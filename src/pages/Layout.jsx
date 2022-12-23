@@ -13,12 +13,12 @@ export default function Home({children}){
         <div className="block">
             < Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
             
-            <div className="block md:flex">
+            <div className="block mt-4 md:mt-0 md:flex">
                 <div className={`${sidebarOpen} xl:block`}>
                     <Sidebar/>
                 </div>
 
-                <div className="container mt-24">
+                <div className="container mt-4 md:mt-12">
                     <main>{children}</main>
                 </div>
             </div>

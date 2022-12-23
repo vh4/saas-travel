@@ -3,19 +3,19 @@
 import React from "react";
 import Layout from "../Layout";
 
-import Carousel from '../../components/home/Carousel'
+import Carouselmage from '../../components/home/Carouselmage'
 import Menu from "../../components/home/Menu";
 
 export default function Home(){
     return(
         <Layout >
             <div className="">
-                <div className="grid grid-cols-2 space-x-80">
-                    <div className="ml-12 mt-10">
+                <div className="grid grid-cols-1 px-0 xl:px-80 space-x-80">
+                    <div className="px-4 md:px-12 mt-24">
 
                         {/* carousel fitur  */}
-                        <Carousel/>
-
+                        <Carouselmage/>
+                        
                         {/* menu fitur  */}
 
                         <Menu />
