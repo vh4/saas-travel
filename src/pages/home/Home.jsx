@@ -1,10 +1,10 @@
 //make create function reactjs
 
 import React from "react";
-import Layout from "./Layout";
+import Layout from "../Layout";
 
-import Carousel from '../components/Carousel'
-import Menu from '../components/Menu'
+import Carousel from '../../components/home/Carousel'
+import Menu from "../../components/home/Menu";
 
 export default function Home(){
     return(

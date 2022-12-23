@@ -2,7 +2,7 @@
 
 import React, {useState} from "react";
 import Header from "./partials/Header";
-// import Footer from "./partials/Footer";
+import Footer from "./partials/Footer";
 import Sidebar from "./partials/Sidebar";
 
 export default function Home({children}){
@@ -11,7 +11,8 @@ export default function Home({children}){
 
     return(
         <div className="block">
-             < Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
+            < Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
+            
             <div className="block md:flex">
                 <div className={`${sidebarOpen} xl:block`}>
                     <Sidebar/>
@@ -22,7 +23,7 @@ export default function Home({children}){
                 </div>
             </div>
 
-            {/* <Footer/> */}
+            <Footer/>
         </div>
     )
 }
