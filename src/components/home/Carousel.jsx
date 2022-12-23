@@ -4,13 +4,12 @@ import "react-multi-carousel/lib/styles.css";
 export default function Carousels({props}) {
     const responsive = {
         desktop: {
-            breakpoint: { max: 3000, min: 864 },
-            items: 3,
-            slidesToSlide: 3 // optional, default to 1.
+            breakpoint: { max: 3000, min: 1024 },
+            items: 1,
         },
         tablet: {
             breakpoint: { max: 800, min: 464 },
-            items: 2,
+            items: 1,
             slidesToSlide: 2 // optional, default to 1.
         },
         mobile: {
@@ -20,7 +19,7 @@ export default function Carousels({props}) {
         }
     };
     return (
-        <>
+        <div >
             <Carousel
                 swipeable={false}
                 draggable={false}
@@ -29,10 +28,10 @@ export default function Carousels({props}) {
                 ssr={true} // means to render carousel on server-side.
                 infinite={true}
                 autoPlay={props !== "mobile" ? true : false}
-                autoPlaySpeed={1000}
+                autoPlaySpeed={2000}
                 keyBoardControl={true}
-                customTransition="all .5"
-                transitionDuration={500}
+                customTransition="transform 300ms ease-in-out"
+                transitionDuration={2000}
                 containerClass="carousel-container"
                 removeArrowOnDeviceType={["tablet", "mobile"]}
                 deviceType={props}
@@ -40,31 +39,22 @@ export default function Carousels({props}) {
                 itemClass="carousel-item-padding-5-px"
                 centerMode={true}
             >
-                <div>
-                    <img src="/wisata.png" alt="" />
+                <div className="pr-4">
+                    <img className="h-96" src="/slider-1.jpg" alt="" />
                 </div>
-                <div>
-                    <img src="/hotel.png" alt="" />
+                <div className="pr-4">
+                    <img className="h-96" src="/slider-2.jpg" alt="" />
                 </div>
-                <div>
-                    <img src="/pelni.png" alt="" />
+                <div className="pr-4">
+                    <img className="h-96" ssrc="/slider-3.jpg" alt="" />
                 </div>
-                <div>
-                    <img src="/train.png" alt="" />
+                <div className="pr-4"> 
+                    <img className="h-96" src="/slider-4.png"alt="" />
                 </div>
-                <div>
-                    <img className="h-96" src="/plane.png" alt="" />
-                </div>
-                <div>
-                    <img src="/logo.png" alt="" />
-                </div>
-                <div>
-                    <img className="h-96" src="/logo192.png" alt="" />
-                </div>
-                <div>
-                    <img className="h-24" src="/logo512.png" alt="" />
+                <div className="pr-4"> 
+                    <img className="h-96" src="/slider-4.png"alt="" />
                 </div>
             </Carousel>
-        </>
+        </div>
     )
 }

@@ -1,3 +1,9 @@
+import {GiCommercialAirplane} from 'react-icons/gi'
+import {RiHotelLine} from 'react-icons/ri'
+import {IoBoatOutline, IoBusOutline} from 'react-icons/io5'
+import {MdOutlineTrain} from 'react-icons/md' 
+import {FaUmbrellaBeach} from 'react-icons/fa'
+
 export default function Sidebar() {
     return (
         <aside className="md:w-64 lg:w-64 mt-20" aria-label="Sidebar">
@@ -5,37 +11,37 @@ export default function Sidebar() {
                 <ul className="space-y-2 mt-8">
                     <li>
                         <a href="#" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <img src="/hotel.png" alt="" className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
+                            <RiHotelLine size={20} />
                             <span className="flex-1 ml-3 whitespace-nowrap">Hotel</span>
                         </a>
                     </li>
                     <li>
                         <a href="#" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <img src="/plane.png" alt="" className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
+                        <GiCommercialAirplane size={20} />
                             <span className="flex-1 ml-3 whitespace-nowrap">Plane</span>
                         </a>
                     </li>
                     <li>
                         <a href="#" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <img src="/pelni.png" alt="" className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
+                        <IoBoatOutline size={20} />
                             <span className="flex-1 ml-3 whitespace-nowrap">Pelni</span>
                         </a>
                     </li>
                     <li>
                         <a href="#" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <img src="/train.png" alt="" className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
+                        <MdOutlineTrain size={20} />
                             <span className="flex-1 ml-3 whitespace-nowrap">Train</span>
                         </a>
                     </li>
                     <li>
                         <a href="#" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <img src="/bus.png" alt="" className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
+                        <IoBusOutline size={20} />
                             <span className="flex-1 ml-3 whitespace-nowrap">Travel Bus</span>
                         </a>
                     </li>
                     <li>
                         <a href="#" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <img src="/wisata.png" alt="" className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
+                        <FaUmbrellaBeach size={20} />
                             <span className="flex-1 ml-3 whitespace-nowrap">Wisata</span>
                         </a>
                     </li>
