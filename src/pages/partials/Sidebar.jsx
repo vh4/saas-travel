@@ -1,7 +1,7 @@
 export default function Sidebar() {
     return (
-        <aside className="w-full md:w-64 lg:w-64 mt-20" aria-label="Sidebar">
-            <div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800">
+        <aside className="md:w-64 lg:w-64 mt-20" aria-label="Sidebar">
+            <div className="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800 h-full md:h-screen" >
                 <ul className="space-y-2">
                     <li>
                         <a href="#" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
