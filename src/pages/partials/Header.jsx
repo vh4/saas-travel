@@ -3,7 +3,6 @@
 import { Link } from "react-router-dom";
 import React, { useCallback } from 'react'
 import {BsBoxArrowRight} from 'react-icons/bs'
-// import Logo from "../../../public/logo.png"
 
 export default function Header({toogleSidebar, valueSidebar}){
 
@@ -14,9 +13,9 @@ export default function Header({toogleSidebar, valueSidebar}){
     return(
         <nav className="bg-white px-2 sm:px-4 py-2.5 dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
         <div className="container flex flex-wrap items-center justify-between mx-auto">
-        {/* <Link to={'/'} className="flex items-center">
-            <img src={Logo} className="w-40 md:w-42 mr-3" alt="Flowbite Logo" />
-        </Link> */}
+        <Link to={'/'} className="flex items-center">
+            <img src="/logo.png" className="w-40 md:w-42 mr-3" alt="Flowbite Logo" />
+        </Link>
         <div className="flex md:order-2">
             <button type="button" class="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 md:px-6 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-800 dark:bg-white dark:border-gray-700 dark:text-gray-900 dark:hover:bg-gray-200 mr-2 mb-2">
                 <BsBoxArrowRight size={16} fontSize={"bold"} />
