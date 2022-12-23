@@ -1,19 +1,24 @@
 //make create function reactjs
 
-import React from "react";
+import React, {useState} from "react";
 import Header from "./partials/Header";
 import Footer from "./partials/Footer";
 import Sidebar from "./partials/Sidebar";
 
 export default function Home({children}){
+
+    const [sidebarOpen, setSidebarOpen] = useState("x");
+
     return(
         <div className="block">
             {/* untuk navbar */}
 
-                < Header />
+                < Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
 
             {/* untuk sidebar */}
-                <Sidebar/>
+                <div className={`${sidebarOpen} xl:block`}>
+                    <Sidebar />
+                </div>
 
             {/* untuk main nya */}
 
