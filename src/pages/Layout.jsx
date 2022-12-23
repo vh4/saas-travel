@@ -1,18 +1,19 @@
 //make create function reactjs
 
 import React from "react";
-import Header from "./Header";
-import Footer from "./Footer";
+import Header from "./partials/Header";
+import Footer from "./partials/Footer";
+import Sidebar from "./partials/Sidebar";
 
 export default function Home({children}){
     return(
         <div className="block">
             {/* untuk navbar */}
 
-                 < Header />
+                < Header />
 
             {/* untuk sidebar */}
-
+                <Sidebar/>
 
             {/* untuk main nya */}
 
