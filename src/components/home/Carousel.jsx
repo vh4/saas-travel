@@ -1,60 +1,85 @@
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+import { useEffect, useState } from "react";
 
-export default function Carousels({props}) {
-    const responsive = {
-        desktop: {
-            breakpoint: { max: 3000, min: 1024 },
-            items: 1,
-        },
-        tablet: {
-            breakpoint: { max: 800, min: 464 },
-            items: 1,
-            slidesToSlide: 2 // optional, default to 1.
-        },
-        mobile: {
-            breakpoint: { max: 464, min: 0 },
-            items: 1,
-            slidesToSlide: 1 // optional, default to 1.
-        }
+export default function Carousels(props) {
+
+    const [width, setWidth] = useState();
+
+    useEffect(() =>{
+        setWidth(window.innerHeight)
+    }, [setWidth]);
+
+    const settingWindows =                 
+    {
+        dots: true,
+        infinite: true,
+        speed: 2000,
+        autoPlay: true,
+        slidesToShow: 1,
+        autoplay: true,
+        autoplaySpeed: 2000,
+        pauseOnHover: true,
     };
+
+    const settingMobile = {
+
+        focusOnSelect: true,
+        slidesToShow: 2,
+        infinite: true,
+        autoplay: true,
+        autoplaySpeed: 2000,
+        pauseOnHover: true,
+        dots:true
+    };
+
     return (
-        <div >
-            <Carousel
-                swipeable={false}
-                draggable={false}
-                showDots={true}
-                responsive={responsive}
-                ssr={true} // means to render carousel on server-side.
-                infinite={true}
-                autoPlay={props !== "mobile" ? true : false}
-                autoPlaySpeed={2000}
-                keyBoardControl={true}
-                customTransition="transform 300ms ease-in-out"
-                transitionDuration={2000}
-                containerClass="carousel-container"
-                removeArrowOnDeviceType={["tablet", "mobile"]}
-                deviceType={props}
-                dotListClass="custom-dot-list-style"
-                itemClass="carousel-item-padding-5-px"
-                centerMode={true}
-            >
-                <div className="pr-4">
-                    <img className="h-96" src="/slider-1.jpg" alt="" />
-                </div>
-                <div className="pr-4">
-                    <img className="h-96" src="/slider-2.jpg" alt="" />
-                </div>
-                <div className="pr-4">
-                    <img className="h-96" ssrc="/slider-3.jpg" alt="" />
-                </div>
-                <div className="pr-4"> 
-                    <img className="h-96" src="/slider-4.png"alt="" />
-                </div>
-                <div className="pr-4"> 
-                    <img className="h-96" src="/slider-4.png"alt="" />
-                </div>
-            </Carousel>
+        <div className="mt-12">
+        {
+            width <= 786 ?
+
+            (
+                <Slider {...settingWindows}
+            
+                >
+                    <div className="flex justify-center space-x-2 px-4 mx-2">
+                        <img className="h-36 xl:h-64 rounded-xl" src="/slider-1.jpg" alt="" />
+                    </div>
+                    <div className="flex justify-center space-x-2 px-4 mx-2">
+                        <img className="h-36 xl:h-64 rounded-xl" src="/slider-2.jpg" alt="" />
+                    </div>
+                    <div className="flex justify-centerspace-x-2 px-2 mx-2">
+                        <img className="h-36 xl:h-64 rounded-xl" src="/slider-3.jpg" alt="" />
+                    </div>
+                    <div className="flex justify-center space-x-2 px-2 mx-2">
+                        <img className="h-36 xl:h-64 rounded-xl" src="/slider-4.png"alt="" />
+                    </div>
+                </Slider>
+            ) : 
+            
+
+            (
+                <Slider {...settingMobile}
+            
+                >
+                    <div className="flex justify-center space-x-4 px-4 mx-4">
+                        <img className="h-36 xl:h-64 rounded-xl" src="/slider-1.jpg" alt="" />
+                    </div>
+                    <div className="flex justify-center space-x-4 px-4 mx-4">
+                        <img className="h-36 xl:h-64 rounded-xl" src="/slider-2.jpg" alt="" />
+                    </div>
+                    <div className="flex justify-centerspace-x-4 px-4 mx-4">
+                        <img className="h-36 xl:h-64 rounded-xl" src="/slider-3.jpg" alt="" />
+                    </div>
+                    <div className="flex justify-center space-x-4 px-4 mx-4">
+                        <img className="h-36 xl:h-64 rounded-xl" src="/slider-4.png"alt="" />
+                    </div>
+                </Slider>
+            )
+
+        }
+
         </div>
     )
 }
