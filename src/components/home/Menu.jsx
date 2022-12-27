@@ -6,22 +6,42 @@ import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-
+import axios from "axios";
 import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import {BiSearchAlt2} from 'react-icons/bi'
-
+import Autocomplete from '@mui/material/Autocomplete';
 
 export default function Menu(){
     
     const [age, setAge] = React.useState('');
+    const [namapesawat, setNamaPesawat] = React.useState('');
     const [value, setValue] = React.useState(null);
 
     const handleChange = (event: SelectChangeEvent) => {
-      setAge(event.target.value);
+        setNamaPesawat(event.target.value);
     };
+
+    const [pesawat, setPesawat] = React.useState({});
+
+    React.useEffect(() => {
+
+        getPesawatData();
+
+    }, []);
+
+    async function getPesawatData(){
+
+        const response = await axios.post('http://localhost:5000/travel/flight/airline', {
+            token: localStorage.getItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53"),
+            product:"PESAWAT"
+        });
+
+        setPesawat(response.data);
+
+    }
 
     
     return (
@@ -90,24 +110,16 @@ export default function Menu(){
                             <div className="text-xl font-medium text-gray-600">tiket pesawat</div>
                         </div>
                         <div className="mt-4 xl:mt-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5">
-                        <FormControl sx={{ m: 1, minWidth: 120 }}>
-                            <Select
-                            displayEmpty
-                            labelId="demo-simple-select-helper-label"
-                            id="demo-simple-select-helper"
-                            value={age}
-                            label="Age"
-                            onChange={handleChange}
-                            >
-                             <MenuItem disabled value="">
-                                <em className="text-gray-500">Nama pesawat</em>
-                            </MenuItem>                               
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
-                            </Select>
+                        <FormControl sx={{ m: 1, minWidth: 120, outline: 'none' }} >
+                        <Autocomplete 
+                            options={pesawat.data}
+                            getOptionLabel={(option) => option.airlineName}
+
+                            renderInput={(params) => <TextField {...params} label="Nama pesawat" />}
+                            />
                             <FormHelperText>Nama Pesawat</FormHelperText>
-                        </FormControl>    
+                        </FormControl>
+                        
                         <FormControl sx={{ m: 1, minWidth: 120 }}>
                             <Select
                             displayEmpty
@@ -125,7 +137,8 @@ export default function Menu(){
                             <MenuItem value={30}>Thirty</MenuItem>
                             </Select>
                             <FormHelperText>Lokasi keberangkatan anda</FormHelperText>
-                        </FormControl> 
+                        </FormControl>
+                         
                         <FormControl sx={{ m: 1, minWidth: 120 }}>
                             <Select
                             displayEmpty

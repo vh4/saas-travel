@@ -7,8 +7,6 @@ import { Link } from 'react-router-dom'
 
 export default function Sidebar({pathSidebar}) {
 
-    console.log(pathSidebar);
-
     return (
         <aside className="md:w-64 mt-12 xl:mt-24 xl:w-72" aria-label="Sidebar">
             <div className="overflow-y-auto py-4 px-3 bg-gray-100 xl:bg-gray-50 rounded dark:bg-gray-800 h-full md:h-screen" >

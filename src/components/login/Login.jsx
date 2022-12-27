@@ -31,7 +31,6 @@ export default function Login({setShowModalComponent}){
 
              }); 
         } catch (error) {
-            console.log(error.response);
         }
 
     }
