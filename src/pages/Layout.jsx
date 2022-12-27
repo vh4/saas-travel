@@ -7,7 +7,7 @@ import SidebarUser from "./partials/SidebarUser";
 
 import { useLocation } from "react-router-dom";
 import _ from 'lodash'
-import Carousels from '../components/plane/Carousel'
+import Carousels from '../components/carousel/Carousel'
 
 export default function Home({children}){
 
