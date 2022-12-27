@@ -22,7 +22,7 @@ export default function Home({children}){
             < Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
             
                             {/* carousel fitur  */}
-            <div className="mt-36">
+            <div className="mt-36 px-12 md:px-0">
                 <Carousels />
             </div>
             

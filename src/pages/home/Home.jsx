@@ -9,7 +9,7 @@ export default function Home(){
     return(
         <Layout>
             <div className="container">
-            <div className="w-full px-2"> 
+            <div className="w-full px-4"> 
 
                 {/* menu fitur  */}
                 <Menu />
