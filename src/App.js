@@ -3,7 +3,9 @@ import { BrowserRouter, Route, Routes} from "react-router-dom";
 import { ToastContainer } from 'react-toastify'; //for flash notifications
 import 'react-toastify/dist/ReactToastify.css';
 
-import Home from "./pages/home/Home";
+import Plane from "./pages/plane/Plane";
+import Kai from "./pages/kai/Kai";
+
 import Register from "./pages/register/Register";
 import Profile from "./pages/profile/Profile";
 import Transaksi from "./pages/transaksi/Transaksi";
@@ -25,7 +27,8 @@ function App() {
           pauseOnHover
           />  
         <Routes>
-          <Route exact path="/" element={<Home />}></Route>
+          <Route exact path="/" element={<Plane />}></Route>
+          <Route exact path="/train" element={< Kai/>}></Route>
           <Route path="/register" element={<Register />}></Route>
           <Route path="/transaksi" element={<Transaksi />}></Route>
           <Route path="/booking" element={<Booking />}></Route>
