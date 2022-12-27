@@ -21,6 +21,7 @@ export default function Menu(){
     const [value, setValue] = React.useState(null);
 
     const handleChange = (event: SelectChangeEvent) => {
+        console.log(namapesawat)
         setNamaPesawat(event.target.value);
     };
 
@@ -114,7 +115,11 @@ export default function Menu(){
                         <Autocomplete 
                             options={pesawat.data}
                             getOptionLabel={(option) => option.airlineName}
-
+                            value={value}
+                            onChange={(newValue) => {
+                            setValue(newValue);
+                            }}
+                            
                             renderInput={(params) => <TextField {...params} label="Nama pesawat" />}
                             />
                             <FormHelperText>Nama Pesawat</FormHelperText>
