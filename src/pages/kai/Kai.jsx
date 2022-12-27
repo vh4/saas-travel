@@ -2,7 +2,7 @@
 
 import Layout from "../Layout";
 
-import Menu from "../../components/plane/Plane";
+import Kai from "../../components/kai/Kai";
 
 export default function Home(){
 
@@ -10,10 +10,8 @@ export default function Home(){
         <Layout>
             <div className="container">
             <div className="w-full px-4"> 
-
                 {/* menu fitur  */}
-                <Menu />
-
+                <Kai />
             </div>
             </div>
         </Layout>

@@ -14,7 +14,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import {BiSearchAlt2} from 'react-icons/bi'
 import Autocomplete from '@mui/material/Autocomplete';
 
-export default function Menu(){
+export default function Plane(){
     
     const [age, setAge] = React.useState('');
     const [namapesawat, setNamaPesawat] = React.useState('');

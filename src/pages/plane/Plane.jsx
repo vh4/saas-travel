@@ -2,7 +2,7 @@
 
 import Layout from "../Layout";
 
-import Menu from "../../components/plane/Plane";
+import Plane from "../../components/plane/Plane";
 
 export default function Home(){
 
@@ -12,7 +12,7 @@ export default function Home(){
             <div className="w-full px-4"> 
 
                 {/* menu fitur  */}
-                <Menu />
+                <Plane />
 
             </div>
             </div>
