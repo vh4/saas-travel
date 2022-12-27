@@ -1,0 +1,205 @@
+
+import {GiCommercialAirplane} from "react-icons/gi"
+import * as React from 'react';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import axios from "axios";
+import TextField from '@mui/material/TextField';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import {BiSearchAlt2} from 'react-icons/bi'
+import Autocomplete from '@mui/material/Autocomplete';
+
+export default function KAI(){
+    
+    const [age, setAge] = React.useState('');
+    const [namakereta, setNamaKereta] = React.useState('');
+    const [value, setValue] = React.useState(null);
+
+    const handleChange = (event: SelectChangeEvent) => {
+        console.log(namakereta)
+        setNamaKereta(event.target.value);
+    };
+
+    const [kai, setKAI] = React.useState({});
+
+    React.useEffect(() => {
+
+        // getKAIdata();
+
+    }, []);
+
+    // async function getKAIdata(){
+
+    //     const response = await axios.post('http://localhost:5000/travel/flight/airline', {
+    //         token: localStorage.getItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53"),
+    //         product:"KAI"
+    //     });
+
+    //     setKAI(response.data);
+
+    // }
+
+    
+    return (
+        <>     
+            <div className="row mt-6 w-full p-2 pr-0 xl:pr-16">
+                <div class="w-full p-2 py-4 xl:px-12 xl:py-8 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
+                    <form className="w-full ">
+                        <div className="space-x-4 items-center hidden xl:flex">
+                            < GiCommercialAirplane className="text-gray-600" size={24} />
+                            <div className="text-xl font-medium text-gray-600">Cari Harga Tiket KAI Murah & Promo di SIni</div>
+                        </div>
+                        <div className="space-x-2 items-center pt-2 flex xl:hidden">
+                            < GiCommercialAirplane className="text-gray-600" size={24} />
+                            <div className="text-xl font-medium text-gray-600">Tiket KAI</div>
+                        </div>
+                        <div className="mt-4 xl:mt-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5">
+                        <FormControl sx={{ m: 1, minWidth: 120, outline: 'none' }} >
+                        <Autocomplete 
+                            options={kai.data}
+                            getOptionLabel={(option) => option.kaiName}
+                            value={value}
+                            onChange={(newValue) => {
+                            setValue(newValue);
+                            }}
+                            
+                            renderInput={(params) => <TextField {...params} label="Nama kereta" />}
+                            />
+                            <FormHelperText>Nama Kereta</FormHelperText>
+                        </FormControl>
+                        
+                        <FormControl sx={{ m: 1, minWidth: 120 }}>
+                            <Select
+                            displayEmpty
+                            labelId="demo-simple-select-helper-label"
+                            id="demo-simple-select-helper"
+                            value={age}
+                            label="Age"
+                            onChange={handleChange}
+                            >
+                            <MenuItem disabled value="">
+                                <em className="text-gray-500">Keberangkatan</em>
+                            </MenuItem>
+                            <MenuItem value={10}>Ten</MenuItem>
+                            <MenuItem value={20}>Twenty</MenuItem>
+                            <MenuItem value={30}>Thirty</MenuItem>
+                            </Select>
+                            <FormHelperText>Lokasi keberangkatan anda</FormHelperText>
+                        </FormControl>
+                         
+                        <FormControl sx={{ m: 1, minWidth: 120 }}>
+                            <Select
+                            displayEmpty
+                            labelId="demo-simple-select-helper-label"
+                            id="demo-simple-select-helper"
+                            value={age}
+                            label="Age"
+                            onChange={handleChange}
+                            >
+                             <MenuItem disabled value="">
+                                <em className="text-gray-500">Tujuan</em>
+                            </MenuItem>                               
+                            <MenuItem value={10}>Ten</MenuItem>
+                            <MenuItem value={20}>Twenty</MenuItem>
+                            <MenuItem value={30}>Thirty</MenuItem>
+                            </Select>
+                            <FormHelperText>Lokasi tujuan anda</FormHelperText>
+                        </FormControl> 
+                        <FormControl sx={{ m: 1, minWidth: 120 }}> 
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                                value={value}
+                                onChange={(newValue) => {
+                                setValue(newValue);
+                                }}
+                                renderInput={(params) => <TextField {...params} />}
+                            />
+                        </LocalizationProvider>
+                        <FormHelperText>Tanggal keberangkatan</FormHelperText>
+                        </FormControl>
+                        <FormControl sx={{ m: 1, minWidth: 120 }}> 
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                                value={value}
+                                onChange={(newValue) => {
+                                setValue(newValue);
+                                }}
+                                renderInput={(params) => <TextField {...params} />}
+                            />
+                        </LocalizationProvider>
+                        <FormHelperText>Tanggal Pulang</FormHelperText>
+                        </FormControl>                                                                   
+                        </div>
+                        <div className="mt-0 md:mt-4 grid grid-cols-1 md:grid-cols-3 xl:grid-cols-8">
+                        <FormControl sx={{ m: 1, minWidth: 120 }}>
+                            <Select
+                            displayEmpty
+                            labelId="demo-simple-select-helper-label"
+                            id="demo-simple-select-helper"
+                            value={age}
+                            label="Age"
+                            onChange={handleChange}
+                            >
+                             <MenuItem disabled value="">
+                                <em className="text-gray-500">Adult</em>
+                            </MenuItem>                               
+                            <MenuItem value={10}>Ten</MenuItem>
+                            <MenuItem value={20}>Twenty</MenuItem>
+                            <MenuItem value={30}>Thirty</MenuItem>
+                            </Select>
+                            <FormHelperText>Adult</FormHelperText>
+                        </FormControl> 
+                        <FormControl sx={{ m: 1, minWidth: 120 }}>
+                            <Select
+                            displayEmpty
+                            labelId="demo-simple-select-helper-label"
+                            id="demo-simple-select-helper"
+                            value={age}
+                            label="Age"
+                            onChange={handleChange}
+                            >
+                             <MenuItem disabled value="">
+                                <em className="text-gray-500">Child</em>
+                            </MenuItem>                               
+                            <MenuItem value={10}>Ten</MenuItem>
+                            <MenuItem value={20}>Twenty</MenuItem>
+                            <MenuItem value={30}>Thirty</MenuItem>
+                            </Select>
+                            <FormHelperText>Child</FormHelperText>
+                        </FormControl> 
+                        <FormControl sx={{ m: 1, minWidth: 120 }}>
+                            <Select
+                            displayEmpty
+                            labelId="demo-simple-select-helper-label"
+                            id="demo-simple-select-helper"
+                            value={age}
+                            label="Age"
+                            onChange={handleChange}
+                            >
+                             <MenuItem disabled value="">
+                                <em className="text-gray-500">Infant</em>
+                            </MenuItem>                               
+                            <MenuItem value={10}>Ten</MenuItem>
+                            <MenuItem value={20}>Twenty</MenuItem>
+                            <MenuItem value={30}>Thirty</MenuItem>
+                            </Select>
+                            <FormHelperText>Infant</FormHelperText>
+                        </FormControl> 
+                        </div>
+                        <div className="w-full flex justify-end">
+                        <button type="button" class="text-white bg-[#FF9119] space-x-2 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-8 py-4 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
+                         <div className="text-white font-bold">Cari tiket</div>
+                         < BiSearchAlt2 className="text-white font-bold" size={24} />
+                        </button>  
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </>
+    )
+}

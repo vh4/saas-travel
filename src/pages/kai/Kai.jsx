@@ -2,17 +2,17 @@
 
 import Layout from "../Layout";
 
-import Kai from "../../components/kai/Kai";
+import Kai from "../../components/kai/KAI";
 
 export default function Home(){
 
     return(
         <Layout>
             <div className="container">
-            <div className="w-full px-4"> 
-                {/* menu fitur  */}
-                <Kai />
-            </div>
+                <div className="w-full px-4"> 
+                    {/* menu fitur  */}
+                    <Kai />
+                </div>
             </div>
         </Layout>
     )
