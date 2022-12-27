@@ -2,7 +2,7 @@
 
 import React from "react";
 import ViewPofile from "../../components/profile/ViewPofile";
-import Layout from "../Layout";
+import Layout from "../LayoutUser";
 
 
 export default function Profile(){

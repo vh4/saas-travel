@@ -2,12 +2,10 @@
 
 import React, {useState} from "react";
 import Header from "./partials/Header";
-import Sidebar from "./partials/Sidebar";
-import SidebarUser from "./partials/SidebarUser";
-
+import Sidebar from "./partials/SidebarUser";
+import {AiOutlineHome} from 'react-icons/ai'
 import { useLocation } from "react-router-dom";
 import _ from 'lodash'
-import Carousels from '../components/home/Carousel'
 
 export default function Home({children}){
 
@@ -21,22 +19,20 @@ export default function Home({children}){
         <div className="block">
             < Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
             
-                            {/* carousel fitur  */}
-            <div className="mt-36">
-                <Carousels />
-            </div>
-            
             <div className="relative mt-4 md:mt-0 md:flex">
                 <div className={`${sidebarOpen} md:block xl:block 2xl:block`}>
-                    <div className="hidden md:block">
-                        <Sidebar pathSidebar={pathSidebar}/>
-                    </div>
-                    <div className="block md:hidden">
-                        <SidebarUser pathSidebar={pathSidebar}/>
-                    </div>
+                    <Sidebar pathSidebar={pathSidebar}/>
                 </div>
 
-                <div className={ sidebarOpen === 'block' ? `container mt-4 ` : 'container mt-4 '}>                   
+                <div className={ sidebarOpen === 'block' ? `container mt-4 md:mt-32 px-0 xl:px-24` : 'container mt-32 md:mt-4 px-0 xl:px-24'}>
+                <div className="profile-header mt-4 mx-8">
+                    <div className="flex space-x-2 items-center">
+                        < AiOutlineHome size={20} />
+                        <p>Home</p>
+                        <p> / </p>
+                        <p>{path}</p>
+                    </div>
+                </div>                     
                     <main className="">{children}</main>
                 </div>
             </div>

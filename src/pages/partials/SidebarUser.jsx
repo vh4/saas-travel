@@ -10,9 +10,9 @@ export default function Sidebar({pathSidebar}) {
     console.log(pathSidebar);
 
     return (
-        <aside className="pl-24 mt-8" aria-label="Sidebar">
-            <div className="flex pb-12 justify-center md:w-64 xl:w-72 overflow-y-auto py-4 px-3 bg-gray-100 xl:bg-gray-50 rounded dark:bg-gray-800" >
-                <ul className="space-y-2 mt-8 xl:mt-10">
+        <aside className="md:w-64 mt-12 xl:mt-24 xl:w-72" aria-label="Sidebar">
+            <div className="overflow-y-auto py-4 px-3 bg-gray-100 xl:bg-gray-50 rounded dark:bg-gray-800 h-full md:h-screen" >
+                <ul className="space-y-2 mt-8 xl:mt-10 pl-0 xl:pl-24 relative xl:fixed">
                     <li>
                         <Link to='/' className={`flex ${ pathSidebar === '/' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700`}>
                             <RiHotelLine size={20} />

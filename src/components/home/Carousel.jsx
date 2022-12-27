@@ -26,7 +26,7 @@ export default function Carousels(props) {
     const settingMobile = {
 
         focusOnSelect: true,
-        slidesToShow: 2,
+        slidesToShow: 3,
         infinite: true,
         autoplay: true,
         autoplaySpeed: 2000,
@@ -35,7 +35,7 @@ export default function Carousels(props) {
     };
 
     return (
-        <div className="mt-12">
+        <div className="px-0 xl:px-16">
         {
             width <= 786 ?
 

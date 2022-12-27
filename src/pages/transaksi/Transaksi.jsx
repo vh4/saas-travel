@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import ViewTransaksi from "../../components/transaksi/ViewTransaksi";
-import Layout from "../Layout";
+import Layout from "../LayoutUser";
 import { toast } from 'react-toastify';
 import axios from "axios";
 

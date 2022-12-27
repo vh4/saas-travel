@@ -2,21 +2,19 @@
 
 import Layout from "../Layout";
 
-import Carousels from '../../components/home/Carousel'
 import Menu from "../../components/home/Menu";
 
 export default function Home(){
 
     return(
         <Layout>
-            <div className="px-2 md:px-12"> 
+            <div className="container">
+            <div className="w-full px-2"> 
 
                 {/* menu fitur  */}
                 <Menu />
 
-                {/* carousel fitur  */}
-                <Carousels />
-
+            </div>
             </div>
         </Layout>
     )
