@@ -151,4 +151,82 @@ Router.post('/travel/flight/search', function (req, res) {
 
 });
 
+
+Router.post('/travel/flight/airline', function (req, res) {
+
+  const {
+    product, token
+  } = req.body;
+
+  request.post(
+      `${process.env.URL_HIT}/travel/flight/airline`,
+      {
+        json: 
+        {
+          product,
+          token
+        }
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          return
+        }
+        return res.send(body)
+      }
+    )
+
+});
+
+Router.post('/travel/train/station', function (req, res) {
+
+  const {
+    product, token
+  } = req.body;
+
+  request.post(
+      `${process.env.URL_HIT}/travel/train/station`,
+      {
+        json: 
+        {
+          product,
+          token
+        }
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          return
+        }
+        return res.send(body)
+      }
+    )
+
+});
+
+Router.post('/travel/train/search', function (req, res) {
+
+  const {
+    productCode, origin, destination, date, token
+  } = req.body;
+
+  request.post(
+      `${process.env.URL_HIT}/travel/train/search`,
+      {
+        json: 
+        {
+          productCode, origin, destination, date, token
+        }
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          return
+        }
+        return res.send(body)
+      }
+    )
+
+});
+
 module.exports = Router
