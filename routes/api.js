@@ -178,6 +178,32 @@ Router.post('/travel/flight/airline', function (req, res) {
 
 });
 
+Router.post('/travel/flight/airport', function (req, res) {
+
+  const {
+    product, token
+  } = req.body;
+
+  request.post(
+      `${process.env.URL_HIT}/travel/flight/airport`,
+      {
+        json: 
+        {
+          product,
+          token
+        }
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          return
+        }
+        return res.send(body)
+      }
+    )
+
+});
+
 Router.post('/travel/train/station', function (req, res) {
 
   const {
