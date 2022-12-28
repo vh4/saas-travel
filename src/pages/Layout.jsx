@@ -26,7 +26,7 @@ export default function Home({children}){
                 <Carousels />
             </div>
             
-            <div className="relative mt-4 md:mt-0 md:flex">
+            <div className="relative px-0 xl:px-24 mt-4 md:mt-0 md:flex">
                 <div className={`${sidebarOpen} md:block xl:block 2xl:block`}>
                     <div className="hidden md:block">
                         <Sidebar pathSidebar={pathSidebar}/>
@@ -36,7 +36,7 @@ export default function Home({children}){
                     </div>
                 </div>
 
-                <div className={ sidebarOpen === 'block' ? `container mt-4 ` : 'container mt-4 '}>                   
+                <div className={ sidebarOpen === 'block' ? `container mt-4 px-0 xl:px-12` : 'container mt-4 px-0 xl:px-12'}>                   
                     <main className="">{children}</main>
                 </div>
             </div>
