@@ -8,20 +8,24 @@ import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import {HiOutlineArrowRight} from 'react-icons/hi'
-
+import {HiOutlineArrowRight, HiOutlineArrowNarrowRight} from 'react-icons/hi'
+import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Popper } from "@mui/material";
 import {FaTrain} from 'react-icons/fa'
-import { parse } from "postcss";
+import {BiTrain} from 'react-icons/bi'
+import { Link } from "react-router-dom";
 
 export default function KAI(){
     
-    const [berangkat, setBerangkat] = React.useState(null);
-    const [tujuan, setTujuan] = React.useState(null);
-    const [tanggal, setTanggal] = React.useState(null);
-    const [search, setSearch] = React.useState(false);
-    const [error, setError] = React.useState(true);
+    const [berangkat, setBerangkat] = React.useState();
+    const [tujuan, setTujuan] = React.useState();
+    const [tanggal, setTanggal] = React.useState();
+    const [notFound, setError] = React.useState(true);
+    const [isLoading, setLoading] = React.useState(false);
+
+    const skeleton = [1,2,3,4,5,6,7,8,9,10];
 
     const [dataSearch, setDataSearch] = React.useState([]);
 
@@ -63,25 +67,42 @@ export default function KAI(){
 
     async function handlerCariKai(e){
         e.preventDefault();
+        setLoading(true);
 
-        const tanggalParse = tanggal.$y + '-' + (parseInt(tanggal.$M) + 1).toString()  + '-' + tanggal.$D;
+        try {
+
+            const tanggalParse = tanggal.$y + '-' + (parseInt(tanggal.$M) + 1).toString()  + '-' + tanggal.$D;
         
-        const response = await axios.post('http://localhost:5000/travel/train/search', {
-            token: localStorage.getItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53"),
-            origin:berangkat.id_stasiun,
-            destination:tujuan.id_stasiun,
-            date:tanggalParse
-        });
+            const response = await axios.post('http://localhost:5000/travel/train/search', {
+                // token: localStorage.getItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53"),,
+                productCode : "WKAI",
+                token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjhkNzNtbmc4OWVkIn0.eyJpc3MiOiJodHRwczpcL1wvYXBpLmZhc3RyYXZlbC5jby5pZCIsImF1ZCI6IkZhc3RyYXZlbEIyQiBDbGllbnQiLCJqdGkiOiI4ZDczbW5nODllZCIsImlhdCI6MTY3MjE5NzI0MywibmJmIjoxNjcyMTk3MzAyLCJleHAiOjE2NzIyMDA4NDIsIm91dGxldElkIjoiRkE0MDMzMjgiLCJwaW4iOiI1MzcyMDEiLCJrZXkiOiJGQVNUUEFZIn0.nMgrQ7qFBMFcdqhABEe8B4x6T5E_Kqb7hQFoXkq-kaA",
+                origin:berangkat.id_stasiun,
+                destination:tujuan.id_stasiun,
+                date:tanggalParse
+            });
+    
+            if(response.data.rc !== "00" || response.data.rc === undefined){
+                setError(true);
+                setLoading(false);
+            }
 
-        if(response.data.rc === null || response.data.rc === undefined){
+            if(response.data === undefined){
+                setError(true);
+                setLoading(false);
+            }
+    
             setError(false);
+            setDataSearch(response.data.data);
+            setLoading(false);
+            
+        } catch (error) {
+            console.log(error);
+            setError(true);
+            setLoading(false);
         }
-        
-        setSearch(true);
-        setDataSearch(response.data);
 
     }
-
 
     return (
         <>     
@@ -89,16 +110,17 @@ export default function KAI(){
                 <div class="w-full p-2 py-4 xl:px-12 xl:py-8 bg-white border border-gray-200 rounded-lg shadow-xs dark:bg-gray-800 dark:border-gray-700">
                     <form className="w-full ">
                         <div className="space-x-4 items-center hidden xl:flex">
-                            < GiCommercialAirplane className="text-gray-600" size={24} />
-                            <div className="text-xl font-medium text-gray-600">Cari Harga Tiket KAI Murah & Promo di Sini</div>
+                            < BiTrain className="text-gray-600" size={24} />
+                            <div className="text-xl font-medium text-gray-600">Cari harga tiket KAI murah meriah</div>
                         </div>
                         <div className="space-x-2 items-center pt-2 flex xl:hidden">
                             < GiCommercialAirplane className="text-gray-600" size={24} />
                             <div className="text-xl font-medium text-gray-600">Tiket KAI</div>
                         </div>
-                        <div className="mt-4 xl:mt-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
+                        <div className="mt-4 xl:mt-12 grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4">
                         <FormControl sx={{ m: 1, minWidth: 120, outline: 'none' }} >
                         <Autocomplete key={ i + 1}
+                            PopperComponent={PopperMy}
                             options={kai.data}
                             getOptionLabel={(option) => option.nama_stasiun + ' - ' + option.nama_kota + ' - ' + option.id_stasiun}
                             value={berangkat}
@@ -119,7 +141,7 @@ export default function KAI(){
                         <Autocomplete  key={ i + 1}
                             PopperComponent={PopperMy}
                             options={kai.data}
-                            getOptionLabel={(option) => option.nama_stasiun + ' ( ' + option.nama_kota + ' ) '}
+                            getOptionLabel={(option) => option.nama_stasiun + ' - ' + option.nama_kota + ' - ' + option.id_stasiun}
                             value={tujuan}
                             onChange={(event, newValue) => {
                                 setTujuan(newValue);
@@ -153,59 +175,128 @@ export default function KAI(){
                     </form>
                 </div>
             </div>
-            { (dataSearch.length > 0) && (dataSearch != "undefined") ? (
+            { (dataSearch !== "undefined") && notFound === false  && berangkat !== null && tujuan !== null ? (
                 <div className="flex text-xl items-center mt-12 ml-4 font-bold text-gray-700 space-x-2">
                     <div>{berangkat.nama_stasiun}</div>
                     < HiOutlineArrowRight />
                     <div>{tujuan.nama_stasiun}</div>
                 </div>
             )
-            :
-
-            ''
+            : ''
         
         }
+            {isLoading ? 
+            <div className="flex text-xl items-center mt-12 ml-4 font-bold text-gray-700 space-x-2">
+                <Box sx={{ width: 350 }}>
+                    <Skeleton />
+                </Box>
+            </div>
+        : ''}
 
         {/* tiket search kereta */}
+            {isLoading ? 
+                skeleton.map((e) =>(
+                    <div className="row mt-6 w-full p-2 pr-0 xl:pr-16">           
+                            <Box sx={{ width: "100%" }}>
+                                <Skeleton />
+                                <Skeleton />
+                                <Skeleton />
+                                <Skeleton />
+                                <Skeleton />
+                            </Box>
+                    </div>
+                    ))
+            : ''}
 
-            { (dataSearch.length > 0) && (dataSearch != "undefined") ? (
-            <div className="row mt-6 mb-24 w-full p-2 pr-0 xl:pr-16">
-            <div class="w-full p-2 py-4 xl:px-12 xl:py-8 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
-                <div className="w-full text-gray-700">
-                    
-                    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-7">
-                        <div className="col-span-2">
-                            <h1 className="text-md font-medium">Argo Lawu </h1>
-                            <small>Excecutive class A</small>
-                        </div>
-                        <div>
-                            <h1 className="text-md font-medium">06.00</h1>
-                            <small>Jakarta (GMR)</small>
-                        </div>
-                        <div>
-                            <h1 className="text-md font-medium">12.00</h1>
-                            <small>Bandung (KAC)</small>
-                        </div>
-                        <div>
-                            <h1 className="text-md font-medium">2j 40m</h1>
-                            <small>Langsung</small>
-                        </div>
-                        <div className="">
-                             <h1 className="text-xl font-bold text-[#FF9119]">Rp. 200.000</h1>
-                             <small className="text-red-500">30 set(s) left</small>
-                        </div>
-                        <div>
-                            <button type="button" class="text-white bg-[#FF9119] space-x-2 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-8 py-4 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
-                            <div className="text-white font-bold">PILIH</div>
-                            </button>  
+            {(dataSearch !== undefined ) && berangkat !== null && tujuan !== null ?  (notFound === false ) ?  ( //ganti
+            <div className="row mt-6 mb-24 w-full p-2 pr-0 xl:pr-16">           
+                {dataSearch.map((e) => (
+                    <div class={`mt-6 w-full p-2 py-4 xl:px-12 xl:py-8 ${ e.seats[0].availability > 0 ? 'bg-white' : 'bg-gray-200' } border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700`}>
+    
+                    {/* desktop cari */}
+    
+                    <div className="hidden xl:block w-full text-gray-700">
+                        
+                        <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
+                            <div className="col-span-1 xl:col-span-2">
+                                <h1 className="text-md font-medium">{e.trainName} </h1>
+                                <small>Eksekutif class {e.seats[0].class}</small>
+                            </div>
+                            <div className="flex">
+                                <div className="">
+                                    <h1 className="mt-4 xl:mt-0 text-md font-medium">{e.departureTime}</h1>
+                                    <small>{berangkat.nama_kota} ({berangkat.id_stasiun})</small>
+                                </div>
+                                < HiOutlineArrowNarrowRight size={24} />
+                            </div>
+                            <div>
+                                <h1 className="text-md font-medium">{e.arrivalTime}</h1>
+                                <small>{tujuan.nama_kota} ({tujuan.id_stasiun})</small>
+                            </div>
+                            <div>
+                                <h1 className="mt-4 xl:mt-0 text-md font-medium">{e.duration}</h1>
+                                <small>Langsung</small>
+                            </div>
+                            <div className="">
+                                    <h1 className="mt-4 xl:mt-0 text-md font-bold text-[#FF9119]">Rp.{e.seats[0].priceAdult}</h1>
+                                    <small className="text-red-500">{e.seats[0].availability} set(s) left</small>
+                            </div>
+                            <div>
+                                {e.seats[0].availability > 0 ? (
+                                    <button type="button" class="mt-4 xl:mt-0 text-white bg-[#FF9119] space-x-2 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-4 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
+                                        <Link to={e.trainNumber}><div className="text-white font-bold">PILIH</div></Link> 
+                                    </button>  
+                                ) : ''}
+                            </div>
                         </div>
                     </div>
+
+                    <div>
+
+                    {/* mobile cari */}
+
+                    <div className="block xl:hidden w-full text-gray-700">
+                        <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
+                            <div className="flex justify-between">
+                                <div className="col-span-1 xl:col-span-2">
+                                    <h1 className="text-md font-medium">{e.trainName}</h1>
+                                    <small className="text-gray-400">Excecutive class {e.seats[0].class}</small>
+                                </div>
+                                <div className="">
+                                    <h1 className="text-md font-medium text-[#FF9119]">Rp. {e.seats[0].priceAdult}</h1>
+                                    <small className="text-red-500 ml-2">{e.seats[0].availability} set(s) left</small>
+                                </div>
+                            </div>
+                            <div className="flex justify-start">
+                                <div className="flex space-x-2 items-start">
+                                    <div>
+                                        <h1 className="mt-10 xl:mt-0 text-sm font-medium">{e.departureTime}</h1>
+                                        <small className="text-gray-400">{berangkat.id_stasiun}</small>
+                                    </div>
+                                    <div className="w-full mt-12 px-4 border-b-2"></div>
+                                    <div className="text-xs">
+                                        <h1 className="mt-10 xl:mt-0 text-gray-400">{e.duration}</h1>
+                                        <small className="text-gray-400">Langsung</small>
+                                    </div>
+                                    <div className="w-full mt-12 px-4 border-b-2"></div>
+                                    <div>
+                                        <h1 className="mt-10 xl:mt-0 text-sm font-medium">{e.arrivalTime}</h1>
+                                        <small className="text-gray-400">{tujuan.id_stasiun}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
                 </div>
-            </div>
-        </div>                
+                ))}
+            </div>   
+         
+
             )
-            :
-            error !== true ? (
+            : '' : 
+
+            (
                 <div className="row mt-6 mb-24 w-full p-2 pr-0 xl:pr-16">
                         <div className="flex justify-center">
                                 <img src={'/nodata.jpg'} width={350} alt="nodata" />
@@ -219,7 +310,7 @@ export default function KAI(){
                             </div>
                         </div>
                 </div> 
-            ) : ''
+            )
         }
         </>
     )
