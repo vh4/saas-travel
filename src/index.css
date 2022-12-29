@@ -9,3 +9,13 @@
       margin: 0;
     }
   }
+
+  .input-phone-number input{
+    border:none;
+  }
+
+  .input-phone-number input:focus{
+    outline: none !important;
+    border:none !important;
+    box-shadow: none !important;
+}

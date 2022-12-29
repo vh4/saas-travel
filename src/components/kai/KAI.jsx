@@ -15,7 +15,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { Popper } from "@mui/material";
 import {FaTrain} from 'react-icons/fa'
 import {BiTrain} from 'react-icons/bi'
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 export default function KAI(){
     
@@ -25,13 +25,32 @@ export default function KAI(){
     const [notFound, setError] = React.useState(true);
     const [isLoading, setLoading] = React.useState(false);
 
+    const navigate = useNavigate();
+
     const skeleton = [1,2,3,4,5,6,7,8,9,10];
 
     const [dataSearch, setDataSearch] = React.useState([]);
 
     const i = 0;
-
     const [kai, setKAI] = React.useState({});
+
+
+    function bookingHandlerDetail(trainNumber){
+        const detailBooking = dataSearch.filter(e => e.trainNumber === trainNumber);
+
+        const detailKereta = [{
+            berangkat_id_station: berangkat.id_stasiun,
+            tujuan_id_station: tujuan.id_stasiun,
+            berangkat_nama_kota: berangkat.nama_kota,
+            tujuan_nama_kota: tujuan.nama_kota
+        }];
+
+        localStorage.setItem(trainNumber + "_booking", JSON.stringify(detailBooking));
+        localStorage.setItem(trainNumber + "_detailTrain", JSON.stringify(detailKereta));
+
+         navigate('/train/booking/' + trainNumber)
+        
+    }
 
     const PopperMy = function (props) {
         return <Popper {...props} style={styles.popper} placement="bottom-start" />;
@@ -95,6 +114,8 @@ export default function KAI(){
             setError(false);
             setDataSearch(response.data.data);
             setLoading(false);
+
+            
             
         } catch (error) {
             console.log(error);
@@ -243,9 +264,9 @@ export default function KAI(){
                             </div>
                             <div>
                                 {e.seats[0].availability > 0 ? (
-                                    <button type="button" class="mt-4 xl:mt-0 text-white bg-[#FF9119] space-x-2 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-4 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
-                                        <Link to={e.trainNumber}><div className="text-white font-bold">PILIH</div></Link> 
-                                    </button>  
+                                    <button type="button" onClick={() => bookingHandlerDetail(e.trainNumber)} class="mt-4 xl:mt-0 text-white bg-[#FF9119] space-x-2 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-4 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
+                                        <div className="text-white font-bold">PILIH</div></button>
+                                    
                                 ) : ''}
                             </div>
                         </div>
