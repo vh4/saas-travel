@@ -7,7 +7,7 @@ import Layout from "../LayoutUser";
 import { toast } from 'react-toastify';
 import axios from "axios";
 
-export default function Transaksi(){
+export default function Booking(){
 
     const navigate = useNavigate();
     const [data, setData] = useState({});

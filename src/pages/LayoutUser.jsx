@@ -7,7 +7,7 @@ import {AiOutlineHome} from 'react-icons/ai'
 import { useLocation } from "react-router-dom";
 import _ from 'lodash'
 
-export default function Home({children}){
+export default function LayoutUser({children}){
 
     const [sidebarOpen, setSidebarOpen] = useState("block");
     const location = useLocation();
