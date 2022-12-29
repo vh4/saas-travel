@@ -21,15 +21,13 @@ export default function Header({toogleSidebar, valueSidebar}){
         e.preventDefault();
 
         axios.post('http://localhost:5000/travel/app/sign_out', {
-            token: JSON.parse(localStorage.getItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53"))
+            token: JSON.parse(localStorage.getItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53")),
         }).then(() => {
-
+            localStorage.removeItem('userDetails');
             localStorage.removeItem(secret_login_key);
             toast.success('Anda berhasil logout!');
             navigate('/')
-        
         });
-
     }
 
     const toggleFuction = useCallback( () => {
