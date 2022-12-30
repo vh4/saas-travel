@@ -142,6 +142,7 @@ export default function KAI(){
                         <FormControl sx={{ m: 1, minWidth: 120, outline: 'none' }} >
                         <Autocomplete key={ i + 1}
                             PopperComponent={PopperMy}
+                            disableClearable
                             options={kai.data}
                             getOptionLabel={(option) => option.nama_stasiun + ' - ' + option.nama_kota + ' - ' + option.id_stasiun}
                             value={berangkat}
@@ -161,6 +162,7 @@ export default function KAI(){
                         <FormControl sx={{ m: 1, minWidth: 120, outline: 'none' }} >
                         <Autocomplete  key={ i + 1}
                             PopperComponent={PopperMy}
+                            disableClearable
                             options={kai.data}
                             getOptionLabel={(option) => option.nama_stasiun + ' - ' + option.nama_kota + ' - ' + option.id_stasiun}
                             value={tujuan}
@@ -204,7 +206,6 @@ export default function KAI(){
                 </div>
             )
             : ''
-        
         }
             {isLoading ? 
             <div className="flex text-xl items-center mt-12 ml-4 font-bold text-gray-700 space-x-2">
@@ -213,7 +214,6 @@ export default function KAI(){
                 </Box>
             </div>
         : ''}
-
         {/* tiket search kereta */}
             {isLoading ? 
                 skeleton.map((e) =>(
@@ -228,7 +228,6 @@ export default function KAI(){
                     </div>
                     ))
             : ''}
-
             {(dataSearch !== undefined ) && berangkat !== null && tujuan !== null ?  (notFound === false ) ?  ( //ganti
             <div className="row mt-6 mb-24 w-full p-2 pr-0 xl:pr-16">           
                 {dataSearch.map((e) => (
@@ -312,8 +311,6 @@ export default function KAI(){
                 </div>
                 ))}
             </div>   
-         
-
             )
             : '' : 
 
