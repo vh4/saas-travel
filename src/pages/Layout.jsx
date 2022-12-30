@@ -21,7 +21,7 @@ export default function Layout({children}){
         <div className="block">
             < Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
             
-                            {/* carousel fitur  */}
+          {/* carousel fitur  */}
             <div className="mt-36 px-12 md:px-0">
                 <Carousels />
             </div>

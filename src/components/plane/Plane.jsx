@@ -55,58 +55,6 @@ export default function Plane(){
     
     return (
         <>     
-            {/* <div className="row mt-12 -mx-8 xl:mx-12 xl:h-16 md:w-auto p-4">
-                <div className="grid grid-cols-4 md:grid-cols-5 xl:grid-cols-6">
-                    <div className=" mx-3 p-4">
-                        <img className=" w-8 xl:h-16 md:w-auto  object-center" src="pulsadata.png" alt="" />
-                        <p className="text-xs text-center xl:text-start">Pulsa</p>
-                    </div>
-                    <div className=" mx-3 p-4">
-                        <img className=" w-8 xl:h-16 md:w-auto  object-center" src="transfer.png" alt="" />
-                        <p className="text-xs text-center xl:text-start">Tranfer</p>
-                    </div>
-                    <div className=" mx-3 p-4">
-                        <img className=" w-8 xl:h-16 md:w-auto  object-center" src="trfspesial.png" alt="" />
-                        <p className="text-xs text-center xl:text-start">Transfer</p>
-                    </div>
-                    <div className=" mx-3  p-4">
-                        <img className=" w-8 xl:h-16 md:w-auto  object-center" src="ecommerce.png" alt="" />
-                        <p className="text-xs text-center xl:text-start">E-Commerce</p>
-                    </div>
-                    <div className=" mx-3  p-4">
-                        <img className=" w-8 xl:h-16 md:w-auto  object-center" src="emoney.png" alt="" />
-                        <p className="text-xs text-center xl:text-start">E-Money</p>
-                    </div>
-                    <div className=" mx-3  p-4">
-                        <img className=" w-8 xl:h-16 md:w-auto  object-center" src="game.png" alt="" />
-                        <p className="text-xs text-center xl:text-start">Game</p>
-                    </div>
-                    <div className=" mx-3  p-4">
-                        <img className=" w-8 xl:h-16 md:w-auto  object-center" src="pln.png" alt="" />
-                        <p className="text-xs text-center xl:text-start">PLN</p>
-                    </div>
-                    <div className=" mx-3  p-4">
-                        <img className=" w-8 xl:h-16 md:w-auto  object-center" src="djkm.png" alt="" />
-                        <p className="text-xs text-center xl:text-start">MPN</p>
-                    </div>
-                    <div className=" mx-3  p-4">
-                        <img className="w-8 xl:h-16 md:w-auto  object-center" src="pdam.png" alt="" />
-                        <p className="text-xs text-center xl:text-start">PDAM</p>
-                    </div>
-                    <div className=" mx-3 p-4">
-                        <img className=" w-8 xl:h-16 md:w-auto  object-center" src="bpjs.png" alt="" />
-                        <p className="text-xs text-center xl:text-start">BPJS Kesehatan</p>
-                    </div>
-                    <div className=" mx-3 p-4">
-                        <img className=" w-8 xl:h-16 md:w-auto  object-center" src="telkom.png" alt="" />
-                        <p className="text-xs text-center xl:text-start">Telkom</p>
-                    </div>
-                    <div className=" mx-3 p-4">
-                        <img className=" w-8 xl:h-16 md:w-auto  object-center" src="tv.png" alt="" />
-                        <p className="text-xs text-center xl:text-start">TV Kabel</p>
-                    </div>
-                </div>
-            </div> */}
             <div className="row mt-6 w-full p-2 pr-0 xl:pr-16 mb-12">
                 <div class="w-full p-2 py-4 xl:px-12 xl:py-8 bg-white border border-gray-200 rounded-lg shadow-xs dark:bg-gray-800 dark:border-gray-700">
                     <form className="w-full ">

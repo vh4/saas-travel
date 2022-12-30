@@ -8,49 +8,79 @@ import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import {HiOutlineArrowRight, HiOutlineArrowNarrowRight} from 'react-icons/hi'
-import Box from '@mui/material/Box';
-import Skeleton from '@mui/material/Skeleton';
+
 import Autocomplete from '@mui/material/Autocomplete';
 import { Popper } from "@mui/material";
 import {FaTrain} from 'react-icons/fa'
 import {BiTrain} from 'react-icons/bi'
-import { useNavigate } from "react-router";
+import { useNavigate, createSearchParams } from "react-router-dom";
 
 export default function KAI(){
     
     const [berangkat, setBerangkat] = React.useState();
     const [tujuan, setTujuan] = React.useState();
     const [tanggal, setTanggal] = React.useState();
-    const [notFound, setError] = React.useState(true);
     const [isLoading, setLoading] = React.useState(false);
+    const [adult, setadult] = React.useState(1);
+    const [child, setchild] = React.useState(0);
+    const [infant, setinfant] = React.useState(0);
 
     const navigate = useNavigate();
 
-    const skeleton = [1,2,3,4,5,6,7,8,9,10];
 
-    const [dataSearch, setDataSearch] = React.useState([]);
+    function plusAdult(e){
+        e.preventDefault();
+
+        setadult(adult + 1);
+    }
+
+    function minusAdult(e){
+        e.preventDefault();
+
+        if(adult < 0 || adult === 0){
+            setadult(0);
+        }else{
+            setadult(adult - 1);
+        }
+        
+    }
+
+    function plusChild(e){
+        e.preventDefault();
+
+        setchild(child + 1);
+    }
+
+    function minusChild(e){
+        e.preventDefault();
+
+        if(child < 0 || child === 0){
+            setchild(0);
+        }else{
+            setchild(child - 1);
+        }
+
+    }
+
+    function plusInfant(e){
+        e.preventDefault();
+        setinfant(infant + 1);
+    }
+
+    function minusInfant(e){
+        e.preventDefault();
+
+        if(infant < 0 || infant === 0){
+            setinfant(0);
+        }else{
+            setinfant(infant - 1);
+        }
+
+    }
+
 
     const i = 0;
     const [kai, setKAI] = React.useState({});
-
-
-    function bookingHandlerDetail(trainNumber){
-        const detailBooking = dataSearch.filter(e => e.trainNumber === trainNumber);
-
-        const detailKereta = [{
-            berangkat_id_station: berangkat.id_stasiun,
-            tujuan_id_station: tujuan.id_stasiun,
-            berangkat_nama_kota: berangkat.nama_kota,
-            tujuan_nama_kota: tujuan.nama_kota
-        }];
-
-        localStorage.setItem(trainNumber + "_booking", JSON.stringify(detailBooking));
-        localStorage.setItem(trainNumber + "_detailTrain", JSON.stringify(detailKereta));
-
-         navigate('/train/booking/' + trainNumber)
-        
-    }
 
     const PopperMy = function (props) {
         return <Popper {...props} style={styles.popper} placement="bottom-start" />;
@@ -85,43 +115,35 @@ export default function KAI(){
     }
 
     async function handlerCariKai(e){
-        e.preventDefault();
+
         setLoading(true);
 
-        try {
-
-            const tanggalParse = tanggal.$y + '-' + (parseInt(tanggal.$M) + 1).toString()  + '-' + tanggal.$D;
+        const tanggalParse = tanggal.$y + '-' + (parseInt(tanggal.$M) + 1).toString()  + '-' + tanggal.$D;
         
-            const response = await axios.post('http://localhost:5000/travel/train/search', {
-                // token: localStorage.getItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53"),,
-                productCode : "WKAI",
-                token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjhkNzNtbmc4OWVkIn0.eyJpc3MiOiJodHRwczpcL1wvYXBpLmZhc3RyYXZlbC5jby5pZCIsImF1ZCI6IkZhc3RyYXZlbEIyQiBDbGllbnQiLCJqdGkiOiI4ZDczbW5nODllZCIsImlhdCI6MTY3MjE5NzI0MywibmJmIjoxNjcyMTk3MzAyLCJleHAiOjE2NzIyMDA4NDIsIm91dGxldElkIjoiRkE0MDMzMjgiLCJwaW4iOiI1MzcyMDEiLCJrZXkiOiJGQVNUUEFZIn0.nMgrQ7qFBMFcdqhABEe8B4x6T5E_Kqb7hQFoXkq-kaA",
-                origin:berangkat.id_stasiun,
+        setTimeout(() => {
+            e.preventDefault();
+            setLoading(false);
+
+            const params = {
+                origin: berangkat.id_stasiun,
                 destination:tujuan.id_stasiun,
-                date:tanggalParse
-            });
-    
-            if(response.data.rc !== "00" || response.data.rc === undefined){
-                setError(true);
-                setLoading(false);
+                productCode: 'WKAI',
+                date:tanggalParse,
+                kotaBerangkat:berangkat.nama_kota,
+                kotaTujuan:tujuan.nama_kota,
+                stasiunBerangkat:berangkat.nama_stasiun,
+                stasiunTujuan:tujuan.nama_stasiun,
+                adult:adult,
+                child:child,
+                infant:infant,
             }
 
-            if(response.data === undefined){
-                setError(true);
-                setLoading(false);
-            }
-    
-            setError(false);
-            setDataSearch(response.data.data);
-            setLoading(false);
+            navigate({
+                pathname: '/train/search',
+                search: `?${createSearchParams(params)}`,
+              });
 
-            
-            
-        } catch (error) {
-            console.log(error);
-            setError(true);
-            setLoading(false);
-        }
+        }, 1000);
 
     }
 
@@ -138,7 +160,7 @@ export default function KAI(){
                             < GiCommercialAirplane className="text-gray-600" size={24} />
                             <div className="text-xl font-medium text-gray-600">Tiket KAI</div>
                         </div>
-                        <div className="mt-4 xl:mt-12 grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4">
+                        <div className="mt-4 xl:mt-12 grid grid-cols-1 2xl:grid-cols-3 gap-4">
                         <FormControl sx={{ m: 1, minWidth: 120, outline: 'none' }} >
                         <Autocomplete key={ i + 1}
                             PopperComponent={PopperMy}
@@ -188,148 +210,71 @@ export default function KAI(){
                             />
                         </LocalizationProvider>
                         <FormHelperText>Tanggal keberangkatan</FormHelperText>
-                        </FormControl>                                                                 
+                        </FormControl>
+                            <div className="block 2xl:flex 2xl:space-x-8">
+                                <div className="mt-2 w-full items-center ml-4 text-gray-600 flex space-x-2">
+                                    <img src={'/adult.svg'} alt="adult" />
+                                    <div className="header-number px-3">
+                                        <p>Adult </p>
+                                    </div>
+                                    <button onClick={plusAdult} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                        <span class="m-auto text-2xl font-md">+</span>
+                                    </button>
+                                    <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={adult} onChange={(e) => setadult(e.target.value)} />
+                                    <button onClick={minusAdult} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                        <span class="m-auto text-2xl font-md">−</span>
+                                    </button>                           
+                                </div>
+                                <div className="mt-2 w-full items-center ml-4 text-gray-600 flex space-x-2">
+                                    <img src={'/child.svg'} alt="child" />
+                                    <div className="header-number px-3">
+                                        <p>Child </p>
+                                    </div>
+                                    <button onClick={plusChild} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                        <span class="m-auto text-2xl font-md">+</span>
+                                    </button>
+                                    <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={child} onChange={(e) => setchild(e.target.value)} />
+                                    <button onClick={minusChild} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                        <span class="m-auto text-2xl font-md">−</span>
+                                    </button>                           
+                                </div>
+                                <div className="mt-2 w-full items-center ml-4 text-gray-600 flex space-x-2">
+                                    <img src={'/infanct.svg'} alt="infanct" />
+                                    <div className="header-number px-2">
+                                        <p>Infant</p>
+                                    </div>
+                                    <button onClick={plusInfant} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                        <span class="m-auto text-2xl font-md">+</span>
+                                    </button>
+                                    <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={infant}  onChange={(e) => setinfant(e.target.value)}/>
+                                    <button onClick={minusInfant} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                        <span class="m-auto text-2xl font-md">−</span>
+                                    </button>                           
+                                </div>
+                            </div>                                                                
                         </div>
                         <div className="w-full mt-4 flex justify-end">
                         <button onClick={handlerCariKai} type="button" class="text-white bg-[#FF9119] space-x-2 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-8 py-4 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
-                         <div className="text-white text-MD font-bold">CARI TIKET</div>
+                            {isLoading ? (
+                            <div className="flex space-x-2 items-center">
+                                <svg aria-hidden="true" class="mr-2 w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                                </svg>
+                                <div class="">Loading...</div>
+                            </div>
+                            )
+                        :
+                        (
+                            <div className="text-white text-MD font-bold">CARI TIKET</div>
+                        )
+                        }
                         </button>  
                         </div>
                     </form>
                 </div>
             </div>
-            { (dataSearch !== "undefined") && notFound === false  && berangkat !== null && tujuan !== null ? (
-                <div className="flex text-xl items-center mt-12 ml-4 font-bold text-gray-700 space-x-2">
-                    <div>{berangkat.nama_stasiun}</div>
-                    < HiOutlineArrowRight />
-                    <div>{tujuan.nama_stasiun}</div>
-                </div>
-            )
-            : ''
-        }
-            {isLoading ? 
-            <div className="flex text-xl items-center mt-12 ml-4 font-bold text-gray-700 space-x-2">
-                <Box sx={{ width: 350 }}>
-                    <Skeleton />
-                </Box>
-            </div>
-        : ''}
-        {/* tiket search kereta */}
-            {isLoading ? 
-                skeleton.map((e) =>(
-                    <div className="row mt-6 w-full p-2 pr-0 xl:pr-16">           
-                            <Box sx={{ width: "100%" }}>
-                                <Skeleton />
-                                <Skeleton />
-                                <Skeleton />
-                                <Skeleton />
-                                <Skeleton />
-                            </Box>
-                    </div>
-                    ))
-            : ''}
-            {(dataSearch !== undefined ) && berangkat !== null && tujuan !== null ?  (notFound === false ) ?  ( //ganti
-            <div className="row mt-6 mb-24 w-full p-2 pr-0 xl:pr-16">           
-                {dataSearch.map((e) => (
-                    <div class={`mt-6 w-full p-2 py-4 xl:px-12 xl:py-8 ${ e.seats[0].availability > 0 ? 'bg-white' : 'bg-gray-200' } border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700`}>
-    
-                    {/* desktop cari */}
-    
-                    <div className="hidden xl:block w-full text-gray-700">
-                        
-                        <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
-                            <div className="col-span-1 xl:col-span-2">
-                                <h1 className="text-md font-medium">{e.trainName} </h1>
-                                <small>Eksekutif class {e.seats[0].class}</small>
-                            </div>
-                            <div className="flex">
-                                <div className="">
-                                    <h1 className="mt-4 xl:mt-0 text-md font-medium">{e.departureTime}</h1>
-                                    <small>{berangkat.nama_kota} ({berangkat.id_stasiun})</small>
-                                </div>
-                                < HiOutlineArrowNarrowRight size={24} />
-                            </div>
-                            <div>
-                                <h1 className="text-md font-medium">{e.arrivalTime}</h1>
-                                <small>{tujuan.nama_kota} ({tujuan.id_stasiun})</small>
-                            </div>
-                            <div>
-                                <h1 className="mt-4 xl:mt-0 text-md font-medium">{e.duration}</h1>
-                                <small>Langsung</small>
-                            </div>
-                            <div className="">
-                                    <h1 className="mt-4 xl:mt-0 text-md font-bold text-[#FF9119]">Rp.{e.seats[0].priceAdult}</h1>
-                                    <small className="text-red-500">{e.seats[0].availability} set(s) left</small>
-                            </div>
-                            <div>
-                                {e.seats[0].availability > 0 ? (
-                                    <button type="button" onClick={() => bookingHandlerDetail(e.trainNumber)} class="mt-4 xl:mt-0 text-white bg-[#FF9119] space-x-2 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-4 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
-                                        <div className="text-white font-bold">PILIH</div></button>
-                                    
-                                ) : ''}
-                            </div>
-                        </div>
-                    </div>
 
-                    <div>
-
-                    {/* mobile cari */}
-
-                    <div className="block xl:hidden w-full text-gray-700">
-                        <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
-                            <div className="flex justify-between">
-                                <div className="col-span-1 xl:col-span-2">
-                                    <h1 className="text-md font-medium">{e.trainName}</h1>
-                                    <small className="text-gray-400">Excecutive class {e.seats[0].class}</small>
-                                </div>
-                                <div className="">
-                                    <h1 className="text-md font-medium text-[#FF9119]">Rp. {e.seats[0].priceAdult}</h1>
-                                    <small className="text-red-500 ml-2">{e.seats[0].availability} set(s) left</small>
-                                </div>
-                            </div>
-                            <div className="flex justify-start">
-                                <div className="flex space-x-2 items-start">
-                                    <div>
-                                        <h1 className="mt-10 xl:mt-0 text-sm font-medium">{e.departureTime}</h1>
-                                        <small className="text-gray-400">{berangkat.id_stasiun}</small>
-                                    </div>
-                                    <div className="w-full mt-12 px-4 border-b-2"></div>
-                                    <div className="text-xs">
-                                        <h1 className="mt-10 xl:mt-0 text-gray-400">{e.duration}</h1>
-                                        <small className="text-gray-400">Langsung</small>
-                                    </div>
-                                    <div className="w-full mt-12 px-4 border-b-2"></div>
-                                    <div>
-                                        <h1 className="mt-10 xl:mt-0 text-sm font-medium">{e.arrivalTime}</h1>
-                                        <small className="text-gray-400">{tujuan.id_stasiun}</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                ))}
-            </div>   
-            )
-            : '' : 
-
-            (
-                <div className="row mt-6 mb-24 w-full p-2 pr-0 xl:pr-16">
-                        <div className="flex justify-center">
-                                <img src={'/nodata.jpg'} width={350} alt="nodata" />
-                            </div>
-                        <div className="flex justify-center w-full text-gray-700">
-                            <div className="text-gray-500 text-center">
-                                <div>
-                                <h1>Maaf, sepertinya rute ini belum dibuka kembali</h1>
-                                <small>Namun jangan khawatir, masih ada pilihan kendaraan lain yang tetap bisa mengantarkan Anda ke tempat tujuan.</small>
-                                </div>
-                            </div>
-                        </div>
-                </div> 
-            )
-        }
         </>
     )
 }
