@@ -12,6 +12,7 @@
 
   .input-phone-number input{
     border:none;
+    width: 80%;
   }
 
   .input-phone-number input:focus{
