@@ -78,7 +78,7 @@ export default function Header({toogleSidebar, valueSidebar}){
             <div className="hidden relative group space-x-2 text-gray-900  md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-6 py-2.5 md:inline-flex group-hover:block items-end ml-2 mb-2">
                 <p className="block">{user.namaPemilik}</p>
                 < CiSettings size={20} />
-            <small className="absolute group-hover top-8 left-4 text-slate-500">{user.balance}</small>
+            <small className="absolute group-hover top-8 left-4 text-slate-500">Sisa saldo Rp {user.balance}</small>
             <ul class="transition-opacity duration-500 invisible group-hover:visible absolute top-0 mt-8 ml-16 w-48 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
             <Link to="/profile/view"><li class="hover:bg-gray-200 py-2 px-4 w-full rounded-t-lg border-b border-gray-200 dark:border-gray-600">Akun saya</li></Link>
                 <li class="hover:bg-gray-200 py-2 px-4 w-full border-b border-gray-200 dark:border-gray-600">Lupa password pin</li>
