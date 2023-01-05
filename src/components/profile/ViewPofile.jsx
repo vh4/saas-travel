@@ -11,7 +11,7 @@ export default function EditProfile(){
     },[]);
 
     const getProfileUser = async () =>{
-        const response = await axios.post('http://localhost:5000/travel/app/account', {
+        const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/account`, {
             token: JSON.parse(localStorage.getItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53"))
         });
 

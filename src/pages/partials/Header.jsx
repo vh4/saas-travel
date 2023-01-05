@@ -20,7 +20,7 @@ export default function Header({toogleSidebar, valueSidebar}){
     const LogoutHandler = (e) => {
         e.preventDefault();
 
-        axios.post('http://localhost:5000/travel/app/sign_out', {
+        axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/sign_out`, {
             token: JSON.parse(localStorage.getItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53")),
         }).then(() => {
             localStorage.removeItem('userDetails');
@@ -33,18 +33,17 @@ export default function Header({toogleSidebar, valueSidebar}){
     const [user, setUser] = useState([]);
 
     useEffect(() => {
-        axios.post('http://localhost:5000/travel/app/account', {
+        axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/account`, {
             token: JSON.parse(localStorage.getItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53")),
         }).then((res) => {
             setUser(res.data.data);
         });
     });
-    console.log(user);
     
     const userData = async (items) => {
         console.log(items)
         return axios
-            .post("http://localhost:5000/travel/app/account", {
+            .post(`${process.env.REACT_APP_HOST_API}/travel/app/account`, {
                 token : items.token,
             })
             .then((data) => {

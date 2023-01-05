@@ -15,6 +15,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.2.1",
     "dayjs": "^1.11.7",
+    "dotenv": "^16.0.3",
     "flowbite-datepicker": "^1.2.2",
     "flowbite-react": "^0.3.7",
     "http-proxy-middleware": "^2.0.6",

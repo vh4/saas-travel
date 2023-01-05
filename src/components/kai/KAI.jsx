@@ -14,8 +14,12 @@ import { Popper } from "@mui/material";
 import {FaTrain} from 'react-icons/fa'
 import {BiTrain} from 'react-icons/bi'
 import { useNavigate, createSearchParams } from "react-router-dom";
+import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
 
 export default function KAI(){
+
+    console.log(process.env.REACT_APP_HOST_API);
     
     const [berangkat, setBerangkat] = React.useState();
     const [tujuan, setTujuan] = React.useState();
@@ -102,7 +106,7 @@ export default function KAI(){
 
         try {
 
-            const response = await axios.post('http://localhost:5000/travel/train/station', {
+            const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/station`, {
                 token: localStorage.getItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53"),
             });
     
@@ -168,99 +172,121 @@ export default function KAI(){
                             < GiCommercialAirplane className="text-gray-600" size={24} />
                             <div className="text-xl font-medium text-gray-600">Tiket KAI</div>
                         </div>
-                        <div className="mt-4 xl:mt-12 grid grid-cols-1 2xl:grid-cols-3 gap-4">
-                        <FormControl sx={{ m: 1, minWidth: 120, outline: 'none' }} >
-                        <Autocomplete key={ i + 1}
-                            PopperComponent={PopperMy}
-                            disableClearable
-                            options={kai.data}
-                            getOptionLabel={(option) => option.nama_stasiun + ' - ' + option.nama_kota + ' - ' + option.id_stasiun}
-                            value={berangkat}
-                            onChange={(event, newValue) => {
-                                setBerangkat(newValue);
-                              }}
+                        {kai.data !== undefined ? 
+                        (
+                            <>
+                                <div className="mt-4 xl:mt-12 grid grid-cols-1 2xl:grid-cols-3 gap-4">
+                                <FormControl sx={{ m: 1, minWidth: 120, outline: 'none' }} >
+                                <Autocomplete key={ i + 1}
+                                    PopperComponent={PopperMy}
+                                    disableClearable
+                                    options={kai.data}
+                                    getOptionLabel={(option) => option.nama_stasiun + ' - ' + option.nama_kota + ' - ' + option.id_stasiun}
+                                    value={berangkat}
+                                    onChange={(event, newValue) => {
+                                        setBerangkat(newValue);
+                                    }}
 
-                              renderInput={(params) => <TextField {...params}
-                              InputProps={{...params.InputProps, 
-                                    startAdornment: <FaTrain/> }}
-                              placeholder="Stasiun keberangkatan"
-                              label="Keberangkatan" />}                            
-                               
-                               />
-                            <FormHelperText>Stasiun Keberangkatan</FormHelperText>
-                        </FormControl>
-                        <FormControl sx={{ m: 1, minWidth: 120, outline: 'none' }} >
-                        <Autocomplete  key={ i + 1}
-                            PopperComponent={PopperMy}
-                            disableClearable
-                            options={kai.data}
-                            getOptionLabel={(option) => option.nama_stasiun + ' - ' + option.nama_kota + ' - ' + option.id_stasiun}
-                            value={tujuan}
-                            onChange={(event, newValue) => {
-                                setTujuan(newValue);
-                              }}
-                              renderInput={(params) => <TextField {...params}
-                              InputProps={{...params.InputProps, 
-                                    startAdornment: <FaTrain/> }}
-                              placeholder="Stasiun Tujuan"
-                              label="Tujuan" />}
-                            />
-                            <FormHelperText>Stasiun Tujuan</FormHelperText>
-                        </FormControl>
-                        <FormControl sx={{ m: 1, minWidth: 120 }}> 
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker key={ i + 1}
-                                value={tanggal}
-                                onChange={(newValue) => {
-                                setTanggal(newValue);
-                                }}
-                                renderInput={(params) => <TextField {...params} />}
-                            />
-                        </LocalizationProvider>
-                        <FormHelperText>Tanggal keberangkatan</FormHelperText>
-                        </FormControl>
-                            <div className="block 2xl:flex 2xl:space-x-8">
-                                <div className="mt-2 w-full items-center ml-4 text-gray-600 flex space-x-2">
-                                    <img src={'/adult.svg'} alt="adult" />
-                                    <div className="header-number px-3">
-                                        <p>Adult </p>
-                                    </div>
-                                    <button onClick={plusAdult} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                        <span class="m-auto text-2xl font-md">+</span>
-                                    </button>
-                                    <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={adult} onChange={(e) => setadult(e.target.value)} />
-                                    <button onClick={minusAdult} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                        <span class="m-auto text-2xl font-md">−</span>
-                                    </button>                           
+                                    renderInput={(params) => <TextField {...params}
+                                    InputProps={{...params.InputProps, 
+                                            startAdornment: <FaTrain/> }}
+                                    placeholder={kai.data === undefined ? 'Loading...'  : 'Stasiun keberangkatan'}
+                                    label="Keberangkatan" />}                            
+                                    
+                                    />
+                                    <FormHelperText>Stasiun Keberangkatan</FormHelperText>
+                                </FormControl>
+                                <FormControl sx={{ m: 1, minWidth: 120, outline: 'none' }} >
+                                <Autocomplete  key={ i + 1}
+                                    PopperComponent={PopperMy}
+                                    disableClearable
+                                    options={kai.data}
+                                    getOptionLabel={(option) => option.nama_stasiun + ' - ' + option.nama_kota + ' - ' + option.id_stasiun}
+                                    value={tujuan}
+                                    onChange={(event, newValue) => {
+                                        setTujuan(newValue);
+                                    }}
+                                    renderInput={(params) => <TextField {...params}
+                                    InputProps={{...params.InputProps, 
+                                            startAdornment: <FaTrain/> }}
+                                    placeholder={kai.data === undefined ? 'Loading...'  : 'Stasiun Tujuan'}
+                                    label="Tujuan" />}
+                                    />
+                                    <FormHelperText>Stasiun Tujuan</FormHelperText>
+                                </FormControl>
+                                <FormControl sx={{ m: 1, minWidth: 120 }}> 
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker key={ i + 1}
+                                        value={tanggal}
+                                        onChange={(newValue) => {
+                                        setTanggal(newValue);
+                                        }}
+                                        renderInput={(params) => <TextField {...params} />}
+                                    />
+                                </LocalizationProvider>
+                                <FormHelperText>Tanggal keberangkatan</FormHelperText>
+                                </FormControl>
+                                    <div className="block 2xl:flex 2xl:space-x-8">
+                                        <div className="mt-2 w-full items-center ml-4 text-gray-600 flex space-x-2">
+                                            <img src={'/adult.svg'} alt="adult" />
+                                            <div className="header-number px-3">
+                                                <p>Adult </p>
+                                            </div>
+                                            <button onClick={plusAdult} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                                <span class="m-auto text-2xl font-md">+</span>
+                                            </button>
+                                            <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={adult} onChange={(e) => setadult(e.target.value)} />
+                                            <button onClick={minusAdult} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                                <span class="m-auto text-2xl font-md">−</span>
+                                            </button>                           
+                                        </div>
+                                        <div className="mt-2 w-full items-center ml-4 text-gray-600 flex space-x-2">
+                                            <img src={'/child.svg'} alt="child" />
+                                            <div className="header-number px-3">
+                                                <p>Child </p>
+                                            </div>
+                                            <button onClick={plusChild} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                                <span class="m-auto text-2xl font-md">+</span>
+                                            </button>
+                                            <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={child} onChange={(e) => setchild(e.target.value)} />
+                                            <button onClick={minusChild} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                                <span class="m-auto text-2xl font-md">−</span>
+                                            </button>                           
+                                        </div>
+                                        <div className="mt-2 w-full items-center ml-4 text-gray-600 flex space-x-2">
+                                            <img src={'/infanct.svg'} alt="infanct" />
+                                            <div className="header-number px-2">
+                                                <p>Infant</p>
+                                            </div>
+                                            <button onClick={plusInfant} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                                <span class="m-auto text-2xl font-md">+</span>
+                                            </button>
+                                            <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={infant}  onChange={(e) => setinfant(e.target.value)}/>
+                                            <button onClick={minusInfant} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                                <span class="m-auto text-2xl font-md">−</span>
+                                            </button>                           
+                                        </div>
+                                    </div>                                                                
                                 </div>
-                                <div className="mt-2 w-full items-center ml-4 text-gray-600 flex space-x-2">
-                                    <img src={'/child.svg'} alt="child" />
-                                    <div className="header-number px-3">
-                                        <p>Child </p>
-                                    </div>
-                                    <button onClick={plusChild} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                        <span class="m-auto text-2xl font-md">+</span>
-                                    </button>
-                                    <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={child} onChange={(e) => setchild(e.target.value)} />
-                                    <button onClick={minusChild} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                        <span class="m-auto text-2xl font-md">−</span>
-                                    </button>                           
-                                </div>
-                                <div className="mt-2 w-full items-center ml-4 text-gray-600 flex space-x-2">
-                                    <img src={'/infanct.svg'} alt="infanct" />
-                                    <div className="header-number px-2">
-                                        <p>Infant</p>
-                                    </div>
-                                    <button onClick={plusInfant} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                        <span class="m-auto text-2xl font-md">+</span>
-                                    </button>
-                                    <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={infant}  onChange={(e) => setinfant(e.target.value)}/>
-                                    <button onClick={minusInfant} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                        <span class="m-auto text-2xl font-md">−</span>
-                                    </button>                           
-                                </div>
-                            </div>                                                                
-                        </div>
+                            </>
+                        ) :
+                        
+                        (
+                            <>
+                            <div className="mt-12 mb-4">
+                            <Box sx={{ width: 1000 }}>
+                                <Skeleton />
+                                <Skeleton animation="wave" />
+                                <Skeleton animation="wave" />
+                                <Skeleton animation="wave" />
+                                <Skeleton animation="wave" />
+                                <Skeleton animation={false} />
+                                </Box>
+                            </div>                            
+                            </>
+                        )
+
+                    }
                         <div className="w-full mt-4 flex justify-end">
                         <button onClick={handlerCariKai} type="button" class="text-white bg-[#FF9119] space-x-2 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-8 py-4 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
                             {isLoading ? (

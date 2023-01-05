@@ -13,7 +13,7 @@ export default function Login({setShowModalComponent}){
     const navigate = useNavigate();
 
     const logout = () => {
-        axios.post('http://localhost:5000/travel/app/sign_out', {
+        axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/sign_out`, {
             token: JSON.parse(localStorage.getItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53")),
         }).then(() => {
             localStorage.removeItem('userDetails');
@@ -37,7 +37,7 @@ export default function Login({setShowModalComponent}){
         e.preventDefault();
         try {
             setLoading(true);
-            await axios.post("http://localhost:5000/travel/app/sign_in", {
+            await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/sign_in`, {
                 outletId:uid,
                 pin:pin,
                 key: ''

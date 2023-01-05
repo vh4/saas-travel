@@ -9,11 +9,12 @@ import Kai from "./pages/kai/Kai";
 import Profile from "./pages/profile/Profile";
 import Transaksi from "./pages/transaksi/Transaksi";
 import BookingList from './pages/transaksi/Booking';
-import BookingKai from "./pages/kai/Booking"; 
-import SeatsKai from "./pages/kai/Seats";
+import BookingKai from "./pages/kai/Booking";
 import SearchKai from "./pages/kai/Search";
+import KonfirmasiKai from "./pages/kai/Konfirmasi"; 
 
 function App() {
+  
   return (
     <div className="App" >
        <BrowserRouter>
@@ -30,14 +31,14 @@ function App() {
           />  
         <Routes>
           <Route exact path="/" element={<Plane />}></Route>
-          <Route exact path="/train" element={< Kai/>}></Route>
-          <Route exact path="/train/search" element={< SearchKai/>}></Route>
-          <Route exact path="/train/Seats" element={< SeatsKai/>}></Route>
-
-          <Route exact path="/train/booking/:trainNumber" element={< BookingKai/>}></Route>
+          <Route path="/train" element={< Kai/>}></Route>
+          <Route path="/train/search" element={< SearchKai/>}></Route>
+          <Route path="/train/booking/:trainNumber" element={< BookingKai/>}></Route>
+          <Route path="/train/konfirmasi/:trainNumber" element={< KonfirmasiKai/>}></Route>
           <Route path="/transaksi" element={<Transaksi />}></Route>
           <Route path="/booking" element={<BookingList />}></Route>
           <Route path="/profile/view" element={<Profile />}></Route>
+          
         </Routes>
       </BrowserRouter>       
     </div>

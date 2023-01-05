@@ -20,6 +20,7 @@ export default function BookingKai(){
     const navigate = useNavigate();
     const {trainNumber} = useParams();
 
+
     const [isLoading, setIsLoading] = useState(false);
     const [inputBooking, setInputBooking] = useState([]);
 
@@ -206,13 +207,15 @@ export default function BookingKai(){
                     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjhkNzNtbmc4OWVkIn0.eyJpc3MiOiJodHRwczpcL1wvYXBpLmZhc3RyYXZlbC5jby5pZCIsImF1ZCI6IkZhc3RyYXZlbEIyQiBDbGllbnQiLCJqdGkiOiI4ZDczbW5nODllZCIsImlhdCI6MTY3MjE5NzI0MywibmJmIjoxNjcyMTk3MzAyLCJleHAiOjE2NzIyMDA4NDIsIm91dGxldElkIjoiRkE0MDMzMjgiLCJwaW4iOiI1MzcyMDEiLCJrZXkiOiJGQVNUUEFZIn0.nMgrQ7qFBMFcdqhABEe8B4x6T5E_Kqb7hQFoXkq-kaA",
                 };
 
-            const response = await axios.post('http://localhost:5000/travel/train/book', dataBookingSubmit);
+            const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/book`, dataBookingSubmit);
 
             if(response.data.rc !== '00'){
-                alert(response.data.rd)
+                alert(response.data.rd) 
+            }else{
+                const hasilDataBooking = response.data.data
+                localStorage.setItem(dataBookingTrain[0].trainNumber + '_hasilBookingdanPilihKursi', JSON.stringify(hasilDataBooking));
+                navigate("/train/konfirmasi/" + dataBookingTrain[0].trainNumber);
             }
-
-            console.log(response);
 
             setIsLoading(false);
 
