@@ -230,19 +230,74 @@ Router.post('/travel/train/station', function (req, res) {
 
 });
 
+
+//khusus fast tavel bang
+
 Router.post('/travel/train/search', function (req, res) {
 
   const {
     productCode, origin, destination, date, token
   } = req.body;
 
+  console.log(req.body);
+
   request.post(
-      `${process.env.URL_HIT}/travel/train/search`,
+      `https://api.fastravel.co.id/train/search`,
       {
         json: 
         {
           productCode, origin, destination, date, token
         }
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          return
+        }
+        return res.send(body)
+      }
+    )
+
+});
+
+
+Router.post('/travel/train/get_seat_layout', function (req, res) {
+
+  const {
+    productCode, origin, destination, date, token, trainNumber
+  } = req.body;
+
+  console.log(req.body);
+
+  request.post(
+      `https://api.fastravel.co.id/train/get_seat_layout`,
+      {
+        json: 
+        {
+          productCode, origin, destination, date, token, trainNumber
+        }
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          return
+        }
+        return res.send(body)
+      }
+    )
+
+});
+
+Router.post('/travel/train/book', function (req, res) {
+
+  const data = req.body;
+
+  console.log(data);
+
+  request.post(
+      `https://api.fastravel.co.id/train/book`,
+      {
+        json: data
       },
       (error, response, body) => {
         if (error) {
