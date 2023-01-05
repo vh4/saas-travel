@@ -27,11 +27,11 @@ export default function Login({setShowModalComponent}){
         localStorage.setItem('userDetails', JSON.stringify(tokenDetails));
     }
 
-    const runLogoutTimer = () => {
-        setTimeout(() => {
-            logout();
-        }, 43200000);
-    }
+    // const runLogoutTimer = () => {
+    //     setTimeout(() => {
+    //         logout();
+    //     }, 43200000);
+    // }
 
     const handlerLogin = async (e) => {
         e.preventDefault();
@@ -45,7 +45,7 @@ export default function Login({setShowModalComponent}){
                 if(data.data.rc === "00"){
                     console.log(data.data);
                     saveTokenInLocalStorage(data.data);
-                    runLogoutTimer(data.data.timer * 43200000);
+                    // runLogoutTimer(data.data.timer * 43200000);
                     setShowModalComponent(false)
                     setLoading(false);
                     localStorage.setItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53", JSON.stringify(data.data.token));

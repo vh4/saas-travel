@@ -90,6 +90,7 @@ export default function Search(){
         case 9: bulan = "Oktober"; break;
         case 10: bulan = "November"; break;
         case 11: bulan = "Desember"; break;
+
        }
 
      const tanggal_keberangkatan_kereta = hari + ', ' + tanggal + ' ' + bulan + ' ' + tahun;
@@ -147,11 +148,18 @@ export default function Search(){
     function bookingHandlerDetail(trainNumber){
         const detailBooking = dataSearch.filter(e => e.trainNumber === trainNumber);
 
+        console.log(detailBooking);
+
         const detailKereta = [{
             berangkat_id_station: origin,
             tujuan_id_station: destination,
             berangkat_nama_kota: kotaBerangkat,
-            tujuan_nama_kota: kotaTujuan
+            tujuan_nama_kota: kotaTujuan,
+            adult: adult,
+            child: child,
+            infant:infant,
+            stasiunBerangkat:stasiunBerangkat,
+            stasiunTujuan:stasiunTujuan,
         }];
 
         localStorage.setItem(trainNumber + "_booking", JSON.stringify(detailBooking));
@@ -166,8 +174,6 @@ export default function Search(){
      }, []);
 
 
-     console.log(notFound)
-
     return(
         <>
             <div className="judul-search mt-4 font-bold text-slate-600">
@@ -177,7 +183,7 @@ export default function Search(){
                 <div className="block md:flex justify-between">
                     <div className="flex items-center justify-center space-x-3 xl:space-x-8">
                         <div className="text-xs font-bold text-slate-600">
-                            {stasiunTujuan}, {kotaBerangkat}
+                            {stasiunBerangkat}, {kotaBerangkat}
                         </div>
                         <div className="bg-[#FF9119] p-1 rounded-full">
                             < VscArrowSwap className="font-bold text-white" size={16} />
@@ -231,7 +237,7 @@ export default function Search(){
                             <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                                 <div className="col-span-1 xl:col-span-2">
                                     <h1 className="text-md font-medium">{e.trainName} </h1>
-                                    <small>Eksekutif class {e.seats[0].class}</small>
+                                    <small>Class {e.seats[0].class}</small>
                                 </div>
                                 <div className="flex">
                                     <div className="">

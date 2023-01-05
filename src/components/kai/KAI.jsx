@@ -114,11 +114,19 @@ export default function KAI(){
 
     }
 
+    function addLeadingZero(num) {
+        if (num < 10) {
+          return '0' + num;
+        } else {
+          return '' + num;
+        }
+      }
+
     async function handlerCariKai(e){
 
         setLoading(true);
 
-        const tanggalParse = tanggal.$y + '-' + (parseInt(tanggal.$M) + 1).toString()  + '-' + tanggal.$D;
+        const tanggalParse = tanggal.$y + '-' + (addLeadingZero(parseInt(tanggal.$M) + 1)).toString()  + '-' + addLeadingZero(parseInt(tanggal.$D)).toString();
         
         setTimeout(() => {
             e.preventDefault();
