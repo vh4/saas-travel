@@ -112,7 +112,7 @@ export default function Konfirmasi(){
         e.preventDefault();
         setShowModal(true)
 
-        const response = await axios.post(`http://localhost:5000/travel/train/get_seat_layout`, {
+        const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/get_seat_layout`, {
             productCode: "WKAI",
             origin: dataDetailTrain[0].berangkat_id_station,
             destination:dataDetailTrain[0].tujuan_id_station,
