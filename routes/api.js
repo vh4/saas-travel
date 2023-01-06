@@ -242,7 +242,7 @@ Router.post('/travel/train/search', function (req, res) {
   console.log(req.body);
 
   request.post(
-      `https://api.fastravel.co.id/train/search`,
+    `${process.env.URL_HIT}/travel/train/search`,
       {
         json: 
         {
@@ -270,7 +270,7 @@ Router.post('/travel/train/get_seat_layout', function (req, res) {
   console.log(req.body);
 
   request.post(
-      `https://api.fastravel.co.id/train/get_seat_layout`,
+      `${process.env.URL_HIT}/travel/train/get_seat_layout`,
       {
         json: 
         {
@@ -295,7 +295,7 @@ Router.post('/travel/train/book', function (req, res) {
   console.log(data);
 
   request.post(
-      `https://api.fastravel.co.id/train/book`,
+    `${process.env.URL_HIT}/travel/train/book`,
       {
         json: data
       },
