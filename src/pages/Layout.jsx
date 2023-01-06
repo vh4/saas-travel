@@ -19,10 +19,13 @@ export default function Layout({children}){
 
     return(
         <div className="block">
-            < Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
+
+            <div className="hidden md:block">
+                < Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
+            </div>
             
           {/* carousel fitur  */}
-            <div className="mt-36 px-12 md:px-0">
+            <div className="mt-8 md:mt-36">
                 <Carousels />
             </div>
             

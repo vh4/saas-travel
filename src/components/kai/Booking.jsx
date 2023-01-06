@@ -5,14 +5,15 @@ import 'react-phone-number-input/style.css'
 import PhoneInput, {formatPhoneNumber} from 'react-phone-number-input'
 import '../../index.css';
 import {TbArrowsLeftRight} from 'react-icons/tb'
-import { useNavigate } from "react-router";
-import { useParams } from 'react-router';
+import { useNavigate } from "react-router-dom";
+import { useParams, createSearchParams } from 'react-router-dom';
 import axios from "axios";
 import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useForm } from "react-hook-form"
+import {RxCrossCircled} from 'react-icons/rx'
 
 export default function BookingKai(){
 
@@ -26,7 +27,8 @@ export default function BookingKai(){
 
     const dataBookingTrain = JSON.parse(localStorage.getItem(trainNumber + "_booking"));
     const dataDetailTrain = JSON.parse(localStorage.getItem(trainNumber + "_detailTrain"));
-    
+
+    const classTrain = dataBookingTrain[0].seats[0].grade === 'E' ? 'Eksekutif' : dataBookingTrain[0].seats[0].grade === 'B' ? 'Bisnis' : 'Ekonomi';
 
     useEffect(() =>{
         
@@ -178,84 +180,92 @@ export default function BookingKai(){
                 adult[0].map((data) =>{
                     data.phone = formatPhoneNumber(data.phone);
                 })
-    
-                const dataBookingSubmit = {
-    
-                    "productCode" : "WKAI",
-                    "origin" : dataDetailTrain[0].berangkat_id_station,
-                    "destination" : dataDetailTrain[0].tujuan_id_station, 
-                    "date" : dataBookingTrain[0].arrivalDate,
-                    "trainNumber" : parseInt(dataBookingTrain[0].trainNumber),
-                    "grade" : dataBookingTrain[0].seats[0].grade,
-                    "class" : dataBookingTrain[0].seats[0].class,
-                    "adult" : TotalAdult,
-                    "child" : TotalChild,
-                    "infant" : TotalInfant,
-                    "trainName" : dataBookingTrain[0].trainName,
-                    "departureStation" : dataDetailTrain[0].stasiunBerangkat,
-                    "departureTime" : dataBookingTrain[0].departureTime,
-                    "arrivalStation" : dataDetailTrain[0].stasiunTujuan,
-                    "arrivalTime" : dataBookingTrain[0].arrivalTime,
-                    "priceAdult" : parseInt(dataBookingTrain[0].seats[0].priceAdult),
-                    "priceChild" : priceInfantChild,
-                    "priceInfant" : priceInfantChild,
-                    "passengers": {
-                        "adults": adult[0],
-                        "children": TotalChild > 0 ? child[0] : [],
-                        "infants": TotalInfant > 0 ? infant[0] : []                    
-                    },
-                    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjhkNzNtbmc4OWVkIn0.eyJpc3MiOiJodHRwczpcL1wvYXBpLmZhc3RyYXZlbC5jby5pZCIsImF1ZCI6IkZhc3RyYXZlbEIyQiBDbGllbnQiLCJqdGkiOiI4ZDczbW5nODllZCIsImlhdCI6MTY3MjE5NzI0MywibmJmIjoxNjcyMTk3MzAyLCJleHAiOjE2NzIyMDA4NDIsIm91dGxldElkIjoiRkE0MDMzMjgiLCJwaW4iOiI1MzcyMDEiLCJrZXkiOiJGQVNUUEFZIn0.nMgrQ7qFBMFcdqhABEe8B4x6T5E_Kqb7hQFoXkq-kaA",
-                };
 
-            const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/book`, dataBookingSubmit);
+
+            const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/book`, 
+                {
+                    productCode : "WKAI",
+                    origin : dataDetailTrain[0].berangkat_id_station,
+                    destination : dataDetailTrain[0].tujuan_id_station, 
+                    date : dataBookingTrain[0].departureDate,
+                    trainNumber : parseInt(dataBookingTrain[0].trainNumber),
+                    grade : dataBookingTrain[0].seats[0].grade,
+                    class : dataBookingTrain[0].seats[0].class,
+                    adult : TotalAdult,
+                    child : TotalChild,
+                    infant : TotalInfant,
+                    trainName : dataBookingTrain[0].trainName,
+                    departureStation : dataDetailTrain[0].stasiunBerangkat,
+                    departureTime : dataBookingTrain[0].departureTime,
+                    arrivalStation : dataDetailTrain[0].stasiunTujuan,
+                    arrivalTime : dataBookingTrain[0].arrivalTime,
+                    priceAdult : parseInt(dataBookingTrain[0].seats[0].priceAdult),
+                    priceChild : priceInfantChild,
+                    priceInfant : priceInfantChild,
+                    passengers: {
+                        adults: adult[0],
+                        children: TotalChild > 0 ? child[0] : [],
+                        infants: TotalInfant > 0 ? infant[0] : []                    
+                    },
+                    token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
+                }
+
+            );
+
+            const params = {
+                passengers:JSON.stringify({
+                    adults: adult[0],
+                    children: TotalChild > 0 ? child[0] : [],
+                    infants: TotalInfant > 0 ? infant[0] : []                    
+                })
+            }
+
 
             if(response.data.rc !== '00'){
                 alert(response.data.rd) 
             }else{
                 const hasilDataBooking = response.data.data
                 localStorage.setItem(dataBookingTrain[0].trainNumber + '_hasilBookingdanPilihKursi', JSON.stringify(hasilDataBooking));
-                navigate("/train/konfirmasi/" + dataBookingTrain[0].trainNumber);
+                navigate({
+                    pathname: "/train/konfirmasi/" + dataBookingTrain[0].trainNumber,
+                    search: `?${createSearchParams(params)}`  
+                })
             }
-
             setIsLoading(false);
-
         }
-        
-
 
     return(
         
         // header booking detailt KAI
         <div className='-mt-8 xl:mt-0'>
-            {/* header kai flow */}
-            <div className='flex justify-start jalur-payment-booking text-xs xl:text-md space-x-2 xl:space-x-8 items-center'>
+                {/* header kai flow */}
+                <div className='flex justify-start jalur-payment-booking text-xs xl:text-md space-x-2 xl:space-x-8 items-center'>
                 <div className='flex space-x-2 items-center'>
-                    <div className='bg-[#FF9119] px-1 py-0 md:px-2 md:py-1  text-white text-xs xl:text-md rounded-full'>1</div>
-                    <div className='hidden xl:flex text-[#FF9119]'>Detail pesanan</div>
-                    <div className='block xl:hidden text-[#FF9119]'>Detail</div>
+                    <div className='hidden xl:flex text-[#ff8400] font-bold'>Detail pesanan</div>
+                    <div className='block xl:hidden text-[#ff8400] font-bold'>Detail</div>
                 </div>
                 <div>
                     <MdHorizontalRule size={20} className='hidden xl:flex text-gray-500' />
                 </div>
                 <div className='flex space-x-2 items-center'>
-                    <div className='bg-gray-400 px-1 py-0 md:px-2 md:py-1  text-white text-xs xl:text-md rounded-full'>2</div>
-                    <div className='hidden xl:flex text-gray-400'>Konfirmasi pesanan</div>
-                    <div className='block xl:hidden text-gray-400'>Konfirmasi</div>
+                    <RxCrossCircled size={20} className='text-slate-500' />
+                    <div className='hidden xl:block text-slate-500'>Konfirmasi pesanan</div>
+                    <div className='block xl:hidden text-slate-500'>Konfirmasi</div>
                 </div>
                 <div>
                     <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
                 </div>
                 <div className='flex space-x-2 items-center'>
-                    <div className='bg-gray-400 px-1 py-0 md:px-2 md:py-1  text-white rounded-full text-xs xl:text-md'>3</div>
-                    <div className='hidden xl:block text-gray-400'>Pembayaran tiket</div>
-                    <div className='block xl:hidden text-gray-400'>Payment</div>
+                    <RxCrossCircled size={20} className='text-slate-500' />
+                    <div className='hidden xl:block text-slate-500'>Pembayaran tiket</div>
+                    <div className='block xl:hidden text-slate-500'>Payment</div>
                 </div>
                 <div>
                     <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
                 </div>
                 <div className='flex space-x-2 items-center'>
-                    <div className='bg-gray-400 px-1 py-0 md:px-2 md:py-1 text-white rounded-full text-xs xl:text-md'>4</div>
-                    <div className='text-gray-400'>E-Tiket</div>
+                    <RxCrossCircled size={20} className='text-slate-500' />
+                    <div className='text-slate-500'>E-Tiket</div>
                 </div>
             </div>
             {/* sidebar mobile kai*/}
@@ -279,7 +289,7 @@ export default function BookingKai(){
                     </div>
                     <div className='p-4 pl-8  text-gray-700'>
                         <div className='text-xs font-bold'>{dataBookingTrain[0].trainName}</div>
-                        <small>Eksekutif class {dataBookingTrain[0].seats[0].class}</small>
+                        <small>{classTrain} class {dataBookingTrain[0].seats[0].class}</small>
                     </div>
                     <div className='p-4 pl-8 mb-4'>
                     <ol class="relative border-l border-gray-500 dark:border-gray-700">                  
@@ -314,9 +324,9 @@ export default function BookingKai(){
                     { adult[0].map((e, i) => (
                         <>
                             <div>
-                                <div className='Booking ml-2 mt-8 mb-4 xl:mt-12'>
-                                    <h1 className='xl:text-xl font-semibold text-gray-700 text-md'>Adult Passenger</h1>
-                                    <small className='text-gray-500'>isi dengan detail pemesanan kereta</small>
+                                <div className='Booking  mt-8 mb-4 xl:mt-12'>
+                                    <h1 className='text-md font-bold text-slate-500'>ADULT PASSENGER</h1>
+                                    <small className='text-gray-500'>Isi sesuai dengan data anda</small>
                                 </div>
                                 {/* Detailt */}            
                                 <div className='flex space-x-12'>
@@ -564,7 +574,7 @@ export default function BookingKai(){
                             </div>
                             <div className='p-4 pl-8 text-gray-700'>
                                 <div className=' text-xs font-bold'>{dataBookingTrain[0].trainName}</div>
-                                <small>Class {dataBookingTrain[0].seats[0].class}</small>
+                                <small>{classTrain} Class {dataBookingTrain[0].seats[0].class}</small>
                             </div>
                             <div className='p-4 pl-12 mb-4'>
                             <ol class="relative border-l-2 border-dotted border-gray-300 dark:border-gray-700">                  

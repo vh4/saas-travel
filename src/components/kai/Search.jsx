@@ -21,8 +21,9 @@ export default function Search(){
     const child = searchParams.get('child');
     const infant = searchParams.get('infant');
 
-    const token = localStorage.getItem('djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53');
+    const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
     const navigate = useNavigate();
+
     
     useEffect(() =>{
         if(token === null || token === undefined){
@@ -67,6 +68,14 @@ export default function Search(){
     var hari = datee.getDay();
     var tanggal = datee.getDate();
 
+    function toRupiah(angka) {
+        var rupiah = '';
+        var angkarev = angka.toString().split('').reverse().join('');
+        for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
+        return rupiah.split('',rupiah.length-1).reverse().join('');
+    }
+
+
     switch(hari) {
         case 0: hari = "Minggu"; break;
         case 1: hari = "Senin"; break;
@@ -108,7 +117,7 @@ export default function Search(){
             const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/search`, {
                 // token: localStorage.getItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53"),,
                 productCode : "WKAI",
-                token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjhkNzNtbmc4OWVkIn0.eyJpc3MiOiJodHRwczpcL1wvYXBpLmZhc3RyYXZlbC5jby5pZCIsImF1ZCI6IkZhc3RyYXZlbEIyQiBDbGllbnQiLCJqdGkiOiI4ZDczbW5nODllZCIsImlhdCI6MTY3MjE5NzI0MywibmJmIjoxNjcyMTk3MzAyLCJleHAiOjE2NzIyMDA4NDIsIm91dGxldElkIjoiRkE0MDMzMjgiLCJwaW4iOiI1MzcyMDEiLCJrZXkiOiJGQVNUUEFZIn0.nMgrQ7qFBMFcdqhABEe8B4x6T5E_Kqb7hQFoXkq-kaA",
+                token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
                 origin:origin,
                 destination:destination,
                 date:date
@@ -182,26 +191,26 @@ export default function Search(){
             <div className="mt-8">
                 <div className="block md:flex justify-between">
                     <div className="flex items-center justify-center space-x-3 xl:space-x-8">
-                        <div className="text-xs font-bold text-slate-600">
+                        <small className="text-xs font-bold text-slate-600">
                             {stasiunBerangkat}, {kotaBerangkat}
-                        </div>
+                        </small>
                         <div className="bg-[#FF9119] p-1 rounded-full">
-                            < VscArrowSwap className="font-bold text-white" size={16} />
+                            < VscArrowSwap className="font-bold text-xs text-white" size={16} />
                         </div>
-                        <div className="text-xs font-bold text-slate-600">
+                        <small className="text-xs font-bold text-slate-600">
                             {stasiunTujuan}, {kotaTujuan}
-                        </div>
+                        </small>
                         <div className="hidden md:block font-normal text-slate-600">|</div>
-                        <div className="hidden md:block text-xs font-bold text-slate-600">
+                        <small className="hidden md:block text-xs font-bold text-slate-600">
                             {tanggal_keberangkatan_kereta}
-                        </div>
+                        </small>
                         <div className="hidden md:block font-normal text-slate-600">|</div>
-                        <div className="hidden md:block text-xs font-bold text-slate-600">
+                        <small className="hidden md:block text-xs font-bold text-slate-600">
                             {parseInt(adult) + parseInt(child) + parseInt(infant)} Penumpang
-                        </div>
+                        </small>
                     </div>
                     <div>
-                    <button type="button" class="mt-4 ml-4 md:ml-0 md:mt-0 border border-[#FF9119] focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-8 py-2 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
+                    <button type="button" class="hidden xl:block mt-4 ml-4 md:ml-0 md:mt-0 border border-[#FF9119] focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-8 py-2 text-center items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
                         <div className="text-[#FF9119] text-md font-bold">KEMBALI</div>
                     </button>                         
                     </div>
@@ -237,7 +246,7 @@ export default function Search(){
                             <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                                 <div className="col-span-1 xl:col-span-2">
                                     <h1 className="text-md font-medium">{e.trainName} </h1>
-                                    <small>Class {e.seats[0].class}</small>
+                                    <small>{e.seats[0].grade === 'E' ? 'Eksekutif' : e.seats[0].grade === 'B' ? 'Bisnis' : 'Ekonomi'} Class ({e.seats[0].class})</small>
                                 </div>
                                 <div className="flex">
                                     <div className="">
@@ -255,7 +264,7 @@ export default function Search(){
                                     <small>Langsung</small>
                                 </div>
                                 <div className="">
-                                        <h1 className="mt-4 xl:mt-0 text-md font-bold text-[#FF9119]">Rp.{e.seats[0].priceAdult}</h1>
+                                        <h1 className="mt-4 xl:mt-0 text-md font-bold text-[#FF9119]">Rp.{toRupiah(e.seats[0].priceAdult)}</h1>
                                         <small className="text-red-500">{e.seats[0].availability} set(s) left</small>
                                 </div>
                                 <div>
@@ -276,18 +285,18 @@ export default function Search(){
                             <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                                 <div className="flex justify-between">
                                     <div className="col-span-1 xl:col-span-2">
-                                        <h1 className="text-md font-medium">{e.trainName}</h1>
+                                        <h1 className="text-xs font-bold">{e.trainName}</h1>
                                         <small className="text-gray-400">Excecutive class {e.seats[0].class}</small>
                                     </div>
-                                    <div className="">
-                                        <h1 className="text-md font-medium text-[#FF9119]">Rp. {e.seats[0].priceAdult}</h1>
-                                        <small className="text-red-500 ml-2">{e.seats[0].availability} set(s) left</small>
+                                    <div className="text-right">
+                                        <h1 className="text-xs font-bold text-[#FF9119]">Rp. {toRupiah(e.seats[0].priceAdult)}</h1>
+                                        <small className="text-red-500">{e.seats[0].availability} set(s)</small>
                                     </div>
                                 </div>
                                 <div className="flex justify-start">
                                     <div className="flex space-x-2 items-start">
                                         <div>
-                                            <h1 className="mt-10 xl:mt-0 text-sm font-medium">{e.departureTime}</h1>
+                                            <h1 className="mt-10 xl:mt-0 text-xs font-bold">{e.departureTime}</h1>
                                             <small className="text-gray-400">{origin}</small>
                                         </div>
                                         <div className="w-full mt-12 px-4 border-b-2"></div>
@@ -297,7 +306,7 @@ export default function Search(){
                                         </div>
                                         <div className="w-full mt-12 px-4 border-b-2"></div>
                                         <div>
-                                            <h1 className="mt-10 xl:mt-0 text-sm font-medium">{e.arrivalTime}</h1>
+                                            <h1 className="mt-10 xl:mt-0 text-xs font-bold">{e.arrivalTime}</h1>
                                             <small className="text-gray-400">{destination}</small>
                                         </div>
                                     </div>

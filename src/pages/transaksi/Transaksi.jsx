@@ -14,7 +14,7 @@ export default function Transaksi(){
 
    
     useEffect(() =>{
-        if(!localStorage.getItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53")){
+        if(!localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)){
             navigate('/');
         }else{
             return;
@@ -28,7 +28,7 @@ export default function Transaksi(){
 
     const getTransaksiList = async (product = '') =>{
         const response = await axios.post('http://localhost:5000/travel/app/transaction_list', {
-            token: JSON.parse(localStorage.getItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53")),
+            token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
             product:product
         });
 

@@ -18,8 +18,6 @@ import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 
 export default function KAI(){
-
-    console.log(process.env.REACT_APP_HOST_API);
     
     const [berangkat, setBerangkat] = React.useState();
     const [tujuan, setTujuan] = React.useState();
@@ -107,7 +105,7 @@ export default function KAI(){
         try {
 
             const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/station`, {
-                token: localStorage.getItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53"),
+                token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
             });
     
             setKAI(response.data);
@@ -161,16 +159,16 @@ export default function KAI(){
 
     return (
         <>     
-            <div className="row mt-6 w-full p-2 pr-0 xl:pr-16">
-                <div class="w-full p-2 py-4 xl:px-12 xl:py-8 bg-white border border-gray-200 rounded-lg shadow-xs dark:bg-gray-800 dark:border-gray-700">
+            <div className="row mt-6 w-full p-2 pr-0 xl:pr-16 mb-16 xl:mb-8">
+                <div class="w-full p-2 py-4 xl:px-12 xl:py-8 bg-white border border-gray-100 rounded-lg shadow-xs dark:bg-gray-800 dark:border-gray-700">
                     <form className="w-full ">
                         <div className="space-x-4 items-center hidden xl:flex">
                             < BiTrain className="text-gray-600" size={24} />
-                            <div className="text-xl font-medium text-gray-600">Cari harga tiket KAI murah meriah</div>
+                            <div className="text-md font-bold text-gray-600">Cari harga tiket KAI murah meriah</div>
                         </div>
-                        <div className="space-x-2 items-center pt-2 flex xl:hidden">
-                            < GiCommercialAirplane className="text-gray-600" size={24} />
-                            <div className="text-xl font-medium text-gray-600">Tiket KAI</div>
+                        <div className="space-x-2 items-center py-4 mb-4 flex xl:hidden">
+                            < BiTrain className="text-gray-600" size={24} />
+                            <div className="text-sm font-bold text-gray-600">TIKET KAI</div>
                         </div>
                         {kai.data !== undefined ? 
                         (
@@ -273,21 +271,34 @@ export default function KAI(){
                         
                         (
                             <>
-                            <div className="mt-12 mb-4">
-                            <Box sx={{ width: 1000 }}>
+                            <div className="hidden 2xl:block w-full mt-12 mb-4">
+                            <Box 
+                                  width={1000}
+                            >
                                 <Skeleton />
                                 <Skeleton animation="wave" />
                                 <Skeleton animation="wave" />
                                 <Skeleton animation="wave" />
                                 <Skeleton animation="wave" />
                                 <Skeleton animation={false} />
-                                </Box>
-                            </div>                            
+                            </Box>
+                            </div>
+                            <div className="block 2xl:hidden w-full mt-12 mb-4">
+                            <Box 
+                            >
+                                <Skeleton />
+                                <Skeleton animation="wave" />
+                                <Skeleton animation="wave" />
+                                <Skeleton animation="wave" />
+                                <Skeleton animation="wave" />
+                                <Skeleton animation={false} />
+                            </Box>
+                            </div>                           
                             </>
                         )
 
                     }
-                        <div className="w-full mt-4 flex justify-end">
+                        <div className="w-full mt-8 xl:mt-4 flex justify-end">
                         <button onClick={handlerCariKai} type="button" class="text-white bg-[#FF9119] space-x-2 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-8 py-4 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
                             {isLoading ? (
                             <div className="flex space-x-2 items-center">

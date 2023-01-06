@@ -38,7 +38,6 @@ function App() {
           <Route path="/transaksi" element={<Transaksi />}></Route>
           <Route path="/booking" element={<BookingList />}></Route>
           <Route path="/profile/view" element={<Profile />}></Route>
-          
         </Routes>
       </BrowserRouter>       
     </div>

@@ -9,15 +9,14 @@ export default function Login({setShowModalComponent}){
     const [pin, setpin] = useState();
     
     const [isLoading, setLoading] = useState(false);
-    const secret_login_key = 'djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53'
     const navigate = useNavigate();
 
     const logout = () => {
         axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/sign_out`, {
-            token: JSON.parse(localStorage.getItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53")),
+            token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
         }).then(() => {
             localStorage.removeItem('userDetails');
-            localStorage.removeItem(secret_login_key);
+            localStorage.removeItem(process.env.REACT_APP_SECTRET_LOGIN_API);
             toast.success('Anda berhasil logout!');
             navigate('/')
         });
@@ -48,9 +47,9 @@ export default function Login({setShowModalComponent}){
                     // runLogoutTimer(data.data.timer * 43200000);
                     setShowModalComponent(false)
                     setLoading(false);
-                    localStorage.setItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53", JSON.stringify(data.data.token));
+                    localStorage.setItem(process.env.REACT_APP_SECTRET_LOGIN_API, JSON.stringify(data.data.token));
                 } else {
-                    toast.error('Id outlet atau Pin salah!');
+                    toast.error(data.data.rd);
                     setLoading(false)
                 }
              }); 
