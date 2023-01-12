@@ -1,8 +1,21 @@
-import React from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Layout from "../BookingLayout";
 import TiketComponent from '../../components/kai/Tiket'
+import { KaiContext } from "../../App";
+import { useNavigate } from "react-router";
 
 export default function Tiket(){
+
+    const {pay} = useContext(KaiContext);
+    const navigate = useNavigate()
+    const [isPayed, setIsPayed] = useState(pay.isPayed)
+
+    useEffect(() => {
+        if(isPayed !== true){
+            navigate('/')
+        }
+    }, [isPayed]);
+
     return(
         <Layout>
         <div className="container">

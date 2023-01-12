@@ -1,5 +1,4 @@
 
-import {GiCommercialAirplane} from "react-icons/gi"
 import * as React from 'react';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
@@ -12,7 +11,6 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Popper } from "@mui/material";
 import {FaTrain} from 'react-icons/fa'
-import {BiTrain} from 'react-icons/bi'
 import { useNavigate, createSearchParams } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
@@ -131,8 +129,11 @@ function KAI(){
 
         setLoading(true);
 
-        const tanggalParse = tanggal.$y + '-' + (addLeadingZero(parseInt(tanggal.$M) + 1)).toString()  + '-' + addLeadingZero(parseInt(tanggal.$D)).toString();
-        
+        let tanggalNullFill = new Date();
+        tanggalNullFill = tanggalNullFill.getFullYear() + '-' + parseInt(tanggalNullFill.getMonth()) + 1 + '-' + tanggalNullFill.getDate();
+
+        const tanggalParse = tanggal !== undefined && tanggal !== null ? tanggal.$y + '-' + (addLeadingZero(parseInt(tanggal.$M) + 1)).toString()  + '-' + addLeadingZero(parseInt(tanggal.$D)).toString() : tanggalNullFill;
+
         setTimeout(() => {
             e.preventDefault();
             setLoading(false);
@@ -156,6 +157,7 @@ function KAI(){
               });
 
         }, 1000);
+
 
     }
 
@@ -188,7 +190,7 @@ function KAI(){
                                             startAdornment: <FaTrain/> }}
                                     placeholder={kai.data === undefined ? 'Loading...'  : 'Stasiun keberangkatan'}
                                     label="Keberangkatan" />}                            
-                                    
+                                    required
                                     />
                                     <FormHelperText>Stasiun Keberangkatan</FormHelperText>
                                 </FormControl>
@@ -207,6 +209,7 @@ function KAI(){
                                             startAdornment: <FaTrain/> }}
                                     placeholder={kai.data === undefined ? 'Loading...'  : 'Stasiun Tujuan'}
                                     label="Tujuan" />}
+                                    required
                                     />
                                     <FormHelperText>Stasiun Tujuan</FormHelperText>
                                 </FormControl>
@@ -227,9 +230,7 @@ function KAI(){
                                     
                                 >
                                     <div>{adult} Adult, {infant} Infant</div>
-                                </div>
-                                </div>
-                                <div id="basic-menu" className={`${anchorEl} absolute right-0  z-10 grid w-auto p-4 text-sm bg-white border border-gray-100 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-700`}>
+                                    <div id="basic-menu" className={`${anchorEl} absolute left-0 xl:left-40  z-10 grid w-auto p-4 text-sm bg-white border border-gray-100 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-700`}>
                                 <div className="ml-4 block  mx-4 md:mx-0">
                                     <div className="mt-2 w-full items-center text-gray-600 flex space-x-2">
                                         <img src={'/adult.svg'} alt="adult" />
@@ -258,7 +259,9 @@ function KAI(){
                                         </button>                           
                                     </div>
                                 </div>                         
-                            </div>                                                            
+                            </div> 
+                                </div>
+                                </div>                                                           
                                 </div>
                             </>
                         ) :

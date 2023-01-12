@@ -11,10 +11,8 @@ import './SeatMap.css';
 
 const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData }) => {
        
-    const [pilihSeats, setPilihSeats] = useState();
     const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
 
-    
     function limitFunction() { 
         var x=0;
         changeState[0].map((e, i) => { 
@@ -87,7 +85,7 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData }) => {
 
     return (
       <div className="">
-        <div className="grid px-20 grid-rows-10 grid-cols-5">
+        <div className="grid px-4 md:px-20 grid-rows-10 grid-cols-5">
           {seats.map((seat, i) => {
             const { row, column, class: seatClass, isFilled } = seat;
             return (
@@ -107,7 +105,7 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData }) => {
                                   onChange={(e) => handleOnChange(e, seat.row, seat.column)}
                                 
                                 class="sr-only peer" />
-                                <div class="select-none  w-10 text-blue-700 h-10 bg-blue-700 peer-checked:text-black font-bold peer-checked:border peer-checked:bg-white rounded-lg"><div class="py-2 px-3.5">{seat.column}</div></div>
+                                <div class="select-none  w-10 text-blue-700 h-10 bg-blue-700 peer-checked:text-black font-bold peer-checked:border peer-checked:bg-white rounded-lg"><div class="py-2 text-center">{seat.row}{seat.column}</div></div>
                             </label>
                             ) : (
                             <label class={`select-none block py-2 pl-2 items-center cursor-pointer`}>
@@ -135,7 +133,7 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData }) => {
                                   onChange={(e) => handleOnChange(e, seat.row, seat.column)}
                                 
                                 class="sr-only peer" />
-                                <div class="select-none  w-10 text-blue-700 h-10 bg-blue-700 peer-checked:text-black font-bold peer-checked:border peer-checked:bg-white rounded-lg"><div class="py-2 px-3.5">{seat.column}</div></div>
+                                <div class="select-none  w-10 text-blue-700 h-10 bg-blue-700 peer-checked:text-black font-bold peer-checked:border peer-checked:bg-white rounded-lg"><div class="py-2 text-center">{seat.row}{seat.column}</div></div>
 
                             </label>
                             ) : (
@@ -409,7 +407,6 @@ export default function Konfirmasi(){
      }
 
 
-
     return(
         <>
         {/* Pilih Seats  */}
@@ -417,7 +414,7 @@ export default function Konfirmasi(){
                 <>
                 {showModal ? (
                     
-                    <div className="justify-center mt-16 flex fixed inset-0 z-50 outline-none focus:outline-none">
+                    <div className="justify-center mt-16 flex absolute md:fixed inset-0 z-50 outline-none focus:outline-none">
                     <div className="relative w-full my-6 mx-auto max-w-3xl"> {/*content*/} 
                     <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                         {dataSeats.data !== undefined ?
@@ -428,7 +425,7 @@ export default function Konfirmasi(){
                                 {/*body*/} 
                                 <div className="relative flex-auto">
                                     <div className="">
-                                    <div className="grid w-full grid-cols-3"> 
+                                    <div className="grid w-full grid-cols-1 md:grid-cols-3"> 
                                     {/* sidebar seats Kai */} 
                                         <div className='text-start mt-8'>
                                             {changeState[0].map((e, i) =>(
@@ -669,7 +666,7 @@ export default function Konfirmasi(){
                             {dataBookingTrain && dataBookingTrain[0].trainName} {TotalAdult > 0 ? `(Adult) x${TotalAdult}` : ''} { TotalChild > 0 ? `(Adult) x${TotalChild}` : ''} { TotalInfant > 0 ? `(Adult) x${TotalInfant}` : ''}
                             </div>
                             <div>
-                                Rp. {hasilBooking && toRupiah(hasilBooking.normalSales)}
+                                Rp. {hasilBooking && toRupiah(hasilBooking.normalSales*TotalAdult)}
                             </div>
                         </div>
                         <div className="mt-2 text-xs text-slate-500 font-bold flex justify-between">
@@ -693,7 +690,7 @@ export default function Konfirmasi(){
                                 Total Harga
                             </div>
                             <div>
-                                Rp. {hasilBooking && toRupiah(parseInt(hasilBooking.normalSales) - parseInt(hasilBooking.discount) + parseInt(hasilBooking.nominalAdmin))}
+                                Rp. {hasilBooking && toRupiah(parseInt(hasilBooking.normalSales*TotalAdult) - parseInt(hasilBooking.discount) + parseInt(hasilBooking.nominalAdmin))}
                             </div>
                         </div>
                     </div>

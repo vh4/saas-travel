@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import axios from "axios";
 import { useParams, useLocation, useSearchParams } from "react-router-dom";
 import {AiOutlineCheckCircle} from "react-icons/ai"
@@ -6,12 +6,15 @@ import {RxCrossCircled} from 'react-icons/rx'
 import {MdHorizontalRule, MdOutlineAirlineSeatReclineExtra} from 'react-icons/md'
 import { useNavigate, createSearchParams } from "react-router-dom";
 import Swal from 'sweetalert2'
+import { KaiContext } from "../../App";
 
-export default function Konfirmasi(){
+export default function Pembayaran(){
 
     const {trainNumber} = useParams();
     const navigate = useNavigate();
-
+    
+    const {dispatch} = useContext(KaiContext);
+    
     const [searchParams, setSearchParams] = useSearchParams();
     const [isLoading, setIsLoading] = useState(false);
     const passengers = searchParams.get('passengers') ? JSON.parse(searchParams.get('passengers')) : [];
@@ -97,6 +100,10 @@ export default function Konfirmasi(){
                     }
                 )
             }
+
+            dispatch({
+                type:'PAY_TRAIN'
+            });
 
             navigate({
                 pathname: "/train/tiket-kai",
@@ -207,7 +214,7 @@ export default function Konfirmasi(){
                             {dataBookingTrain && dataBookingTrain[0].trainName} {TotalAdult > 0 ? `(Adult) x${TotalAdult}` : ''} { TotalChild > 0 ? `(Adult) x${TotalChild}` : ''} { TotalInfant > 0 ? `(Adult) x${TotalInfant}` : ''}
                             </div>
                             <div>
-                                Rp. {hasilBooking && toRupiah(hasilBooking.normalSales)}
+                                Rp. {hasilBooking && toRupiah(hasilBooking.normalSales * TotalAdult)}
                             </div>
                         </div>
                         <div className="mt-2 text-xs text-slate-500 font-bold flex justify-between">
@@ -231,7 +238,7 @@ export default function Konfirmasi(){
                                 Total Harga
                             </div>
                             <div>
-                                Rp. {hasilBooking && toRupiah(parseInt(hasilBooking.normalSales) - parseInt(hasilBooking.discount) + parseInt(hasilBooking.nominalAdmin))}
+                                Rp. {hasilBooking && toRupiah(parseInt(hasilBooking.normalSales * TotalAdult) - parseInt(hasilBooking.discount) + parseInt(hasilBooking.nominalAdmin))}
                             </div>
                         </div>
                     </div>

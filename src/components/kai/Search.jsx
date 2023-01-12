@@ -252,7 +252,7 @@ export default function Search(){
 
                     <div className="row mt-6 mb-24 w-full p-2 pr-0 xl:pr-16">           
                     {dataSearch.map((e) => (
-                        <div class={`mt-6 w-full p-2 py-4 xl:px-12 xl:py-8 ${ e.seats[0].availability > 0 ? 'bg-white' : 'bg-gray-200' } border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700`}>
+                        <div class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${ e.seats[0].availability > 0 ? 'bg-white' : 'bg-gray-200' } border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700`}>
         
                         {/* desktop cari */}
         
@@ -296,7 +296,7 @@ export default function Search(){
     
                         {/* mobile cari */}
     
-                        <div className="block xl:hidden w-full text-gray-700">
+                        <div onClick={() => bookingHandlerDetail(e.trainNumber)} className="cursor-pointer block xl:hidden w-full text-gray-700">
                             <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                                 <div className="flex justify-between">
                                     <div className="col-span-1 xl:col-span-2">
