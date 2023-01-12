@@ -1,54 +1,92 @@
-import Carousel from "react-multi-carousel";
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
 import { useEffect, useState } from "react";
 import "react-multi-carousel/lib/styles.css";
+import {IoMdArrowDropright} from "react-icons/io";
+import Slider from "react-slick";
 
 export default function Carousels(props) {
 
-    const responsive = {
-        superLargeDesktop: {
-          // the naming can be any, depends on you.
-          breakpoint: { max: 4000, min: 3000 },
-          items: 5
-        },
-        desktop: {
-          breakpoint: { max: 3000, min: 1024 },
-          items: 3
-        },
-        tablet: {
-          breakpoint: { max: 1024, min: 464 },
-          items: 2
-        },
-        mobile: {
-          breakpoint: { max: 464, min: 0 },
-          items: 1
-        }
+    const SlickArrowRight = () => {
+      return(
+        <></>
+      )
+    }
+
+      var settings = {
+        dots: true,
+        arrows:true,
+        nextArrow:<SlickArrowRight />,
+        infinite: true,
+        slidesToShow: 2,
+        slidesToScroll: 1,
+        autoplay: true,
+        speed: 5000,
+        focusOnSelect: true,
+        draggable: true,
+        edgeFriction: 1,
+        swipeToSlide: true,
+        accessibility: true,
+        autoplaySpeed: 2000,
+        responsive: [
+          {
+            breakpoint: 1024,
+            settings: {
+              slidesToShow: 3,
+              slidesToScroll: 3,
+              infinite: true,
+              dots: true
+            }
+          },
+          {
+            breakpoint: 600,
+            settings: {
+              slidesToShow: 2,
+              slidesToScroll: 2,
+              initialSlide: 2
+            }
+          },
+          {
+            breakpoint: 480,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1
+            }
+          }
+        ]
       };
 
-    return (
-        <div className="w-full">
-                <Carousel 
+      
 
-                autoPlaySpeed={1000}
-                keyBoardControl={true}
-                customTransition="all .1"
-                transitionDuration={100}               
-                infinite={true}
-                responsive={responsive}
-            
+    return (
+        <div className="xl:grid xl:grid-cols-2 w-full px-0 xl:px-4 xl:py-8">
+            <div className="hidden xl:block pl-24">
+              <div className="flex space-x-4 pl-12 pr-16 text-white">
+                <img className="" src="/plane.svg" width={200} alt="carousel.png" />
+                <div>
+                <h1 className="2xl:px-8 text-xl font-bold">Hai Traveler, Welcome!</h1>
+                <div className="mt-2 2xl:px-8">
+                  <div className="mt-4">Cukup login dan booking semua tiket dengan mudah.</div>
+                  <div className="mt-4">Jangan lupa mengecek promo terbaru untuk mendapatkan diskon!</div>
+                </div>
+                </div>
+              </div>
+            </div>
+              <Slider {...settings} 
                 >
-                    <div className="flex justify-center px-2">
-                        <img className="h-36 xl:h-64 rounded-xl" src="/slider-1.jpg" alt="" />
+                  <div className="flex justify-center md:px-2">
+                        <img className="w-full h-full xl:rounded-xl" src="/slider-1.jpg" alt="" />
                     </div>
-                    <div className="flex justify-center px-2">
-                        <img className="h-36 xl:h-64 rounded-xl" src="/slider-2.jpg" alt="" />
+                    <div className="flex justify-center md:px-2">
+                        <img className="w-full h-full xl:rounded-xl" src="/slider-2.jpg" alt="" />
                     </div>
-                    <div className="flex justify-center px-2">
-                        <img className="h-36 xl:h-64 rounded-xl" src="/slider-3.jpg" alt="" />
+                    <div className="flex justify-center md:px-2">
+                        <img className="w-full h-full xl:rounded-xl" src="/slider-3.jpg" alt="" />
                     </div>
-                    <div className="flex justify-center px-2">
-                        <img className="h-36 xl:h-64 rounded-xl" src="/slider-4.png"alt="" />
-                    </div>
-                </Carousel>
+                    <div className="flex justify-center md:px-2">
+                        <img className="w-full h-full xl:rounded-xl" src="/slider-4.png"alt="" />
+                  </div>
+              </Slider>               
         </div>
     )
 }

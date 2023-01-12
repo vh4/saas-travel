@@ -5,6 +5,9 @@ import axios from "axios";
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import {HiOutlineArrowRight, HiOutlineArrowNarrowRight} from 'react-icons/hi'
+import {IoArrowBackOutline} from "react-icons/io5"
+import { Link } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 export default function Search(){
 
@@ -18,7 +21,6 @@ export default function Search(){
     const stasiunBerangkat = searchParams.get('stasiunBerangkat');  
     const stasiunTujuan = searchParams.get('stasiunTujuan');
     const adult = searchParams.get('adult');
-    const child = searchParams.get('child');
     const infant = searchParams.get('infant');
 
     const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
@@ -27,36 +29,49 @@ export default function Search(){
     
     useEffect(() =>{
         if(token === null || token === undefined){
-            alert('Anda harus Login terlebih dahulu!')
-            navigate('/train');
+            Swal.fire({
+                
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                  },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                  },
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Anda harus login terlebih dahulu!',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                confirmButtonText: 'Kembali'
+              }).then(() => navigate('/'));
         }
 
         if(origin === null || origin === undefined){
-            navigate('/train');
+            navigate('/');
         }
 
         if(destination === null || destination === undefined){
-            navigate('/train');
+            navigate('/');
         }
         
         if(date === null || date === undefined){
-            navigate('/train');
+            navigate('/');
         }
         if(productCode === null || productCode === undefined){
-            navigate('/train');
+            navigate('/');
         }
 
         if(kotaBerangkat === null || kotaBerangkat === undefined){
-            navigate('/train');
+            navigate('/');
         }
         if(kotaTujuan === null || kotaTujuan === undefined){
-            navigate('/train');
+            navigate('/');
         }
         if(stasiunBerangkat === null || stasiunBerangkat === undefined){
-            navigate('/train');
+            navigate('/');
         }
         if(stasiunTujuan === null || stasiunTujuan === undefined){
-            navigate('/train');
+            navigate('/');
         }
 
     }, [token, origin, destination, date, productCode, kotaBerangkat, kotaTujuan, stasiunTujuan, stasiunBerangkat]);
@@ -165,7 +180,6 @@ export default function Search(){
             berangkat_nama_kota: kotaBerangkat,
             tujuan_nama_kota: kotaTujuan,
             adult: adult,
-            child: child,
             infant:infant,
             stasiunBerangkat:stasiunBerangkat,
             stasiunTujuan:stasiunTujuan,
@@ -206,13 +220,14 @@ export default function Search(){
                         </small>
                         <div className="hidden md:block font-normal text-slate-600">|</div>
                         <small className="hidden md:block text-xs font-bold text-slate-600">
-                            {parseInt(adult) + parseInt(child) + parseInt(infant)} Penumpang
+                            {parseInt(adult) + parseInt(infant)} Penumpang
                         </small>
                     </div>
                     <div>
-                    <button type="button" class="hidden xl:block mt-4 ml-4 md:ml-0 md:mt-0 border border-[#FF9119] focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-8 py-2 text-center items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
-                        <div className="text-[#FF9119] text-md font-bold">KEMBALI</div>
-                    </button>                         
+                    <Link to='/' className="flex space-x-2 items-center">
+                        <IoArrowBackOutline className="text-[#FF9119]" size={16} />
+                        <div className="text-[#FF9119] text-sm font-bold">Kembali</div>
+                    </Link>                      
                     </div>
                 </div>
             </div>

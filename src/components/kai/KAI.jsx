@@ -16,57 +16,60 @@ import {BiTrain} from 'react-icons/bi'
 import { useNavigate, createSearchParams } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
+import onClickOutside from "react-onclickoutside";
 
-export default function KAI(){
+function KAI(){
     
     const [berangkat, setBerangkat] = React.useState();
     const [tujuan, setTujuan] = React.useState();
     const [tanggal, setTanggal] = React.useState();
     const [isLoading, setLoading] = React.useState(false);
     const [adult, setadult] = React.useState(1);
-    const [child, setchild] = React.useState(0);
     const [infant, setinfant] = React.useState(0);
+
+    const [anchorEl, setAnchorEl] = React.useState('hidden');
+    const handleClick = () => {
+        anchorEl === 'hidden' ? setAnchorEl('grid') : setAnchorEl('hidden');
+    }
+
+    KAI.handleClickOutside = () => {
+        setAnchorEl('hidden');
+      };
+
 
     const navigate = useNavigate();
 
 
     function plusAdult(e){
         e.preventDefault();
+        if(adult >= 4){
+            setadult(4);
+        }else{
+            setadult(adult + 1);
+        }
 
-        setadult(adult + 1);
     }
 
     function minusAdult(e){
         e.preventDefault();
 
-        if(adult < 0 || adult === 0){
-            setadult(0);
-        }else{
+        if(adult < 1 || adult === 1){
+            setadult(1);
+        }
+        else{
             setadult(adult - 1);
         }
         
     }
 
-    function plusChild(e){
-        e.preventDefault();
-
-        setchild(child + 1);
-    }
-
-    function minusChild(e){
-        e.preventDefault();
-
-        if(child < 0 || child === 0){
-            setchild(0);
-        }else{
-            setchild(child - 1);
-        }
-
-    }
 
     function plusInfant(e){
         e.preventDefault();
-        setinfant(infant + 1);
+        if(infant >= 4){
+            setinfant(4);
+        }else{
+            setinfant(infant + 1);
+        }
     }
 
     function minusInfant(e){
@@ -144,7 +147,6 @@ export default function KAI(){
                 stasiunBerangkat:berangkat.nama_stasiun,
                 stasiunTujuan:tujuan.nama_stasiun,
                 adult:adult,
-                child:child,
                 infant:infant,
             }
 
@@ -159,21 +161,17 @@ export default function KAI(){
 
     return (
         <>     
-            <div className="row mt-6 w-full p-2 pr-0 xl:pr-16 mb-16 xl:mb-8">
-                <div class="w-full p-2 py-4 xl:px-12 xl:py-8 bg-white border border-gray-100 rounded-lg shadow-xs dark:bg-gray-800 dark:border-gray-700">
-                    <form className="w-full ">
-                        <div className="space-x-4 items-center hidden xl:flex">
+            <div className="row bg-white border-t border-gray-200 w-full p-2 pr-0">
+                <div class="w-full p-4 py-4 xl:px-8 rounded-lg shadow-xs dark:bg-gray-800 dark:border-gray-700">
+                    <form className="w-full">
+                        {/* <div className="space-x-2 items-center flex">
                             < BiTrain className="text-gray-600" size={24} />
-                            <div className="text-md font-bold text-gray-600">Cari harga tiket KAI murah meriah</div>
-                        </div>
-                        <div className="space-x-2 items-center py-4 mb-4 flex xl:hidden">
-                            < BiTrain className="text-gray-600" size={24} />
-                            <div className="text-sm font-bold text-gray-600">TIKET KAI</div>
-                        </div>
+                            <div className="text-sm md:text-md font-bold text-slate-700">TRAINS</div>
+                        </div> */}
                         {kai.data !== undefined ? 
                         (
                             <>
-                                <div className="mt-4 xl:mt-12 grid grid-cols-1 2xl:grid-cols-3 gap-4">
+                                <div className="grid grid-cols-1 xl:grid-cols-4 gap-4">
                                 <FormControl sx={{ m: 1, minWidth: 120, outline: 'none' }} >
                                 <Autocomplete key={ i + 1}
                                     PopperComponent={PopperMy}
@@ -224,70 +222,53 @@ export default function KAI(){
                                 </LocalizationProvider>
                                 <FormHelperText>Tanggal keberangkatan</FormHelperText>
                                 </FormControl>
-                                    <div className="block 2xl:flex 2xl:space-x-8">
-                                        <div className="mt-2 w-full items-center ml-4 text-gray-600 flex space-x-2">
-                                            <img src={'/adult.svg'} alt="adult" />
-                                            <div className="header-number px-3">
-                                                <p>Adult </p>
-                                            </div>
-                                            <button onClick={plusAdult} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                                <span class="m-auto text-2xl font-md">+</span>
-                                            </button>
-                                            <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={adult} onChange={(e) => setadult(e.target.value)} />
-                                            <button onClick={minusAdult} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                                <span class="m-auto text-2xl font-md">−</span>
-                                            </button>                           
+                                <div onClick={handleClick} className="relative bg-white ml-2 py-4 px-2 cursor-pointer  text-slate-500 w-11/12 h-3/5 rounded-md mt-2 border-b border-gray-300 focus:outline-none hover:bg-gray-100 hover:text-slate-600 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                <div
+                                    
+                                >
+                                    <div>{adult} Adult, {infant} Infant</div>
+                                </div>
+                                </div>
+                                <div id="basic-menu" className={`${anchorEl} absolute right-0  z-10 grid w-auto p-4 text-sm bg-white border border-gray-100 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-700`}>
+                                <div className="ml-4 block  mx-4 md:mx-0">
+                                    <div className="mt-2 w-full items-center text-gray-600 flex space-x-2">
+                                        <img src={'/adult.svg'} alt="adult" />
+                                        <div className="header-number px-3">
+                                            <p>Adult </p>
                                         </div>
-                                        <div className="mt-2 w-full items-center ml-4 text-gray-600 flex space-x-2">
-                                            <img src={'/child.svg'} alt="child" />
-                                            <div className="header-number px-3">
-                                                <p>Child </p>
-                                            </div>
-                                            <button onClick={plusChild} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                                <span class="m-auto text-2xl font-md">+</span>
-                                            </button>
-                                            <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={child} onChange={(e) => setchild(e.target.value)} />
-                                            <button onClick={minusChild} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                                <span class="m-auto text-2xl font-md">−</span>
-                                            </button>                           
+                                        <button onClick={plusAdult} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                            <span class="m-auto text-2xl font-md">+</span>
+                                        </button>
+                                        <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={adult} />
+                                        <button onClick={minusAdult} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                            <span class="m-auto text-2xl font-md">−</span>
+                                        </button>                           
+                                    </div>
+                                    <div className="mt-2 w-full items-center text-gray-600 flex space-x-2">
+                                        <img src={'/infanct.svg'} alt="infanct" />
+                                        <div className="header-number px-2">
+                                            <p>Infant</p>
                                         </div>
-                                        <div className="mt-2 w-full items-center ml-4 text-gray-600 flex space-x-2">
-                                            <img src={'/infanct.svg'} alt="infanct" />
-                                            <div className="header-number px-2">
-                                                <p>Infant</p>
-                                            </div>
-                                            <button onClick={plusInfant} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                                <span class="m-auto text-2xl font-md">+</span>
-                                            </button>
-                                            <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={infant}  onChange={(e) => setinfant(e.target.value)}/>
-                                            <button onClick={minusInfant} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                                <span class="m-auto text-2xl font-md">−</span>
-                                            </button>                           
-                                        </div>
-                                    </div>                                                                
+                                        <button onClick={plusInfant} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                            <span class="m-auto text-2xl font-md">+</span>
+                                        </button>
+                                        <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={infant} />
+                                        <button onClick={minusInfant} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                            <span class="m-auto text-2xl font-md">−</span>
+                                        </button>                           
+                                    </div>
+                                </div>                         
+                            </div>                                                            
                                 </div>
                             </>
                         ) :
                         
                         (
                             <>
-                            <div className="hidden 2xl:block w-full mt-12 mb-4">
-                            <Box 
-                                  width={1000}
-                            >
-                                <Skeleton />
-                                <Skeleton animation="wave" />
-                                <Skeleton animation="wave" />
-                                <Skeleton animation="wave" />
-                                <Skeleton animation="wave" />
-                                <Skeleton animation={false} />
-                            </Box>
-                            </div>
-                            <div className="block 2xl:hidden w-full mt-12 mb-4">
+                            <div className="block w-full mb-4">
                             <Box 
                             >
                                 <Skeleton />
-                                <Skeleton animation="wave" />
                                 <Skeleton animation="wave" />
                                 <Skeleton animation="wave" />
                                 <Skeleton animation="wave" />
@@ -298,8 +279,8 @@ export default function KAI(){
                         )
 
                     }
-                        <div className="w-full mt-8 xl:mt-4 flex justify-end">
-                        <button onClick={handlerCariKai} type="button" class="text-white bg-[#FF9119] space-x-2 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-8 py-4 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
+                        <div className="w-full mt-8 xl:mt-0 flex justify-end">
+                        <button onClick={handlerCariKai} type="button" class="text-white bg-[#FF9119] space-x-2 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-10 py-3 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
                             {isLoading ? (
                             <div className="flex space-x-2 items-center">
                                 <svg aria-hidden="true" class="mr-2 w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -311,7 +292,7 @@ export default function KAI(){
                             )
                         :
                         (
-                            <div className="text-white text-MD font-bold">CARI TIKET</div>
+                            <div className="text-white text-md font-bold">CARI TIKET</div>
                         )
                         }
                         </button>  
@@ -323,3 +304,9 @@ export default function KAI(){
         </>
     )
 }
+
+const clickOutsideConfig = {
+    handleClickOutside: () => KAI.handleClickOutside,
+  };
+  
+export default onClickOutside(KAI, clickOutsideConfig);

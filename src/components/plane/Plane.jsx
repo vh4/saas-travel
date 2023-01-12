@@ -13,8 +13,18 @@ import {FaPlaneDeparture, FaPlaneArrival} from 'react-icons/fa'
 import { Chip } from "@mui/material";
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
+import onClickOutside from "react-onclickoutside";
 
-export default function Plane(){
+function Plane(){
+
+    const [anchorEl, setAnchorEl] = React.useState('hidden');
+    const handleClick = () => {
+        anchorEl === 'hidden' ? setAnchorEl('grid') : setAnchorEl('hidden');
+    }
+
+    Plane.handleClickOutside = () => {
+        setAnchorEl('hidden');
+      };
     
     const [age, setAge] = React.useState('');
     const [namapesawat, setNamaPesawat] = React.useState('Nama pesawat');
@@ -25,7 +35,6 @@ export default function Plane(){
     const [adult, setadult] = React.useState(1);
 
     React.useEffect(() => {
-
         getPesawatData();
         getPesawatDataStasiun();
 
@@ -53,28 +62,20 @@ export default function Plane(){
 
     }
 
-
-    
     return (
         <>     
-            <div className="row mt-6 w-full p-2 pr-0 xl:pr-16 mb-12">
-                <div class="w-full p-2 py-4 xl:px-12 xl:py-8 bg-white border border-gray-100 rounded-lg shadow-xs dark:bg-gray-800 dark:border-gray-700">
-                        <form className="w-full ">
-                        <div className="space-x-4 items-center hidden xl:flex">
-                            < GiCommercialAirplane className="text-gray-600" size={24} />
-                            <div className="text-md font-bold text-gray-600">Cari Harga Tiket Pesawat Murah</div>
-                        </div>
-                        <div className="ml-2 xl:ml-0 space-x-2 items-center py-4 flex xl:hidden">
-                            < GiCommercialAirplane className="text-gray-600" size={24} />
-                            <div className="text-sm font-bold text-gray-600">TIKET PESAWAT</div>
-                        </div>
-                        
+           <div className="row bg-white border-t border-gray-200 w-full p-2 pr-0">
+                <div class="w-full p-4 py-4 xl:px-8 rounded-lg shadow-xs dark:bg-gray-800 dark:border-gray-700">
+                    <form className="w-full">
+                        {/* <div className="space-x-2 items-center flex">
+                            < GiCommercialAirplane className="text-gray-700" size={20} />
+                            <div className="text-sm md:text-md font-bold text-slate-700">AIRLINES</div>
+                        </div> */}
                         {pesawatStasiun.data !== undefined ? 
-                    
                         (
                         <>
-                            <div className="mt-4 xl:mt-12 grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4">
-                            <FormControl className="col-span-1 xl:col-span-2" sx={{ m: 1, minWidth: 120, outline: 'none' }} >
+                            <div className="mt-4 xl:mt-2 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 mx-0 xl:mx-8">
+                            <FormControl className="" sx={{ m: 1, minWidth: 120, outline: 'none' }} >
                             <Autocomplete 
                                 options={pesawatStasiun.data}
                                 renderTags={(value, getTagProps) => (
@@ -98,7 +99,7 @@ export default function Plane(){
                                 <FormHelperText>Stasiun Keberangkatan</FormHelperText>
                             </FormControl>
                             
-                            <FormControl className="col-span-1 xl:col-span-2" sx={{ m: 1, minWidth: 120, outline: 'none' }} >
+                            <FormControl className="" sx={{ m: 1, minWidth: 120, outline: 'none' }} >
                             <Autocomplete 
                                 options={pesawatStasiun.data}
                                 getOptionLabel={(option) => option.bandara + " - " + option.name + " - " + option.code}            
@@ -110,7 +111,7 @@ export default function Plane(){
                                 />
                                 <FormHelperText>Stasiun Tujuan</FormHelperText>
                             </FormControl>
-                            <FormControl className="col-span-1 xl:col-span-2" sx={{ m: 1, minWidth: 120, outline: 'none' }} >
+                            <FormControl className="" sx={{ m: 1, minWidth: 120, outline: 'none' }} >
                             <Autocomplete 
                                 options={pesawat.data}
                                 getOptionLabel={(option) => option.airlineName}            
@@ -133,11 +134,16 @@ export default function Plane(){
                                 />
                             </LocalizationProvider>
                             <FormHelperText>Tanggal Pulang</FormHelperText>
-                            </FormControl>                                                            
-                            </div>
-                            <div className="grid grid-cols-1 xl:grid-cols-2">
-                                <div>
-                                    <div className="mt-2 w-full items-center ml-4 text-gray-600 flex space-x-2">
+                            </FormControl>   
+                            <div onClick={handleClick} className="relative bg-white ml-2 py-4 px-2 cursor-pointer  text-slate-500 w-11/12 h-3/5 rounded-md mt-2 border-b border-gray-300 focus:outline-none hover:bg-gray-100 hover:text-slate-600 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                <div
+                                    
+                                >
+                                    <div>1 Adult, 0 Child, 0 Infant</div>
+                                </div>
+                                <div id="basic-menu" className={`${anchorEl} absolute top-14  z-10 grid w-auto p-4 text-sm bg-white border border-gray-100 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-700`}>
+                                <div className="ml-4 block  mx-4 md:mx-0">
+                                    <div className="mt-2 w-full items-center text-gray-600 flex space-x-2">
                                         <img src={'/adult.svg'} alt="adult" />
                                         <div className="header-number px-3">
                                             <p>Adult </p>
@@ -150,7 +156,7 @@ export default function Plane(){
                                             <span class="m-auto text-2xl font-md">−</span>
                                         </button>                           
                                     </div>
-                                    <div className="mt-2 w-full items-center ml-4 text-gray-600 flex space-x-2">
+                                    <div className="mt-2 w-full items-center text-gray-600 flex space-x-2">
                                         <img src={'/child.svg'} alt="child" />
                                         <div className="header-number px-3">
                                             <p>Child </p>
@@ -163,7 +169,7 @@ export default function Plane(){
                                             <span class="m-auto text-2xl font-md">−</span>
                                         </button>                           
                                     </div>
-                                    <div className="mt-2 w-full items-center ml-4 text-gray-600 flex space-x-2">
+                                    <div className="mt-2 w-full items-center text-gray-600 flex space-x-2">
                                         <img src={'/infanct.svg'} alt="infanct" />
                                         <div className="header-number px-2">
                                             <p>Infant</p>
@@ -176,13 +182,10 @@ export default function Plane(){
                                             <span class="m-auto text-2xl font-md">−</span>
                                         </button>                           
                                     </div>
-                                </div>
-                                <div className="w-full flex justify-end">
-                                    <button type="button" class="w-40 mt-8 xl:mt-16 h-16 text-white bg-[#FF9119] space-x-2 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-8 py-4 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
-                                        <div className="text-white font-bold text-md pl-2">CARI TIKET</div>
-                                    </button>  
-                                </div>                           
+                                </div>                         
                             </div>
+                                </div>
+                            </div>                                                        
                         </>
                             )
 
@@ -190,28 +193,9 @@ export default function Plane(){
 
                             (
                                 <>
-                                <div className="hidden 2xl:block mt-12">
-                                    <Box sx={{ width: 900 }}>
-                                        <Skeleton />
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation="wave" />
-                                        <Skeleton animation={false} />
-                                    </Box>                                    
-                                </div>
-                                 <div className="block 2xl:hidden w-full mt-12">
+                                 <div className="block w-full mb-4">
                                  <Box>
                                      <Skeleton />
-                                     <Skeleton animation="wave" />
-                                     <Skeleton animation="wave" />
-                                     <Skeleton animation="wave" />
-                                     <Skeleton animation="wave" />
-                                     <Skeleton animation="wave" />
                                      <Skeleton animation="wave" />
                                      <Skeleton animation="wave" />
                                      <Skeleton animation="wave" />
@@ -221,9 +205,20 @@ export default function Plane(){
                              </>                            
                             )
                         }
+                        <div className="w-full flex justify-end pr-0">
+                            <button type="button" class="text-white bg-[#FF9119] space-x-2 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-10 py-3 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
+                                <div className="text-white text-md font-bold">CARI TIKET</div>
+                            </button>  
+                        </div>  
                     </form>
                 </div>
             </div>
         </>
     )
 }
+
+const clickOutsideConfig = {
+    handleClickOutside: () => Plane.handleClickOutside,
+  };
+  
+export default onClickOutside(Plane, clickOutsideConfig);

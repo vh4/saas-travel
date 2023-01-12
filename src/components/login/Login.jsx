@@ -48,6 +48,8 @@ export default function Login({setShowModalComponent}){
                     setShowModalComponent(false)
                     setLoading(false);
                     localStorage.setItem(process.env.REACT_APP_SECTRET_LOGIN_API, JSON.stringify(data.data.token));
+                    toast.success('Anda Berhasil Login!');
+
                 } else {
                     toast.error(data.data.rd);
                     setLoading(false)
@@ -61,7 +63,7 @@ export default function Login({setShowModalComponent}){
         <>
 
         <div
-            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+            className="justify-center overflow-y-auto fixed inset-0 z-50"
         >
             <div className="relative w-auto xl:w-1/4 my-6 mx-auto max-w-3xl">
             {/*content*/}

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
-import { useParams, useSearchParams, useLocation } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import {AiOutlineCheckCircle} from "react-icons/ai"
 import {RxCrossCircled} from 'react-icons/rx'
 import {MdHorizontalRule, MdOutlineAirlineSeatReclineExtra} from 'react-icons/md'
@@ -9,80 +9,30 @@ import {createSearchParams, useNavigate} from 'react-router-dom'
 import Swal from 'sweetalert2'
 import './SeatMap.css';
 
-const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData }) => {
+
+const SeatMap = ({ seats, changeState, setChangeSet, clickSeats }) => {
        
     const [pilihSeats, setPilihSeats] = useState();
-    const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
 
-    
-    function limitFunction() { 
-        var x=0;
-        changeState[0].map((e, i) => { 
-            if(e.type == 'adult'){
-                x = x + 1;
-            }else{
-                x= x + 0;
+
+    function handleSeatsChanges(e, row, column, index){
+        e.preventDefault();
+
+        let changesStateSeatData = changeState;
+        var x = 0;
+
+        changeState[0].map((e, i) => {
+            if(x === i){
+                changesStateSeatData[x][0].wagonNumber = parseInt(clickSeats) + 1;
+                changesStateSeatData[x][0].row = row;
+                changesStateSeatData[x][0].column = column;
             }
-        }) 
-        return x;
-    };
+        })
+        setPilihSeats(row.toString() + column.toString());
+        setChangeSet([changesStateSeatData[0]]);
+    }
 
-    const limit = limitFunction();
-
-
-    const [selectedCount, setSelectedCount] = useState(0);
-
-      const handleOnChange = (e, row, cols) => {
-        if (e.target.checked) {
-            if (selectedCount < limit) {
-              setSelectedCount(selectedCount + 1);
-              setSelectedCheckboxes(prevSelectedCheckboxes => {
-                if (prevSelectedCheckboxes.includes(`${row}-${cols}-${parseInt(clickSeatsData) + 1}`)) {
-                  return prevSelectedCheckboxes.filter(checkbox => checkbox !== `${row}-${cols}-${parseInt(clickSeatsData) + 1}`);
-                } else {
-                  return [...prevSelectedCheckboxes, 
-                      `${row}-${cols}-${parseInt(clickSeatsData) + 1}`];
-                }
-              });
-            } else {
-              e.target.checked = false;
-            }
-          } else {
-            setSelectedCount(selectedCount - 1);
-            setSelectedCheckboxes(prevSelectedCheckboxes => {
-                if (prevSelectedCheckboxes.includes(`${row}-${cols}-${parseInt(clickSeatsData) + 1}`)) {
-                  return prevSelectedCheckboxes.filter(checkbox => checkbox !== `${row}-${cols}-${parseInt(clickSeatsData) + 1}`);
-                } else {
-                  return [...prevSelectedCheckboxes, 
-                      `${row}-${cols}-${parseInt(clickSeatsData) + 1}`];
-                }
-              });
-          }
-
-      }
-
-
-      useEffect(() => {
-        const changeStateData = changeState[0]
-        if(limit === selectedCount){
-            
-            for(let i = 0; i < limit; i++){
-                if(selectedCheckboxes[i] !== null && selectedCheckboxes[i] !== undefined){
-                    const splittingSeat = selectedCheckboxes[i].split('-');
-                    changeStateData[i].row = parseInt(splittingSeat[0]);
-                    changeStateData[i].column = splittingSeat[1];
-                    changeStateData[i].wagonNumber = parseInt(splittingSeat[2]);
-                }else{
-                    setSelectedCount(0);
-                    alert('Mohon maaf, pilih gerbong yang sama !')
-                }
-
-            }
-
-            setChangeSet([changeStateData]);
-    
-         }
-      }, [limit, selectedCount, selectedCheckboxes])
+    console.log(changeState)
 
 
     return (
@@ -103,10 +53,7 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData }) => {
                           >
                             {isFilled === 0 ? (
                             <label class={`block py-2 pl-2  items-center cursor-pointer`}>
-                               <input type="checkbox"  
-                                  onChange={(e) => handleOnChange(e, seat.row, seat.column)}
-                                
-                                class="sr-only peer" />
+                                <input type="checkbox" value={pilihSeats} onClick={(e) => handleSeatsChanges(e, seat.row, seat.column)}  class="sr-only peer" />
                                 <div class="select-none  w-10 text-blue-700 h-10 bg-blue-700 peer-checked:text-black font-bold peer-checked:border peer-checked:bg-white rounded-lg"><div class="py-2 px-3.5">{seat.column}</div></div>
                             </label>
                             ) : (
@@ -131,10 +78,7 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData }) => {
                           >
                             {isFilled === 0 ? (
                             <label class={`block py-2 pl-2  items-center cursor-pointer`}>
-                                <input type="checkbox"  
-                                  onChange={(e) => handleOnChange(e, seat.row, seat.column)}
-                                
-                                class="sr-only peer" />
+                                <input type="checkbox" onClick={(e) => handleSeatsChanges(e, seat.row, seat.column, i)}  class="sr-only peer" />
                                 <div class="select-none  w-10 text-blue-700 h-10 bg-blue-700 peer-checked:text-black font-bold peer-checked:border peer-checked:bg-white rounded-lg"><div class="py-2 px-3.5">{seat.column}</div></div>
 
                             </label>
@@ -159,25 +103,20 @@ export default function Konfirmasi(){
 
     const {trainNumber} = useParams();
     const navigate = useNavigate();
-    const location = useLocation();
 
     const [searchParams, setSearchParams] = useSearchParams();
     const [isLoading, setIsLoading] = useState(false);
-    const passengers_params = searchParams.get('passengers') ? JSON.parse(searchParams.get('passengers')) : [];
-
+    const passengers = searchParams.get('passengers') ? JSON.parse(searchParams.get('passengers')) : [];
 
     const dataBookingTrain = JSON.parse(localStorage.getItem(trainNumber + "_booking"));
     const dataDetailTrain = JSON.parse(localStorage.getItem(trainNumber + "_detailTrain"));
-    const hasilBookingSession = JSON.parse(localStorage.getItem(trainNumber + "_hasilBookingdanPilihKursi"));
+    const hasilBooking = JSON.parse(localStorage.getItem(trainNumber + "_hasilBookingdanPilihKursi"));
 
     const [clickSeats, setClickSeats] = useState(0);
 
     const [showModal, setShowModal] = React.useState(false);
     const [dataSeats, setDataSeats] = useState([]);
     const classTrain = dataBookingTrain && dataBookingTrain[0].seats[0].grade === 'E' ? 'Eksekutif' : dataBookingTrain[0].seats[0].grade === 'B' ? 'Bisnis' : 'Ekonomi';
-
-    const [hasilBooking, setHasilBooking] = useState(hasilBookingSession);
-    const [passengers, setPassengers] = useState(passengers_params);
 
     const TotalAdult = passengers.adults ? passengers.adults.length : 0;
     const TotalChild = passengers.children ? passengers.children.length : 0;
@@ -197,28 +136,28 @@ export default function Konfirmasi(){
         }   
     }, [hasilBooking, dataBookingTrain, dataDetailTrain])
 
-    useEffect(() =>{
-       if(hasilBooking && new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()) {
-           Swal.fire({
-              showClass: {
-                popup: 'animate__animated animate__fadeInDown'
-              },
-              hideClass: {
-                popup: 'animate__animated animate__fadeOutUp'
-              },
-               icon: 'error',
-               title: 'Oops...',
-               text: 'Maaf, Waktu Booking sudah habis!',
-             });
-             navigate('/');
+    // useEffect(() =>{
+    //    if(hasilBooking && new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()) {
+    //        Swal.fire({
+    //           showClass: {
+    //             popup: 'animate__animated animate__fadeInDown'
+    //           },
+    //           hideClass: {
+    //             popup: 'animate__animated animate__fadeOutUp'
+    //           },
+    //            icon: 'error',
+    //            title: 'Oops...',
+    //            text: 'Maaf, Waktu Booking sudah habis!',
+    //          });
+    //          navigate('/');
 
-             localStorage.removeItem(trainNumber + '_booking');
-             localStorage.removeItem(trainNumber + '_detailTrain');
-             localStorage.removeItem(trainNumber + '_hasilBookingdanPilihKursi');   
+    //          localStorage.removeItem(trainNumber + '_booking');
+    //          localStorage.removeItem(trainNumber + '_detailTrain');
+    //          localStorage.removeItem(trainNumber + '_hasilBookingdanPilihKursi');   
 
-        }
+    //     }
 
-    })
+    // })
 
     function toRupiah(angka) {
         var rupiah = '';
@@ -296,7 +235,6 @@ export default function Konfirmasi(){
         hasilBooking.passengers.map((e, i) => {
             initialChanges.push({
                 name: e,
-                type:passengers.adults[i] !== null && passengers.adults[i] ? 'adult' : 'infant',
                 class:hasilBooking.seats[i][0],
                 wagonNumber:hasilBooking.seats[i][1],
                 row:hasilBooking.seats[i][2],
@@ -308,6 +246,7 @@ export default function Konfirmasi(){
         setChangeSet([initialChanges]);
 
      }, [setChangeSet]);
+
 
      const handlerKonfirmasi = (e) => {
         
@@ -321,93 +260,9 @@ export default function Konfirmasi(){
             search: `?${createSearchParams(params)}`  
         })
 
-     }
+     }     
 
-     const handlerPindahKursi = async (e) => {
-        e.preventDefault();
-
-        const changeStateFix = changeState;
-
-        const wagonNumber = changeStateFix[0][0]["wagonNumber"];
-        const className = changeStateFix[0][0]["class"];
-        
-        changeStateFix[0].forEach(item => {
-            delete item.name;
-            delete item.checkbox;
-            delete item.class;
-            delete item.wagonNumber;
-          });
-
-          const gantiKursiFix = {
-            productCode: "WKAI",
-            bookingCode:hasilBooking.bookingCode,
-            transactionId:hasilBooking.transactionId,
-            wagonNumber:wagonNumber,
-            wagonCode:className,
-            seats:changeStateFix[0],
-            token:JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API))
-          }
-
-          gantiKursiFix.seats = gantiKursiFix.seats.filter(seat => seat.type !== "infant");
-          gantiKursiFix.seats.forEach(item => {
-            delete item.type;
-          });
-
-        //   let z = Object.assign(gantiKursiFix, passengers);
-
-        const hasilBookingData = hasilBooking;
-
-        for(var i=0; i< changeStateFix[0].length; i++){
-            hasilBookingData.seats[i][1] = wagonNumber
-            hasilBookingData.seats[i][2] = gantiKursiFix.seats[i].row.toString()
-            hasilBookingData.seats[i][3] = gantiKursiFix.seats[i].column
-        }
-
-          const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/change_seat`, gantiKursiFix);
-          setShowModal(false)
-
-          if(response.data.rc === '00'){
-
-            localStorage.setItem(trainNumber + '_hasilBookingdanPilihKursi', JSON.stringify(hasilBookingData));
-            setHasilBooking(hasilBookingData);
-
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'Pindah kursi berhasil!',
-                showConfirmButton: false,
-                timer: 1500
-              })
-
-          }else if(response.data.rc === '55'){
-            Swal.fire({
-                showClass: {
-                  popup: 'animate__animated animate__fadeInDown'
-                },
-                hideClass: {
-                  popup: 'animate__animated animate__fadeOutUp'
-                },
-                 icon: 'error',
-                 title: 'Oops...',
-                 text: 'Maaf, kursi sudah ada. Silahkan pilih kembali!',
-               });
-          }else{
-            Swal.fire({
-                showClass: {
-                  popup: 'animate__animated animate__fadeInDown'
-                },
-                hideClass: {
-                  popup: 'animate__animated animate__fadeOutUp'
-                },
-                 icon: 'error',
-                 title: 'Oops...',
-                 text: response.data.rd,
-               });
-          }
-
-                   
-     }
-
+     console.log(dataSeats);
 
 
     return(
@@ -432,22 +287,18 @@ export default function Konfirmasi(){
                                     {/* sidebar seats Kai */} 
                                         <div className='text-start mt-8'>
                                             {changeState[0].map((e, i) =>(
-                                                <>
-                                                {e.type === 'adult' && (
-                                                    <div className='border m-6 rounded-md mt-2 text-xs font-bold'>
-                                                    <div className="flex space-x-4 items-center p-4 text-gray-700">
-                                                        <div className="text-2xl font-bold">
-                                                            {i + 1}
-                                                        </div>
-                                                        <div>
-                                                            <div className="font-bold mt-2">{e.name}</div>
-                                                            <div className="mt-2">{e.class === 'EKO' ? 'Ekonomi' : e.class === 'EKS' ? 'Eksekutif' : 'Bisnis' } {e.wagonNumber}</div>
-                                                            <div>{e.row}{e.column}</div>
-                                                        </div>
+                                             <div className='border m-6 rounded-md mt-2 text-xs font-bold'>
+                                                <div className="flex space-x-4 items-center p-4 text-gray-700">
+                                                    <div className="text-2xl font-bold">
+                                                        1.
                                                     </div>
-                                                    </div>                                                   
-                                                )}
-                                                </>
+                                                    <div>
+                                                        <div className="font-bold mt-2">{e.name}</div>
+                                                        <div className="mt-2">{e.class === 'EKO' ? 'Ekonomi' : e.class === 'EKS' ? 'Eksekutif' : 'Bisnis' } {e.wagonNumber}</div>
+                                                        <div>{e.row}{e.column}</div>
+                                                    </div>
+                                                </div>
+                                             </div>
                                             ))}
                                         </div>                        
                                         {/* seats cols and rows kereta premium dan bisnis */}
@@ -484,7 +335,7 @@ export default function Konfirmasi(){
                                             {
                                                 dataSeats !== undefined && dataSeats !== null && (
                                                     <>
-                                                        <SeatMap changeState={changeState} setChangeSet={setChangeSet} clickSeatsData={clickSeats} seats={dataSeats.data[clickSeats].layout} />
+                                                        <SeatMap changeState={changeState} setChangeSet={setChangeSet} clickSeats={clickSeats} seats={dataSeats.data[clickSeats].layout} />
                                                     </>
                                                 )
                                             }
@@ -495,7 +346,7 @@ export default function Konfirmasi(){
     
                             <div className="flex items-center justify-end p-6  border-solid border-slate-200 rounded-b">
                                 <button className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" onClick={()=> setShowModal(false)} > Close </button>
-                                <button onClick={handlerPindahKursi} className="bg-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button"> PINDAH KURSI </button>
+                                <button className="bg-blue-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button"> Konfirmasi </button>
                               </div>
                             </form>
 
@@ -652,7 +503,7 @@ export default function Konfirmasi(){
                                 </div> 
                                 <div className="px-4 py-2 text-sm font-bold">
                                     <div className="text-gray-500">Kursi</div>
-                                    <div className="text-gray-600">{hasilBooking !== null ? hasilBooking.seats[i][0] === 'EKO'  ? 'Ekonomi' : hasilBooking.seats[i][0] === 'BIS' ? 'Bisnis' : 'Eksekutif' : '' }  {hasilBooking  !== null ? hasilBooking.seats[i][1] : ''} - {hasilBooking ? hasilBooking.seats[i][2] : ''}{hasilBooking !== null ? hasilBooking.seats[i][3] : ''}</div>
+                                    <div className="text-gray-600">{hasilBooking.seats[i][0] === 'EKO'  ? 'EKONOMI' : hasilBooking.seats[i][0]} {hasilBooking.seats[i][1]} - {hasilBooking.seats[i][2]} {hasilBooking.seats[i][3]}</div>
                                 </div> 
                             </div>
                         </div>

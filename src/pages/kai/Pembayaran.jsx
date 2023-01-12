@@ -1,15 +1,14 @@
 import React from "react";
 import Layout from "../BookingLayout";
-import KonfirmasiComponent from '../../components/kai/Konfirmasi'
+import PembayaranComponent from '../../components/kai/Pembayaran'
 
-export default function Konfirmasi(){
+export default function Pembayaran(){
     return(
         <Layout>
         <div className="container">
-        
             <div className="w-full px-4"> 
                 {/* menu fitur  */}
-                < KonfirmasiComponent />
+                <PembayaranComponent />
             </div>
         </div>
     </Layout>

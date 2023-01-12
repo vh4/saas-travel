@@ -1,0 +1,49 @@
+nst checkboxData = [
+  { food: "rice" },
+  { food: "sandwich" },
+  { food: "burger" },
+  { food: "chicken" },
+  { food: "donut" },
+  { food: "pizza" }
+];
+
+const DataList = () => {
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
+  const [dataUser, setDataUser] = useState([{name:"tony"}, {name:"vasa"}]);
+  const limit = 2;
+  
+  const handleCheckboxChange = event => {
+    const { name } = event.target;
+    if (selectedCheckboxes.length >= limit && !selectedCheckboxes.includes(name)) {
+      alert(`You can only select up to ${limit} checkboxes.`);
+    } else {
+      setSelectedCheckboxes(prevSelectedCheckboxes => {
+        if (prevSelectedCheckboxes.includes(name)) {
+          return prevSelectedCheckboxes.filter(checkbox => checkbox !== name);
+        } else {
+          return [...prevSelectedCheckboxes, name];
+        }
+      });
+    }
+  };
+
+  return (
+    <div>
+        {dataUser.map((user) =>
+        <div key={user.name}>
+            <p>{user.name}</p>
+            {checkboxData.map((data, index) => (
+            <label key={index}>
+                <input
+                type="checkbox"
+                name={data.food}
+                checked={selectedCheckboxes.includes(data.food)}
+                onChange={handleCheckboxChange}
+                />
+                {data.food}
+            </label>
+            ))}
+        </div>)}
+    </div>
+  );
+};

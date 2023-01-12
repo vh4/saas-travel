@@ -14,6 +14,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useForm } from "react-hook-form"
 import {RxCrossCircled} from 'react-icons/rx'
+import Swal from 'sweetalert2'
 
 export default function BookingKai(){
 
@@ -28,7 +29,14 @@ export default function BookingKai(){
     const dataBookingTrain = JSON.parse(localStorage.getItem(trainNumber + "_booking"));
     const dataDetailTrain = JSON.parse(localStorage.getItem(trainNumber + "_detailTrain"));
 
-    const classTrain = dataBookingTrain[0].seats[0].grade === 'E' ? 'Eksekutif' : dataBookingTrain[0].seats[0].grade === 'B' ? 'Bisnis' : 'Ekonomi';
+    const classTrain = dataBookingTrain && dataBookingTrain[0].seats[0].grade === 'E' ? 'Eksekutif' : dataBookingTrain[0].seats[0].grade === 'B' ? 'Bisnis' : 'Ekonomi';
+    const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
+
+    useEffect(() =>{
+        if(token === null || token === undefined){
+             navigate('/');
+        }
+    });
 
     useEffect(() =>{
         
@@ -75,11 +83,9 @@ export default function BookingKai(){
 
      const tanggal_keberangkatan_kereta = hari + ', ' + tanggal + ' ' + bulan + ' ' + tahun;
      const TotalAdult = parseInt(dataDetailTrain[0].adult);
-     const TotalChild = parseInt(dataDetailTrain[0].child);
      const TotalInfant = parseInt(dataDetailTrain[0].infant);
 
     const AdultArr = Array();
-    const childArr = Array();
     const InfantArr = Array();
 
     for(var i = 0; i < TotalAdult; i++){
@@ -88,15 +94,7 @@ export default function BookingKai(){
             birthdate: '',
             idNumber: '',
             phone: '',
-        });
-
-    }
-
-    for(var i = 0; i < TotalChild; i++){
-        childArr.push({
-            name: '',
-            birthdate: '',
-            idNumber: '',
+            phone_values: '',
         });
 
     }    
@@ -111,7 +109,6 @@ export default function BookingKai(){
     }  
          //untuk handler changes
         const [adult, setAdult] = useState([AdultArr]);
-        const [child, setChild] = useState([childArr]);
         const [infant, setInfant] = useState([InfantArr]);
 
 
@@ -119,7 +116,12 @@ export default function BookingKai(){
             
             const adultCategory = adult[0];
 
-            category === 'phone' ? adultCategory[i][category] = e : adultCategory[i][category] = e.target.value
+            if(category === 'phone'){
+                adultCategory[i]['phone_values'] = e
+                adultCategory[i][category] = e
+            }else{
+                adultCategory[i][category] = e.target.value
+            }
 
             setAdult([adultCategory]);
             
@@ -133,27 +135,11 @@ export default function BookingKai(){
             }
           }
 
-        const handleChildsubCatagoryChange = (i, category) => e => { 
-            
-            const childCategory = child[0];
-
-            if(category === 'birthdate'){
-
-                const tanggalParse = e.$y + '-' + (addLeadingZero(parseInt(e.$M) + 1)).toString()  + '-' + addLeadingZero(parseInt(e.$D)).toString();
-                childCategory[i][category] = tanggalParse;
-
-            }else{
-                childCategory[i][category] = e.target.value
-            }
-
-            setChild([childCategory]);            
-        }
-
         const handleInfantsubCatagoryChange = (i, category) => e => { 
             
             const infantCategory = infant[0];
 
-            if(category === 'birthdate'){
+            if(category == 'birthdate'){
 
                 const tanggalParse = e.$y + '-' + (addLeadingZero(parseInt(e.$M) + 1)).toString()  + '-' + addLeadingZero(parseInt(e.$D)).toString();
                 infantCategory[i][category] = tanggalParse;
@@ -161,6 +147,8 @@ export default function BookingKai(){
             }else{
                 infantCategory[i][category] = e.target.value
             }
+
+            console.log(infantCategory);
 
             setInfant([infantCategory]);
             
@@ -171,14 +159,12 @@ export default function BookingKai(){
         const handlerBookingSubmit = async () => {
         
             setIsLoading(true);
-
-
+            
                 var priceInfantChild;
-
-                TotalChild > 0 ? priceInfantChild = dataBookingTrain[0].seats[0].priceAdult : priceInfantChild = '-';   
+                TotalInfant > 0 ? priceInfantChild = dataBookingTrain[0].seats[0].priceAdult : priceInfantChild = '-';   
 
                 adult[0].map((data) =>{
-                    data.phone = formatPhoneNumber(data.phone);
+                    data.phone = formatPhoneNumber(data.phone_values);
                 })
 
 
@@ -192,7 +178,6 @@ export default function BookingKai(){
                     grade : dataBookingTrain[0].seats[0].grade,
                     class : dataBookingTrain[0].seats[0].class,
                     adult : TotalAdult,
-                    child : TotalChild,
                     infant : TotalInfant,
                     trainName : dataBookingTrain[0].trainName,
                     departureStation : dataDetailTrain[0].stasiunBerangkat,
@@ -200,11 +185,9 @@ export default function BookingKai(){
                     arrivalStation : dataDetailTrain[0].stasiunTujuan,
                     arrivalTime : dataBookingTrain[0].arrivalTime,
                     priceAdult : parseInt(dataBookingTrain[0].seats[0].priceAdult),
-                    priceChild : priceInfantChild,
-                    priceInfant : priceInfantChild,
+                    priceInfant : '-',
                     passengers: {
                         adults: adult[0],
-                        children: TotalChild > 0 ? child[0] : [],
                         infants: TotalInfant > 0 ? infant[0] : []                    
                     },
                     token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
@@ -215,14 +198,21 @@ export default function BookingKai(){
             const params = {
                 passengers:JSON.stringify({
                     adults: adult[0],
-                    children: TotalChild > 0 ? child[0] : [],
                     infants: TotalInfant > 0 ? infant[0] : []                    
                 })
             }
 
 
             if(response.data.rc !== '00'){
-                alert(response.data.rd) 
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Booking Invalid!',
+                    text: response.data.rd,
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    confirmButtonText: 'Kembali'
+                  });
+                
             }else{
                 const hasilDataBooking = response.data.data
                 localStorage.setItem(dataBookingTrain[0].trainNumber + '_hasilBookingdanPilihKursi', JSON.stringify(hasilDataBooking));
@@ -235,9 +225,11 @@ export default function BookingKai(){
         }
 
     return(
-        
-        // header booking detailt KAI
-        <div className='-mt-8 xl:mt-0'>
+        <>
+        {token !== undefined && token !== null  ? 
+
+            (
+                <div className='-mt-8 xl:mt-0'>
                 {/* header kai flow */}
                 <div className='flex justify-start jalur-payment-booking text-xs xl:text-md space-x-2 xl:space-x-8 items-center'>
                 <div className='flex space-x-2 items-center'>
@@ -355,7 +347,7 @@ export default function BookingKai(){
                                                                 international
                                                                 {...register(`phone${i}`, { required: true} )}
                                                                 defaultCountry="ID"
-                                                                value={e.phone} 
+                                                                value={e.phone_values} 
                                                                 onChange={handleAdultsubCatagoryChange(i, 'phone')}
                                                                 className={"input-phone-number"}
                                                             /> 
@@ -373,13 +365,13 @@ export default function BookingKai(){
                                                                 international
                                                                 {...register(`phones${i}`, { required: true} )}
                                                                 defaultCountry="ID"
-                                                                value={e.phone} 
+                                                                value={e.phone_values} 
                                                                 onChange={handleAdultsubCatagoryChange(i, 'phone')}
                                                                 className={"input-phone-number"}
                                                             /> 
                                                             </div>
                                                             {errors[`phones${i}`]?.type === "required" ? (<small className='text-red-500'>Nomor HP harus diisi</small>) : ''}
-                                                            <div className='mt-2 text-gray-400'>Contoh: (+62) 812345678</div>            
+                                                            <div className='mt-2 text-gray-400'>Contoh: +62812345678</div>            
                                                         </FormControl>
                                                     </div>
 
@@ -390,7 +382,7 @@ export default function BookingKai(){
                                                                 <div className='text-gray-700 text-sm font-bold mb-2'>Nomor Keluarga (NIK)</div>
                                                                 <input   {...register(`idNumber${i}`, { required: true} )} value={e.idNumber} onChange={handleAdultsubCatagoryChange(i, 'idNumber')} type="text" placeholder='NIK' id="default-input" class="w-full border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block p-3.5 mt-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                                                                 {errors[`idNumber${i}`]?.type === "required" ? (<small className='text-red-500'>NIK harus diisi</small>) : ''}
-                                                                <div><small className='mt-2 text-gray-400'>Contoh: 16 digit, 1111222233334444</small></div>
+                                                                <div><small className='mt-2 text-gray-400'>Contoh: 16 digit nomor</small></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -400,64 +392,6 @@ export default function BookingKai(){
                             </div>
                         </>
                     )) }
-
-                    {/* child loop */}
-
-                    { child[0].map((e, i) => (
-                        <>
-                            <div>
-                                <div className='Booking ml-2 mt-8 mb-4 xl:mt-12'>
-                                    <h1 className='xl:text-xl font-semibold text-gray-700 text-md'>Child Passenger</h1>
-                                    <small className='text-gray-500'>isi dengan detail pemesanan kereta</small>
-                                </div>
-                                {/* Detailt */}            
-                                <div className='flex space-x-12'>
-                                    {/* form detailt kontal */}
-                                    <div className='w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-2'>
-                                            <div className=''>
-                                                <div className='p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8'>
-                                                    {/* mobile & desktop Nama*/}
-                                                    <div className='xl:w-full mt-4 xl:mt-0'>
-                                                    <div className='text-gray-700 text-sm font-bold mb-2'>Nama Lengkap</div>
-                                                        <div>
-                                                            <input value={e.name} onChange={handleChildsubCatagoryChange(i, 'name')} type="text" placeholder='Nama Lengkap' id="default-input" class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block p-4 mt-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className='mb-8 mt-8'>
-                                                <div className='py-0 px-0 xl:px-8  block xl:flex space-x-2 xl:space-x-8 mt-0 xl:-mt-6'>
-                                                    {/* desktop nomor hp */}
-                                                    <div className='p-2 xl:p-0 hidden xl:block'>
-                                                        <div className=' text-gray-700 text-sm  font-bold mb-2 ml-2'>Tanggal Lahir</div>
-                                                        <FormControl sx={{ m: 1, borderRadius:60, outlineColor: 'gray' }}>
-                                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                            <DatePicker key={ i + 1}
-                                                                value={e.birthdate}
-                                                                onChange={handleChildsubCatagoryChange(i, 'birthdate')}
-                                                                renderInput={(params) => <TextField {...params} />}
-                                                            />
-                                                        </LocalizationProvider>
-                                                            <small className='mt-2 text-gray-400'>Contoh: dd-mm-yyyy</small>            
-                                                        </FormControl>
-                                                    </div>
-                                                    {/* mobile & desktop NIK*/}
-                                                    
-                                                    <div className='block'>
-                                                        <div className='block pr-4 ml-4'>
-                                                                <div className='text-gray-700 text-sm font-bold mb-2'>Nomor Keluarga (NIK)</div>
-                                                                <input value={e.idNumber} onChange={handleChildsubCatagoryChange(i, 'idNumber')} type="text" placeholder='NIK' id="default-input" class="w-full border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block p-4 mt-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                                                                <small className='block mt-2 text-gray-400'>Contoh: 16 digit, 1111222233334444</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                    </div> 
-                                </div>
-                            </div>
-                        </>
-                    )) }
-
 
                     {/* Infant loop */}
 
@@ -492,6 +426,7 @@ export default function BookingKai(){
                                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                             <DatePicker key={ i + 1}
                                                                 onChange={handleInfantsubCatagoryChange(i, 'birthdate')}
+                                                                value={e.birthdate}
                                                                 renderInput={(params) => <TextField {...params} />}
                                                             />
                                                         </LocalizationProvider>
@@ -521,7 +456,7 @@ export default function BookingKai(){
                                                         <div className='block pr-4 ml-4'>
                                                                 <div className='text-gray-700 text-sm font-bold mb-2'>Nomor Keluarga (NIK)</div>
                                                                 <input value={e.idNumber} onChange={handleInfantsubCatagoryChange(i, 'idNumber')} type="text" placeholder='NIK' id="default-input" class="w-full border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block p-3.5 mt-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                                                                <small className='mt-2 text-gray-400'>Contoh: 16 digit, 1111222233334444</small>
+                                                                <small className='mt-2 text-gray-400'>Contoh: 16 digit</small>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -572,6 +507,7 @@ export default function BookingKai(){
                                     <div>({dataDetailTrain[0].tujuan_id_station})</div>
                                 </div>
                             </div>
+
                             <div className='p-4 pl-8 text-gray-700'>
                                 <div className=' text-xs font-bold'>{dataBookingTrain[0].trainName}</div>
                                 <small>{classTrain} Class {dataBookingTrain[0].seats[0].class}</small>
@@ -604,5 +540,9 @@ export default function BookingKai(){
                 </div>
             </div>
         </div>
+            )
+        
+        : ''}
+        </>
     )
 }

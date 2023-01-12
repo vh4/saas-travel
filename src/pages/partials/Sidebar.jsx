@@ -5,47 +5,46 @@ import {MdOutlineTrain} from 'react-icons/md'
 import {FaUmbrellaBeach} from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 
-export default function Sidebar({pathSidebar}) {
-
+export default function Sidebar({nameMenu, setNameMenu}) {
     return (
-        <aside className="pl-24 mt-8" aria-label="Sidebar">
-            <div className="flex pb-12 justify-center md:w-64 xl:w-72 overflow-y-auto py-4 px-3 bg-gray-100 xl:bg-gray-50 rounded dark:bg-gray-800" >
-                <ul className="space-y-2 mt-8 xl:mt-10">
+        <aside className="w-full" aria-label="Sidebar">
+            <div className="flex w-full overflow-y-auto py-4 px-3 xl:bg-gray-50 rounded dark:bg-gray-800" >
+                <ul className="w-full grid grid-cols-3 xl:flex xl:space-x-4 gap-4 xl:gap-0">
                     <li>
-                        <Link to='/' className={`flex ${ pathSidebar === '/' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700`}>
-                            <RiHotelLine size={20} />
-                            <span className="flex-1 ml-3 whitespace-nowrap">Plane</span>
-                        </Link>
+                        <div onClick={() => setNameMenu('plane')} className={`flex cursor-pointer px-4 ${ nameMenu === 'plane' ? 'border-b-2 border-blue-500' : ''} items-center p-2 text-base font-normal text-gray-900   hover:border-blue-500 hover:border-b-2`}>
+                        <GiCommercialAirplane className='text-red-500 text-[28px]' size={20} />
+                            <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Pesawat</span>
+                        </div>
+                    </li>                    
+                    <li>
+                    <div onClick={() => setNameMenu('hotel') } className={`flex cursor-pointer px-4 ${ nameMenu === 'hotel' ? 'border-b-2 border-blue-500' : ''} items-center p-2 text-base font-normal text-gray-900   hover:border-blue-500 hover:border-b-2`}>
+                            <RiHotelLine className='text-blue-700' size={20} />
+                            <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Penginapan Hotel</span>
+                        </div>
                     </li>
                     <li>
-                        <Link to='/hotel' className={`flex ${ pathSidebar === '/hotel' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700`}>
-                        <GiCommercialAirplane size={20} />
-                            <span className="flex-1 ml-3 whitespace-nowrap">Hotel</span>
-                        </Link>
+                        <div onClick={() => setNameMenu('pelni')} className={`flex cursor-pointer px-4 ${ nameMenu === 'pelni' ? 'border-b-2 border-blue-500' : ''} items-center p-2 text-base font-normal text-gray-900   hover:border-blue-500 hover:border-b-2 `}>
+                        <IoBoatOutline className='text-fuchsia-500' size={20} />
+                            <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Pelni Kapal</span>
+                        </div>
                     </li>
                     <li>
-                        <Link to='/pelni' className={`flex ${ pathSidebar === '/pelni' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700`}>
-                        <IoBoatOutline size={20} />
-                            <span className="flex-1 ml-3 whitespace-nowrap">Pelni</span>
-                        </Link>
+                        <div onClick={() => setNameMenu('train')} className={`flex cursor-pointer px-4 ${ nameMenu === 'train' ? 'border-b-2 border-blue-500' : ''} items-center p-2 text-base font-normal text-gray-900   hover:border-blue-500 hover:border-b-2 `}>
+                        <MdOutlineTrain className='text-orange-500' size={20} />
+                            <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Kereta Api</span>
+                        </div>
                     </li>
                     <li>
-                        <Link to='/train' className={`flex ${ pathSidebar === '/train' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700`}>
-                        <MdOutlineTrain size={20} />
-                            <span className="flex-1 ml-3 whitespace-nowrap">Train</span>
-                        </Link>
+                        <div onClick={() => setNameMenu('travel')} className={`flex cursor-pointer px-4 ${ nameMenu === 'travel' ? 'border-b-2 border-blue-500' : ''} items-center p-2 text-base font-normal text-gray-900   hover:border-blue-500 hover:border-b-2 `}>
+                        <IoBusOutline className='text-green-500' size={20} />
+                            <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Travel Bus</span>
+                        </div>
                     </li>
                     <li>
-                        <Link to='/travel' className={`flex ${ pathSidebar === '/travel' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700`}>
-                        <IoBusOutline size={20} />
-                            <span className="flex-1 ml-3 whitespace-nowrap">Travel Bus</span>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to='/wisata' className={`flex ${ pathSidebar === '/wisata' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700`}>
-                        <FaUmbrellaBeach size={20} />
-                            <span className="flex-1 ml-3 whitespace-nowrap">Wisata</span>
-                        </Link>
+                        <div onClick={() => setNameMenu('wisata')} className={`flex cursor-pointer px-4 ${ nameMenu === 'wisata' ? 'border-b-2 border-blue-500' : ''} items-center p-2 text-base font-normal text-gray-900   hover:border-blue-500 hover:border-b-2 `}>
+                        <FaUmbrellaBeach className='text-lime-500' size={20} />
+                            <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Wisata</span>
+                        </div>
                     </li>
                 </ul>
             </div>

@@ -1,0 +1,127 @@
+import React, {useState, useEffect} from "react";
+import axios from "axios";
+import {useSearchParams } from "react-router-dom";
+import {AiOutlineCheckCircle} from "react-icons/ai"
+import {RxCrossCircled} from 'react-icons/rx'
+import {MdHorizontalRule, MdOutlineAirlineSeatReclineExtra} from 'react-icons/md'
+import { useNavigate } from "react-router-dom";
+import {BsFillCheckCircleFill} from "react-icons/bs"
+import {AiOutlineDownload} from "react-icons/ai"
+
+export default function Konfirmasi(){
+
+    const navigate = useNavigate();
+    const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
+    useEffect(() =>{
+        if(token === null || token === undefined){
+            navigate('/');
+        }
+    });
+
+    const [searchParams, setSearchParams] = useSearchParams();
+    const data = searchParams.get('success') ? JSON.parse(searchParams.get('success')) : [];
+
+    const tiket = async () =>{
+        const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/payment`, 
+        {
+            "productCode" : "WKAI",
+            "bookingCode" : data.booking_id,
+            "transactionId" : data.id_transaksi,
+            "nominal" : data.nominal_sales,
+            "pay_type" : "TUNAI",
+            "token" : JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API))
+        });
+
+        if(response.data.rc !== "00" && response.data.data.length < 1){
+            alert("Anda harus melakukan pembayaran terlebih dahulu");
+            navigate('/');
+        }
+        
+    }
+
+
+    useEffect(() => {
+        tiket();
+    })
+
+    return(
+        <>
+        {token !== null && token !== undefined ? (
+            <>
+                        {/* header kai flow */}
+                <div className='flex justify-start jalur-payment-booking text-xs xl:text-md space-x-2 xl:space-x-8 items-center'>
+                        <div className='flex space-x-2 items-center'>
+                            <AiOutlineCheckCircle className='text-slate-500' size={20} />
+                            <div className='hidden xl:flex text-slate-500'>Detail pesanan</div>
+                            <div className='block xl:hidden text-slate-500'>Detail</div>
+                        </div>
+                        <div>
+                            <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
+                        </div>
+                        <div className='flex space-x-2 items-center'>
+                            <AiOutlineCheckCircle className='text-slate-500'  size={20} />
+                            <div className='hidden xl:flex text-slate-500'>Konfirmasi pesanan</div>
+                            <div className='block xl:hidden text-slate-500'>Konfirmasi</div>
+                        </div>
+                        <div>
+                            <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
+                        </div>
+                        <div className='flex space-x-2 items-center'>
+                            <AiOutlineCheckCircle className='text-slate-500'  size={20} />
+                            <div className='hidden xl:flex text-slate-500'>Pembayaran tiket</div>
+                            <div className='block xl:hidden text-slate-500'>Payment</div>
+                        </div>
+                        <div>
+                            <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
+                        </div>
+                        <div className='flex space-x-2 items-center'>
+                            <AiOutlineCheckCircle className='text-slate-500'  size={20} />
+                            <div className='text-slate-500'>E-Tiket</div>
+                        </div>
+                </div>
+                <div className="w-full">
+                    <div className="shadow-lg pb-6">
+                        <div className="text-center md:py-16 px-4 md:px-12 xl:px-24">
+                            <div className="flex justify-center">
+                                <div>
+                                    <div className="text-center flex justify-center"> <BsFillCheckCircleFill className="text-green-400" size={32} /></div>
+                                    <div className="mt-2 text-xl text-green-400">Pembayaran sukses</div>
+                                </div>
+                            </div>
+                            <div className="mt-12 text-gray-500 flex justify-between">
+                                <div>Booking ID</div>
+                                <div>{data.booking_id}</div>
+                            </div>
+                            <div className="mt-2 text-gray-500 flex justify-between">
+                                <div>Tipe Pembayaran</div>
+                                <div>{data.tipe_pembayaran}</div>
+                            </div>
+                            <div className="mt-2 text-gray-500 flex justify-between">
+                                <div>Nomor HP Booking</div>
+                                <div>{data.nomor_hp_booking}</div>
+                            </div>
+                            <div className="mt-2 text-gray-500 flex justify-between">
+                                <div>Transaksi ID</div>
+                                <div>{data.id_transaksi}</div>
+                            </div>
+                            <div className="mt-8 text-gray-500 font-bold flex justify-between">
+                                <div>Total Dibayar</div>
+                                <div>Rp. {data.total_dibayar}</div>
+                            </div>
+                        </div>
+                        <div className=" text-gray-500 font-bold flex justify-end pr-4">
+                                <button type="button" class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                    <div className="flex space-x-2">
+                                        <AiOutlineDownload className="text-gray-500" size={20} />
+                                        <div className="text-gray-500 font-bold">Download tiket</div>
+                                    </div>
+                                </button>
+                            </div>
+                    </div>
+                </div>
+            
+            </>
+        ) : ''}
+        </>
+    )
+}

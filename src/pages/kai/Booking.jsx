@@ -1,5 +1,5 @@
 import React from "react";
-import Layout from "../bookingLayout/BookingLayout";
+import Layout from "../BookingLayout";
 import BookingKai from '../../components/kai/Booking'
 
 export default function Booking(){
