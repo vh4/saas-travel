@@ -310,4 +310,50 @@ Router.post('/travel/train/book', function (req, res) {
 
 });
 
+Router.post('/travel/train/payment', function (req, res) {
+
+  const data = req.body;
+
+  console.log(data);
+
+  request.post(
+    `${process.env.URL_HIT}/travel/train/payment`,
+      {
+        json: data
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          return
+        }
+        return res.send(body)
+      }
+    )
+
+});
+
+
+Router.post('/travel/train/change_seat', function (req, res) {
+
+  const data = req.body;
+
+  console.log(data);
+
+  request.post(
+    `${process.env.URL_HIT}/travel/train/change_seat`,
+      {
+        json: data
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          return
+        }
+        return res.send(body)
+      }
+    )
+
+});
+
+
 module.exports = Router
