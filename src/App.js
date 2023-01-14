@@ -3,8 +3,10 @@ import { BrowserRouter, Route, Routes} from "react-router-dom";
 import { ToastContainer } from 'react-toastify'; //for flash notifications
 import 'react-toastify/dist/ReactToastify.css';
 import Profile from "./pages/profile/Profile";
-import Transaksi from "./pages/transaksi/Transaksi";
-import BookingList from './pages/transaksi/Booking';
+
+import TransaksiKai from "./pages/transaksi/TransaksiKai";
+import TransaksiPesawat from "./pages/transaksi/TransaksiPesawat";
+
 import BookingKai from "./pages/kai/Booking";
 import SearchKai from "./pages/kai/Search";
 import KonfirmasiKai from "./pages/kai/Konfirmasi";
@@ -32,7 +34,7 @@ function App() {
   const [pay, dispatch] =  useReducer(reducer, initialStatePembayaran);
   
   return (
-    <div className="App" >
+    <div className="App">
        <BrowserRouter>
        <ToastContainer
           position="top-center"
@@ -53,8 +55,8 @@ function App() {
           <Route path="/train/konfirmasi/:trainNumber" element={< KonfirmasiKai/>}></Route>
           <Route path="/train/bayar/:trainNumber" element={< PembayaranKai/>}></Route>
           <Route path="/train/tiket-kai" element={< TiketKai/>}></Route>
-          <Route path="/transaksi" element={<Transaksi />}></Route>
-          <Route path="/booking" element={<BookingList />}></Route>
+          <Route path="/transaksi/kai" element={<TransaksiKai />}></Route>
+          <Route path="/transaksi/pesawat" element={<TransaksiPesawat />}></Route>
           <Route path="/profile/view" element={<Profile />}></Route>
         </Routes>
         </KaiContext.Provider>  

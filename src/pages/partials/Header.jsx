@@ -2,9 +2,7 @@
 
 import { Link } from "react-router-dom";
 import React, { useCallback, useEffect, useState } from 'react'
-import {BsBoxArrowRight} from 'react-icons/bs'
 import Login from "../../components/login/Login";
-import HeaderMenu from "../../components/header/HeaderMenu";
 import {CiSettings} from 'react-icons/ci'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -18,6 +16,7 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { Drawer, Box, Typography } from '@mui/material'
+import SidebarMobileUser from "./sidebar/mobile/SidebarMobileUser";
 
 export default function Header({toogleSidebar, valueSidebar}){
 
@@ -73,7 +72,7 @@ export default function Header({toogleSidebar, valueSidebar}){
           }, [toogleSidebar, valueSidebar]);
 
     return(
-        <nav className="bg-white px-2 sm:px-4 py-2 dark:bg-gray-900 fixed w-full z-50 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
+        <nav className="bg-white px-2 sm:px-4 py-2 dark:bg-gray-900 block sticky top-0 w-full z-50 left-0 border-b border-gray-200 dark:border-gray-600">
             <div className="container mx-auto">
                 <div className="flex justify-between items-center sm:-mx-6 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24">
                     <div className="">
@@ -90,9 +89,9 @@ export default function Header({toogleSidebar, valueSidebar}){
                         < BsTags className="text-orange-500" size={18}/>
                         <div className="text-[15px] text-slate-800">Promo</div>
                     </Link>
-                    <Link to="/booking" className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-slate-700">
+                    <Link to="/transaksi/kai" className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-slate-700">
                         < FaListAlt className="text-cyan-500" size={18}/>
-                        <div className="text-[15px] text-slate-800">Booking</div>
+                        <div className="text-[15px] text-slate-800">Transaksi</div>
                     </Link>                                       
                     <>
 
@@ -104,7 +103,7 @@ export default function Header({toogleSidebar, valueSidebar}){
                     </button> 
                     ) :
                     (        
-                        <div className="hidden relative group space-x-2 text-gray-900 md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 py-2.5 xl:inline-flex group-hover:block items-end ml-2 mb-2">
+                        <div className="hidden relative group space-x-2 text-gray-500 md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 py-2.5 xl:inline-flex group-hover:block items-end ml-2 mb-2">
                             {user !== undefined ? 
                             (
                                 <>
@@ -113,7 +112,7 @@ export default function Header({toogleSidebar, valueSidebar}){
 
                                     (
                                         <>
-                                            <p className="block">{user.namaPemilik}</p>
+                                            <p className="text-gray-500 block">{user.namaPemilik}</p>
                                                 < CiSettings size={20} />
                                             {/* <small className="absolute group-hover top-8 left-4 text-slate-500">Sisa saldo {sisaSaldo(user.balance)}</small> */}
                                             <small className="absolute -left-0 group-hover top-7 text-slate-500">Sisa saldo Rp.{toRupiah(user.balance)}</small> 
@@ -203,7 +202,7 @@ export default function Header({toogleSidebar, valueSidebar}){
                 onClose={() => setIsDrawerOpen(false)}>
                 <Box p={2} width='250px' role='presentation' textAlign='center'>
                 <Typography variant='h6' component='div'>
-                    Side Panel
+                    <SidebarMobileUser />
                 </Typography>
                 </Box>
             </Drawer> 

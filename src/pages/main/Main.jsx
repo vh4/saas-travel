@@ -3,8 +3,8 @@
 import Layout from "../Layout";
 import Plane from "../../components/plane/Plane";
 import KAI from "../../components/kai/KAI";
-import Sidebar from "../partials/Sidebar"
-import SideBarMobile from "../partials/SideBarMobile"
+import Sidebar from "../partials/sidebar/desktop/Sidebar"
+import SideBarMobile from "../partials/sidebar/mobile/SideBarMobile"
 import React, {useState} from "react";
 import Carousels from '../../components/carousel/Carousel'
 
@@ -16,7 +16,7 @@ export default function MainPage(){
         <Layout>
             {/* carousel fitur  */}
         <div className="w-full">
-            <div className="bg-gradient-to-r xl:from-cyan-500 xl:to-blue-500 mt-16 md:mt-20 xl:mt-20 2xl:mt-4">
+            <div className="bg-gradient-to-r xl:from-cyan-500 xl:to-blue-500">
                 <div className="py-8">
                     <Carousels />
                 </div>

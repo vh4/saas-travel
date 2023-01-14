@@ -202,7 +202,6 @@ export default function BookingKai(){
                 })
             }
 
-
             if(response.data.rc !== '00'){
                 Swal.fire({
                     icon: 'error',

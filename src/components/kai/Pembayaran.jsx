@@ -39,28 +39,30 @@ export default function Pembayaran(){
         }   
     }, [hasilBooking, dataBookingTrain])
 
-    useEffect(() =>{
-        if(hasilBooking &&  new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()) {
+    setTimeout(() =>{ 
+
+        if(hasilBooking && new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()) {
+  
             Swal.fire({
                 showClass: {
-                    popup: 'animate__animated animate__fadeInDown'
-                  },
+                  popup: 'animate__animated animate__fadeInDown'
+                },
                 hideClass: {
-                    popup: 'animate__animated animate__fadeOutUp'
-                  },
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Maaf, Waktu Booking sudah habis!',
-                confirmButtonText: '<a href="/">Kembali</a>'
-              });
-              
-              localStorage.removeItem(trainNumber + '_booking');
-              localStorage.removeItem(trainNumber + '_detailTrain');
-              localStorage.removeItem(trainNumber + '_hasilBookingdanPilihKursi');
-              
-         }
+                  popup: 'animate__animated animate__fadeOutUp'
+                },
+                 icon: 'error',
+                 title: 'Oops...',
+                 text: 'Maaf, Waktu Booking sudah habis!',
+               });
+               navigate('/');
+    
+               localStorage.removeItem(trainNumber + '_booking');
+               localStorage.removeItem(trainNumber + '_detailTrain');
+               localStorage.removeItem(trainNumber + '_hasilBookingdanPilihKursi'); 
 
-     })
+        }
+
+    }, hasilBooking && new Date(hasilBooking.timeLimit).getTime() - new Date().getTime());
 
     function toRupiah(angka) {
         var rupiah = '';

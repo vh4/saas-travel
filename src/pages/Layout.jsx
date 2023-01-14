@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import {HiUser} from "react-icons/hi"
 import {IoIosListBox} from "react-icons/io" 
 import {BsFillBookmarkStarFill} from "react-icons/bs"
+import { Link } from "react-router-dom";
 
 export default function Layout({children}){
 
@@ -27,15 +28,17 @@ export default function Layout({children}){
             <div className="block md:hidden z-auto shadow-lg">
             <Box sx={{ width:"100%", position: "absolute", bottom:0 }} elevation={3}>
                 <BottomNavigation
+                    sx={{display:'flex', justifyContent:'around'}}
                     showLabels
                     value={value}
                     onChange={(event, newValue) => {
                     setValue(newValue);
                     }}
                 >
+                    
                     <BottomNavigationAction label="Home" icon={<ImHome2 size={28} />} />
-                    <BottomNavigationAction label="Disimpan" icon={<BsFillBookmarkStarFill size={25} />} />
-                    <BottomNavigationAction label="Pesanan" icon={<IoIosListBox size={27} />} />
+                    <BottomNavigationAction label="Booking" icon={<BsFillBookmarkStarFill size={25} />} />
+                    <BottomNavigationAction label="Transaksi" icon={<IoIosListBox size={27} />} />
                     <BottomNavigationAction label="Akun saya" icon={<HiUser size={28} />} />
                 </BottomNavigation>
             </Box>
