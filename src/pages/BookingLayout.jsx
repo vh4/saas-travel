@@ -10,8 +10,8 @@ export default function BookingLayout({children}){
     return(
         <div className="block">
             < Header/>
-            <div className="mt-32">
-                <div className="container mx-auto px-0 xl:px-40">                   
+            <div className="mt-8">
+                <div className="container mx-auto px-0 xl:px-24">                   
                     <main>{children}</main>
                 </div>
             </div>

@@ -231,34 +231,34 @@ function KAI(){
                                 >
                                     <div>{adult} Adult, {infant} Infant</div>
                                     <div id="basic-menu" className={`${anchorEl} absolute left-0 xl:left-40  z-10 grid w-auto p-4 text-sm bg-white border border-gray-100 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-700`}>
-                                <div className="ml-4 block  mx-4 md:mx-0">
-                                    <div className="mt-2 w-full items-center text-gray-600 flex space-x-2">
-                                        <img src={'/adult.svg'} alt="adult" />
-                                        <div className="header-number px-3">
-                                            <p>Adult </p>
-                                        </div>
-                                        <button onClick={plusAdult} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                            <span class="m-auto text-2xl font-md">+</span>
-                                        </button>
-                                        <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={adult} />
-                                        <button onClick={minusAdult} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                            <span class="m-auto text-2xl font-md">−</span>
-                                        </button>                           
-                                    </div>
-                                    <div className="mt-2 w-full items-center text-gray-600 flex space-x-2">
-                                        <img src={'/infanct.svg'} alt="infanct" />
-                                        <div className="header-number px-2">
-                                            <p>Infant</p>
-                                        </div>
-                                        <button onClick={plusInfant} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                            <span class="m-auto text-2xl font-md">+</span>
-                                        </button>
-                                        <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={infant} />
-                                        <button onClick={minusInfant} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                            <span class="m-auto text-2xl font-md">−</span>
-                                        </button>                           
-                                    </div>
-                                </div>                         
+                                        <div className="ml-4 block  mx-4 md:mx-0">
+                                            <div className="mt-2 w-full items-center text-gray-600 flex space-x-2">
+                                                <img src={'/adult.svg'} alt="adult" />
+                                                <div className="header-number px-3">
+                                                    <p>Adult </p>
+                                                </div>
+                                                <button onClick={plusAdult} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                                    <span class="m-auto text-2xl font-md">+</span>
+                                                </button>
+                                                <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={adult} />
+                                                <button onClick={minusAdult} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                                    <span class="m-auto text-2xl font-md">−</span>
+                                                </button>                           
+                                            </div>
+                                            <div className="mt-2 w-full items-center text-gray-600 flex space-x-2">
+                                                <img src={'/infanct.svg'} alt="infanct" />
+                                                <div className="header-number px-2">
+                                                    <p>Infant</p>
+                                                </div>
+                                                <button onClick={plusInfant} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                                    <span class="m-auto text-2xl font-md">+</span>
+                                                </button>
+                                                <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={infant} />
+                                                <button onClick={minusInfant} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
+                                                    <span class="m-auto text-2xl font-md">−</span>
+                                                </button>                           
+                                            </div>
+                                        </div>                         
                             </div> 
                                 </div>
                                 </div>                                                           

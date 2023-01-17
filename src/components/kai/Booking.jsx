@@ -402,7 +402,7 @@ export default function BookingKai(){
                                     <small className='text-gray-500'>isi dengan detail pemesanan kereta</small>
                                 </div>
                                 {/* Detailt */}            
-                                <div className='mb-24 flex space-x-12'>
+                                <div className='flex space-x-12'>
                                     {/* form detailt kontal */}
                                     <div className='w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-2'>
                                             <div className=''>

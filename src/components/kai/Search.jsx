@@ -200,7 +200,7 @@ export default function Search(){
     return(
         <>
             <div className="judul-search mt-4 font-bold text-slate-600">
-                Pilih Jadwal
+                PILIH JADWAL
             </div>
             <div className="mt-8">
                 <div className="block md:flex justify-between">
@@ -222,19 +222,38 @@ export default function Search(){
                         <small className="hidden md:block text-xs font-bold text-slate-600">
                             {parseInt(adult) + parseInt(infant)} Penumpang
                         </small>
-                    </div>
-                    <div>
-                    <Link to='/' className="flex space-x-2 items-center">
+                    </div>    
+                    <div> 
+                    <Link to='/' className="flex space-x-2 items-center mr-0 xl:mr-16">
                         <IoArrowBackOutline className="text-[#FF9119]" size={16} />
                         <div className="text-[#FF9119] text-sm font-bold">Kembali</div>
-                    </Link>                      
+                    </Link>                 
+                    </div>
+                </div>
+                <div className="flex justify-between mt-6">
+                    <div className="flex items-center space-x-2 text-slate-600 text-xs font-bold">
+                        <div className="hidden md:block">FILTER : </div>
+                        <button className="block border p-2 px-2 md:px-4">
+                            HARGA
+                        </button>
+                        <button className="block border p-2 px-2 md:px-4">
+                            WAKTU
+                        </button>
+                        <button className="block border p-2 px-2 md:px-4">
+                            KELAS
+                        </button>
+                    </div>
+                    <div>
+                        <button className="block border p-2 px-2 md:px-4 mr-0 xl:mr-16 text-slate-600 text-xs font-bold">
+                            URUTKAN
+                        </button>
                     </div>
                 </div>
             </div>
             <div>
                 {isLoading ? (
                   skeleton.map(() =>(
-                    <div className="row mt-6 w-full p-2 pr-0 xl:pr-16">           
+                    <div className="row mt-4 w-full p-2 pr-0 xl:pr-16">           
                             <Box sx={{ width: "100%" }}>
                                 <Skeleton />
                                 <Skeleton />
@@ -250,13 +269,13 @@ export default function Search(){
 
                 notFound !== true ? (
 
-                    <div className="row mt-6 mb-24 w-full p-2 pr-0 xl:pr-16">           
+                    <div className="row mb-24 w-full p-2 pr-0 xl:pr-16">           
                     {dataSearch.map((e) => (
-                        <div class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${ e.seats[0].availability > 0 ? 'bg-white' : 'bg-gray-200' } border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700`}>
+                        <div class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${ e.seats[0].availability > 0 ? 'bg-white' : 'bg-gray-200' } border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 hover:border hover:border-black transition-transform transform hover:scale-105`}>
         
                         {/* desktop cari */}
         
-                        <div className="hidden xl:block w-full text-gray-700">
+                        <div className="hidden xl:block w-full text-gray-700 ">
                             
                             <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                                 <div className="col-span-1 xl:col-span-2">

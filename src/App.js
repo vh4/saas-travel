@@ -15,6 +15,7 @@ import MainPage from "./pages/main/Main"
 import TiketKai from "./pages/kai/Tiket";
 
 export const KaiContext = createContext();
+export const NavContext = createContext();
 
 
 function App() {
@@ -23,16 +24,25 @@ function App() {
     isPayed: false,
   }
 
+  const initialStateNavigation = {
+    isActive: 0,
+
+  }
+
   const reducer = (state, action) => {
       switch(action.type) {
         case 'PAY_TRAIN': return {
           isPayed: true,
         }
+        case 'NAVIGATION':return{
+          isActive:action.isActive
+        }
       }
   }
 
   const [pay, dispatch] =  useReducer(reducer, initialStatePembayaran);
-  
+  const [nav, setNav] =  useReducer(reducer, initialStateNavigation);
+
   return (
     <div className="App">
        <BrowserRouter>
@@ -48,6 +58,7 @@ function App() {
           pauseOnHover
           />  
       <KaiContext.Provider value={{pay,dispatch}}>
+      <NavContext.Provider value={{nav,setNav}}>
         <Routes>
           <Route exact path="/" element={<MainPage />}></Route>
           <Route path="/train/search" element={< SearchKai/>}></Route>
@@ -59,6 +70,7 @@ function App() {
           <Route path="/transaksi/pesawat" element={<TransaksiPesawat />}></Route>
           <Route path="/profile/view" element={<Profile />}></Route>
         </Routes>
+        </NavContext.Provider>  
         </KaiContext.Provider>  
       </BrowserRouter>     
     </div>

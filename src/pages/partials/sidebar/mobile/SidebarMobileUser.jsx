@@ -11,12 +11,12 @@ export default function SidebarMobileUser({pathSidebar}) {
     return (
         <aside className="w-full" aria-label="Sidebar">
             <div className="flex justify-center overflow-y-auto dark:bg-gray-800 h-full" >
-                <ul className="mt-8 md:mt-0 space-y-2 relative">
+                <ul className="mt-0 space-y-2 relative">
                     <Link to='/profile/view'>
                         <li>
                             <div className={`flex cursor-pointer ${ pathSidebar === '/profile/view' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-500 rounded-lg dark:text-white hover:bg-cyan-100 dark:hover:bg-gray-700`}>
                                 <div className='flex'>
-                                   <FaUserCircle className="text-green-500" size={20} />
+                                   <FaUserCircle className="text-orange-500" size={20} />
                                    <span className="flex-1 ml-3 whitespace-nowrap">Profile</span>
                                 </div>
                             </div>

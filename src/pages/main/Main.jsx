@@ -17,13 +17,13 @@ export default function MainPage(){
             {/* carousel fitur  */}
         <div className="w-full">
             <div className="bg-gradient-to-r xl:from-cyan-500 xl:to-blue-500">
-                <div className="py-8">
+                <div className="py-4 md:py-8 relative z-10">
                     <Carousels />
                 </div>
             </div>
-            <div className="">
+            <div className="-mt-8">
                 <div className="relative container mx-auto mb-48">
-                    <div className="-mt-6 z-10 bg-white mx-0 xl:mx-32 md:border md:rounded-md md:shadow-lg">
+                    <div className="z-10 bg-white mx-0 xl:mx-32 md:border md:rounded-md md:shadow-lg">
                     <div className={`block md:flex xl:flex 2xl:flex justify-center`}>
                         <div className="hidden md:flex justify-center">
                             <Sidebar nameMenu={nameMenu} setNameMenu={setNameMenu}/>

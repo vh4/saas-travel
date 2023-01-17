@@ -74,16 +74,16 @@ export default function Carousels(props) {
             </div>
               <Slider {...settings} 
                 >
-                  <div className="flex justify-center md:px-2">
+                  <div className="flex justify-center px-2">
                         <img className="w-full h-full xl:rounded-xl" src="/slider-1.jpg" alt="" />
                     </div>
-                    <div className="flex justify-center md:px-2">
+                    <div className="flex justify-center px-2">
                         <img className="w-full h-full xl:rounded-xl" src="/slider-2.jpg" alt="" />
                     </div>
-                    <div className="flex justify-center md:px-2">
+                    <div className="flex justify-center px-2">
                         <img className="w-full h-full xl:rounded-xl" src="/slider-3.jpg" alt="" />
                     </div>
-                    <div className="flex justify-center md:px-2">
+                    <div className="flex justify-center px-2">
                         <img className="w-full h-full xl:rounded-xl" src="/slider-4.png"alt="" />
                   </div>
               </Slider>               

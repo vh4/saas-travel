@@ -9,43 +9,55 @@ export default function SideBarMobile() {
     return (
         <aside className="w-full" aria-label="Sidebar">
             <div className="flex w-full overflow-y-auto py-4 px-1" >
-                <ul className="w-full grid grid-cols-4 gap-2">
+                <ul className="p-4 w-full grid grid-cols-4 gap-2">
                     <li>
-                        <div className={`mt-2 block center cursor-pointer items-center p-2 text-sm font-bold text-gray-900 hover:border-blue-500 hover:border-b-2`}>
-                            <GiCommercialAirplane className='ml-6 text-red-500 text-[28px]' size={28} />
-                            <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Pesawat</span>
+                        <div className={`mt-2 block center cursor-pointer items-center text-sm font-bold text-gray-900 hover:border-blue-500 hover:border-b-2`}>
+                            <div className='bg-gray-100 mx-4 py-3 flex justify-center rounded-xl'>
+                                <GiCommercialAirplane className='text-red-500' size={24} />
+                            </div>
+                            <span className="block text-center font-normal mt-2 flex-1 whitespace-nowrap text-[15px] text-gray-500 ">Pesawat</span>
                         </div>
-                    </li>                    
-                    <li>
-                        <div className={`mt-2 block cursor-pointer items-center p-2 text-sm font-bold text-gray-900 hover:border-blue-500 hover:border-b-2`}>
-                            <RiHotelLine className='ml-4 text-blue-700' size={28} />
-                            <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Hotel</span>
+                    </li>    
+                    <li>                
+                        <div className={`mt-2 block center cursor-pointer items-center text-sm font-bold text-gray-900 hover:border-blue-500 hover:border-b-2`}>
+                            <div className='bg-gray-100 mx-4 py-3 flex justify-center rounded-xl'>
+                                <RiHotelLine className='text-blue-500' size={24} />
+                            </div>
+                            <span className="block text-center font-normal mt-2 flex-1 whitespace-nowrap text-[15px] text-gray-500">Hotel</span>
                         </div>
-                    </li>
-                    <li>
-                        <div className={`mt-2 block cursor-pointer items-center p-2 text-sm font-bold text-gray-900 hover:border-blue-500 hover:border-b-2`}>
-                        <IoBoatOutline className='ml-4 text-fuchsia-500' size={28} />
-                            <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Kapal</span>
+                    </li> 
+                    <li>                
+                        <div className={`mt-2 block center cursor-pointer items-center text-sm font-bold text-gray-900 hover:border-blue-500 hover:border-b-2`}>
+                            <div className='bg-gray-100 mx-4 py-3 flex justify-center rounded-xl'>
+                                <IoBoatOutline className='text-fuchsia-500' size={24} />
+                            </div>
+                            <span className="block text-center font-normal mt-2 flex-1 whitespace-nowrap text-[15px] text-gray-500">Kapal</span>
                         </div>
-                    </li>
-                    <li>
-                        <div className={`mt-2 block cursor-pointer items-center p-2 text-sm font-bold text-gray-900 hover:border-blue-500 hover:border-b-2`}>
-                        <MdOutlineTrain className='ml-5 text-orange-500' size={28} />
-                            <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Kereta</span>
+                    </li> 
+                    <li>                
+                        <div className={`mt-2 block center cursor-pointer items-center text-sm font-bold text-gray-900 hover:border-blue-500 hover:border-b-2`}>
+                            <div className='bg-gray-100 mx-4 py-3 flex justify-center rounded-xl'>
+                                <MdOutlineTrain className='text-orange-500' size={24} />
+                            </div>
+                            <span className="block text-center font-normal mt-2 flex-1 whitespace-nowrap text-[15px] text-gray-500">Kereta Api</span>
                         </div>
-                    </li>
-                    <li>
-                    <div className={`mt-2 block cursor-pointer items-center p-2 text-sm font-bold text-gray-900 hover:border-blue-500 hover:border-b-2`}>
-                        <IoBusOutline className='ml-6 text-green-500' size={28} />
-                            <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Travel</span>
+                    </li> 
+                    <li>                
+                        <div className={`mt-2 block center cursor-pointer items-center text-sm font-bold text-gray-900 hover:border-blue-500 hover:border-b-2`}>
+                            <div className='bg-gray-100 mx-4 py-3 flex justify-center rounded-xl'>
+                                <IoBusOutline className='text-green-500' size={24} />
+                            </div>
+                            <span className="block text-center font-normal mt-2 flex-1 whitespace-nowrap text-[15px] text-gray-500">Travel Bus</span>
                         </div>
-                    </li>
-                    <li>
-                        <div className={`mt-2 block cursor-pointer items-center p-2 text-sm font-bold text-gray-900 hover:border-blue-500 hover:border-b-2`}>
-                        <FaUmbrellaBeach className='ml-6 text-lime-500' size={28} />
-                            <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Wisata</span>
+                    </li> 
+                    <li>                
+                        <div className={`mt-2 block center cursor-pointer items-center text-sm font-bold text-gray-900 hover:border-blue-500 hover:border-b-2`}>
+                            <div className='bg-gray-100 mx-4 py-3 flex justify-center rounded-xl'>
+                                <FaUmbrellaBeach className='text-lime-500' size={24} />
+                            </div>
+                            <span className="block text-center font-normal mt-2 flex-1 whitespace-nowrap text-[15px] text-gray-500">Wisata</span>
                         </div>
-                    </li>
+                    </li> 
                 </ul>
             </div>
         </aside>

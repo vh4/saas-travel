@@ -43,8 +43,6 @@ export default function ViewTransaksi({path}) {
         return rupiah.split('',rupiah.length-1).reverse().join('');
     }
 
-    console.log(data);
-
     return (
         <>
             <div className='w-full mt-8'>
@@ -59,51 +57,65 @@ export default function ViewTransaksi({path}) {
             </div>
             {isLoading === false ? (
                 <>
-                {data.map((e) => (
-                    <div className='w-full mt-6'>
-                        <div className="w-full rounded-md shadow-sm border profile-header">
-                            <div className='p-4'>
-                                <div className='flex justify-between items-end'>
-                                    <div className='flex space-x-2  items-end'>
-                                        <div className='text-xs text-gray-500'>ID Transaksi</div>
-                                        <div className='text-sm text-blue-500 font-bold'>{e.id_transaksi}</div>
-                                    </div>
-                                    <div className='text-sm text-slate-500 font-bold '>
-                                        Rp. {toRupiah(e.nominal)}
-                                    </div>
-                                </div>
-                                <div className='border-t mt-2'>
-                                    <div className='flex space-x-2 mt-4 text-sm font-bold text-gray-500'>
-                                        <MdOutlineTrain className='text-orange-500' size={20} />
-                                        <div className='flex space-x-2 items-center'><div>{e.origin.toLowerCase()}</div><BsArrowRightShort /><div>{e.destination.toLowerCase()}</div></div>
-                                    </div>
-                                    <div className='pl-1'>
-                                        <div className='mt-4 text-xs  text-gray-500'>
-                                            Date
+                    {data !== null && data !== undefined && data.length !== 0 ? (
+                    <>
+                        {data.map((e) => (
+                            <div className='w-full mt-6'>
+                                <div className="w-full rounded-md shadow-sm border profile-header">
+                                    <div className='p-4'>
+                                        <div className='flex justify-between items-end'>
+                                            <div className='flex space-x-2  items-end'>
+                                                <div className='text-xs text-gray-500'>ID Transaksi</div>
+                                                <div className='text-sm text-blue-500 font-bold'>{e.id_transaksi}</div>
+                                            </div>
+                                            <div className='text-sm text-slate-500 font-bold '>
+                                                Rp. {toRupiah(e.nominal)}
+                                            </div>
                                         </div>
-                                        <div className='mt-1 text-sm font-bold text-gray-500'>
-                                            {e.tanggal_transaksi}
+                                        <div className='border-t mt-2'>
+                                            <div className='flex space-x-2 mt-4 text-sm font-bold text-gray-500'>
+                                                <MdOutlineTrain className='text-orange-500' size={20} />
+                                                <div className='flex space-x-2 items-center'><div>{e.origin.toLowerCase()}</div><BsArrowRightShort /><div>{e.destination.toLowerCase()}</div></div>
+                                            </div>
+                                            <div className='pl-1'>
+                                                <div className='mt-4 text-xs  text-gray-500'>
+                                                    Date
+                                                </div>
+                                                <div className='mt-1 text-sm font-bold text-gray-500'>
+                                                    {e.tanggal_transaksi}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className='mt-4 border-t block md:flex md:justify-between  md:items-center'>
+                                            <div className='mt-2 flex space-x-2 items-end'>
+                                                <div className='mt-1 text-xs  text-gray-500'>
+                                                    Kode Booking
+                                                </div>
+                                                <div className='mt-1 text-sm font-bold text-gray-500'>
+                                                    {e.kode_booking}
+                                                </div>
+                                            </div>
+                                            <div className='flex space-x-2  items-center pt-4'>
+                                                <div className='text-xs py-1 px-3 rounded-full bg-green-500 text-white'>Transaksi sukses</div>
+                                                <div className='text-blue-500 font-bold text-xs'>lihat detail</div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div className='mt-4 border-t block md:flex md:justify-between  md:items-center'>
-                                    <div className='mt-2 flex space-x-2 items-end'>
-                                        <div className='mt-1 text-xs  text-gray-500'>
-                                            Kode Booking
-                                        </div>
-                                        <div className='mt-1 text-sm font-bold text-gray-500'>
-                                            {e.kode_booking}
-                                        </div>
-                                    </div>
-                                    <div className='flex space-x-2  items-center pt-4'>
-                                        <div className='text-xs py-1 px-3 rounded-full bg-green-500 text-white'>Transaksi sukses</div>
-                                        <div className='text-blue-500 font-bold text-xs'>lihat detail</div>
-                                    </div>
+                                </div>   
+                            </div>
+                        ))}
+                    </>) : (
+                    <>
+                        <div className='flex justify-center items-center'>
+                            <div className='text-center'>
+                                <img className='block mx-auto' width={270} src="/emptyy.png" alt="empty.png" />
+                                <div className='text-slate-600 font-bold text-center'>Data Tidak Ditemukan</div>
+                                <div className='mt-2 text-center text-gray-500 text-sm'>
+                                    Maaf, History Data Transaksi Tidak ditemukan. Lakukan transaksi terlebih dahulu.
                                 </div>
                             </div>
-                        </div>   
-                    </div>
-                ))}
+                        </div>
+                    </>)}
                 </>
             )
             :
