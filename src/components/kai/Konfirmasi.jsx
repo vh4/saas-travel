@@ -578,8 +578,8 @@ export default function Konfirmasi(){
                 <MdHorizontalRule size={20} className='hidden xl:flex text-gray-500' />
             </div>
             <div className='flex space-x-2 items-center'>
-                <div className='hidden xl:flex text-[#ff8400] font-bold'>Konfirmasi pesanan</div>
-                <div className='block xl:hidden text-[#ff8400] font-bold'>Konfirmasi</div>
+                <div className='hidden xl:flex text-blue-500 font-bold'>Konfirmasi pesanan</div>
+                <div className='block xl:hidden text-blue-500  font-bold'>Konfirmasi</div>
             </div>
             <div>
                 <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
@@ -600,7 +600,7 @@ export default function Konfirmasi(){
         <div className="block xl:flex xl:justify-around mb-24 xl:space-x-4">
             <div className="w-full mx-0 2xl:mx-4">
             <div className='mt-8 w-full rounded-md border border-gray-200 shadow-sm'>
-                    <div className='p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-[#FF9119] border-b-gray-100'>
+                    <div className='p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100'>
                         <div className='text-slate-700 font-bold '>Keberangkatan kereta</div>
                         <small className='text-gray-700'>{tanggal_keberangkatan_kereta}</small>
                     </div>
@@ -624,7 +624,7 @@ export default function Konfirmasi(){
                                 </div>
                             </li>
                             <li class="ml-4">
-                                <div class="absolute w-4 h-4 bg-[#FF9119] rounded-full mt-0 -left-2 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                <div class="absolute w-4 h-4 bg-blue-500 rounded-full mt-0 -left-2 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
                                 <div className='flex space-x-12'>
                                     <time class="mb-1 text-sm leading-none text-gray-400 dark:text-gray-500">{dataBookingTrain && dataBookingTrain[0].arrivalTime}</time>
                                     <div className='-mt-2'>
@@ -739,7 +739,7 @@ export default function Konfirmasi(){
                     </div>
                 </div>
                 <div className="flex justify-end">
-                    <button onClick={handlerKonfirmasi} type="button" class="block  mt-8 justify-center text-white bg-[#FF9119] space-x-2 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-8 py-4 text-center items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
+                    <button onClick={handlerKonfirmasi} type="button" class="block  mt-8 justify-center text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-medium rounded-lg text-sm px-8 py-4 text-center items-center dark:hover:bg-blue-500/80 dark:focus:ring-blue-500/40 mr-2 mb-2">
                                 {isLoading ? (
                                 <div className="flex space-x-2 items-center">
                                     <svg aria-hidden="true" class="mr-2 w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -751,7 +751,7 @@ export default function Konfirmasi(){
                                 )
                             :
                             (
-                                <div className="text-white text-MD font-bold">KONFIRMASI</div>
+                                <div className="text-white text-MD font-bold">LANJUT KE PEMBAYARAN</div>
                             )
                             }
                     </button>  
@@ -762,7 +762,7 @@ export default function Konfirmasi(){
                 <div className='mt-8 py-2 rounded-md border border-gray-200 shadow-sm'>
                     <div className="flex items-center justify-between p-4">
                         <div className="text-gray-500 text-sm">Booking ID</div>
-                        <div className="font-bold text-[#ff8400]">{hasilBooking && hasilBooking.bookingCode}</div>
+                        <div className="font-bold text-blue-500 ">{hasilBooking && hasilBooking.bookingCode}</div>
                     </div>
                 </div>
                 <button onClick={handlerPilihKursi}  className="block w-full">

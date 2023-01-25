@@ -49,7 +49,6 @@ export default function Search(){
     const [gradeFilter, setGradeFilter] = useState([false, false, false]);
     const [waktuFilter, setWaktuFilter] = useState([false, false, false, false]);
     const [selectedTime, setSelectedTime] = useState([]);
-
     const [ubahPencarian, setUbahPencarian] = useState(false);
 
     const handleGradeFilterChange = (e) => {
@@ -61,18 +60,19 @@ export default function Search(){
       const handleWaktuFilterChange = (e) => {
         let newWktuFilter = waktuFilter;
 
-        if(e.target.value == '06:00-12:00'){
+        if(e.target.value == '06:00-11:59'){
             newWktuFilter[0] = newWktuFilter[0] ? false : true;
         }
-        else if(e.target.value == '12:00-18:00'){
+        else if(e.target.value == '12:00-17:59'){
             newWktuFilter[1] = newWktuFilter[1] ? false : true;
         }
-        else if(e.target.value == '18:00-00:00'){
+        else if(e.target.value == '18:00-23:59'){
             newWktuFilter[2] =  newWktuFilter[2] ? false : true;
         }
-        else if(e.target.value == '00:00-06:00'){
+        else if(e.target.value == '00:00-05:59'){
             newWktuFilter[3] =  newWktuFilter[3] ? false : true;
         }
+
         setWaktuFilter(newWktuFilter);
 
         const time = e.target.value;
@@ -82,6 +82,7 @@ export default function Search(){
             setSelectedTime([...selectedTime, time]);
         }
     };
+    console.log(waktuFilter);
 
     const btnRefHarga = useRef();
     const btnRefWaktu= useRef();
@@ -111,7 +112,6 @@ export default function Search(){
         setHargaRange(data);
 
     }
-
 
     useEffect(() =>{
         if(token === null || token === undefined){
@@ -327,7 +327,7 @@ export default function Search(){
                         <small className="text-xs font-bold text-slate-600">
                             {stasiunBerangkat}, {kotaBerangkat}
                         </small>
-                        <div className="bg-[#FF9119] p-1 rounded-full">
+                        <div className="bg-blue-500 p-1 rounded-full">
                             < VscArrowSwap className="font-bold text-xs text-white" size={16} />
                         </div>
                         <small className="text-xs font-bold text-slate-600">
@@ -344,10 +344,10 @@ export default function Search(){
                     </div>    
                     <div className="mt-4 md:mt-0 flex space-x-4 mr-0 xl:mr-16"> 
                         <Link to='/' className="flex space-x-2 items-center">
-                            <IoArrowBackOutline className="text-[#FF9119]" size={16} />
-                            <div className="text-[#FF9119] text-sm font-bold">Kembali</div>
+                            <IoArrowBackOutline className="text-blue-500" size={16} />
+                            <div className="text-blue-500 text-sm font-bold">Kembali</div>
                         </Link>
-                        <button onClick={() => setUbahPencarian(prev => !prev)} className="block border p-2 px-4 md:px-4 mr-0 xl:mr-16 bg-[#FF9119] text-white rounded-md text-xs font-bold">
+                        <button onClick={() => setUbahPencarian(prev => !prev)} className="block border p-2 px-4 md:px-4 mr-0 xl:mr-16 bg-blue-500 text-white rounded-md text-xs font-bold">
                             Ubah Pencarian
                         </button>            
                     </div>
@@ -395,10 +395,10 @@ export default function Search(){
                                 <div className="w-auto absolute top-10 left-28 z-50 opacity-100 bg-white p-4 text-xs">
                                 <Box sx={{ width: 120,}}>
                                     <FormGroup>
-                                        <FormControlLabel  control={<Checkbox  checked={waktuFilter[0]} value="06:00-12:00"  onChange={handleWaktuFilterChange} size="small"  />} label={<span style={{ fontSize: '12px' }}>06.00 - 12.00</span>} />
-                                        <FormControlLabel  control={<Checkbox  checked={waktuFilter[1]} value="12:00-18:00" onChange={handleWaktuFilterChange} size="small" />}  label={<span style={{ fontSize: '12px' }}>12.00 - 18.00</span>} />
-                                        <FormControlLabel  control={<Checkbox  checked={waktuFilter[2]} value="18:00-00:00" onChange={handleWaktuFilterChange} size="small" />} label={<span style={{ fontSize: '12px' }}>18.00 - 00.00</span>} />
-                                        <FormControlLabel  control={<Checkbox  checked={waktuFilter[3]} value="00:00-06:00" onChange={handleWaktuFilterChange} size="small" />} label={<span style={{ fontSize: '12px' }}>00.00 - 06.00</span>} />
+                                        <FormControlLabel  control={<Checkbox  checked={waktuFilter[0]} value="06:00-11:59"  onChange={handleWaktuFilterChange} size="small"  />} label={<span style={{ fontSize: '12px' }}>06.00 - 12.00</span>} />
+                                        <FormControlLabel  control={<Checkbox  checked={waktuFilter[1]} value="12:00-17:59" onChange={handleWaktuFilterChange} size="small" />}  label={<span style={{ fontSize: '12px' }}>12.00 - 18.00</span>} />
+                                        <FormControlLabel  control={<Checkbox  checked={waktuFilter[2]} value="18:00-23:59" onChange={handleWaktuFilterChange} size="small" />} label={<span style={{ fontSize: '12px' }}>18.00 - 00.00</span>} />
+                                        <FormControlLabel  control={<Checkbox  checked={waktuFilter[3]} value="00:00-05:59" onChange={handleWaktuFilterChange} size="small" />} label={<span style={{ fontSize: '12px' }}>00.00 - 06.00</span>} />
                                     </FormGroup> 
                                 </Box>                                                         
                             </div> 
@@ -449,7 +449,7 @@ export default function Search(){
 
                     <div className="row mb-24 w-full p-2 pr-0 xl:pr-16">           
                     {filteredData.map((e) => ( //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
-                        <div class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${ e.seats[0].availability > 0 ? 'bg-white' : 'bg-gray-200' } border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 hover:border hover:border-black transition-transform transform hover:scale-105`}>
+                        <div class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${ e.seats[0].availability > 0 ? 'bg-white' : 'bg-gray-200' } border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 hover:border transition-transform transform hover:scale-105`}>
         
                         {/* desktop cari */}
         
@@ -476,12 +476,12 @@ export default function Search(){
                                     <small>Langsung</small>
                                 </div>
                                 <div className="">
-                                        <h1 className="mt-4 xl:mt-0 text-md font-bold text-[#FF9119]">Rp.{toRupiah(e.seats[0].priceAdult)}</h1>
+                                        <h1 className="mt-4 xl:mt-0 text-md font-bold text-blue-500">Rp.{toRupiah(e.seats[0].priceAdult)}</h1>
                                         <small className="text-red-500">{e.seats[0].availability} set(s) left</small>
                                 </div>
                                 <div>
                                     {e.seats[0].availability > 0 ? (
-                                        <button type="button" onClick={() => bookingHandlerDetail(e.trainNumber)} class="mt-4 xl:mt-0 text-white bg-[#FF9119] space-x-2 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
+                                        <button type="button" onClick={() => bookingHandlerDetail(e.trainNumber)} class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-medium rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center dark:hover:bg-blue-500/80 dark:focus:ring-blue-500/40 mr-2 mb-2">
                                             <div className="text-white font-bold">PILIH</div></button>
                                         
                                     ) : ''}
@@ -501,7 +501,7 @@ export default function Search(){
                                         <small>{e.seats[0].grade === 'E' ? 'Eksekutif' : e.seats[0].grade === 'B' ? 'Bisnis' : 'Ekonomi'} Class ({e.seats[0].class})</small>
                                     </div>
                                     <div className="text-right">
-                                        <h1 className="text-xs font-bold text-[#FF9119]">Rp. {toRupiah(e.seats[0].priceAdult)}</h1>
+                                        <h1 className="text-xs font-bold text-blue-500">Rp. {toRupiah(e.seats[0].priceAdult)}</h1>
                                         <small className="text-red-500">{e.seats[0].availability} set(s)</small>
                                     </div>
                                 </div>

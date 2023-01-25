@@ -11,7 +11,7 @@ export default function BookingLayout({children}){
         <div className="block">
             < Header/>
             <div className="mt-8">
-                <div className="container mx-auto px-0 xl:px-24">                   
+                <div className="container mx-auto px-0 xl:px-12">                   
                     <main>{children}</main>
                 </div>
             </div>

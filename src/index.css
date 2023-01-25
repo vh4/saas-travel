@@ -9,10 +9,12 @@
       margin: 0;
     }
   }
+  
 
   .input-phone-number input{
     border:none;
-    width: 80%;
+    padding:10px 0px 10px 0px;
+    color: gray;
   }
 
   .input-phone-number input:focus{
@@ -21,3 +23,19 @@
     box-shadow: none !important;
 }
 * { -webkit-tap-highlight-color: rgba(0,0,0,0); }
+
+.flex-no-wrap {
+  flex-wrap: nowrap;
+}
+
+/* For Webkit-based browsers (Chrome, Safari and Opera) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+

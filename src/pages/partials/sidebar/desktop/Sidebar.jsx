@@ -9,7 +9,7 @@ export default function Sidebar({nameMenu, setNameMenu}) {
     return (
         <aside className="w-full" aria-label="Sidebar">
             <div className="flex justify-center w-full overflow-y-auto py-4 px-3 xl:bg-gray-50 rounded dark:bg-gray-800" >
-                <ul className="w-full grid grid-cols-3 xl:flex xl:space-x-4 gap-4 xl:gap-0">
+                <ul className="w-full grid grid-cols-3 lg:grid-cols-4 xl:flex xl:space-x-4 gap-4 xl:gap-0">
                     <li>
                         <div onClick={() => setNameMenu('plane')} className={`flex cursor-pointer px-4 ${ nameMenu === 'plane' ? 'border-b-2 border-blue-500' : ''} items-center p-2 text-base font-normal text-gray-900   hover:border-blue-500 hover:border-b-2`}>
                         <GiCommercialAirplane className='text-red-500 text-[28px]' size={20} />

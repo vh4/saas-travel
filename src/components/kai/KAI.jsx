@@ -7,36 +7,79 @@ import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
+import { Chip } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
 import Autocomplete from '@mui/material/Autocomplete';
 import {Popper } from "@mui/material";
 import {FaTrain} from 'react-icons/fa'
 import { useNavigate, createSearchParams } from "react-router-dom";
-import Box from '@mui/material/Box';
-import Skeleton from '@mui/material/Skeleton';
 import onClickOutside from "react-onclickoutside";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from '@mui/styles';
 
 function KAI(){
 
     const useStyles = makeStyles((theme) => ({
         inputRoot: {
-          color: "gray",
+          color:"#6b7280",
           "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#d1d5db"
+            borderColor: "#e5e7eb"
           },
           "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "#e5e7eb"
+          },
+          "&:Mui-actived .MuiOutlinedInput-notchedOutline": {
             borderColor: "#d1d5db"
           },
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
             borderColor: "#d1d5db"
-          }
+          },
+          "&&& $input": {
+            padding: "3px",
+          },
+        },
+        root: {
+            
+            "& .MuiInputBase-root": {
+              "& .MuiInputBase-input": {
+                padding: 12,
+              },
+              color:"#6b7280",
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#e5e7eb"
+              },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#e5e7eb"
+              },
+              "&:Mui-actived .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#e5e7eb"
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "#e5e7eb"
+              },
+            }
         }
-      }));
+}));
+
+
+    const PopperMy = function (props) {
+        return (<Popper {...props} style={{ width: 350 }} placement='bottom-start' />)
+    };
     
     const classes = useStyles();
+    
+    const [kai, setKAI] = React.useState({});
+    const [kaiData, setKAIData] = React.useState([]);
+    const i = 0;
 
-    const [berangkat, setBerangkat] = React.useState();
+    const [openBerangka, SetopenBerangka] = React.useState(false);
+    const [openTujuan, setOpenTujuan] = React.useState(false);
+    
+
+    const loadingBerangkat = openBerangka && kaiData.length === 0;
+    const loadingTujuan = openTujuan && kaiData.length === 0;
+
+    //input
+    const [keberangkatan, setKeberangkatan] = React.useState();
     const [tujuan, setTujuan] = React.useState();
     const [tanggal, setTanggal] = React.useState();
     const [isLoading, setLoading] = React.useState(false);
@@ -48,10 +91,72 @@ function KAI(){
         anchorEl === 'hidden' ? setAnchorEl('grid') : setAnchorEl('hidden');
     }
 
-    KAI.handleClickOutside = () => {
+    KAI.handleClickOutside = () =>{
         setAnchorEl('hidden');
       };
 
+
+      function sleep(delay = 0) {
+        return new Promise((resolve) => {
+          setTimeout(resolve, delay);
+        });
+      }
+
+      //berangkat
+      React.useEffect(() => {
+        let active = true;
+    
+        if (!loadingBerangkat) {
+          return undefined;
+        }
+        
+        (async () => {
+          await sleep(1e3); // For demo purposes.
+    
+          if (active) {
+            setKAIData([...kai.data]);
+          }
+        })();
+    
+        return () => {
+          active = false;
+        };
+      }, [loadingBerangkat]);
+    
+      React.useEffect(() => {
+        if (!openBerangka) {
+            setKAIData([]);
+        }
+      }, [openBerangka]);
+
+
+      //tujuan
+      React.useEffect(() => {
+        let active = true;
+    
+        if (!loadingTujuan) {
+          return undefined;
+        }
+        
+        (async () => {
+          await sleep(1e3); // For demo purposes.
+    
+          if (active) {
+            setKAIData([...kai.data]);
+          }
+        })();
+    
+        return () => {
+          active = false;
+        };
+      }, [loadingTujuan]);
+    
+      React.useEffect(() => {
+        if (!openTujuan) {
+            setKAIData([]);
+        }
+      }, [openTujuan]);
+    
 
     const navigate = useNavigate();
 
@@ -99,20 +204,6 @@ function KAI(){
 
     }
 
-
-    const i = 0;
-    const [kai, setKAI] = React.useState({});
-
-    const PopperMy = function (props) {
-        return <Popper {...props} style={styles.popper} placement="bottom-start" />;
-     };
-
-     const styles = (theme) => ({
-        popper: {
-           minWidth:'400px'
-        }
-     });
-
     React.useEffect(() => {
 
         getKAIdata();
@@ -157,13 +248,13 @@ function KAI(){
             setLoading(false);
 
             const params = {
-                origin: berangkat.id_stasiun,
+                origin: keberangkatan.id_stasiun,
                 destination:tujuan.id_stasiun,
                 productCode: 'WKAI',
                 date:tanggalParse,
-                kotaBerangkat:berangkat.nama_kota,
+                kotaBerangkat:keberangkatan.nama_kota,
                 kotaTujuan:tujuan.nama_kota,
-                stasiunBerangkat:berangkat.nama_stasiun,
+                stasiunBerangkat:keberangkatan.nama_stasiun,
                 stasiunTujuan:tujuan.nama_stasiun,
                 adult:adult,
                 infant:infant,
@@ -178,6 +269,9 @@ function KAI(){
 
 
     }
+    const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
+
+    console.log(token);
 
     return (
         <>     
@@ -188,141 +282,184 @@ function KAI(){
                             < BiTrain className="text-gray-600" size={24} />
                             <div className="text-sm md:text-md font-bold text-slate-700">TRAINS</div>
                         </div> */}
-                        {kai.data !== undefined ? 
-                        (
                             <>
-                                <div className="grid grid-cols-1 xl:grid-cols-4 gap-4">
-                                <FormControl sx={{ m: 1, minWidth: 120, outline: 'none' }} >
-                                <Autocomplete key={ i + 1}
-                                    classes={classes}
-                                    PopperComponent={PopperMy}
-                                    disableClearable
-                                    options={kai.data}
-                                    getOptionLabel={(option) => option.nama_stasiun + ' - ' + option.nama_kota + ' - ' + option.id_stasiun}
-                                    value={berangkat}
-                                    onChange={(event, newValue) => {
-                                        setBerangkat(newValue);
-                                    }}
-
-                                    renderInput={(params) => <TextField {...params} 
-                                       
-                                    InputProps={{...params.InputProps, 
-                                            startAdornment: <FaTrain/> }}
-                                    placeholder={kai.data === undefined ? 'Loading...'  : 'Stasiun keberangkatan'}
-                                    label="Keberangkatan" />}                            
-                                    required
-                                    />
-                                    <FormHelperText>Stasiun Keberangkatan</FormHelperText>
+                            <div className='block xl:flex justify-between'>
+                                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 md:mx-12 xl:mx-6">
+                                <FormControl className="" sx={{ m: 1, minWidth: 120, outline: 'none' }} >
+                                    <small className="mb-2 text-gray-500">Stasiun Asal</small>
+                                    <Autocomplete
+                                        classes={classes}
+                                        id="asynchronous-demo"
+                                        disableClearable
+                                        PopperComponent={PopperMy}
+                                        open={openBerangka}
+                                        hiddenLabel={true}
+                                        onOpen={() => {
+                                            SetopenBerangka(true);
+                                        }}
+                                        onClose={() => {
+                                            SetopenBerangka(false);
+                                        }}
+                                        renderTags={(value, getTagProps) => (
+                                            <div style={{ width: "100%" }}>
+                                            {value.map((option, index) => (
+                                                <Chip
+                                                variant="outlined"
+                                                label={option}
+                                                {...getTagProps({ index })}
+                                                />
+                                            ))}
+                                            </div>
+                                        )}
+                                        isOptionEqualToValue={(option, value) => option.title === value.title}
+                                        getOptionLabel={(option) => option.nama_stasiun + ' - ' + option.nama_kota + ' - ' + option.id_stasiun}
+                                        options={kaiData}
+                                        onChange={(event, newValue) => {
+                                            setKeberangkatan(newValue);
+                                        }}
+                                        loading={loadingBerangkat}
+                                        renderInput={(params) => (
+                                            <TextField
+                                            {...params}
+                                            InputProps={{
+                                                ...params.InputProps,
+                                                startAdornment: (<FaTrain className="text-gray-400"/>),
+                                                placeholder:"Stasiun Asal",
+                                                endAdornment: (
+                                                <React.Fragment>
+                                                    {loadingBerangkat ? <CircularProgress color="inherit" size={20} /> : null}
+                                                    {params.InputProps.endAdornment}
+                                                </React.Fragment>
+                                                ),
+                                            }}
+                                            />
+                                        )
+                                    }
+                                        />
                                 </FormControl>
-                                <FormControl sx={{ m: 1, minWidth: 120, outline: 'none' }} >
-                                <Autocomplete  key={ i + 1}
-                                    PopperComponent={PopperMy}
-                                    disableClearable
-                                    options={kai.data}
-                                    classes={classes}
-                                    getOptionLabel={(option) => option.nama_stasiun + ' - ' + option.nama_kota + ' - ' + option.id_stasiun}
-                                    value={tujuan}
-                                    onChange={(event, newValue) => {
-                                        setTujuan(newValue);
-                                    }}
-                                    renderInput={(params) => <TextField {...params}
-                                    InputProps={{...params.InputProps, 
-                                            startAdornment: <FaTrain/> }}
-                                    placeholder={kai.data === undefined ? 'Loading...'  : 'Stasiun Tujuan'}
-                                    label="Tujuan" />}
-                                    required
-                                    />
-                                    <FormHelperText>Stasiun Tujuan</FormHelperText>
+                                <FormControl className="" sx={{ m: 1, minWidth: 120, outline: 'none' }} >
+                                    <small className="mb-2 text-gray-500">Stasiun Asal</small>
+                                    <Autocomplete
+                                        classes={classes}
+                                        id="asynchronous-demo"
+                                        disableClearable
+                                        PopperComponent={PopperMy}
+                                        open={openTujuan}
+                                        hiddenLabel={true}
+                                        onOpen={() => {
+                                            setOpenTujuan(true);
+                                        }}
+                                        onClose={() => {
+                                            setOpenTujuan(false);
+                                        }}
+                                        renderTags={(value, getTagProps) => (
+                                            <div style={{ width: "100%" }}>
+                                            {value.map((option, index) => (
+                                                <Chip
+                                                variant="outlined"
+                                                label={option}
+                                                {...getTagProps({ index })}
+                                                />
+                                            ))}
+                                            </div>
+                                        )}
+                                        isOptionEqualToValue={(option, value) => option.title === value.title}
+                                        getOptionLabel={(option) => option.nama_stasiun + ' - ' + option.nama_kota + ' - ' + option.id_stasiun}
+                                        options={kaiData}
+                                        onChange={(event, newValue) => {
+                                            setTujuan(newValue);
+                                        }}
+                                        loading={loadingTujuan}
+                                        renderInput={(params) => (
+                                            <TextField
+                                            {...params}
+                                            InputProps={{
+                                                ...params.InputProps,
+                                                startAdornment: (<FaTrain className="text-gray-400"/>),
+                                                placeholder:"Stasiun Asal",
+                                                endAdornment: (
+                                                <React.Fragment>
+                                                    {loadingTujuan ? <CircularProgress color="inherit" size={20} /> : null}
+                                                    {params.InputProps.endAdornment}
+                                                </React.Fragment>
+                                                ),
+                                            }}
+                                            />
+                                        )
+                                    }
+                                        />
                                 </FormControl>
                                 <FormControl sx={{ m: 1, minWidth: 120 }}> 
+                                <small className="mb-2 text-gray-500">Tanggal Berangkat</small>
                                 <LocalizationProvider 
-                                classes={classes}                               
                                 dateAdapter={AdapterDayjs}>
-                                    <DatePicker key={ i + 1}
-                                        value={tanggal}
-                                        onChange={(newValue) => {
-                                        setTanggal(newValue);
-                                        }}
+                                    <DatePicker
+                                            value={tanggal}
+                                            className={classes.root}
+                                            onChange={(newValue) => {
+                                            setTanggal(newValue);
+                                            }}
                                         renderInput={(params) => <TextField {...params} />}
                                     />
                                 </LocalizationProvider>
-                                <FormHelperText>Tanggal keberangkatan</FormHelperText>
                                 </FormControl>
-                                <div onClick={handleClick} className="relative bg-white ml-2 py-4 px-2 cursor-pointer  text-slate-500 w-11/12 h-3/5 rounded-md mt-2 border-b border-gray-300 focus:outline-none hover:bg-gray-100 hover:text-slate-600 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                                <div
-                                    
-                                >
-                                    <div>{adult} Adult, {infant} Infant</div>
-                                    <div id="basic-menu" className={`${anchorEl} absolute left-0 xl:left-40  z-10 grid w-auto p-4 text-sm bg-white border border-gray-100 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-700`}>
-                                        <div className="ml-4 block  mx-4 md:mx-0">
-                                            <div className="mt-2 w-full items-center text-gray-600 flex space-x-2">
-                                                <img src={'/adult.svg'} alt="adult" />
-                                                <div className="header-number px-3">
-                                                    <p>Adult </p>
+                                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                                <small className="mb-2 text-gray-500">Total Penumpang</small>
+                                <TextField onClick={ handleClick} sx={{ input: { cursor: 'pointer' } }} size="medium" classes={classes} id="outlined-basic" value={`${parseInt(adult) + parseInt(infant)} Penumpang`} variant="outlined" />       
+                                    <div id="basic-menu" className={`${anchorEl} absolute top-20 z-10 grid w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-700`}>
+                                        <div className="w-full ml-4 block md:mx-0">
+                                            <div className="mt-4 w-full items-center text-gray-600">
+                                                <div className="text-sm text-center header-number">
+                                                    <p>Adult (Dewasa {'>'} 12 thn)</p>
                                                 </div>
-                                                <button onClick={plusAdult} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                                    <span class="m-auto text-2xl font-md">+</span>
+                                                <div class="flex flex-row h-10 w-full rounded-lg relative mt-2">
+                                                <button onClick={plusAdult} class=" bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-l cursor-pointer outline-none">
+                                                    <span class="m-auto text-2xl font-thin">+</span>
                                                 </button>
-                                                <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={adult} />
-                                                <button onClick={minusAdult} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                                    <span class="m-auto text-2xl font-md">−</span>
-                                                </button>                           
-                                            </div>
-                                            <div className="mt-2 w-full items-center text-gray-600 flex space-x-2">
-                                                <img src={'/infanct.svg'} alt="infanct" />
-                                                <div className="header-number px-2">
-                                                    <p>Infant</p>
+                                                    <input type="number" class="focus:outline-none text-center w-full bg-gray-50 font-semibold text-md md:text-basecursor-default flex items-center text-gray-500  outline-none" name="custom-input-number" value={adult} />
+                                                <button onClick={minusAdult} class="bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-r cursor-pointer">
+                                                    <span class="m-auto text-2xl font-thin">-</span>
+                                                </button>
+                                                </div>                          
+                                            </div>                       
+                                            <div className="mt-4 w-full items-center text-gray-600">
+                                                <div className="text-sm text-center header-number">
+                                                    <p>Infant (Infant 0-2 thn)</p>
                                                 </div>
-                                                <button onClick={plusInfant} data-action="decrement" class="h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                                    <span class="m-auto text-2xl font-md">+</span>
+                                                <div class="flex flex-row h-10 w-full rounded-lg relative mt-2">
+                                                <button onClick={plusInfant} class=" bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-l cursor-pointer outline-none">
+                                                    <span class="m-auto text-2xl font-thin">+</span>
                                                 </button>
-                                                <input className="w-12 h-10 border-b-1 text-gray-600 border-gray-300   border-x-0 border-t-0 outline-none focus:outline-none focus:ring-0"  type="number" value={infant} />
-                                                <button onClick={minusInfant} data-action="decrement" class=" h-10 w-10  text-blue-600 rounded-l cursor-pointer outline-none">
-                                                    <span class="m-auto text-2xl font-md">−</span>
-                                                </button>                           
-                                            </div>
+                                                    <input type="number" class="focus:outline-none text-center w-full bg-gray-50 font-semibold text-md md:text-basecursor-default flex items-center text-gray-500  outline-none" name="custom-input-number" value={infant} />
+                                                <button onClick={minusInfant} class="bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-r cursor-pointer">
+                                                    <span class="m-auto text-2xl font-thin">-</span>
+                                                </button>
+                                                </div>                          
+                                            </div>                         
                                         </div>                         
+                                    </div>
+                                </FormControl>                                                         
+                                </div>
+                                <div className="w-full pr-4 xl:mr-0 xl:pl-4 xl:w-1/4 flex justify-end xl:justify-start mt-8 py-0.5">
+                                <button onClick={handlerCariKai} type="button" class="text-white bg-blue-500 space-x-2 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-sm text-sm px-6 py-3 xl:py-0 text-center inline-flex items-center mb-2">
+                                {isLoading ? (
+                                <div className="flex space-x-2 items-center">
+                                    <svg aria-hidden="true" class="mr-2 w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                                        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                                    </svg>
+                                    <div class="">Loading...</div>
+                                </div>
+                                )
+                                :
+                                (
+                                    <div className="text-white text-md font-bold">CARI TIKET</div>
+                                )
+                                }
+                                </button>  
+                                </div>
                             </div> 
-                                </div>
-                                </div>                                                           
-                                </div>
                             </>
-                        ) :
-                        
-                        (
-                            <>
-                            <div className="block w-full mb-4">
-                            <Box 
-                            >
-                                <Skeleton />
-                                <Skeleton animation="wave" />
-                                <Skeleton animation="wave" />
-                                <Skeleton animation="wave" />
-                                <Skeleton animation={false} />
-                            </Box>
-                            </div>                           
-                            </>
-                        )
-
-                    }
-                        <div className="w-full mt-8 xl:mt-0 flex justify-end">
-                        <button onClick={handlerCariKai} type="button" class="text-white bg-[#FF9119] space-x-2 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-10 py-3 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
-                            {isLoading ? (
-                            <div className="flex space-x-2 items-center">
-                                <svg aria-hidden="true" class="mr-2 w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-                                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
-                                </svg>
-                                <div class="">Loading...</div>
-                            </div>
-                            )
-                        :
-                        (
-                            <div className="text-white text-md font-bold">CARI TIKET</div>
-                        )
-                        }
-                        </button>  
-                        </div>
                     </form>
                 </div>
             </div>

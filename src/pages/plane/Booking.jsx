@@ -1,16 +1,14 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import Layout from "../BookingLayout";
-import PembayaranComponent from '../../components/kai/Pembayaran'
+import BookingPesawatComponent from "../../components/plane/Booking";
 
-
-export default function Pembayaran(){
-
+export default function Booking(){
     return(
         <Layout>
         <div className="container">
             <div className="w-full px-4"> 
                 {/* menu fitur  */}
-                <PembayaranComponent />
+                <BookingPesawatComponent />
             </div>
         </div>
     </Layout>

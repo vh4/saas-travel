@@ -91,7 +91,7 @@ export default function BookingKai(){
     for(var i = 0; i < TotalAdult; i++){
         AdultArr.push({
             name: '',
-            birthdate: '',
+            birthdate: null,
             idNumber: '',
             phone: '',
             phone_values: '',
@@ -102,7 +102,7 @@ export default function BookingKai(){
     for(var i = 0; i < TotalInfant; i++){
         InfantArr.push({
             name: '',
-            birthdate: '',
+            birthdate: null,
             idNumber: '',
         });
 
@@ -165,9 +165,25 @@ export default function BookingKai(){
 
                 adult[0].map((data) =>{
                     data.phone = formatPhoneNumber(data.phone_values);
-                })
+                });
 
-
+            // const Fare = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/book`, {
+            //     productCode : "WKAI",
+            //     origin : dataDetailTrain[0].berangkat_id_station,
+            //     destination : dataDetailTrain[0].tujuan_id_station, 
+            //     date : dataBookingTrain[0].departureDate,
+            //     trainNumber : parseInt(dataBookingTrain[0].trainNumber),
+            //     grade : dataBookingTrain[0].seats[0].grade,
+            //     class : dataBookingTrain[0].seats[0].class,
+            //     adult : TotalAdult,
+            //     infant : TotalInfant,
+            //     trainName : dataBookingTrain[0].trainName,
+            //     departureStation : dataDetailTrain[0].stasiunBerangkat,
+            //     departureTime : dataBookingTrain[0].departureTime,
+            //     arrivalStation : dataDetailTrain[0].stasiunTujuan,
+            //     arrivalTime : dataBookingTrain[0].arrivalTime,
+            // }); // karena di booking sudah punya biaya admin, maka fare dihilangkan
+            
             const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/book`, 
                 {
                     productCode : "WKAI",
@@ -215,6 +231,8 @@ export default function BookingKai(){
             }else{
                 const hasilDataBooking = response.data.data
                 localStorage.setItem(dataBookingTrain[0].trainNumber + '_hasilBookingdanPilihKursi', JSON.stringify(hasilDataBooking));
+                // localStorage.setItem(dataBookingTrain[0].trainNumber + '_fareAdmin', JSON.stringify(Fare.data.data));
+
                 navigate({
                     pathname: "/train/konfirmasi/" + dataBookingTrain[0].trainNumber,
                     search: `?${createSearchParams(params)}`  
@@ -232,8 +250,8 @@ export default function BookingKai(){
                 {/* header kai flow */}
                 <div className='flex justify-start jalur-payment-booking text-xs xl:text-md space-x-2 xl:space-x-8 items-center'>
                 <div className='flex space-x-2 items-center'>
-                    <div className='hidden xl:flex text-[#ff8400] font-bold'>Detail pesanan</div>
-                    <div className='block xl:hidden text-[#ff8400] font-bold'>Detail</div>
+                    <div className='hidden xl:flex text-blue-500 font-bold'>Detail pesanan</div>
+                    <div className='block xl:hidden text-blue-500 font-bold'>Detail</div>
                 </div>
                 <div>
                     <MdHorizontalRule size={20} className='hidden xl:flex text-gray-500' />
@@ -261,7 +279,7 @@ export default function BookingKai(){
             </div>
             {/* sidebar mobile kai*/}
             <div className='mt-8 block xl:hidden w-full rounded-md border border-gray-200 shadow-sm'>
-                    <div className='p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-[#FF9119] border-b-gray-100'>
+                    <div className='p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100'>
                         <div className='text-gray-700 '>Keberangkatan kereta</div>
                         <small className='text-gray-700'>{tanggal_keberangkatan_kereta}</small>
                     </div>
@@ -270,7 +288,7 @@ export default function BookingKai(){
                             <div>{dataDetailTrain[0].berangkat_nama_kota}</div>
                             <div>({dataDetailTrain[0].berangkat_id_station})</div>
                         </div>
-                        <div className='rounded-full p-2 bg-[#FF9119]'>
+                        <div className='rounded-full p-2 bg-blue-500'>
                             < TbArrowsLeftRight className='text-white' size={18} />
                         </div>
                         <div className='text-slate-600 text-xs'>
@@ -295,7 +313,7 @@ export default function BookingKai(){
                                 </div>
                             </li>
                             <li class="ml-4">
-                                <div class="absolute w-4 h-4 bg-[#FF9119] rounded-full mt-0 -left-2 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                <div class="absolute w-4 h-4 bg-blue-500 rounded-full mt-0 -left-2 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
                                 <div className='flex space-x-12'>
                                     <time class="mb-1 text-sm leading-none text-gray-400 dark:text-gray-500">{dataBookingTrain[0].arrivalTime}</time>
                                     <div className='-mt-2'>
@@ -307,16 +325,16 @@ export default function BookingKai(){
                         </ol>
                     </div>
             </div>
-            <div className='mb-24 block xl:flex xl:space-x-10'>
+            <div className='w-full mb-24 block xl:flex xl:space-x-10'>
                 {/* detail passengger kai*/} 
-                <form className='block'>
+                <form className='block w-full mt-8 mb-4'>
                     {/* adult loop */}
 
                     { adult[0].map((e, i) => (
                         <>
                             <div>
                                 <div className='Booking  mt-8 mb-4 xl:mt-12'>
-                                    <h1 className='text-md font-bold text-slate-500'>ADULT PASSENGER</h1>
+                                    <h1 className='text-md font-bold text-gray-500'>ADULT PASSENGER</h1>
                                     <small className='text-gray-500'>Isi sesuai dengan data anda</small>
                                 </div>
                                 {/* Detailt */}            
@@ -329,18 +347,18 @@ export default function BookingKai(){
                                                     <div className='xl:w-full mt-4 xl:mt-0'>
                                                     <div className='text-gray-700 text-sm font-bold mb-2'>Nama Lengkap</div>
                                                         <div>
-                                                            <input {...register(`name${i}`, {required:true})} value={e.name} onChange={handleAdultsubCatagoryChange(i, 'name')}  type="text" placeholder='Nama Lengkap' id="default-input" class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block p-4 mt-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                                            <input {...register(`name${i}`, {required:true})} value={e.name} onChange={handleAdultsubCatagoryChange(i, 'name')}  type="text" placeholder='Nama Lengkap' id="default-input" class="border w-full  border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" />
                                                             {errors[`name${i}`]?.type === "required" ? (<small className='ml-2 text-red-500'>Nama harus diisi</small>) : ''}
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className='mb-8 mt-8'>
-                                                <div className='py-0 px-0 xl:px-8  block xl:flex space-x-2 xl:space-x-8 mt-0 xl:-mt-6'>
+                                            <div className='mb-8'>
+                                                <div className='py-0 px-0 xl:px-8 block xl:grid xl:grid-cols-2 xl:gap-8'>
                                                     {/* desktop nomor hp */}
-                                                    <div className='p-2 xl:p-0 hidden xl:block'>
-                                                        <div className=' text-gray-700 text-sm  font-bold mb-2 ml-2'>Nomor HP</div>
-                                                        <FormControl sx={{ m: 1, borderRadius:60, outlineColor: 'red' }}>
+                                                    <div className='w-full xl:p-0 hidden xl:block'>
+                                                        <div className='w-full text-gray-700 text-sm font-bold ml-2'>Nomor HP</div>
+                                                        <FormControl sx={{ m: 1, borderRadius:60, width:'100%' }}>
                                                             <div className='border border-gray-300 py-1 pl-4'>
                                                             <PhoneInput
                                                                 international
@@ -356,9 +374,9 @@ export default function BookingKai(){
                                                         </FormControl>
                                                     </div>
                                                     {/* mobile nomor hp */}
-                                                    <div className='p-2 xl:p-0 block xl:hidden'>
-                                                        <div className=' text-gray-700 text-sm md:text-base font-bold mb-2 ml-2'>Nomor HP</div>
-                                                        <FormControl sx={{ m: 1, borderRadius:60, outlineColor: 'red' }}>
+                                                    <div className='px-4 xl:p-0 block xl:hidden'>
+                                                        <div className=' text-gray-700 text-sm md:text-base font-bold mb-2'>Nomor HP</div>
+                                                        <FormControl sx={{borderRadius:60, width:'100%' }}>
                                                             <div className='border border-gray-300 py-1 pl-4'>
                                                             <PhoneInput
                                                                 international
@@ -375,15 +393,12 @@ export default function BookingKai(){
                                                     </div>
 
                                                     {/* mobile & desktop NIK*/}
-                                                    
-                                                    <div className='block'>
-                                                        <div className='block pr-4 ml-4'>
-                                                                <div className='text-gray-700 text-sm font-bold mb-2'>Nomor Keluarga (NIK)</div>
-                                                                <input   {...register(`idNumber${i}`, { required: true} )} value={e.idNumber} onChange={handleAdultsubCatagoryChange(i, 'idNumber')} type="text" placeholder='NIK' id="default-input" class="w-full border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block p-3.5 mt-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                                                                {errors[`idNumber${i}`]?.type === "required" ? (<small className='text-red-500'>NIK harus diisi</small>) : ''}
-                                                                <div><small className='mt-2 text-gray-400'>Contoh: 16 digit nomor</small></div>
+                                                        <div className='px-4 xl:px-0 w-full block mt-4 xl:mt-0'>
+                                                            <div className='w-full text-gray-700 text-sm font-bold mb-2'>Nomor Keluarga (NIK)</div>
+                                                            <input   {...register(`idNumber${i}`, { required: true} )} value={e.idNumber} onChange={handleAdultsubCatagoryChange(i, 'idNumber')} type="text" placeholder='NIK' id="default-input" class="border w-full  border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" />
+                                                            {errors[`idNumber${i}`]?.type === "required" ? (<small className='text-red-500'>NIK harus diisi</small>) : ''}
+                                                            <div><small className='mt-2 text-gray-400'>Contoh: 16 digit nomor</small></div>
                                                         </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                     </div> 
@@ -398,7 +413,7 @@ export default function BookingKai(){
                         <>
                             <div>
                                 <div className='Booking ml-2 mt-8 mb-4 xl:mt-12'>
-                                    <h1 className='xl:text-xl font-semibold text-gray-700 text-md'>Infant Passenger</h1>
+                                    <h1 className='xl:text-xl font-semibold text-gray-500 text-md'>Infant Passenger</h1>
                                     <small className='text-gray-500'>isi dengan detail pemesanan kereta</small>
                                 </div>
                                 {/* Detailt */}            
@@ -411,17 +426,17 @@ export default function BookingKai(){
                                                     <div className='xl:w-full mt-4 xl:mt-0'>
                                                     <div className='text-gray-700 text-sm font-bold mb-2'>Nama Lengkap</div>
                                                         <div>
-                                                            <input value={e.name} onChange={handleInfantsubCatagoryChange(i, 'name')} type="text" placeholder='Nama Lengkap' id="default-input" class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block p-4 mt-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                                            <input value={e.name} onChange={handleInfantsubCatagoryChange(i, 'name')} type="text" placeholder='Nama Lengkap' id="default-input" class="border w-full  border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" />
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className='mb-8 mt-8'>
-                                                <div className='py-0 px-0 xl:px-8  block xl:flex space-x-2 xl:space-x-8 mt-0 xl:-mt-6'>
+                                                <div className='py-0 px-0 xl:px-8 block xl:grid space-x-2 xl:grid-cols-2 mt-0 xl:-mt-6 xl:gap-4'>
                                                     {/* desktop nomor hp */}
-                                                    <div className='p-2 xl:p-0 hidden xl:block'>
-                                                        <div className=' text-gray-700 text-sm  font-bold mb-2 ml-2'>Tanggal Lahir</div>
-                                                        <FormControl sx={{ m: 1, borderRadius:60, outlineColor: 'gray' }}>
+                                                    <div className='w-full xl:p-0 hidden xl:block'>
+                                                        <div className=' text-gray-700 text-sm  font-bold mb-2'>Tanggal Lahir</div>
+                                                        <FormControl sx={{borderRadius:60, outlineColor: 'gray', width:'100%' }}>
                                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                             <DatePicker key={ i + 1}
                                                                 onChange={handleInfantsubCatagoryChange(i, 'birthdate')}
@@ -435,7 +450,7 @@ export default function BookingKai(){
                                                     {/* mobile nomor hp */}
                                                     <div className='p-2 xl:p-0 block xl:hidden'>
                                                         <div className=' text-gray-700 text-sm md:text-base font-bold mb-2 ml-2'>Nomor HP</div>
-                                                        <FormControl sx={{ m: 1, borderRadius:60, outlineColor: 'red' }}>
+                                                        <FormControl sx={{borderRadius:60,  width:'100%'}}>
                                                             <div className='border border-gray-300 py-1 pl-4'>
                                                             <PhoneInput
                                                                 international
@@ -452,9 +467,9 @@ export default function BookingKai(){
                                                     {/* mobile & desktop NIK*/}
                                                     
                                                     <div className='block'>
-                                                        <div className='block pr-4 ml-4'>
+                                                        <div className='w-full block'>
                                                                 <div className='text-gray-700 text-sm font-bold mb-2'>Nomor Keluarga (NIK)</div>
-                                                                <input value={e.idNumber} onChange={handleInfantsubCatagoryChange(i, 'idNumber')} type="text" placeholder='NIK' id="default-input" class="w-full border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block p-3.5 mt-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                                                <input value={e.idNumber} onChange={handleInfantsubCatagoryChange(i, 'idNumber')} type="text" placeholder='NIK' id="default-input" class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" />
                                                                 <small className='mt-2 text-gray-400'>Contoh: 16 digit</small>
                                                         </div>
                                                     </div>
@@ -467,7 +482,7 @@ export default function BookingKai(){
                     )) }
 
                     <div className='flex justify-end mr-2 mt-8'>
-                    <button onClick={handleSubmit(handlerBookingSubmit)} type="button" class="text-white bg-[#FF9119] space-x-2 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-8 py-4 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
+                    <button onClick={handleSubmit(handlerBookingSubmit)} type="button" class="text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-medium rounded-lg text-sm px-8 py-4 text-center inline-flex items-center dark:hover:bg-blue-500/80 dark:focus:ring-blue-500/40 mr-2 mb-2">
                             {isLoading ? (
                             <div className="flex space-x-2 items-center">
                                 <svg aria-hidden="true" class="mr-2 w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -487,9 +502,9 @@ export default function BookingKai(){
 
                 </form>
                 {/* sidebra desktop*/}
-                <div className='xl:mt-24'>
+                <div className='w-1/2 xl:mt-24'>
                     <div className='hidden xl:block rounded-md border border-gray-200 shadow-sm'>
-                            <div className='p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-[#FF9119] border-b-gray-100'>
+                            <div className='p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100'>
                                 <div className='text-gray-700 text-sm font-bold'>Keberangkatan kereta</div>
                                 <small className='text-xs text-gray-700'>{tanggal_keberangkatan_kereta}</small>
                             </div>
@@ -498,7 +513,7 @@ export default function BookingKai(){
                                     <div>{dataDetailTrain[0].berangkat_nama_kota}</div>
                                     <div>({dataDetailTrain[0].berangkat_id_station})</div>
                                 </div>
-                                <div className='rounded-full p-1 bg-[#FF9119] '>
+                                <div className='rounded-full p-1 bg-blue-500 '>
                                     < TbArrowsLeftRight className='text-white' size={18} />
                                 </div>
                                 <div className='text-xs font-bold text-slate-600'>
@@ -524,7 +539,7 @@ export default function BookingKai(){
                                         </div>
                                     </li>
                                     <li class="ml-4 text-sm mt-10">
-                                        <div class="absolute mt-2 w-4 h-4 bg-[#FF9119] rounded-full -left-2 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                        <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
                                         <div className='flex space-x-12'>
                                             <time class="mb-1 text-xs font-bold leading-none text-gray-400 dark:text-gray-500">{dataBookingTrain[0].arrivalTime}</time>
                                             <div className='-mt-2'>

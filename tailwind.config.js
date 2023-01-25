@@ -11,7 +11,5 @@ module.exports = {
       visibility: ["group-hover"],
     },
    },
-  plugins: [
-    require('flowbite/plugin')
-  ],
+
 }

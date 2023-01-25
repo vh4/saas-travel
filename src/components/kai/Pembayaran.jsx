@@ -51,8 +51,8 @@ export default function Pembayaran(){
                   popup: 'animate__animated animate__fadeOutUp'
                 },
                  icon: 'error',
-                 title: 'Oops...',
-                 text: 'Maaf, Waktu Booking sudah habis!',
+                 title: 'Maaf, Waktu Booking sudah habis',
+                 text: 'Jika sudah melakukan Pembayaran, Cek di Menu Transaksi',
                });
                navigate('/');
     
@@ -97,6 +97,7 @@ export default function Pembayaran(){
                         id_transaksi:hasilBooking.transactionId,
                         nominal_admin: hasilBooking.nominalAdmin,
                         discount: hasilBooking.discount,
+                        url_etiket : response.data.data.url_etiket,
                         nominal_sales: hasilBooking.normalSales,
                         total_dibayar:toRupiah(parseInt(hasilBooking.normalSales) - parseInt(hasilBooking.discount) + parseInt(hasilBooking.nominalAdmin))
                     }
@@ -118,6 +119,7 @@ export default function Pembayaran(){
         }
 
     }
+
 
     return(
         <>
@@ -142,8 +144,8 @@ export default function Pembayaran(){
                 <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
             </div>
             <div className='flex space-x-2 items-center'>
-                <div className='hidden xl:flex text-[#ff8400] font-bold'>Pembayaran tiket</div>
-                <div className='block xl:hidden text-[#ff8400] font-bold'>Payment</div>
+                <div className='hidden xl:flex text-blue-500 font-bold'>Pembayaran tiket</div>
+                <div className='block xl:hidden text-blue-500 font-bold'>Payment</div>
             </div>
             <div>
                 <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
@@ -251,7 +253,7 @@ export default function Pembayaran(){
                 <div className='mt-8 py-2 rounded-md border border-gray-200 shadow-sm'>
                     <div className="px-4 py-2">
                         <div className="text-gray-500 text-xs">Booking ID</div>
-                        <div className="mt-1 font-bold text-[#ff8400] text-xs">{hasilBooking && hasilBooking.bookingCode}</div>
+                        <div className="mt-1 font-bold text-blue-500 text-xs">{hasilBooking && hasilBooking.bookingCode}</div>
                     </div>
                     <div className="p-4 border-t">
                         <div className="text-xs text-gray-500">TRAIN DESCRIPTION</div>
@@ -284,7 +286,7 @@ export default function Pembayaran(){
                         Tekan tombol <span className="text-blue-500">bayar langsung</span> untuk melakukan pembayaran secara tunai.
                     </div>
                     <div className="flex justify-center">
-                        <button onClick={handlerPembayaran} type="button" class="block justify-center text-white bg-[#FF9119] space-x-2 hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium rounded-lg text-sm px-8 py-3 text-center items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 mr-2 mb-2">
+                        <button onClick={handlerPembayaran} type="button" class="block justify-center text-white bg-blue-500  space-x-2 hover:text-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-8 py-3 text-center items-center mr-2 mb-2">
                         {isLoading ? (
                         <div className="flex space-x-2 items-center">
                             <svg aria-hidden="true" class="mr-2 w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

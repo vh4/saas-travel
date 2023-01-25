@@ -7,23 +7,24 @@ import Sidebar from "../partials/sidebar/desktop/Sidebar"
 import SideBarMobile from "../partials/sidebar/mobile/SideBarMobile"
 import React, {useState} from "react";
 import Carousels from '../../components/carousel/Carousel'
+import HotelCarousel from "../../components/carousel/HotelCarousel";
+import PesawatCarousel from "../../components/carousel/PesawatCarousel";
 
 export default function MainPage(){
 
     const [nameMenu, setNameMenu] = useState('plane');
-
     return(
         <Layout>
             {/* carousel fitur  */}
         <div className="w-full">
-            <div className="bg-gradient-to-r xl:from-cyan-500 xl:to-blue-500">
+            <div className="bg-gradient-to-r xl:from-[#337AFF] xl:to-blue-500">
                 <div className="py-4 md:py-8 relative z-10">
                     <Carousels />
                 </div>
             </div>
-            <div className="-mt-8">
-                <div className="relative container mx-auto mb-48">
-                    <div className="z-10 bg-white mx-0 xl:mx-32 md:border md:rounded-md md:shadow-lg">
+            <div className="mt-0 md:mt-4 xl:-mt-8">
+                <div className="relative container mx-auto mb-96">
+                    <div className="-mt-4 md:mt-0 z-10 bg-white mx-0 lg:mx-12 xl:mx-32 2xl:mx-64 md:border md:rounded-md md:shadow-lg">
                     <div className={`block md:flex xl:flex 2xl:flex justify-center`}>
                         <div className="hidden md:flex justify-center">
                             <Sidebar nameMenu={nameMenu} setNameMenu={setNameMenu}/>
@@ -39,7 +40,6 @@ export default function MainPage(){
                             {nameMenu == 'plane' ? (
                                 <Plane />
                             ) : 
-                            
                             nameMenu == 'train' ? (
                                 <KAI />
                             ) :
@@ -47,6 +47,12 @@ export default function MainPage(){
                             }
                          </div>
                     </div>
+                    </div>
+                    <div className="-mt-4 md:mt-12 mx-0 lg:mx-12 xl:mx-32 2xl:mx-64">
+                        <HotelCarousel />
+                    </div>
+                    <div className="mt-2  md:mt-12 mx-0 lg:mx-12 xl:mx-32 2xl:mx-64">
+                        <PesawatCarousel />
                     </div>
                 </div>
             </div>

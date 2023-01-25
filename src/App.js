@@ -9,10 +9,13 @@ import TransaksiPesawat from "./pages/transaksi/TransaksiPesawat";
 
 import BookingKai from "./pages/kai/Booking";
 import SearchKai from "./pages/kai/Search";
+import SearchPlane from "./pages/plane/Search";
+
 import KonfirmasiKai from "./pages/kai/Konfirmasi";
 import PembayaranKai from "./pages/kai/Pembayaran"; 
 import MainPage from "./pages/main/Main"
 import TiketKai from "./pages/kai/Tiket";
+import BookingPesawat from "./pages/plane/Booking";
 
 export const KaiContext = createContext();
 export const NavContext = createContext();
@@ -62,6 +65,8 @@ function App() {
         <Routes>
           <Route exact path="/" element={<MainPage />}></Route>
           <Route path="/train/search" element={< SearchKai/>}></Route>
+          <Route path="/flight/search" element={< SearchPlane/>}></Route>
+          <Route path="/flight/booking/:PesawatNumber" element={< BookingPesawat/>}></Route>
           <Route path="/train/booking/:trainNumber" element={< BookingKai/>}></Route>
           <Route path="/train/konfirmasi/:trainNumber" element={< KonfirmasiKai/>}></Route>
           <Route path="/train/bayar/:trainNumber" element={< PembayaranKai/>}></Route>

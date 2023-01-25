@@ -67,7 +67,7 @@ export default function Carousels(props) {
                 <h1 className="2xl:px-8 text-xl font-bold">Hai Traveler, Welcome!</h1>
                 <div className="mt-2 2xl:px-8">
                   <div className="mt-4">Cukup login dan booking semua tiket dengan mudah.</div>
-                  <div className="mt-4">Jangan lupa mengecek promo terbaru untuk mendapatkan diskon!</div>
+                  <div className="mt-4">Jangan lupa mengecek promo terbaru untuk mendapatkan diskon murah.</div>
                 </div>
                 </div>
               </div>
