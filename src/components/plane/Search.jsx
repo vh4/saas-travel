@@ -195,22 +195,10 @@ export default function Search(){
     const [isLoadingPilih, setIsLoadingPilih] = useState(false);
 
 
-    useEffect(() => {
-        if(isLoadingPilih === true){
-            Swal.fire({
-                title: 'Mohon Tunggu',
-                html: 'Sedang memproses...',
-                allowEscapeKey: false,
-                allowOutsideClick: false,
-                didOpen: () => {
-                  Swal.showLoading()
-                }
-              })
-        }
-     }, [isLoadingPilih]);
+      async function bookingHandlerDetail(e,i){
 
-      async function bookingHandlerDetail(Title){
-        let filterDataSearching = dataSearch.filter(e => e.title == Title);
+        e.preventDefault();
+        let filterDataSearching = dataSearch.filter((_, index) => index === i);
 
         let detailKereta = {
             "airline" : filterDataSearching[0].airlineCode,
@@ -226,6 +214,8 @@ export default function Search(){
             ],
             "token":token,
         };
+
+        // console.log(JSON.stringify(detailKereta));
 
         const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/flight/fare`, detailKereta) 
 
@@ -252,14 +242,16 @@ export default function Search(){
                 "priceTotal": response.data.data.price,
                 "baggage": response.data.data.baggage,
             }
+
+            let randomNavigateNumber = crypto.randomUUID();
+                randomNavigateNumber = randomNavigateNumber.split("-").join("");
             
-            localStorage.setItem(process.env.REACT_APP_BOOKING_TRAIN + "_flight", JSON.stringify(next));  
-            navigate(`/flight/booking/${process.env.REACT_APP_BOOKING_TRAIN}`);
+            localStorage.setItem(randomNavigateNumber + "_flight", JSON.stringify(next));  
+            navigate(`/flight/booking/${randomNavigateNumber}`);
         }else{
             console.log(response.data);
         }
     }
-
 
     return(
         <>
@@ -331,7 +323,7 @@ export default function Search(){
                                     <div className="flex justify-center col-span-1 md:col-span-2">
                                         {e.classes[0][0].availability > 0 ? (
                                             <div>
-                                                <button type="button" onClick={() => bookingHandlerDetail(e.title)}  type="button" class="xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-medium rounded-sm text-sm px-10 md:px10 xl:px-10 py-3.5 2xl:px-14 text-center inline-flex items-center dark:hover:bg-blue-500/80 dark:focus:ring-blue-500/40 mr-2 mb-2">
+                                                <button type="button" onClick={(e) => bookingHandlerDetail(e, index)}  class="xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-medium rounded-sm text-sm px-10 md:px10 xl:px-10 py-3.5 2xl:px-14 text-center inline-flex items-center dark:hover:bg-blue-500/80 dark:focus:ring-blue-500/40 mr-2 mb-2">
                                                     <div className="text-white font-bold">PILIH</div>
                                                 </button>
                                             </div>

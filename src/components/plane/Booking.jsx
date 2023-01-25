@@ -120,9 +120,9 @@ const CssTextField = styled(TextField)({
 
 export default function BookingPesawat(){
 
+    const {PesawatNumber} = useParams();
     const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
-    const dataDetail  = JSON.parse(localStorage.getItem(process.env.REACT_APP_BOOKING_TRAIN + '_flight'));
-    const [value, setValue] = useState();
+    const dataDetail  = JSON.parse(localStorage.getItem(PesawatNumber + '_flight'));
     const [isLoading, setIsLoading] = useState(false);
 
     function tanggalParse(x){
@@ -205,13 +205,6 @@ export default function BookingPesawat(){
     const [child, setChild] = useState([ChildArr]);
     const [infant, setInfant] = useState([InfantArr]);   
 
-    const [age, setAge] = React.useState('');
-
-    const handleChange = (event) => {
-      setAge(event.target.value);
-    };
-
-
     function addLeadingZero(num) {
         if (num < 10) {
           return '0' + num;
@@ -270,12 +263,45 @@ export default function BookingPesawat(){
         
     }
 
+    const [email, setEmail] = useState();
+    const [hp, setHp] = useState();
 
     const handlerBookingSubmit = async () => {
+        let email_hp = {
+            email:email,
+            nomor:formatPhoneNumber(hp)
+        };
+        let data_adult = adult[0].map(item => ({...item, ...email_hp}));
+        let end_adult = [];
+        
+        data_adult.forEach(item => {
+          let date = new Date(item.birthdate);
+          let dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+          end_adult.push(`ADT;${item.gender};${item.nama_depan.split(" ")[0]};${item.nama_depan.split(" ")[1]};${dateString};${item.idNumber};::;::;;;;${item.email};;;;;;;`);
+        })
+
+        const book = {
+                airline : dataDetail.airline,
+                departure : dataDetail.departure,
+                arrival : dataDetail.arrival,
+                departureDate : dataDetail.departureDate,
+                returnDate : dataDetail.returnDate,
+                adult : 1,
+                child : 0,
+                infant : 0,
+                flights : dataDetail.seats,
+                buyer : "",
+                passengers : {
+                adults : end_adult
+        
+            },
+            token:token
+        }
+
+        console.log(JSON.stringify(book))
 
     }
 
-    console.log(child);
 
     const {register, handleSubmit, formState:{ errors }} = useForm();
 
@@ -366,9 +392,8 @@ export default function BookingPesawat(){
                                     <div className='text-gray-500 text-sm font-bold'>Email Address</div>
                                         <div className='block xl:flex xl:space-x-6'>                                        
                                             <div className='w-full'>
-                                                <input class="border w-full border-gray-300 text-gray-500 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-4" {...register(`email`, {required:true})}  type="text" placeholder='Email Address' id="default-input" />
+                                                <input onChange={(e) => setEmail(e.target.value)} class="border w-full border-gray-300 text-gray-500 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-4" type="text" placeholder='Email Address' id="default-input" />
                                                 <div className='mt-2 text-gray-400'><small>Contoh: ex-machina@gmail.com</small></div>            
-                                                {/* {errors[`name${i}`]?.type === "required" ? (<small className='ml-2 text-red-500'>Nama harus diisi</small>) : ''} */}
                                             </div>
                                     </div>
                                 </div>
@@ -380,12 +405,12 @@ export default function BookingPesawat(){
                                                 <div className='border border-gray-300 py-1 pl-4'>
                                                 <PhoneInput
                                                     international
-                                                    {...register(`phone`, { required: true} )}
+                                                    value={hp}
+                                                    onChange={setHp}
                                                     defaultCountry="ID"
                                                     className={"input-phone-number"}
                                                 /> 
                                                 </div>
-                                                {errors[`phone`]?.type === "required" ? (<small className='text-red-500'>Nomor HP harus diisi</small>) : ''}
                                                 <div className='mt-2 text-gray-400'><small>Contoh: (+62) 812345678</small></div>            
                                             </FormControl>
                                         </div>
@@ -396,12 +421,12 @@ export default function BookingPesawat(){
                                                 <div className='w-full border border-gray-300 py-1.5 pl-4 -mx-2  focus:border-blue-500'>
                                                 <PhoneInput
                                                     international
-                                                    {...register(`phones`, { required: true} )}
+                                                    value={hp}
+                                                    onChange={setHp}
                                                     defaultCountry="ID"
                                                     className={"input-phone-number"}
                                                 /> 
                                                 </div>
-                                                {errors[`phones`]?.type === "required" ? (<small className='text-red-500'>Nomor HP harus diisi</small>) : ''}
                                                 <div className='text-xs mt-2 text-gray-400'>Contoh: +62812345678</div>            
                                         </div>                                
                                         </div>
@@ -458,13 +483,11 @@ export default function BookingPesawat(){
                                                             <div className='w-full grid grid-cols-2 gap-2'>                                    
                                                                 <div className='w-full'>
                                                                     <div className='text-gray-500 font-bold text-sm'>Nama Depan</div>
-                                                                    <input class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" {...register(`namedepanAdult${i}`, {required:true})} value={e.nama_depan} onChange={handleAdultsubCatagoryChange(i, 'nama_depan')}  type="text" placeholder='Nama Depan' id="default-input" />
-                                                                    {errors[`namedepanAdult${i}`]?.type === "required" ? (<small className='ml-2 text-red-500'>Nama depan harus diisi</small>) : ''}
+                                                                    <input class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2"  value={e.nama_depan} onChange={handleAdultsubCatagoryChange(i, 'nama_depan')}  type="text" placeholder='Nama Depan' id="default-input" />
                                                                 </div>
                                                                 <div className='w-full'>
                                                                     <div className='text-gray-500 font-bold text-sm'>Nama Belakang</div>
-                                                                    <input class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" {...register(`namebelakangAdult${i}`, {required:true})} value={e.nama_belakang} onChange={handleAdultsubCatagoryChange(i, 'nama_belakang')}  type="text" placeholder='Nama Belakang' id="default-input" />
-                                                                    {errors[`namebelakangAdult${i}`]?.type === "required" ? (<small className='ml-2 text-red-500'>Nama belakang harus diisi</small>) : ''}
+                                                                    <input class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2"  value={e.nama_belakang} onChange={handleAdultsubCatagoryChange(i, 'nama_belakang')}  type="text" placeholder='Nama Belakang' id="default-input" />
                                                                 </div>
                                                         </div>
                                                     </div>
@@ -503,8 +526,7 @@ export default function BookingPesawat(){
                                                     <div className='w-full'>
                                                         <div className='px-4 xl:px-0 w-full block '>
                                                                 <div className='text-gray-500 text-sm font-bold'>No. Ktp</div>
-                                                                <input   {...register(`idNumberAdult${i}`, { required: true} )} value={e.idNumber} onChange={handleAdultsubCatagoryChange(i, 'idNumber')} type="text" placeholder='No. Ktp / NIK' id="default-input" class="border w-full  border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" />
-                                                                {errors[`idNumberAdult${i}`]?.type === "required" ? (<small className='text-red-500'>NIK harus diisi</small>) : ''}
+                                                                <input value={e.idNumber} onChange={handleAdultsubCatagoryChange(i, 'idNumber')} type="text" placeholder='No. Ktp / NIK' id="default-input" class="border w-full  border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" />
                                                                 <div><small className='mt-2 text-gray-400'>Contoh: 16 digit nomor</small></div>
                                                         </div>
                                                     </div>
@@ -565,13 +587,11 @@ export default function BookingPesawat(){
                                                             <div className='grid grid-cols-2 gap-2'>                                    
                                                                 <div className='w-full'>
                                                                     <div className='text-gray-500 font-bold text-sm'>Nama Depan</div>
-                                                                    <input class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" {...register(`namedepanChild${i}`, {required:true})} value={e.nama_depan} onChange={handleChildsubCatagoryChange(i, 'nama_depan')}  type="text" placeholder='Nama Depan' id="default-input" />
-                                                                    {errors[`namedepanChild${i}`]?.type === "required" ? (<small className='ml-2 text-red-500'>Nama depan harus diisi</small>) : ''}
+                                                                    <input class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" value={e.nama_depan} onChange={handleChildsubCatagoryChange(i, 'nama_depan')}  type="text" placeholder='Nama Depan' id="default-input" />
                                                                 </div>
                                                                 <div className='w-full'>
                                                                     <div className='text-gray-500 font-bold text-sm'>Nama Belakang</div>
-                                                                    <input class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" {...register(`namebelakangChild${i}`, {required:true})} value={e.nama_belakang} onChange={handleChildsubCatagoryChange(i, 'nama_belakang')}  type="text" placeholder='Nama Belakang' id="default-input" />
-                                                                    {errors[`namebelakangChild${i}`]?.type === "required" ? (<small className='ml-2 text-red-500'>Nama belakang harus diisi</small>) : ''}
+                                                                    <input class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" value={e.nama_belakang} onChange={handleChildsubCatagoryChange(i, 'nama_belakang')}  type="text" placeholder='Nama Belakang' id="default-input" />
                                                                 </div>
                                                         </div>
                                                     </div>
@@ -664,13 +684,11 @@ export default function BookingPesawat(){
                                                             <div className='grid grid-cols-2 gap-2'>                                    
                                                                 <div className='w-full'>
                                                                 <div className='text-gray-500 font-bold text-sm'>Nama Depan</div>
-                                                                    <input class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" {...register(`namedepanInfant${i}`, {required:true})} value={e.nama_depan} onChange={handleInfantsubCatagoryChange(i, 'nama_depan')}  type="text" placeholder='Nama Depan' id="default-input" />
-                                                                    {errors[`namedepanInfant${i}`]?.type === "required" ? (<small className='ml-2 text-red-500'>Nama depan harus diisi</small>) : ''}
+                                                                    <input class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" type="text" placeholder='Nama Depan' id="default-input" />
                                                                 </div>
                                                                 <div className='w-full'>
                                                                     <div className='text-gray-500 font-bold text-sm'>Nama Belakang</div>
-                                                                    <input class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" {...register(`namebelakangInfant${i}`, {required:true})} value={e.nama_belakang} onChange={handleInfantsubCatagoryChange(i, 'nama_belakang')}  type="text" placeholder='Nama Belakang' id="default-input" />
-                                                                    {errors[`namebelakangInfant${i}`]?.type === "required" ? (<small className='ml-2 text-red-500'>Nama belakang harus diisi</small>) : ''}
+                                                                    <input class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" value={e.nama_belakang} onChange={handleInfantsubCatagoryChange(i, 'nama_belakang')}  type="text" placeholder='Nama Belakang' id="default-input" />
                                                                 </div>
                                                         </div>
                                                     </div>
@@ -759,10 +777,7 @@ export default function BookingPesawat(){
                             <div className='p-2 -mt-2 mb-2  pl-8 relative px-4 text-gray-700'>
                                 <div className='flex items-center space-x-2'>
                                     <img src={dataDetail.airlineIcon} width={50} alt="icon.png" />
-                                    <div className='text-gray-500 text-xs font-bold'>{dataDetail.airlineName}</div>
-                                </div>
-                                <div>
-                                    <small className='block absolute text-gray-500 top-12 '>{dataDetail.airline}</small>
+                                    <div className='text-gray-500 text-xs font-bold'>{dataDetail.airlineName} ({dataDetail.airline})</div>
                                 </div>
                             </div>
                             <div className='p-4 pl-8 pt-4 px-6 mb-4'>
