@@ -58,7 +58,7 @@ export default function Header({toogleSidebar, valueSidebar}){
 
     useEffect(() =>  {
         userProfile()
-    }, [userProfile]);
+    }, []);
 
 
     function toRupiah(angka) {

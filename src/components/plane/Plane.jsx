@@ -240,7 +240,7 @@ function Plane(){
 
     async function getPesawatDataStasiun(){
 
-        const response = await axios.post('http://localhost:5000/travel/flight/airport', {
+        const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/flight/airport`, {
             token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
             product:"PESAWAT"
         });
@@ -248,7 +248,6 @@ function Plane(){
         setpesawatStasiun(response.data);
 
     }
-
 
     async function handlerCariPesawat(e){
 

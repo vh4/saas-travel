@@ -16,7 +16,7 @@ export default function MainPage(){
     const [nameMenu, setNameMenu] = useState('plane');
     return(
         <Layout>
-            {/* carousel fitur  */}
+        {/* carousel fitur  */}
         <div className="w-full">
             <div className="bg-gradient-to-r xl:from-[#337AFF] xl:to-blue-500">
                 <div className="py-4 md:py-8 relative z-10">

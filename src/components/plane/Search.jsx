@@ -251,7 +251,7 @@ export default function Search(){
                 })
             }
 
-            let randomNavigateNumber = crypto.randomUUID();
+            let randomNavigateNumber = window.crypto.randomUUID();
                 randomNavigateNumber = randomNavigateNumber.split("-").join("");
             
             localStorage.setItem(randomNavigateNumber + "_flight", JSON.stringify(next));
@@ -287,7 +287,7 @@ export default function Search(){
                 })
             }
 
-            let randomNavigateNumber = crypto.randomUUID();
+            let randomNavigateNumber = window.crypto.randomUUID();
             randomNavigateNumber = randomNavigateNumber.split("-").join("");
         
             localStorage.setItem(randomNavigateNumber + "_flight", JSON.stringify(next)); 

@@ -25,7 +25,7 @@ export default function ViewTransaksi({path}) {
 
     const getTransaksiList = async () =>{
         setIsLoading(true);
-        const response = await axios.post('http://localhost:5000/travel/app/transaction_list', {
+        const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/transaction_list`, {
             token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
             product:"PESAWAT"
         });
