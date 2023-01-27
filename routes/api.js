@@ -125,20 +125,13 @@ Router.post('/travel/app/transaction_book_list', function (req, res) {
 
 Router.post('/travel/flight/search', function (req, res) {
 
-    const {token, airline, departure, arrival, departureDate, returnDate, 
-        isLowestPrice = true, adult, child, infant 
-    
-    } = req.body;
+    const data = req.body;
+    console.log(req.body);
 
     request.post(
         `${process.env.URL_HIT}/travel/flight/search`,
         {
-          json: 
-          {
-            token,
-            airline, departure, arrival, departureDate, returnDate, isLowestPrice,
-            adult, child, infant 
-          }
+          json: data
         },
         (error, response, body) => {
           if (error) {
@@ -354,6 +347,139 @@ Router.post('/travel/train/change_seat', function (req, res) {
     )
 
 });
+
+Router.post('/travel/train/fare', function (req, res) {
+
+  const data = req.body;
+
+  console.log(data);
+
+  request.post(
+    `${process.env.URL_HIT}/travel/train/fare`,
+      {
+        json: data
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          return
+        }
+        return res.send(body)
+      }
+    )
+
+});
+
+Router.post('/travel/flight/fare', function (req, res) {
+
+  const data = req.body;
+
+  console.log(data);
+
+  request.post(
+    `${process.env.URL_HIT}/travel/flight/fare`,
+      {
+        json: data
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          return
+        }
+        return res.send(body)
+      }
+    )
+
+});
+
+Router.post('/travel/flight/book', function (req, res) {
+
+  const data = req.body;
+
+  console.log(data);
+
+  request.post(
+    `${process.env.URL_HIT}/travel/flight/book`,
+      {
+        json: data
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          return
+        }
+        return res.send(body)
+      }
+    )
+
+});
+
+Router.post('/travel/flight/payment', function (req, res) {
+
+  const data = req.body;
+
+  console.log(data);
+
+  request.post(
+    `${process.env.URL_HIT}/travel/flight/payment`,
+      {
+        json: data
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          return
+        }
+        return res.send(body)
+      }
+    )
+
+});
+
+
+//pelni
+
+Router.post('/travel/pelni/get_origin', function (req, res) {
+
+  const data = req.body;
+
+  request.post(
+    `${process.env.URL_HIT}/travel/pelni/get_origin`,
+      {
+        json: data
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          return
+        }
+        return res.send(body)
+      }
+    )
+
+});
+
+
+Router.post('/travel/pelni/search', function (req, res) {
+
+  const data = req.body;
+
+  request.post(
+    `${process.env.URL_HIT}/travel/pelni/search`,
+      {
+        json: data
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          return
+        }
+        return res.send(body)
+      }
+    )
+
+});
+
 
 
 module.exports = Router
