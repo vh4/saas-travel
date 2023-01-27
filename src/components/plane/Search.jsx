@@ -144,12 +144,11 @@ export default function Search(){
         return rupiah.split('',rupiah.length-1).reverse().join('');
     }
 
-     const tanggal_keberangkatan_kereta = hari + ', ' + tanggal + ' ' + bulan + ' ' + tahun;
 
      const [isLoading, setLoading] = React.useState(false);
      const [notFound, setError] = React.useState(true);
      const skeleton = [1,2,3,4,5,6,7,8,9,10];
-     const [dataSearch, setDataSearch] = React.useState();
+     const [dataSearch, setDataSearch] = React.useState(Array());
      const [detailTiket, setDetailTiket] = React.useState(null);
      const [detailHarga, setDetailHarga] = React.useState(null);
 
@@ -176,23 +175,17 @@ export default function Search(){
             infant: infant,
             token: token
         })
-            if(response.data.data !== undefined){
-                allData.push(response.data.data)
-            }
-        }
-        setLoading(false);
-        let dataHasilParsing = [].concat(...allData);
-
-        if(dataHasilParsing === null || dataHasilParsing === undefined || dataHasilParsing.length === 0){
-            setError(true);
+        
+        if(response.data.data !== undefined){
+            setDataSearch(dataSearch => [...dataSearch, ...response.data.data]);
             setLoading(false);
-        }else{
             setError(false);
-            setDataSearch(dataHasilParsing);
+            }
         }
     }
 
-    const [isLoadingPilih, setIsLoadingPilih] = useState(false);
+
+      const [isLoadingPilih, setIsLoadingPilih] = useState(false);
 
 
       async function bookingHandlerDetail(e,i){
@@ -209,9 +202,6 @@ export default function Search(){
             "adult" : adult,
             "child" : child,
             "infant" : infant,
-            "seats" : [
-                filterDataSearching[0].classes[0][0].seat
-            ],
             "token":token,
         };
 
@@ -219,39 +209,95 @@ export default function Search(){
 
         const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/flight/fare`, detailKereta) 
 
+        const forBooking = {
+            "airline" : filterDataSearching[0].airlineCode,
+            "departure" : departure,
+            "arrival" : arrival,
+            "departureDate" : filterDataSearching[0].departureDate,
+            "returnDate" :  "",
+            "adult" : adult,
+            "child" : child,
+            "infant" : infant,
+            "seats" : [
+                filterDataSearching[0].classes[0][0].seat
+            ],
+        }
+
         if(response.data.rc === '00'){
-            const next = {
-                "airline" : filterDataSearching[0].airlineCode,
-                "airlineName":filterDataSearching[0].airlineName,
-                "airlineIcon":filterDataSearching[0].airlineIcon,
-                "departure" : filterDataSearching[0].classes[0][0].departure,
-                "arrival" : filterDataSearching[0].classes[0][0].arrival,
-                "departureName" : filterDataSearching[0].classes[0][0].departureName,
-                "arrivalName" : filterDataSearching[0].classes[0][0].arrivalName,
-                "departureDate" : filterDataSearching[0].departureDate,
-                "arrivalDate" : filterDataSearching[0].arrivalDate,
-                "departureTime" : filterDataSearching[0].classes[0][0].departureTime,
-                "arrivalTime" : filterDataSearching[0].classes[0][0].arrivalTime,
-                "returnDate" :  "",
-                "adult" : adult,
-                "child" : child,
-                "infant" : infant,
-                "seats" : [
-                    filterDataSearching[0].classes[0][0].seat
-                ],
-                "priceTotal": response.data.data.price,
-                "baggage": response.data.data.baggage,
+            const next = [];
+            const lenghtArr = filterDataSearching[0].classes.length;
+        
+            for(var i=0; i<lenghtArr; i++){
+                next.push({
+                    "airline" : filterDataSearching[0].detailTitle[i].flightCode,
+                    "airlineName":filterDataSearching[0].detailTitle[i].flightName,
+                    "airlineIcon":filterDataSearching[0].detailTitle[i].flightIcon,
+                    "departure" : filterDataSearching[0].classes[i][0].departure,
+                    "arrival" : filterDataSearching[0].classes[i][0].arrival,
+                    "departureName" : filterDataSearching[0].classes[i][0].departureName,
+                    "arrivalName" : filterDataSearching[0].classes[i][0].arrivalName,
+                    "departureDate" : filterDataSearching[0].classes[i][0].departureDate,
+                    "arrivalDate" : filterDataSearching[0].classes[i][0].arrivalDate,
+                    "departureTime" : filterDataSearching[0].classes[i][0].departureTime,
+                    "arrivalTime" : filterDataSearching[0].classes[i][0].arrivalTime,
+                    "returnDate" :  "",
+                    "adult" : adult,
+                    "child" : child,
+                    "infant" : infant,
+                    "seats" : [
+                        filterDataSearching[0].classes[i][0].seat
+                    ],
+                    "priceTotal": filterDataSearching[0].classes[i][0].price,
+                })
             }
 
             let randomNavigateNumber = crypto.randomUUID();
                 randomNavigateNumber = randomNavigateNumber.split("-").join("");
             
-            localStorage.setItem(randomNavigateNumber + "_flight", JSON.stringify(next));  
+            localStorage.setItem(randomNavigateNumber + "_flight", JSON.stringify(next));
+            localStorage.setItem(randomNavigateNumber + "_flight_forBooking", JSON.stringify(forBooking));  
+
             navigate(`/flight/booking/${randomNavigateNumber}`);
+
         }else{
-            console.log(response.data);
+            const next = Array();
+            const lenghtArr = filterDataSearching[0].classes.length;
+
+            for(var i=0; i<lenghtArr; i++){
+                next.push({
+                    "airline" : filterDataSearching[0].detailTitle[i].flightCode,
+                    "airlineName":filterDataSearching[0].detailTitle[i].flightName,
+                    "airlineIcon":filterDataSearching[0].detailTitle[i].flightIcon,
+                    "departure" : filterDataSearching[0].classes[i][0].departure,
+                    "arrival" : filterDataSearching[0].classes[i][0].arrival,
+                    "departureName" : filterDataSearching[0].classes[i][0].departureName,
+                    "arrivalName" : filterDataSearching[0].classes[i][0].arrivalName,
+                    "departureDate" : filterDataSearching[0].classes[i][0].departureDate,
+                    "arrivalDate" : filterDataSearching[0].classes[i][0].arrivalDate,
+                    "departureTime" : filterDataSearching[0].classes[i][0].departureTime,
+                    "arrivalTime" : filterDataSearching[0].classes[i][0].arrivalTime,
+                    "returnDate" :  "",
+                    "adult" : adult,
+                    "child" : child,
+                    "infant" : infant,
+                    "seats" : [
+                        filterDataSearching[0].classes[i][0].seat
+                    ],
+                    "priceTotal": filterDataSearching[0].classes[i][0].price,
+                })
+            }
+
+            let randomNavigateNumber = crypto.randomUUID();
+            randomNavigateNumber = randomNavigateNumber.split("-").join("");
+        
+            localStorage.setItem(randomNavigateNumber + "_flight", JSON.stringify(next)); 
+            localStorage.setItem(randomNavigateNumber + "_flight_forBooking", JSON.stringify(forBooking));   
+            navigate(`/flight/booking/${randomNavigateNumber}`);
+        
         }
     }
+
+    // console.log(dataSearch);
 
     return(
         <>
@@ -276,7 +322,7 @@ export default function Search(){
 
                 notFound !== true ? (
 
-                    <div className="row mb-24 w-full p-2 pr-0 xl:pr-16">           
+                    <div className="row mb-24 w-full p-2 pr-0">              
                     {dataSearch.map((e, index) => ( //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
                         <>
                         {e.classes[0][0].price !== 0 ? (
@@ -286,7 +332,7 @@ export default function Search(){
                                 
                                 <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-10 gap-4">
                                     <div className="col-span-1 md:col-span-2">
-                                        <h1 className="text-md font-bold">{e.airlineName} </h1>
+                                        <h1 className="text-sm font-bold">{e.airlineName} </h1>
                                         <div className="text-sm">
                                             {e.classes[0][0].flightCode}
                                         </div>
@@ -303,21 +349,21 @@ export default function Search(){
                                     </div>
                                     <div className="flex">
                                         <div className="">
-                                            <h1 className="mt-4 xl:mt-0 text-md font-medium">{e.detailTitle[0].depart}</h1>
-                                            <small>{e.detailTitle[0].origin}</small>
+                                            <h1 className="mt-4 xl:mt-0 text-sm font-medium">{e.detailTitle[0].depart}</h1>
+                                            <small>{departure}</small>
                                         </div>
                                     </div>
                                     < HiOutlineArrowNarrowRight size={24} />
                                     <div>
-                                        <h1 className="text-md font-medium">{e.detailTitle[0].arrival}</h1>
-                                        <small>{e.detailTitle[0].destination}</small>
+                                        <h1 className="text-sm font-medium">{e.detailTitle[0].arrival}</h1>
+                                        <small>{arrival}</small>
                                     </div>
                                     <div>
-                                        <h1 className="mt-4 xl:mt-0 text-md font-medium">{e.detailTitle[0].durationDetail}</h1>
+                                        <h1 className="mt-4 xl:mt-0 text-sm font-medium">{e.duration}</h1>
                                         <small>{e.isTransit === true ? `${e.classes.length - 1}x Transit` : 'Langsung'}</small>
                                     </div>
                                     <div className="">
-                                            <h1 className="mt-4 xl:mt-0 text-md font-bold text-blue-500">Rp.{toRupiah(e.classes[0][0].price)}</h1>
+                                            <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">Rp.{toRupiah(e.classes[0][0].price)}</h1>
                                             <small className="text-red-500">{e.classes[0][0].availability} set(s) left</small>
                                     </div>
                                     <div className="flex justify-center col-span-1 md:col-span-2">
@@ -344,7 +390,7 @@ export default function Search(){
                                 {e.isTransit === true ? e.classes.map((x, i) => (
                                     <div className="hidden xl:flex xl:items-center xl:space-x-16 xl:mt-6 border-t">
                                     <div className="mt-8">
-                                            <h1 className="text-md font-bold">{e.detailTitle[i].flightName} </h1>
+                                            <h1 className="text-sm font-bold">{e.detailTitle[i].flightName} </h1>
                                             <div className="text-sm">
                                                 {e.detailTitle[i].flightCode}
                                             </div>
@@ -417,7 +463,7 @@ export default function Search(){
                                 )) : (
                                     <div className="hidden xl:flex xl:items-center xl:space-x-16 xl:mt-6 border-t">
                                     <div className="mt-8">
-                                            <h1 className="text-md font-bold">{e.airlineName} </h1>
+                                            <h1 className="text-sm font-bold">{e.airlineName} </h1>
                                             <div className="text-sm">
                                                 {e.classes[0][0].flightCode}
                                             </div>
@@ -495,14 +541,14 @@ export default function Search(){
                             {/* desktop detail harga */}
                             {detailHarga == `harga-open-${index}` ? (
                                 <>
-                                                            { e.isTransit === true ? (
+                                { e.isTransit === true ? (
                                 <>
                                 {e.classes.map((z, w) => (
                                     <>
                                     
                                     <div className="hidden xl:flex xl:items-center xl:space-x-16 xl:mt-6 border-t">
                                     <div className="mt-8">
-                                            <h1 className="text-md font-bold">{e.detailTitle[w].flightName}  </h1>
+                                            <h1 className="text-sm font-bold">{e.detailTitle[w].flightName}  </h1>
                                             <div className="text-sm">
                                             {e.detailTitle[w].flightCode} 
                                             </div>
@@ -537,7 +583,7 @@ export default function Search(){
                             ) : (
                                 <div className="hidden xl:flex xl:items-center xl:space-x-16 xl:mt-6 border-t">
                                     <div className="mt-8">
-                                            <h1 className="text-md font-bold">{e.airlineName} </h1>
+                                            <h1 className="text-sm font-bold">{e.airlineName} </h1>
                                             <div className="text-sm">
                                                 {e.classes[0][0].flightCode}
                                             </div>
@@ -590,7 +636,7 @@ export default function Search(){
                                     <div className="flex justify-start">
                                         <div className="flex space-x-2 items-start">
                                             <div>
-                                                <h1 className="mt-4 xl:mt-0 text-md font-medium">{e.detailTitle[0].depart}</h1>
+                                                <h1 className="mt-4 xl:mt-0 text-sm font-medium">{e.detailTitle[0].depart}</h1>
                                                 <small>{e.detailTitle[0].origin}</small>
                                             </div>
                                             <div className="w-full mt-12 px-4 border-b-2"></div>
@@ -600,7 +646,7 @@ export default function Search(){
                                             </div>
                                             <div className="w-full mt-12 px-4 border-b-2"></div>
                                             <div>
-                                                <h1 className="text-md font-medium">{e.detailTitle[0].arrival}</h1>
+                                                <h1 className="text-sm font-medium">{e.detailTitle[0].arrival}</h1>
                                                 <small>{e.detailTitle[0].destination}</small>
                                             </div>
                                         </div>

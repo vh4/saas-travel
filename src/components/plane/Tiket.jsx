@@ -7,7 +7,7 @@ import {MdHorizontalRule, MdOutlineAirlineSeatReclineExtra} from 'react-icons/md
 import { useNavigate } from "react-router-dom";
 import {BsFillCheckCircleFill} from "react-icons/bs"
 import {AiOutlineDownload} from "react-icons/ai"
-import { Link } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 export default function Konfirmasi(){
 
@@ -21,7 +21,6 @@ export default function Konfirmasi(){
 
     const [searchParams, setSearchParams] = useSearchParams();
     const data = searchParams.get('success') ? JSON.parse(searchParams.get('success')) : [];
-
     return(
         <>
         {token !== null && token !== undefined ? (

@@ -318,7 +318,7 @@ export default function Search(){
     
     return(
         <>
-            <div className="judul-search mt-4 font-bold text-slate-600">
+            <div className="text-sm judul-search mt-4 font-bold text-slate-600">
                 PILIH JADWAL
             </div>
             <div className="mt-8">
@@ -457,31 +457,31 @@ export default function Search(){
                             
                             <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                                 <div className="col-span-1 xl:col-span-2">
-                                    <h1 className="text-md font-medium">{e.trainName} </h1>
+                                    <h1 className="text-sm font-bold">{e.trainName} </h1>
                                     <small>{e.seats[0].grade === 'E' ? 'Eksekutif' : e.seats[0].grade === 'B' ? 'Bisnis' : 'Ekonomi'} Class ({e.seats[0].class})</small>
                                 </div>
                                 <div className="flex">
                                     <div className="">
-                                        <h1 className="mt-4 xl:mt-0 text-md font-medium">{e.departureTime}</h1>
+                                        <h1 className="mt-4 xl:mt-0 text-sm font-bold">{e.departureTime}</h1>
                                         <small>{kotaBerangkat} ({origin})</small>
                                     </div>
                                     < HiOutlineArrowNarrowRight size={24} />
                                 </div>
                                 <div>
-                                    <h1 className="text-md font-medium">{e.arrivalTime}</h1>
+                                    <h1 className="text-sm font-bold">{e.arrivalTime}</h1>
                                     <small>{kotaTujuan} ({destination})</small>
                                 </div>
                                 <div>
-                                    <h1 className="mt-4 xl:mt-0 text-md font-medium">{e.duration}</h1>
+                                    <h1 className="mt-4 xl:mt-0 text-sm font-bold">{e.duration}</h1>
                                     <small>Langsung</small>
                                 </div>
                                 <div className="">
-                                        <h1 className="mt-4 xl:mt-0 text-md font-bold text-blue-500">Rp.{toRupiah(e.seats[0].priceAdult)}</h1>
+                                        <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">Rp.{toRupiah(e.seats[0].priceAdult)}</h1>
                                         <small className="text-red-500">{e.seats[0].availability} set(s) left</small>
                                 </div>
                                 <div>
                                     {e.seats[0].availability > 0 ? (
-                                        <button type="button" onClick={() => bookingHandlerDetail(e.trainNumber)} class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-medium rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center dark:hover:bg-blue-500/80 dark:focus:ring-blue-500/40 mr-2 mb-2">
+                                        <button type="button" onClick={() => bookingHandlerDetail(e.trainNumber)} class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center dark:hover:bg-blue-500/80 dark:focus:ring-blue-500/40 mr-2 mb-2">
                                             <div className="text-white font-bold">PILIH</div></button>
                                         
                                     ) : ''}

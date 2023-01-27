@@ -15,115 +15,22 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useForm } from "react-hook-form"
 import {RxCrossCircled} from 'react-icons/rx'
 import Swal from 'sweetalert2'
-import { alpha, styled } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-
-const CssTextField = styled(TextField)({
-    '& label.Mui-focused': {
-      color: 'green',
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: 'green',
-    },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: 'red',
-      },
-      '&:hover fieldset': {
-        borderColor: 'yellow',
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: 'green',
-      },
-    },
-  });
-  
-  const BootstrapInput = styled(InputBase)(({ theme }) => ({
-    'label + &': {
-      marginTop: theme.spacing(3),
-    },
-    '& .MuiInputBase-input': {
-      borderRadius: 4,
-      position: 'relative',
-      backgroundColor: theme.palette.mode === 'light' ? '#fcfcfb' : '#2b2b2b',
-      border: '1px solid #ced4da',
-      fontSize: 16,
-      width: 'auto',
-      padding: '10px 12px',
-      transition: theme.transitions.create([
-        'border-color',
-        'background-color',
-        'box-shadow',
-      ]),
-      // Use the system font instead of the default Roboto font.
-      fontFamily: [
-        '-apple-system',
-        'BlinkMacSystemFont',
-        '"Segoe UI"',
-        'Roboto',
-        '"Helvetica Neue"',
-        'Arial',
-        'sans-serif',
-        '"Apple Color Emoji"',
-        '"Segoe UI Emoji"',
-        '"Segoe UI Symbol"',
-      ].join(','),
-      '&:focus': {
-        boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-        borderColor: theme.palette.primary.main,
-      },
-    },
-  }));
-  
-  const RedditTextField = styled((props) => (
-    <TextField InputProps={{ disableUnderline: true }} {...props} />
-  ))(({ theme }) => ({
-    '& .MuiFilledInput-root': {
-      border: '1px solid #e2e2e1',
-      overflow: 'hidden',
-      borderRadius: 4,
-      backgroundColor: theme.palette.mode === 'light' ? '#fcfcfb' : '#2b2b2b',
-      transition: theme.transitions.create([
-        'border-color',
-        'background-color',
-        'box-shadow',
-      ]),
-      '&:hover': {
-        backgroundColor: 'transparent',
-      },
-      '&.Mui-focused': {
-        backgroundColor: 'transparent',
-        boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
-        borderColor: theme.palette.primary.main,
-      },
-    },
-  }));
-  
-  const ValidationTextField = styled(TextField)({
-    '& input:valid + fieldset': {
-      borderColor: 'green',
-      borderWidth: 2,
-    },
-    '& input:invalid + fieldset': {
-      borderColor: 'red',
-      borderWidth: 2,
-    },
-    '& input:valid:focus + fieldset': {
-      borderLeftWidth: 6,
-      padding: '4px !important', // override inline-style
-    },
-  });
-
 
 export default function BookingPesawat(){
+
+    useEffect(() => {
+        window.scrollTo(0,0)
+      },[])
 
     const {PesawatNumber} = useParams();
     const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
     const dataDetail  = JSON.parse(localStorage.getItem(PesawatNumber + '_flight'));
+    const dataDetailForBooking  = JSON.parse(localStorage.getItem(PesawatNumber + '_flight_forBooking'));
+
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
     function tanggalParse(x){
         var date = new Date(x);
@@ -161,9 +68,9 @@ export default function BookingPesawat(){
          return result
     }
 
-    const TotalAdult = parseInt(dataDetail.adult);
-    const TotalChild = parseInt(dataDetail.child);
-    const TotalInfant = parseInt(dataDetail.infant);
+    const TotalAdult = parseInt(dataDetailForBooking.adult);
+    const TotalChild = parseInt(dataDetailForBooking.child);
+    const TotalInfant = parseInt(dataDetailForBooking.infant);
 
     const AdultArr = Array();
     const ChildArr = Array();
@@ -182,7 +89,7 @@ export default function BookingPesawat(){
 
     for(var i = 0; i < TotalInfant; i++){
         InfantArr.push({
-            gender:'MR',
+            gender:'MSTR',
             nama_depan: '',
             nama_belakang:'',
             birthdate: null,
@@ -192,10 +99,11 @@ export default function BookingPesawat(){
 
     for(var i = 0; i < TotalChild; i++){
         ChildArr.push({
-            gender:'MR',
+            gender:'MSTR',
             nama_depan: '',
             nama_belakang:'',
             birthdate: null,
+            idNumber: '',
         });
 
     }  
@@ -241,7 +149,6 @@ export default function BookingPesawat(){
         }else{
             childCategory[i][category] = e.target.value
         }
-
         setChild([childCategory]);
         
     }
@@ -267,41 +174,102 @@ export default function BookingPesawat(){
     const [hp, setHp] = useState();
 
     const handlerBookingSubmit = async () => {
+
+        let end_adult = [];
+        let end_child = [];
+        let end_infant = [];
+
+        setIsLoading(true);
         let email_hp = {
             email:email,
-            nomor:formatPhoneNumber(hp)
+            nomor:formatPhoneNumber(hp).replace(/-/g, "")
         };
         let data_adult = adult[0].map(item => ({...item, ...email_hp}));
-        let end_adult = [];
+
+        child[0].forEach(item => {
+            let date = new Date(item.birthdate);
+            let dateString = (date.getMonth() + 1).toString().padStart(2, '0') + '/' + date.getDate().toString().padStart(2, '0') + '/' + date.getFullYear();
+            end_child.push(`CHD;${item.gender};${item.nama_depan.split(" ")[0].toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${item.idNumber};ID;ID;;;ID;`);
+        });
+
+        infant[0].forEach(item => {
+            let date = new Date(item.birthdate);
+            let dateString = (date.getMonth() + 1).toString().padStart(2, '0') + '/' + date.getDate().toString().padStart(2, '0') + '/' + date.getFullYear();
+            end_infant.push(`INF;${item.gender};${item.nama_depan.split(" ")[0].toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${item.idNumber};ID;ID;;;ID`);
+        });
         
         data_adult.forEach(item => {
-          let date = new Date(item.birthdate);
-          let dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-          end_adult.push(`ADT;${item.gender};${item.nama_depan.split(" ")[0]};${item.nama_depan.split(" ")[1]};${dateString};${item.idNumber};::;::;;;;${item.email};;;;;;;`);
-        })
+            let date = new Date(item.birthdate);
+            let dateString = (date.getMonth() + 1).toString().padStart(2, '0') + '/' + date.getDate().toString().padStart(2, '0') + '/' + date.getFullYear();
+            // end_adult.push(`ADT;${item.gender};${item.nama_depan.split(" ")[0].toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${item.idNumber};::${item.nomor};::${item.nomor};;;;${item.email};KTP;ID;ID;;;;`);
+            end_adult.push(`ADT;${item.gender};${item.nama_depan.split(" ")[0].toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${item.idNumber};::${item.nomor};::${item.nomor};;;;${item.email};1;ID;ID;;;ID;`);
+        });
+
+        let seats = dataDetail.map(item => item.seats[0]);
 
         const book = {
-                airline : dataDetail.airline,
-                departure : dataDetail.departure,
-                arrival : dataDetail.arrival,
-                departureDate : dataDetail.departureDate,
-                returnDate : dataDetail.returnDate,
-                adult : 1,
-                child : 0,
-                infant : 0,
-                flights : dataDetail.seats,
-                buyer : "",
+                airline : dataDetailForBooking.airline,
+                departure : dataDetailForBooking.departure,
+                arrival : dataDetailForBooking.arrival,
+                departureDate : dataDetailForBooking.departureDate,
+                returnDate : dataDetailForBooking.returnDate,
+                adult : TotalAdult,
+                child : TotalChild,
+                infant : TotalInfant,
+                flights : seats,
+                buyer:"",
                 passengers : {
-                adults : end_adult
-        
+                adults : end_adult,
+                children:end_child,
+                infants:end_infant
             },
             token:token
         }
 
-        console.log(JSON.stringify(book))
+        const bookingResponse = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/flight/book`, book);
+
+        if(bookingResponse.data.rc === '00'){
+            console.log(JSON.stringify(bookingResponse.data));
+            localStorage.setItem(PesawatNumber + "_DetailPassenger", JSON.stringify({
+                adults : data_adult,
+                children:child[0],
+                infants:infant[0]
+            }));  
+            localStorage.setItem(PesawatNumber + "_Bookingflight", JSON.stringify(bookingResponse.data.data));  
+            navigate(`/flight/payment/${PesawatNumber}`);
+            // window.location = `/flight/payment/${PesawatNumber}`
+            setIsLoading(false);
+        }else{
+            setIsLoading(false);
+            if(bookingResponse.data.rc === '73'){
+                Swal.fire({
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                    },
+                        title: 'Maaf, Waktu Booking sudah habis!',
+                        text: bookingResponse.data.rd,
+                        confirmButtonText: "Kembali",
+                    }).then(() => navigate('/'));
+            }else{
+                Swal.fire({
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                    },
+                        title: 'Maaf, Terdapat Kesalahan!',
+                        text: bookingResponse.data.rd,
+                        confirmButtonText: "Kembali",
+                    });
+            }
+
+        }
 
     }
-
 
     const {register, handleSubmit, formState:{ errors }} = useForm();
 
@@ -311,7 +279,7 @@ export default function BookingPesawat(){
             (
                 <div className='-mt-2 xl:mt-0'>
                 {/* header kai flow */}
-                <div className='flex justify-start jalur-payment-booking text-xs xl:text-md space-x-4 items-center'>
+                <div className='flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-4 items-center'>
                 <div className='flex space-x-2 items-center'>
                     <div className='hidden xl:flex text-blue-500 font-bold'>Detail pesanan</div>
                     <div className='block xl:hidden text-blue-500 font-bold'>Detail</div>
@@ -439,7 +407,7 @@ export default function BookingPesawat(){
                         <>
                             <div>
                                 <div className='Booking  mt-8 mb-4 xl:mt-12'>
-                                    <h1 className='text-md font-bold text-slate-500'>ADULT PASSENGER</h1>
+                                    <h1 className='text-sm font-bold text-slate-500'>ADULT PASSENGER</h1>
                                     <small className='text-gray-500'>Isi sesuai dengan data anda</small>
                                 </div>
                                 {/* Detailt */}            
@@ -461,7 +429,7 @@ export default function BookingPesawat(){
                                                                         onChange={handleAdultsubCatagoryChange(i, 'gender')}
                                                                     >
                                                                         <MenuItem value={'MR'}>Tuan.</MenuItem>
-                                                                        <MenuItem value={'MRS'}>Nyonya</MenuItem>
+                                                                        <MenuItem value={'MRS'}>Nyonya.</MenuItem>
                                                                         <MenuItem value={'MISS'}>Nona</MenuItem>
                                                                     </Select>
                                                                 </FormControl>  
@@ -475,8 +443,9 @@ export default function BookingPesawat(){
                                                                         hiddenLabel={true}
                                                                         onChange={handleAdultsubCatagoryChange(i, 'gender')}
                                                                     >
-                                                                        <MenuItem value={'MR'}>Mr.</MenuItem>
-                                                                        <MenuItem value={'MRS'}>Mrs.</MenuItem>
+                                                                        <MenuItem value={'MR'}>Tuan.</MenuItem>
+                                                                        <MenuItem value={'MRS'}>Nyonya.</MenuItem>
+                                                                        <MenuItem value={'MISS'}>Nona.</MenuItem>
                                                                     </Select>
                                                                 </FormControl>  
                                                             </div>
@@ -543,7 +512,7 @@ export default function BookingPesawat(){
                         <>
                             <div>
                                 <div className='Booking  mt-8 mb-4 xl:mt-12'>
-                                    <h1 className='text-md font-bold text-slate-500'>CHILD PASSENGER</h1>
+                                    <h1 className='text-sm font-bold text-slate-500'>CHILD PASSENGER</h1>
                                     <small className='text-gray-500'>Isi sesuai dengan data anak anda</small>
                                 </div>
                                 {/* Detailt */}            
@@ -564,9 +533,7 @@ export default function BookingPesawat(){
                                                                         hiddenLabel={true}
                                                                         onChange={handleChildsubCatagoryChange(i, 'gender')}
                                                                     >
-                                                                        <MenuItem value={'MR'}>Tuan.</MenuItem>
-                                                                        <MenuItem value={'MRS'}>Nyonya.</MenuItem>
-                                                                        <MenuItem value={'MISS'}>Nona.</MenuItem>
+                                                                        <MenuItem value={'MSTR'}>Mstr.</MenuItem>
                                                                     </Select>
                                                                 </FormControl>  
                                                             </div>
@@ -579,8 +546,7 @@ export default function BookingPesawat(){
                                                                         hiddenLabel={true}
                                                                         onChange={handleChildsubCatagoryChange(i, 'gender')}
                                                                     >
-                                                                        <MenuItem value={'MR'}>Mr.</MenuItem>
-                                                                        <MenuItem value={'MRS'}>Mrs.</MenuItem>
+                                                                        <MenuItem value={'MSTR'}>Mstr.</MenuItem>
                                                                     </Select>
                                                                 </FormControl>  
                                                             </div>
@@ -598,7 +564,7 @@ export default function BookingPesawat(){
                                                 </div>
                                             </div>
                                             <div className='mb-8 mt-0 xl:mt-4'>
-                                                <div className='block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 mt-0 xl:-mt-6'>
+                                                <div className='block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 mt-0 xl:-mt-6 xl:gap-2'>
                                                     {/* mobile & desktop NIK*/}
                                                     <div className='w-full xl:p-0 hidden xl:block'>
                                                         <div className=' text-gray-500 text-sm font-bold mb-2'>Tanggal Lahir</div>
@@ -627,6 +593,13 @@ export default function BookingPesawat(){
                                                             <small className='mt-2 text-gray-400'>Contoh: dd-mm-yyyy</small>            
                                                         </FormControl>
                                                     </div>
+                                                    <div className='w-full'>
+                                                        <div className='px-4 xl:px-0 w-full block '>
+                                                                <div className='text-gray-500 text-sm font-bold'>No. Ktp</div>
+                                                                <input value={e.idNumber} onChange={handleChildsubCatagoryChange(i, 'idNumber')} type="text" placeholder='No. Ktp / NIK' id="default-input" class="border w-full  border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" />
+                                                                <div><small className='mt-2 text-gray-400'>Contoh: 16 digit nomor</small></div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                     </div> 
@@ -640,7 +613,7 @@ export default function BookingPesawat(){
                         <>
                             <div>
                                 <div className='Booking  mt-8 mb-4 xl:mt-12'>
-                                    <h1 className='text-md font-bold text-slate-500'>INFANT PASSENGER</h1>
+                                    <h1 className='text-sm font-bold text-slate-500'>INFANT PASSENGER</h1>
                                     <small className='text-gray-500'>Isi sesuai dengan data bayi anda</small>
                                 </div>
                                 {/* Detailt */}            
@@ -661,9 +634,7 @@ export default function BookingPesawat(){
                                                                         hiddenLabel={true}
                                                                         onChange={handleInfantsubCatagoryChange(i, 'gender')}
                                                                     >
-                                                                        <MenuItem value={'MR'}>Tuan.</MenuItem>
-                                                                        <MenuItem value={'MRS'}>Nyonya.</MenuItem>
-                                                                        <MenuItem value={'MISS'}>Nona.</MenuItem>
+                                                                        <MenuItem value={'MSTR'}>Mstr.</MenuItem>
                                                                     </Select>
                                                                 </FormControl>  
                                                             </div>
@@ -676,15 +647,14 @@ export default function BookingPesawat(){
                                                                         hiddenLabel={true}
                                                                         onChange={handleInfantsubCatagoryChange(i, 'gender')}
                                                                     >
-                                                                        <MenuItem value={'MR'}>Mr.</MenuItem>
-                                                                        <MenuItem value={'MRS'}>Mrs.</MenuItem>
+                                                                        <MenuItem value={'MSTR'}>Mstr.</MenuItem>
                                                                     </Select>
                                                                 </FormControl>  
                                                             </div>
                                                             <div className='grid grid-cols-2 gap-2'>                                    
                                                                 <div className='w-full'>
                                                                 <div className='text-gray-500 font-bold text-sm'>Nama Depan</div>
-                                                                    <input class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" type="text" placeholder='Nama Depan' id="default-input" />
+                                                                    <input class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" value={e.nama_depan} onChange={handleInfantsubCatagoryChange(i, 'nama_depan')} type="text" placeholder='Nama Depan' id="default-input" />
                                                                 </div>
                                                                 <div className='w-full'>
                                                                     <div className='text-gray-500 font-bold text-sm'>Nama Belakang</div>
@@ -695,7 +665,7 @@ export default function BookingPesawat(){
                                                 </div>
                                             </div>
                                             <div className='mb-8 mt-0 xl:mt-4'>
-                                                <div className='block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 mt-0 xl:-mt-6'>
+                                                <div className='block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 xl:gap-4 mt-0 xl:-mt-6'>
                                                     {/* mobile & desktop NIK*/}
                                                     <div className='w-full xl:p-0 hidden xl:block'>
                                                         <div className='w-full text-gray-500 text-sm font-bold mb-2'>Tanggal Lahir</div>
@@ -724,6 +694,13 @@ export default function BookingPesawat(){
                                                             <small className='mt-2 text-gray-400'>Contoh: dd-mm-yyyy</small>            
                                                         </FormControl>
                                                     </div>
+                                                    <div className='w-full'>
+                                                        <div className='px-4 xl:px-0 w-full block '>
+                                                                <div className='text-gray-500 text-sm font-bold'>No. Ktp</div>
+                                                                <input value={e.idNumber} onChange={handleInfantsubCatagoryChange(i, 'idNumber')} type="text" placeholder='No. Ktp / NIK' id="default-input" class="border w-full  border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" />
+                                                                <div><small className='mt-2 text-gray-400'>Contoh: 16 digit nomor</small></div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                     </div> 
@@ -745,7 +722,7 @@ export default function BookingPesawat(){
                             )
                         :
                         (
-                            <div className="text-white text-md font-bold">LANJUT KE PEMBAYARAN</div>
+                            <div className="text-white text-sm font-bold">LANJUT KE PEMBAYARAN</div>
                         )
                         }
                         </button>
@@ -755,56 +732,61 @@ export default function BookingPesawat(){
 
                 {/* sidebra desktop*/}
                 <div className='w-1/2'>
-                    <div className='hidden xl:block rounded-md border border-gray-200 shadow-sm'>
-                            <div className='p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100'>
-                                <div className='text-gray-700 text-sm font-bold'>Keberangkatan Pesawat</div>
-                                <small className='text-xs text-gray-700'>{tanggalParse(dataDetail.departureDate)}</small>
-                            </div>
-                            <div className='px-4 p-8 flex justify-between space-x-8 mx-4 items-center'>
-                                <div className='text-xs font-bold text-slate-600'>
-                                    <div>{dataDetail.departureName}</div>
-                                    <div>({dataDetail.departure})</div>
+                    {dataDetail.map((dataDetail) =>(
+                        <>
+                            <div className='hidden xl:block rounded-md border border-gray-200 shadow-sm mb-4'>
+                                <div className='p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100'>
+                                    <div className='text-gray-700 text-sm font-bold'>Keberangkatan Pesawat</div>
+                                    <small className='text-xs text-gray-700'>{tanggalParse(dataDetail.departureDate)}</small>
                                 </div>
-                                <div className='rounded-full p-1 bg-blue-500 '>
-                                    < TbArrowsLeftRight className='text-white' size={18} />
+                                <div className='px-4 p-8 flex justify-between space-x-8 mx-4 items-center'>
+                                    <div className='text-xs font-bold text-slate-600'>
+                                        <div>{dataDetail.departureName}</div>
+                                        <div>({dataDetail.departure})</div>
+                                    </div>
+                                    <div className='rounded-full p-1 bg-blue-500 '>
+                                        < TbArrowsLeftRight className='text-white' size={18} />
+                                    </div>
+                                    <div className='text-xs font-bold text-slate-600'>
+                                        <div>{dataDetail.arrivalName}</div>
+                                        <div>({dataDetail.arrival})</div>
+                                    </div>
                                 </div>
-                                <div className='text-xs font-bold text-slate-600'>
-                                    <div>{dataDetail.arrivalName}</div>
-                                    <div>({dataDetail.arrival})</div>
-                                </div>
-                            </div>
 
-                            <div className='p-2 -mt-2 mb-2  pl-8 relative px-4 text-gray-700'>
-                                <div className='flex items-center space-x-2'>
-                                    <img src={dataDetail.airlineIcon} width={50} alt="icon.png" />
-                                    <div className='text-gray-500 text-xs font-bold'>{dataDetail.airlineName} ({dataDetail.airline})</div>
+                                <div className='p-2 -mt-2 mb-2  pl-8 relative px-4 text-gray-700'>
+                                    <div className='flex items-center space-x-2'>
+                                        <img src={dataDetail.airlineIcon} width={50} alt="icon.png" />
+                                        <div className='text-gray-500 text-xs font-bold'>{dataDetail.airlineName} ({dataDetail.airline})</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className='p-4 pl-8 pt-4 px-6 mb-4'>
-                            <ol class="relative border-l-2 border-dotted border-gray-300 dark:border-gray-700">                  
-                                    <li class="mb-10 ml-4 text-sm">
-                                        <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-400 dark:border-gray-900 dark:bg-gray-700"></div>
-                                        <div className='flex space-x-12'>
-                                            <time class="mb-1 text-xs font-bold leading-none text-gray-400 dark:text-gray-500">{dataDetail.departureTime}</time>
-                                            <div className='-mt-2'>
-                                                <h3 class="text-left text-xs font-bold text-slate-600 dark:text-white">{dataDetail.departureName}</h3>
-                                                <p class="text-left text-xs font-bold text-gray-500 dark:text-gray-400">({dataDetail.departure})</p>
+                                <div className='p-4 pl-8 pt-4 px-6 mb-4'>
+                                <ol class="relative border-l-2 border-dotted border-gray-300 dark:border-gray-700">                  
+                                        <li class="mb-10 ml-4 text-sm">
+                                            <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-400 dark:border-gray-900 dark:bg-gray-700"></div>
+                                            <div className='flex space-x-12'>
+                                                <time class="mb-1 text-xs font-bold leading-none text-gray-400 dark:text-gray-500">{dataDetail.departureTime}</time>
+                                                <div className='-mt-2'>
+                                                    <h3 class="text-left text-xs font-bold text-slate-600 dark:text-white">{dataDetail.departureName}</h3>
+                                                    <p class="text-left text-xs font-bold text-gray-500 dark:text-gray-400">({dataDetail.departure})</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                    <li class="ml-4 text-sm mt-10">
-                                        <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-                                        <div className='flex space-x-12'>
-                                            <time class="mb-1 text-xs font-bold leading-none text-gray-400 dark:text-gray-500">{dataDetail.arrivalTime}</time>
-                                            <div className='-mt-2'>
-                                                <h3 class="text-left text-xs font-bold text-slate-600 dark:text-white">{dataDetail.arrivalName}</h3>
-                                                <p class="text-left text-xs font-bold text-gray-500 dark:text-gray-400">({dataDetail.arrival})</p>
+                                        </li>
+                                        <li class="ml-4 text-sm mt-10">
+                                            <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                            <div className='flex space-x-12'>
+                                                <time class="mb-1 text-xs font-bold leading-none text-gray-400 dark:text-gray-500">{dataDetail.arrivalTime}</time>
+                                                <div className='-mt-2'>
+                                                    <h3 class="text-left text-xs font-bold text-slate-600 dark:text-white">{dataDetail.arrivalName}</h3>
+                                                    <p class="text-left text-xs font-bold text-gray-500 dark:text-gray-400">({dataDetail.arrival})</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>
-                                </ol>
-                            </div>
-                    </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                        </div>
+                        </>
+                    ))}
+
                 </div>
             </div>
         </div>

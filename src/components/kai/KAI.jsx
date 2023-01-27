@@ -1,6 +1,5 @@
 
 import * as React from 'react';
-import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import axios from "axios";
 import TextField from '@mui/material/TextField';
@@ -20,45 +19,46 @@ function KAI(){
 
     const useStyles = makeStyles((theme) => ({
         inputRoot: {
-          color:"#6b7280",
-          "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#e5e7eb"
+            color:"#6b7280",
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#e5e7eb"
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#e5e7eb"
+            },
+            "&:Mui-actived .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#d1d5db"
+            },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#d1d5db"
+            },
+            "&&& $input": {
+              padding: 1,
+            },
           },
-          "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#e5e7eb"
-          },
-          "&:Mui-actived .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#d1d5db"
-          },
-          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#d1d5db"
-          },
-          "&&& $input": {
-            padding: "3px",
-          },
-        },
-        root: {
-            
-            "& .MuiInputBase-root": {
-              "& .MuiInputBase-input": {
-                padding: 12,
-              },
-              color:"#6b7280",
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#e5e7eb"
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#e5e7eb"
-              },
-              "&:Mui-actived .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#e5e7eb"
-              },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#e5e7eb"
-              },
-            }
-        }
-}));
+          root: {
+              
+              "& .MuiInputBase-root": {
+                "& .MuiInputBase-input": {
+                  padding: 9,
+                  borderRadius:10
+                },
+                color:"#6b7280",
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#e5e7eb"
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#e5e7eb"
+                },
+                "&:Mui-actived .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#e5e7eb"
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#e5e7eb"
+                },
+              }
+          }
+      }));
 
 
     const PopperMy = function (props) {
@@ -269,9 +269,6 @@ function KAI(){
 
 
     }
-    const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
-
-    console.log(token);
 
     return (
         <>     
@@ -280,7 +277,7 @@ function KAI(){
                     <form className="w-full">
                         {/* <div className="space-x-2 items-center flex">
                             < BiTrain className="text-gray-600" size={24} />
-                            <div className="text-sm md:text-md font-bold text-slate-700">TRAINS</div>
+                            <div className="text-sm md:text-sm font-bold text-slate-700">TRAINS</div>
                         </div> */}
                             <>
                             <div className='block xl:flex justify-between'>
@@ -338,7 +335,7 @@ function KAI(){
                                         />
                                 </FormControl>
                                 <FormControl className="" sx={{ m: 1, minWidth: 120, outline: 'none' }} >
-                                    <small className="mb-2 text-gray-500">Stasiun Asal</small>
+                                    <small className="mb-2 text-gray-500">Stasiun Tujuan</small>
                                     <Autocomplete
                                         classes={classes}
                                         id="asynchronous-demo"

@@ -248,7 +248,7 @@ export default function BookingKai(){
             (
                 <div className='-mt-8 xl:mt-0'>
                 {/* header kai flow */}
-                <div className='flex justify-start jalur-payment-booking text-xs xl:text-md space-x-2 xl:space-x-8 items-center'>
+                <div className='flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center'>
                 <div className='flex space-x-2 items-center'>
                     <div className='hidden xl:flex text-blue-500 font-bold'>Detail pesanan</div>
                     <div className='block xl:hidden text-blue-500 font-bold'>Detail</div>
@@ -334,7 +334,7 @@ export default function BookingKai(){
                         <>
                             <div>
                                 <div className='Booking  mt-8 mb-4 xl:mt-12'>
-                                    <h1 className='text-md font-bold text-gray-500'>ADULT PASSENGER</h1>
+                                    <h1 className='text-sm font-bold text-gray-500'>ADULT PASSENGER</h1>
                                     <small className='text-gray-500'>Isi sesuai dengan data anda</small>
                                 </div>
                                 {/* Detailt */}            
@@ -413,7 +413,7 @@ export default function BookingKai(){
                         <>
                             <div>
                                 <div className='Booking ml-2 mt-8 mb-4 xl:mt-12'>
-                                    <h1 className='xl:text-xl font-semibold text-gray-500 text-md'>Infant Passenger</h1>
+                                    <h1 className='xl:text-sm font-bold text-gray-500 text-sm'>INFANT PASSENGER</h1>
                                     <small className='text-gray-500'>isi dengan detail pemesanan kereta</small>
                                 </div>
                                 {/* Detailt */}            
@@ -482,7 +482,7 @@ export default function BookingKai(){
                     )) }
 
                     <div className='flex justify-end mr-2 mt-8'>
-                    <button onClick={handleSubmit(handlerBookingSubmit)} type="button" class="text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-medium rounded-lg text-sm px-8 py-4 text-center inline-flex items-center dark:hover:bg-blue-500/80 dark:focus:ring-blue-500/40 mr-2 mb-2">
+                    <button onClick={handleSubmit(handlerBookingSubmit)} type="button" class="text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-lg text-sm px-8 py-4 text-center inline-flex items-center dark:hover:bg-blue-500/80 dark:focus:ring-blue-500/40 mr-2 mb-2">
                             {isLoading ? (
                             <div className="flex space-x-2 items-center">
                                 <svg aria-hidden="true" class="mr-2 w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -494,7 +494,7 @@ export default function BookingKai(){
                             )
                         :
                         (
-                            <div className="text-white text-MD font-bold">KONFIRMASI</div>
+                            <div className="text-white text-sm font-bold">KONFIRMASI</div>
                         )
                         }
                         </button>

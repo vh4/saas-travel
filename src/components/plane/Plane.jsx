@@ -28,7 +28,6 @@ function Plane(){
 
     const navigate = useNavigate();
     
-    const [age, setAge] = React.useState('');
     const [isLoading, setLoading] = React.useState(false);
     const [pulang, setPulang] = React.useState(false);
     const [pesawatStasiun, setpesawatStasiun] = React.useState({});
@@ -53,45 +52,46 @@ function Plane(){
 
     const useStyles = makeStyles((theme) => ({
         inputRoot: {
-          color:"#6b7280",
-          "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#e5e7eb"
+            color:"#6b7280",
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#e5e7eb"
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#e5e7eb"
+            },
+            "&:Mui-actived .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#d1d5db"
+            },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#d1d5db"
+            },
+            "&&& $input": {
+              padding: 1,
+            },
           },
-          "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#e5e7eb"
-          },
-          "&:Mui-actived .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#d1d5db"
-          },
-          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#d1d5db"
-          },
-          "&&& $input": {
-            padding: "3px"
-          },
-        },
-        root: {
-            
-            "& .MuiInputBase-root": {
-              "& .MuiInputBase-input": {
-                padding: 12,
-              },
-              color:"#6b7280",
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#e5e7eb"
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#e5e7eb"
-              },
-              "&:Mui-actived .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#e5e7eb"
-              },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#e5e7eb"
-              },
-            }
-        }
-}));
+          root: {
+              
+              "& .MuiInputBase-root": {
+                "& .MuiInputBase-input": {
+                  padding: 9,
+                  borderRadius:10
+                },
+                color:"#6b7280",
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#e5e7eb"
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#e5e7eb"
+                },
+                "&:Mui-actived .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#e5e7eb"
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#e5e7eb"
+                },
+              }
+          }
+      }));
     
     const classes = useStyles();
 

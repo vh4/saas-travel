@@ -3,20 +3,49 @@ import * as React from 'react';
 import FormControl from '@mui/material/FormControl';
 import axios from "axios";
 import TextField from '@mui/material/TextField';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Chip } from "@mui/material";
 import CircularProgress from '@mui/material/CircularProgress';
 import Autocomplete from '@mui/material/Autocomplete';
 import {Popper } from "@mui/material";
-import {FaTrain} from 'react-icons/fa'
+import {IoBoatSharp} from 'react-icons/io5'
 import { useNavigate, createSearchParams } from "react-router-dom";
 import onClickOutside from "react-onclickoutside";
 import { makeStyles } from '@mui/styles';
+import { DateRangePicker } from 'rsuite';
+import "rsuite/dist/rsuite.min.css";
 
-function KAISearch(){
+function Pelni(){
+
+    const [anchorEl, setAnchorEl] = React.useState('hidden');
+    const handleClick = () => {
+        anchorEl === 'hidden' ? setAnchorEl('grid') : setAnchorEl('hidden');
+    }
+
+    Pelni.handleClickOutside = () => {
+        setAnchorEl('hidden');
+      };
+
+    const navigate = useNavigate();
     
+    const [isLoading, setLoading] = React.useState(false);
+    const [pelniStasiun, setpelniStasiun] = React.useState({});
+    const [laki, setLaki] = React.useState(1);
+    const [wanita, setWanita] = React.useState(0);
+
+    const [openBerangka, SetopenBerangka] = React.useState(false);
+    const [openTujuan, setOpenTujuan] = React.useState(false);
+
+    const [pelniData, setPelniData] = React.useState([]);
+    const loadingBerangkat = openBerangka && pelniData.length === 0;
+    const loadingTujuan = openTujuan && pelniData.length === 0;
+
+    //input
+    const [keberangkatan, setKeberangkatan] = React.useState();
+    const [tujuan, setTujuan] = React.useState();
+    const [tanggal, setTanggal] = React.useState();
+
+    const i = 0;
+
     const useStyles = makeStyles((theme) => ({
         inputRoot: {
           color:"#6b7280",
@@ -33,14 +62,15 @@ function KAISearch(){
             borderColor: "#d1d5db"
           },
           "&&& $input": {
-            padding: "3px",
+            padding: 1,
           },
         },
         root: {
             
             "& .MuiInputBase-root": {
               "& .MuiInputBase-input": {
-                padding: 12,
+                padding: 9,
+                borderRadius:10
               },
               color:"#6b7280",
               "& .MuiOutlinedInput-notchedOutline": {
@@ -57,223 +87,173 @@ function KAISearch(){
               },
             }
         }
-}));
+    }));
+        const classes = useStyles();
 
-
-    const PopperMy = function (props) {
-        return (<Popper {...props} style={{ width: 350 }} placement='bottom-start' />)
-    };
-    
-    const classes = useStyles();
-    
-    const [kai, setKAI] = React.useState({});
-    const [kaiData, setKAIData] = React.useState([]);
-    const i = 0;
-
-    const [openBerangka, SetopenBerangka] = React.useState(false);
-    const [openTujuan, setOpenTujuan] = React.useState(false);
-    
-
-    const loadingBerangkat = openBerangka && kaiData.length === 0;
-    const loadingTujuan = openTujuan && kaiData.length === 0;
-
-    //input
-    const [keberangkatan, setKeberangkatan] = React.useState();
-    const [tujuan, setTujuan] = React.useState();
-    const [tanggal, setTanggal] = React.useState();
-    const [isLoading, setLoading] = React.useState(false);
-    const [adult, setadult] = React.useState(1);
-    const [infant, setinfant] = React.useState(0);
-
-    const [anchorEl, setAnchorEl] = React.useState('hidden');
-    const handleClick = () => {
-        anchorEl === 'hidden' ? setAnchorEl('grid') : setAnchorEl('hidden');
-    }
-
-    KAISearch.handleClickOutside = () =>{
-        setAnchorEl('hidden');
-      };
-
-
-      function sleep(delay = 0) {
-        return new Promise((resolve) => {
-          setTimeout(resolve, delay);
-        });
-      }
-
-      //berangkat
-      React.useEffect(() => {
-        let active = true;
-    
-        if (!loadingBerangkat) {
-          return undefined;
-        }
-        
-        (async () => {
-          await sleep(1e3); // For demo purposes.
-    
-          if (active) {
-            setKAIData([...kai.data]);
-          }
-        })();
-    
-        return () => {
-          active = false;
-        };
-      }, [loadingBerangkat]);
-    
-      React.useEffect(() => {
-        if (!openBerangka) {
-            setKAIData([]);
-        }
-      }, [openBerangka]);
-
-
-      //tujuan
-      React.useEffect(() => {
-        let active = true;
-    
-        if (!loadingTujuan) {
-          return undefined;
-        }
-        
-        (async () => {
-          await sleep(1e3); // For demo purposes.
-    
-          if (active) {
-            setKAIData([...kai.data]);
-          }
-        })();
-    
-        return () => {
-          active = false;
-        };
-      }, [loadingTujuan]);
-    
-      React.useEffect(() => {
-        if (!openTujuan) {
-            setKAIData([]);
-        }
-      }, [openTujuan]);
-    
-
-    const navigate = useNavigate();
-
-
-    function plusAdult(e){
-        e.preventDefault();
-        if(adult >= 4){
-            setadult(4);
-        }else{
-            setadult(adult + 1);
-        }
-
-    }
-
-    function minusAdult(e){
-        e.preventDefault();
-
-        if(adult < 1 || adult === 1){
-            setadult(1);
-        }
-        else{
-            setadult(adult - 1);
-        }
-        
-    }
-
-
-    function plusInfant(e){
-        e.preventDefault();
-        if(infant >= 4){
-            setinfant(4);
-        }else{
-            setinfant(infant + 1);
-        }
-    }
-
-    function minusInfant(e){
-        e.preventDefault();
-
-        if(infant < 0 || infant === 0){
-            setinfant(0);
-        }else{
-            setinfant(infant - 1);
-        }
-
-    }
-
-    React.useEffect(() => {
-
-        getKAIdata();
-
-    }, []);
-
-    async function getKAIdata(){
-
-        try {
-
-            const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/station`, {
-                token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
+        function sleep(delay = 0) {
+            return new Promise((resolve) => {
+            setTimeout(resolve, delay);
             });
-    
-            setKAI(response.data);
+        }
+
+        //berangkat
+        React.useEffect(() => {
+            let active = true;
+
+            if (!loadingBerangkat) {
+            return undefined;
+            }
             
-        } catch (error) {
-            setKAI({message: error.message});
-        }
+            (async () => {
+            await sleep(1e3); // For demo purposes.
 
-    }
+            if (active) {
+                setPelniData([...pelniStasiun.data]);
+            }
+            })();
 
-    function addLeadingZero(num) {
-        if (num < 10) {
-          return '0' + num;
-        } else {
-          return '' + num;
-        }
-      }
+            return () => {
+            active = false;
+            };
+        }, [loadingBerangkat]);
 
-      async function handlerCariKai(e){
+        React.useEffect(() => {
+            if (!openBerangka) {
+            setPelniData([]);
+            }
+        }, [openBerangka]);
 
-        setLoading(true);
 
-        let tanggalNullFill = new Date();
-        tanggalNullFill = tanggalNullFill.getFullYear() + '-' + parseInt(tanggalNullFill.getMonth()) + 1 + '-' + tanggalNullFill.getDate();
+        //tujuan
+        React.useEffect(() => {
+            let active = true;
 
-        const tanggalParse = tanggal !== undefined && tanggal !== null ? tanggal.$y + '-' + (addLeadingZero(parseInt(tanggal.$M) + 1)).toString()  + '-' + addLeadingZero(parseInt(tanggal.$D)).toString() : tanggalNullFill;
+            if (!loadingTujuan) {
+            return undefined;
+            }
+            
+            (async () => {
+            await sleep(1e3); // For demo purposes.
 
-        setTimeout(() => {
+            if (active) {
+                setPelniData([...pelniStasiun.data]);
+            }
+            })();
+
+            return () => {
+            active = false;
+            };
+        }, [loadingTujuan]);
+
+        React.useEffect(() => {
+            if (!openTujuan) {
+            setPelniData([]);
+            }
+        }, [openTujuan]);
+
+
+
+        React.useEffect(() => {
+            getPelnitDataStasiun();
+
+        }, []);
+
+        const PopperMy = function (props) {
+            return (<Popper {...props} style={{ width: 350 }} placement='bottom-start' />)
+        };
+
+        function plusLaki(e){
             e.preventDefault();
-            setLoading(false);
-
-            const params = {
-                origin: keberangkatan.id_stasiun,
-                destination:tujuan.id_stasiun,
-                productCode: 'WKAI',
-                date:tanggalParse,
-                kotaBerangkat:keberangkatan.nama_kota,
-                kotaTujuan:tujuan.nama_kota,
-                stasiunBerangkat:keberangkatan.nama_stasiun,
-                stasiunTujuan:tujuan.nama_stasiun,
-                adult:adult,
-                infant:infant,
-                ubah:'cari'
+            if(laki >= 4){
+                setLaki(4);
+            }else{
+                setLaki(laki + 1);
             }
 
-            var str = "";
-            for (var key in params) {
-                if (str != "") {
-                    str += "&";
-                }
-                str += key + "=" + encodeURIComponent(params[key]);
-            } 
+        }
 
-            window.location = `search?${str}`;  
+        function minusLaki(e){
+            e.preventDefault();
 
-        }, 1000);
+            if(laki < 1 || laki === 1){
+                setLaki(1);
+            }
+            else{
+                setLaki(laki - 1);
+            }
+            
+        }
 
+        function plusWanita(e){
+            e.preventDefault();
+            if(wanita >= 4){
+                setWanita(4);
+            }else{
+                setWanita(wanita + 1);
+            }
+        }
 
-    }
+        function minusWanita(e){
+            e.preventDefault();
+
+            if(wanita < 0 || wanita === 0){
+                setWanita(0);
+            }else{
+                setWanita(wanita - 1);
+            }
+
+        }
+
+        function addLeadingZero(num) {
+            if (num < 10) {
+            return '0' + num;
+            } else {
+            return '' + num;
+            }
+        }
+
+        async function getPelnitDataStasiun(){
+            const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/pelni/get_origin`, {
+                token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
+            });
+
+            setpelniStasiun(response.data);
+
+        }
+
+        function handleSubmitPelni(e){
+            e.preventDefault();
+            setLoading(true);
+
+            let startDate= new Date(tanggal[0] ? tanggal[0] : null);
+                startDate= startDate.getFullYear()+'-'+addLeadingZero(parseInt(startDate.getMonth()) + 1)+'-'+addLeadingZero(parseInt(startDate.getDate()) + 1);
+            let endDate= new Date(tanggal[1] ? tanggal[1] : null);
+                endDate= endDate.getFullYear()+'-'+addLeadingZero(parseInt(endDate.getMonth()) + 1)+'-'+addLeadingZero(parseInt(endDate.getDate()) + 1);
+
+            setTimeout(() => {
+                e.preventDefault();
+                setLoading(false);
+    
+                const params = {
+                    origin: keberangkatan.CODE,
+                    destination: tujuan.CODE,
+                    originName:keberangkatan.NAME,
+                    destinationName:tujuan.NAME,
+                    startDate: startDate,
+                    endDate: endDate,
+                    laki:laki,
+                    wanita:wanita
+                };
+    
+                navigate({
+                    pathname: '/pelni/search',
+                    search: `?${createSearchParams(params)}`,
+                  });
+    
+            }, 1000);
+
+        }
+
 
     return (
         <>     
@@ -288,7 +268,7 @@ function KAISearch(){
                             <div className='block xl:flex justify-between'>
                                 <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 md:mx-12 xl:mx-6">
                                 <FormControl className="" sx={{ m: 1, minWidth: 120, outline: 'none' }} >
-                                    <small className="mb-2 text-gray-500">Stasiun Asal</small>
+                                    <small className="mb-2 text-gray-500">Pelabuhan Asal</small>
                                     <Autocomplete
                                         classes={classes}
                                         id="asynchronous-demo"
@@ -314,8 +294,8 @@ function KAISearch(){
                                             </div>
                                         )}
                                         isOptionEqualToValue={(option, value) => option.title === value.title}
-                                        getOptionLabel={(option) => option.nama_stasiun + ' - ' + option.nama_kota + ' - ' + option.id_stasiun}
-                                        options={kaiData}
+                                        getOptionLabel={(option) => option.NAME}
+                                        options={pelniData}
                                         onChange={(event, newValue) => {
                                             setKeberangkatan(newValue);
                                         }}
@@ -325,8 +305,8 @@ function KAISearch(){
                                             {...params}
                                             InputProps={{
                                                 ...params.InputProps,
-                                                startAdornment: (<FaTrain className="text-gray-400"/>),
-                                                placeholder:"Stasiun Asal",
+                                                startAdornment: (<IoBoatSharp className="text-gray-400"/>),
+                                                placeholder:"Asal",
                                                 endAdornment: (
                                                 <React.Fragment>
                                                     {loadingBerangkat ? <CircularProgress color="inherit" size={20} /> : null}
@@ -340,7 +320,7 @@ function KAISearch(){
                                         />
                                 </FormControl>
                                 <FormControl className="" sx={{ m: 1, minWidth: 120, outline: 'none' }} >
-                                    <small className="mb-2 text-gray-500">Stasiun Asal</small>
+                                    <small className="mb-2 text-gray-500">Pelabuhan Tujuan</small>
                                     <Autocomplete
                                         classes={classes}
                                         id="asynchronous-demo"
@@ -366,8 +346,8 @@ function KAISearch(){
                                             </div>
                                         )}
                                         isOptionEqualToValue={(option, value) => option.title === value.title}
-                                        getOptionLabel={(option) => option.nama_stasiun + ' - ' + option.nama_kota + ' - ' + option.id_stasiun}
-                                        options={kaiData}
+                                        getOptionLabel={(option) => option.NAME}
+                                        options={pelniData}
                                         onChange={(event, newValue) => {
                                             setTujuan(newValue);
                                         }}
@@ -377,8 +357,8 @@ function KAISearch(){
                                             {...params}
                                             InputProps={{
                                                 ...params.InputProps,
-                                                startAdornment: (<FaTrain className="text-gray-400"/>),
-                                                placeholder:"Stasiun Asal",
+                                                startAdornment: (<IoBoatSharp className="text-gray-400"/>),
+                                                placeholder:"Tujuan",
                                                 endAdornment: (
                                                 <React.Fragment>
                                                     {loadingTujuan ? <CircularProgress color="inherit" size={20} /> : null}
@@ -392,48 +372,40 @@ function KAISearch(){
                                         />
                                 </FormControl>
                                 <FormControl sx={{ m: 1, minWidth: 120 }}> 
-                                <small className="mb-2 text-gray-500">Tanggal Berangkat</small>
-                                <LocalizationProvider 
-                                dateAdapter={AdapterDayjs}>
-                                    <DatePicker
-                                            value={tanggal}
-                                            className={classes.root}
-                                            onChange={(newValue) => {
-                                            setTanggal(newValue);
-                                            }}
-                                        renderInput={(params) => <TextField {...params} />}
-                                    />
-                                </LocalizationProvider>
+                                <small className="mb-2 text-gray-500">Range Tanggal</small>
+                                <div className='w-full'>
+                                    <DateRangePicker onChange={(e) => setTanggal(e)} size="lg" sx={{width:'100%'}} placeholder='yyyy-mm-dd yyyy-mm-dd' className='text-gray-300'/>
+                                </div>
                                 </FormControl>
                                 <FormControl sx={{ m: 1, minWidth: 120 }}>
                                 <small className="mb-2 text-gray-500">Total Penumpang</small>
-                                <TextField onClick={ handleClick} sx={{ input: { cursor: 'pointer' } }} size="medium" classes={classes} id="outlined-basic" value={`${parseInt(adult) + parseInt(infant)} Penumpang`} variant="outlined" />       
-                                    <div id="basic-menu" className={`${anchorEl} absolute top-20 z-10 grid w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-700`}>
+                                <TextField onClick={ handleClick} sx={{ input: { cursor: 'pointer' } }} variant="outlined" size="small" classes={classes} id="outlined-basic" value={`${parseInt(laki) + parseInt(wanita)} Penumpang`} variant="outlined" />       
+                                    <div id="basic-menu" className={`${anchorEl} absolute top-20 z-10 grid w-auto px-8 text-sm bg-white border border-gray-100 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-700`}>
                                         <div className="w-full ml-4 block md:mx-0">
                                             <div className="mt-4 w-full items-center text-gray-600">
                                                 <div className="text-sm text-center header-number">
-                                                    <p>Adult (Dewasa {'>'} 12 thn)</p>
+                                                    <p>laki (Laki-laki {'>'} 12 thn)</p>
                                                 </div>
                                                 <div class="flex flex-row h-10 w-full rounded-lg relative mt-2">
-                                                <button onClick={plusAdult} class=" bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-l cursor-pointer outline-none">
+                                                <button onClick={plusLaki} class=" bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-l cursor-pointer outline-none">
                                                     <span class="m-auto text-2xl font-thin">+</span>
                                                 </button>
-                                                    <input type="number" class="focus:outline-none text-center w-full bg-gray-50 font-semibold text-md md:text-basecursor-default flex items-center text-gray-500  outline-none" name="custom-input-number" value={adult} />
-                                                <button onClick={minusAdult} class="bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-r cursor-pointer">
+                                                    <input type="number" class="focus:outline-none text-center w-full bg-gray-50 font-semibold text-md md:text-basecursor-default flex items-center text-gray-500  outline-none" name="custom-input-number" value={laki} />
+                                                <button onClick={minusLaki} class="bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-r cursor-pointer">
                                                     <span class="m-auto text-2xl font-thin">-</span>
                                                 </button>
                                                 </div>                          
                                             </div>                       
-                                            <div className="mt-4 w-full items-center text-gray-600">
+                                            <div className="mt-4 mb-8 w-full items-center text-gray-600">
                                                 <div className="text-sm text-center header-number">
-                                                    <p>Infant (Infant 0-2 thn)</p>
+                                                    <p>Wanita (Wanita {'>'} 12 thn)</p>
                                                 </div>
                                                 <div class="flex flex-row h-10 w-full rounded-lg relative mt-2">
-                                                <button onClick={plusInfant} class=" bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-l cursor-pointer outline-none">
+                                                <button onClick={plusWanita} class=" bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-l cursor-pointer outline-none">
                                                     <span class="m-auto text-2xl font-thin">+</span>
                                                 </button>
-                                                    <input type="number" class="focus:outline-none text-center w-full bg-gray-50 font-semibold text-md md:text-basecursor-default flex items-center text-gray-500  outline-none" name="custom-input-number" value={infant} />
-                                                <button onClick={minusInfant} class="bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-r cursor-pointer">
+                                                    <input type="number" class="focus:outline-none text-center w-full bg-gray-50 font-semibold text-md md:text-basecursor-default flex items-center text-gray-500  outline-none" name="custom-input-number" value={wanita} />
+                                                <button onClick={minusWanita} class="bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-r cursor-pointer">
                                                     <span class="m-auto text-2xl font-thin">-</span>
                                                 </button>
                                                 </div>                          
@@ -443,7 +415,7 @@ function KAISearch(){
                                 </FormControl>                                                         
                                 </div>
                                 <div className="w-full pr-4 xl:mr-0 xl:pl-4 xl:w-1/4 flex justify-end xl:justify-start mt-8 py-0.5">
-                                <button onClick={handlerCariKai} type="button" class="text-white bg-blue-500 space-x-2 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-sm text-sm px-6 py-3 xl:py-0 text-center inline-flex items-center mb-2">
+                                <button onClick={handleSubmitPelni} type="button" class="text-white bg-blue-500 space-x-2 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-sm text-sm px-6 py-3 xl:py-0 text-center inline-flex items-center mb-2">
                                 {isLoading ? (
                                 <div className="flex space-x-2 items-center">
                                     <svg aria-hidden="true" class="mr-2 w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -471,7 +443,7 @@ function KAISearch(){
 }
 
 const clickOutsideConfig = {
-    handleClickOutside: () => KAISearch.handleClickOutside,
+    handleClickOutside: () => Pelni.handleClickOutside,
   };
   
-export default onClickOutside(KAISearch, clickOutsideConfig);
+export default onClickOutside(Pelni, clickOutsideConfig);

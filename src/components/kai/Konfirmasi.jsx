@@ -165,7 +165,6 @@ export default function Konfirmasi(){
     const [isLoadingPindahKursi, setisLoadingPindahKursi] = useState(false);
     const passengers_params = searchParams.get('passengers') ? JSON.parse(searchParams.get('passengers')) : [];
 
-
     const dataBookingTrain = JSON.parse(localStorage.getItem(trainNumber + "_booking"));
     const dataDetailTrain = JSON.parse(localStorage.getItem(trainNumber + "_detailTrain"));
     const hasilBookingSession = JSON.parse(localStorage.getItem(trainNumber + "_hasilBookingdanPilihKursi"));
@@ -211,8 +210,9 @@ export default function Konfirmasi(){
                  icon: 'error',
                  title: 'Oops...',
                  text: 'Maaf, Waktu Booking sudah habis!',
-               });
-               navigate('/');
+                 confirmButtonText: "Kembali",
+
+               }).then(() => navigate('/'));
     
                localStorage.removeItem(trainNumber + '_booking');
                localStorage.removeItem(trainNumber + '_detailTrain');
@@ -230,7 +230,7 @@ export default function Konfirmasi(){
     }
 
     
-    var i=0;
+     var i=0;
 
      var date = dataBookingTrain ? new Date(dataBookingTrain[0].departureDate) : '';
      var tahun = dataBookingTrain ? date.getFullYear() : '';
@@ -568,7 +568,7 @@ export default function Konfirmasi(){
             {/* end show modal */}
 
             {/* header kai flow */}
-            <div className='flex justify-start jalur-payment-booking text-xs xl:text-md space-x-2 xl:space-x-8 items-center'>
+            <div className='flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center'>
             <div className='flex space-x-2 items-center'>
                 <AiOutlineCheckCircle className='text-slate-500'  size={20} />
                 <div className='hidden xl:flex text-slate-500'>Detail pesanan</div>
@@ -597,7 +597,7 @@ export default function Konfirmasi(){
                 <div className='text-slate-500'>E-Tiket</div>
             </div>
         </div>
-        <div className="block xl:flex xl:justify-around mb-24 xl:space-x-4">
+        <div className="block xl:flex xl:justify-around mb-24 xl:mx-16 xl:space-x-4">
             <div className="w-full mx-0 2xl:mx-4">
             <div className='mt-8 w-full rounded-md border border-gray-200 shadow-sm'>
                     <div className='p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100'>
@@ -638,7 +638,7 @@ export default function Konfirmasi(){
             </div>
             {/* adult */}
             { passengers.adults && passengers.adults.length > 0 ? (
-            <div className="text-sm xl:text-lg font-bold text-slate-600 mt-12">
+            <div className="text-sm xl:text-sm font-bold text-slate-600 mt-12">
                 <p>ADULT PASSENGERS</p>
             </div>
             ) : '' }
@@ -670,7 +670,7 @@ export default function Konfirmasi(){
             {/* infants */}
 
             {passengers.infants && passengers.infants.length > 0 ? (
-            <div className="text-sm xl:text-lg font-bold text-slate-600 mt-12">
+            <div className="text-sm xl:text-sm font-bold text-slate-600 mt-12">
                 <p>INFANTS PASSENGERS</p>
             </div>
             ) : '' }
@@ -683,7 +683,7 @@ export default function Konfirmasi(){
                             </div>
                             <div className="mt-2 flex space-x-8">
                                 <div className="px-4 py-2 text-sm font-bold">
-                                    <div className="text-gray-500">Tanggal Lahir</div>
+                                    <div className="text-gray-500">NIK</div>
                                     <div className="text-gray-600">{e.idNumber}</div>
                                 </div>
                                 <div className="px-4 py-2 text-sm font-bold">
@@ -699,7 +699,7 @@ export default function Konfirmasi(){
                     </div>                                      
                 </>
             )) : ''}
-             <div className="text-sm xl:text-lg font-bold text-slate-600 mt-12">
+             <div className="text-sm xl:text-sm font-bold text-slate-600 mt-12">
                 <p>PRICE DETAILT</p>
             </div>
                 <div className='p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm'>
@@ -751,14 +751,14 @@ export default function Konfirmasi(){
                                 )
                             :
                             (
-                                <div className="text-white text-MD font-bold">LANJUT KE PEMBAYARAN</div>
+                                <div className="text-white text-sm font-bold">LANJUT KE PEMBAYARAN</div>
                             )
                             }
                     </button>  
                 </div>      
             </div>  
             {/* desktop sidebar */}
-            <div className="sidebar w-full xl:w-2/3">
+            <div className="sidebar w-full xl:w-1/2">
                 <div className='mt-8 py-2 rounded-md border border-gray-200 shadow-sm'>
                     <div className="flex items-center justify-between p-4">
                         <div className="text-gray-500 text-sm">Booking ID</div>

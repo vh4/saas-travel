@@ -9,6 +9,7 @@ import React, {useState} from "react";
 import Carousels from '../../components/carousel/Carousel'
 import HotelCarousel from "../../components/carousel/HotelCarousel";
 import PesawatCarousel from "../../components/carousel/PesawatCarousel";
+import Pelni from "../../components/pelni/Pelni";
 
 export default function MainPage(){
 
@@ -42,6 +43,9 @@ export default function MainPage(){
                             ) : 
                             nameMenu == 'train' ? (
                                 <KAI />
+                            ) :
+                            nameMenu == 'pelni' ? (
+                                <Pelni />
                             ) :
                             (<></>)
                             }

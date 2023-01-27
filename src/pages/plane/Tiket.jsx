@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import Layout from "../BookingLayout";
-import TiketComponent from '../../components/kai/Tiket'
+import TiketComponent from '../../components/plane/Tiket'
 import { TiketContext } from "../../App";
 import { useNavigate } from "react-router";
 

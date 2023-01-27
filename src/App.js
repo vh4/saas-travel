@@ -7,17 +7,21 @@ import Profile from "./pages/profile/Profile";
 import TransaksiKai from "./pages/transaksi/TransaksiKai";
 import TransaksiPesawat from "./pages/transaksi/TransaksiPesawat";
 
-import BookingKai from "./pages/kai/Booking";
 import SearchKai from "./pages/kai/Search";
 import SearchPlane from "./pages/plane/Search";
+import SearchPelni from "./pages/pelni/Search";
 
+import BookingKai from "./pages/kai/Booking";
 import KonfirmasiKai from "./pages/kai/Konfirmasi";
 import PembayaranKai from "./pages/kai/Pembayaran"; 
 import MainPage from "./pages/main/Main"
 import TiketKai from "./pages/kai/Tiket";
-import BookingPesawat from "./pages/plane/Booking";
 
-export const KaiContext = createContext();
+import BookingPesawat from "./pages/plane/Booking";
+import PembayaranPesawat from "./pages/plane/Pembayaran";
+import TiketPesawat from "./pages/plane/Tiket";
+
+export const TiketContext = createContext();
 export const NavContext = createContext();
 
 
@@ -35,6 +39,9 @@ function App() {
   const reducer = (state, action) => {
       switch(action.type) {
         case 'PAY_TRAIN': return {
+          isPayed: true,
+        }
+        case 'PAY_FLIGHT': return {
           isPayed: true,
         }
         case 'NAVIGATION':return{
@@ -60,13 +67,16 @@ function App() {
           draggable
           pauseOnHover
           />  
-      <KaiContext.Provider value={{pay,dispatch}}>
+      <TiketContext.Provider value={{pay,dispatch}}>
       <NavContext.Provider value={{nav,setNav}}>
         <Routes>
           <Route exact path="/" element={<MainPage />}></Route>
           <Route path="/train/search" element={< SearchKai/>}></Route>
           <Route path="/flight/search" element={< SearchPlane/>}></Route>
+          <Route path="/pelni/search" element={< SearchPelni/>}></Route>
           <Route path="/flight/booking/:PesawatNumber" element={< BookingPesawat/>}></Route>
+          <Route path="/flight/payment/:PesawatNumber" element={< PembayaranPesawat/>}></Route>
+          <Route path="/flight/tiket-pesawat" element={< TiketPesawat/>}></Route>
           <Route path="/train/booking/:trainNumber" element={< BookingKai/>}></Route>
           <Route path="/train/konfirmasi/:trainNumber" element={< KonfirmasiKai/>}></Route>
           <Route path="/train/bayar/:trainNumber" element={< PembayaranKai/>}></Route>
@@ -76,7 +86,7 @@ function App() {
           <Route path="/profile/view" element={<Profile />}></Route>
         </Routes>
         </NavContext.Provider>  
-        </KaiContext.Provider>  
+        </TiketContext.Provider>  
       </BrowserRouter>     
     </div>
   );
