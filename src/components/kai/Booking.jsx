@@ -1,20 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import {MdHorizontalRule} from 'react-icons/md'
-import FormControl from '@mui/material/FormControl';
 import 'react-phone-number-input/style.css'
-import PhoneInput, {formatPhoneNumber} from 'react-phone-number-input'
 import '../../index.css';
 import {TbArrowsLeftRight} from 'react-icons/tb'
 import { useNavigate } from "react-router-dom";
 import { useParams, createSearchParams } from 'react-router-dom';
 import axios from "axios";
-import TextField from '@mui/material/TextField';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useForm } from "react-hook-form"
 import {RxCrossCircled} from 'react-icons/rx'
 import Swal from 'sweetalert2'
+import 'react-phone-input-2/lib/bootstrap.css'
+import { DatePicker } from 'antd';
+import dayjs from 'dayjs';
+import PhoneInput from 'react-phone-input-2'
+import { Input, Form } from 'antd';
 
 export default function BookingKai(){
 
@@ -91,10 +90,9 @@ export default function BookingKai(){
     for(var i = 0; i < TotalAdult; i++){
         AdultArr.push({
             name: '',
-            birthdate: null,
+            birthdate: new Date().getFullYear() + '-' + (addLeadingZero(parseInt(new Date().getMonth()) + 1)).toString()  + '-' + addLeadingZero(parseInt(new Date().getDay())).toString(),
             idNumber: '',
             phone: '',
-            phone_values: '',
         });
 
     }    
@@ -102,7 +100,7 @@ export default function BookingKai(){
     for(var i = 0; i < TotalInfant; i++){
         InfantArr.push({
             name: '',
-            birthdate: null,
+            birthdate: new Date().getFullYear() + '-' + (addLeadingZero(parseInt(new Date().getMonth()) + 1)).toString()  + '-' + addLeadingZero(parseInt(new Date().getDay())).toString(),
             idNumber: '',
         });
 
@@ -117,7 +115,7 @@ export default function BookingKai(){
             const adultCategory = adult[0];
 
             if(category === 'phone'){
-                adultCategory[i]['phone_values'] = e
+                adultCategory[i]['phone'] = e
                 adultCategory[i][category] = e
             }else{
                 adultCategory[i][category] = e.target.value
@@ -140,16 +138,12 @@ export default function BookingKai(){
             const infantCategory = infant[0];
 
             if(category == 'birthdate'){
-
-                const tanggalParse = e.$y + '-' + (addLeadingZero(parseInt(e.$M) + 1)).toString()  + '-' + addLeadingZero(parseInt(e.$D)).toString();
-                infantCategory[i][category] = tanggalParse;
-
+                let tanggalParse = new Date(e);
+                    tanggalParse = tanggalParse.getFullYear() + '-' + (addLeadingZero(parseInt(tanggalParse.getMonth()) + 1)).toString()  + '-' + addLeadingZero(parseInt(tanggalParse.getDay())).toString();
+                    infantCategory[i][category] = tanggalParse;
             }else{
                 infantCategory[i][category] = e.target.value
             }
-
-            console.log(infantCategory);
-
             setInfant([infantCategory]);
             
         }
@@ -163,8 +157,14 @@ export default function BookingKai(){
                 var priceInfantChild;
                 TotalInfant > 0 ? priceInfantChild = dataBookingTrain[0].seats[0].priceAdult : priceInfantChild = '-';   
 
+                
                 adult[0].map((data) =>{
-                    data.phone = formatPhoneNumber(data.phone_values);
+                    if(data.phone.substring(0,2) == '62'){
+                        data.phone = data.phone.replace("62", "08");
+                    }else{
+                        data.phone = data.phone;
+                    }
+
                 });
 
             // const Fare = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/book`, {
@@ -183,7 +183,9 @@ export default function BookingKai(){
             //     arrivalStation : dataDetailTrain[0].stasiunTujuan,
             //     arrivalTime : dataBookingTrain[0].arrivalTime,
             // }); // karena di booking sudah punya biaya admin, maka fare dihilangkan
-            
+
+            console.log(adult);
+
             const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/book`, 
                 {
                     productCode : "WKAI",
@@ -210,6 +212,7 @@ export default function BookingKai(){
                 }
 
             );
+            
 
             const params = {
                 passengers:JSON.stringify({
@@ -246,7 +249,7 @@ export default function BookingKai(){
         {token !== undefined && token !== null  ? 
 
             (
-                <div className='-mt-8 xl:mt-0'>
+                <div className='xl:mt-0'>
                 {/* header kai flow */}
                 <div className='flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center'>
                 <div className='flex space-x-2 items-center'>
@@ -327,13 +330,13 @@ export default function BookingKai(){
             </div>
             <div className='w-full mb-24 block xl:flex xl:space-x-10'>
                 {/* detail passengger kai*/} 
-                <form className='block w-full mt-8 mb-4'>
+                <Form onFinish={handleSubmit(handlerBookingSubmit)} className='block w-full mt-0 xl:mt-4 mb-4'>
                     {/* adult loop */}
 
                     { adult[0].map((e, i) => (
                         <>
                             <div>
-                                <div className='Booking  mt-8 mb-4 xl:mt-12'>
+                                <div className='Booking ml-2 md:ml-0 mt-8 mb-4 xl:mt-12'>
                                     <h1 className='text-sm font-bold text-gray-500'>ADULT PASSENGER</h1>
                                     <small className='text-gray-500'>Isi sesuai dengan data anda</small>
                                 </div>
@@ -344,61 +347,43 @@ export default function BookingKai(){
                                             <div className=''>
                                                 <div className='p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8'>
                                                     {/* mobile & desktop Nama*/}
-                                                    <div className='xl:w-full mt-4 xl:mt-0'>
-                                                    <div className='text-gray-700 text-sm font-bold mb-2'>Nama Lengkap</div>
-                                                        <div>
-                                                            <input {...register(`name${i}`, {required:true})} value={e.name} onChange={handleAdultsubCatagoryChange(i, 'name')}  type="text" placeholder='Nama Lengkap' id="default-input" class="border w-full  border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" />
-                                                            {errors[`name${i}`]?.type === "required" ? (<small className='ml-2 text-red-500'>Nama harus diisi</small>) : ''}
-                                                        </div>
+                                                    <div className='xl:w-full mt-4 xl:mt-0 '>
+                                                    <div className='w-full'>
+                                                        <div className='text-gray-500 text-sm'>Nama Lengkap</div>
+                                                        <Form.Item  name={`adultNameLengkap${i}`} rules={[{required:true, message:'Tolong diisi input nama lengkap'}]}>
+                                                            <Input size='large' className='mt-2'value={e.name} onChange={handleAdultsubCatagoryChange(i, 'name')}  type="text" placeholder='Nama Lengkap' id="default-input"/>
+                                                        </Form.Item>
+                                                        <div className='block -mt-4 text-gray-400'><small>Contoh: Farris Muhammad Ramadhan.</small></div>            
+                                                    </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className='mb-8'>
                                                 <div className='py-0 px-0 xl:px-8 block xl:grid xl:grid-cols-2 xl:gap-8'>
                                                     {/* desktop nomor hp */}
-                                                    <div className='w-full xl:p-0 hidden xl:block'>
-                                                        <div className='w-full text-gray-700 text-sm font-bold ml-2'>Nomor HP</div>
-                                                        <FormControl sx={{ m: 1, borderRadius:60, width:'100%' }}>
-                                                            <div className='border border-gray-300 py-1 pl-4'>
+                                                    <div className='w-full px-4 xl:px-0 mt-2 xl:mt-0'>
+                                                    <div className='text-gray-500 text-sm mb-2'>Nomor HP</div>
                                                             <PhoneInput
-                                                                international
-                                                                {...register(`phone${i}`, { required: true} )}
-                                                                defaultCountry="ID"
-                                                                value={e.phone_values} 
+                                                            hiddenLabel={true}
+                                                                inputProps={{
+                                                                    required: true,
+                                                                    autoFocus: true
+                                                                }}
+                                                                country='id'
+                                                                inputStyle={{ width:'100%', borderColor:'hover:red', paddingTop:7, paddingBottom:7}}
+                                                                value={e.phone} 
                                                                 onChange={handleAdultsubCatagoryChange(i, 'phone')}
-                                                                className={"input-phone-number"}
                                                             /> 
-                                                            </div>
-                                                            {errors[`phone${i}`]?.type === "required" ? (<small className='text-red-500'>Nomor HP harus diisi</small>) : ''}
                                                             <div className='mt-2 text-gray-400'><small>Contoh: (+62) 812345678</small></div>            
-                                                        </FormControl>
                                                     </div>
-                                                    {/* mobile nomor hp */}
-                                                    <div className='px-4 xl:p-0 block xl:hidden'>
-                                                        <div className=' text-gray-700 text-sm md:text-base font-bold mb-2'>Nomor HP</div>
-                                                        <FormControl sx={{borderRadius:60, width:'100%' }}>
-                                                            <div className='border border-gray-300 py-1 pl-4'>
-                                                            <PhoneInput
-                                                                international
-                                                                {...register(`phones${i}`, { required: true} )}
-                                                                defaultCountry="ID"
-                                                                value={e.phone_values} 
-                                                                onChange={handleAdultsubCatagoryChange(i, 'phone')}
-                                                                className={"input-phone-number"}
-                                                            /> 
-                                                            </div>
-                                                            {errors[`phones${i}`]?.type === "required" ? (<small className='text-red-500'>Nomor HP harus diisi</small>) : ''}
-                                                            <div className='mt-2 text-gray-400'>Contoh: +62812345678</div>            
-                                                        </FormControl>
-                                                    </div>
-
                                                     {/* mobile & desktop NIK*/}
-                                                        <div className='px-4 xl:px-0 w-full block mt-4 xl:mt-0'>
-                                                            <div className='w-full text-gray-700 text-sm font-bold mb-2'>Nomor Keluarga (NIK)</div>
-                                                            <input   {...register(`idNumber${i}`, { required: true} )} value={e.idNumber} onChange={handleAdultsubCatagoryChange(i, 'idNumber')} type="text" placeholder='NIK' id="default-input" class="border w-full  border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" />
-                                                            {errors[`idNumber${i}`]?.type === "required" ? (<small className='text-red-500'>NIK harus diisi</small>) : ''}
-                                                            <div><small className='mt-2 text-gray-400'>Contoh: 16 digit nomor</small></div>
-                                                        </div>
+                                                    <div className='w-full p-4 xl:p-0 mt-2 xl:mt-0'>
+                                                        <div className='text-gray-500 text-sm'>No.Ktp / Nik</div>
+                                                        <Form.Item  name={`niktpAdult${i}`} rules={[{required:true, message:'Tolong diisi input ktp / nik'}]}>
+                                                            <Input size='large' className='mt-2'value={e.idNumber} onChange={handleAdultsubCatagoryChange(i, 'idNumber')} type="text" placeholder='No.Ktp / Nik' id="default-input"/>
+                                                        </Form.Item>
+                                                        <div className='block -mt-4 text-gray-400'><small>Contoh: harus berupa digit jumlah 16.</small></div>            
+                                                    </div>
                                                 </div>
                                             </div>
                                     </div> 
@@ -424,54 +409,37 @@ export default function BookingKai(){
                                                 <div className='p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8'>
                                                     {/* mobile & desktop Nama*/}
                                                     <div className='xl:w-full mt-4 xl:mt-0'>
-                                                    <div className='text-gray-700 text-sm font-bold mb-2'>Nama Lengkap</div>
-                                                        <div>
-                                                            <input value={e.name} onChange={handleInfantsubCatagoryChange(i, 'name')} type="text" placeholder='Nama Lengkap' id="default-input" class="border w-full  border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" />
-                                                        </div>
+                                                    <div className='w-full'>
+                                                        <div className='text-gray-500 text-sm'>Nama Lengkap</div>
+                                                        <Form.Item  name={`infantNamaLengkap${i}`} rules={[{required:true, message:'Tolong diisi input nama lengkap'}]}>
+                                                            <Input size='large' className='mt-2' value={e.name} onChange={handleInfantsubCatagoryChange(i, 'name')} type="text" placeholder='Nama Lengkap' id="default-input" />
+                                                        </Form.Item>
+                                                        <div className='block -mt-4 text-gray-400'><small>Contoh: Farris Muhammad Ramadhan.</small></div>            
+                                                    </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className='mb-8 mt-8'>
-                                                <div className='py-0 px-0 xl:px-8 block xl:grid space-x-2 xl:grid-cols-2 mt-0 xl:-mt-6 xl:gap-4'>
+                                            <div className='mb-8'>
+                                                <div className='py-0 px-0 xl:px-8 block xl:grid xl:grid-cols-2 mt-0 xl:gap-8'>
                                                     {/* desktop nomor hp */}
-                                                    <div className='w-full xl:p-0 hidden xl:block'>
-                                                        <div className=' text-gray-700 text-sm  font-bold mb-2'>Tanggal Lahir</div>
-                                                        <FormControl sx={{borderRadius:60, outlineColor: 'gray', width:'100%' }}>
-                                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                            <DatePicker key={ i + 1}
-                                                                onChange={handleInfantsubCatagoryChange(i, 'birthdate')}
-                                                                value={e.birthdate}
-                                                                renderInput={(params) => <TextField {...params} />}
+                                                    <div className='p-4 xl:p-0 w-full'>
+                                                    <div className='text-gray-500 text-sm xl:mb-2'>Tanggal Lahir</div>
+                                                        <DatePicker
+                                                            size='large'
+                                                            className='w-full'
+                                                            value={dayjs(e.birthdate, 'YYYY/MM/DD')} format={'YYYY/MM/DD'}
+                                                            onChange={handleInfantsubCatagoryChange(i, 'birthdate')}
+                                                            
                                                             />
-                                                        </LocalizationProvider>
-                                                            <small className='mt-2 text-gray-400'>Contoh: dd-mm-yyyy</small>            
-                                                        </FormControl>
+                                                            <small className='block mt-2 text-gray-400'>Contoh: dd-mm-yyyy</small>            
                                                     </div>
-                                                    {/* mobile nomor hp */}
-                                                    <div className='p-2 xl:p-0 block xl:hidden'>
-                                                        <div className=' text-gray-700 text-sm md:text-base font-bold mb-2 ml-2'>Nomor HP</div>
-                                                        <FormControl sx={{borderRadius:60,  width:'100%'}}>
-                                                            <div className='border border-gray-300 py-1 pl-4'>
-                                                            <PhoneInput
-                                                                international
-                                                                defaultCountry="ID"
-                                                                value={value}
-                                                                onChange={setValue}
-                                                                className={"input-phone-number"}
-                                                            /> 
-                                                            </div>
-                                                            <small className='mt-2 text-gray-400'>Contoh: (+62) 812345678</small>            
-                                                        </FormControl>
-                                                    </div>
-
                                                     {/* mobile & desktop NIK*/}
-                                                    
-                                                    <div className='block'>
-                                                        <div className='w-full block'>
-                                                                <div className='text-gray-700 text-sm font-bold mb-2'>Nomor Keluarga (NIK)</div>
-                                                                <input value={e.idNumber} onChange={handleInfantsubCatagoryChange(i, 'idNumber')} type="text" placeholder='NIK' id="default-input" class="border w-full border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-none focus:outline-none focus:border block p-4 mt-2" />
-                                                                <small className='mt-2 text-gray-400'>Contoh: 16 digit</small>
-                                                        </div>
+                                                    <div className='p-4 xl:p-0 w-full'>
+                                                        <div className='text-gray-500 text-sm mb-0 xl:mb-2'>No.Ktp / Nik</div>
+                                                        <Form.Item  name={`infantktpnik${i}`} rules={[{required:true, message:'Tolong diisi input nama lengkap'}]}>
+                                                            <Input size='large' value={e.idNumber} onChange={handleInfantsubCatagoryChange(i, 'idNumber')} type="text" placeholder='NIK' id="default-input"/>
+                                                        </Form.Item>
+                                                        <div className='block -mt-4 text-gray-400'><small>Contoh: harus berupa digit jumlah 16.</small></div>            
                                                     </div>
                                                 </div>
                                             </div>
@@ -482,7 +450,7 @@ export default function BookingKai(){
                     )) }
 
                     <div className='flex justify-end mr-2 mt-8'>
-                    <button onClick={handleSubmit(handlerBookingSubmit)} type="button" class="text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-lg text-sm px-8 py-4 text-center inline-flex items-center dark:hover:bg-blue-500/80 dark:focus:ring-blue-500/40 mr-2 mb-2">
+                    <button htmlType="submit" class="text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-lg text-sm px-8 py-4 text-center inline-flex items-center dark:hover:bg-blue-500/80 dark:focus:ring-blue-500/40 mr-2 mb-2">
                             {isLoading ? (
                             <div className="flex space-x-2 items-center">
                                 <svg aria-hidden="true" class="mr-2 w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -500,9 +468,9 @@ export default function BookingKai(){
                         </button>
                     </div>                     
 
-                </form>
+                </Form>
                 {/* sidebra desktop*/}
-                <div className='w-1/2 xl:mt-24'>
+                <div className='w-1/2 xl:mt-16'>
                     <div className='hidden xl:block rounded-md border border-gray-200 shadow-sm'>
                             <div className='p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100'>
                                 <div className='text-gray-700 text-sm font-bold'>Keberangkatan kereta</div>

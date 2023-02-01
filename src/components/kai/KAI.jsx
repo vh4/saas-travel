@@ -391,6 +391,7 @@ function KAI(){
                                 <LocalizationProvider 
                                 dateAdapter={AdapterDayjs}>
                                     <DatePicker
+                                            minDate={new Date()}
                                             value={tanggal}
                                             className={classes.root}
                                             onChange={(newValue) => {

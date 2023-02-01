@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 export default function Sidebar({nameMenu, setNameMenu}) {
     return (
         <aside className="w-full" aria-label="Sidebar">
-            <div className="flex justify-center w-full overflow-y-auto py-4 px-3 xl:bg-gray-50 rounded dark:bg-gray-800" >
+            <div className="flex justify-start w-full overflow-y-auto py-4 px-3 xl:bg-gray-50 rounded dark:bg-gray-800" >
                 <ul className="w-full grid grid-cols-3 lg:grid-cols-4 xl:flex xl:space-x-4 gap-4 xl:gap-0">
                     <li>
                         <div onClick={() => setNameMenu('plane')} className={`flex cursor-pointer px-4 ${ nameMenu === 'plane' ? 'border-b-2 border-blue-500' : ''} items-center p-2 text-base font-normal text-gray-900   hover:border-blue-500 hover:border-b-2`}>
@@ -16,12 +16,6 @@ export default function Sidebar({nameMenu, setNameMenu}) {
                             <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Pesawat</span>
                         </div>
                     </li>                    
-                    <li>
-                    <div onClick={() => setNameMenu('hotel') } className={`flex cursor-pointer px-4 ${ nameMenu === 'hotel' ? 'border-b-2 border-blue-500' : ''} items-center p-2 text-base font-normal text-gray-900   hover:border-blue-500 hover:border-b-2`}>
-                            <RiHotelLine className='text-blue-700' size={20} />
-                            <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Penginapan Hotel</span>
-                        </div>
-                    </li>
                     <li>
                         <div onClick={() => setNameMenu('pelni')} className={`flex cursor-pointer px-4 ${ nameMenu === 'pelni' ? 'border-b-2 border-blue-500' : ''} items-center p-2 text-base font-normal text-gray-900   hover:border-blue-500 hover:border-b-2 `}>
                         <IoBoatOutline className='text-fuchsia-500' size={20} />
@@ -34,18 +28,7 @@ export default function Sidebar({nameMenu, setNameMenu}) {
                             <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Kereta Api</span>
                         </div>
                     </li>
-                    <li>
-                        <div onClick={() => setNameMenu('travel')} className={`flex cursor-pointer px-4 ${ nameMenu === 'travel' ? 'border-b-2 border-blue-500' : ''} items-center p-2 text-base font-normal text-gray-900   hover:border-blue-500 hover:border-b-2 `}>
-                        <IoBusOutline className='text-green-500' size={20} />
-                            <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Travel Bus</span>
-                        </div>
-                    </li>
-                    <li>
-                        <div onClick={() => setNameMenu('wisata')} className={`flex cursor-pointer px-4 ${ nameMenu === 'wisata' ? 'border-b-2 border-blue-500' : ''} items-center p-2 text-base font-normal text-gray-900   hover:border-blue-500 hover:border-b-2 `}>
-                        <FaUmbrellaBeach className='text-lime-500' size={20} />
-                            <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Wisata</span>
-                        </div>
-                    </li>
+
                 </ul>
             </div>
         </aside>

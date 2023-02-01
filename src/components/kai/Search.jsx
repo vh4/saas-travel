@@ -538,7 +538,7 @@ export default function Search(){
                             <div className="flex justify-center w-full text-gray-700">
                                 <div className="text-gray-500 text-center">
                                     <div>
-                                    <h1>Maaf, sepertinya rute ini belum dibuka kembali</h1>
+                                    <div className="text-lg font-bold">Maaf, sepertinya rute ini belum dibuka kembali</div>
                                     <small>Namun jangan khawatir, masih ada pilihan kendaraan lain yang tetap bisa mengantarkan Anda ke tempat tujuan.</small>
                                     </div>
                                 </div>

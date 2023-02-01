@@ -48,10 +48,7 @@ export default function ViewTransaksi({path}) {
             <div className='w-full mt-8'>
                 <div className="w-full rounded-md shadow-sm border profile-header">
                     <div className="text-gray-500 p-4 flex space-x-2 items-center">
-                        < AiOutlineHome size={20} />
-                        <p>Home</p>
-                        <p> / </p>
-                        <p>{path}</p>
+                        < AiOutlineHome size={20} /> <span>Home</span> <span>/</span> <span>{path}</span>
                     </div>
                 </div>   
             </div>

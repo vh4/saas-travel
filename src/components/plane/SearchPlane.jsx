@@ -15,14 +15,14 @@ import onClickOutside from "react-onclickoutside";
 import { createSearchParams, useNavigate } from "react-router-dom"
 import { makeStyles } from '@mui/styles';
 
-function Plane(){
+function SearchPlane(){
 
     const [anchorEl, setAnchorEl] = React.useState('hidden');
     const handleClick = () => {
         anchorEl === 'hidden' ? setAnchorEl('grid') : setAnchorEl('hidden');
     }
 
-    Plane.handleClickOutside = () => {
+    SearchPlane.handleClickOutside = () => {
         setAnchorEl('hidden');
       };
 
@@ -275,13 +275,18 @@ function Plane(){
                 child : child,
                 infant : infant,
             }
-
+            
             localStorage.setItem('v-search', JSON.stringify(params));
 
-            navigate({
-                pathname: '/flight/search',
-                search: `?${createSearchParams(params)}`,
-              });
+            var str = "";
+            for (var key in params) {
+                if (str != "") {
+                    str += "&";
+                }
+                str += key + "=" + encodeURIComponent(params[key]);
+            } 
+
+            window.location = `/flight/search?${str}`;
 
         }, 1000);
 
@@ -532,7 +537,7 @@ function Plane(){
 }
 
 const clickOutsideConfig = {
-    handleClickOutside: () => Plane.handleClickOutside,
+    handleClickOutside: () => SearchPlane.handleClickOutside,
   };
   
-export default onClickOutside(Plane, clickOutsideConfig);
+export default onClickOutside(SearchPlane, clickOutsideConfig);

@@ -46,7 +46,15 @@ export default function Layout({children}){
                     <BottomNavigationAction to='/profile/view' component={Link} label="Akun saya" icon={<HiUser size={22} />} />
                 </BottomNavigation>
             </Box>
+            {/* footer */}
             </div>
-        </div>
+            <footer class="border-t text-sm text-gray-500 py-6">
+            <div class="container mx-auto flex flex-wrap items-center">
+                <div class="w-full text-center">
+                <p class="text-sm">© 2015-2023 PT. Bimasakti Multisinergi. All Rights Reserved.</p>
+                </div>
+            </div>
+            </footer>
+            </div>
     )
 }

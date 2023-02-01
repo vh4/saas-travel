@@ -9,13 +9,8 @@ import {IoArrowBackOutline} from "react-icons/io5"
 import { Link } from "react-router-dom";
 import Swal from 'sweetalert2'
 import Typography from '@mui/material/Typography';
-import Slider from '@mui/material/Slider';
 import { createTheme } from "@mui/material/styles";
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import {MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp, MdOutlineLuggage} from "react-icons/md"
-import moment from "moment"
+import { MdOutlineLuggage} from "react-icons/md"
 import Timeline from '@mui/lab/Timeline';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineConnector from '@mui/lab/TimelineConnector';
@@ -23,6 +18,9 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineItem, { timelineItemClasses } from '@mui/lab/TimelineItem';
 import {IoMdTimer} from 'react-icons/io'
+import SearchPlane from "./SearchPlane";
+import { Progress } from 'rsuite';
+import { Alert, Space, Spin } from 'antd';
 
 export default function Search(){
 
@@ -35,21 +33,17 @@ export default function Search(){
       });
       
 
+    let v_search = localStorage.getItem('v-search') ? JSON.parse(localStorage.getItem('v-search')) : null;
+    v_search = v_search !== undefined && v_search !== null ? v_search : null;
     const [searchParams, setSearchParams] = useSearchParams();
-    const departure = searchParams.get('departure');
-    const arrival = searchParams.get('arrival');
-    const departureDate = searchParams.get('departureDate');
-    const returnDate = searchParams.get('returnDate');
-    const isLowestPrice = searchParams.get('isLowestPrice');
-    const adult = searchParams.get('adult');  
-    const child = searchParams.get('child');
-    const infant = searchParams.get('infant');
-
+    const [isLoadingPilihTiket, setisLoadingPilihTiket] = useState();
+    const [percent, setPercent] = useState(0);
     const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
-    const navigate = useNavigate();
+    const [err, setErr] = useState(false);
 
-    useEffect(() =>{
+    useEffect(() => {
         if(token === null || token === undefined){
+            setErr(true);
             Swal.fire({
                 showClass: {
                     popup: 'animate__animated animate__fadeInDown'
@@ -66,36 +60,64 @@ export default function Search(){
               }).then(() => navigate('/'));
         }
 
-        if(departure === null || departure === undefined){
-            navigate('/');
+        if(v_search == null || v_search == undefined){
+            setErr(true);
+            Swal.fire({
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                  },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                  },
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Terjadi Kesalahan, Mohon ulangi kembali proses pencarian!',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                confirmButtonText: 'Kembali'
+              }).then(() => navigate('/'));
         }
 
-        if(arrival === null || arrival === undefined){
-            navigate('/');
-        }
-        
-        if(departureDate === null || departureDate === undefined){
-            navigate('/');
-        }
-        if(returnDate === null || returnDate === undefined){
-            navigate('/');
-        }
+    }, [token, v_search]);
 
-        if(isLowestPrice === null || isLowestPrice === undefined){
-            navigate('/');
-        }
-        if(adult === null || adult === undefined){
-            navigate('/');
-        }
-        if(child === null || child === undefined){
-            navigate('/');
-        }
-        if(infant === null || infant === undefined){
-            navigate('/');
-        }
+    let departure, departureName, arrival, arrivalName, departureDate, returnDate, 
+    isLowestPrice, adult, child, infant;
 
-    }, [token, departure, arrival, departureDate, returnDate, isLowestPrice, adult, child, infant]);
+    if(v_search){
 
+        departure = v_search.departure ?  v_search.departure : null;
+        departureName = v_search.departureName ? v_search.departureName : null;
+   
+        arrival = v_search.arrival ? v_search.arrival : null;
+        arrivalName = v_search.arrivalName ? v_search.arrivalName : null;
+   
+        departureDate = v_search.departureDate ? v_search.departureDate : null;
+        returnDate = v_search.returnDate ? v_search.returnDate : null;
+        isLowestPrice = v_search.isLowestPrice ? v_search.isLowestPrice : null;
+        adult = v_search.adult ? v_search.adult : 0;
+        child = v_search.child ? v_search.child : 0;
+        infant = v_search.infant ? v_search.infant : 0;
+
+    }else{
+
+     departure = searchParams.get('departure') ?  searchParams.get('departure') : null;
+     departureName = searchParams.get('departureName') ? searchParams.get('departureName') : null;
+
+     arrival = searchParams.get('arrival') ? searchParams.get('arrival') : null;
+     arrivalName = searchParams.get('arrivalName') ? searchParams.get('arrivalName') : null;
+
+     departureDate = searchParams.get('departureDate') ?  searchParams.get('departureDate') : null;
+     returnDate = searchParams.get('returnDate') ? searchParams.get('returnDate') : null;
+     isLowestPrice = searchParams.get('isLowestPrice') ? searchParams.get('isLowestPrice') : null;
+     adult = searchParams.get('adult') ? searchParams.get('adult') : 0;  
+     child = searchParams.get('child') ? searchParams.get('child') : 0;
+     infant = searchParams.get('infant') ? searchParams.get('infant') : 0;
+
+    }
+
+    const navigate = useNavigate();
+
+    const [ubahPencarian, setUbahPencarian] = useState(false);
 
     var datee = new Date(departureDate);
     var tahun = datee.getFullYear();
@@ -137,6 +159,9 @@ export default function Search(){
 
        }
 
+    const tanggal_keberangkatan = hari + ', ' + tanggal + ' ' + bulan + ' ' + tahun;
+
+
     function toRupiah(angka) {
         var rupiah = '';
         var angkarev = angka.toString().split('').reverse().join('');
@@ -161,8 +186,10 @@ export default function Search(){
         
         let allData = []
         setLoading(true);
+        var x = 0;
 
         for (let e of ListKodePesawat) {
+        
         let response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/flight/search`, {
             airline: e,
             departure: departure,
@@ -177,12 +204,24 @@ export default function Search(){
         })
         
         if(response.data.data !== undefined){
+            x = x + 15;
+            setTimeout(() => {
+                setPercent(x + 30);
+            });
             setDataSearch(dataSearch => [...dataSearch, ...response.data.data]);
             setLoading(false);
             setError(false);
-            }
+            x++;
+
         }
+
     }
+
+    if(percent < 90){
+        setPercent(100);
+    }
+
+}
 
 
       const [isLoadingPilih, setIsLoadingPilih] = useState(false);
@@ -191,6 +230,8 @@ export default function Search(){
       async function bookingHandlerDetail(e,i){
 
         e.preventDefault();
+        setisLoadingPilihTiket(`true-${i}`);
+
         let filterDataSearching = dataSearch.filter((_, index) => index === i);
 
         let detailKereta = {
@@ -226,8 +267,10 @@ export default function Search(){
         if(response.data.rc === '00'){
             const next = [];
             const lenghtArr = filterDataSearching[0].classes.length;
+
         
             for(var i=0; i<lenghtArr; i++){
+                                  
                 next.push({
                     "airline" : filterDataSearching[0].detailTitle[i].flightCode,
                     "airlineName":filterDataSearching[0].detailTitle[i].flightName,
@@ -254,6 +297,9 @@ export default function Search(){
             let randomNavigateNumber = window.crypto.randomUUID();
                 randomNavigateNumber = randomNavigateNumber.split("-").join("");
             
+            setisLoadingPilihTiket(`false-${i}`);
+
+
             localStorage.setItem(randomNavigateNumber + "_flight", JSON.stringify(next));
             localStorage.setItem(randomNavigateNumber + "_flight_forBooking", JSON.stringify(forBooking));  
 
@@ -289,7 +335,9 @@ export default function Search(){
 
             let randomNavigateNumber = window.crypto.randomUUID();
             randomNavigateNumber = randomNavigateNumber.split("-").join("");
-        
+
+            setisLoadingPilihTiket(`false-${i}`);
+
             localStorage.setItem(randomNavigateNumber + "_flight", JSON.stringify(next)); 
             localStorage.setItem(randomNavigateNumber + "_flight_forBooking", JSON.stringify(forBooking));   
             navigate(`/flight/booking/${randomNavigateNumber}`);
@@ -301,13 +349,69 @@ export default function Search(){
 
     return(
         <>
-            <div className="judul-search mt-4 font-bold text-slate-600">
+        {err !== true ? (
+            <>
+                        <div className="judul-search mt-4 font-bold text-slate-600">
                 PILIH JADWAL
             </div>
+                <div className="mt-8">
+                <div className="block md:flex justify-between">
+                    <div className="flex items-center justify-center space-x-3 xl:space-x-8">
+                        <small className="text-xs font-bold text-slate-600">
+                            {departureName} ({departure})
+                        </small>
+                        <div className="bg-blue-500 p-1 rounded-full">
+                            < VscArrowSwap className="font-bold text-xs text-white" size={16} />
+                        </div>
+                        <small className="text-xs font-bold text-slate-600">
+                            {arrivalName} ({arrival})
+                        </small>
+                        <div className="hidden md:block font-normal text-slate-600">|</div>
+                        <small className="hidden md:block text-xs font-bold text-slate-600">
+                            {tanggal_keberangkatan}
+                        </small>
+                        <div className="hidden md:block font-normal text-slate-600">|</div>
+                        <small className="hidden md:block text-xs font-bold text-slate-600">
+                            {parseInt(adult) + parseInt(child) + parseInt(infant)} Penumpang
+                        </small>
+                    </div>    
+                    <div className="mt-4 md:mt-0 flex space-x-4 mr-0 xl:mr-16"> 
+                        <Link to='/' className="flex space-x-2 items-center">
+                            <IoArrowBackOutline className="text-blue-500" size={16} />
+                            <div className="text-blue-500 text-sm font-bold">Kembali</div>
+                        </Link>
+                        <button onClick={() => setUbahPencarian(prev => !prev)} className="block border p-2 px-4 md:px-4 mr-0 xl:mr-16 bg-blue-500 text-white rounded-md text-xs font-bold">
+                            Ubah Pencarian
+                        </button>            
+                    </div>
+                </div>
+            <div>
+            </div>
+            </div>
+            {percent === 0 || percent === 100 ?  null :
+            (
+            <div className="mt-4">
+                <Progress.Line percent={percent} status="active" showInfo={false} />
+                <div className="mt-8">
+                    <Spin tip="Loading">
+                        <div className="content" />
+                    </Spin>
+                </div>
+            </div>
+            )
+                
+        }
+            {
+                    ubahPencarian ? (
+                    <div className="mt-8">
+                        <SearchPlane />
+                    </div>
+                    ) : null
+                }
             <div>
                 {isLoading ? (
                   skeleton.map(() =>(
-                    <div className="row mt-4 w-full p-2 pr-0 xl:pr-16">           
+                    <div className="row mt-8 w-full p-2 pr-0 xl:pr-16">           
                             <Box sx={{ width: "100%" }}>
                                 <Skeleton />
                                 <Skeleton />
@@ -369,8 +473,14 @@ export default function Search(){
                                     <div className="flex justify-center col-span-1 md:col-span-2">
                                         {e.classes[0][0].availability > 0 ? (
                                             <div>
-                                                <button type="button" onClick={(e) => bookingHandlerDetail(e, index)}  class="xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-medium rounded-sm text-sm px-10 md:px10 xl:px-10 py-3.5 2xl:px-14 text-center inline-flex items-center dark:hover:bg-blue-500/80 dark:focus:ring-blue-500/40 mr-2 mb-2">
-                                                    <div className="text-white font-bold">PILIH</div>
+                                                <button type="button" onClick={(e) => bookingHandlerDetail(e, index)}  class={`${isLoadingPilihTiket == 'true-' + index   ? 'py-6 xl:px-16' : 'py-3.5 px-10 md:px-10 xl:px-12 2xl:px-14'} relative xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-medium rounded-sm text-sm  text-center inline-flex items-center dark:hover:bg-blue-500/80 dark:focus:ring-blue-500/40 mr-2 mb-2`}>
+                                                    {isLoadingPilihTiket == 'true-' + index ? (
+                                                        <>
+                                                            <img className="absolute right-8" src="/load.gif"  width={60} alt="laoding"/>
+                                                        </>
+                                                    ) : (
+                                                        <div className="text-white font-bold">PILIH</div>
+                                                    )}
                                                 </button>
                                             </div>
                                             
@@ -621,7 +731,7 @@ export default function Search(){
                             <div>
 
                             {/* mobile cari */}
-                            <div className="cursor-pointer block xl:hidden w-full text-gray-700">
+                            <div type="button" onClick={(e) => bookingHandlerDetail(e, index)}  className="cursor-pointer block xl:hidden w-full text-gray-700">
                                 <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                                     <div className="flex justify-between">
                                         <div className="col-span-1 xl:col-span-2">
@@ -641,12 +751,12 @@ export default function Search(){
                                             </div>
                                             <div className="w-full mt-12 px-4 border-b-2"></div>
                                             <div className="text-xs">
-                                                <h1 className="mt-10 xl:mt-0 text-gray-400">{e.detailTitle[0].durationDetail}</h1>
+                                                <div className="mt-10  xl:mt-0 text-gray-400">{e.detailTitle[0].durationDetail}</div>
                                                 <small className="text-gray-400">{e.isTransit}</small>
                                             </div>
                                             <div className="w-full mt-12 px-4 border-b-2"></div>
                                             <div>
-                                                <h1 className="text-sm font-medium">{e.detailTitle[0].arrival}</h1>
+                                                <h1 className="mt-4 xl:mt-0 text-sm font-medium">{e.detailTitle[0].arrival}</h1>
                                                 <small>{e.detailTitle[0].destination}</small>
                                             </div>
                                         </div>
@@ -668,7 +778,7 @@ export default function Search(){
                             <div className="flex justify-center w-full text-gray-700">
                                 <div className="text-gray-500 text-center">
                                     <div>
-                                    <h1>Maaf, sepertinya rute ini belum dibuka kembali</h1>
+                                    <div className="text-lg font-bold">Maaf, sepertinya rute ini belum dibuka kembali</div>
                                     <small>Namun jangan khawatir, masih ada pilihan kendaraan lain yang tetap bisa mengantarkan Anda ke tempat tujuan.</small>
                                     </div>
                                 </div>
@@ -679,5 +789,12 @@ export default function Search(){
             }
             </div>
         </>
+        )
+        :
+        (
+            <>Error, Terjadi Kesalahan!.</>
+        )
+    }
+    </>
     )
 }

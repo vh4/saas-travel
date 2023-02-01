@@ -52,7 +52,7 @@ export default function Pembayaran(){
                   popup: 'animate__animated animate__fadeOutUp'
                 },
                  icon: 'error',
-                 title: 'Maaf, Waktu Booking sudah habis',
+                 text: 'Maaf, Booking tiket sebelumnya expired!',
                  text: 'Jika sudah melakukan Pembayaran, Cek di Menu Transaksi',
                  confirmButtonText: "Kembali",
                }).then(() => navigate('/'));
