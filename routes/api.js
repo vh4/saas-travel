@@ -1,5 +1,6 @@
 const express = require('express');
 const request = require('request');
+const { Writemessage } = require('../utils/message');
 require('dotenv').config()
 
 const Router = express.Router();
@@ -126,7 +127,12 @@ Router.post('/travel/app/transaction_book_list', function (req, res) {
 Router.post('/travel/flight/search', function (req, res) {
 
     const data = req.body;
-    console.log(req.body);
+
+    const req_ = 'REQ';
+    const url = process.env.URL_LOCAL + '/travel/flight/search';
+    const path = './log/pesawat/search.txt';
+    const rc = '00';
+    Writemessage(req_, url, rc, path);
 
     request.post(
         `${process.env.URL_HIT}/travel/flight/search`,
@@ -136,8 +142,14 @@ Router.post('/travel/flight/search', function (req, res) {
         (error, response, body) => {
           if (error) {
             console.error(error)
+            Writemessage(res_, url_response, 'ERROR', path);
             return
           }
+
+          const res_ = 'RES';
+          const url_response = process.env.URL_HIT + '/travel/flight/search';
+          const path = './log/pesawat/search.txt';
+          Writemessage(res_, url_response, response.body.rc, path, response.body.rd);
           return res.send(body)
         }
       )
@@ -373,8 +385,11 @@ Router.post('/travel/train/fare', function (req, res) {
 Router.post('/travel/flight/fare', function (req, res) {
 
   const data = req.body;
-
-  console.log(data);
+  const req_ = 'REQ';
+  const url = process.env.URL_LOCAL + '/travel/flight/fare';
+  const path = './log/pesawat/fare.txt';
+  const rc = '00';
+  Writemessage(req_, url, rc, path);
 
   request.post(
     `${process.env.URL_HIT}/travel/flight/fare`,
@@ -384,8 +399,15 @@ Router.post('/travel/flight/fare', function (req, res) {
       (error, response, body) => {
         if (error) {
           console.error(error)
+          Writemessage(res_, url_response, 'ERROR', path);
           return
         }
+
+        const res_ = 'RES';
+        const url_response = process.env.URL_HIT + '/travel/flight/fare';
+        const path = './log/pesawat/fare.txt';
+        Writemessage(res_, url_response, response.body.rc, path, response.body.rd);
+
         return res.send(body)
       }
     )
@@ -395,8 +417,11 @@ Router.post('/travel/flight/fare', function (req, res) {
 Router.post('/travel/flight/book', function (req, res) {
 
   const data = req.body;
-
-  console.log(data);
+  const req_ = 'REQ';
+  const url = process.env.URL_LOCAL + '/travel/flight/book';
+  const path = './log/pesawat/booking.txt';
+  const rc = '00';
+  Writemessage(req_, url, rc, path);
 
   request.post(
     `${process.env.URL_HIT}/travel/flight/book`,
@@ -406,9 +431,17 @@ Router.post('/travel/flight/book', function (req, res) {
       (error, response, body) => {
         if (error) {
           console.error(error)
+          Writemessage(res_, url_response, 'ERROR', path);
           return
         }
-        return res.send(body)
+
+        const res_ = 'RES';
+        const url_response = process.env.URL_HIT + '/travel/flight/book';
+        const path = './log/pesawat/booking.txt';
+        Writemessage(res_, url_response, response.body.rc, path, response.body.rd);
+
+        return res.send(body);
+
       }
     )
 
@@ -417,8 +450,11 @@ Router.post('/travel/flight/book', function (req, res) {
 Router.post('/travel/flight/payment', function (req, res) {
 
   const data = req.body;
-
-  console.log(data);
+  const req_ = 'REQ';
+  const url = process.env.URL_LOCAL + '/travel/flight/payment';
+  const path = './log/pesawat/payment.txt';
+  const rc = '00';
+  Writemessage(req_, url, rc, path);
 
   request.post(
     `${process.env.URL_HIT}/travel/flight/payment`,
@@ -428,9 +464,16 @@ Router.post('/travel/flight/payment', function (req, res) {
       (error, response, body) => {
         if (error) {
           console.error(error)
+          Writemessage(res_, url_response, 'ERROR', path);
           return
         }
-        return res.send(body)
+
+        const res_ = 'RES';
+        const url_response = process.env.URL_HIT + '/travel/flight/payment';
+        const path = './log/pesawat/payment.txt';
+        Writemessage(res_, url_response, response.body.rc, path, response.body.rd);
+
+        return res.send(body);
       }
     )
 
@@ -480,6 +523,24 @@ Router.post('/travel/pelni/search', function (req, res) {
 
 });
 
+Router.post('/travel/app/transaction_book_list', function (req, res) {
 
+  const data = req.body;
+
+  request.post(
+    `${process.env.URL_HIT}/travel/app/transaction_book_list`,
+      {
+        json: data
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          return
+        }
+        return res.send(body)
+      }
+    )
+
+});
 
 module.exports = Router

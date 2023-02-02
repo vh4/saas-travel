@@ -1,0 +1,1 @@
+|REQ|2023-011-02|10.0.9.88:1111/travel/flight/payment|00|	-->		|RES|2023-011-02|https://rajabiller.fastpay.co.id/travel/flight/payment|06|SALDO ANDA TIDAK MENCUKUPI|
