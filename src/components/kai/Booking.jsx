@@ -28,28 +28,63 @@ export default function BookingKai(){
     const dataBookingTrain = JSON.parse(localStorage.getItem(trainNumber + "_booking"));
     const dataDetailTrain = JSON.parse(localStorage.getItem(trainNumber + "_detailTrain"));
 
-    const classTrain = dataBookingTrain && dataBookingTrain[0].seats[0].grade === 'E' ? 'Eksekutif' : dataBookingTrain[0].seats[0].grade === 'B' ? 'Bisnis' : 'Ekonomi';
+    const classTrain = dataBookingTrain ? dataBookingTrain[0].seats[0].grade === 'E' ? 'Eksekutif' : dataBookingTrain[0].seats[0].grade === 'B' ? 'Bisnis' : 'Ekonomi' : 'Error';
     const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
 
-    useEffect(() =>{
+        var err = false;
+
         if(token === null || token === undefined){
-             navigate('/');
+            err  = true;
+            Swal.fire({
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                  },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                  },
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Anda harus login terlebih dahulu!',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+              }).then(() => navigate('/'));
         }
-    });
 
-    useEffect(() =>{
-        
-        if(dataBookingTrain === undefined || dataBookingTrain === null){
-            navigate('/train');
+        if(dataBookingTrain == null || dataBookingTrain == undefined){
+            err  = true;
+            Swal.fire({
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                  },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                  },
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Terjadi kesalahan, silahkan lakukan booking ulang!.',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+              }).then(() => navigate('/'));
         }
 
-        if(dataDetailTrain === undefined || dataDetailTrain === null){
-            navigate('/train')
+        if(dataDetailTrain == null || dataDetailTrain == undefined){
+            err  = true;
+            Swal.fire({
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                  },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                  },
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Terjadi kesalahan, silahkan lakukan booking ulang!.',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+              }).then(() => navigate('/'));
         }
 
-    }, [dataBookingTrain, dataDetailTrain]);
-
-    var date = new Date(dataBookingTrain[0].departureDate);
+    var date = new Date(dataBookingTrain ? dataBookingTrain[0].departureDate : new Date());
     var tahun = date.getFullYear();
     var bulan = date.getMonth();
     var hari = date.getDay();
@@ -80,9 +115,9 @@ export default function BookingKai(){
         case 11: bulan = "Desember"; break;
        }
 
-     const tanggal_keberangkatan_kereta = hari + ', ' + tanggal + ' ' + bulan + ' ' + tahun;
-     const TotalAdult = parseInt(dataDetailTrain[0].adult);
-     const TotalInfant = parseInt(dataDetailTrain[0].infant);
+    const tanggal_keberangkatan_kereta = hari + ', ' + tanggal + ' ' + bulan + ' ' + tahun;
+    const TotalAdult = dataDetailTrain ?  parseInt(dataDetailTrain[0].adult) : 0;
+    const TotalInfant = dataDetailTrain ? parseInt(dataDetailTrain[0].infant) : 0;
 
     const AdultArr = Array();
     const InfantArr = Array();
@@ -148,7 +183,7 @@ export default function BookingKai(){
             
         }
 
-        const {register, handleSubmit, formState:{ errors }} = useForm();
+        const {handleSubmit} = useForm();
 
         const handlerBookingSubmit = async () => {
         
@@ -184,8 +219,6 @@ export default function BookingKai(){
             //     arrivalTime : dataBookingTrain[0].arrivalTime,
             // }); // karena di booking sudah punya biaya admin, maka fare dihilangkan
 
-            console.log(adult);
-
             const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/book`, 
                 {
                     productCode : "WKAI",
@@ -213,14 +246,6 @@ export default function BookingKai(){
 
             );
             
-
-            const params = {
-                passengers:JSON.stringify({
-                    adults: adult[0],
-                    infants: TotalInfant > 0 ? infant[0] : []                    
-                })
-            }
-
             if(response.data.rc !== '00'){
                 Swal.fire({
                     icon: 'error',
@@ -234,11 +259,14 @@ export default function BookingKai(){
             }else{
                 const hasilDataBooking = response.data.data
                 localStorage.setItem(dataBookingTrain[0].trainNumber + '_hasilBookingdanPilihKursi', JSON.stringify(hasilDataBooking));
+                localStorage.setItem(dataBookingTrain[0].trainNumber + '_passenggers', JSON.stringify({
+                    adults: adult[0],
+                    infants: TotalInfant > 0 ? infant[0] : []                    
+                }))
                 // localStorage.setItem(dataBookingTrain[0].trainNumber + '_fareAdmin', JSON.stringify(Fare.data.data));
 
                 navigate({
                     pathname: "/train/konfirmasi/" + dataBookingTrain[0].trainNumber,
-                    search: `?${createSearchParams(params)}`  
                 })
             }
             setIsLoading(false);
@@ -246,7 +274,7 @@ export default function BookingKai(){
 
     return(
         <>
-        {token !== undefined && token !== null  ? 
+        { err !== true  ? 
 
             (
                 <div className='xl:mt-0'>
@@ -288,40 +316,40 @@ export default function BookingKai(){
                     </div>
                     <div className='p-4 px-4 flex justify-between space-x-12 items-center'>
                         <div className='text-slate-600 text-xs'>
-                            <div>{dataDetailTrain[0].berangkat_nama_kota}</div>
-                            <div>({dataDetailTrain[0].berangkat_id_station})</div>
+                            <div>{dataDetailTrain && dataDetailTrain[0].berangkat_nama_kota}</div>
+                            <div>({dataDetailTrain && dataDetailTrain[0].berangkat_id_station})</div>
                         </div>
                         <div className='rounded-full p-2 bg-blue-500'>
                             < TbArrowsLeftRight className='text-white' size={18} />
                         </div>
                         <div className='text-slate-600 text-xs'>
-                            <div>{dataDetailTrain[0].tujuan_nama_kota}</div>
-                            <div>({dataDetailTrain[0].tujuan_id_station})</div>
+                            <div>{dataDetailTrain && dataDetailTrain[0].tujuan_nama_kota}</div>
+                            <div>({dataDetailTrain && dataDetailTrain[0].tujuan_id_station})</div>
                         </div>
                     </div>
                     <div className='p-4 pl-8  text-gray-700'>
                         <div className='text-xs font-bold'>{dataBookingTrain[0].trainName}</div>
-                        <small>{classTrain} class {dataBookingTrain[0].seats[0].class}</small>
+                        <small>{classTrain} class { dataBookingTrain && dataBookingTrain[0].seats[0].class}</small>
                     </div>
                     <div className='p-4 pl-8 mb-4'>
                     <ol class="relative border-l border-gray-500 dark:border-gray-700">                  
                             <li class="mb-10 ml-4">
                                 <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-500 dark:border-gray-900 dark:bg-gray-700"></div>
                                 <div className='flex space-x-12'>
-                                    <time class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{dataBookingTrain[0].departureTime}</time>
+                                    <time class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{dataBookingTrain && dataBookingTrain[0].departureTime}</time>
                                     <div className='-mt-2'>
-                                        <h3 class="text-left text-xs text-slate-600 dark:text-white">{dataDetailTrain[0].berangkat_nama_kota}</h3>
-                                        <p class="text-left text-xs text-gray-500 dark:text-gray-400">({dataDetailTrain[0].berangkat_id_station})</p>
+                                        <h3 class="text-left text-xs text-slate-600 dark:text-white">{dataDetailTrain && dataDetailTrain[0].berangkat_nama_kota}</h3>
+                                        <p class="text-left text-xs text-gray-500 dark:text-gray-400">({dataDetailTrain && dataDetailTrain[0].berangkat_id_station})</p>
                                     </div>
                                 </div>
                             </li>
                             <li class="ml-4">
                                 <div class="absolute w-4 h-4 bg-blue-500 rounded-full mt-0 -left-2 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
                                 <div className='flex space-x-12'>
-                                    <time class="mb-1 text-sm leading-none text-gray-400 dark:text-gray-500">{dataBookingTrain[0].arrivalTime}</time>
+                                    <time class="mb-1 text-sm leading-none text-gray-400 dark:text-gray-500">{dataBookingTrain && dataBookingTrain[0].arrivalTime}</time>
                                     <div className='-mt-2'>
-                                        <h3 class="text-left text-xs  text-slate-600 dark:text-white">{dataDetailTrain[0].tujuan_nama_kota}</h3>
-                                        <p class="text-left text-xs text-gray-500 dark:text-gray-400">({dataDetailTrain[0].tujuan_id_station})</p>
+                                        <h3 class="text-left text-xs  text-slate-600 dark:text-white">{dataDetailTrain && dataDetailTrain[0].tujuan_nama_kota}</h3>
+                                        <p class="text-left text-xs text-gray-500 dark:text-gray-400">({dataDetailTrain && dataDetailTrain[0].tujuan_id_station})</p>
                                     </div>
                                 </div>
                             </li>
@@ -333,7 +361,7 @@ export default function BookingKai(){
                 <Form onFinish={handleSubmit(handlerBookingSubmit)} className='block w-full mt-0 xl:mt-4 mb-4'>
                     {/* adult loop */}
 
-                    { adult[0].map((e, i) => (
+                    { adult && adult[0].map((e, i) => (
                         <>
                             <div>
                                 <div className='Booking ml-2 md:ml-0 mt-8 mb-4 xl:mt-12'>
@@ -371,7 +399,7 @@ export default function BookingKai(){
                                                                 }}
                                                                 country='id'
                                                                 inputStyle={{ width:'100%', borderColor:'hover:red', paddingTop:7, paddingBottom:7}}
-                                                                value={e.phone} 
+                                                                value={e.phone.substring(0,2) == '08' ? "62" + e.phone.slice(2) : e.phone} 
                                                                 onChange={handleAdultsubCatagoryChange(i, 'phone')}
                                                             /> 
                                                             <div className='mt-2 text-gray-400'><small>Contoh: (+62) 812345678</small></div>            
@@ -393,8 +421,7 @@ export default function BookingKai(){
                     )) }
 
                     {/* Infant loop */}
-
-                    { infant[0].map((e, i) => (
+                    { infant && infant[0].map((e, i) => (
                         <>
                             <div>
                                 <div className='Booking ml-2 mt-8 mb-4 xl:mt-12'>
@@ -478,41 +505,41 @@ export default function BookingKai(){
                             </div>
                             <div className='px-4 xl:px-8 p-4 flex justify-between space-x-12 items-center'>
                                 <div className='text-xs font-bold text-slate-600'>
-                                    <div>{dataDetailTrain[0].berangkat_nama_kota}</div>
-                                    <div>({dataDetailTrain[0].berangkat_id_station})</div>
+                                    <div>{dataDetailTrain && dataDetailTrain[0].berangkat_nama_kota}</div>
+                                    <div>({dataDetailTrain && dataDetailTrain[0].berangkat_id_station})</div>
                                 </div>
                                 <div className='rounded-full p-1 bg-blue-500 '>
                                     < TbArrowsLeftRight className='text-white' size={18} />
                                 </div>
                                 <div className='text-xs font-bold text-slate-600'>
-                                    <div>{dataDetailTrain[0].tujuan_nama_kota}</div>
-                                    <div>({dataDetailTrain[0].tujuan_id_station})</div>
+                                    <div>{dataDetailTrain && dataDetailTrain[0].tujuan_nama_kota}</div>
+                                    <div>({dataDetailTrain && dataDetailTrain[0].tujuan_id_station})</div>
                                 </div>
                             </div>
 
                             <div className='p-4 pl-8 text-gray-700'>
-                                <div className=' text-xs font-bold'>{dataBookingTrain[0].trainName}</div>
-                                <small>{classTrain} Class {dataBookingTrain[0].seats[0].class}</small>
+                                <div className=' text-xs font-bold'>{dataBookingTrain && dataBookingTrain[0].trainName}</div>
+                                <small>{classTrain} Class {dataBookingTrain && dataBookingTrain[0].seats[0].class}</small>
                             </div>
                             <div className='p-4 pl-12 mb-4'>
                             <ol class="relative border-l-2 border-dotted border-gray-300 dark:border-gray-700">                  
                                     <li class="mb-10 ml-4 text-sm">
                                         <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-400 dark:border-gray-900 dark:bg-gray-700"></div>
                                         <div className='flex space-x-12'>
-                                            <time class="mb-1 text-xs font-bold leading-none text-gray-400 dark:text-gray-500">{dataBookingTrain[0].departureTime}</time>
+                                            <time class="mb-1 text-xs font-bold leading-none text-gray-400 dark:text-gray-500">{dataBookingTrain && dataBookingTrain[0].departureTime}</time>
                                             <div className='-mt-2'>
-                                                <h3 class="text-left text-xs font-bold text-slate-600 dark:text-white">{dataDetailTrain[0].berangkat_nama_kota}</h3>
-                                                <p class="text-left text-xs font-bold text-gray-500 dark:text-gray-400">({dataDetailTrain[0].berangkat_id_station})</p>
+                                                <h3 class="text-left text-xs font-bold text-slate-600 dark:text-white">{dataDetailTrain && dataDetailTrain[0].berangkat_nama_kota}</h3>
+                                                <p class="text-left text-xs font-bold text-gray-500 dark:text-gray-400">({dataDetailTrain && dataDetailTrain[0].berangkat_id_station})</p>
                                             </div>
                                         </div>
                                     </li>
                                     <li class="ml-4 text-sm mt-10">
                                         <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
                                         <div className='flex space-x-12'>
-                                            <time class="mb-1 text-xs font-bold leading-none text-gray-400 dark:text-gray-500">{dataBookingTrain[0].arrivalTime}</time>
+                                            <time class="mb-1 text-xs font-bold leading-none text-gray-400 dark:text-gray-500">{dataBookingTrain && dataBookingTrain[0].arrivalTime}</time>
                                             <div className='-mt-2'>
-                                                <h3 class="text-left text-xs font-bold text-slate-600 dark:text-white">{dataDetailTrain[0].tujuan_nama_kota}</h3>
-                                                <p class="text-left text-xs font-bold text-gray-500 dark:text-gray-400">({dataDetailTrain[0].tujuan_id_station})</p>
+                                                <h3 class="text-left text-xs font-bold text-slate-600 dark:text-white">{dataDetailTrain && dataDetailTrain[0].tujuan_nama_kota}</h3>
+                                                <p class="text-left text-xs font-bold text-gray-500 dark:text-gray-400">({dataDetailTrain && dataDetailTrain[0].tujuan_id_station})</p>
                                             </div>
                                         </div>
                                     </li>
@@ -524,7 +551,7 @@ export default function BookingKai(){
         </div>
             )
         
-        : ''}
+        : null}
         </>
     )
 }

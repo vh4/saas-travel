@@ -15,30 +15,104 @@ export default function Pembayaran(){
     
     const {dispatch} = useContext(TiketContext);
     
-    const [searchParams, setSearchParams] = useSearchParams();
     const [isLoading, setIsLoading] = useState(false);
-    const passengers = searchParams.get('passengers') ? JSON.parse(searchParams.get('passengers')) : [];
+    const passengers = localStorage.getItem(trainNumber + "_passenggers") ? JSON.parse(localStorage.getItem(trainNumber + "_passenggers")) : null;
 
-    const dataBookingTrain = JSON.parse(localStorage.getItem(trainNumber + "_booking"));
+    const dataBookingTrain = localStorage.getItem(trainNumber + "_booking") ? JSON.parse(localStorage.getItem(trainNumber + "_booking")) : null;
+    const dataDetailTrain = localStorage.getItem(trainNumber + "_detailTrain") ? JSON.parse(localStorage.getItem(trainNumber + "_detailTrain")) : null;
     const hasilBooking = JSON.parse(localStorage.getItem(trainNumber + "_hasilBookingdanPilihKursi"));
-    const dataDetailTrain = JSON.parse(localStorage.getItem(trainNumber + "_detailTrain"));
 
-    const TotalAdult = passengers.adults ? passengers.adults.length : 0;
-    const TotalChild = passengers.children ? passengers.children.length : 0;
-    const TotalInfant = passengers.infants ? passengers.infants.length : 0;
+    const TotalAdult = passengers ? passengers.adults ? passengers.adults.length : 0 :  0;
+    const TotalChild = passengers ? passengers.children ? passengers.children.length : 0 : 0;
+    const TotalInfant = passengers ? passengers.infants ? passengers.infants.length : 0 : 0;
 
     const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
-    useEffect(() =>{
-        if(token === null || token === undefined){
-            navigate('/');
-        }
-    });
 
-    useEffect(() =>{
-        if(hasilBooking === null || dataBookingTrain === null){
-            navigate('/')
-        }   
-    }, [hasilBooking, dataBookingTrain])
+    var err = false;
+    if(passengers === null || passengers === undefined) {
+        err = true;
+        Swal.fire({
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+              },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+              },
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Terjadi kesalahan, silahkan lakukan booking ulang!.',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+          }).then(() => navigate('/'));
+    }
+
+    if(token === null || token === undefined) {
+        err = true;
+        Swal.fire({
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+              },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+              },
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Maaf, Anda harus login terlebih dahulu dan melakukan booking!.',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+          }).then(() => navigate('/'));
+    }
+
+    if(dataBookingTrain === null || dataBookingTrain === undefined) {
+        err = true;
+        Swal.fire({
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+              },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+              },
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Terjadi kesalahan, silahkan lakukan booking ulang!.',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+          }).then(() => navigate('/'));
+    }
+
+    if(dataDetailTrain === null || dataDetailTrain === undefined) {
+        err = true;
+        Swal.fire({
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+              },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+              },
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Terjadi kesalahan, silahkan lakukan booking ulang!.',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+          }).then(() => navigate('/'));
+    }
+
+    if(hasilBooking === null || hasilBooking === undefined) {
+        err = true;
+        Swal.fire({
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+              },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+              },
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Terjadi kesalahan, silahkan lakukan booking ulang!.',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+          }).then(() => navigate('/'));
+    }
 
     setTimeout(() =>{ 
 
@@ -52,7 +126,7 @@ export default function Pembayaran(){
                   popup: 'animate__animated animate__fadeOutUp'
                 },
                  icon: 'error',
-                 text: 'Maaf, Booking tiket sebelumnya expired!',
+                 title: 'Maaf, Booking tiket sebelumnya expired!',
                  text: 'Jika sudah melakukan Pembayaran, Cek di Menu Transaksi',
                  confirmButtonText: "Kembali",
                }).then(() => navigate('/'));
@@ -60,6 +134,7 @@ export default function Pembayaran(){
                localStorage.removeItem(trainNumber + '_booking');
                localStorage.removeItem(trainNumber + '_detailTrain');
                localStorage.removeItem(trainNumber + '_hasilBookingdanPilihKursi'); 
+               localStorage.removeItem(trainNumber + '_passenggers');
 
         }
 
@@ -176,7 +251,7 @@ export default function Pembayaran(){
 
     return(
         <>
-        {token !== undefined && token !== null ? (
+        {err !== true ? (
             <>
         {/* header kai flow */}
         <div className='flex justify-start jalur-payment-booking text-xs xl:text-md space-x-2 xl:space-x-8 items-center'>
@@ -360,7 +435,7 @@ export default function Pembayaran(){
             </div>
         </div>
             </>
-        ) : ''}
+        ) : null}
         </>
     )
 }

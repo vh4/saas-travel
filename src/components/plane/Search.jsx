@@ -356,7 +356,7 @@ export default function Search(){
             </div>
                 <div className="mt-8">
                 <div className="block md:flex justify-between">
-                    <div className="flex items-center justify-center space-x-3 xl:space-x-8">
+                    <div className="flex items-center justify-start space-x-3 xl:space-x-4">
                         <small className="text-xs font-bold text-slate-600">
                             {departureName} ({departure})
                         </small>

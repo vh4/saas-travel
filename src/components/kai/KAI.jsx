@@ -260,6 +260,8 @@ function KAI(){
                 infant:infant,
             }
 
+            localStorage.setItem('k_search', JSON.stringify(params))
+
             navigate({
                 pathname: '/train/search',
                 search: `?${createSearchParams(params)}`,

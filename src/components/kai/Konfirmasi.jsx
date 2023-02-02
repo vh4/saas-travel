@@ -159,44 +159,118 @@ export default function Konfirmasi(){
 
     const {trainNumber} = useParams();
     const navigate = useNavigate();
-    const location = useLocation();
     const [open, setOpen] = React.useState(false);
     const handleClose = () => setOpen(false);
 
     const [searchParams, setSearchParams] = useSearchParams();
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingPindahKursi, setisLoadingPindahKursi] = useState(false);
-    const passengers_params = searchParams.get('passengers') ? JSON.parse(searchParams.get('passengers')) : [];
+    const passengers_params = localStorage.getItem(trainNumber + "_passenggers") ? JSON.parse(localStorage.getItem(trainNumber + "_passenggers")) : null;
 
-    const dataBookingTrain = JSON.parse(localStorage.getItem(trainNumber + "_booking"));
-    const dataDetailTrain = JSON.parse(localStorage.getItem(trainNumber + "_detailTrain"));
-    const hasilBookingSession = JSON.parse(localStorage.getItem(trainNumber + "_hasilBookingdanPilihKursi"));
+    const dataBookingTrain = localStorage.getItem(trainNumber + "_booking") ? JSON.parse(localStorage.getItem(trainNumber + "_booking")) : null;
+    const dataDetailTrain = localStorage.getItem(trainNumber + "_detailTrain") ? JSON.parse(localStorage.getItem(trainNumber + "_detailTrain")) : null;
+    const hasilBookingSession = localStorage.getItem(trainNumber + "_hasilBookingdanPilihKursi") ? JSON.parse(localStorage.getItem(trainNumber + "_hasilBookingdanPilihKursi")) : null;
 
     const [clickSeats, setClickSeats] = useState(0);
 
     const [dataSeats, setDataSeats] = useState([]);
-    const classTrain = dataBookingTrain && dataBookingTrain[0] && dataBookingTrain[0].seats[0].grade === 'E' ? 'Eksekutif' : dataBookingTrain[0].seats[0].grade === 'B' ? 'Bisnis' : 'Ekonomi';
+    const classTrain = dataBookingTrain ? dataBookingTrain[0] ? dataBookingTrain[0].seats[0].grade === 'E' ? 'Eksekutif' : dataBookingTrain[0].seats[0].grade === 'B' ? 'Bisnis' : 'Ekonomi' : 'Err' : 'Err';
 
     const [hasilBooking, setHasilBooking] = useState(hasilBookingSession);
     const [passengers, setPassengers] = useState(passengers_params);
 
-    const TotalAdult = passengers.adults ? passengers.adults.length : 0;
-    const TotalChild = passengers.children ? passengers.children.length : 0;
-    const TotalInfant = passengers.infants ? passengers.infants.length : 0;
+    const TotalAdult = passengers ? passengers.adults ? passengers.adults.length : 0 :  0;
+    const TotalChild = passengers ? passengers.children ? passengers.children.length : 0 : 0;
+    const TotalInfant = passengers ? passengers.infants ? passengers.infants.length : 0 : 0;
 
     const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
-    useEffect(() =>{
-        if(token === null || token === undefined){
-           
-            navigate('/');
-        }
-    });
+    var err = false;
 
-    useEffect(() =>{
-        if(hasilBooking === null || dataDetailTrain === null || dataBookingTrain === null){
-            navigate('/')
-        }   
-    }, [hasilBooking, dataBookingTrain, dataDetailTrain])
+    if(passengers_params === null || passengers_params === undefined) {
+        err = true;
+        Swal.fire({
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+              },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+              },
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Terjadi kesalahan, silahkan lakukan booking ulang!.',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+          }).then(() => navigate('/'));
+    }
+
+    if(token === null || token === undefined) {
+        err = true;
+        Swal.fire({
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+              },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+              },
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Maaf, Anda harus login terlebih dahulu dan melakukan booking!.',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+          }).then(() => navigate('/'));
+    }
+
+    if(dataBookingTrain === null || dataBookingTrain === undefined) {
+        err = true;
+        Swal.fire({
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+              },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+              },
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Terjadi kesalahan, silahkan lakukan booking ulang!.',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+          }).then(() => navigate('/'));
+    }
+
+    if(dataDetailTrain === null || dataDetailTrain === undefined) {
+        err = true;
+        Swal.fire({
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+              },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+              },
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Terjadi kesalahan, silahkan lakukan booking ulang!.',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+          }).then(() => navigate('/'));
+    }
+
+    if(hasilBooking === null || hasilBooking === undefined) {
+        err = true;
+        Swal.fire({
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+              },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+              },
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Terjadi kesalahan, silahkan lakukan booking ulang!.',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+          }).then(() => navigate('/'));
+    }
+
 
     setTimeout(() =>{ 
 
@@ -219,7 +293,7 @@ export default function Konfirmasi(){
                localStorage.removeItem(trainNumber + '_booking');
                localStorage.removeItem(trainNumber + '_detailTrain');
                localStorage.removeItem(trainNumber + '_hasilBookingdanPilihKursi'); 
-
+               localStorage.removeItem(trainNumber + '_passenggers');
         }
 
     }, hasilBooking && new Date(hasilBooking.timeLimit).getTime() - new Date().getTime());
@@ -330,13 +404,8 @@ export default function Konfirmasi(){
      const handlerKonfirmasi = (e) => {
         
         e.preventDefault();
-        const params = {
-            passengers: searchParams.get('passengers')
-        }
-
         navigate({
             pathname: "/train/bayar/" + dataBookingTrain[0].trainNumber,
-            search: `?${createSearchParams(params)}`  
         })
 
      }
@@ -441,7 +510,7 @@ export default function Konfirmasi(){
     return(
         <>
             {/* Pilih Seats  */}
-            {token !== null && token !== undefined ? (
+            {err !== true ? (
                 <>
                 
             <Modal size="md" open={open} onClose={handleClose}>
@@ -773,7 +842,7 @@ export default function Konfirmasi(){
                 </>
             )
         
-            : (<></>)
+            : null
         }
         </>
     )

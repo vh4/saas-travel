@@ -1,23 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import {AiOutlineHome} from 'react-icons/ai';
 import {BsArrowRightShort} from "react-icons/bs";
-import {ImAirplane} from 'react-icons/im';
+import {MdOutlineTrain} from 'react-icons/md';
 import axios from "axios";
-import { useNavigate } from "react-router";
 
-export default function ViewTransaksi({path}) {
+export default function ViewBooking({path}) {
 
-    const navigate = useNavigate();
     const [data, setData] = useState({});
-    const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() =>{
-        if(!localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)){
-            navigate('/');
-        }else{
-            return;
-        }
-    }, [navigate]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         getTransaksiList();
@@ -25,16 +16,16 @@ export default function ViewTransaksi({path}) {
 
     const getTransaksiList = async () =>{
         setIsLoading(true);
-        const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/transaction_list`, {
+        const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/transaction_book_list`, {
             token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
-            product:"PESAWAT"
+            product:"KERETA"
         });
 
         const datas = response.data;
         setData(datas.data);
         setIsLoading(false);
-
     }
+
 
     function toRupiah(angka) {
         var rupiah = '';
@@ -43,8 +34,30 @@ export default function ViewTransaksi({path}) {
         return rupiah.split('',rupiah.length-1).reverse().join('');
     }
 
+    function remainingTime(targetDate) {
+            
+        let currentDate = new Date();
+        let timeDifference = new Date(targetDate) - currentDate;
+        
+        let hours = Math.floor(timeDifference / (1000 * 60 * 60));
+        let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+        
+        if(hours === 0){
+            return ` ${minutes} menit ${seconds} detik`;
+
+        }else if(hours ===0 && minutes === 0){
+            return ` ${seconds} detik`;
+
+        }else{
+            return ` ${hours} jam ${minutes} menit ${seconds} detik`;
+
+        }    
+    }
+
     return (
         <>
+        <div className=''>
             <div className='w-full mt-8'>
                 <div className="w-full rounded-md shadow-sm border profile-header">
                     <div className="text-gray-500 p-4 flex space-x-2 items-center">
@@ -55,9 +68,9 @@ export default function ViewTransaksi({path}) {
             {isLoading === false ? (
                 <>
                     {data !== null && data !== undefined && data.length !== 0 ? (
-                    <>
+                    <div className='mt-6'>
                         {data.map((e) => (
-                            <div className='w-full mt-6'>
+                            <div className='w-full mb-6'>
                                 <div className="w-full rounded-md shadow-sm border profile-header">
                                     <div className='p-4'>
                                         <div className='flex justify-between items-end'>
@@ -71,7 +84,7 @@ export default function ViewTransaksi({path}) {
                                         </div>
                                         <div className='border-t mt-2'>
                                             <div className='flex space-x-2 mt-4 text-sm font-bold text-gray-500'>
-                                                <ImAirplane className='text-orange-500' size={20} />
+                                                <MdOutlineTrain className='text-blue-500' size={16} />
                                                 <div className='flex space-x-2 items-center'><div>{e.origin.toLowerCase()}</div><BsArrowRightShort /><div>{e.destination.toLowerCase()}</div></div>
                                             </div>
                                             <div className='pl-1'>
@@ -93,22 +106,24 @@ export default function ViewTransaksi({path}) {
                                                 </div>
                                             </div>
                                             <div className='flex space-x-2  items-center pt-4'>
-                                                <div className='text-xs py-1 px-3 rounded-full bg-green-500 text-white'>Transaksi sukses</div>
-                                                <div className='text-blue-500 font-bold text-xs'>lihat detail</div>
+                                                <div className='text-xs py-1 px-3 rounded-full bg-blue-500 text-white'>sisa waktu 
+                                    
+                                                 {remainingTime(e.expiredDate)}</div>
+                                                <div className='text-blue-500 font-bold text-xs'>lanjut bayar</div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>   
                             </div>
                         ))}
-                    </>) : (
+                   </div>) : (
                     <>
                         <div className='flex justify-center items-center'>
                             <div className='text-center'>
                                 <img className='block mx-auto' width={270} src="/emptyy.png" alt="empty.png" />
                                 <div className='text-slate-600 font-bold text-center'>Data Tidak Ditemukan</div>
                                 <div className='mt-2 text-center text-gray-500 text-sm'>
-                                    Maaf, History Data Transaksi Tidak ditemukan. Lakukan transaksi terlebih dahulu.
+                                    Maaf, History Data Booking Tidak ditemukan. Lakukan Booking terlebih dahulu.
                                 </div>
                             </div>
                         </div>
@@ -132,6 +147,7 @@ export default function ViewTransaksi({path}) {
                 </>
             )
         }
+        </div>
         </>
     );
 };

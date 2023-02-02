@@ -27,19 +27,21 @@ export default function Search(){
           fontSize: 8,
         },
       });
+
+    const k = localStorage.getItem('k_search') ? JSON.parse(localStorage.getItem('k_search')) : null;
       
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const origin = searchParams.get('origin');
-    const destination = searchParams.get('destination');
-    const date = searchParams.get('date');
-    const productCode = searchParams.get('productCode');
-    const kotaBerangkat = searchParams.get('kotaBerangkat');
-    const kotaTujuan = searchParams.get('kotaTujuan');
-    const stasiunBerangkat = searchParams.get('stasiunBerangkat');  
-    const stasiunTujuan = searchParams.get('stasiunTujuan');
-    const adult = searchParams.get('adult');
-    const infant = searchParams.get('infant');
+    const origin = k ? k.origin : searchParams.get('origin') ? searchParams.get('origin') : null;
+    const destination = k ? k.destination : searchParams.get('destination') ? searchParams.get('destination') : null;
+    const date = k ? k.date : searchParams.get('date') ? searchParams.get('date') : null;
+    const productCode = k ? k.productCode : searchParams.get('productCode') ? searchParams.get('productCode') : null;
+    const kotaBerangkat = k ? k.kotaBerangkat : searchParams.get('kotaBerangkat') ? searchParams.get('kotaBerangkat') : null;;
+    const kotaTujuan = k ? k.kotaTujuan : searchParams.get('kotaTujuan') ? searchParams.get('kotaTujuan') : null;
+    const stasiunBerangkat = k ? k.stasiunBerangkat : searchParams.get('stasiunBerangkat') ? searchParams.get('stasiunBerangkat') : null;  
+    const stasiunTujuan = k ? k.stasiunTujuan : searchParams.get('stasiunTujuan') ? searchParams.get('stasiunTujuan') : null;
+    const adult = k ? k.adult : searchParams.get('adult') ? searchParams.get('adult') : null;
+    const infant = k ? k.infant : searchParams.get('infant') ? searchParams.get('infant') : null;
 
     const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
     const navigate = useNavigate();
@@ -50,6 +52,7 @@ export default function Search(){
     const [waktuFilter, setWaktuFilter] = useState([false, false, false, false]);
     const [selectedTime, setSelectedTime] = useState([]);
     const [ubahPencarian, setUbahPencarian] = useState(false);
+    const [err, setErr] = useState(false);
 
     const handleGradeFilterChange = (e) => {
         let newGradeFilter = [...gradeFilter];
@@ -82,7 +85,6 @@ export default function Search(){
             setSelectedTime([...selectedTime, time]);
         }
     };
-    console.log(waktuFilter);
 
     const btnRefHarga = useRef();
     const btnRefWaktu= useRef();
@@ -115,6 +117,7 @@ export default function Search(){
 
     useEffect(() =>{
         if(token === null || token === undefined){
+            setErr(true);
             Swal.fire({
                 
                 showClass: {
@@ -132,35 +135,27 @@ export default function Search(){
               }).then(() => navigate('/'));
         }
 
-        if(origin === null || origin === undefined){
-            navigate('/');
+
+        if(k == null || k == undefined){
+            setErr(true);
+            Swal.fire({
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                  },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                  },
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Terjadi Kesalahan, Mohon ulangi kembali proses pencarian!',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                confirmButtonText: 'Kembali'
+              }).then(() => navigate('/'));
         }
 
-        if(destination === null || destination === undefined){
-            navigate('/');
-        }
-        
-        if(date === null || date === undefined){
-            navigate('/');
-        }
-        if(productCode === null || productCode === undefined){
-            navigate('/');
-        }
 
-        if(kotaBerangkat === null || kotaBerangkat === undefined){
-            navigate('/');
-        }
-        if(kotaTujuan === null || kotaTujuan === undefined){
-            navigate('/');
-        }
-        if(stasiunBerangkat === null || stasiunBerangkat === undefined){
-            navigate('/');
-        }
-        if(stasiunTujuan === null || stasiunTujuan === undefined){
-            navigate('/');
-        }
-
-    }, [token, origin, destination, date, productCode, kotaBerangkat, kotaTujuan, stasiunTujuan, stasiunBerangkat]);
+    }, [token, k]);
 
 
     var datee = new Date(date);
@@ -314,16 +309,17 @@ export default function Search(){
         });
       });
 
-      
     
     return(
         <>
+        {err !== true ? (
+            <>
             <div className="text-sm judul-search mt-4 font-bold text-slate-600">
                 PILIH JADWAL
             </div>
             <div className="mt-8">
-                <div className="block md:flex justify-between">
-                    <div className="flex items-center justify-center space-x-3 xl:space-x-8">
+                <div className="block lg:flex justify-between">
+                    <div className="flex items-center justify-start space-x-3 xl:space-x-4">
                         <small className="text-xs font-bold text-slate-600">
                             {stasiunBerangkat}, {kotaBerangkat}
                         </small>
@@ -342,7 +338,7 @@ export default function Search(){
                             {parseInt(adult) + parseInt(infant)} Penumpang
                         </small>
                     </div>    
-                    <div className="mt-4 md:mt-0 flex space-x-4 mr-0 xl:mr-16"> 
+                    <div className="mt-4 lg:mt-0 flex space-x-4 mr-0 xl:mr-16"> 
                         <Link to='/' className="flex space-x-2 items-center">
                             <IoArrowBackOutline className="text-blue-500" size={16} />
                             <div className="text-blue-500 text-sm font-bold">Kembali</div>
@@ -513,7 +509,7 @@ export default function Search(){
                                         </div>
                                         <div className="w-full mt-12 px-4 border-b-2"></div>
                                         <div className="text-xs">
-                                            <h1 className="mt-10 xl:mt-0 text-gray-400">{e.duration}</h1>
+                                            <h1 className="text-xs mt-10 xl:mt-0 text-gray-400">{e.duration}</h1>
                                             <small className="text-gray-400">Langsung</small>
                                         </div>
                                         <div className="w-full mt-12 px-4 border-b-2"></div>
@@ -548,6 +544,8 @@ export default function Search(){
             
             }
             </div>
+            </>
+        ) : null}
         </>
     )
 }

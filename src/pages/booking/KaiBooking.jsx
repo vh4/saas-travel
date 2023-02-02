@@ -1,13 +1,13 @@
 //make create function reactjs
 
 import React, {useEffect} from "react";
-import TransaksiKaiComponent from "../../components/transaksi/TransaksiKai";
+import BookingKaiComponent from "../../components/booking/BookingKai";
 import Layout from "../LayoutUser";
 import { useLocation } from "react-router-dom";
 import _ from 'lodash'
 import { useNavigate } from "react-router-dom";
 
-export default function TransaksiKai(){
+export default function TransaksiPesawat(){
 
     const location = useLocation();
     const path = _.startCase(location.pathname.toString()).split('  ').join('/');
@@ -26,7 +26,7 @@ export default function TransaksiKai(){
             <div className="mt-4 px-4 md:px-12">
 
                 {/* Profile fitur  */}
-                < TransaksiKaiComponent path={path} />
+                < BookingKaiComponent path={path} />
                 
             </div>
         </Layout>

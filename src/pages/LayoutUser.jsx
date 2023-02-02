@@ -25,7 +25,7 @@ export default function LayoutUser({children}){
     const pathSidebar = location.pathname.toString();
 
     return(
-        <div style={{backgroundColor: '#f7f9ff'}} className="h-auto">
+        <div className="h-auto">
             < Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
             
             <div className="relative ml-0 md:ml-16 xl:ml-0 2xl:ml-0 mt-4 md:mt-0 md:flex md:justify-center">
@@ -60,13 +60,13 @@ export default function LayoutUser({children}){
             </div>
 
             {/* <Footer/> */}
-            <footer class="border-t text-sm text-gray-500 py-6">
-        <div class="container mx-auto flex flex-wrap items-center">
-            <div class="w-full text-center">
-            <p class="text-sm">© 2015-2023 PT. Bimasakti Multisinergi. All Rights Reserved.</p>
-            </div>
-        </div>
-        </footer>
+            <footer class="mt-24 border-t text-sm text-gray-500 py-6">
+                <div class="container mx-auto flex flex-wrap items-center">
+                    <div class="w-full text-center">
+                        <p class="text-sm">© 2015-2023 PT. Bimasakti Multisinergi. All Rights Reserved.</p>
+                    </div>
+                </div>
+            </footer>
         </div>
     )
 }

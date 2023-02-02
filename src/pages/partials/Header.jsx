@@ -57,21 +57,23 @@ export default function Header({toogleSidebar, valueSidebar}){
         });
     }
 
-    const [user, setUser] = useState([]);
 
-        
+    const user = localStorage.getItem('v_') != 'undefined' && localStorage.getItem('v_') !== null ? JSON.parse(localStorage.getItem('v_')) : null;
+    const [usr, setUsr] = useState();
+
+    useEffect(() =>  {
+        if(user === null || user === undefined){
+            userProfile()
+        }
+    }, [user]);
+    
     const userProfile = async () =>  {
         const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/account`, {
             token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
         });
-        setUser(response.data.data);
+        setUsr(response.data.data)
+        localStorage.setItem('v_', JSON.stringify(response.data.data))
     }
-
-
-    useEffect(() =>  {
-        userProfile()
-    }, []);
-
 
     function toRupiah(angka) {
         var rupiah = '';
@@ -153,10 +155,18 @@ export default function Header({toogleSidebar, valueSidebar}){
                         < BsTags className="text-orange-500" size={18}/>
                         <div className="text-[15px] text-slate-800">Promo</div>
                     </Link>
-                    <Link to="/transaksi/kai" className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-slate-700">
+                    {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
+                    <Link to="/transaksi/pesawat" className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-slate-700">
                         < FaListAlt className="text-cyan-500" size={18}/>
                         <div className="text-[15px] text-slate-800">Transaksi</div>
-                    </Link>                                       
+                    </Link> 
+                    ) : null}
+                    {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
+                    <Link to="/booking/pesawat" className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-slate-700">
+                        < FaListAlt className="text-red-500" size={18}/>
+                        <div className="text-[15px] text-slate-800">Booking</div>
+                    </Link> 
+                    ) : null}
                     <>
 
                     {/* Untuk Belum login */}
@@ -168,7 +178,7 @@ export default function Header({toogleSidebar, valueSidebar}){
                     ) :
                     (        
                         <div className="hidden relative group space-x-2 text-gray-500 md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 py-2.5 xl:inline-flex group-hover:block items-end ml-2 mb-2">
-                            {user !== undefined ? 
+                            {user !== null && user !== undefined ? 
                             (
                                 <>
                                 {
@@ -240,7 +250,6 @@ export default function Header({toogleSidebar, valueSidebar}){
                                     }}
                                 >
                                     <MenuItem onClick={handleCloses}>Indonesia</MenuItem>
-                                    <MenuItem onClick={handleCloses}>English</MenuItem>
                                 </Menu>
                             </div>
                     </div> 

@@ -7,6 +7,9 @@ import Profile from "./pages/profile/Profile";
 import TransaksiKai from "./pages/transaksi/TransaksiKai";
 import TransaksiPesawat from "./pages/transaksi/TransaksiPesawat";
 
+import BookingKaiList from "./pages/booking/KaiBooking";
+import BookingPesawatList from "./pages/booking/PesawatBooking";
+
 import SearchKai from "./pages/kai/Search";
 import SearchPlane from "./pages/plane/Search";
 import SearchPelni from "./pages/pelni/Search";
@@ -83,6 +86,8 @@ function App() {
           <Route path="/train/tiket-kai" element={< TiketKai/>}></Route>
           <Route path="/transaksi/kai" element={<TransaksiKai />}></Route>
           <Route path="/transaksi/pesawat" element={<TransaksiPesawat />}></Route>
+          <Route path="/booking/kai" element={<BookingKaiList />}></Route>
+          <Route path="/booking/pesawat" element={<BookingPesawatList />}></Route>
           <Route path="/profile/view" element={<Profile />}></Route>
         </Routes>
         </NavContext.Provider>  

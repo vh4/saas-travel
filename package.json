@@ -17,6 +17,7 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.1.6",
     "axios": "^1.2.1",
+    "browserify-fs": "^1.0.0",
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
     "i": "^0.3.7",

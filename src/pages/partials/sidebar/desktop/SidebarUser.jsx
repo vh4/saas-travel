@@ -61,12 +61,12 @@ export default function SidebarUser({pathSidebar}) {
                         className={`${!dropdownBooking ? 'block' : 'hidden'}`}
 
                         >
-                            <Link to='/booking/kai' className='block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500'>
+                            <Link to='/booking/kai' className={`${ pathSidebar === '/booking/kai' ? 'bg-cyan-100' : ''} block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500`}>
                                 <div className=''>
                                 Booking Kai
                                 </div>
                             </Link>
-                            <Link to='/booking/pesawat' className='block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500'>
+                            <Link to='/booking/pesawat' className={`${ pathSidebar === '/booking/pesawat' ? 'bg-cyan-100' : ''} block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500`}>
                                 <div className=' '>
                                     Booking Pesawat
                                 </div>
