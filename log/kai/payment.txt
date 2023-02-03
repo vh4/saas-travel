@@ -1,0 +1,2 @@
+REQ|2023-011-03|10.0.9.88:1111/travel/train/payment|00|	-->		|RES|SP173269|2023-011-03|https://rajabiller.fastpay.co.id/travel/train/payment|06|SALDO ANDA TIDAK MENCUKUPI|
+REQ|2023-011-03|10.0.9.88:1111/travel/train/payment|00|	-->		|RES|SP173269|2023-011-03|https://rajabiller.fastpay.co.id/travel/train/payment|06|SALDO ANDA TIDAK MENCUKUPI|

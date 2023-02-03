@@ -1,4 +1,5 @@
 const fs = require('fs');
+const utils = require("./utils")
 
 const parseDate = () => {
     const tanggal  = new Date();
@@ -50,34 +51,41 @@ function addLeadingZero(num) {
     }
   }
 
-const Writemessage = (method, url, rc, paths, msg='') => {
+const Writemessage = async (method, url, rc, paths, msg='', token='') =>   {
+  
     let nows = new Date();
         nows = parseDate(nows);
 
     if(method == 'REQ'){
-        const msg =  '|' + method + '|' + nows + '|' + url + '|' + rc + '|' + '\t';
+        const msg = method + '|' + nows + '|' + url + '|' + rc + '|' + '\t';
         fs.appendFile(paths, msg, (error) => {
             if (error) throw error;
             console.log(method + ':' + nows + '->' + url + '|' + JSON.stringify(rc));
           });
     }else{
+      
+        const outlet = await utils.getIdOutlet(token);
+        let usr = outlet;
+
         let messages = '';
         if(rc !== '00'){
-            messages = '-->' + '\t\t' + '|' + method + '|' + nows + '|' + url + '|' + rc + '|' + msg + '|' +'\n';
-            console.log(method + ':' + nows + '->' + url + '|' + JSON.stringify(rc) + '|' + msg + '|');
+            messages = '-->' + '\t\t' + '|' + method +  '|' + usr + '|' + nows + '|' + url + '|' + rc + '|' + msg + '|' +'\n';
+            console.log(method + ':' + usr + '|' + nows + '->' + url + '|' + JSON.stringify(rc) + '|' + msg + '|');
 
           }else{
-          messages = '-->' + '\t\t' + '|' + method + '|' + nows + '|' + url + '|' + rc + '|' + 'SUKSES' + '|' +'\n';
-          console.log(method + ':' + nows + '->' + url + '|' + JSON.stringify(rc) + '|' + 'SUKSES' + '|');
+          messages = '-->' + '\t\t' + '|' + method + '|' + usr + '|' + nows + '|' + url + '|' + rc + '|' + 'SUKSES' + '|' +'\n';
+          console.log(method + ':' + usr + '|' + nows + '->' + url + '|' + JSON.stringify(rc) + '|' + 'SUKSES' + '|');
         }
 
         fs.appendFile(paths, messages, (error) => {
-            if (error) throw error;
-          });
-    }
+          if (error) throw error;
+        });
+      }
+
 
 }
 
 module.exports = {
-    Writemessage
+    Writemessage,
+    tanggalParse
 }
