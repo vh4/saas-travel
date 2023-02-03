@@ -1,12 +1,36 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {FaUserCircle, FaListAlt, FaInbox} from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import {MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp} from "react-icons/md"
+import axios from 'axios'
 
 export default function SidebarUser({pathSidebar}) {
     
     const [dropdownTransaksi, setDropdownTransaksi] = useState(false);
     const [dropdownBooking, setDropdownBooking] = useState(false);
+
+    const user = localStorage.getItem('v_') != 'undefined' && localStorage.getItem('v_') !== null ? JSON.parse(localStorage.getItem('v_')) : null;
+    const [usr, setUsr] = useState();
+
+    useEffect(() =>  {
+        if(user === null || user === undefined){
+            userProfile()
+        }
+    }, [user]);
+
+    const x = user ? user.namaPemilik.split(' ') : usr ? usr.namaPemilik.split(' ') : null;
+    const nd = x ? x[0] ? x[0] : '' : '';
+    const nb =  x ? x[1] ? x[1] : '' : ''
+    
+    const avatar_nd = nd !== '' && nd !== undefined ? nd.substring(0,1).toUpperCase() : 'X';
+    const avatar_nb = nb !== '' && nb !== undefined ? nb.substring(0,1).toUpperCase() : 'X';
+    const userProfile = async () =>  {
+        const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/account`, {
+            token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
+        });
+        setUsr(response.data.data)
+        localStorage.setItem('v_', JSON.stringify(response.data.data))
+    }
 
     return (
         <aside className="mt-8 hidden md:block w-full md:w-full xl:w-72 border rounded-xl shadow-sm" aria-label="Sidebar">
@@ -14,8 +38,8 @@ export default function SidebarUser({pathSidebar}) {
                 <ul className="mt-8 md:mt-0 space-y-2 relative">
                     <li className='hidden md:block mb-4'>
                         <div className={`flex items-center p-2 text-base font-normal text-gray-900 rounded-lg `}>
-                            <div className='hidden xl:block w-full text-xs xl:text-md text-gray-500 font-bold xl:p-4 shadow-sm border rounded-full'><div>F W</div></div>
-                            <span className="text-sm font-bold text-gray-500 flex-1 ml-3 whitespace-nowrap">Fathoni Waseso Jati</span>
+                            <div className='hidden xl:block w-full text-xs xl:text-md text-gray-500 font-bold xl:p-4 shadow-sm border rounded-full'><div>{avatar_nd} {avatar_nb}</div></div>
+                            <span className="text-sm font-bold text-gray-500 flex-1 ml-3 whitespace-nowrap">{nb} {nd}</span>
                         </div>
                     </li> 
                     <Link to='/profile/view'>

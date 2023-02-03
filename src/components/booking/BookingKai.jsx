@@ -109,7 +109,7 @@ export default function ViewBooking({path}) {
                                                 <div className='text-xs py-1 px-3 rounded-full bg-blue-500 text-white'>sisa waktu 
                                     
                                                  {remainingTime(e.expiredDate)}</div>
-                                                <div className='text-blue-500 font-bold text-xs'>lanjut bayar</div>
+                                                <div className='cursor-pointer text-blue-500 font-bold text-xs'>lanjut bayar</div>
                                             </div>
                                         </div>
                                     </div>
