@@ -26,7 +26,10 @@ Router.post('/travel/app/sign_in', function (req, res) {
             return
           }
 
-          return res.send(body)
+          const data = body;
+          data.expired_date = new Date(new Date().getTime() + 60 * 60 * 1000)
+
+          return res.send(data)
         }
       )
 

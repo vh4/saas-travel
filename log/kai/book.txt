@@ -1,2 +1,14 @@
-REQ|2023-011-03|10.0.9.88:1111/travel/train/book|00|	REQ|2023-011-03|10.0.9.88:1111/travel/train/book|00|	REQ|2023-011-03|10.0.9.88:1111/travel/train/book|00|	-->		|RES|SP173269|2023-011-03|https://rajabiller.fastpay.co.id/travel/train/book|00|SUKSES|
-REQ|2023-011-03|10.0.9.88:1111/travel/train/book|00|	-->		|RES|SP173269|2023-011-03|https://rajabiller.fastpay.co.id/travel/train/book|00|SUKSES|
+REQ|2023-011-06|10.0.9.88:1111/travel/train/book|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/train/book|81|Gagal Booking, mohon dicek ulang karena Nomor HP tidak boleh kosong.|
+REQ|2023-011-06|10.0.9.88:1111/travel/train/book|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/train/book|00|SUKSES|
+REQ|2023-011-06|10.0.9.88:1111/travel/train/book|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/train/book|00|SUKSES|
+REQ|2023-011-06|10.0.9.88:1111/travel/train/book|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/train/book|00|SUKSES|
+REQ|2023-011-06|10.0.9.88:1111/travel/train/book|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/train/book|00|SUKSES|
+REQ|2023-011-06|10.0.9.88:1111/travel/train/book|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/train/book|00|SUKSES|
+REQ|2023-011-06|10.0.9.88:1111/travel/train/book|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/train/book|00|SUKSES|
+REQ|2023-011-06|10.0.9.88:1111/travel/train/book|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/train/book|10|Terjadi masalah dalam proses booking. Silahkan ulangi proses dari awal.|
+REQ|2023-011-06|10.0.9.88:1111/travel/train/book|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/train/book|33|Transaksi double, silakan cek report transaksi untuk memastikan|
+REQ|2023-011-06|10.0.9.88:1111/travel/train/book|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/train/book|00|SUKSES|
+REQ|2023-011-06|10.0.9.88:1111/travel/train/book|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/train/book|00|SUKSES|
+REQ|2023-011-06|10.0.9.88:1111/travel/train/book|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/train/book|00|SUKSES|
+REQ|2023-011-06|10.0.9.88:1111/travel/train/book|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/train/book|00|SUKSES|
+REQ|2023-011-06|10.0.9.88:1111/travel/train/book|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/train/book|00|SUKSES|

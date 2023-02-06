@@ -64,17 +64,17 @@ const Writemessage = async (method, url, rc, paths, msg='', token='') =>   {
           });
     }else{
       
-        const outlet = await utils.getIdOutlet(token);
-        let usr = outlet;
+        // const outlet = await utils.getIdOutlet(token);
+        // let usr = outlet;
 
         let messages = '';
         if(rc !== '00'){
-            messages = '-->' + '\t\t' + '|' + method +  '|' + usr + '|' + nows + '|' + url + '|' + rc + '|' + msg + '|' +'\n';
-            console.log(method + ':' + usr + '|' + nows + '->' + url + '|' + JSON.stringify(rc) + '|' + msg + '|');
+            messages = '-->' + '\t\t' + '|' + method + '|' + nows + '|' + url + '|' + rc + '|' + msg + '|' +'\n';
+            console.log(method + ':' + '|' + nows + '->' + url + '|' + JSON.stringify(rc) + '|' + msg + '|');
 
           }else{
-          messages = '-->' + '\t\t' + '|' + method + '|' + usr + '|' + nows + '|' + url + '|' + rc + '|' + 'SUKSES' + '|' +'\n';
-          console.log(method + ':' + usr + '|' + nows + '->' + url + '|' + JSON.stringify(rc) + '|' + 'SUKSES' + '|');
+          messages = '-->' + '\t\t' + '|' + method + '|' + nows + '|' + url + '|' + rc + '|' + 'SUKSES' + '|' +'\n';
+          console.log(method + ':' + nows + '->' + url + '|' + JSON.stringify(rc) + '|' + 'SUKSES' + '|');
         }
 
         fs.appendFile(paths, messages, (error) => {
