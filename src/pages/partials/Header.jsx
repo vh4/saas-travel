@@ -1,13 +1,11 @@
 //make create function reactjs
 
 import { Link } from "react-router-dom";
-import React, { useCallback, useEffect, useState } from 'react'
+import React, {useEffect, useState } from 'react'
 import {CiSettings} from 'react-icons/ci'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast } from 'react-toastify'
 import Skeleton from '@mui/material/Skeleton';
-import { BsTags } from "react-icons/bs";
 import {MdOutlineCorporateFare} from "react-icons/md"
 import {IoMdArrowDropdown} from "react-icons/io"
 import { FaRegUser, FaListAlt } from "react-icons/fa";
@@ -15,7 +13,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { Drawer, Box, Typography } from '@mui/material'
 import SidebarMobileUser from "./sidebar/mobile/SidebarMobileUser";
-import { Modal, Form, Button as Buttons } from 'rsuite';
+import { Modal, Form } from 'rsuite';
 import {Button} from 'antd'
 import { notification } from 'antd';
 
@@ -44,6 +42,30 @@ export default function Header({toogleSidebar, valueSidebar}){
     const handleCloses = () => {
       setAnchorEl(null);
     };
+
+    const gagalLogin = (rd) => {
+        api['error']({
+          message: 'Error!',
+          description:
+          rd.toLowerCase().charAt(0).toUpperCase() + rd.slice(1).toLowerCase() + ' .!',
+        });
+      };
+
+      const suksesLogin = () => {
+        api['success']({
+          message: 'Successfully!',
+          description:
+          'Successfully, anda berhasil login!.',
+        });
+      };
+
+      const suksesLogout= () => {
+        api['success']({
+          message: 'Successfully!',
+          description:
+          'Successfully, anda berhasil logout!.',
+        });
+      };
     
     const navigate = useNavigate();
     const LogoutHandler = (e) => {
@@ -53,7 +75,7 @@ export default function Header({toogleSidebar, valueSidebar}){
             token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
         }).then(() => {
             localStorage.clear();
-            toast.success('Anda berhasil logout!');
+            suksesLogout();
             navigate('/')
         });
         
@@ -105,13 +127,7 @@ export default function Header({toogleSidebar, valueSidebar}){
         localStorage.setItem('userDetails', JSON.stringify(tokenDetails));
     }
 
-    const logoutNotification = () => {
-        api['info']({
-          message: 'Logout!',
-          description:
-          'Waktu anda sudah habis, silahkan login kembali!.',
-        });
-      };
+
 
     const [isExpired, setIsExpired] = useState(false);
     const [api, contextHolder] = notification.useNotification();
@@ -129,7 +145,6 @@ export default function Header({toogleSidebar, valueSidebar}){
     useEffect(() => {
       if (isExpired) {
         logout();
-        logoutNotification();
       }
     }, [isExpired]);    
 
@@ -149,11 +164,11 @@ export default function Header({toogleSidebar, valueSidebar}){
                     setLoading(false);
                     localStorage.setItem(process.env.REACT_APP_SECTRET_LOGIN_API, JSON.stringify(data.data.token));
                     userProfile();
-                    toast.success('Anda Berhasil Login!');
+                    suksesLogin();
                     localStorage.setItem("expired_date", data.data.expired_date);
 
                 } else {
-                    toast.error(data.data.rd);
+                    gagalLogin(data.data.rd);
                     setLoading(false);
                 }
              }); 

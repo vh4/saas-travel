@@ -1,7 +1,5 @@
 import React, {createContext, useEffect, useReducer} from "react";
 import { BrowserRouter, Route, Routes} from "react-router-dom";
-import { ToastContainer } from 'react-toastify'; //for flash notifications
-import 'react-toastify/dist/ReactToastify.css';
 import Profile from "./pages/profile/Profile";
 
 import TransaksiKai from "./pages/transaksi/TransaksiKai";
@@ -59,17 +57,6 @@ function App() {
   return (
     <div className="App">
        <BrowserRouter>
-       <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          />  
       <TiketContext.Provider value={{pay,dispatch}}>
       <NavContext.Provider value={{nav,setNav}}>
         <Routes>
