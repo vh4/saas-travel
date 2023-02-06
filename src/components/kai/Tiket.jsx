@@ -1,13 +1,10 @@
-import React, {useState, useEffect} from "react";
-import axios from "axios";
+import React, {useEffect} from "react";
 import {useSearchParams } from "react-router-dom";
 import {AiOutlineCheckCircle} from "react-icons/ai"
-import {RxCrossCircled} from 'react-icons/rx'
-import {MdHorizontalRule, MdOutlineAirlineSeatReclineExtra} from 'react-icons/md'
+import {MdHorizontalRule} from 'react-icons/md'
 import { useNavigate } from "react-router-dom";
 import {BsFillCheckCircleFill} from "react-icons/bs"
 import {AiOutlineDownload} from "react-icons/ai"
-import { Link } from "react-router-dom";
 
 export default function Konfirmasi(){
 
@@ -49,7 +46,7 @@ export default function Konfirmasi(){
                             <div className='text-slate-500'>E-Tiket</div>
                         </div>
                 </div>
-                <div className="w-full mt-8 xl:px-28">
+                <div className="w-full mt-8 xl:px-28 mb-16">
                     <div className="border rounded-md pb-12">
                         <div className="text-center md:py-16 px-4 md:px-12 xl:px-24">
                             <div className="flex justify-center">

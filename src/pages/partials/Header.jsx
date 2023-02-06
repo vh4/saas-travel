@@ -11,12 +11,13 @@ import { BsTags } from "react-icons/bs";
 import {MdOutlineCorporateFare} from "react-icons/md"
 import {IoMdArrowDropdown} from "react-icons/io"
 import { FaRegUser, FaListAlt } from "react-icons/fa";
-import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { Drawer, Box, Typography } from '@mui/material'
 import SidebarMobileUser from "./sidebar/mobile/SidebarMobileUser";
 import { Modal, Form, Button as Buttons } from 'rsuite';
+import {Button} from 'antd'
+import { notification } from 'antd';
 
 function TextField(props) {
     const { name, label, accepter, ...rest } = props;
@@ -55,6 +56,7 @@ export default function Header({toogleSidebar, valueSidebar}){
             toast.success('Anda berhasil logout!');
             navigate('/')
         });
+        
     }
 
 
@@ -87,25 +89,50 @@ export default function Header({toogleSidebar, valueSidebar}){
     const [isLoading, setLoading] = useState(false);
 
     const logout = () => {
-        axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/sign_out`, {
-            token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
-        }).then(() => {
-            localStorage.removeItem('userDetails');
-            localStorage.removeItem(process.env.REACT_APP_SECTRET_LOGIN_API);
-            toast.success('Anda berhasil logout!');
-            navigate('/')
-        });
+        try{
+            axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/sign_out`, {
+                token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)) == null ? 'Logout' : JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
+            }).then((data) => {
+                console.log(data);
+                localStorage.clear();
+                navigate('/')
+            });
+        }catch(e){
+        }
     }
 
     const saveTokenInLocalStorage = (tokenDetails) => {
         localStorage.setItem('userDetails', JSON.stringify(tokenDetails));
     }
 
-    // const runLogoutTimer = () => {
-    //     setTimeout(() => {
-    //         logout();
-    //     }, 43200000);
-    // }
+    const logoutNotification = () => {
+        api['info']({
+          message: 'Logout!',
+          description:
+          'Waktu anda sudah habis, silahkan login kembali!.',
+        });
+      };
+
+    const [isExpired, setIsExpired] = useState(false);
+    const [api, contextHolder] = notification.useNotification();
+
+    useEffect(() => {
+      const expiredDate = localStorage.getItem("expired_date");
+      const currentDate = new Date();
+      const diffTime = new Date(expiredDate) - currentDate;
+      const timeout = setTimeout(() => {
+        setIsExpired(true);
+      }, diffTime);
+      return () => clearTimeout(timeout);
+    }, []);
+  
+    useEffect(() => {
+      if (isExpired) {
+        logout();
+        logoutNotification();
+      }
+    }, [isExpired]);    
+
 
     const handlerLogin = async (e) => {
         e.preventDefault();
@@ -118,12 +145,12 @@ export default function Header({toogleSidebar, valueSidebar}){
             }).then((data) => {
                 if(data.data.rc === "00"){
                     saveTokenInLocalStorage(data.data);
-                    // runLogoutTimer(data.data.timer * 43200000);
                     setShowModal(false)
                     setLoading(false);
                     localStorage.setItem(process.env.REACT_APP_SECTRET_LOGIN_API, JSON.stringify(data.data.token));
                     userProfile();
                     toast.success('Anda Berhasil Login!');
+                    localStorage.setItem("expired_date", data.data.expired_date);
 
                 } else {
                     toast.error(data.data.rd);
@@ -136,9 +163,13 @@ export default function Header({toogleSidebar, valueSidebar}){
         }
     }
 
+    const x = user ? user.namaPemilik.split(' ') : usr ? usr.namaPemilik.split(' ') : null;
+    const nd = x ? x[0] ? x[0] : '' : '';
+    const nb =  x ? x[1] ? x[1] : '' : ''
 
     return(
         <nav className="bg-white px-2 sm:px-4 py-2 dark:bg-gray-900 block sticky top-0 w-full z-50 left-0 border-b border-gray-200 dark:border-gray-600">
+            {contextHolder}
             <div className="container mx-auto">
                 <div className="flex justify-between items-center sm:-mx-6 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24">
                     <div className="">
@@ -151,10 +182,6 @@ export default function Header({toogleSidebar, valueSidebar}){
                         < MdOutlineCorporateFare className="text-blue-500 font-bold" size={18}/>
                         <div className="text-[15px] text-slate-800">B2B</div>
                     </div></a>
-                    <Link to="/promo" className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-slate-700">
-                        < BsTags className="text-orange-500" size={18}/>
-                        <div className="text-[15px] text-slate-800">Promo</div>
-                    </Link>
                     {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
                     <Link to="/transaksi/pesawat" className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-slate-700">
                         < FaListAlt className="text-cyan-500" size={18}/>
@@ -177,7 +204,7 @@ export default function Header({toogleSidebar, valueSidebar}){
                     </button> 
                     ) :
                     (        
-                        <div className="hidden relative group space-x-2 text-gray-500 md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 py-2.5 xl:inline-flex group-hover:block items-end ml-2 mb-2">
+                        <div className="hidden relative group space-x-2 text-gray-500 md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 py-2.5 md:inline-flex group-hover:block items-end ml-2 mb-2">
                             {user !== null && user !== undefined ? 
                             (
                                 <>
@@ -186,7 +213,7 @@ export default function Header({toogleSidebar, valueSidebar}){
 
                                     (
                                         <>
-                                            <p className="text-gray-500 block">{user.namaPemilik}</p>
+                                            <p className="text-gray-500 block">{nd} {nb}</p>
                                                 < CiSettings size={20} />
                                             {/* <small className="absolute group-hover top-8 left-4 text-slate-500">Sisa saldo {sisaSaldo(user.balance)}</small> */}
                                             <small className="absolute -left-0 group-hover top-7 text-slate-500">Sisa saldo Rp.{toRupiah(user.balance)}</small> 
@@ -225,11 +252,7 @@ export default function Header({toogleSidebar, valueSidebar}){
                 }
                         <div className="hidden md:flex cursor-pointer space-x-3 text-sm items-center text-slate-700">
                             <div className="">
-                                <Button
-                                    id="basic-button"
-                                    aria-controls={open ? 'basic-menu' : undefined}
-                                    aria-haspopup="true"
-                                    aria-expanded={open ? 'true' : undefined}
+                                <button
                                     onClick={handleClick}
                                 >
                                     <div className="flex space-x-4 text-slate-500 text-sm items-center">
@@ -239,7 +262,7 @@ export default function Header({toogleSidebar, valueSidebar}){
                                         </div>
                                         < IoMdArrowDropdown className="font-bold" size={18} />
                                     </div>
-                                </Button>
+                                </button>
                                 <Menu
                                     id="basic-menu"
                                     anchorEl={anchorEl}
@@ -314,10 +337,10 @@ export default function Header({toogleSidebar, valueSidebar}){
         </Modal.Body>
         <Modal.Footer>
             <div className="flex justify-end space-x-4">
-            <Buttons onClick={handlerLogin} type="submit" appearance="primary">
-            {isLoading ? 'Loading...' : 'Login'}
-          </Buttons>
-          <Button onClick={handleClose} appearance="subtle">
+            <Button key="submit" type="primary" className='bg-blue-500' loading={isLoading} onClick={handlerLogin}>
+                Submit
+             </Button>
+          <Button onClick={handleClose}>
             Cancel
           </Button>
             </div>

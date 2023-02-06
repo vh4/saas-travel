@@ -7,7 +7,6 @@ import Skeleton from '@mui/material/Skeleton';
 import {HiOutlineArrowNarrowRight} from 'react-icons/hi'
 import {IoArrowBackOutline} from "react-icons/io5"
 import { Link } from "react-router-dom";
-import Swal from 'sweetalert2'
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import { createTheme } from "@mui/material/styles";
@@ -51,20 +50,8 @@ export default function Search(){
 
     useEffect(() =>{
         if(token === null || token === undefined){
-            Swal.fire({
-                showClass: {
-                    popup: 'animate__animated animate__fadeInDown'
-                  },
-                hideClass: {
-                    popup: 'animate__animated animate__fadeOutUp'
-                  },
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Anda harus login terlebih dahulu!',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                confirmButtonText: 'Kembali'
-              }).then(() => navigate('/'));
+            navigate('/');
+
         }
 
         if(origin === null || origin === undefined){

@@ -32,8 +32,8 @@ export default function Carousels(props) {
           {
             breakpoint: 1024,
             settings: {
-              slidesToShow: 3,
-              slidesToScroll: 3,
+              slidesToShow: 2,
+              slidesToScroll: 2,
               infinite: true,
               dots: true
             }
@@ -60,9 +60,13 @@ export default function Carousels(props) {
 
     return (
         <div className="xl:grid xl:grid-cols-2 w-full px-0 xl:px-4 xl:py-8">
+            <div className='block md:hidden px-4 mb-4 text-gray-500'>
+                <div className="font-semibold text-sm">Promo kamu</div>
+                <small >nikmati promo menarik lainya untuk kamu.</small>
+            </div>
             <div className="hidden xl:block pl-24">
               <div className="flex space-x-4 pl-12 pr-16 text-white">
-                <img className="" src="/plane.svg" width={200} alt="carousel.png" />
+                <img className="" src="/join.svg" width={160} alt="carousal.png" />
                 <div>
                 <h1 className="2xl:px-8 text-xl font-bold">Hai Traveler, Welcome!</h1>
                 <div className="mt-2 2xl:px-8">

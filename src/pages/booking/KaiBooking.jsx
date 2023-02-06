@@ -22,13 +22,16 @@ export default function TransaksiPesawat(){
     }, [navigate]);
 
     return(
+        <>
+        {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
         <Layout>
             <div className="mt-4 px-4 md:px-12">
-
                 {/* Profile fitur  */}
                 < BookingKaiComponent path={path} />
                 
             </div>
         </Layout>
+        ) : null }
+        </>
     )
 }

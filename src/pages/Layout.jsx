@@ -11,6 +11,7 @@ import {IoIosListBox} from "react-icons/io"
 import {BsFillBookmarkStarFill} from "react-icons/bs"
 import { Link } from "react-router-dom";
 import {NavContext} from '../App';
+import Footer from "./partials/Footer";
 
 export default function Layout({children}){
 
@@ -48,13 +49,7 @@ export default function Layout({children}){
             </Box>
             {/* footer */}
             </div>
-            <footer class="border-t text-sm text-gray-500 py-6">
-            <div class="container mx-auto flex flex-wrap items-center">
-                <div class="w-full text-center">
-                <p class="text-sm">© 2015-2023 PT. Bimasakti Multisinergi. All Rights Reserved.</p>
-                </div>
-            </div>
-            </footer>
+                <Footer />
             </div>
     )
 }

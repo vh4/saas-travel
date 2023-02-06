@@ -1,15 +1,42 @@
 import React, {useState, useEffect} from 'react';
 import {AiOutlineHome} from 'react-icons/ai';
-import {BsArrowRightShort} from "react-icons/bs";
+import {HiOutlineArrowNarrowRight} from 'react-icons/hi'
 import {ImAirplane} from 'react-icons/im';
 import axios from "axios";
+import { Button, Modal, Space } from 'antd';
+import { Placeholder } from 'rsuite';
+import {BsArrowRightShort} from "react-icons/bs";
+import { message } from 'antd';
 
 export default function ViewBooking({path}) {
 
-    const [data, setData] = useState({});
-    const [tanggal, setTanggal] = useState();
+    const [data, setData] = useState();
+    const [byrdata, setByrData] = useState();
+    const [showModal, setShowModal] = React.useState(false);
+    const handleOpen = () => setShowModal(true);
+    const handleClose = () => setShowModal(false);
+    const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [messageApi, contextHolder] = message.useMessage();
 
-    const [isLoading, setIsLoading] = useState(true);
+    function success(){
+        messageApi.open({
+          type: 'success',
+          content: 'Pembayaran anda berhasil, silahkan check tiket anda di menu transaksi.',
+          duration: 7,
+        });
+      };
+
+      function gagal(rd){
+        messageApi.open({
+          type: 'error',
+          content: 'Failed, ' + rd.toLowerCase().charAt(0).toUpperCase() + rd.slice(1).toLowerCase() + ' .!',
+          duration: 7,
+        });
+      };
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [loadBayar, setloadBayar] = useState(true);
 
     useEffect(() => {
         getTransaksiList();
@@ -17,16 +44,21 @@ export default function ViewBooking({path}) {
 
     const getTransaksiList = async () =>{
         setIsLoading(true);
-        const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/transaction_book_list`, {
-            token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
-            product:"PESAWAT"
-        });
 
-        const datas = response.data;
-        setData(datas.data);
-        setIsLoading(false);
+        try{
+            const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/transaction_book_list`, {
+                token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
+                product:"PESAWAT"
+            });
+    
+            const datas = response.data;
+            setData(datas.data);
+            setIsLoading(false);
+        }catch(e){
+            setIsLoading(false);
+            console.log(e);
+        }
     }
-
 
     function toRupiah(angka) {
         var rupiah = '';
@@ -55,9 +87,189 @@ export default function ViewBooking({path}) {
         }
     }
 
+    function toRupiah(angka) {
+        var rupiah = '';
+        var angkarev = angka.toString().split('').reverse().join('');
+        for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
+        return rupiah.split('',rupiah.length-1).reverse().join('');
+    }
+
+
+    function openModalBayar(e, i){
+        let filterDataSearching = data.filter((_, index) => index === i);
+        setByrData(filterDataSearching[0]);
+        e.preventDefault();        
+        handleOpen()
+        setShowModal(true);
+        setTimeout(() => {
+            setloadBayar(false);
+        }, 1000)
+    }
+
+    const handleBayar = async () => {
+        setLoading(true);
+
+        const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/flight/payment`, 
+        {
+            airline : byrdata.id_produk,
+            transactionId : byrdata.id_transaksi,
+            bookingCode : byrdata.kode_booking,
+            simulateSuccess: process.env.REACT_APP_SIMUATION_PAYMENT,
+            paymentCode : "",
+            token:JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
+        });
+        setTimeout(() => {
+          setLoading(false);
+          setOpen(false);
+        }, 1000);
+
+        if(response.data.rc !== "00"){
+            gagal(response.data.rd);
+            handleClose();
+        }else{
+            success();
+            handleClose();
+        }
+
+      };
+
     return (
         <>
         <div className=''>
+
+            {/* meessage bayar */}
+            {contextHolder}
+
+            <Modal  width={1000}
+            open={showModal}
+            onOk={handleClose}
+            onCancel={handleClose}
+            footer={[
+                <Button key="back" onClick={handleClose}>
+                  Cancel
+                </Button>,
+                <Button key="submit" type="primary" className='bg-blue-500' loading={loading} onClick={handleBayar}>
+                  Bayar Langsung
+                </Button>,
+              ]}
+        >
+            {loadBayar !== true ? (
+                <div className='mt-4 mb-12'>
+                    <div className='mt-4 mb-4 font-bold text-lg'>
+                        <div>Passengers</div>
+                    </div>
+                    {byrdata.penumpang.map((e) => (
+                        <>
+                            <div className='border rounded-md p-4 grid grid-cols-1 md:grid-cols-5 gap-2 mt-4'>
+                                <div className=''>
+                                    <div className='font-semibold'>Nama</div>
+                                    <div>
+                                    {((e.title).toLowerCase()).charAt(0).toUpperCase() + e.title.slice(1).toLowerCase()}. {((e.nama).toLowerCase()).charAt(0).toUpperCase() + e.nama.slice(1).toLowerCase()} ({((e.status).toLowerCase()).charAt(0).toUpperCase() + e.status.slice(1).toLowerCase()})
+                                    </div>
+                                </div>
+                                <div className=''>
+                                    <div className='font-semibold'>Nik</div>
+                                    <div>
+                                    {((e.nik).toLowerCase()).charAt(0).toUpperCase() + e.nik.slice(1).toLowerCase() != 'Undefined' ? ((e.nik).toLowerCase()).charAt(0).toUpperCase() + e.nik.slice(1).toLowerCase() : '-'}
+                                    </div>
+                                </div>
+                                {
+                                    e.status === 'DEWASA' ?
+                                    (
+                                    <div className=''>
+                                            <div className='font-semibold'>No</div>
+                                            <div>
+                                            {((e.no_hp).toLowerCase()).charAt(0).toUpperCase() + e.no_hp.slice(1).toLowerCase() != "Undefined" ? ((e.no_hp).toLowerCase()).charAt(0).toUpperCase() + e.no_hp.slice(1).toLowerCase() : '-'}
+                                        </div>
+                                    </div>
+                                    ) : null
+                                }
+                                <div className=''>
+                                    <div className='font-semibold'>Tanggal Lahir</div>
+                                    <div>
+                                    {((e.tgl_lahir).toLowerCase()).charAt(0).toUpperCase() + e.tgl_lahir.slice(1).toLowerCase()}
+                                    </div>
+                                </div>
+                            </div> 
+                        </>
+                    ))}
+
+                    <div className='mt-4 mb-4 text-gray-700 font-bold text-lg'>
+                        <div>Description</div>
+                    </div>
+                    {/* desktop */}
+                    <div className='mt-4 hidden md:block'>
+                        <div className='border p-4 grid grid-cols-6 gap-2 items-center'>
+                            <div className=''>
+                                <div className='max-w-[80px]'><img src={byrdata.airlineIcon} alt="logo.png" /></div>
+                                <div className='font-semibold'>{byrdata.nama_maskapai}</div>
+                            </div>
+                            <div className=''>
+                                <div className='font-semibold'>{byrdata.jam_keberangkatan}</div>
+                                <div className='text-xs font-normal'>{byrdata.origin}</div>
+                            </div>
+                            <div>
+                            < HiOutlineArrowNarrowRight className='flex justify-center text-gray-500' size={24} />
+                            </div>
+                            <div className=''>
+                                <div className='font-semibold'>{byrdata.jam_kedatangan}</div>
+                                <div className='text-xs font-normal'>{byrdata.destination}</div>
+                            </div>
+                            <div className=''>
+                                <div className='font-semibold'>{byrdata.duration}</div>
+                                <div className='text-xs font-normal'>Langsung</div>
+                            </div>
+                            <div className=''>
+                                <div className='font-semibold'>Rp. {toRupiah(byrdata.nominal)}</div>
+                                <div className='text-xs  font-normal'>Admin Rp. {toRupiah(byrdata.nominal_admin)}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {/* mobile */}
+                    <div className='mt-4 block md:hidden'>
+                        <div className='border p-4'>
+                            <div className='flex space-x-2 items-center'>
+                                <div className='mr-8'>
+                                    <div><img src={byrdata.airlineIcon} alt="logo.png" /></div>
+                                    <div className=' font-semibold'>{byrdata.nama_maskapai}</div>
+                                </div>
+                                <div className=''>
+                                    <div className=' font-semibold'>{byrdata.jam_keberangkatan}</div>
+                                    <div className='text-xs font-normal'>{byrdata.origin}</div>
+                                </div>
+                                <div>
+                                < HiOutlineArrowNarrowRight className='flex justify-center' size={24} />
+                                </div>
+                                <div className=''>
+                                    <div className='font-semibold'>{byrdata.jam_kedatangan}</div>
+                                    <div className='text-xs font-normal'>{byrdata.destination}</div>
+                                </div>
+                            </div>
+                            <div className='flex space-x-8 items-center mt-4'>
+                                <div className=''>
+                                    <div className='font-semibold'>{byrdata.duration}</div>
+                                    <div className='text-xs font-normal'>Langsung</div>
+                                </div>
+                                <div className=''>
+                                    <div className='font-semibold'>Rp. {toRupiah(byrdata.nominal)}</div>
+                                    <div className='text-xs font-normal'>Admin Rp. {toRupiah(byrdata.nominal_admin)}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ) : 
+            
+            (
+                <>
+                    <div className='mt-2'>
+                        <Placeholder.Paragraph />
+                    </div>
+                </>
+            )
+            
+            }
+        </Modal>
             <div className='w-full mt-8'>
                 <div className="w-full rounded-md shadow-sm border profile-header">
                     <div className="text-gray-500 p-4 flex space-x-2 items-center">
@@ -67,9 +279,9 @@ export default function ViewBooking({path}) {
             </div>
             {isLoading === false ? (
                 <>
-                    {data !== null && data !== undefined && data.length !== 0 ? (
+                {data !== null && data !== undefined && data.length !== undefined ? (
                     <div className='mt-6'>
-                        {data.map((e) => (
+                        {data && data.map((e, i) => (
                             <div className='w-full mb-6'>
                                 <div className="w-full rounded-md shadow-sm border profile-header">
                                     <div className='p-4'>
@@ -96,7 +308,7 @@ export default function ViewBooking({path}) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className='mt-4 border-t block md:flex md:justify-between  md:items-center'>
+                                        <div className='mt-4 border-t block lg:flex md:justify-between  lg:items-center'>
                                             <div className='mt-2 flex space-x-2 items-end'>
                                                 <div className='mt-1 text-xs  text-gray-500'>
                                                     Kode Booking
@@ -107,7 +319,7 @@ export default function ViewBooking({path}) {
                                             </div>
                                             <div className='flex space-x-2  items-center pt-4'>
                                                 <div className='text-xs py-1 px-3 rounded-full bg-blue-500 text-white'>sisa waktu {remainingTime(e.expiredDate)}</div>
-                                                <div className='cursor-pointer text-blue-500 font-bold text-xs'>lanjut bayar</div>
+                                                <div onClick={(e) => openModalBayar(e, i)} type="button" className='cursor-pointer text-blue-500 font-bold text-xs'>lanjut bayar</div>
                                             </div>
                                         </div>
                                     </div>

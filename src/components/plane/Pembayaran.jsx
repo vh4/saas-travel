@@ -1,19 +1,21 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useContext} from "react";
 import axios from "axios";
-import { useParams, useLocation, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {AiOutlineCheckCircle} from "react-icons/ai"
 import {RxCrossCircled} from 'react-icons/rx'
-import {MdHorizontalRule, MdOutlineAirlineSeatReclineExtra} from 'react-icons/md'
+import {MdHorizontalRule} from 'react-icons/md'
 import { useNavigate, createSearchParams } from "react-router-dom";
-import Swal from 'sweetalert2'
 import { TiketContext } from "../../App";
 import {BsArrowRightShort} from "react-icons/bs"
+import { Button, message } from 'antd';
+import { Modal } from 'antd';
 
 export default function Pembayaran(){
 
     const {PesawatNumber} = useParams();
     const navigate = useNavigate();
-    
+    const [messageApi, contextHolder] = message.useMessage();
+
     const {dispatch} = useContext(TiketContext);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -27,91 +29,34 @@ export default function Pembayaran(){
     const TotalInfant = dataDetail ? parseInt(dataDetail[0].infant) : 0;
     const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
 
-    var err = false;
+    var err = false
+
+      function gagal(rd){
+        messageApi.open({
+          type: 'error',
+          content: 'Failed, ' + rd.toLowerCase().charAt(0).toUpperCase() + rd.slice(1).toLowerCase() + ' .!',
+          duration: 5,
+        });
+      };
 
     if(token === null || token === undefined){
-        err = true;
-        Swal.fire({
-            showClass: {
-                popup: 'animate__animated animate__fadeInDown'
-                },
-            hideClass: {
-                popup: 'animate__animated animate__fadeOutUp'
-                },
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Anda harus login terlebih dahulu!',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            }).then(() => navigate('/'));
+        err = true
     }
 
     if(dataDetail === null || dataDetail === undefined){
-        err = true;
-        Swal.fire({
-            showClass: {
-                popup: 'animate__animated animate__fadeInDown'
-                },
-            hideClass: {
-                popup: 'animate__animated animate__fadeOutUp'
-                },
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Terjadi kesalahan, silahkan ulangi dari awal!',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            }).then(() => navigate('/'));
+        err = true
     }
 
     if(dataDetailPassenger === null || dataDetailPassenger === undefined){
-        err = true;
-        Swal.fire({
-            showClass: {
-                popup: 'animate__animated animate__fadeInDown'
-                },
-            hideClass: {
-                popup: 'animate__animated animate__fadeOutUp'
-                },
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Terjadi kesalahan, silahkan ulangi dari awal!',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            }).then(() => navigate('/'));
+        err = true
     }   
 
     if(hasilBooking === null || hasilBooking === undefined){
-        err = true;
-        Swal.fire({
-            showClass: {
-                popup: 'animate__animated animate__fadeInDown'
-                },
-            hideClass: {
-                popup: 'animate__animated animate__fadeOutUp'
-                },
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Terjadi kesalahan, silahkan ulangi dari awal!',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            }).then(() => navigate('/'));
+        err = true
     }
 
     if(dataDetailForBooking === null || dataDetailForBooking === undefined){
-        err = true;
-        Swal.fire({
-            showClass: {
-                popup: 'animate__animated animate__fadeInDown'
-                },
-            hideClass: {
-                popup: 'animate__animated animate__fadeOutUp'
-                },
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Terjadi kesalahan, silahkan ulangi dari awal!',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            }).then(() => navigate('/'));
+        err = true
     }  
     
     function tanggalParse(x){
@@ -151,17 +96,6 @@ export default function Pembayaran(){
          return result
     }
 
-    useEffect(() =>{
-        if(token === null || token === undefined){
-            navigate('/');
-        }
-    });
-
-    useEffect(() =>{
-        if(hasilBooking === null || dataDetailPassenger === null || dataDetail === null){
-            navigate('/')
-        }   
-    }, [hasilBooking, dataDetailPassenger, dataDetail])
 
     function toRupiah(angka) {
         var rupiah = '';
@@ -173,30 +107,19 @@ export default function Pembayaran(){
     setTimeout(() =>{ 
 
         if(hasilBooking && new Date(hasilBooking.timeLimitYMD).getTime() < new Date().getTime()) {
-  
-            Swal.fire({
-                showClass: {
-                  popup: 'animate__animated animate__fadeInDown'
-                },
-                hideClass: {
-                  popup: 'animate__animated animate__fadeOutUp'
-                },
-                 icon: 'error',
-                 title: 'Oops...',
-                 text: 'Maaf, Waktu Booking Tiket Pesawat sudah Expired!',
-                 confirmButtonText: "Kembali",
 
-               }).then(() => navigate('/'));
-    
-               localStorage.removeItem(PesawatNumber + '_flight');
-               localStorage.removeItem(PesawatNumber + '_DetailPassenger');
-               localStorage.removeItem(PesawatNumber + '_Bookingflight');
+            navigate('/');
+            localStorage.removeItem(PesawatNumber + '_flight');
+            localStorage.removeItem(PesawatNumber + '_DetailPassenger');
+            localStorage.removeItem(PesawatNumber + '_Bookingflight');
+
         }
 
     }, hasilBooking && new Date(hasilBooking.timeLimit).getTime() - new Date().getTime());
 
     async function handlerPembayaran(e){
         e.preventDefault();
+        setIsLoading(true);
 
         const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/flight/payment`, 
         {
@@ -232,33 +155,42 @@ export default function Pembayaran(){
                 pathname: "/flight/tiket-pesawat",
                 search: `?${createSearchParams(params)}`  
             })
+            setIsLoading(false);
 
-            
         }else{
-            Swal.fire({
-                showClass: {
-                    popup: 'animate__animated animate__fadeInDown'
-                },
-                hideClass: {
-                    popup: 'animate__animated animate__fadeOutUp'
-                },
-                    title: 'Terjadi Kesalahan!',
-                    text: response.data.rd.toLowerCase(),
-                    confirmButtonText: "Kembali",
-                    showCancelButton: true,
-                }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-                      navigate('/');
-                    } 
-                });
+
+            setTimeout(() => {
+                setIsLoading(false);
+                gagal(response.data.rd)
+
+            }, 1000)
+
         }
     }
 
-
     return(
         <>
-        {err === true ? 'Error' :
+
+        {/* meessage bayar */}
+        {contextHolder}        
+        {err === true ? (<>
+        <Modal.error
+                title="Error!"
+                open={true}
+                content= 'Terjadi kesalahan, silahkan booking kembali.'
+                footer={[
+                    (
+                    <div className="flex justify-end mt-4">
+                        <Button key="submit" type="primary" className='bg-blue-500' onClick={() => window.location = '/'}>
+                             Kembali ke home
+                        </Button>,
+                    </div>
+                    )
+                  ]}
+            >
+        </Modal.error>
+        
+        </>) :
         
         (
             <>
@@ -446,24 +378,11 @@ export default function Pembayaran(){
                                 </div>
                             </div>
                         </div>
-                        <div className="flex justify-center">
-                            <button onClick={handlerPembayaran} type="button" class="block justify-center text-white bg-blue-500  space-x-2 hover:text-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-8 py-3 text-center items-center mr-2 mb-2">
-                            {isLoading ? (
-                            <div className="flex space-x-2 items-center">
-                                <svg aria-hidden="true" class="mr-2 w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-                                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
-                                </svg>
-                                <div class="">Loading...</div>
-                            </div>
-                            )
-                            :
-                            (
-                                <div className="text-white text-sm font-bold">BAYAR LANGSUNG</div>
-                            )
-                            }
-                        </button>
-                        </div>  
+                        <div className="flex justify-center mb-4" >
+                            <Button key="submit" size="large" type="primary" className='bg-blue-500' loading={isLoading} onClick={handlerPembayaran}>
+                                Bayar Langsung
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -11,28 +11,27 @@ export default function ViewTransaksi({path}) {
     const [data, setData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() =>{
-        if(!localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)){
-            navigate('/');
-        }else{
-            return;
-        }
-    }, [navigate]);
-
     useEffect(() => {
         getTransaksiList();
     },[]);
 
     const getTransaksiList = async () =>{
         setIsLoading(true);
-        const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/transaction_list`, {
-            token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
-            product:"KERETA"
-        });
 
-        const datas = response.data;
-        setData(datas.data);
-        setIsLoading(false);
+        try{
+            const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/transaction_list`, {
+                token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
+                product:"KERETA"
+            });
+    
+            const datas = response.data;
+            setData(datas.data);
+            setIsLoading(false);
+
+        }catch(err){
+            console.log(err);
+            setIsLoading(false);
+        }
 
     }
 
@@ -54,7 +53,7 @@ export default function ViewTransaksi({path}) {
             </div>
             {isLoading === false ? (
                 <>
-                    {data !== null && data !== undefined && data.length !== 0 ? (
+                    {data !== null && data !== undefined && data.length !== undefined ? (
                     <>
                         {data.map((e) => (
                             <div className='w-full mt-6'>

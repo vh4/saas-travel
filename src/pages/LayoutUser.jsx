@@ -60,7 +60,7 @@ export default function LayoutUser({children}){
             </div>
 
             {/* <Footer/> */}
-            <footer class="mt-24 border-t text-sm text-gray-500 py-6">
+            <footer class="mt-24 hidden md:block border-t text-sm text-gray-500 py-6">
                 <div class="container mx-auto flex flex-wrap items-center">
                     <div class="w-full text-center">
                         <p class="text-sm">© 2015-2023 PT. Bimasakti Multisinergi. All Rights Reserved.</p>

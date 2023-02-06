@@ -19,11 +19,11 @@ export default function SidebarUser({pathSidebar}) {
     }, [user]);
 
     const x = user ? user.namaPemilik.split(' ') : usr ? usr.namaPemilik.split(' ') : null;
-    const nd = x ? x[0] ? x[0] : '' : '';
-    const nb =  x ? x[1] ? x[1] : '' : ''
+    const nd = x ? x[0] ? x[0] : 'Unknown' : 'Unknown';
+    const nb =  x ? x[1] ? x[1] : 'User' : 'User'
     
-    const avatar_nd = nd !== '' && nd !== undefined ? nd.substring(0,1).toUpperCase() : 'X';
-    const avatar_nb = nb !== '' && nb !== undefined ? nb.substring(0,1).toUpperCase() : 'X';
+    const avatar_nd = nd !== '' && nd !== undefined ? nd.substring(0,1).toUpperCase() : 'U';
+    const avatar_nb = nb !== '' && nb !== undefined ? nb.substring(0,1).toUpperCase() : 'S';
     const userProfile = async () =>  {
         const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/account`, {
             token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
@@ -38,7 +38,7 @@ export default function SidebarUser({pathSidebar}) {
                 <ul className="mt-8 md:mt-0 space-y-2 relative">
                     <li className='hidden md:block mb-4'>
                         <div className={`flex items-center p-2 text-base font-normal text-gray-900 rounded-lg `}>
-                            <div className='hidden xl:block w-full text-xs xl:text-md text-gray-500 font-bold xl:p-4 shadow-sm border rounded-full'><div>{avatar_nd} {avatar_nb}</div></div>
+                            <div className='hidden xl:block w-full text-xs xl:text-md text-gray-500 font-bold xl:py-6 xl:px-7 shadow-sm border rounded-full'><div>{avatar_nb} {avatar_nd}</div></div>
                             <span className="text-sm font-bold text-gray-500 flex-1 ml-3 whitespace-nowrap">{nb} {nd}</span>
                         </div>
                     </li> 
@@ -97,14 +97,6 @@ export default function SidebarUser({pathSidebar}) {
                             </Link>
                         </div>
                     </li>
-                    <Link to='/pesan'>
-                        <li className='ml-4'>
-                            <div className={`flex cursor-pointer ${ pathSidebar === 'pesan' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-500 rounded-lg dark:text-white hover:bg-cyan-100 dark:hover:bg-gray-700`}>
-                            <FaInbox className="text-green-500" size={20} />
-                                <span className="flex-1 ml-3 whitespace-nowrap">Semua Pesan</span>
-                            </div>
-                        </li>
-                    </Link>
                 </ul>
             </div>
         </aside>

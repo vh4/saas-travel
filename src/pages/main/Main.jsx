@@ -65,14 +65,14 @@ export default function MainPage(){
                     <div className="md:mt-24 mx-0 lg:mx-12 xl:mx-32 2xl:mx-64">
                         <WhyFastravel />
                     </div>
-                    <footer className="md:mt-48 border-t">
-                        <div className="mx-0 lg:mx-12 xl:mx-32 2xl:mx-64 bg-white grid grid-cols-4">
-                            <div className="mt-16 col-span-1">
+                    {/* <footer className="mt-24 md:mt-48 border-t hidden md:block">
+                        <div className="p-8 md:p-0 mx-0 lg:mx-12 xl:mx-32 2xl:mx-64 bg-white grid grid-cols-1 md:grid-cols-4">
+                            <div className="mt-8 md:mt-16 col-span-1">
                             <div className="text-gray-700 font-bold text-lg">DIDUKUNG OLEH</div>
                             <img src={'/logo.png'} width={170}  alt="Company Logo" />
                             <img src={'/speedcash.png'} width={170} alt="Support Logo" />
                         </div>
-                        <div className="mt-16 col-span-1">
+                        <div className="mt-8 md:mt-16 col-span-1">
                         <div className="text-gray-700 font-bold text-lg">SOSIAL MEDIA</div>
                             <a href="#" target='_blank' className="text-gray-700 hover:text-blue-700 flex space-x-2 items-center mt-2">
                                 <CiFacebook size={24} />
@@ -91,7 +91,7 @@ export default function MainPage(){
                                 <div>Linkedln</div>
                             </a>
                         </div>
-                        <div className="mt-16 col-span-1">
+                        <div className="mt-8 md:mt-16  col-span-1">
                             <div className="text-gray-700 font-bold text-lg">PRODUK KAMI</div>
                             <a href="#" target='_blank' className="text-gray-700 hover:decoration-gray-700"><div className="mt-2 text-gray-700">Tiket Pesawat</div></a>
                             <a href="#" target='_blank' className="text-gray-700 hover:decoration-gray-700"><div className="mt-2 text-gray-700">Tiket Kereta Api</div></a>
@@ -99,14 +99,14 @@ export default function MainPage(){
                             <a href="#" target='_blank' className="text-gray-700 hover:decoration-gray-700"><div className="mt-2 text-gray-700">Tiket Travel</div></a>
                             <a href="#" target='_blank' className="text-gray-700 hover:decoration-gray-700"><div className="mt-2 text-gray-700">Penginapan Hotel</div></a>
                         </div>
-                        <div className="mt-16 col-span-1">
+                        <div className="mt-8 md:mt-16  col-span-1">
                             <div className="text-gray-700 font-bold text-lg">ALAMAT</div>
                             <p className="mt-2 text-gray-700">Jln. Delta Raya Utara Kav, Waru Sidoarjo 61256</p>
                               <a href="#" target='_blank' className="text-gray-700 hover:decoration-gray-700"><div className="mt-4 text-gray-700">Tentang Kami</div></a>
                               <a href="#" target='_blank' className="text-gray-700 hover:decoration-gray-700"><div className="mt-2 text-gray-700">Blog</div></a>
                         </div>
                         </div>
-                    </footer>
+                    </footer> */}
                 </div>
             </div>
         </div>

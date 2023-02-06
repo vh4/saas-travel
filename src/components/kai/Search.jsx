@@ -7,16 +7,16 @@ import Skeleton from '@mui/material/Skeleton';
 import {HiOutlineArrowNarrowRight} from 'react-icons/hi'
 import {IoArrowBackOutline} from "react-icons/io5"
 import { Link } from "react-router-dom";
-import Swal from 'sweetalert2'
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import { createTheme } from "@mui/material/styles";
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import {MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp} from "react-icons/md"
+import {MdOutlineKeyboardArrowDown} from "react-icons/md"
 import KAISearch from "./KAISearch";
 import moment from "moment"
+import {Modal, Button} from 'antd'
 
 export default function Search(){
 
@@ -35,7 +35,6 @@ export default function Search(){
     const origin = k ? k.origin : searchParams.get('origin') ? searchParams.get('origin') : null;
     const destination = k ? k.destination : searchParams.get('destination') ? searchParams.get('destination') : null;
     const date = k ? k.date : searchParams.get('date') ? searchParams.get('date') : null;
-    const productCode = k ? k.productCode : searchParams.get('productCode') ? searchParams.get('productCode') : null;
     const kotaBerangkat = k ? k.kotaBerangkat : searchParams.get('kotaBerangkat') ? searchParams.get('kotaBerangkat') : null;;
     const kotaTujuan = k ? k.kotaTujuan : searchParams.get('kotaTujuan') ? searchParams.get('kotaTujuan') : null;
     const stasiunBerangkat = k ? k.stasiunBerangkat : searchParams.get('stasiunBerangkat') ? searchParams.get('stasiunBerangkat') : null;  
@@ -118,40 +117,11 @@ export default function Search(){
     useEffect(() =>{
         if(token === null || token === undefined){
             setErr(true);
-            Swal.fire({
-                
-                showClass: {
-                    popup: 'animate__animated animate__fadeInDown'
-                  },
-                hideClass: {
-                    popup: 'animate__animated animate__fadeOutUp'
-                  },
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Anda harus login terlebih dahulu!',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                confirmButtonText: 'Kembali'
-              }).then(() => navigate('/'));
         }
 
 
         if(k == null || k == undefined){
             setErr(true);
-            Swal.fire({
-                showClass: {
-                    popup: 'animate__animated animate__fadeInDown'
-                  },
-                hideClass: {
-                    popup: 'animate__animated animate__fadeOutUp'
-                  },
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Terjadi Kesalahan, Mohon ulangi kembali proses pencarian!',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                confirmButtonText: 'Kembali'
-              }).then(() => navigate('/'));
         }
 
 
@@ -545,7 +515,27 @@ export default function Search(){
             }
             </div>
             </>
-        ) : null}
+        ) : 
+        
+        (
+    <Modal.error
+            title="Error!"
+            open={true}
+            content= 'Silahkan anda login terlebih dahulu.'
+            footer={[
+                (
+                <div className="flex justify-end mt-4">
+                    <Button key="submit" type="primary" className='bg-blue-500' onClick={() => window.location = '/'}>
+                         Kembali ke home
+                    </Button>,
+                </div>
+                )
+              ]}
+        >
+    </Modal.error>
+        )
+        
+        }
         </>
     )
 }

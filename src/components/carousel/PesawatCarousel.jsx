@@ -83,11 +83,15 @@ export default function PesawatCarousel(){
     return(
         <>
             <div className="">
-                <div className="py-4 px-4 md:px-0 title text-slate-600 text-md md:text-2xl font-medium">
-                    <div className="flex space-x-2 items-center"><div>Rekomendasi Pesawat Buat Kamu Loh </div><GiStarsStack className="text-yellow-400" /></div>
+                <div className="hidden md:block py-4 px-4 md:px-0 title text-slate-600 text-md md:text-2xl font-medium">
+                    <div className="flex space-x-2 items-center text-lg font-semibold"><div>Rekomendasi Pesawat Buat Kamu Loh </div><GiStarsStack className="text-yellow-400" /></div>
                     <div className="mt-2 text-sm text-gray-400">Bingung perjalanan akhir pekan mau kemana, disini tempat rekomendasi buat kamu.</div>
                 </div>
-                <div className="mx-2 md:mx-0 flex space-x-2 mb-2">
+                <div className='block mt-8 md:hidden px-4 mb-4 text-gray-500'>
+                  <div className="font-semibold text-sm">Rekomendasi pesawat</div>
+                  <small >rekomendasi weekend menarik untuk kamu.</small>
+                </div>
+                <div className="mx-2 md:mx-0 flex space-x-2 mb-2 overflow-x-scroll scrollbar-hide">
                     <button type="button" class="py-2.5 px-5 mb-2 text-sm font-medium text-white focus:outline-none bg-blue-500 rounded-full border border-gray-200 focus:z-10 focus:ring-2 focus:ring-blue-200">Jakarta</button>
                     <button type="button" class="py-2.5 px-5 mr-3 mb-2 text-sm font-medium text-blue-400 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-blue-50 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-blue-200">Bandung</button>
                     <button type="button" class="py-2.5 px-5 mr-3 mb-2 text-sm font-medium text-blue-400 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-blue-50 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-blue-200">Surabaya</button>
@@ -95,10 +99,10 @@ export default function PesawatCarousel(){
                     <button type="button" class="py-2.5 px-5 mr-3 mb-2 text-sm font-medium text-blue-400 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-blue-50 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-blue-200">Surakarta</button>
                     <button type="button" class="py-2.5 px-5 mr-3 mb-2 text-sm font-medium text-blue-400 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-blue-50 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-blue-200">Bali</button>
                 </div>
-                <Carousel responsive={responsive} className="flex items-stretch ">
+                <Carousel responsive={responsive} className="p-2 md:p-0 flex items-stretch ">
                     {data.map((e) => (
                           <div className="mx-1 md:mx-0 flex-1 h-full">
-                            <div class="w-fit md:min-w-[250px] md:max-w-[250px] bg-white border border-gray-200 rounded-lg h-full  dark:bg-gray-800 dark:border-gray-700">
+                            <div class="w-fit mx-0 lg:mx-2 md:min-w-[240px] md:max-w-[250px] bg-white border border-gray-200 rounded-lg h-full  dark:bg-gray-800 dark:border-gray-700">
                                 <div className="mb-4">
                                     <img class="rounded-t-lg min-h-[120px] md:min-h-[120px]" src={e.image} alt="hotel image" />
                                 </div>

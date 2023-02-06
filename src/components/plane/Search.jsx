@@ -7,7 +7,6 @@ import Skeleton from '@mui/material/Skeleton';
 import {HiOutlineArrowNarrowRight} from 'react-icons/hi'
 import {IoArrowBackOutline} from "react-icons/io5"
 import { Link } from "react-router-dom";
-import Swal from 'sweetalert2'
 import Typography from '@mui/material/Typography';
 import { createTheme } from "@mui/material/styles";
 import { MdOutlineLuggage} from "react-icons/md"
@@ -21,17 +20,9 @@ import {IoMdTimer} from 'react-icons/io'
 import SearchPlane from "./SearchPlane";
 import { Progress } from 'rsuite';
 import { Alert, Space, Spin } from 'antd';
+import {Modal, Button} from 'antd'
 
 export default function Search(){
-
-    const theme = createTheme({
-        typography: {
-          // In Chinese and Japanese the characters are usually larger,
-          // so a smaller fontsize may be appropriate.
-          fontSize: 8,
-        },
-      });
-      
 
     let v_search = localStorage.getItem('v-search') ? JSON.parse(localStorage.getItem('v-search')) : null;
     v_search = v_search !== undefined && v_search !== null ? v_search : null;
@@ -44,38 +35,10 @@ export default function Search(){
     useEffect(() => {
         if(token === null || token === undefined){
             setErr(true);
-            Swal.fire({
-                showClass: {
-                    popup: 'animate__animated animate__fadeInDown'
-                  },
-                hideClass: {
-                    popup: 'animate__animated animate__fadeOutUp'
-                  },
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Anda harus login terlebih dahulu!',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                confirmButtonText: 'Kembali'
-              }).then(() => navigate('/'));
         }
 
         if(v_search == null || v_search == undefined){
             setErr(true);
-            Swal.fire({
-                showClass: {
-                    popup: 'animate__animated animate__fadeInDown'
-                  },
-                hideClass: {
-                    popup: 'animate__animated animate__fadeOutUp'
-                  },
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Terjadi Kesalahan, Mohon ulangi kembali proses pencarian!',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                confirmButtonText: 'Kembali'
-              }).then(() => navigate('/'));
         }
 
     }, [token, v_search]);
@@ -217,6 +180,8 @@ export default function Search(){
 
     }
 
+    setLoading(false);
+
     if(percent < 90){
         setPercent(100);
     }
@@ -345,13 +310,11 @@ export default function Search(){
         }
     }
 
-    // console.log(dataSearch);
-
     return(
         <>
         {err !== true ? (
             <>
-                        <div className="judul-search mt-4 font-bold text-slate-600">
+            <div className="judul-search mt-4 font-bold text-slate-600">
                 PILIH JADWAL
             </div>
                 <div className="mt-8">
@@ -473,7 +436,7 @@ export default function Search(){
                                     <div className="flex justify-center col-span-1 md:col-span-2">
                                         {e.classes[0][0].availability > 0 ? (
                                             <div>
-                                                <button type="button" onClick={(e) => bookingHandlerDetail(e, index)}  class={`${isLoadingPilihTiket == 'true-' + index   ? 'py-6 xl:px-16' : 'py-3.5 px-10 md:px-10 xl:px-12 2xl:px-14'} relative xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-medium rounded-sm text-sm  text-center inline-flex items-center dark:hover:bg-blue-500/80 dark:focus:ring-blue-500/40 mr-2 mb-2`}>
+                                                <button type="button" onClick={(e) => bookingHandlerDetail(e, index)}  class={`${isLoadingPilihTiket == 'true-' + index   ? 'py-6 xl:px-16' : 'py-3.5 px-10 md:px-10 xl:px-12 2xl:px-14'} relative xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-2 rounded-md focus:outline-none focus:ring-blue-500/50 font-medium text-sm  text-center inline-flex items-center dark:hover:bg-blue-500/80 dark:focus:ring-blue-500/40 mr-2 mb-2`}>
                                                     {isLoadingPilihTiket == 'true-' + index ? (
                                                         <>
                                                             <img className="absolute right-8" src="/load.gif"  width={60} alt="laoding"/>
@@ -792,7 +755,21 @@ export default function Search(){
         )
         :
         (
-            <>Error, Terjadi Kesalahan!.</>
+    <Modal.error
+            title="Error!"
+            open={true}
+            content= 'Silahkan anda login terlebih dahulu.'
+            footer={[
+                (
+                <div className="flex justify-end mt-4">
+                    <Button key="submit" type="primary" className='bg-blue-500' onClick={() => window.location = '/'}>
+                         Kembali ke home
+                    </Button>,
+                </div>
+                )
+              ]}
+        >
+    </Modal.error>
         )
     }
     </>
