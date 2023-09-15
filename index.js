@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const Routes = require("./routes/api")
 const app = express();
-const port = process.env.PORT || 5000;
+const port = 9999;
 require('./utils/createFs');
 
 app.use(cors({
