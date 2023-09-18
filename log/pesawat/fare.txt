@@ -1,8 +1,0 @@
-REQ|2023-011-06|10.0.9.88:1111/travel/flight/fare|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/flight/fare|05|GENERAL ERROR|
-REQ|2023-011-06|10.0.9.88:1111/travel/flight/fare|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/flight/fare|88|Penerbangan tidak tersedia.|
-REQ|2023-011-06|10.0.9.88:1111/travel/flight/fare|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/flight/fare|||
-REQ|2023-011-06|10.0.9.88:1111/travel/flight/fare|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/flight/fare|88|Penerbangan tidak tersedia.|
-REQ|2023-011-06|10.0.9.88:1111/travel/flight/fare|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/flight/fare|05|GENERAL ERROR|
-REQ|2023-011-06|10.0.9.88:1111/travel/flight/fare|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/flight/fare|88|Penerbangan tidak tersedia.|
-REQ|2023-011-06|10.0.9.88:1111/travel/flight/fare|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/flight/fare|||
-REQ|2023-011-06|10.0.9.88:1111/travel/flight/fare|00|	-->		|RES|2023-011-06|https://rajabiller.fastpay.co.id/travel/flight/fare|88|Penerbangan tidak tersedia.|
