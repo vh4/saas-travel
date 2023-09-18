@@ -393,7 +393,7 @@ export default function Search(){
                     {dataSearch.map((e, index) => ( //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
                         <>
                         {e.classes[0][0].price !== 0 ? (
-                            <div class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 bg-white border border-gray-200 rounded-md shadow-sm dark:bg-gray-800 dark:border-gray-700 hover:border hover:border-gray-100 transition-transform transform hover:scale-105`}>
+                            <div class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 bg-white border border-gray-200 rounded-md shadow-sm hover:border hover:border-gray-100 transition-transform transform hover:scale-105`}>
                             {/* desktop cari */}
                             <div className="hidden xl:block w-full text-gray-700 ">
                                 
@@ -436,7 +436,7 @@ export default function Search(){
                                     <div className="flex justify-center col-span-1 md:col-span-2">
                                         {e.classes[0][0].availability > 0 ? (
                                             <div>
-                                                <button type="button" onClick={(e) => bookingHandlerDetail(e, index)}  class={`${isLoadingPilihTiket == 'true-' + index   ? 'py-6 xl:px-16' : 'py-3.5 px-10 md:px-10 xl:px-12 2xl:px-14'} relative xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-2 rounded-md focus:outline-none focus:ring-blue-500/50 font-medium text-sm  text-center inline-flex items-center dark:hover:bg-blue-500/80 dark:focus:ring-blue-500/40 mr-2 mb-2`}>
+                                                <button type="button" onClick={(e) => bookingHandlerDetail(e, index)}  class={`${isLoadingPilihTiket == 'true-' + index   ? 'py-6 xl:px-16' : 'py-3.5 px-10 md:px-10 xl:px-12 2xl:px-14'} relative xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-2 rounded-md focus:outline-none focus:ring-blue-500/50 font-medium text-sm  text-center inline-flex items-center  mr-2 mb-2`}>
                                                     {isLoadingPilihTiket == 'true-' + index ? (
                                                         <>
                                                             <img className="absolute right-8" src="/load.gif"  width={60} alt="laoding"/>

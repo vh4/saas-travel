@@ -183,7 +183,7 @@ export default function Header({toogleSidebar, valueSidebar}){
     const nb =  x ? x[1] ? x[1] : '' : ''
 
     return(
-        <nav className="bg-white px-2 sm:px-4 py-2 dark:bg-gray-900 block sticky top-0 w-full z-50 left-0 border-b border-gray-200 dark:border-gray-600">
+        <nav className="bg-white px-2 sm:px-4 py-2  block sticky top-0 w-full z-50 left-0 border-b border-gray-200 ">
             {contextHolder}
             <div className="container mx-auto">
                 <div className="flex justify-between items-center sm:-mx-6 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24">
@@ -232,10 +232,10 @@ export default function Header({toogleSidebar, valueSidebar}){
                                                 < CiSettings size={20} />
                                             {/* <small className="absolute group-hover top-8 left-4 text-slate-500">Sisa saldo {sisaSaldo(user.balance)}</small> */}
                                             <small className="absolute -left-0 group-hover top-7 text-slate-500">Sisa saldo Rp.{toRupiah(user.balance)}</small> 
-                                            <ul class="transition-opacity duration-500 invisible group-hover:visible absolute top-0 mt-8 w-48 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                                            <Link to="/profile/view"><li class="hover:bg-gray-200 py-2 px-4 w-full rounded-t-lg border-b border-gray-200 dark:border-gray-600">Akun saya</li></Link>
-                                                <li class="hover:bg-gray-200 py-2 px-4 w-full border-b border-gray-200 dark:border-gray-600">Lupa password pin</li>
-                                                <li onClick={LogoutHandler} class="hover:bg-gray-200 py-2 px-4 w-full border-b border-gray-200 dark:border-gray-600">Logout</li>
+                                            <ul class="transition-opacity duration-500 invisible group-hover:visible absolute top-0 mt-8 w-48 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 ">
+                                            <Link to="/profile/view"><li class="hover:bg-gray-200 py-2 px-4 w-full rounded-t-lg border-b border-gray-200 ">Akun saya</li></Link>
+                                                <li class="hover:bg-gray-200 py-2 px-4 w-full border-b border-gray-200 ">Lupa password pin</li>
+                                                <li onClick={LogoutHandler} class="hover:bg-gray-200 py-2 px-4 w-full border-b border-gray-200 ">Logout</li>
                                             </ul>                      
                                         </>  
                                     ) :
@@ -296,7 +296,7 @@ export default function Header({toogleSidebar, valueSidebar}){
 
                 </>
                 {/* Button */}
-                        <button data-collapse-toggle="navbar-sticky" type="button" className="inline-flex items-center py-2 px-4 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
+                        <button data-collapse-toggle="navbar-sticky" type="button" className="inline-flex items-center py-2 px-4 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 " aria-controls="navbar-sticky" aria-expanded="false">
                             <span className="sr-only">Open main menu</span>
                             <button onClick={() => setIsDrawerOpen(true)}>
                             <svg className="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>

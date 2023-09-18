@@ -227,9 +227,9 @@ function Pelni(){
             setLoading(true);
 
             let startDate= new Date(tanggal[0] ? tanggal[0] : null);
-                startDate= startDate.getFullYear()+'-'+addLeadingZero(parseInt(startDate.getMonth()) + 1)+'-'+addLeadingZero(parseInt(startDate.getDate()) + 1);
+                startDate= startDate.getFullYear()+'-'+addLeadingZero(parseInt(startDate.getMonth()) + 1)+'-'+addLeadingZero(parseInt(startDate.getDate()));
             let endDate= new Date(tanggal[1] ? tanggal[1] : null);
-                endDate= endDate.getFullYear()+'-'+addLeadingZero(parseInt(endDate.getMonth()) + 1)+'-'+addLeadingZero(parseInt(endDate.getDate()) + 1);
+                endDate= endDate.getFullYear()+'-'+addLeadingZero(parseInt(endDate.getMonth()) + 1)+'-'+addLeadingZero(parseInt(endDate.getDate()));
 
             setTimeout(() => {
                 e.preventDefault();
@@ -257,7 +257,7 @@ function Pelni(){
     return (
         <>     
             <div className="row bg-white border-t border-gray-200 w-full p-2 pr-0">
-                <div class="w-full p-4 py-4 xl:px-8 rounded-lg shadow-xs dark:bg-gray-800 dark:border-gray-700">
+                <div class="w-full p-4 py-4 xl:px-8 rounded-lg shadow-xs">
                     <form className="w-full">
                         {/* <div className="space-x-2 items-center flex">
                             < BiTrain className="text-gray-600" size={24} />
@@ -379,7 +379,7 @@ function Pelni(){
                                 <FormControl sx={{ m: 1, minWidth: 120 }}>
                                 <small className="mb-2 text-gray-500">Total Penumpang</small>
                                 <TextField onClick={ handleClick} sx={{ input: { cursor: 'pointer' } }} variant="outlined" size="small" classes={classes} id="outlined-basic" value={`${parseInt(laki) + parseInt(wanita)} Penumpang`} variant="outlined" />       
-                                    <div id="basic-menu" className={`${anchorEl} absolute top-20 z-10 grid w-auto px-8 text-sm bg-white border border-gray-100 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-700`}>
+                                    <div id="basic-menu" className={`${anchorEl} absolute top-20 z-10 grid w-auto px-8 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}>
                                         <div className="w-full ml-4 block md:mx-0">
                                             <div className="mt-4 w-full items-center text-gray-600">
                                                 <div className="text-sm text-center header-number">

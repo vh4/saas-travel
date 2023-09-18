@@ -294,7 +294,7 @@ function Plane(){
     return (
         <>     
            <div className="pl-4 flex justify-center row bg-white border-t border-gray-200 w-full pr-0">
-                <div class="w-full p-4 py-4 rounded-lg shadow-xs dark:bg-gray-800 dark:border-gray-700">
+                <div class="w-full p-4 py-4 rounded-lg shadow-xs">
                     <form className="w-full">
                         <>
                         <div className="w-64 xl:w-48 mx-0">

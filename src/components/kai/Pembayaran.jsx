@@ -8,6 +8,8 @@ import { useNavigate, createSearchParams } from "react-router-dom";
 import { TiketContext } from "../../App";
 import {Button as ButtonAnt, Modal as Modals} from 'antd'
 import { notification } from 'antd';
+import Marquee from 'react-fast-marquee';
+import { Alert } from 'antd';
 
 export default function Pembayaran(){
 
@@ -350,11 +352,27 @@ export default function Pembayaran(){
                     </div>
                 </div>
                 <div className='mt-8 py-2 rounded-md border border-gray-200 shadow-sm'>
+                    {/* <div className="px-8 py-4 text-sm text-gray-500">
+                        Tekan tombol <span className="text-blue-500">bayar langsung</span> untuk melakukan pembayaran secara tunai.
+                    </div> */}
+
+                    <div className="px-4 py-2 text-sm text-gray-500">
+                        <Alert
+                            banner
+                            message={
+                            <Marquee pauseOnHover gradient={false}>
+                                <span>Untuk menu pembayaran, masih dalam proses pengembangan. </span>
+                            </Marquee>              
+                            }
+                        />
+                    </div>
+
                     <div className="px-8 py-4 text-sm text-gray-500">
                         Tekan tombol <span className="text-blue-500">bayar langsung</span> untuk melakukan pembayaran secara tunai.
-                    </div>
+                    </div> 
+                    
                     <div className="flex justify-center">
-                    <ButtonAnt onClick={handlerPembayaran}  size="large" key="submit"  type="primary" className='bg-blue-500 mx-2 font-semibold mt-4' loading={isLoading}>
+                    <ButtonAnt onClick={handlerPembayaran}  size="large" key="submit"  type="primary" className='bg-blue-500 mx-2 font-semibold mt-4' loading={isLoading} disabled>
                         Langsung Bayar
                     </ButtonAnt>
                     </div>  

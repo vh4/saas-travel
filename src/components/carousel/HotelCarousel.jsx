@@ -100,14 +100,14 @@ export default function HotelCarousel(){
                 <Carousel responsive={responsive}  className="flex items-stretch">
                     {data.map((e) => (
                           <div className="mx-2 h-full">
-                            <div class="w-fit md:min-w-[250px] md:max-w-[270px] h-full bg-white border border-gray-200 rounded-lg  dark:bg-gray-800 dark:border-gray-700">
+                            <div class="w-fit md:min-w-[250px] md:max-w-[270px] h-full bg-white border border-gray-200 rounded-lg">
                                 <div className="mb-4">
                                     <img class="rounded-t-lg w-full min-h-[120px] max-h-[120px] md:min-h-[170px] md:max-h-[170px]" src={e.image} alt="hotel image" />
                                 </div>
                                 <div class="px-2 pb-5">
                                   <div className="flex flex-col">
                                   <div>
-                                        <h5 class="ml-1 text-sm font-semibold tracking-tight text-gray-700 dark:text-white">{e.name}</h5>
+                                        <h5 class="ml-1 text-sm font-semibold tracking-tight text-gray-700">{e.name}</h5>
                                         <div className="mt-2 flex ">
                                             <IoLocationOutline className="text-gray-500" />
                                             <small className="text-gray-500">{e.lokasi}</small>
@@ -118,12 +118,12 @@ export default function HotelCarousel(){
                                         <svg aria-hidden="true" class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>First star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
 
                                         )}
-                                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-3">{e.rating}/5.0</span>
+                                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">{e.rating}/5.0</span>
                                     </div>
                                   </div>
                                     <div class="flex items-center justify-start pl-2 mt-5">
                                         <div>
-                                          <div className="flex space-x-2"><span class="text-md font-bold text-blue-500 dark:text-white">Rp.{toRupiah(e.harga - (e.harga * (e.diskon/100)))}</span><div className="text-gray-500 text-sm">{e.diskon !== 0 ? (<s>Rp.{toRupiah(e.harga)}</s>) : null}</div></div>
+                                          <div className="flex space-x-2"><span class="text-md font-bold text-blue-500 ">Rp.{toRupiah(e.harga - (e.harga * (e.diskon/100)))}</span><div className="text-gray-500 text-sm">{e.diskon !== 0 ? (<s>Rp.{toRupiah(e.harga)}</s>) : null}</div></div>
                                             <div className="text-xs text-gray-500">Diskon {e.diskon}%</div>
                                         </div>
                                     </div>

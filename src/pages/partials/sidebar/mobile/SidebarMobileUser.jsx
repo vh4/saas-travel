@@ -48,7 +48,7 @@ export default function SidebarMobileUser({pathSidebar}) {
 
     return (
         <aside className="w-full" aria-label="Sidebar">
-            <div className="flex justify-center overflow-y-auto dark:bg-gray-800 h-full" >
+            <div className="flex justify-center overflow-y-auto  h-full" >
                 <ul className="mt-0 space-y-2 relative">
                     {loading ? (<></>)
                         : (
@@ -71,7 +71,7 @@ export default function SidebarMobileUser({pathSidebar}) {
                                             </li> 
                                             <Link to='/profile/view'>
                                                 <li>
-                                                    <div className={`flex cursor-pointer ${ pathSidebar === '/profile/view' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-500 rounded-lg dark:text-white hover:bg-cyan-100 dark:hover:bg-gray-700`}>
+                                                    <div className={`flex cursor-pointer ${ pathSidebar === '/profile/view' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-500 rounded-lg `}>
                                                         <div className='flex'>
                                                         <FaUserCircle className="text-orange-500" size={20} />
                                                         <span className="flex-1 ml-3 whitespace-nowrap">Profile</span>
@@ -80,7 +80,7 @@ export default function SidebarMobileUser({pathSidebar}) {
                                                 </li>
                                             </Link>
                                             <li>
-                                                <div onClick={(e) => dropdownTransaksi === true ? setDropdownTransaksi(false) : setDropdownTransaksi(true)}  className={`flex justify-between cursor-pointer items-center p-2 text-base font-normal text-gray-500 rounded-lg dark:text-white hover:bg-cyan-100 dark:hover:bg-gray-700`}>
+                                                <div onClick={(e) => dropdownTransaksi === true ? setDropdownTransaksi(false) : setDropdownTransaksi(true)}  className={`flex justify-between cursor-pointer items-center p-2 text-base font-normal text-gray-500 rounded-lg `}>
                                                     <div className='flex items-center'>
                                                         <FaListAlt className="text-cyan-500" size={18} />
                                                         <span className="flex-1 ml-3 whitespace-nowrap">List Transaksi</span>
@@ -103,7 +103,7 @@ export default function SidebarMobileUser({pathSidebar}) {
                                                 </div>
                                             </li>
                                             <li>
-                                                <div onClick={(e) => dropdownBooking === true ? setDropdownBooking(false) : setDropdownBooking(true)}  className={`flex justify-between cursor-pointer ${ pathSidebar === 'booking' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-500 rounded-lg dark:text-white hover:bg-cyan-100 dark:hover:bg-gray-700`}>
+                                                <div onClick={(e) => dropdownBooking === true ? setDropdownBooking(false) : setDropdownBooking(true)}  className={`flex justify-between cursor-pointer ${ pathSidebar === 'booking' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-500 rounded-lg `}>
                                                     <div className='flex items-center'>
                                                         <FaListAlt className="text-blue-500" size={18} />
                                                         <span className="flex-1 ml-3 whitespace-nowrap">List Booking</span>
@@ -134,7 +134,7 @@ export default function SidebarMobileUser({pathSidebar}) {
                     }
                     <Link to='/kai'>
                         <li className='mt-2 mb-2'>
-                            <div className={`flex cursor-pointer ${ pathSidebar === '/kai' ? 'bg-gray-200' : ''} items-center p-1 text-base font-normal text-gray-500 rounded-lg dark:text-white hover:bg-cyan-100 dark:hover:bg-gray-700`}>
+                            <div className={`flex cursor-pointer ${ pathSidebar === '/kai' ? 'bg-gray-200' : ''} items-center p-1 text-base font-normal text-gray-500 rounded-lg `}>
                                 <div className='flex'>
                                 <MdOutlineTrain className="text-fuchsia-500" size={24} />
                                 <span className="flex-1 ml-3 whitespace-nowrap">Kereta</span>
@@ -144,7 +144,7 @@ export default function SidebarMobileUser({pathSidebar}) {
                     </Link>
                     <Link to='/pesawat'>
                         <li className='mt-2 mb-2'>
-                            <div className={`flex cursor-pointer ${ pathSidebar === '/pesawat' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-500 rounded-lg dark:text-white hover:bg-cyan-100 dark:hover:bg-gray-700`}>
+                            <div className={`flex cursor-pointer ${ pathSidebar === '/pesawat' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-500 rounded-lg `}>
                                 <div className='flex'>
                                 <GiCommercialAirplane className="text-blue-500" size={20} />
                                 <span className="flex-1 ml-3 whitespace-nowrap">Pesawat</span>
@@ -154,7 +154,7 @@ export default function SidebarMobileUser({pathSidebar}) {
                     </Link>
                     <Link to='/pelni'>
                         <li className='mt-2 mb-2'>
-                            <div className={`flex cursor-pointer ${ pathSidebar === '/pelni' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-500 rounded-lg dark:text-white hover:bg-cyan-100 dark:hover:bg-gray-700`}>
+                            <div className={`flex cursor-pointer ${ pathSidebar === '/pelni' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-500 rounded-lg `}>
                                 <div className='flex'>
                                 <IoBoatOutline className="text-red-500" size={20} />
                                 <span className="flex-1 ml-3 whitespace-nowrap">Kapal</span>

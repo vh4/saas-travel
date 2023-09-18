@@ -368,24 +368,24 @@ export default function BookingPesawat(){
                             </div>
                         </div>
                         <div className='p-4 pl-12 mb-4'>
-                        <ol class="relative border-l-2 border-dotted border-gray-300 dark:border-gray-700">                  
+                        <ol class="relative border-l-2 border-dotted border-gray-300 ">                  
                                 <li class="mb-10 ml-4 text-sm">
-                                    <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-400 dark:border-gray-900 dark:bg-gray-700"></div>
+                                    <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-400  "></div>
                                     <div className='flex space-x-12'>
-                                        <time class="mb-1 text-xs font-bold leading-none text-gray-400 dark:text-gray-500">{dataDetail.departureTime}</time>
+                                        <time class="mb-1 text-xs font-bold leading-none text-gray-400 ">{dataDetail.departureTime}</time>
                                         <div className='-mt-2'>
-                                            <h3 class="text-left text-xs font-bold text-slate-600 dark:text-white">{dataDetail.departureName}</h3>
-                                            <p class="text-left text-xs font-bold text-gray-500 dark:text-gray-400">({dataDetail.departure})</p>
+                                            <h3 class="text-left text-xs font-bold text-slate-600 ">{dataDetail.departureName}</h3>
+                                            <p class="text-left text-xs font-bold text-gray-500 ">({dataDetail.departure})</p>
                                         </div>
                                     </div>
                                 </li>
                                 <li class="ml-4 text-sm mt-10">
-                                    <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                    <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white  "></div>
                                     <div className='flex space-x-12'>
-                                        <time class="mb-1 text-xs font-bold leading-none text-gray-400 dark:text-gray-500">{dataDetail.arrivalTime}</time>
+                                        <time class="mb-1 text-xs font-bold leading-none text-gray-400 ">{dataDetail.arrivalTime}</time>
                                         <div className='-mt-2'>
-                                            <h3 class="text-left text-xs font-bold text-slate-600 dark:text-white">{dataDetail.arrivalName}</h3>
-                                            <p class="text-left text-xs font-bold text-gray-500 dark:text-gray-400">({dataDetail.arrival})</p>
+                                            <h3 class="text-left text-xs font-bold text-slate-600 ">{dataDetail.arrivalName}</h3>
+                                            <p class="text-left text-xs font-bold text-gray-500 ">({dataDetail.arrival})</p>
                                         </div>
                                     </div>
                                 </li>
@@ -739,24 +739,24 @@ export default function BookingPesawat(){
                                     </div>
                                 </div>
                                 <div className='p-4 pl-8 pt-4 px-6 mb-4'>
-                                <ol class="relative border-l-2 border-dotted border-gray-300 dark:border-gray-700">                  
+                                <ol class="relative border-l-2 border-dotted border-gray-300 ">                  
                                         <li class="mb-10 ml-4 text-sm">
-                                            <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-400 dark:border-gray-900 dark:bg-gray-700"></div>
+                                            <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-400  "></div>
                                             <div className='flex space-x-12'>
-                                                <time class="mb-1 text-xs font-bold leading-none text-gray-400 dark:text-gray-500">{dataDetail.departureTime}</time>
+                                                <time class="mb-1 text-xs font-bold leading-none text-gray-400 ">{dataDetail.departureTime}</time>
                                                 <div className='-mt-2'>
-                                                    <h3 class="text-left text-xs font-bold text-slate-600 dark:text-white">{dataDetail.departureName}</h3>
-                                                    <p class="text-left text-xs font-bold text-gray-500 dark:text-gray-400">({dataDetail.departure})</p>
+                                                    <h3 class="text-left text-xs font-bold text-slate-600 ">{dataDetail.departureName}</h3>
+                                                    <p class="text-left text-xs font-bold text-gray-500 ">({dataDetail.departure})</p>
                                                 </div>
                                             </div>
                                         </li>
                                         <li class="ml-4 text-sm mt-10">
-                                            <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                                            <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white  "></div>
                                             <div className='flex space-x-12'>
-                                                <time class="mb-1 text-xs font-bold leading-none text-gray-400 dark:text-gray-500">{dataDetail.arrivalTime}</time>
+                                                <time class="mb-1 text-xs font-bold leading-none text-gray-400 ">{dataDetail.arrivalTime}</time>
                                                 <div className='-mt-2'>
-                                                    <h3 class="text-left text-xs font-bold text-slate-600 dark:text-white">{dataDetail.arrivalName}</h3>
-                                                    <p class="text-left text-xs font-bold text-gray-500 dark:text-gray-400">({dataDetail.arrival})</p>
+                                                    <h3 class="text-left text-xs font-bold text-slate-600 ">{dataDetail.arrivalName}</h3>
+                                                    <p class="text-left text-xs font-bold text-gray-500 ">({dataDetail.arrival})</p>
                                                 </div>
                                             </div>
                                         </li>

@@ -79,7 +79,7 @@ export default function Konfirmasi(){
                         </div>
                         <div className="hidden md:flex text-gray-500 font-bold justify-between pr-4">
                                 <div className="px-4 md:px-12 xl:px-16">
-                                    <div class="flex p-2 mb-4 text-sm text-yellow-700 dark:bg-gray-800 dark:text-yellow-400 dark:border-yellow-800" role="alert">
+                                    <div class="flex p-2 mb-4 text-sm text-yellow-700 " role="alert">
                                         <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
                                         <span class="sr-only">Info</span>
                                         <div>
@@ -87,7 +87,7 @@ export default function Konfirmasi(){
                                         </div>
                                     </div>
                                 </div>
-                                <a href={data.url_etiket} target="_blank" class="py-2.5 px-5 mr-8 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                <a href={data.url_etiket} target="_blank" class="py-2.5 px-5 mr-8 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 ">
                                     <div className="flex space-x-2">
                                         <AiOutlineDownload className="text-gray-500" size={20} />
                                         <div className="text-gray-500 font-bold">Download tiket</div>
@@ -97,7 +97,7 @@ export default function Konfirmasi(){
                             {/* mobile */}
                             <div className="block mt-4 md:hidden text-gray-500 font-bold justify-between pr-4">
                                 <div className="px-4 md:px-12 xl:px-16">
-                                    <div class="flex p-2 mb-4 text-sm text-yellow-700 dark:bg-gray-800 dark:text-yellow-400 dark:border-yellow-800" role="alert">
+                                    <div class="flex p-2 mb-4 text-sm text-yellow-700 " role="alert">
                                         <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
                                         <span class="sr-only">Info</span>
                                         <div>
@@ -106,7 +106,7 @@ export default function Konfirmasi(){
                                     </div>
                                 </div>
                                 <div className="flex justify-end">
-                                <button href={data.url_etiket} target="_blank" class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                <button href={data.url_etiket} target="_blank" class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 ">
                                     <div className="flex space-x-2">
                                         <AiOutlineDownload className="text-gray-500" size={20} />
                                         <div className="text-gray-500 font-bold">Download tiket</div>

@@ -9,6 +9,8 @@ import { TiketContext } from "../../App";
 import {BsArrowRightShort} from "react-icons/bs"
 import { Button, message } from 'antd';
 import { Modal } from 'antd';
+import Marquee from 'react-fast-marquee';
+import { Alert } from 'antd';
 
 export default function Pembayaran(){
 
@@ -371,6 +373,16 @@ export default function Pembayaran(){
                         </div> */}
                     </div>
                     <div className='mt-8 py-2 rounded-md border border-gray-200 shadow-sm'>
+                            <div className="px-4 py-2 text-sm text-gray-500">
+                                <Alert
+                                    banner
+                                    message={
+                                    <Marquee pauseOnHover gradient={false}>
+                                        <span>Untuk menu pembayaran, masih dalam proses pengembangan. </span>
+                                    </Marquee>              
+                                    }
+                                />
+                            </div>
                         <div className="flex justify-center">
                             <div className="flex justify-center px-8 py-4 text-sm text-gray-500">
                                 <div className="">
@@ -379,7 +391,7 @@ export default function Pembayaran(){
                             </div>
                         </div>
                         <div className="flex justify-center mb-4" >
-                            <Button key="submit" size="large" type="primary" className='bg-blue-500' loading={isLoading} onClick={handlerPembayaran}>
+                            <Button key="submit" size="large" type="primary" className='bg-blue-500' loading={isLoading} onClick={handlerPembayaran} disabled>
                                 Bayar Langsung
                             </Button>
                         </div>

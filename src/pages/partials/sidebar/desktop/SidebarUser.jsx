@@ -34,7 +34,7 @@ export default function SidebarUser({pathSidebar}) {
 
     return (
         <aside className="mt-8 hidden md:block w-full md:w-full xl:w-72 border rounded-xl shadow-sm" aria-label="Sidebar">
-            <div className="flex mb-8 justify-center overflow-y-auto py-4 px-3 rounded dark:bg-gray-800 h-full " >
+            <div className="flex mb-8 justify-center overflow-y-auto py-4 px-3 rounded  h-full " >
                 <ul className="mt-8 md:mt-0 space-y-2 relative">
                     <li className='hidden md:block mb-4'>
                         <div className={`flex items-center p-2 text-base font-normal text-gray-900 rounded-lg `}>
@@ -44,14 +44,14 @@ export default function SidebarUser({pathSidebar}) {
                     </li> 
                     <Link to='/profile/view'>
                     <li className='ml-4'>
-                        <div  className={`flex cursor-pointer ${ pathSidebar === '/profile/view' ? 'bg-cyan-100' : ''} items-center p-2 text-base font-normal text-gray-500 rounded-lg dark:text-white hover:bg-cyan-100 dark:hover:bg-gray-700`}>
+                        <div  className={`flex cursor-pointer ${ pathSidebar === '/profile/view' ? 'bg-cyan-100' : ''} items-center p-2 text-base font-normal text-gray-500 rounded-lg  hover:bg-cyan-100 `}>
                             <FaUserCircle className='text-orange-500' size={20} />
                             <span className="flex-1 ml-3 whitespace-nowrap">Profile</span>
                         </div>
                     </li>
                     </Link>
                     <li className='ml-4'>
-                        <div onClick={(e) => dropdownTransaksi === true ? setDropdownTransaksi(false) : setDropdownTransaksi(true)}  className={`flex justify-between cursor-pointer items-center p-2 text-base font-normal text-gray-500 rounded-lg dark:text-white hover:bg-cyan-100 dark:hover:bg-gray-700`}>
+                        <div onClick={(e) => dropdownTransaksi === true ? setDropdownTransaksi(false) : setDropdownTransaksi(true)}  className={`flex justify-between cursor-pointer items-center p-2 text-base font-normal text-gray-500 rounded-lg  hover:bg-cyan-100 `}>
                             <div className='flex items-center'>
                                 <FaListAlt className="text-cyan-500" size={18} />
                                 <span className="flex-1 ml-3 whitespace-nowrap">List Transaksi</span>
@@ -74,7 +74,7 @@ export default function SidebarUser({pathSidebar}) {
                         </div>
                     </li>
                     <li className='ml-4'>
-                        <div onClick={(e) => dropdownBooking === true ? setDropdownBooking(false) : setDropdownBooking(true)}  className={`flex justify-between cursor-pointer ${ pathSidebar === 'booking' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-500 rounded-lg dark:text-white hover:bg-cyan-100 dark:hover:bg-gray-700`}>
+                        <div onClick={(e) => dropdownBooking === true ? setDropdownBooking(false) : setDropdownBooking(true)}  className={`flex justify-between cursor-pointer ${ pathSidebar === 'booking' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-500 rounded-lg  hover:bg-cyan-100 `}>
                             <div className='flex items-center'>
                                 <FaListAlt className="text-blue-500" size={18} />
                                 <span className="flex-1 ml-3 whitespace-nowrap">List Booking</span>

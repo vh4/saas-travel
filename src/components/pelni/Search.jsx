@@ -24,15 +24,6 @@ import TimelineItem, { timelineItemClasses } from '@mui/lab/TimelineItem';
 
 export default function Search(){
 
-    const theme = createTheme({
-        typography: {
-          // In Chinese and Japanese the characters are usually larger,
-          // so a smaller fontsize may be appropriate.
-          fontSize: 8,
-        },
-      });
-      
-
     const [searchParams, setSearchParams] = useSearchParams();
     const origin = searchParams.get('origin');
     const originName = searchParams.get('originName');
@@ -85,7 +76,6 @@ export default function Search(){
 
     }, [token, origin, destination, startDate, endDate, laki, wanita, destinationName, originName]);
 
-
     function parseDate(x){
 
         var datee = new Date(x);
@@ -118,7 +108,13 @@ export default function Search(){
             case 10: bulan = "November"; break;
             case 11: bulan = "Desember"; break;
     
-           }
+        }
+
+        const tanggalbozqu = hari + ', ' + tanggal + ' ' + bulan + ' ' + tahun;
+
+        return tanggalbozqu;
+
+           
     }
 
     function toRupiah(angka) {
@@ -159,20 +155,43 @@ export default function Search(){
 
     }
 
-    function duration(tanggal1, tanggal2) {
-        let date1 = new Date(tanggal1);
-        let date2 = new Date(tanggal2);
-        let diff = date2.getTime() - date1.getTime();
+    function duration(tanggal1, tanggal2, time1, time2) {
+
+        const date1 = new Date(`${tanggal1.slice(0, 4)}-${tanggal1.slice(4, 6)}-${tanggal1.slice(6, 8)}T${time1.slice(0, 2)}:${time1.slice(2)}:00`);
+        const date2 = new Date(`${tanggal2.slice(0, 4)}-${tanggal2.slice(4, 6)}-${tanggal2.slice(6, 8)}T${time2.slice(0, 2)}:${time2.slice(2)}:00`);
       
-        let hours = Math.floor(diff / (1000 * 60 * 60));
-        let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      
-        if (hours > 0) {
-          return `${hours} jam ${minutes} menit`;
-        } else {
-          return `${minutes} menit`;
+
+        if (isNaN(date1) || isNaN(date2)) {
+          return 'Invalid date or time';
         }
+      
+
+        const selisihMilidetik = Math.abs(date2 - date1);
+      
+        const hari = Math.floor(selisihMilidetik / (1000 * 60 * 60 * 24));
+        const sisaMilidetik = selisihMilidetik % (1000 * 60 * 60 * 24);
+      
+        const jam = Math.floor(sisaMilidetik / (1000 * 60 * 60));
+        const sisaMilidetikJam = sisaMilidetik % (1000 * 60 * 60);
+        const menit = Math.floor(sisaMilidetikJam / (1000 * 60));
+      
+        let hasil = '';
+        if (hari > 0) {
+          hasil += `${hari}h `;
+        }
+        if (jam > 0) {
+          hasil += `${jam < 10 ? '0' : ''}${jam}j `;
+        }
+        if (menit > 0) {
+          hasil += `${menit < 10 ? '0' : ''}${menit}m`;
+        }
+        if (hari === 0 && jam === 0 && menit === 0) {
+          hasil = '0m';
+        }
+      
+        return hasil;
       }
+
 
     return(
         <>
@@ -193,11 +212,11 @@ export default function Search(){
                         </small>
                         <div className="hidden md:block font-normal text-slate-600">|</div>
                         <small className="hidden md:block text-xs font-bold text-slate-600">
-                            {startDate}
+                            {parseDate(startDate)}
                         </small>
                         <div className="hidden md:block font-normal text-slate-600">|</div>
                         <small className="hidden md:block text-xs font-bold text-slate-600">
-                            {endDate}
+                            {parseDate(endDate)}
                         </small>
                         <div className="hidden md:block font-normal text-slate-600">|</div>
                         <small className="hidden md:block text-xs font-bold text-slate-600">
@@ -241,7 +260,83 @@ export default function Search(){
                     <>
                         {e.fares.map((z, i) => (
                             <>
-                             {console.log(e.fares[i].AVAILABILITY)}
+                            {console.log(e)}
+
+                            {console.log(e.fares[i].AVAILABILITY)}
+
+                                <div class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 bg-white border border-gray-200 rounded-lg shadow-sm  hover:border transition-transform transform hover:scale-105`}>
+                                        
+                                        {/* desktop cari */}
+                                        <div className="hidden xl:block w-full text-gray-700 ">
+                                            
+                                            <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-8">
+                                                <div className="col-span-1 xl:col-span-2">
+                                                    <h1 className="text-sm font-bold">{e.SHIP_NAME} </h1>
+                                                    <small>{e.fares[i].CLASS?.substring(0,2) == 'EK' ? 'Ekonomi ' + e.fares[i].CLASS?.substring(2) : e.fares[i].CLASS?.substring(0,2) == 'BI' ? e.fares[i].CLASS : 'Eksekutif '  + e.fares[i].CLASS?.substring(3)} Subclass ({e.fares[i].SUBCLASS})</small>
+                                                </div>
+                                                <div className="flex">
+                                                    <div className="">
+                                                        <h1 className="mt-4 xl:mt-0 text-sm font-bold">{`${e.DEP_TIME.slice(0, 2)}:${e.DEP_TIME.slice(2)}`}</h1>
+                                                        <small>{originName}</small>
+                                                    </div>
+                                                </div>
+                                                < HiOutlineArrowNarrowRight size={24} />
+                                                <div>
+                                                    <h1 className="text-sm font-bold">{`${e.ARV_TIME.slice(0, 2)}:${e.ARV_TIME.slice(2)}`}</h1>
+                                                    <small>{destinationName}</small>
+                                                </div>
+                                                <div>
+                                                    <h1 className="mt-4 xl:mt-0 text-sm font-bold">{duration(e.DEP_DATE, e.ARV_DATE, e.DEP_TIME, e.ARV_TIME)}</h1>
+                                                    <small>Langsung</small>
+                                                </div>
+                                                <div className="">
+                                                        <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">Rp.{toRupiah(e.fares[0].FARE_DETAIL.A.TOTAL)}</h1>
+                                                        <small className="text-red-500">Infant Rp.{toRupiah(e.fares[0].FARE_DETAIL.I.TOTAL)}</small>
+                                                </div>
+                                                <div>
+                                                        <button type="button" class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2">
+                                                            <div className="text-white font-bold">PILIH</div>
+                                                        </button>
+                                                        
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                 {/* mobile cari */}
+                                {/* <div onClick={() => bookingHandlerDetail(e.trainNumber)} className="cursor-pointer block xl:hidden w-full text-gray-700">
+                                    <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
+                                        <div className="flex justify-between">
+                                            <div className="col-span-1 xl:col-span-2">
+                                                <h1 className="text-xs font-bold">{e.trainName}</h1>
+                                                <small>{e.seats[0].grade === 'E' ? 'Eksekutif' : e.seats[0].grade === 'B' ? 'Bisnis' : 'Ekonomi'} Class ({e.seats[0].class})</small>
+                                            </div>
+                                            <div className="text-right">
+                                                <h1 className="text-xs font-bold text-blue-500">Rp. {toRupiah(e.seats[0].priceAdult)}</h1>
+                                                <small className="text-red-500">{e.seats[0].availability} set(s)</small>
+                                            </div>
+                                        </div>
+                                        <div className="flex justify-start">
+                                            <div className="flex space-x-2 items-start">
+                                                <div>
+                                                    <h1 className="mt-10 xl:mt-0 text-xs font-bold">{e.departureTime}</h1>
+                                                    <small className="text-gray-400">{origin}</small>
+                                                </div>
+                                                <div className="w-full mt-12 px-4 border-b-2"></div>
+                                                <div className="text-xs">
+                                                    <h1 className="text-xs mt-10 xl:mt-0 text-gray-400">{e.duration}</h1>
+                                                    <small className="text-gray-400">Langsung</small>
+                                                </div>
+                                                <div className="w-full mt-12 px-4 border-b-2"></div>
+                                                <div>
+                                                    <h1 className="mt-10 xl:mt-0 text-xs font-bold">{e.arrivalTime}</h1>
+                                                    <small className="text-gray-400">{destination}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> */}
+                                </div>
+                            </div>
                             </>
                         ))}
                     </>

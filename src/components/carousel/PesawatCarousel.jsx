@@ -102,13 +102,13 @@ export default function PesawatCarousel(){
                 <Carousel responsive={responsive} className="p-2 md:p-0 flex items-stretch ">
                     {data.map((e) => (
                           <div className="mx-1 md:mx-0 flex-1 h-full">
-                            <div class="w-fit mx-0 lg:mx-2 md:min-w-[240px] md:max-w-[250px] bg-white border border-gray-200 rounded-lg h-full  dark:bg-gray-800 dark:border-gray-700">
+                            <div class="w-fit mx-0 lg:mx-2 md:min-w-[240px] md:max-w-[250px] bg-white border border-gray-200 rounded-lg h-full">
                                 <div className="mb-4">
                                     <img class="rounded-t-lg min-h-[120px] md:min-h-[120px]" src={e.image} alt="hotel image" />
                                 </div>
                                 <div class="flex flex-col px-2 pb-5">
                                     <div className="pl-2">
-                                        <h5 class="flex space-x-2 items-center text-sm font-semibold tracking-tight text-gray-700 dark:text-white"><div>{e.keberangkatan}</div><BsArrowRightShort /><div>{e.tujuan}</div></h5>
+                                        <h5 class="flex space-x-2 items-center text-sm font-semibold tracking-tight text-gray-700"><div>{e.keberangkatan}</div><BsArrowRightShort /><div>{e.tujuan}</div></h5>
                                         <div className="mt-2 flex space-x-2 items-center">
                                             <img src={e.logo} width={25} alt="logo.png" />
                                             <small className="text-gray-500">{e.NamaMaskapai}</small>
@@ -118,7 +118,7 @@ export default function PesawatCarousel(){
                                     <div class="py-2 flex items-center justify-start mt-5 pl-2">
                                         <div>
                                             <div className="text-xs text-gray-500">Harga mulai</div>
-                                          <div className="flex space-x-2"><span class="text-md font-bold text-blue-500 dark:text-white">Rp.{toRupiah(e.harga)}</span></div>
+                                          <div className="flex space-x-2"><span class="text-md font-bold text-blue-500">Rp.{toRupiah(e.harga)}</span></div>
                                         </div>
                                     </div>
                                 </div>
