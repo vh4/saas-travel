@@ -349,6 +349,7 @@ Router.post('/travel/train/get_seat_layout', function (req, res) {
 
 Router.post('/travel/train/book', function (req, res) {
 
+  const data = req.body;
   logger.info(`Request /travel/train/book: ${JSON.stringify(req.body)}`);
 
   request.post(
