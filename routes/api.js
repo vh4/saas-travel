@@ -564,6 +564,63 @@ Router.post('/travel/pelni/get_origin', function (req, res) {
 
 });
 
+//pelni
+
+Router.post('/travel/pelni/check_availability', function (req, res) {
+
+  const data = req.body;
+  logger.info(`Request /travel/pelni/check_availability: ${JSON.stringify(data)}`);
+
+  request.post(
+    `${process.env.URL_HIT}/travel/pelni/check_availability`,
+      {
+        json: data
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          logger.error(`Error /travel/pelni/check_availability: ${error.message}`);
+
+          return
+        }
+
+        logger.info(`Response /travel/pelni/check_availability: ${JSON.stringify(body)}`);
+
+        return res.send(body)
+      }
+    )
+
+});
+
+
+
+//pelni
+
+Router.post('/travel/pelni/fare', function (req, res) {
+
+  const data = req.body;
+  logger.info(`Request /travel/pelni/fare: ${JSON.stringify(data)}`);
+
+  request.post(
+    `${process.env.URL_HIT}/travel/pelni/fare`,
+      {
+        json: data
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          logger.error(`Error /travel/pelni/fare: ${error.message}`);
+
+          return
+        }
+
+        logger.info(`Response /travel/pelni/fare: ${JSON.stringify(body)}`);
+
+        return res.send(body)
+      }
+    )
+
+});
 
 Router.post('/travel/pelni/search', function (req, res) {
 
@@ -583,6 +640,55 @@ Router.post('/travel/pelni/search', function (req, res) {
           return
         }
         logger.info(`Response /travel/pelni/search: ${JSON.stringify(body)}`);
+        return res.send(body)
+      }
+    )
+
+});
+
+Router.post('/travel/pelni/book', function (req, res) {
+
+  const data = req.body;
+  logger.info(`Request /travel/pelni/book: ${JSON.stringify(data)}`);
+
+  request.post(
+    `${process.env.URL_HIT}/travel/pelni/book`,
+      {
+        json: data
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          logger.error(`Error /travel/pelni/book: ${error.message}`);
+
+          return
+        }
+        logger.info(`Response /travel/pelni/book: ${JSON.stringify(body)}`);
+        return res.send(body)
+      }
+    )
+
+});
+
+
+Router.post('/travel/pelni/book_info', function (req, res) {
+
+  const data = req.body;
+  logger.info(`Request /travel/pelni/book_info: ${JSON.stringify(data)}`);
+
+  request.post(
+    `${process.env.URL_HIT}/travel/pelni/book_info`,
+      {
+        json: data
+      },
+      (error, response, body) => {
+        if (error) {
+          console.error(error)
+          logger.error(`Error /travel/pelni/book_info: ${error.message}`);
+
+          return
+        }
+        logger.info(`Response /travel/pelni/book_info: ${JSON.stringify(body)}`);
         return res.send(body)
       }
     )
