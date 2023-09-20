@@ -36,7 +36,7 @@ export default function Pembayaran(){
       function gagal(rd){
         messageApi.open({
           type: 'error',
-          content: 'Failed, ' + rd.toLowerCase().charAt(0).toUpperCase() + rd.slice(1).toLowerCase() + ' .!',
+          content: 'Failed, ' + rd.toLowerCase().charAt(0).toUpperCase() + rd.slice(1).toLowerCase() + '',
           duration: 5,
         });
       };

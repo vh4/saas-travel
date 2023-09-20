@@ -26,7 +26,7 @@ export default function BookingKai(){
         api['error']({
           message: 'Error!',
           description:
-          rd.toLowerCase().charAt(0).toUpperCase() + rd.slice(1).toLowerCase() + ' .!',
+          rd.toLowerCase().charAt(0).toUpperCase() + rd.slice(1).toLowerCase() + '',
         });
       };
 
@@ -235,6 +235,16 @@ export default function BookingKai(){
             setIsLoading(false);
         }
 
+
+        const disabledDate = (current, e, i) => {
+            
+            const twoYearsAgo = dayjs().subtract(2, 'year');
+            const currentDate = dayjs();
+
+            return current && (current < twoYearsAgo || current > currentDate);
+        };
+
+
     return(
         <>
         {/* message notification  */}
@@ -424,7 +434,7 @@ export default function BookingKai(){
                                                             className='w-full'
                                                             value={dayjs(e.birthdate, 'YYYY/MM/DD')} format={'YYYY/MM/DD'}
                                                             onChange={handleInfantsubCatagoryChange(i, 'birthdate')}
-                                                            
+                                                            disabledDate={disabledDate}
                                                             />
                                                             <small className='block mt-2 text-gray-400'>Contoh: dd-mm-yyyy</small>            
                                                     </div>

@@ -3,7 +3,7 @@ import React from 'react';
 export default function Description(){
     return(
         <>
-            {/* <div className='mt-24 md:mt-36 title text-center text-lg md:text-2xl font-bold text-gray-600 md:text-gray-800'>
+            <div className='mt-24 md:mt-36 title text-center text-lg md:text-2xl font-bold text-gray-600 md:text-gray-800'>
                 Temukan Jadwal Tiket Pesawat
             </div>
             <div className='p-4 md:p-0 md:mt-0'>
@@ -29,7 +29,7 @@ export default function Description(){
                     </div>
                 </div>
             </div>
-            </div> */}
+            </div>
         </>
     )
 }

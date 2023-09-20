@@ -7,36 +7,72 @@ import { Chip } from "@mui/material";
 import CircularProgress from '@mui/material/CircularProgress';
 import Autocomplete from '@mui/material/Autocomplete';
 import {Popper } from "@mui/material";
-import {IoBoatSharp} from 'react-icons/io5'
-import { useNavigate, createSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import onClickOutside from "react-onclickoutside";
 import { makeStyles } from '@mui/styles';
+import { Button } from 'antd';
+import {IoBoatSharp} from 'react-icons/io5'
 import { DateRangePicker } from 'rsuite';
-import "rsuite/dist/rsuite.min.css";
-import {Button} from 'antd'
 
-function Pelni(){
+function PELNI(){
 
-    const [anchorEl, setAnchorEl] = React.useState('hidden');
-    const handleClick = () => {
-        anchorEl === 'hidden' ? setAnchorEl('grid') : setAnchorEl('hidden');
-    }
+    const useStyles = makeStyles((theme) => ({
+        inputRoot: {
+            color:"#6b7280",
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#e5e7eb"
+            },
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#e5e7eb"
+            },
+            "&:Mui-actived .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#d1d5db"
+            },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#d1d5db"
+            },
+            "&&& $input": {
+              padding: 1,
+            },
+          },
+          root: {
+              
+              "& .MuiInputBase-root": {
+                "& .MuiInputBase-input": {
+                  padding: 9,
+                  borderRadius:10
+                },
+                color:"#6b7280",
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#e5e7eb"
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#e5e7eb"
+                },
+                "&:Mui-actived .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#e5e7eb"
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#e5e7eb"
+                },
+              }
+          }
+      }));
 
-    Pelni.handleClickOutside = () => {
-        setAnchorEl('hidden');
-      };
 
-    const navigate = useNavigate();
+    const PopperMy = function (props) {
+        return (<Popper {...props} style={{ width: 350 }} placement='bottom-start' />)
+    };
     
-    const [isLoading, setLoading] = React.useState(false);
-    const [pelniStasiun, setpelniStasiun] = React.useState({});
-    const [laki, setLaki] = React.useState(1);
-    const [wanita, setWanita] = React.useState(0);
+    const classes = useStyles();
+    
+    const [pelni, setPelni] = React.useState({});
+    const [pelniData, setPelniData] = React.useState([]);
+    const i = 0;
 
     const [openBerangka, SetopenBerangka] = React.useState(false);
     const [openTujuan, setOpenTujuan] = React.useState(false);
-
-    const [pelniData, setPelniData] = React.useState([]);
+    
     const loadingBerangkat = openBerangka && pelniData.length === 0;
     const loadingTujuan = openTujuan && pelniData.length === 0;
 
@@ -44,222 +80,202 @@ function Pelni(){
     const [keberangkatan, setKeberangkatan] = React.useState();
     const [tujuan, setTujuan] = React.useState();
     const [tanggal, setTanggal] = React.useState();
+    const [isLoading, setLoading] = React.useState(false);
+    const [laki, setLaki] = React.useState(1);
+    const [wanita, setWanita] = React.useState(0);
 
-    const i = 0;
+    const [anchorEl, setAnchorEl] = React.useState('hidden');
+    const handleClick = () => {
+        anchorEl === 'hidden' ? setAnchorEl('grid') : setAnchorEl('hidden');
+    }
 
-    const useStyles = makeStyles((theme) => ({
-        inputRoot: {
-          color:"#6b7280",
-          "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#e5e7eb"
-          },
-          "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#e5e7eb"
-          },
-          "&:Mui-actived .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#d1d5db"
-          },
-          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#d1d5db"
-          },
-          "&&& $input": {
-            padding: 1,
-          },
-        },
-        root: {
-            
-            "& .MuiInputBase-root": {
-              "& .MuiInputBase-input": {
-                padding: 9,
-                borderRadius:10
-              },
-              color:"#6b7280",
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#e5e7eb"
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#e5e7eb"
-              },
-              "&:Mui-actived .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#e5e7eb"
-              },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#e5e7eb"
-              },
-            }
+    PELNI.handleClickOutside = () =>{
+        setAnchorEl('hidden');
+      };
+
+
+      function sleep(delay = 0) {
+        return new Promise((resolve) => {
+          setTimeout(resolve, delay);
+        });
+      }
+
+      //berangkat
+      React.useEffect(() => {
+        let active = true;
+    
+        if (!loadingBerangkat) {
+          return undefined;
         }
-    }));
-        const classes = useStyles();
-
-        function sleep(delay = 0) {
-            return new Promise((resolve) => {
-            setTimeout(resolve, delay);
-            });
-        }
-
-        //berangkat
-        React.useEffect(() => {
-            let active = true;
-
-            if (!loadingBerangkat) {
-            return undefined;
-            }
-            
-            (async () => {
-            await sleep(1e3); // For demo purposes.
-
-            if (active) {
-                setPelniData([...pelniStasiun.data]);
-            }
-            })();
-
-            return () => {
-            active = false;
-            };
-        }, [loadingBerangkat]);
-
-        React.useEffect(() => {
-            if (!openBerangka) {
-            setPelniData([]);
-            }
-        }, [openBerangka]);
-
-
-        //tujuan
-        React.useEffect(() => {
-            let active = true;
-
-            if (!loadingTujuan) {
-            return undefined;
-            }
-            
-            (async () => {
-            await sleep(1e3); // For demo purposes.
-
-            if (active) {
-                setPelniData([...pelniStasiun.data]);
-            }
-            })();
-
-            return () => {
-            active = false;
-            };
-        }, [loadingTujuan]);
-
-        React.useEffect(() => {
-            if (!openTujuan) {
-            setPelniData([]);
-            }
-        }, [openTujuan]);
-
-
-
-        React.useEffect(() => {
-            getPelnitDataStasiun();
-
-        }, []);
-
-        const PopperMy = function (props) {
-            return (<Popper {...props} style={{ width: 350 }} placement='bottom-start' />)
+        
+        (async () => {
+          await sleep(1e3); // For demo purposes.
+    
+          if (active) {
+            setPelniData([...pelni.data]);
+          }
+        })();
+    
+        return () => {
+          active = false;
         };
+      }, [loadingBerangkat]);
+    
+      React.useEffect(() => {
+        if (!openBerangka) {
+            setPelniData([]);
+        }
+      }, [openBerangka]);
 
-        function plusLaki(e){
-            e.preventDefault();
-            if(laki >= 4){
-                setLaki(4);
-            }else{
-                setLaki(laki + 1);
-            }
 
+      //tujuan
+      React.useEffect(() => {
+        let active = true;
+    
+        if (!loadingTujuan) {
+          return undefined;
+        }
+        
+        (async () => {
+          await sleep(1e3); // For demo purposes.
+    
+          if (active) {
+            setPelniData([...pelni.data]);
+          }
+        })();
+    
+        return () => {
+          active = false;
+        };
+      }, [loadingTujuan]);
+    
+      React.useEffect(() => {
+        if (!openTujuan) {
+            setPelniData([]);
+        }
+      }, [openTujuan]);
+    
+
+    const navigate = useNavigate();
+
+
+    function plusLaki(e){
+        e.preventDefault();
+        if(laki >= 4){
+            setLaki(4);
+        }else{
+            setLaki(laki + 1);
         }
 
-        function minusLaki(e){
-            e.preventDefault();
+    }
 
-            if(laki < 1 || laki === 1){
-                setLaki(1);
-            }
-            else{
-                setLaki(laki - 1);
-            }
-            
+    function minusLaki(e){
+        e.preventDefault();
+
+        if(laki < 1 || laki === 1){
+            setLaki(1);
+        }
+        else{
+            setLaki(laki - 1);
+        }
+        
+    }
+
+    function plusWanita(e){
+        e.preventDefault();
+        if(wanita >= 4){
+            setWanita(4);
+        }else{
+            setWanita(wanita + 1);
+        }
+    }
+
+    function minusWanita(e){
+        e.preventDefault();
+
+        if(wanita < 0 || wanita === 0){
+            setWanita(0);
+        }else{
+            setWanita(wanita - 1);
         }
 
-        function plusWanita(e){
-            e.preventDefault();
-            if(wanita >= 4){
-                setWanita(4);
-            }else{
-                setWanita(wanita + 1);
-            }
-        }
+    }
 
-        function minusWanita(e){
-            e.preventDefault();
+    React.useEffect(() => {
 
-            if(wanita < 0 || wanita === 0){
-                setWanita(0);
-            }else{
-                setWanita(wanita - 1);
-            }
+        getPelnidata();
 
-        }
+    }, []);
 
-        function addLeadingZero(num) {
-            if (num < 10) {
-            return '0' + num;
-            } else {
-            return '' + num;
-            }
-        }
+    async function getPelnidata(){
 
-        async function getPelnitDataStasiun(){
+        try {
+
             const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/pelni/get_origin`, {
                 token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
             });
-
-            setpelniStasiun(response.data);
-
+    
+            setPelni(response.data);
+            
+        } catch (error) {
+            setPelni({message: error.message});
         }
+
+    }
+
+    function addLeadingZero(num) {
+        if (num < 10) {
+          return '0' + num;
+        } else {
+          return '' + num;
+        }
+      }
+
+    function formatDate(date) {
+        return date.getFullYear() + '-' + addLeadingZero(date.getMonth() + 1) + '-' + addLeadingZero(date.getDate());
+    }
+
+    async function handlerCariPelni(e){
+
+        setLoading(true);
+
+        let startDate = new Date(tanggal && tanggal[0] || new Date());
+        let endDate = new Date(tanggal && tanggal[1] || new Date());
         
-        function formatDate(date) {
-            return date.getFullYear() + '-' + addLeadingZero(date.getMonth() + 1) + '-' + addLeadingZero(date.getDate());
-          }
-
-        function handleSubmitPelni(e){
+        startDate = formatDate(startDate);
+        endDate = formatDate(endDate);
+        
+        setTimeout(() => {
             e.preventDefault();
-            setLoading(true);
-            
-            let startDate = new Date(tanggal && tanggal[0] || new Date());
-            let endDate = new Date(tanggal && tanggal[1] || new Date());
-            
-            startDate = formatDate(startDate);
-            endDate = formatDate(endDate);
+            setLoading(false);
 
-            setTimeout(() => {
-                e.preventDefault();
-                setLoading(false);
-    
-                const params = {
-                    origin: keberangkatan.CODE,
-                    destination: tujuan.CODE,
-                    originName:keberangkatan.NAME,
-                    destinationName:tujuan.NAME,
-                    startDate: startDate,
-                    endDate: endDate,
-                    laki:laki,
-                    wanita:wanita
-                };
-                
-                localStorage.setItem('p_search', JSON.stringify(params))
-    
-                navigate({
-                    pathname: '/pelni/search',
-                    search: `?${createSearchParams(params)}`,
-                  });
-            }, 1000)    
-        }
+            const params = {
+                origin: keberangkatan.CODE,
+                destination: tujuan.CODE,
+                originName:keberangkatan.NAME,
+                destinationName:tujuan.NAME,
+                startDate: startDate,
+                endDate: endDate,
+                laki:laki,
+                wanita:wanita
+            };
 
+            var str = "";
+            for (var key in params) {
+                if (str != "") {
+                    str += "&";
+                }
+                str += key + "=" + encodeURIComponent(params[key]);
+            } 
+            
+            localStorage.setItem('p_search', JSON.stringify(params))
+
+            window.location = `search?${str}`;  
+
+        }, 1000);
+
+
+    }
 
     return (
         <>     
@@ -385,7 +401,7 @@ function Pelni(){
                                 </FormControl>
                                 <FormControl sx={{ m: 1, minWidth: 120 }}>
                                 <small className="mb-2 text-gray-500">Total Penumpang</small>
-                                <TextField onClick={ handleClick} sx={{ input: { cursor: 'pointer' } }} variant="outlined" size="small" classes={classes} id="outlined-basic" value={`${parseInt(laki) + parseInt(wanita)} Penumpang`} />       
+                                <TextField onClick={ handleClick} sx={{ input: { cursor: 'pointer' } }} variant="outlined" size="small" classes={classes} id="outlined-basic" value={`${parseInt(laki) + parseInt(wanita)} Penumpang`} variant="outlined" />       
                                     <div id="basic-menu" className={`${anchorEl} absolute top-20 z-10 grid w-auto px-8 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}>
                                         <div className="w-full ml-4 block md:mx-0">
                                             <div className="mt-4 w-full items-center text-gray-600">
@@ -421,7 +437,7 @@ function Pelni(){
                                 </FormControl>                                                         
                                 </div>
                                 <div className="w-full pr-4 xl:mr-0 xl:pl-4 xl:w-1/4 flex justify-end xl:justify-start mt-8 py-0.5">
-                                <Button block size="large" key="submit"  type="primary" className='bg-blue-500 mx-2 font-semibold' loading={isLoading} onClick={handleSubmitPelni}>
+                                <Button block size="large" key="submit"  type="primary" className='bg-blue-500 mx-2 font-semibold' loading={isLoading} onClick={handlerCariPelni}>
                                     Cari Tiket
                                 </Button> 
                                 </div>
@@ -430,13 +446,12 @@ function Pelni(){
                     </form>
                 </div>
             </div>
-
         </>
     )
 }
 
 const clickOutsideConfig = {
-    handleClickOutside: () => Pelni.handleClickOutside,
+    handleClickOutside: () => PELNI.handleClickOutside,
   };
   
-export default onClickOutside(Pelni, clickOutsideConfig);
+export default onClickOutside(PELNI, clickOutsideConfig);

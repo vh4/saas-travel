@@ -7,20 +7,8 @@ import Skeleton from '@mui/material/Skeleton';
 import {HiOutlineArrowNarrowRight} from 'react-icons/hi'
 import {IoArrowBackOutline} from "react-icons/io5"
 import { Link } from "react-router-dom";
-import Typography from '@mui/material/Typography';
-import Slider from '@mui/material/Slider';
-import { createTheme } from "@mui/material/styles";
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import {MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp, MdOutlineLuggage} from "react-icons/md"
-import moment from "moment"
-import Timeline from '@mui/lab/Timeline';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import TimelineConnector from '@mui/lab/TimelineConnector';
-import TimelineContent from '@mui/lab/TimelineContent';
-import TimelineDot from '@mui/lab/TimelineDot';
-import TimelineItem, { timelineItemClasses } from '@mui/lab/TimelineItem';
+import Searchpelni from './PelniSearch'
+
 
 export default function Search(){
 
@@ -38,6 +26,7 @@ export default function Search(){
 
     const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
     const navigate = useNavigate();
+    const [ubahPencarian, setUbahPencarian] = useState(false);
 
     useEffect(() =>{
         if(token === null || token === undefined){
@@ -129,31 +118,81 @@ export default function Search(){
      const skeleton = [1,2,3,4,5,6,7,8,9,10];
      const [dataSearch, setDataSearch] = React.useState(Array());
 
-     useEffect(() => {
+      useEffect(() => {
         handlerSearch();
-     }, []);
-
-    const handlerSearch = async () => {
+      }, []);
+      
+      const handlerSearch = async () => {
         setLoading(true);
-        const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/pelni/search`, {
-            origin:origin,
-            destination:destination,
-            startDate:startDate,
-            endDate:endDate,
-            token:token
-        });
-
-        if(response.data.rc === '00'){
-            setDataSearch(response.data.data);
+        try {
+          const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/pelni/search`, {
+            origin: origin,
+            destination: destination,
+            startDate: startDate,
+            endDate: endDate,
+            token: token,
+          });
+      
+          if (response.data.rc === '00') {
+            const dataParsing = response.data.data;
+      
+            for (let k = 0; k < dataParsing.length; k++) {
+              const e = dataParsing[k];
+              for (let i = 0; i < e.fares.length; i++) {
+                const fareResponse = await handleAvailbillity(e, i);
+                dataParsing[k].fares[i]['M_available'] = fareResponse.M;
+                dataParsing[k].fares[i]['F_available'] = fareResponse.F;
+              }
+            }
+      
+            setDataSearch(dataParsing);
             setLoading(false);
             setError(false);
-
-        }else{
+          } else {
             setLoading(false);
             setError(true);
+          }
+        } catch (error) {
+          setLoading(false);
+          setError(true);
+          console.error('Error:', error);
         }
+      };
+      
+      const handleAvailbillity = async (e, i) => {
+        const departureDate = e.DEP_DATE.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
+      
+        const params = {
+          origin: origin,
+          originCall: e.ORG_CALL,
+          destination: destination,
+          destinationCall: e.DES_CALL,
+          departureDate: departureDate,
+          shipNumber: e.SHIP_NO,
+          subClass: e.fares[i].SUBCLASS,
+          male: 1,
+          female: e.fares[i].AVAILABILITY.F,
+          token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
+        };
+      
+        try {
+          const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/pelni/check_availability`, params);
+          const data = response.data.data;
+      
+          return {
+            M: data.M,
+            F: data.F,
+          };
+        } catch (error) {
+          console.error('Error in handleAvailbillity:', error);
+          return {
+            M: 0, // Handle error case gracefully
+            F: 0, // Handle error case gracefully
+          };
+        }
+      };
+      
 
-    }
 
     function duration(tanggal1, tanggal2, time1, time2) {
 
@@ -193,6 +232,106 @@ export default function Search(){
       }
 
 
+      function durationFull(tanggal1, tanggal2, time1, time2) {
+
+        const date1 = new Date(`${tanggal1.slice(0, 4)}-${tanggal1.slice(4, 6)}-${tanggal1.slice(6, 8)}T${time1.slice(0, 2)}:${time1.slice(2)}:00`);
+        const date2 = new Date(`${tanggal2.slice(0, 4)}-${tanggal2.slice(4, 6)}-${tanggal2.slice(6, 8)}T${time2.slice(0, 2)}:${time2.slice(2)}:00`);
+      
+
+        if (isNaN(date1) || isNaN(date2)) {
+          return 'Invalid date or time';
+        }
+      
+
+        const selisihMilidetik = Math.abs(date2 - date1);
+      
+        const hari = Math.floor(selisihMilidetik / (1000 * 60 * 60 * 24));
+        const sisaMilidetik = selisihMilidetik % (1000 * 60 * 60 * 24);
+      
+        const jam = Math.floor(sisaMilidetik / (1000 * 60 * 60));
+        const sisaMilidetikJam = sisaMilidetik % (1000 * 60 * 60);
+        const menit = Math.floor(sisaMilidetikJam / (1000 * 60));
+      
+        let hasil = '';
+        if (hari > 0) {
+          hasil += `${hari} Hari `;
+        }
+        if (jam > 0) {
+          hasil += `${jam < 10 ? '0' : ''}${jam} Jam `;
+        }
+        if (menit > 0) {
+          hasil += `${menit < 10 ? '0' : ''}${menit} Menit`;
+        }
+        if (hari === 0 && jam === 0 && menit === 0) {
+          hasil = '0 Menit';
+        }
+      
+        return hasil;
+      }
+
+      const fare = async (e, i) => {
+        
+        const departureDate = e.DEP_DATE.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
+
+        const params =  
+        {
+            "origin" : origin,
+            "originCall" : e.ORG_CALL,
+            "destination" : destination,
+            "destinationCall" : e.DES_CALL,
+            "departureDate" : departureDate,
+            "shipNumber" : e.SHIP_NO,
+            "token" : JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API))
+        };
+
+        const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/pelni/fare`, params);
+        const parsing = response.data.data;
+
+        const faresResponseFix = parsing[i];
+
+        return faresResponseFix;
+
+
+    }
+
+    
+
+      async function handleSubmit(e, i){
+
+        const fares = await fare(e, i);
+        const departureDate = e.DEP_DATE.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
+        const arrivalDate = e.ARV_DATE.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
+
+        const params = {
+
+            "harga_dewasa" : fares.FARE_DETAIL.A.TOTAL,
+            "harga_anak" : "0",
+            "harga_infant" : fares.FARE_DETAIL.I.TOTAL,
+            "pelabuhan_asal" : originName,
+            "pelabuhan_tujuan" : destinationName,
+            "shipName" : e.SHIP_NAME,
+            "origin" : origin,
+            "originCall" : e.ORG_CALL,
+            "destination" : destination,
+            "destinationCall" : e.DES_CALL,
+            "departureDate" : departureDate,
+            "arrivalDate" : arrivalDate,
+            "departureTime" : `${e.DEP_TIME.slice(0, 2)}:${e.DEP_TIME.slice(2)}`,
+            "arrivalTime" : `${e.ARV_TIME.slice(0, 2)}:${e.ARV_TIME.slice(2)}`,
+            "shipNumber" : e.SHIP_NO,
+            "class": e.fares[i].CLASS,
+            "subClass" : fares.SUBCLASS,
+            "duration": durationFull(e.DEP_DATE, e.ARV_DATE, e.DEP_TIME, e.ARV_TIME),
+            "male" : laki,
+            "female" : wanita
+        }
+
+        localStorage.setItem('v_ship', JSON.stringify(params));
+        navigate('/pelni/booking/');
+
+      }
+
+
     return(
         <>
             <div className="judul-search mt-4 font-bold text-slate-600">
@@ -228,7 +367,7 @@ export default function Search(){
                             <IoArrowBackOutline className="text-blue-500" size={16} />
                             <div className="text-blue-500 text-sm font-bold">Kembali</div>
                         </Link>
-                        <button className="block border p-2 px-4 md:px-4 mr-0 xl:mr-16 bg-blue-500 text-white rounded-md text-xs font-bold">
+                        <button onClick={() => setUbahPencarian(prev => !prev)} className="block border p-2 px-4 md:px-4 mr-0 xl:mr-16 bg-blue-500 text-white rounded-md text-xs font-bold">
                             Ubah Pencarian
                         </button>            
                     </div>
@@ -236,6 +375,15 @@ export default function Search(){
             <div>
             </div>
             </div>
+
+            {
+                    ubahPencarian ? (
+                    <div className="mt-8">
+                        <Searchpelni />
+                    </div>
+                    ) : null
+                }
+
             <div>
                 {isLoading ? (
                   skeleton.map(() =>(
@@ -262,9 +410,7 @@ export default function Search(){
                             <>
                             {console.log(e)}
 
-                            {console.log(e.fares[i].AVAILABILITY)}
-
-                                <div class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 bg-white border border-gray-200 rounded-lg shadow-sm  hover:border transition-transform transform hover:scale-105`}>
+                                <div class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${ e.fares[i]['M_available'] == "0" &&  e.fares[i]['F_available'] == "0" ? 'bg-gray-200' : 'bg-white' } border border-gray-200 rounded-lg shadow-sm  hover:border transition-transform transform hover:scale-105`}>
                                         
                                         {/* desktop cari */}
                                         <div className="hidden xl:block w-full text-gray-700 ">
@@ -290,51 +436,59 @@ export default function Search(){
                                                     <small>Langsung</small>
                                                 </div>
                                                 <div className="">
-                                                        <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">Rp.{toRupiah(e.fares[0].FARE_DETAIL.A.TOTAL)}</h1>
-                                                        <small className="text-red-500">Infant Rp.{toRupiah(e.fares[0].FARE_DETAIL.I.TOTAL)}</small>
+                                                        <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">Rp.{toRupiah(e.fares[i].FARE_DETAIL.A.TOTAL)}</h1>
+                                                        <small className="text-red-500">Infant Rp.{toRupiah(e.fares[i].FARE_DETAIL.I.TOTAL)}</small>
                                                 </div>
                                                 <div>
-                                                        <button type="button" class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2">
-                                                            <div className="text-white font-bold">PILIH</div>
-                                                        </button>
+                                                    {
+                                                        e.fares[i]['M_available'] == "0" &&  e.fares[i]['F_available'] == "0" ? (
+                                                        <></>
+                                                        ) : (
+                                                            <>
+                                                                <button onClick={async () => handleSubmit(e, i)} type="button" class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2">
+                                                                    <div className="text-white font-bold">PILIH</div>
+                                                                </button>
+                                                            </>
+                                                        )
+                                                    }
                                                         
                                                 </div>
                                             </div>
                                         </div>
                                         <div>
                                  {/* mobile cari */}
-                                {/* <div onClick={() => bookingHandlerDetail(e.trainNumber)} className="cursor-pointer block xl:hidden w-full text-gray-700">
+                                <div className="cursor-pointer block xl:hidden w-full text-gray-700">
                                     <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                                         <div className="flex justify-between">
                                             <div className="col-span-1 xl:col-span-2">
-                                                <h1 className="text-xs font-bold">{e.trainName}</h1>
-                                                <small>{e.seats[0].grade === 'E' ? 'Eksekutif' : e.seats[0].grade === 'B' ? 'Bisnis' : 'Ekonomi'} Class ({e.seats[0].class})</small>
+                                                <h1 className="text-xs font-bold">{e.SHIP_NAME}</h1>
+                                                <small>{e.fares[i].CLASS?.substring(0,2) == 'EK' ? 'Ekonomi ' + e.fares[i].CLASS?.substring(2) : e.fares[i].CLASS?.substring(0,2) == 'BI' ? e.fares[i].CLASS : 'Eksekutif '  + e.fares[i].CLASS?.substring(3)} Subclass ({e.fares[i].SUBCLASS})</small>
                                             </div>
                                             <div className="text-right">
-                                                <h1 className="text-xs font-bold text-blue-500">Rp. {toRupiah(e.seats[0].priceAdult)}</h1>
-                                                <small className="text-red-500">{e.seats[0].availability} set(s)</small>
+                                                <h1 className="text-xs font-bold text-blue-500">Rp.{toRupiah(e.fares[0].FARE_DETAIL.A.TOTAL)}</h1>
+                                                <small className="text-red-500">Infant Rp.{toRupiah(e.fares[0].FARE_DETAIL.I.TOTAL)}</small>
                                             </div>
                                         </div>
                                         <div className="flex justify-start">
                                             <div className="flex space-x-2 items-start">
                                                 <div>
-                                                    <h1 className="mt-10 xl:mt-0 text-xs font-bold">{e.departureTime}</h1>
-                                                    <small className="text-gray-400">{origin}</small>
+                                                    <h1 className="mt-10 xl:mt-0 text-xs font-bold">{`${e.DEP_TIME.slice(0, 2)}:${e.DEP_TIME.slice(2)}`}</h1>
+                                                    <small className="text-gray-400">{originName}</small>
                                                 </div>
                                                 <div className="w-full mt-12 px-4 border-b-2"></div>
                                                 <div className="text-xs">
-                                                    <h1 className="text-xs mt-10 xl:mt-0 text-gray-400">{e.duration}</h1>
+                                                    <h1 className="text-xs mt-10 xl:mt-0 text-gray-400">{duration(e.DEP_DATE, e.ARV_DATE, e.DEP_TIME, e.ARV_TIME)}</h1>
                                                     <small className="text-gray-400">Langsung</small>
                                                 </div>
                                                 <div className="w-full mt-12 px-4 border-b-2"></div>
                                                 <div>
-                                                    <h1 className="mt-10 xl:mt-0 text-xs font-bold">{e.arrivalTime}</h1>
-                                                    <small className="text-gray-400">{destination}</small>
+                                                    <h1 className="mt-10 xl:mt-0 text-xs font-bold">{`${e.ARV_TIME.slice(0, 2)}:${e.ARV_TIME.slice(2)}`}</h1>
+                                                    <small className="text-gray-400">{destinationName}</small>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div> */}
+                                </div>
                                 </div>
                             </div>
                             </>

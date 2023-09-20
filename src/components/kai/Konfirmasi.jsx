@@ -191,7 +191,7 @@ export default function Konfirmasi(){
         api['error']({
           message: 'Error!',
           description:
-          rd.toLowerCase().charAt(0).toUpperCase() + rd.slice(1).toLowerCase() + ' .!',
+          rd.toLowerCase().charAt(0).toUpperCase() + rd.slice(1).toLowerCase() + '',
         });
       };
 

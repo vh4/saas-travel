@@ -33,7 +33,7 @@ export default function BookingPesawat(){
         api['error']({
           message: 'Error!',
           description:
-          rd.toLowerCase().charAt(0).toUpperCase() + rd.slice(1).toLowerCase() + ' .!',
+          rd.toLowerCase().charAt(0).toUpperCase() + rd.slice(1).toLowerCase() + '',
         });
       };
 
@@ -307,6 +307,14 @@ export default function BookingPesawat(){
         }
 
     }
+
+    const disabledDate = (current, e, i) => {
+            
+        const twoYearsAgo = dayjs().subtract(2, 'year');
+        const currentDate = dayjs();
+
+        return current && (current < twoYearsAgo || current > currentDate);
+    };
 
     const {register, handleSubmit, formState:{ errors }} = useForm();
 
@@ -678,6 +686,7 @@ export default function BookingPesawat(){
                                                             className='w-full'
                                                             value={dayjs(e.birthdate, 'YYYY/MM/DD')} format={'YYYY/MM/DD'}
                                                             onChange={handleInfantsubCatagoryChange(i, 'birthdate')}
+                                                            disabledDate={disabledDate}
                                                             />
                                                         </Form.Item>
                                                         <small className='block -mt-4 text-gray-400'>Contoh: dd-mm-yyyy</small>                

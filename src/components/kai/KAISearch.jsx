@@ -11,7 +11,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Autocomplete from '@mui/material/Autocomplete';
 import {Popper } from "@mui/material";
 import {FaTrain} from 'react-icons/fa'
-import { useNavigate, createSearchParams } from "react-router-dom";
 import onClickOutside from "react-onclickoutside";
 import { makeStyles } from '@mui/styles';
 import { Button } from 'antd';
@@ -112,7 +111,7 @@ function KAI(){
         }
         
         (async () => {
-          await sleep(1e3); // For demo purposes.
+          await sleep(1e3);
     
           if (active) {
             setKAIData([...kai.data]);
@@ -158,9 +157,6 @@ function KAI(){
         }
       }, [openTujuan]);
     
-
-    const navigate = useNavigate();
-
 
     function plusAdult(e){
         e.preventDefault();

@@ -10,7 +10,10 @@ import BookingPesawatList from "./pages/booking/PesawatBooking";
 
 import SearchKai from "./pages/kai/Search";
 import SearchPlane from "./pages/plane/Search";
+
 import SearchPelni from "./pages/pelni/Search";
+import BookingPelni from "./pages/pelni/Booking";
+import PaymentPelni from "./pages/pelni/Pembayaran";
 
 import BookingKai from "./pages/kai/Booking";
 import KonfirmasiKai from "./pages/kai/Konfirmasi";
@@ -64,6 +67,8 @@ function App() {
           <Route path="/train/search" element={< SearchKai/>}></Route>
           <Route path="/flight/search" element={< SearchPlane/>}></Route>
           <Route path="/pelni/search" element={< SearchPelni/>}></Route>
+          <Route path="/pelni/booking" element={< BookingPelni/>}></Route>
+          <Route path="/pelni/payment" element={< PaymentPelni/>}></Route>
           <Route path="/flight/booking/:PesawatNumber" element={< BookingPesawat/>}></Route>
           <Route path="/flight/payment/:PesawatNumber" element={< PembayaranPesawat/>}></Route>
           <Route path="/flight/tiket-pesawat" element={< TiketPesawat/>}></Route>

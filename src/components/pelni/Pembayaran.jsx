@@ -1,6 +1,5 @@
 import React, {useState, useContext} from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 import {AiOutlineCheckCircle} from "react-icons/ai"
 import {RxCrossCircled} from 'react-icons/rx'
 import {MdHorizontalRule} from 'react-icons/md'
@@ -13,21 +12,20 @@ import { Alert } from 'antd';
 
 export default function Pembayaran(){
 
-    const {trainNumber} = useParams();
     const navigate = useNavigate();
     
     const {dispatch} = useContext(TiketContext);
-    
     const [isLoading, setIsLoading] = useState(false);
-    const passengers = localStorage.getItem(trainNumber + "_passenggers") ? JSON.parse(localStorage.getItem(trainNumber + "_passenggers")) : null;
 
-    const dataBookingTrain = localStorage.getItem(trainNumber + "_booking") ? JSON.parse(localStorage.getItem(trainNumber + "_booking")) : null;
-    const dataDetailTrain = localStorage.getItem(trainNumber + "_detailTrain") ? JSON.parse(localStorage.getItem(trainNumber + "_detailTrain")) : null;
-    const hasilBooking = JSON.parse(localStorage.getItem(trainNumber + "_hasilBookingdanPilihKursi"));
+	const book = JSON.parse(localStorage.getItem('v_pelnibook'));
+    const book_info  = JSON.parse(localStorage.getItem('v_infopelnibook'));
+    const passengers  = JSON.parse(localStorage.getItem('v_passengers'));
 
-    const TotalAdult = passengers ? passengers.adults ? passengers.adults.length : 0 :  0;
-    const TotalChild = passengers ? passengers.children ? passengers.children.length : 0 : 0;
-    const TotalInfant = passengers ? passengers.infants ? passengers.infants.length : 0 : 0;
+	console.log(book);
+	console.log(book_info);
+
+    const TotalAdult = passengers ? parseInt(passengers.adult) : 0;
+    const TotalInfant = passengers ? parseInt(passengers.infant) : 0;	
 
     const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
     const [api, contextHolder] = notification.useNotification();
@@ -40,44 +38,32 @@ export default function Pembayaran(){
         });
       };
 
-      const successNotification = (rd) => {
-        api['success']({
-          message: 'Success!',
-          description:
-          "Successfully, pindah kursi anda sudah berhasil!.",
-          duration:7,
-        });
-      };
+	const successNotification = (rd) => {
+	api['success']({
+		message: 'Success!',
+		description:
+		"Successfully, pindah kursi anda sudah berhasil!.",
+		duration:7,
+	});
+	};
+
     var err = false;
-    if(passengers === null || passengers === undefined) {
-        err = true;
+
+    if(token === null || token === undefined){
+        err = true
     }
 
-    if(token === null || token === undefined) {
-        err = true;
+    if(book === null || book === undefined){
+        err = true
     }
 
-    if(dataBookingTrain === null || dataBookingTrain === undefined) {
-        err = true;
+    if(passengers === null || passengers === undefined){
+        err = true
+    }   
+
+    if(book_info === null || book_info === undefined){
+        err = true
     }
-
-    if(dataDetailTrain === null || dataDetailTrain === undefined) {
-        err = true;
-    }
-
-    if(hasilBooking === null || hasilBooking === undefined) {
-        err = true;
-    }
-
-    setTimeout(() =>{ 
-
-        if(hasilBooking && new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()) {
-
-            err = true;
-
-        }
-
-    }, hasilBooking && new Date(hasilBooking.timeLimit).getTime() - new Date().getTime());
 
     function toRupiah(angka) {
         var rupiah = '';
@@ -88,58 +74,6 @@ export default function Pembayaran(){
 
     async function handlerPembayaran(e){
         e.preventDefault();
-        setIsLoading(true);
-        const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/payment`, 
-        {
-            "productCode" : "WKAI",
-            "bookingCode" : hasilBooking.bookingCode,
-            "transactionId" : hasilBooking.transactionId,
-            "nominal" : hasilBooking.normalSales,
-            "nominal_admin" : hasilBooking.nominalAdmin,
-            "discount" : hasilBooking.discount,
-            "simulateSuccess":process.env.REACT_APP_SIMUATION_PAYMENT,
-            "pay_type" : "TUNAI",
-            "token" : JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API))
-        }
-        );
-        
-        if(response.data.rc === '00'){
-            const params = {
-                success: JSON.stringify(
-                    {
-                        booking_id: hasilBooking.bookingCode,
-                        tipe_pembayaran:"TUNAI",
-                        nomor_hp_booking:passengers.adults[0].phone,
-                        id_transaksi:hasilBooking.transactionId,
-                        nominal_admin: hasilBooking.nominalAdmin,
-                        discount: hasilBooking.discount,
-                        url_etiket : response.data.data.url_etiket,
-                        nominal_sales: hasilBooking.normalSales,
-                        total_dibayar:toRupiah(parseInt(hasilBooking.normalSales) - parseInt(hasilBooking.discount) + parseInt(hasilBooking.nominalAdmin))
-                    }
-                )
-            }
-
-            dispatch({
-                type:'PAY_TRAIN'
-            });
-
-            setTimeout(() => {
-                setIsLoading(false);
-
-                navigate({
-                    pathname: "/train/tiket-kai",
-                    search: `?${createSearchParams(params)}`  
-                })
-            }, 1500)
-
-        }else{
-            setTimeout(() => {
-                failedNotification(response.data.rd);
-                setIsLoading(false);
-            }, 1000)
-
-        }
 
     }
 
@@ -182,10 +116,10 @@ export default function Pembayaran(){
     function handleError(){
         
         window.location = '/';
-        localStorage.removeItem(trainNumber + '_booking');
-        localStorage.removeItem(trainNumber + '_detailTrain');
-        localStorage.removeItem(trainNumber + '_hasilBookingdanPilihKursi'); 
-        localStorage.removeItem(trainNumber + '_passenggers');
+        localStorage.removeItem('v_pelnibook');
+        localStorage.removeItem('v_infopelnibook');
+        localStorage.removeItem('v_passengers'); 
+
     }
 
     return(
@@ -227,55 +161,27 @@ export default function Pembayaran(){
         </div>
         <div className="block xl:flex xl:justify-around mb-24 xl:mx-16 xl:space-x-4">
             <div className="mt-4 w-full mx-0 2xl:mx-4">
-            {/* adult */}
-            { passengers.adults.length > 0 ? passengers.adults.map((e, i) =>(
+            {/* adult and infant */}
+            { book_info.PAX_LIST.length > 0 ? book_info.PAX_LIST.map((e, i) =>(
                 <>
                     <div className='p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm'>
                         <div className="p-2">
                             <div className="px-2 xl:px-4 py-2 text-gray-500 border-b border-gray-200 text-sm font-bold">
-                                {e.name}
+								{book_info.PAX_LIST[i][0]}
                             </div>
                             <div className="mt-2 block md:flex md:space-x-8">
                                 <div className="px-2 md:px-4 py-2 text-sm font-bold">
                                     <div className="text-gray-500">NIK</div>
-                                    <div className="text-gray-600">{e.idNumber}</div>
+                                    <div className="text-gray-600">{book_info.PAX_LIST[i][1]}</div>
                                 </div>
                                 <div className="px-2 md:px-4 py-2 text-sm font-bold">
                                     <div className="text-gray-500">Nomor HP</div>
-                                    <div className="text-gray-600">{e.phone}</div>
+                                    <div className="text-gray-600">{book_info.CALLER}</div>
                                 </div> 
                                 <div className="px-2 md:px-4 py-2 text-sm font-bold">
                                     <div className="text-gray-500">Kursi</div>
-                                    <div className="text-gray-600">{hasilBooking !== null ? hasilBooking.seats[i][0] === 'EKO'  ? 'Ekonomi' : hasilBooking.seats[i][0] === 'BIS' ? 'Bisnis' : 'Eksekutif' : '' } {hasilBooking !== null ? hasilBooking.seats[i][1] : ''} - {hasilBooking !== null ? hasilBooking.seats[i][2] : ''}{hasilBooking !== null ? hasilBooking.seats[i][3] : ''}</div>
+									<div className="text-gray-600">{book_info.PAX_LIST[i][2]}/{book_info.PAX_LIST[i][3]}-{book_info.PAX_LIST[i][4]}</div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>                                      
-                </>
-            )) : ''}
-
-
-            {/* infants */}
-            { passengers.infants.length > 0 ? passengers.infants.map((e, i) =>(
-                <>
-                    <div className='p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm'>
-                        <div className="p-4">
-                            <div className="p-4 text-gray-500 border-b border-gray-200 text-sm font-bold">
-                                {e.name}
-                            </div>
-                            <div className="mt-2 flex space-x-8">
-                                <div className="px-4 py-2 text-sm font-bold">
-                                    <div className="text-gray-500">NIK</div>
-                                    <div className="text-gray-600">{e.idNumber}</div>
-                                </div>
-                                <div className="px-4 py-2 text-sm font-bold">
-                                    <div className="text-gray-500">Tanggal Lahir</div>
-                                    <div className="text-gray-600">{e.birthdate}</div>
-                                </div> 
-                                <div className="px-4 py-2 text-sm font-bold">
-                                    <div className="text-gray-500">Kursi</div>
-                                    <div className="text-gray-600">{hasilBooking.seats[i][0] === 'EKO'  ? 'Ekonomi' : hasilBooking.seats[i][0]} {hasilBooking.seats[i][1]} - {hasilBooking.seats[i][2]} {hasilBooking.seats[i][3]}</div>
-                                </div> 
                             </div>
                         </div>
                     </div>                                      
@@ -285,10 +191,10 @@ export default function Pembayaran(){
                     <div className="p-4">
                         <div className="text-xs text-slate-500 font-bold flex justify-between">
                             <div>
-                            {dataBookingTrain && dataBookingTrain[0].trainName} {TotalAdult > 0 ? `(Adult) x${TotalAdult}` : ''} { TotalChild > 0 ? `(Adult) x${TotalChild}` : ''} { TotalInfant > 0 ? `(Adult) x${TotalInfant}` : ''}
+                            {book_info && book_info.SHIP_NAME} {TotalAdult > 0 ? `(Adult) x${TotalAdult}` : ''} { TotalInfant > 0 ? `(Infant) x${TotalInfant}` : ''}
                             </div>
                             <div>
-                                Rp. {hasilBooking && toRupiah(hasilBooking.normalSales * TotalAdult)}
+                                Rp. {book && toRupiah(book.normalSales * TotalAdult)}
                             </div>
                         </div>
                         <div className="mt-2 text-xs text-slate-500 font-bold flex justify-between">
@@ -296,7 +202,7 @@ export default function Pembayaran(){
                                 Biaya Admin (Fee)
                             </div>
                             <div>
-                                Rp. {hasilBooking && toRupiah(hasilBooking.nominalAdmin)}
+                                Rp. {book && toRupiah(book.nominal_admin)}
                             </div>
                         </div>
                         <div className="mt-2 text-xs text-slate-500 font-bold flex justify-between">
@@ -304,7 +210,7 @@ export default function Pembayaran(){
                                 Diskon (Rp.)
                             </div>
                             <div>
-                                Rp. {hasilBooking && hasilBooking.discount}
+                                Rp. {book && book.discount}
                             </div>
                         </div>
                         <div className="mt-4 pt-2 border-t border-gray-200 text-sm text-slate-500 font-bold flex justify-between">
@@ -312,7 +218,7 @@ export default function Pembayaran(){
                                 Total Harga
                             </div>
                             <div>
-                                Rp. {hasilBooking && toRupiah(parseInt(hasilBooking.normalSales * TotalAdult) - parseInt(hasilBooking.discount) + parseInt(hasilBooking.nominalAdmin))}
+                                Rp. {book && toRupiah(parseInt(book.normalSales * TotalAdult) - parseInt(book.discount) + parseInt(book.nominal_admin))}
                             </div>
                         </div>
                     </div>
@@ -322,29 +228,29 @@ export default function Pembayaran(){
             <div className="sidebar w-full xl:w-1/2">
                 <div className='mt-8 py-2 rounded-md border border-gray-200 shadow-sm'>
                     <div className="px-4 py-2">
-                        <div className="text-gray-500 text-xs">Booking ID</div>
-                        <div className="mt-1 font-bold text-blue-500 text-xs">{hasilBooking && hasilBooking.bookingCode}</div>
+                        <div className="text-gray-500 text-xs">Status Booking</div>
+                        <div className="mt-1 font-bold text-blue-500 text-xs">{book_info && book_info.STATUS}</div>
                     </div>
                     <div className="p-4 border-t">
-                        <div className="text-xs text-gray-500">TRAIN DESCRIPTION</div>
-                        <div className="mt-3 text-xs text-gray-500">{dataBookingTrain[0].trainName}</div>
-                        <div className="mt-1 text-xs text-slate-700 font-bold">{dataDetailTrain[0].berangkat_nama_kota} - {dataDetailTrain[0].tujuan_nama_kota}</div>
-                        <div className="mt-3 text-xs text-gray-500">{parseTanggal(dataBookingTrain[0].departureDate)}</div>
-                        <div className="mt-1 text-xs text-gray-500">{dataBookingTrain[0].departureTime} - {dataBookingTrain[0].arrivalTime}</div>
+                        <div className="text-xs text-gray-500">PELNI DESCRIPTION</div>
+                        <div className="mt-3 text-xs text-gray-500">{book.SHIP_NAME}</div>
+                        <div className="mt-1 text-xs text-slate-700 font-bold">{passengers.pelabuhan_asal} - {passengers.pelabuhan_tujuan}</div>
+                        <div className="mt-3 text-xs text-gray-500">{parseTanggal(passengers.departureDate)}</div>
+                        <div className="mt-1 text-xs text-gray-500">{passengers.departureTime} - {passengers.arrivalTime}</div>
                     </div>
                     <div className="p-4 border-t">
                         <div className="text-xs text-gray-500">LIST PASSENGERS</div>
-                        {passengers.adults && passengers.adults.length > 0 && 
-                            passengers.adults.map((e, i) => (
+                        {passengers.passengers.adults && passengers.passengers.adults.length > 0 && 
+                            passengers.passengers.adults.map((e, i) => (
                                 <div className="mt-3 text-xs text-slate-700 font-bold">{e.name} (Adult)</div>
                             ))
                         }
-                         {passengers.children && passengers.children.length > 0 && 
+                         {passengers.passengers.children && passengers.passengers.children.length > 0 && 
                             passengers.children.map((e, i) => (
                                 <div className="mt-3 text-xs text-slate-700 font-bold">{e.name} (Children)</div>
                             ))
                         }                       
-                         {passengers.infants && passengers.infants.length > 0 && 
+                         {passengers.passengers.infants && passengers.passengers.infants.length > 0 && 
                             passengers.infants.map((e, i) => (
                                 <div className="mt-3 text-xs text-slate-700 font-bold">{e.name} (Infants)</div>
                             ))
