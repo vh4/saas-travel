@@ -37,7 +37,10 @@ export default function SidebarMobileUser({pathSidebar}) {
             });
             setUsr(response.data.data)
             setIsLoading(false);
-            localStorage.setItem('v_', JSON.stringify(response.data.data))
+            localStorage.setItem('v_', JSON.stringify({
+                namaPemilik:response.data.data.namaPemilik,
+                balance:response.data.data.balance
+            }))
         }catch(e){
             console.log(e);
             setIsLoading(false);

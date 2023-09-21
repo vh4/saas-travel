@@ -344,13 +344,28 @@ export default function BookingPelni(){
 			}, 
 		];
 
-        const disabledDate = (current, e, i) => {
+
+
+          const disabledDate = (current, e, i) => {
             
             const twoYearsAgo = dayjs().subtract(2, 'year');
-            const currentDate = dayjs();
-
-            return current && (current < twoYearsAgo || current > currentDate);
+            const endOfMonth = twoYearsAgo.endOf('month');
+            const endOfDays = endOfMonth.subtract(1, 'day');
+    
+            const currentDate = dayjs().subtract(1, 'day');
+    
+            return current && (current < endOfDays || current > currentDate);
         };
+    
+        const disabledDateAdult = (current) => {
+            const TenYearsAgo = dayjs().subtract(2, 'year');
+    
+            const endOfMonth = TenYearsAgo.endOf('month');
+            const endOfDays = endOfMonth.subtract(1, 'day');
+    
+            return current && current > endOfDays;
+    
+          };
 
     return(
         <>
@@ -542,8 +557,12 @@ export default function BookingPelni(){
                                                                 if (e.usia === 'infant') {
                                                                   return disabledDate(current, e, i);
 
+                                                                }else{
+
+                                                                    return disabledDateAdult(current, e, i);
+
                                                                 }
-                                                                return false;
+
                                                               }}
                                                               
                                                             />
@@ -642,8 +661,12 @@ export default function BookingPelni(){
                                                                 if (e.usia === 'infant') {
                                                                   return disabledDate(current, e, i);
 
+                                                                }else{
+
+                                                                    return disabledDateAdult(current, e, i);
+
                                                                 }
-                                                                return false;
+
                                                               }}
                                                            
                                                            />

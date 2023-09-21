@@ -14,6 +14,7 @@ import { makeStyles } from '@mui/styles';
 import { DateRangePicker } from 'rsuite';
 import "rsuite/dist/rsuite.min.css";
 import {Button} from 'antd'
+const { allowedMaxDays, beforeToday, combine} = DateRangePicker;
 
 function Pelni(){
 
@@ -44,6 +45,12 @@ function Pelni(){
     const [keberangkatan, setKeberangkatan] = React.useState();
     const [tujuan, setTujuan] = React.useState();
     const [tanggal, setTanggal] = React.useState();
+
+
+    const disabledDateRule = combine(
+        allowedMaxDays(30), // Menonaktifkan tanggal lebih dari 7 hari dari tanggal saat ini
+        beforeToday()      // Menonaktifkan tanggal yang kurang dari tanggal saat ini
+      );
 
     const i = 0;
 
@@ -380,7 +387,7 @@ function Pelni(){
                                 <FormControl sx={{ m: 1, minWidth: 120 }}> 
                                 <small className="mb-2 text-gray-500">Range Tanggal</small>
                                 <div className='w-full'>
-                                    <DateRangePicker block onChange={(e) => setTanggal(e)} size="lg" sx={{width:'100%'}} placeholder='yyyy-mm-dd yyyy-mm-dd' className='text-gray-300'/>
+                                    <DateRangePicker block onChange={(e) => setTanggal(e)} size="lg" sx={{width:'100%'}} placeholder='yyyy-mm-dd yyyy-mm-dd' className='text-gray-300' disabledDate={disabledDateRule}/>
                                 </div>
                                 </FormControl>
                                 <FormControl sx={{ m: 1, minWidth: 120 }}>

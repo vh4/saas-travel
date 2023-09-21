@@ -23,28 +23,36 @@ export default function Konfirmasi(){
         <>
         {token !== null && token !== undefined ? (
             <>
-                        {/* header kai flow */}
+            {/* header kai flow */}
                 <div className='flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center'>
-                        <div className='flex space-x-2 items-center'>
-                            <AiOutlineCheckCircle className='text-slate-500' size={20} />
-                            <div className='hidden xl:flex text-slate-500'>Detail pesanan</div>
-                            <div className='block xl:hidden text-slate-500'>Detail</div>
-                        </div>
-                        <div>
-                            <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
-                        </div>
-                        <div className='flex space-x-2 items-center'>
-                            <AiOutlineCheckCircle className='text-slate-500'  size={20} />
-                            <div className='hidden xl:flex text-slate-500'>Pembayaran tiket</div>
-                            <div className='block xl:hidden text-slate-500'>Payment</div>
-                        </div>
-                        <div>
-                            <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
-                        </div>
-                        <div className='flex space-x-2 items-center'>
-                            <AiOutlineCheckCircle className='text-slate-500'  size={20} />
-                            <div className='text-slate-500'>E-Tiket</div>
-                        </div>
+                    <div className='flex space-x-2 items-center'>
+                        <AiOutlineCheckCircle className='text-slate-500'  size={20} />
+                        <div className='hidden xl:flex text-slate-500'>Detail pesanan</div>
+                        <div className='block xl:hidden text-slate-500'>Detail</div>
+                    </div>
+                    <div>
+                        <MdHorizontalRule size={20} className='hidden xl:flex text-gray-500' />
+                    </div>
+                    <div className='flex space-x-2 items-center'>
+                        <AiOutlineCheckCircle className='text-slate-500'  size={20} />
+                        <div className='hidden xl:flex text-slate-500 font-bold'>Konfirmasi pesanan</div>
+                        <div className='block xl:hidden text-slate-500  font-bold'>Konfirmasi</div>
+                    </div>
+                    <div>
+                        <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
+                    </div>
+                    <div className='flex space-x-2 items-center'>
+                        <AiOutlineCheckCircle className='text-slate-500'  size={20} />
+                        <div className='hidden xl:block text-slate-500'>Pembayaran tiket</div>
+                        <div className='block xl:hidden text-slate-500'>Payment</div>
+                    </div>
+                    <div>
+                        <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
+                    </div>
+                    <div className='flex space-x-2 items-center'>
+                        <AiOutlineCheckCircle className='text-slate-500'  size={20} />
+                        <div className='text-slate-500'>E-Tiket</div>
+                    </div>
                 </div>
                 <div className="w-full mt-8 xl:px-28 mb-16">
                     <div className="border rounded-md pb-12">

@@ -16,16 +16,16 @@ export default function Description(){
                 </div>
                 <div className='w-full mt-4 lg:mt-0'>
                     <div className='flex justify-start font-bold text-md md:text-xl text-gray-600'>
-                        Dapatkan Harga Tiket Pesawat Murah dan Cepat Tanpa Ribet.
+                    Dapatkan Harga Tiket Pesawat Murah dan Cepat Tanpa Ribet.
                     </div>
                     <div className='flex justify-start mt-4 text-sm text-gray-500'>
-                        Nikmati Harga tiket pesawat dengan murah meriah hanya di fastravel.com. kamu bisa dengan cepat memesan tiket pesawat tanpa ribet.
+                    Nikmati penawaran tiket pesawat yang terjangkau dan cepat hanya di Rajabiller.com. Kamu bisa dengan mudah memesan tiket pesawat tanpa kerumitan.
                     </div>
                     <div className='flex justify-start mt-4 text-sm text-gray-500'>
-                        Kamu juga bisa membandikan jawal tiket pesawat secara online dan memberikan kamu keuntungan untuk memilih harga yang lebih murah. dan kamu juga bisa mendapatkan promo lebih dengan melakukan transaksi secara terus menerus. jangan lupa untuk mengecek promo tiket pesawat supaya kamu bisa lebih hemat.
+                    Kamu juga dapat membandingkan berbagai pilihan tiket pesawat secara online, memberikanmu keunggulan dalam memilih harga yang lebih terjangkau.Selain itu, kamu juga bisa mendapatkan promo tambahan dengan melakukan transaksi secara rutin. Jangan lupa untuk selalu memeriksa promo tiket pesawat agar kamu bisa menghemat lebih banyak.
                     </div>
                     <div className='mt-4 text-sm text-gray-500'>
-                        Nikmati kemudahan pembelian tiket anda hanya di <a href="/">fastravel.com</a>
+                    Nikmati kemudahan pembelian tiketmu hanya di <a href="/">rajabiller.com</a>
                     </div>
                 </div>
             </div>

@@ -4,8 +4,18 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import {GiStarsStack} from 'react-icons/gi'
 import {BsArrowRightShort} from 'react-icons/bs'
+import dayjs from "dayjs";
+import { useNavigate } from "react-router";
+
 
 export default function PesawatCarousel(){
+
+      // Tanggal saat ini
+    const today = dayjs();
+    const nextSaturday = today.add(1, 'week').day(6);
+    const formattedDate = nextSaturday.format('dddd, D MMM YYYY');
+    const formattedDateUrl = nextSaturday.format('YYYY-MM-DD');
+
     const responsive = {
         superLargeDesktop: {
           // the naming can be any, depends on you.
@@ -27,49 +37,54 @@ export default function PesawatCarousel(){
       };
 
       const data = [{
-        keberangkatan: 'Jakarta',
-        tujuan: 'Denpasar Bali',
-        NamaMaskapai: 'Citilink',
-        logo:'https://s-light.tiket.photos/t/01E25EBZS3W0FY9GTG6C42E1SE/rsfit00gsmenlarge1/string/2020/12/17/3deec547-980a-4d75-ac89-6e34eb9ddcf7-1608153225434-f5996f5af379dc69b93f00f8b725e579.png',
-        image:'https://imageio.forbes.com/specials-images/imageserve/675172642/pura-ulun-danu-bratan-temple-in-Bali-/960x0.jpg?format=jpg&width=960',
-        harga: 1260000,
-        tanggal:'30 Jan 2023'
-      },
-      {
-        keberangkatan: 'Jakarta',
-        tujuan: 'Papua',
-        NamaMaskapai: 'Citilink',
-        logo:'https://s-light.tiket.photos/t/01E25EBZS3W0FY9GTG6C42E1SE/rsfit00gsmenlarge1/string/2020/12/17/3deec547-980a-4d75-ac89-6e34eb9ddcf7-1608153225434-f5996f5af379dc69b93f00f8b725e579.png',
-        image:'https://www.turiz.id/wp-content/uploads/2020/03/03ad0c4e-3e47-4d1e-9bfb-88855329eb64.jpg',
-        harga: 5260000,
-        tanggal:'05 Feb 2023'
-      },
-      {
-        keberangkatan: 'Jakarta',
-        tujuan: 'Surabaya',
+        keberangkatan: 'Jakarta CGK',
+        tujuan: 'Bali Denpasar',
         NamaMaskapai: 'Lion Air',
         logo:'https://storage.googleapis.com/static-sbf/fastravel/asset/maskapai/TPIW.png',
-        image:'https://www.nibble.id/uploads/wisata_anak_surabaya_2022_10_df0b9d5df1.jpg',
-        harga: 1025000,
-        tanggal:'27 Jan 2023'
+        image:'./bali.jpg',
+        url:`/flight/search?departure=HLP&departureName=Halim+Perdanakusuma&arrival=DPS&arrivalName=Ngurah+Rai&departureDate=${formattedDateUrl}&returnDate=&isLowestPrice=true&adult=1&child=0&infant=0`,
+        harga: 1200000,
+        tanggal:formattedDate
       },
       {
-        keberangkatan: 'Jakarta',
+        keberangkatan: 'Jakarta CGK',
+        tujuan: 'Raja Ampat',
+        NamaMaskapai: 'Lion Air',
+        logo:'https://storage.googleapis.com/static-sbf/fastravel/asset/maskapai/TPIW.png',
+        image:'papuaaa.jpg',
+        url:`/flight/search?departure=CGK&departureName=Soekarno+%E2%80%93+Hatta&arrival=RJM&arrivalName=Marinda&departureDate=${formattedDateUrl}&returnDate=&isLowestPrice=true&adult=1&child=0&infant=0`,
+        harga: 2560000,
+        tanggal:formattedDate
+      },
+      {
+        keberangkatan: 'Jakarta CGK',
+        tujuan: 'Juanda',
+        NamaMaskapai: 'Lion Air',
+        logo:'https://storage.googleapis.com/static-sbf/fastravel/asset/maskapai/TPIW.png',
+        image:'./surabaya.jpg',
+        url:`/flight/search?departure=CGK&departureName=Soekarno+%E2%80%93+Hatta&arrival=SUB&arrivalName=Juanda&departureDate=${formattedDateUrl}&returnDate=&isLowestPrice=true&adult=1&child=0&infant=0`,
+        harga: 820000,
+        tanggal:formattedDate
+      },
+      {
+        keberangkatan: 'Jakarta HLM',
         tujuan: 'Yogyakarta',
         NamaMaskapai: 'Lion Air',
         logo:'https://storage.googleapis.com/static-sbf/fastravel/asset/maskapai/TPIW.png',
-        image:'https://asset.kompas.com/crops/PXj4FVleekuQq-mgvju_Yo9e6wk=/0x0:1000x667/750x500/data/photo/2020/06/27/5ef71456e667a.jpg',
-        harga: 810000,
-        tanggal:'22 Feb 2023'
+        url:`/flight/search?departure=HLP&departureName=Halim%20Perdanakusuma&arrival=JOG&arrivalName=Adisutjipto&departureDate=${formattedDateUrl}&returnDate=&isLowestPrice=true&adult=1&child=0&infant=0`,
+        image:'./jogja.jpg',
+        harga: 3000000,
+        tanggal:formattedDate
       },
       {
-        keberangkatan: 'Jakarta',
-        tujuan: 'Denpasar Bali',
-        NamaMaskapai: 'Citilink',
-        logo:'https://s-light.tiket.photos/t/01E25EBZS3W0FY9GTG6C42E1SE/rsfit00gsmenlarge1/string/2020/12/17/3deec547-980a-4d75-ac89-6e34eb9ddcf7-1608153225434-f5996f5af379dc69b93f00f8b725e579.png',
-        image:'https://imageio.forbes.com/specials-images/imageserve/675172642/pura-ulun-danu-bratan-temple-in-Bali-/960x0.jpg?format=jpg&width=960',
-        harga: 1260000,
-        tanggal:'21 Februari 2023'
+        keberangkatan: 'Jakarta CGK',
+        tujuan: 'Surakarta',
+        NamaMaskapai: 'Lion Air',
+        logo:'https://storage.googleapis.com/static-sbf/fastravel/asset/maskapai/TPIW.png',
+        url:`/flight/search?departure=CGK&departureName=Soekarno+%E2%80%93+Hatta&arrival=SOC&arrivalName=Adisumarmo&departureDate=${formattedDateUrl}}&returnDate=&isLowestPrice=true&adult=1&child=0&infant=0`,
+        image:'./surakarta.jpg',
+        harga: 600000,
+        tanggal:formattedDate
       },
     ];
 
@@ -79,6 +94,8 @@ export default function PesawatCarousel(){
       for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
       return rupiah.split('',rupiah.length-1).reverse().join('');
     }
+
+    const navigate = useNavigate();
 
     return(
         <>
@@ -93,15 +110,15 @@ export default function PesawatCarousel(){
                 </div>
                 <div className="mx-2 md:mx-0 flex space-x-2 mb-2 overflow-x-scroll scrollbar-hide">
                     <button type="button" class="py-2.5 px-5 mb-2 text-sm font-medium text-white focus:outline-none bg-blue-500 rounded-full border border-gray-200 focus:z-10 focus:ring-2 focus:ring-blue-200">Jakarta</button>
-                    <button type="button" class="py-2.5 px-5 mr-3 mb-2 text-sm font-medium text-blue-400 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-blue-50 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-blue-200">Bandung</button>
-                    <button type="button" class="py-2.5 px-5 mr-3 mb-2 text-sm font-medium text-blue-400 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-blue-50 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-blue-200">Surabaya</button>
-                    <button type="button" class="py-2.5 px-5 mr-3 mb-2 text-sm font-medium text-blue-400 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-blue-50 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-blue-200">Yogyakarta</button>
-                    <button type="button" class="py-2.5 px-5 mr-3 mb-2 text-sm font-medium text-blue-400 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-blue-50 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-blue-200">Surakarta</button>
-                    <button type="button" class="py-2.5 px-5 mr-3 mb-2 text-sm font-medium text-blue-400 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-blue-50 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-blue-200">Bali</button>
+                    <button disabled type="button" class="py-2.5 px-5 mr-3 mb-2 text-sm font-medium text-blue-400 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-blue-50 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-blue-200">Bandung</button>
+                    <button disabled type="button" class="py-2.5 px-5 mr-3 mb-2 text-sm font-medium text-blue-400 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-blue-50 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-blue-200">Surabaya</button>
+                    <button disabled type="button" class="py-2.5 px-5 mr-3 mb-2 text-sm font-medium text-blue-400 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-blue-50 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-blue-200">Yogyakarta</button>
+                    <button disabled type="button" class="py-2.5 px-5 mr-3 mb-2 text-sm font-medium text-blue-400 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-blue-50 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-blue-200">Surakarta</button>
+                    <button disabled type="button" class="py-2.5 px-5 mr-3 mb-2 text-sm font-medium text-blue-400 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-blue-50 hover:text-blue-500 focus:z-10 focus:ring-2 focus:ring-blue-200">Bali</button>
                 </div>
                 <Carousel responsive={responsive} className="p-2 md:p-0 flex items-stretch ">
                     {data.map((e) => (
-                          <div className="mx-1 md:mx-0 flex-1 h-full">
+                          <div onClick={() => navigate(e.url)} className="mx-1 md:mx-0 flex-1 h-full cursor-pointer">
                             <div class="w-fit mx-0 lg:mx-2 md:min-w-[240px] md:max-w-[250px] bg-white border border-gray-200 rounded-lg h-full">
                                 <div className="mb-4">
                                     <img class="rounded-t-lg min-h-[120px] md:min-h-[120px]" src={e.image} alt="hotel image" />

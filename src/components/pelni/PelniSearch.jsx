@@ -277,6 +277,13 @@ function PELNI(){
 
     }
 
+    const { allowedMaxDays, beforeToday, combine } = DateRangePicker;
+
+    const disabledDateRule = combine(
+        allowedMaxDays(30), // Menonaktifkan tanggal lebih dari 7 hari dari tanggal saat ini
+        beforeToday()      // Menonaktifkan tanggal yang kurang dari tanggal saat ini
+      );
+
     return (
         <>     
             <div className="row bg-white border-t border-gray-200 w-full p-2 pr-0">
@@ -396,7 +403,7 @@ function PELNI(){
                                 <FormControl sx={{ m: 1, minWidth: 120 }}> 
                                 <small className="mb-2 text-gray-500">Range Tanggal</small>
                                 <div className='w-full'>
-                                    <DateRangePicker block onChange={(e) => setTanggal(e)} size="lg" sx={{width:'100%'}} placeholder='yyyy-mm-dd yyyy-mm-dd' className='text-gray-300'/>
+                                    <DateRangePicker block onChange={(e) => setTanggal(e)} size="lg" sx={{width:'100%'}} placeholder='yyyy-mm-dd yyyy-mm-dd' className='text-gray-300' disabledDate={disabledDateRule}/>
                                 </div>
                                 </FormControl>
                                 <FormControl sx={{ m: 1, minWidth: 120 }}>

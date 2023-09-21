@@ -196,26 +196,26 @@ export default function Pembayaran(){
         {err !== true ? (
             <>
         {/* header kai flow */}
-        <div className='flex justify-start jalur-payment-booking text-xs xl:text-md space-x-2 xl:space-x-8 items-center'>
+        <div className='flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center'>
             <div className='flex space-x-2 items-center'>
                 <AiOutlineCheckCircle className='text-slate-500'  size={20} />
                 <div className='hidden xl:flex text-slate-500'>Detail pesanan</div>
                 <div className='block xl:hidden text-slate-500'>Detail</div>
             </div>
             <div>
-                <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
+                <MdHorizontalRule size={20} className='hidden xl:flex text-gray-500' />
             </div>
             <div className='flex space-x-2 items-center'>
                 <AiOutlineCheckCircle className='text-slate-500'  size={20} />
-                <div className='hidden xl:flex text-slate-500'>Konfirmasi pesanan</div>
-                <div className='block xl:hidden text-slate-500'>Konfirmasi</div>
+                <div className='hidden xl:flex text-slate-500 font-bold'>Konfirmasi pesanan</div>
+                <div className='block xl:hidden text-slate-500  font-bold'>Konfirmasi</div>
             </div>
             <div>
                 <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
             </div>
             <div className='flex space-x-2 items-center'>
-                <div className='hidden xl:flex text-blue-500 font-bold'>Pembayaran tiket</div>
-                <div className='block xl:hidden text-blue-500 font-bold'>Payment</div>
+                <div className='hidden xl:block text-blue-500'>Pembayaran tiket</div>
+                <div className='block xl:hidden text-blue-500'>Payment</div>
             </div>
             <div>
                 <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />

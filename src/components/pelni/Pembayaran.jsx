@@ -9,6 +9,7 @@ import {Button as ButtonAnt, Modal as Modals} from 'antd'
 import { notification } from 'antd';
 import Marquee from 'react-fast-marquee';
 import { Alert } from 'antd';
+import {TbArrowsLeftRight} from 'react-icons/tb'
 
 export default function Pembayaran(){
 
@@ -130,26 +131,26 @@ export default function Pembayaran(){
         {err !== true ? (
             <>
         {/* header kai flow */}
-        <div className='flex justify-start jalur-payment-booking text-xs xl:text-md space-x-2 xl:space-x-8 items-center'>
+        <div className='flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center'>
             <div className='flex space-x-2 items-center'>
                 <AiOutlineCheckCircle className='text-slate-500'  size={20} />
                 <div className='hidden xl:flex text-slate-500'>Detail pesanan</div>
                 <div className='block xl:hidden text-slate-500'>Detail</div>
             </div>
             <div>
-                <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
+                <MdHorizontalRule size={20} className='hidden xl:flex text-gray-500' />
             </div>
             <div className='flex space-x-2 items-center'>
                 <AiOutlineCheckCircle className='text-slate-500'  size={20} />
-                <div className='hidden xl:flex text-slate-500'>Konfirmasi pesanan</div>
-                <div className='block xl:hidden text-slate-500'>Konfirmasi</div>
+                <div className='hidden xl:flex text-slate-500 font-bold'>Konfirmasi pesanan</div>
+                <div className='block xl:hidden text-slate-500  font-bold'>Konfirmasi</div>
             </div>
             <div>
                 <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
             </div>
             <div className='flex space-x-2 items-center'>
-                <div className='hidden xl:flex text-blue-500 font-bold'>Pembayaran tiket</div>
-                <div className='block xl:hidden text-blue-500 font-bold'>Payment</div>
+                <div className='hidden xl:block text-blue-500'>Pembayaran tiket</div>
+                <div className='block xl:hidden text-blue-500'>Payment</div>
             </div>
             <div>
                 <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
@@ -166,21 +167,25 @@ export default function Pembayaran(){
                 <>
                     <div className='p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm'>
                         <div className="p-2">
-                            <div className="px-2 xl:px-4 py-2 text-gray-500 border-b border-gray-200 text-sm font-bold">
-								{book_info.PAX_LIST[i][0]}
+                            <div className="px-2 xl:px-4 py-2 text-gray-600 border-b border-gray-200 text-sm font-bold">
+								{book_info.PAX_LIST[i][0]} ({book_info.PAX_LIST[i][6] == 'N/A' ? 'INFANT' : 'ADULT'})
                             </div>
                             <div className="mt-2 block md:flex md:space-x-8">
-                                <div className="px-2 md:px-4 py-2 text-sm font-bold">
+                                {/* <div className="px-2 md:px-4 py-2 text-sm">
                                     <div className="text-gray-500">NIK</div>
-                                    <div className="text-gray-600">{book_info.PAX_LIST[i][1]}</div>
-                                </div>
-                                <div className="px-2 md:px-4 py-2 text-sm font-bold">
-                                    <div className="text-gray-500">Nomor HP</div>
-                                    <div className="text-gray-600">{book_info.CALLER}</div>
+                                    <div className="font-bold text-xs text-gray-600">{book_info.PAX_LIST[i][1]}</div>
+                                </div> */}
+                                <div className="px-2 md:px-4 py-2">
+                                    <div className="text-gray-500 text-sm">Nomor HP</div>
+                                    <div className="font-bold text-xs text-gray-600">{book_info.CALLER}</div>
                                 </div> 
-                                <div className="px-2 md:px-4 py-2 text-sm font-bold">
-                                    <div className="text-gray-500">Kursi</div>
-									<div className="text-gray-600">{book_info.PAX_LIST[i][2]}/{book_info.PAX_LIST[i][3]}-{book_info.PAX_LIST[i][4]}</div>
+                                <div className="px-2 md:px-4 py-2">
+                                    <div className="text-gray-500 text-sm">Kursi</div>
+									<div className="font-bold text-xs text-gray-600">{book_info.PAX_LIST[i][6] == 'N/A' ? ' Non Seats' : `${book_info.PAX_LIST[i][2] + '/' + book_info.PAX_LIST[i][5] + '-' + book_info.PAX_LIST[i][4]}`}</div>
+                                </div>
+                                <div className="px-2 md:px-4 py-2">
+                                    <div className="text-sm text-gray-500">Kelas</div>
+									<div className="font-bold text-xs text-gray-600">{book_info.CLASS} / Subclass ({book_info.SUBCLASS})</div>
                                 </div>
                             </div>
                         </div>
@@ -189,23 +194,23 @@ export default function Pembayaran(){
             )) : ''}
                 <div className='p-2 mt-2 w-full rounded-md border border-gray-200 shadow-sm'>
                     <div className="p-4">
-                        <div className="text-xs text-slate-500 font-bold flex justify-between">
+                        <div className="text-xs text-gray-600 font-bold flex justify-between">
                             <div>
                             {book_info && book_info.SHIP_NAME} {TotalAdult > 0 ? `(Adult) x${TotalAdult}` : ''} { TotalInfant > 0 ? `(Infant) x${TotalInfant}` : ''}
                             </div>
                             <div>
-                                Rp. {book && toRupiah(book.normalSales * TotalAdult)}
+                                Rp. {book && toRupiah(book.normalSales)}
                             </div>
                         </div>
-                        <div className="mt-2 text-xs text-slate-500 font-bold flex justify-between">
+                        <div className="mt-2 text-xs text-gray-600 font-bold flex justify-between">
                             <div>
-                                Biaya Admin (Fee)
+                                Biaya Admin (Fee) x{TotalAdult + TotalInfant}
                             </div>
                             <div>
-                                Rp. {book && toRupiah(book.nominal_admin)}
+                                Rp. {book && toRupiah(book.nominal_admin * (TotalAdult + TotalInfant))}
                             </div>
                         </div>
-                        <div className="mt-2 text-xs text-slate-500 font-bold flex justify-between">
+                        <div className="mt-2 text-xs text-gray-600 font-bold flex justify-between">
                             <div>
                                 Diskon (Rp.)
                             </div>
@@ -213,12 +218,12 @@ export default function Pembayaran(){
                                 Rp. {book && book.discount}
                             </div>
                         </div>
-                        <div className="mt-4 pt-2 border-t border-gray-200 text-sm text-slate-500 font-bold flex justify-between">
+                        <div className="mt-4 pt-2 border-t border-gray-200 text-sm text-gray-600 font-bold flex justify-between">
                             <div>
                                 Total Harga
                             </div>
                             <div>
-                                Rp. {book && toRupiah(parseInt(book.normalSales * TotalAdult) - parseInt(book.discount) + parseInt(book.nominal_admin))}
+                                Rp. {book && toRupiah(parseInt(book.normalSales) - parseInt(book.discount) + parseInt(book.nominal_admin * (TotalAdult + TotalInfant)))}
                             </div>
                         </div>
                     </div>
@@ -234,9 +239,13 @@ export default function Pembayaran(){
                     <div className="p-4 border-t">
                         <div className="text-xs text-gray-500">PELNI DESCRIPTION</div>
                         <div className="mt-3 text-xs text-gray-500">{book.SHIP_NAME}</div>
-                        <div className="mt-1 text-xs text-slate-700 font-bold">{passengers.pelabuhan_asal} - {passengers.pelabuhan_tujuan}</div>
-                        <div className="mt-3 text-xs text-gray-500">{parseTanggal(passengers.departureDate)}</div>
-                        <div className="mt-1 text-xs text-gray-500">{passengers.departureTime} - {passengers.arrivalTime}</div>
+                        <div className="flex space-x-4">
+                            <div className="mt-1 text-xs text-slate-700 font-bold">{passengers.pelabuhan_asal}</div>
+                            < TbArrowsLeftRight className='text-gray-500' size={18} />
+                            <div className="mt-1 text-xs text-slate-700 font-bold">{passengers.pelabuhan_tujuan}</div>  
+                        </div>
+                        <div className="mt-3 text-xs text-gray-500">{parseTanggal(passengers.departureDate)} - {parseTanggal(book.arrivalDate)}</div>
+                        <div className="mt-1 text-xs text-gray-500">{book.departureTime} - {book.arrivalTime}</div>
                     </div>
                     <div className="p-4 border-t">
                         <div className="text-xs text-gray-500">LIST PASSENGERS</div>
@@ -244,14 +253,9 @@ export default function Pembayaran(){
                             passengers.passengers.adults.map((e, i) => (
                                 <div className="mt-3 text-xs text-slate-700 font-bold">{e.name} (Adult)</div>
                             ))
-                        }
-                         {passengers.passengers.children && passengers.passengers.children.length > 0 && 
-                            passengers.children.map((e, i) => (
-                                <div className="mt-3 text-xs text-slate-700 font-bold">{e.name} (Children)</div>
-                            ))
-                        }                       
+                        }                     
                          {passengers.passengers.infants && passengers.passengers.infants.length > 0 && 
-                            passengers.infants.map((e, i) => (
+                            passengers.passengers.infants.map((e, i) => (
                                 <div className="mt-3 text-xs text-slate-700 font-bold">{e.name} (Infants)</div>
                             ))
                         }         

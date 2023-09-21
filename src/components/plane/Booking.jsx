@@ -311,10 +311,38 @@ export default function BookingPesawat(){
     const disabledDate = (current, e, i) => {
             
         const twoYearsAgo = dayjs().subtract(2, 'year');
-        const currentDate = dayjs();
+        const endOfMonth = twoYearsAgo.endOf('month');
+        const endOfDays = endOfMonth.subtract(1, 'day');
 
-        return current && (current < twoYearsAgo || current > currentDate);
+        const currentDate = dayjs().subtract(1, 'day');
+
+        return current && (current < endOfDays || current > currentDate);
     };
+
+    const disabledDateAdult = (current) => {
+        const TenYearsAgo = dayjs().subtract(12, 'year');
+
+        const endOfMonth = TenYearsAgo.endOf('month');
+        const endOfDays = endOfMonth.subtract(1, 'day');
+
+        return current && current > endOfDays;
+
+      };
+
+      const disabledDateChild = (current) => {
+        
+        const twoYearsAgo = dayjs().subtract(2, 'year');
+        const TenYearsAgo = dayjs().subtract(12, 'year');
+
+        const startOfMonth = TenYearsAgo.endOf('month');
+        const endOfDays = startOfMonth.subtract(1, 'day');
+
+        const endOfMonth = twoYearsAgo.endOf('month');
+
+
+        return current && (current < endOfDays || current > endOfMonth);
+      };
+
 
     const {register, handleSubmit, formState:{ errors }} = useForm();
 
@@ -507,6 +535,7 @@ export default function BookingPesawat(){
                                                             className='w-full'
                                                             value={dayjs(e.birthdate, 'YYYY/MM/DD')} format={'YYYY/MM/DD'}
                                                             onChange={handleAdultsubCatagoryChange(i, 'birthdate')}
+                                                            disabledDate={disabledDateAdult}
                                                             />
                                                         </Form.Item>
                                                         <small className='block -mt-4 text-gray-400'>Contoh: dd-mm-yyyy</small>                
@@ -596,6 +625,7 @@ export default function BookingPesawat(){
                                                             className='w-full'
                                                             value={dayjs(e.birthdate, 'YYYY/MM/DD')} format={'YYYY/MM/DD'}
                                                             onChange={handleChildsubCatagoryChange(i, 'birthdate')}
+                                                            disabledDate={disabledDateChild}
                                                             />
                                                         </Form.Item>
                                                         <small className='blcok -mt-4 text-gray-400'>Contoh: dd-mm-yyyy</small>                

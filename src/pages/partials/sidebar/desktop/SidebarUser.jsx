@@ -29,7 +29,10 @@ export default function SidebarUser({pathSidebar}) {
             token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
         });
         setUsr(response.data.data)
-        localStorage.setItem('v_', JSON.stringify(response.data.data))
+        localStorage.setItem('v_', JSON.stringify({
+            namaPemilik:response.data.data.namaPemilik,
+            balance:response.data.data.balance
+        }))
     }
 
     return (

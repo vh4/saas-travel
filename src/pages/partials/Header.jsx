@@ -55,7 +55,7 @@ export default function Header({toogleSidebar, valueSidebar}){
         api['success']({
           message: 'Successfully!',
           description:
-          'Successfully, anda berhasil login!.',
+          'Successfully, anda berhasil login.'
         });
       };
 
@@ -63,9 +63,10 @@ export default function Header({toogleSidebar, valueSidebar}){
         api['success']({
           message: 'Successfully!',
           description:
-          'Successfully, anda berhasil logout!.',
+          'Successfully, anda berhasil logout.',
         });
       };
+
     
     const navigate = useNavigate();
     const LogoutHandler = (e) => {
@@ -96,7 +97,10 @@ export default function Header({toogleSidebar, valueSidebar}){
             token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
         });
         setUsr(response.data.data)
-        localStorage.setItem('v_', JSON.stringify(response.data.data))
+        localStorage.setItem('v_', JSON.stringify({
+            namaPemilik:response.data.data.namaPemilik,
+            balance:response.data.data.balance
+        }))
     }
 
     function toRupiah(angka) {
@@ -123,14 +127,17 @@ export default function Header({toogleSidebar, valueSidebar}){
         }
     }
 
-    const saveTokenInLocalStorage = (tokenDetails) => {
-        localStorage.setItem('userDetails', JSON.stringify(tokenDetails));
-    }
-
-
-
     const [isExpired, setIsExpired] = useState(false);
     const [api, contextHolder] = notification.useNotification();
+
+    const suksesLogoutAutomatic= () => {
+        api['success']({
+          message: 'Successfully!',
+          description:
+          'Waktu login anda sudah habis. Silahkan login kembali.',
+          duration: null,
+        });
+      };
 
     useEffect(() => {
       const expiredDate = localStorage.getItem("expired_date");
@@ -145,6 +152,7 @@ export default function Header({toogleSidebar, valueSidebar}){
     useEffect(() => {
       if (isExpired) {
         logout();
+        suksesLogoutAutomatic();
       }
     }, [isExpired]);    
 
@@ -159,7 +167,6 @@ export default function Header({toogleSidebar, valueSidebar}){
                 key: ''
             }).then((data) => {
                 if(data.data.rc === "00"){
-                    saveTokenInLocalStorage(data.data);
                     setShowModal(false)
                     setLoading(false);
                     localStorage.setItem(process.env.REACT_APP_SECTRET_LOGIN_API, JSON.stringify(data.data.token));

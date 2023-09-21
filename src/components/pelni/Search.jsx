@@ -8,6 +8,7 @@ import {HiOutlineArrowNarrowRight} from 'react-icons/hi'
 import {IoArrowBackOutline} from "react-icons/io5"
 import { Link } from "react-router-dom";
 import Searchpelni from './PelniSearch'
+import { notification } from 'antd';
 
 
 export default function Search(){
@@ -27,6 +28,16 @@ export default function Search(){
     const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
     const navigate = useNavigate();
     const [ubahPencarian, setUbahPencarian] = useState(false);
+
+    const [api, contextHolder] = notification.useNotification();
+
+    const failedNotification = (rd) => {
+        api['error']({
+          message: 'Error!',
+          description:
+          rd.toLowerCase().charAt(0).toUpperCase() + rd.slice(1).toLowerCase() + '',
+        });
+      };
 
     useEffect(() =>{
         if(token === null || token === undefined){
@@ -149,6 +160,7 @@ export default function Search(){
             setLoading(false);
             setError(false);
           } else {
+            failedNotification(response.data.rd);
             setLoading(false);
             setError(true);
           }
@@ -334,6 +346,7 @@ export default function Search(){
 
     return(
         <>
+            {contextHolder}
             <div className="judul-search mt-4 font-bold text-slate-600">
                 PILIH JADWAL
             </div>
@@ -457,7 +470,7 @@ export default function Search(){
                                         </div>
                                         <div>
                                  {/* mobile cari */}
-                                <div className="cursor-pointer block xl:hidden w-full text-gray-700">
+                                <div onClick={async () => handleSubmit(e, i)} className="cursor-pointer block xl:hidden w-full text-gray-700">
                                     <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                                         <div className="flex justify-between">
                                             <div className="col-span-1 xl:col-span-2">
