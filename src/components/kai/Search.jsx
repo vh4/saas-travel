@@ -16,7 +16,7 @@ import Checkbox from '@mui/material/Checkbox';
 import {MdOutlineKeyboardArrowDown} from "react-icons/md"
 import KAISearch from "./KAISearch";
 import moment from "moment"
-import {Modal, Button} from 'antd'
+import {Modal, Button, Result} from 'antd'
 
 export default function Search(){
 
@@ -514,23 +514,19 @@ export default function Search(){
         ) : 
         
         (
-<Modal.error
-    title="Error!"
-    open={true}
-    content='Silahkan Anda login terlebih dahulu.'
-    cancelButtonProps={null}
-    className="transition-none animate-none"
-    footer={[
-        (
-            <div className="flex justify-end mt-4" style={{ position: 'relative', zIndex: 1001 }}>
-                <Button key="submit" type="primary" className='bg-blue-500' onClick={() => window.location = '/'}>
-                    Kembali ke home
-                </Button>
-            </div>
-        )
-    ]}
->
-</Modal.error>
+        <Result
+            status="500"
+            title="Error!"
+            subTitle="Silahkan Anda login terlebih dahulu."
+            style={{ color: 'white' }} // Ini akan memastikan warna teks menjadi putih
+            extra={
+                <Button
+                    style={{ color: 'white' }} // Ini akan memastikan warna teks menjadi putih
+                    className="bg-blue-600 text-white hover:text-gray-100 focus:text-gray-100 active:text-gray-200"
+                    onClick={() => window.location = '/'}
+                >Back Home</Button>
+            }
+        />
 
         )
         

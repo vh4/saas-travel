@@ -6,7 +6,7 @@ import {RxCrossCircled} from 'react-icons/rx'
 import {MdHorizontalRule} from 'react-icons/md'
 import { useNavigate, createSearchParams } from "react-router-dom";
 import { TiketContext } from "../../App";
-import {Button as ButtonAnt, Modal as Modals} from 'antd'
+import {Button as ButtonAnt, Modal as Modals, Result} from 'antd'
 import { notification } from 'antd';
 import Marquee from 'react-fast-marquee';
 import { Alert } from 'antd';
@@ -381,25 +381,19 @@ export default function Pembayaran(){
         </div>
             </>
         ) : (
-    <Modals.error
+        <Result
+            status="500"
             title="Error!"
-            open={true}
-            content= 'Silahkan anda login terlebih dahulu.'
-            zIndex={1000}
-            onOk={false}
-            cancelButtonProps={null}
-            className="transition-none	animate-none"
-            footer={[
-                (
-                <div className="flex justify-end mt-4">
-                    <ButtonAnt key="submit" type="primary" className='bg-blue-500' onClick={() => window.location = '/'}>
-                         Kembali ke home
-                    </ButtonAnt>,
-                </div>
-                )
-              ]}
-        >
-    </Modals.error>
+            subTitle="Silahkan Anda login terlebih dahulu."
+            style={{ color: 'white' }} // Ini akan memastikan warna teks menjadi putih
+            extra={
+                <ButtonAnt
+                    style={{ color: 'white' }} // Ini akan memastikan warna teks menjadi putih
+                    className="bg-blue-600 text-white hover:text-gray-100 focus:text-gray-100 active:text-gray-200"
+                    onClick={() => window.location = '/'}
+                >Back Home</ButtonAnt>
+            }
+        />
         )}
         </>
     )

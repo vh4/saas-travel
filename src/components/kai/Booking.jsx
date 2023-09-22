@@ -9,7 +9,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form"
 import {RxCrossCircled} from 'react-icons/rx'
 import 'react-phone-input-2/lib/bootstrap.css'
-import { Button, DatePicker } from 'antd';
+import { Button, DatePicker, Result } from 'antd';
 import dayjs from 'dayjs';
 import PhoneInput from 'react-phone-input-2'
 import { Input, Form } from 'antd';
@@ -518,25 +518,19 @@ export default function BookingKai(){
         
         : (
             <>
-    <Modal.error
-            title="Error!"
-            open={true}
-            content= 'Silahkan anda login terlebih dahulu.'
-            zIndex={1000}
-            onOk={false}
-            cancelButtonProps={null}
-            className="transition-none	animate-none"
-            footer={[
-                (
-                <div className="flex justify-end mt-4">
-                    <Button key="submit" type="primary" className='bg-blue-500' onClick={() => window.location = '/'}>
-                         Kembali ke home
-                    </Button>,
-                </div>
-                )
-              ]}
-        >
-    </Modal.error>
+                <Result
+                    status="500"
+                    title="Error!"
+                    subTitle="Silahkan Anda login terlebih dahulu."
+                    style={{ color: 'white' }} // Ini akan memastikan warna teks menjadi putih
+                    extra={
+                        <Button
+                            style={{ color: 'white' }} // Ini akan memastikan warna teks menjadi putih
+                            className="bg-blue-600 text-white hover:text-gray-100 focus:text-gray-100 active:text-gray-200"
+                            onClick={() => window.location = '/'}
+                        >Back Home</Button>
+                    }
+                />
             </>
         )}
         </>

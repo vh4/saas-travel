@@ -754,12 +754,22 @@ export default function Search(){
         )
         :
         (
-        <Result
-            status="401"
-            title="Error!"
-            subTitle="Silahkan Anda login terlebih dahulu."
-            extra={<Button onClick={() => navigate('/')} type="primary">Back Home</Button>}
-        />
+            <>
+                <Result
+                    status="500"
+                    title="Error!"
+                    subTitle="Silahkan Anda login terlebih dahulu."
+                    style={{ color: 'white' }} // Ini akan memastikan warna teks menjadi putih
+                    extra={
+                        <Button
+                            style={{ color: 'white' }} // Ini akan memastikan warna teks menjadi putih
+                            className="bg-blue-600 text-white hover:text-gray-100 focus:text-gray-100 active:text-gray-200"
+                            onClick={() => window.location = '/'}
+                        >Back Home</Button>
+                    }
+                />
+
+            </>
         )
     }
     </>

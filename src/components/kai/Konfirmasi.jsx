@@ -8,7 +8,7 @@ import {IoIosArrowDropright} from "react-icons/io"
 import { useNavigate} from 'react-router-dom'
 import './SeatMap.css';
 import { Modal, Placeholder, Button } from 'rsuite';
-import { notification } from 'antd';
+import { Result, notification } from 'antd';
 import {Button as ButtonAnt, Modal as Modals} from 'antd'
 
 const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData }) => {
@@ -752,25 +752,19 @@ export default function Konfirmasi(){
         
             : 
             (
-    <Modals.error
-            title="Error!"
-            open={true}
-            content= 'Silahkan anda login terlebih dahulu.'
-            zIndex={1000}
-            onOk={false}
-            cancelButtonProps={null}
-            className="transition-none	animate-none"
-            footer={[
-                (
-                <div className="flex justify-end mt-4">
-                    <Button key="submit" type="primary" className='bg-blue-500' onClick={() => window.location = '/'}>
-                         Kembali ke home
-                    </Button>,
-                </div>
-                )
-              ]}
-        >
-    </Modals.error>
+                <Result
+                    status="500"
+                    title="Error!"
+                    subTitle="Silahkan Anda login terlebih dahulu."
+                    style={{ color: 'white' }} // Ini akan memastikan warna teks menjadi putih
+                    extra={
+                        <Button
+                            style={{ color: 'white' }} // Ini akan memastikan warna teks menjadi putih
+                            className="bg-blue-600 text-white hover:text-gray-100 focus:text-gray-100 active:text-gray-200"
+                            onClick={() => window.location = '/'}
+                        >Back Home</Button>
+                    }
+                />
             )
         }
         </>
