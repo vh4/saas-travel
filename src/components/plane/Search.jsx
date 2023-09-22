@@ -761,15 +761,6 @@ export default function Search(){
     content='Silahkan Anda login terlebih dahulu.'
     cancelButtonProps={null}
     className="transition-none animate-none"
-    footer={[
-        (
-            <div className="flex justify-end mt-4" style={{ position: 'relative', zIndex: 1001 }}>
-                <Button key="submit" type="primary" className='bg-blue-500' onClick={() => window.location = '/'}>
-                    Kembali ke home
-                </Button>
-            </div>
-        )
-    ]}
 >
 </Modal.error>
         )
