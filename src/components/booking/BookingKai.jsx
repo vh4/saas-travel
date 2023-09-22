@@ -264,7 +264,7 @@ export default function ViewBooking({path}) {
             </div>
             {isLoading === false ? (
                 <>
-                    {data !== null && data !== undefined && data.length !== undefined ? (
+                    {data !== null && data !== undefined && data.length !== undefined  && data.length !== 0 ? (
                     <div className='mt-6'>
                         {data.map((e, i) => (
                             <div className='w-full mb-6'>

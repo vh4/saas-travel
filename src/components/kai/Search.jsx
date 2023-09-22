@@ -22,8 +22,6 @@ export default function Search(){
 
     const theme = createTheme({
         typography: {
-          // In Chinese and Japanese the characters are usually larger,
-          // so a smaller fontsize may be appropriate.
           fontSize: 8,
         },
       });
@@ -188,7 +186,6 @@ export default function Search(){
             setLoading(true);
 
             const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/search`, {
-                // token: localStorage.getItem("djkfghdfkghydo8e893745yv345vj34h35vu3vjh35v345v3v53"),,
                 productCode : "WKAI",
                 token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
                 origin:origin,
@@ -199,7 +196,6 @@ export default function Search(){
             if(response.data.rc.length < 1){
                 setError(true);
                 setLoading(false);
-                console.log("benarrrr")
             }
     
             else if(response.data.rc !== "00" || response.data.rc === undefined){
@@ -522,6 +518,10 @@ export default function Search(){
             title="Error!"
             open={true}
             content= 'Silahkan anda login terlebih dahulu.'
+            zIndex={1000}
+            onOk={false}
+            cancelButtonProps={null}
+            className="transition-none	animate-none"
             footer={[
                 (
                 <div className="flex justify-end mt-4">

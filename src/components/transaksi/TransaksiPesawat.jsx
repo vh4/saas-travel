@@ -53,7 +53,7 @@ export default function ViewTransaksi({path}) {
             </div>
             {isLoading === false ? (
                 <>
-                    {data !== null && data !== undefined && data.length !== undefined ? (
+                    {data !== null && data !== undefined && data.length !== undefined && data.length !== 0 ? (
                     <>
                         {data.map((e) => (
                             <div className='w-full mt-6'>

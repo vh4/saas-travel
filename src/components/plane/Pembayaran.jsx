@@ -176,21 +176,25 @@ export default function Pembayaran(){
         {/* meessage bayar */}
         {contextHolder}        
         {err === true ? (<>
-        <Modal.error
-                title="Error!"
-                open={true}
-                content= 'Terjadi kesalahan, silahkan booking kembali.'
-                footer={[
-                    (
-                    <div className="flex justify-end mt-4">
-                        <Button key="submit" type="primary" className='bg-blue-500' onClick={() => window.location = '/'}>
-                             Kembali ke home
-                        </Button>,
-                    </div>
-                    )
-                  ]}
-            >
-        </Modal.error>
+            <Modal.error
+            title="Error!"
+            open={true}
+            content= 'Silahkan anda login terlebih dahulu.'
+            zIndex={1000}
+            onOk={false}
+            cancelButtonProps={null}
+            className="transition-none	animate-none"
+            footer={[
+                (
+                <div className="flex justify-end mt-4">
+                    <Button key="submit" type="primary" className='bg-blue-500' onClick={() => window.location = '/'}>
+                         Kembali ke home
+                    </Button>,
+                </div>
+                )
+              ]}
+        >
+    </Modal.error>
         
         </>) :
         
@@ -301,7 +305,7 @@ export default function Pembayaran(){
                         <div className="p-4">
                             <div className="text-xs text-slate-500 font-bold flex justify-between">
                                 <div>
-                                {dataDetail && dataDetail.airlineName} {TotalAdult > 0 ? `(Adult) x${TotalAdult}` : ''} { TotalChild > 0 ? `(Child) x${TotalChild}` : ''} { TotalInfant > 0 ? `(Infant) x${TotalInfant}` : ''}
+                                {dataDetail && dataDetail.airlineName} {TotalAdult > 0 ? `(Adults) x${TotalAdult}` : ''} { TotalChild > 0 ? `(Childen) x${TotalChild}` : ''} { TotalInfant > 0 ? `(Infants) x${TotalInfant}` : ''}
                                 </div>
                                 <div>
                                     Rp. {toRupiah(hasilBooking && hasilBooking.nominal)}

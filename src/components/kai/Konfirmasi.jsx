@@ -681,10 +681,10 @@ export default function Konfirmasi(){
                     <div className="p-4">
                         <div className="text-xs text-slate-500 font-bold flex justify-between">
                             <div>
-                            {dataBookingTrain && dataBookingTrain[0].trainName} {TotalAdult > 0 ? `(Adult) x${TotalAdult}` : ''} { TotalChild > 0 ? `(Adult) x${TotalChild}` : ''} { TotalInfant > 0 ? `(Adult) x${TotalInfant}` : ''}
+                            {dataBookingTrain && dataBookingTrain[0].trainName} {TotalAdult > 0 ? `(Adults) x${TotalAdult}` : ''} { TotalChild > 0 ? `(Children) x${TotalChild}` : ''} { TotalInfant > 0 ? `(Infants) x${TotalInfant}` : ''}
                             </div>
                             <div>
-                                Rp. {hasilBooking && toRupiah(hasilBooking.normalSales*TotalAdult)}
+                                Rp. {hasilBooking && toRupiah(hasilBooking.normalSales)}
                             </div>
                         </div>
                         <div className="mt-2 text-xs text-slate-500 font-bold flex justify-between">
@@ -708,7 +708,7 @@ export default function Konfirmasi(){
                                 Total Harga
                             </div>
                             <div>
-                                Rp. {hasilBooking && toRupiah(parseInt(hasilBooking.normalSales*TotalAdult) - parseInt(hasilBooking.discount) + parseInt(hasilBooking.nominalAdmin))}
+                                Rp. {hasilBooking && toRupiah(parseInt(hasilBooking.normalSales) - parseInt(hasilBooking.discount) + parseInt(hasilBooking.nominalAdmin))}
                             </div>
                         </div>
                     </div>
@@ -752,21 +752,25 @@ export default function Konfirmasi(){
         
             : 
             (
-        <Modals.error
-                title="Error!"
-                open={true}
-                content= 'Terjadi kesalahan, silahkan booking kembali.'
-                footer={[
-                    (
-                    <div className="flex justify-end mt-4">
-                        <ButtonAnt key="submit" type="primary" className='bg-blue-500' onClick={ handleError }>
-                             Kembali ke home
-                        </ButtonAnt>,
-                    </div>
-                    )
-                  ]}
-            >
-        </Modals.error>
+    <Modals.error
+            title="Error!"
+            open={true}
+            content= 'Silahkan anda login terlebih dahulu.'
+            zIndex={1000}
+            onOk={false}
+            cancelButtonProps={null}
+            className="transition-none	animate-none"
+            footer={[
+                (
+                <div className="flex justify-end mt-4">
+                    <Button key="submit" type="primary" className='bg-blue-500' onClick={() => window.location = '/'}>
+                         Kembali ke home
+                    </Button>,
+                </div>
+                )
+              ]}
+        >
+    </Modals.error>
             )
         }
         </>

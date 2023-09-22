@@ -759,6 +759,10 @@ export default function Search(){
             title="Error!"
             open={true}
             content= 'Silahkan anda login terlebih dahulu.'
+            zIndex={1000}
+            onOk={false}
+            cancelButtonProps={null}
+            className="transition-none	animate-none"
             footer={[
                 (
                 <div className="flex justify-end mt-4">

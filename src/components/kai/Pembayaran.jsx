@@ -207,14 +207,14 @@ export default function Pembayaran(){
             </div>
             <div className='flex space-x-2 items-center'>
                 <AiOutlineCheckCircle className='text-slate-500'  size={20} />
-                <div className='hidden xl:flex text-slate-500 font-bold'>Konfirmasi pesanan</div>
-                <div className='block xl:hidden text-slate-500  font-bold'>Konfirmasi</div>
+                <div className='hidden xl:flex text-slate-500'>Konfirmasi pesanan</div>
+                <div className='block xl:hidden text-slate-500'>Konfirmasi</div>
             </div>
             <div>
                 <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
             </div>
             <div className='flex space-x-2 items-center'>
-                <div className='hidden xl:block text-blue-500'>Pembayaran tiket</div>
+                <div className='font-bold hidden xl:block text-blue-500'>Pembayaran tiket</div>
                 <div className='block xl:hidden text-blue-500'>Payment</div>
             </div>
             <div>
@@ -285,10 +285,10 @@ export default function Pembayaran(){
                     <div className="p-4">
                         <div className="text-xs text-slate-500 font-bold flex justify-between">
                             <div>
-                            {dataBookingTrain && dataBookingTrain[0].trainName} {TotalAdult > 0 ? `(Adult) x${TotalAdult}` : ''} { TotalChild > 0 ? `(Adult) x${TotalChild}` : ''} { TotalInfant > 0 ? `(Adult) x${TotalInfant}` : ''}
+                            {dataBookingTrain && dataBookingTrain[0].trainName} {TotalAdult > 0 ? `(Adults) x${TotalAdult}` : ''} { TotalChild > 0 ? `(Childen) x${TotalChild}` : ''} { TotalInfant > 0 ? `(Infants) x${TotalInfant}` : ''}
                             </div>
                             <div>
-                                Rp. {hasilBooking && toRupiah(hasilBooking.normalSales * TotalAdult)}
+                                Rp. {hasilBooking && toRupiah(hasilBooking.normalSales)}
                             </div>
                         </div>
                         <div className="mt-2 text-xs text-slate-500 font-bold flex justify-between">
@@ -312,7 +312,7 @@ export default function Pembayaran(){
                                 Total Harga
                             </div>
                             <div>
-                                Rp. {hasilBooking && toRupiah(parseInt(hasilBooking.normalSales * TotalAdult) - parseInt(hasilBooking.discount) + parseInt(hasilBooking.nominalAdmin))}
+                                Rp. {hasilBooking && toRupiah(parseInt(hasilBooking.normalSales) - parseInt(hasilBooking.discount) + parseInt(hasilBooking.nominalAdmin))}
                             </div>
                         </div>
                     </div>
@@ -384,11 +384,15 @@ export default function Pembayaran(){
     <Modals.error
             title="Error!"
             open={true}
-            content= 'Terjadi kesalahan, silahkan booking kembali.'
+            content= 'Silahkan anda login terlebih dahulu.'
+            zIndex={1000}
+            onOk={false}
+            cancelButtonProps={null}
+            className="transition-none	animate-none"
             footer={[
                 (
                 <div className="flex justify-end mt-4">
-                    <ButtonAnt key="submit" type="primary" className='bg-blue-500' onClick={ handleError }>
+                    <ButtonAnt key="submit" type="primary" className='bg-blue-500' onClick={() => window.location = '/'}>
                          Kembali ke home
                     </ButtonAnt>,
                 </div>
