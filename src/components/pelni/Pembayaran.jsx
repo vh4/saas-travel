@@ -298,16 +298,6 @@ export default function Pembayaran(){
             zIndex={1000}
             onOk={false}
             cancelButtonProps={null}
-            className="transition-none	animate-none"
-            footer={[
-                (
-                <div className="flex justify-end mt-4">
-                    <ButtonAnt key="submit" type="primary" className='bg-blue-500' onClick={() => window.location = '/'}>
-                         Kembali ke home
-                    </ButtonAnt>,
-                </div>
-                )
-              ]}
         >
     </Modals.error>
         )}
