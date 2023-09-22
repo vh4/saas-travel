@@ -9,33 +9,76 @@ Router.post('/travel/app/sign_in', function (req, res) {
 
     const {outletId, pin, key} = req.body;
     logger.info(`Request /travel/app/sign_in: ${JSON.stringify(req.body)}`);
+    logger.info(`Request HIT API RAJABILLER JSON: ${JSON.stringify(
 
+      {
+        uid:outletId,
+        method:"rajabiller.outlet_travel",
+        pin:pin
+      }
+      
+    )}`);
+    
     request.post(
-        `${process.env.URL_HIT}/travel/app/sign_in`,
-        {
-          json: 
-          {
-            outletId: outletId,
-            pin: pin,
-            key: key
-          }
+
+      `${process.env.HOST_AUTH}`,
+      {
+        url: `${process.env.HOST_AUTH}`,
+        json: {
+          uid: outletId,
+          method: "rajabiller.outlet_travel",
+          pin: pin
         },
+        rejectUnauthorized: false // Opsional, hanya digunakan untuk debugging
+      },
 
-        (error, response, body) => {
-          if (error) {
-            console.error(error)
-            logger.error(`Error /travel/app/sign_in: ${error.message}`);
-            return;
-          }
+      (err, response, body) => {
 
-          const data = body;
-          data.expired_date = new Date(new Date().getTime() + 60 * 60 * 1000);
-
-          logger.info(`Responose /travel/app/sign_in: ${JSON.stringify(data)}`);
-
-          return res.send(data)
+        if (err) {
+          logger.error(`Error Sign in HIT RAJABILLER JSON: ${err.message}`);
+          return;
         }
-      )
+
+        logger.info(`Responose HIT RAJABILLER JSON: ${JSON.stringify(body)}`);
+
+        if(response.statusCode != 200){
+
+          return res.send({
+            rc: '03',
+            rd: body
+          });
+
+        }
+
+        request.post(
+          `${process.env.URL_HIT}/travel/app/sign_in`,
+          {
+            json: 
+            {
+              outletId: outletId,
+              pin: pin,
+              key: key
+            }
+          },
+  
+          (error, response, body) => {
+            if (error) {
+              logger.error(`Error /travel/app/sign_in: ${error.message}`);
+              return;
+            }
+  
+            const data = body;
+            data.expired_date = new Date(new Date().getTime() + 60 * 60 * 1000);
+  
+            logger.info(`Responose /travel/app/sign_in: ${JSON.stringify(data)}`);
+  
+            return res.send(data)
+          }
+        )
+
+      }
+
+    )
 
 });
 
