@@ -19,8 +19,7 @@ import TimelineItem, { timelineItemClasses } from '@mui/lab/TimelineItem';
 import {IoMdTimer} from 'react-icons/io'
 import SearchPlane from "./SearchPlane";
 import { Progress } from 'rsuite';
-import { Button, Result } from 'antd';
-import {Modal} from 'antd'
+import { Button, Result, Spin } from 'antd';
 
 export default function Search(){
 
