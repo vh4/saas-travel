@@ -755,25 +755,23 @@ export default function Search(){
         )
         :
         (
-    <Modal.error
-            title="Error!"
-            open={true}
-            content= 'Silahkan anda login terlebih dahulu.'
-            zIndex={1000}
-            onOk={false}
-            cancelButtonProps={null}
-            className="transition-none	animate-none"
-            footer={[
-                (
-                <div className="flex justify-end mt-4">
-                    <Button key="submit" type="primary" className='bg-blue-500' onClick={() => window.location = '/'}>
-                         Kembali ke home
-                    </Button>,
-                </div>
-                )
-              ]}
-        >
-    </Modal.error>
+<Modal.error
+    title="Error!"
+    open={true}
+    content='Silahkan Anda login terlebih dahulu.'
+    cancelButtonProps={null}
+    className="transition-none animate-none"
+    footer={[
+        (
+            <div className="flex justify-end mt-4" style={{ position: 'relative', zIndex: 1001 }}>
+                <Button key="submit" type="primary" className='bg-blue-500' onClick={() => window.location = '/'}>
+                    Kembali ke home
+                </Button>
+            </div>
+        )
+    ]}
+>
+</Modal.error>
         )
     }
     </>
