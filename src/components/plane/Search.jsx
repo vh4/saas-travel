@@ -19,8 +19,8 @@ import TimelineItem, { timelineItemClasses } from '@mui/lab/TimelineItem';
 import {IoMdTimer} from 'react-icons/io'
 import SearchPlane from "./SearchPlane";
 import { Progress } from 'rsuite';
-import { Alert, Space, Spin } from 'antd';
-import {Modal, Button} from 'antd'
+import { Button, Result } from 'antd';
+import {Modal} from 'antd'
 
 export default function Search(){
 
@@ -755,14 +755,12 @@ export default function Search(){
         )
         :
         (
-<Modal.error
-    title="Error!"
-    open={true}
-    content='Silahkan Anda login terlebih dahulu.'
-    cancelButtonProps={null}
-    className="transition-none animate-none"
->
-</Modal.error>
+        <Result
+            status="401"
+            title="Error!"
+            subTitle="Silahkan Anda login terlebih dahulu."
+            extra={<Button onClick={() => navigate('/')} type="primary">Back Home</Button>}
+        />
         )
     }
     </>
