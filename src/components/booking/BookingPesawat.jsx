@@ -56,7 +56,6 @@ export default function ViewBooking({path}) {
             setIsLoading(false);
         }catch(e){
             setIsLoading(false);
-            console.log(e);
         }
     }
 

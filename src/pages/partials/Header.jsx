@@ -119,7 +119,6 @@ export default function Header({toogleSidebar, valueSidebar}){
             axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/sign_out`, {
                 token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)) == null ? 'Logout' : JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
             }).then((data) => {
-                console.log(data);
                 localStorage.clear();
                 navigate('/')
             });
@@ -131,8 +130,8 @@ export default function Header({toogleSidebar, valueSidebar}){
     const [api, contextHolder] = notification.useNotification();
 
     const suksesLogoutAutomatic= () => {
-        api['success']({
-          message: 'Successfully!',
+        api['warning']({
+          message: 'Warning!',
           description:
           'Waktu login anda sudah habis. Silahkan login kembali.',
           duration: null,
@@ -196,7 +195,7 @@ export default function Header({toogleSidebar, valueSidebar}){
                 <div className="flex justify-between items-center sm:-mx-6 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24">
                     <div className="">
                         <Link to={'/'} className="flex items-center">
-                            <img src="/logo-rm.png" className="w-36 -my-2 md:-my-0 md:w-32  mr-3" alt="Fastravel Logo" />
+                            <img src="/logo-rb.png" className="w-36 -my-2 md:-my-0 md:w-40 mr-3" alt="Rajabiller Logo" />
                         </Link>
                     </div>
                     <div className="flex space-x-6 items-center xl:order-2">

@@ -22,9 +22,6 @@ export default function Pembayaran(){
     const book_info  = JSON.parse(localStorage.getItem('v_infopelnibook'));
     const passengers  = JSON.parse(localStorage.getItem('v_passengers'));
 
-	console.log(book);
-	console.log(book_info);
-
     const TotalAdult = passengers ? parseInt(passengers.adult) : 0;
     const TotalInfant = passengers ? parseInt(passengers.infant) : 0;	
 

@@ -260,8 +260,6 @@ function Plane(){
         const tanggalKeberangkatanParse= tanggalKeberangkatan !== undefined && tanggalKeberangkatan !== null ? tanggalKeberangkatan.$y + '-' + (addLeadingZero(parseInt(tanggalKeberangkatan.$M) + 1)).toString()  + '-' + addLeadingZero(parseInt(tanggalKeberangkatan.$D)).toString() : tanggalNullFill;
         const tanggalTujuanParse= tanggalTujuan !== undefined && tanggalTujuan !== null ? tanggalTujuan.$y + '-' + (addLeadingZero(parseInt(tanggalTujuan.$M) + 1)).toString()  + '-' + addLeadingZero(parseInt(tanggalTujuan.$D)).toString() : tanggalNullFill;
 
-        console.log('tanggalKeberangkatanParse :' + tanggalKeberangkatanParse);
-
         setTimeout(() => {
             e.preventDefault();
             setLoading(false);

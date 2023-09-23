@@ -421,7 +421,6 @@ export default function Search(){
                     <>
                         {e.fares.map((z, i) => (
                             <>
-                            {console.log(e)}
 
                                 <div class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${ e.fares[i]['M_available'] == "0" &&  e.fares[i]['F_available'] == "0" ? 'bg-gray-200' : 'bg-white' } border border-gray-200 rounded-lg shadow-sm  hover:border transition-transform transform hover:scale-105`}>
                                         

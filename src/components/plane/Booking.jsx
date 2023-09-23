@@ -286,7 +286,6 @@ export default function BookingPesawat(){
         const bookingResponse = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/flight/book`, book);
 
         if(bookingResponse.data.rc === '00'){
-            console.log(JSON.stringify(bookingResponse.data));
             localStorage.setItem(PesawatNumber + "_DetailPassenger", JSON.stringify({
                 adults : data_adult,
                 children:child[0],

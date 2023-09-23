@@ -42,7 +42,6 @@ export default function SidebarMobileUser({pathSidebar}) {
                 balance:response.data.data.balance
             }))
         }catch(e){
-            console.log(e);
             setIsLoading(false);
         }
         setIsLoading(false);

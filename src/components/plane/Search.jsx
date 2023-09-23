@@ -210,8 +210,6 @@ export default function Search(){
             "token":token,
         };
 
-        // console.log(JSON.stringify(detailKereta));
-
         const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/flight/fare`, detailKereta) 
 
         const forBooking = {

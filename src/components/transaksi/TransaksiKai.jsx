@@ -29,7 +29,6 @@ export default function ViewTransaksi({path}) {
             setIsLoading(false);
 
         }catch(err){
-            console.log(err);
             setIsLoading(false);
         }
 
