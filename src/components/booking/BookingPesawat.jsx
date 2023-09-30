@@ -7,10 +7,12 @@ import { Button, Modal, Space } from 'antd';
 import { Placeholder } from 'rsuite';
 import {BsArrowRightShort} from "react-icons/bs";
 import { message } from 'antd';
+import { toRupiah } from '../../helpers/rupiah';
+import { remainingTime } from '../../helpers/date';
 
 export default function ViewBooking({path}) {
 
-    const [data, setData] = useState();
+    const [data, setData] = useState([]);
     const [byrdata, setByrData] = useState();
     const [showModal, setShowModal] = React.useState(false);
     const handleOpen = () => setShowModal(true);
@@ -54,45 +56,11 @@ export default function ViewBooking({path}) {
             const datas = response.data;
             setData(datas.data);
             setIsLoading(false);
+ 
         }catch(e){
             setIsLoading(false);
         }
     }
-
-    function toRupiah(angka) {
-        var rupiah = '';
-        var angkarev = angka.toString().split('').reverse().join('');
-        for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
-        return rupiah.split('',rupiah.length-1).reverse().join('');
-    }
-
-    function remainingTime(targetDate) {
-            
-        let currentDate = new Date();
-        let timeDifference = new Date(targetDate) - currentDate;
-        
-        let hours = Math.floor(timeDifference / (1000 * 60 * 60));
-        let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-        let seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-        if(hours === 0){
-            return ` ${minutes} menit ${seconds} detik`;
-
-        }else if(hours ===0 && minutes === 0){
-            return ` ${seconds} detik`;
-
-        }else{
-            return ` ${hours} jam ${minutes} menit ${seconds} detik`;
-
-        }
-    }
-
-    function toRupiah(angka) {
-        var rupiah = '';
-        var angkarev = angka.toString().split('').reverse().join('');
-        for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
-        return rupiah.split('',rupiah.length-1).reverse().join('');
-    }
-
 
     function openModalBayar(e, i){
         let filterDataSearching = data.filter((_, index) => index === i);
@@ -278,7 +246,7 @@ export default function ViewBooking({path}) {
             </div>
             {isLoading === false ? (
                 <>
-                {data !== null && data !== undefined && data.length !== undefined ? (
+                {data !== null && data !== undefined && data.length !== 0 ? (
                     <div className='mt-6'>
                         {data && data.map((e, i) => (
                             <div className='w-full mb-6'>

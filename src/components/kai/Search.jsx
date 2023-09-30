@@ -1,535 +1,715 @@
-import React, {useEffect, useRef, useState} from "react"
-import { useSearchParams, useNavigate } from "react-router-dom"
-import {VscArrowSwap} from 'react-icons/vsc'
+import React, { useEffect, useRef, useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { VscArrowSwap } from "react-icons/vsc";
 import axios from "axios";
-import Box from '@mui/material/Box';
-import Skeleton from '@mui/material/Skeleton';
-import {HiOutlineArrowNarrowRight} from 'react-icons/hi'
-import {IoArrowBackOutline} from "react-icons/io5"
+import Box from "@mui/material/Box";
+import Skeleton from "@mui/material/Skeleton";
+import { HiOutlineArrowNarrowRight } from "react-icons/hi";
+import { IoArrowBackOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import Typography from '@mui/material/Typography';
-import Slider from '@mui/material/Slider';
+import Typography from "@mui/material/Typography";
+import Slider from "@mui/material/Slider";
 import { createTheme } from "@mui/material/styles";
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import {MdOutlineKeyboardArrowDown} from "react-icons/md"
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import KAISearch from "./KAISearch";
-import moment from "moment"
-import {Modal, Button, Result} from 'antd'
+import moment from "moment";
+import { toRupiah } from "../../helpers/rupiah";
+import { parseTanggal } from "../../helpers/date";
+import Page500 from "../components/500";
+import Page400 from "../components/400";
+import { notification } from "antd";
 
-export default function Search(){
+export default function Search() {
+  const theme = createTheme({
+    typography: {
+      fontSize: 8,
+    },
+  });
 
-    const theme = createTheme({
-        typography: {
-          fontSize: 8,
-        },
-      });
+  const [searchParams, setSearchParams] = useSearchParams();
 
-    const k = localStorage.getItem('k_search') ? JSON.parse(localStorage.getItem('k_search')) : null;
-      
+  const origin = searchParams.get("origin");
+  const destination = searchParams.get("destination");
+  const date = searchParams.get("date");
+  const kotaBerangkat = searchParams.get("kotaBerangkat");
+  const kotaTujuan = searchParams.get("kotaTujuan");
+  const stasiunBerangkat = searchParams.get("stasiunBerangkat");
+  const stasiunTujuan = searchParams.get("stasiunTujuan");
+  const adult = searchParams.get("adult");
+  const infant = searchParams.get("infant");
 
-    const [searchParams, setSearchParams] = useSearchParams();
-    const origin = k ? k.origin : searchParams.get('origin') ? searchParams.get('origin') : null;
-    const destination = k ? k.destination : searchParams.get('destination') ? searchParams.get('destination') : null;
-    const date = k ? k.date : searchParams.get('date') ? searchParams.get('date') : null;
-    const kotaBerangkat = k ? k.kotaBerangkat : searchParams.get('kotaBerangkat') ? searchParams.get('kotaBerangkat') : null;;
-    const kotaTujuan = k ? k.kotaTujuan : searchParams.get('kotaTujuan') ? searchParams.get('kotaTujuan') : null;
-    const stasiunBerangkat = k ? k.stasiunBerangkat : searchParams.get('stasiunBerangkat') ? searchParams.get('stasiunBerangkat') : null;  
-    const stasiunTujuan = k ? k.stasiunTujuan : searchParams.get('stasiunTujuan') ? searchParams.get('stasiunTujuan') : null;
-    const adult = k ? k.adult : searchParams.get('adult') ? searchParams.get('adult') : null;
-    const infant = k ? k.infant : searchParams.get('infant') ? searchParams.get('infant') : null;
+  const token = JSON.parse(
+    localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+  );
+  const navigate = useNavigate();
 
-    const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
-    const navigate = useNavigate();
-    const [showHarga, setShowHarga] = React.useState(false);
-    const [showWaktu, setShowWaktu] = React.useState(false);
-    const [showKelas, setShowKelas] = React.useState(false);
-    const [gradeFilter, setGradeFilter] = useState([false, false, false]);
-    const [waktuFilter, setWaktuFilter] = useState([false, false, false, false]);
-    const [selectedTime, setSelectedTime] = useState([]);
-    const [ubahPencarian, setUbahPencarian] = useState(false);
-    const [err, setErr] = useState(false);
+  const [showHarga, setShowHarga] = React.useState(false);
+  const [showWaktu, setShowWaktu] = React.useState(false);
+  const [showKelas, setShowKelas] = React.useState(false);
+  const [gradeFilter, setGradeFilter] = useState([false, false, false]);
+  const [waktuFilter, setWaktuFilter] = useState([false, false, false, false]);
+  const [selectedTime, setSelectedTime] = useState([]);
+  const [ubahPencarian, setUbahPencarian] = useState(false);
+  const [err, setErr] = useState(false);
+  const [errPage, setErrPage] = useState(false);
 
-    const handleGradeFilterChange = (e) => {
-        let newGradeFilter = [...gradeFilter];
-        newGradeFilter[e.target.value] = e.target.checked;
-        setGradeFilter(newGradeFilter);
+  const btnRefHarga = useRef();
+  const btnRefWaktu = useRef();
+  const btnRefKelas = useRef();
+
+  const [valHargaRange, setHargaRange] = useState([0, 1000000]);
+
+  const [api, contextHolder] = notification.useNotification();
+
+  const failedNotification = (rd) => {
+    api["error"]({
+      message: "Error!",
+      description:
+        rd.toLowerCase().charAt(0).toUpperCase() +
+        rd.slice(1).toLowerCase() +
+        "",
+    });
+  };
+
+  const handleGradeFilterChange = (e) => {
+    let newGradeFilter = [...gradeFilter];
+    newGradeFilter[e.target.value] = e.target.checked;
+    setGradeFilter(newGradeFilter);
+  };
+
+  const handleWaktuFilterChange = (e) => {
+    let newWktuFilter = waktuFilter;
+
+    if (e.target.value == "06:00-11:59") {
+      newWktuFilter[0] = newWktuFilter[0] ? false : true;
+    } else if (e.target.value == "12:00-17:59") {
+      newWktuFilter[1] = newWktuFilter[1] ? false : true;
+    } else if (e.target.value == "18:00-23:59") {
+      newWktuFilter[2] = newWktuFilter[2] ? false : true;
+    } else if (e.target.value == "00:00-05:59") {
+      newWktuFilter[3] = newWktuFilter[3] ? false : true;
+    }
+
+    setWaktuFilter(newWktuFilter);
+
+    const time = e.target.value;
+    if (selectedTime.includes(time)) {
+      setSelectedTime(selectedTime.filter((t) => t !== time));
+    } else {
+      setSelectedTime([...selectedTime, time]);
+    }
+  };
+
+  useEffect(() => {
+    const closeFilter = (e) => {
+      const category = e.path ? e.path[0] : null;
+      if (category !== btnRefHarga.current) {
+        setShowHarga(false);
       }
+      if (category !== btnRefWaktu.current) {
+        setShowWaktu(false);
+      }
+      if (category !== btnRefKelas.current) {
+        setShowKelas(false);
+      }
+    };
+    document.body.addEventListener("click", closeFilter);
 
-      const handleWaktuFilterChange = (e) => {
-        let newWktuFilter = waktuFilter;
+    return () => document.body.removeEventListener("click", closeFilter);
+  }, []);
 
-        if(e.target.value == '06:00-11:59'){
-            newWktuFilter[0] = newWktuFilter[0] ? false : true;
-        }
-        else if(e.target.value == '12:00-17:59'){
-            newWktuFilter[1] = newWktuFilter[1] ? false : true;
-        }
-        else if(e.target.value == '18:00-23:59'){
-            newWktuFilter[2] =  newWktuFilter[2] ? false : true;
-        }
-        else if(e.target.value == '00:00-05:59'){
-            newWktuFilter[3] =  newWktuFilter[3] ? false : true;
-        }
+  function hargraRangeChange(e, data) {
+    setHargaRange(data);
+  }
 
-        setWaktuFilter(newWktuFilter);
+  useEffect(() => {
+    if (token === null || token === undefined) {
+      setErr(true);
+    }
 
-        const time = e.target.value;
-        if (selectedTime.includes(time)) {
-            setSelectedTime(selectedTime.filter((t) => t !== time));
-        } else {
-            setSelectedTime([...selectedTime, time]);
+    if (origin === null || origin === undefined) {
+      setErrPage(true);
+    }
+
+    if (destination === null || destination === undefined) {
+      setErrPage(true);
+    }
+
+    if (date === null || date === undefined) {
+      setErrPage(true);
+    }
+
+    if (kotaBerangkat === null || kotaBerangkat === undefined) {
+      setErrPage(true);
+    }
+
+    if (kotaTujuan === null || kotaTujuan === undefined) {
+      setErrPage(true);
+    }
+
+    if (stasiunBerangkat === null || stasiunBerangkat === undefined) {
+      setErrPage(true);
+    }
+
+    if (stasiunTujuan === null || stasiunTujuan === undefined) {
+      setErrPage(true);
+    }
+
+    if (infant === null || infant === undefined) {
+      setErrPage(true);
+    }
+
+    if (adult === null || adult === undefined) {
+      setErrPage(true);
+    }
+  }, [
+    token,
+    stasiunBerangkat,
+    stasiunTujuan,
+    kotaBerangkat,
+    kotaTujuan,
+    origin,
+    destination,
+    date,
+    adult,
+    infant,
+  ]);
+
+  const tanggal_keberangkatan_kereta = parseTanggal(date);
+
+  const [isLoading, setLoading] = React.useState(false);
+  const [notFound, setError] = React.useState(true);
+  const skeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const [dataSearch, setDataSearch] = React.useState([]);
+
+  async function handlerSearch() {
+    try {
+      setLoading(true);
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/travel/train/search`,
+        {
+          productCode: "WKAI",
+          token: JSON.parse(
+            localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+          ),
+          origin: origin,
+          destination: destination,
+          date: date,
         }
+      );
+
+      if (response.data.rc.length < 1) {
+        setError(true);
+        setLoading(false);
+      } else if (response.data.rc !== "00" || response.data.rc === undefined) {
+        setError(true);
+        setLoading(false);
+      } else if (response.data === undefined) {
+        setError(true);
+        setLoading(false);
+      } else {
+        setError(false);
+        setDataSearch(response.data.data);
+        setLoading(false);
+      }
+    } catch (error) {
+      setError(true);
+      setLoading(false);
+    }
+  }
+
+  async function bookingHandlerDetail(trainNumber) {
+    const detailBooking = dataSearch.filter(
+      (e) => e.trainNumber === trainNumber
+    );
+    const detailKereta = [
+      {
+        berangkat_id_station: origin,
+        tujuan_id_station: destination,
+        berangkat_nama_kota: kotaBerangkat,
+        tujuan_nama_kota: kotaTujuan,
+        adult: adult,
+        infant: infant,
+        stasiunBerangkat: stasiunBerangkat,
+        stasiunTujuan: stasiunTujuan,
+      },
+    ];
+
+    const dataLengkap = {
+      train: detailBooking,
+      train_detail: detailKereta,
     };
 
-    const btnRefHarga = useRef();
-    const btnRefWaktu= useRef();
-    const btnRefKelas= useRef();
+    const uuid = await axios.post(
+      `${process.env.REACT_APP_HOST_API}/travel/train/search/k_search`,
+      dataLengkap
+    );
 
-    useEffect(() => {
-        const closeFilter = e => {
-           if(e.path[0] !== btnRefHarga.current){
-            setShowHarga(false);
-           }
-           if(e.path[0] !== btnRefWaktu.current){
-            setShowWaktu(false);
-           }
-           if(e.path[0] !== btnRefKelas.current){
-            setShowKelas(false);
-           }
-        }
-        document.body.addEventListener('click', closeFilter);
-
-        return() =>  document.body.removeEventListener('click', closeFilter);
-
-    }, [])
-
-    const [valHargaRange, setHargaRange] = useState([0, 1000000])
-      
-    function hargraRangeChange(e, data){
-        setHargaRange(data);
-
+    if (uuid.data.rc == "00") {
+      navigate("/train/booking/" + uuid.data.uuid);
+    } else {
+      failedNotification(uuid.data.rd);
     }
+  }
 
-    useEffect(() =>{
-        if(token === null || token === undefined){
-            setErr(true);
-        }
+  useEffect(() => {
+    handlerSearch();
+  }, []);
 
-
-        if(k == null || k == undefined){
-            setErr(true);
-        }
-
-
-    }, [token, k]);
-
-
-    var datee = new Date(date);
-    var tahun = datee.getFullYear();
-    var bulan = datee.getMonth();
-    var hari = datee.getDay();
-    var tanggal = datee.getDate();
-
-    function toRupiah(angka) {
-        var rupiah = '';
-        var angkarev = angka.toString().split('').reverse().join('');
-        for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
-        return rupiah.split('',rupiah.length-1).reverse().join('');
-    }
-
-
-    switch(hari) {
-        case 0: hari = "Minggu"; break;
-        case 1: hari = "Senin"; break;
-        case 2: hari = "Selasa"; break;
-        case 3: hari = "Rabu"; break;
-        case 4: hari = "Kamis"; break;
-        case 5: hari = "Jum'at"; break;
-        case 6: hari = "Sabtu"; break;
-     }
-
-     switch(bulan) {
-        case 0: bulan = "Januari"; break;
-        case 1: bulan = "Februari"; break;
-        case 2: bulan = "Maret"; break;
-        case 3: bulan = "April"; break;
-        case 4: bulan = "Mei"; break;
-        case 5: bulan = "Juni"; break;
-        case 6: bulan = "Juli"; break;
-        case 7: bulan = "Agustus"; break;
-        case 8: bulan = "September"; break;
-        case 9: bulan = "Oktober"; break;
-        case 10: bulan = "November"; break;
-        case 11: bulan = "Desember"; break;
-
-       }
-
-    function toRupiah(angka) {
-        var rupiah = '';
-        var angkarev = angka.toString().split('').reverse().join('');
-        for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
-        return rupiah.split('',rupiah.length-1).reverse().join('');
-    }
-
-     const tanggal_keberangkatan_kereta = hari + ', ' + tanggal + ' ' + bulan + ' ' + tahun;
-
-     const [isLoading, setLoading] = React.useState(false);
-     const [notFound, setError] = React.useState(true);
-     const skeleton = [1,2,3,4,5,6,7,8,9,10];
-     const [dataSearch, setDataSearch] = React.useState([]);
-
-     async function handlerSearch(){
-        try {
-
-            setLoading(true);
-
-            const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/search`, {
-                productCode : "WKAI",
-                token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
-                origin:origin,
-                destination:destination,
-                date:date
-            });
-
-            if(response.data.rc.length < 1){
-                setError(true);
-                setLoading(false);
-            }
-    
-            else if(response.data.rc !== "00" || response.data.rc === undefined){
-                setError(true);
-                setLoading(false);
-            }
-
-            else if(response.data === undefined){
-                setError(true);
-                setLoading(false);
-            }
-            
-            else{
-
-                setError(false);
-                setDataSearch(response.data.data);
-                setLoading(false);
-            }
-            
-        } catch (error) {
-            setError(true);
-            setLoading(false);
-        }
-
-    }
-
-
-    function bookingHandlerDetail(trainNumber){
-        const detailBooking = dataSearch.filter(e => e.trainNumber === trainNumber);
-        const detailKereta = [{
-            berangkat_id_station: origin,
-            tujuan_id_station: destination,
-            berangkat_nama_kota: kotaBerangkat,
-            tujuan_nama_kota: kotaTujuan,
-            adult: adult,
-            infant:infant,
-            stasiunBerangkat:stasiunBerangkat,
-            stasiunTujuan:stasiunTujuan,
-        }];
-
-        localStorage.setItem(trainNumber + "_booking", JSON.stringify(detailBooking));
-        localStorage.setItem(trainNumber + "_detailTrain", JSON.stringify(detailKereta));
-
-         navigate('/train/booking/' + trainNumber)
-    }
-
-    useEffect(() =>{
-        handlerSearch();
-     }, []);
-
-
-
-     const filteredData = dataSearch.filter(train => {
-        if (!gradeFilter.some(filter => filter)) {
-          return true;
-        } else {
-          return train.seats.some(seat => {
-            return gradeFilter[['K','E','B'].indexOf(seat.grade)];
-          });
-        }
-      }).filter((d) => {
-        if (selectedTime.length === 0) {
-            return true;
-        }
-        const departureTime = moment(d.departureTime, "HH:mm").format("HH:mm");
-        return selectedTime.some((t) => {
-            const [start, end] = t.split("-");
-
-            return moment(departureTime, "HH:mm").isBetween(moment(start, "HH:mm"), moment(end, "HH:mm"));
-
+  const filteredData = dataSearch
+    .filter((train) => {
+      if (!gradeFilter.some((filter) => filter)) {
+        return true;
+      } else {
+        return train.seats.some((seat) => {
+          return gradeFilter[["K", "E", "B"].indexOf(seat.grade)];
         });
-      })
-      .filter(train => {
-        return train.seats.some(seat => {
-          return valHargaRange[0] <= seat.priceAdult && seat.priceAdult <= valHargaRange[1]
-        });
+      }
+    })
+    .filter((d) => {
+      if (selectedTime.length === 0) {
+        return true;
+      }
+      const departureTime = moment(d.departureTime, "HH:mm").format("HH:mm");
+      return selectedTime.some((t) => {
+        const [start, end] = t.split("-");
+        return moment(departureTime, "HH:mm").isBetween(
+          moment(start, "HH:mm"),
+          moment(end, "HH:mm")
+        );
       });
+    })
+    .filter((train) => {
+      return train.seats.some((seat) => {
+        return (
+          valHargaRange[0] <= seat.priceAdult &&
+          seat.priceAdult <= valHargaRange[1]
+        );
+      });
+    });
 
-    
-    return(
+  return (
+    <>
+      {contextHolder}
+
+      {err === true ? (
         <>
-        {err !== true ? (
-            <>
-            <div className="text-sm judul-search mt-4 font-bold text-slate-600">
-                PILIH JADWAL
-            </div>
-            <div className="mt-8">
-                <div className="block lg:flex justify-between">
-                    <div className="flex items-center justify-start space-x-3 xl:space-x-4">
-                        <small className="text-xs font-bold text-slate-600">
-                            {stasiunBerangkat}, {kotaBerangkat}
-                        </small>
-                        <div className="bg-blue-500 p-1 rounded-full">
-                            < VscArrowSwap className="font-bold text-xs text-white" size={16} />
-                        </div>
-                        <small className="text-xs font-bold text-slate-600">
-                            {stasiunTujuan}, {kotaTujuan}
-                        </small>
-                        <div className="hidden md:block font-normal text-slate-600">|</div>
-                        <small className="hidden md:block text-xs font-bold text-slate-600">
-                            {tanggal_keberangkatan_kereta}
-                        </small>
-                        <div className="hidden md:block font-normal text-slate-600">|</div>
-                        <small className="hidden md:block text-xs font-bold text-slate-600">
-                            {parseInt(adult) + parseInt(infant)} Penumpang
-                        </small>
-                    </div>    
-                    <div className="mt-4 lg:mt-0 flex space-x-4 mr-0 xl:mr-16"> 
-                        <Link to='/' className="flex space-x-2 items-center">
-                            <IoArrowBackOutline className="text-blue-500" size={16} />
-                            <div className="text-blue-500 text-sm font-bold">Kembali</div>
-                        </Link>
-                        <button onClick={() => setUbahPencarian(prev => !prev)} className="block border p-2 px-4 md:px-4 mr-0 xl:mr-16 bg-blue-500 text-white rounded-md text-xs font-bold">
-                            Ubah Pencarian
-                        </button>            
-                    </div>
-                </div>
-                {
-                    ubahPencarian ? (
-                    <div className="mt-8">
-                        <KAISearch />
-                    </div>
-                    ) : null
-                }
-                <div className="flex justify-between mt-6">
-                    <div className="relative flex items-center space-x-2 text-slate-600 text-xs font-bold">
-                        <div className="hidden md:block">FILTER : </div>
-                        <button ref={btnRefHarga} onClick={() => setShowHarga(prev => !prev)} className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300">
-                            HARGA
-                        </button>
-                        <button ref={btnRefWaktu} onClick={() => setShowWaktu(prev => !prev)} className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300">
-                            WAKTU
-                        </button>
-                        <button ref={btnRefKelas} onClick={() => setShowKelas(prev => !prev)} className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300">
-                            KELAS
-                        </button>
-                        {
-                            showHarga ? (
-                            <div className="w-auto absolute top-10 z-50 opacity-100 bg-white p-4 text-xs">
-                                <Box sx={{ width: 200,}}>
-                                    <Typography theme={theme} id="track-inverted-slider" gutterBottom>
-                                    Range antara Rp.{toRupiah(valHargaRange[0])} - Rp.{toRupiah(valHargaRange[1])}
-                                    </Typography>
-                                    <Slider
-                                        size="small"
-                                        track="inverted"
-                                        aria-labelledby="track-inverted-range-slider"
-                                        onChange={hargraRangeChange}
-                                        value={valHargaRange}
-                                        min={0}
-                                        max={1500000}
-                                    />
-                                </Box>
-                            </div>  
-                            ) : null
-                        }{
-                            showWaktu ? (
-                                <div className="w-auto absolute top-10 left-28 z-50 opacity-100 bg-white p-4 text-xs">
-                                <Box sx={{ width: 120,}}>
-                                    <FormGroup>
-                                        <FormControlLabel  control={<Checkbox  checked={waktuFilter[0]} value="06:00-11:59"  onChange={handleWaktuFilterChange} size="small"  />} label={<span style={{ fontSize: '12px' }}>06.00 - 12.00</span>} />
-                                        <FormControlLabel  control={<Checkbox  checked={waktuFilter[1]} value="12:00-17:59" onChange={handleWaktuFilterChange} size="small" />}  label={<span style={{ fontSize: '12px' }}>12.00 - 18.00</span>} />
-                                        <FormControlLabel  control={<Checkbox  checked={waktuFilter[2]} value="18:00-23:59" onChange={handleWaktuFilterChange} size="small" />} label={<span style={{ fontSize: '12px' }}>18.00 - 00.00</span>} />
-                                        <FormControlLabel  control={<Checkbox  checked={waktuFilter[3]} value="00:00-05:59" onChange={handleWaktuFilterChange} size="small" />} label={<span style={{ fontSize: '12px' }}>00.00 - 06.00</span>} />
-                                    </FormGroup> 
-                                </Box>                                                         
-                            </div> 
-                            ) : null
-                        }           
-                        {
-                            showKelas ? (
-                                <div className="w-auto absolute top-10 left-48 z-50 opacity-100 bg-white p-4 text-xs">
-                                <Box sx={{ width: 120,}}>
-                                    <FormGroup>
-                                        <FormControlLabel  control={<Checkbox checked={gradeFilter[0]} value={0} onChange={handleGradeFilterChange}  size="small"  />} label={<span style={{ fontSize: '12px' }}>Ekonomi</span>} />
-                                        <FormControlLabel  control={<Checkbox checked={gradeFilter[1]} value={1} onChange={handleGradeFilterChange}   size="small"  />} label={<span style={{ fontSize: '12px' }}>Eksekutif</span>} />
-                                        <FormControlLabel  control={<Checkbox checked={gradeFilter[2]} value={2} onChange={handleGradeFilterChange}   size="small"  />} label={<span style={{ fontSize: '12px' }}>Bisnis</span>} />
-                                    </FormGroup> 
-                                </Box>                                                         
-                            </div> 
-                            ) : null
-                        }                        
-                    </div>
-                    <div>
-                        <div className="flex space-x-2 items-center p-4 px-4 md:px-4 mr-0 xl:mr-16 text-gray-500 rounded-md text-xs font-bold">
-                            <div>URUTKAN</div>
-                            <MdOutlineKeyboardArrowDown />
-                        </div>
-                    </div>
-                </div>
-            <div>
-            </div>
-            </div>
-            <div>
-                {isLoading ? (
-                  skeleton.map(() =>(
-                    <div className="row mt-4 w-full p-2 pr-0 xl:pr-16">           
-                            <Box sx={{ width: "100%" }}>
-                                <Skeleton />
-                                <Skeleton />
-                                <Skeleton />
-                                <Skeleton />
-                                <Skeleton />
-                            </Box>
-                    </div>
-                    ))
-                )
-
-                : 
-
-                notFound !== true ? (
-
-                    <div className="row mb-24 w-full p-2 pr-0 xl:pr-16">           
-                    {filteredData.map((e) => ( //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
-                        <div class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${ e.seats[0].availability > 0 ? 'bg-white' : 'bg-gray-200' } border border-gray-200 rounded-lg shadow-sm  hover:border transition-transform transform hover:scale-105`}>
-        
-                        {/* desktop cari */}
-        
-                        <div className="hidden xl:block w-full text-gray-700 ">
-                            
-                            <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
-                                <div className="col-span-1 xl:col-span-2">
-                                    <h1 className="text-sm font-bold">{e.trainName} </h1>
-                                    <small>{e.seats[0].grade === 'E' ? 'Eksekutif' : e.seats[0].grade === 'B' ? 'Bisnis' : 'Ekonomi'} Class ({e.seats[0].class})</small>
-                                </div>
-                                <div className="flex">
-                                    <div className="">
-                                        <h1 className="mt-4 xl:mt-0 text-sm font-bold">{e.departureTime}</h1>
-                                        <small>{kotaBerangkat} ({origin})</small>
-                                    </div>
-                                    < HiOutlineArrowNarrowRight size={24} />
-                                </div>
-                                <div>
-                                    <h1 className="text-sm font-bold">{e.arrivalTime}</h1>
-                                    <small>{kotaTujuan} ({destination})</small>
-                                </div>
-                                <div>
-                                    <h1 className="mt-4 xl:mt-0 text-sm font-bold">{e.duration}</h1>
-                                    <small>Langsung</small>
-                                </div>
-                                <div className="">
-                                        <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">Rp.{toRupiah(e.seats[0].priceAdult)}</h1>
-                                        <small className="text-red-500">{e.seats[0].availability} set(s) left</small>
-                                </div>
-                                <div>
-                                    {e.seats[0].availability > 0 ? (
-                                        <button type="button" onClick={() => bookingHandlerDetail(e.trainNumber)} class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2">
-                                            <div className="text-white font-bold">PILIH</div></button>
-                                        
-                                    ) : ''}
-                                </div>
-                            </div>
-                        </div>
-    
-                        <div>
-    
-                        {/* mobile cari */}
-    
-                        <div onClick={() => bookingHandlerDetail(e.trainNumber)} className="cursor-pointer block xl:hidden w-full text-gray-700">
-                            <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
-                                <div className="flex justify-between">
-                                    <div className="col-span-1 xl:col-span-2">
-                                        <h1 className="text-xs font-bold">{e.trainName}</h1>
-                                        <small>{e.seats[0].grade === 'E' ? 'Eksekutif' : e.seats[0].grade === 'B' ? 'Bisnis' : 'Ekonomi'} Class ({e.seats[0].class})</small>
-                                    </div>
-                                    <div className="text-right">
-                                        <h1 className="text-xs font-bold text-blue-500">Rp. {toRupiah(e.seats[0].priceAdult)}</h1>
-                                        <small className="text-red-500">{e.seats[0].availability} set(s)</small>
-                                    </div>
-                                </div>
-                                <div className="flex justify-start">
-                                    <div className="flex space-x-2 items-start">
-                                        <div>
-                                            <h1 className="mt-10 xl:mt-0 text-xs font-bold">{e.departureTime}</h1>
-                                            <small className="text-gray-400">{origin}</small>
-                                        </div>
-                                        <div className="w-full mt-12 px-4 border-b-2"></div>
-                                        <div className="text-xs">
-                                            <h1 className="text-xs mt-10 xl:mt-0 text-gray-400">{e.duration}</h1>
-                                            <small className="text-gray-400">Langsung</small>
-                                        </div>
-                                        <div className="w-full mt-12 px-4 border-b-2"></div>
-                                        <div>
-                                            <h1 className="mt-10 xl:mt-0 text-xs font-bold">{e.arrivalTime}</h1>
-                                            <small className="text-gray-400">{destination}</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    ))}
-                </div>   
-
-                ) :(
-                    <div className="row mt-6 mb-24 w-full p-2 pr-0 xl:pr-16">
-                            <div className="flex justify-center">
-                                    <img src={'/nodata.jpg'} width={350} alt="nodata" />
-                                </div>
-                            <div className="flex justify-center w-full text-gray-700">
-                                <div className="text-gray-500 text-center">
-                                    <div>
-                                    <div className="text-lg font-bold">Maaf, sepertinya rute ini belum dibuka kembali</div>
-                                    <small>Namun jangan khawatir, masih ada pilihan kendaraan lain yang tetap bisa mengantarkan Anda ke tempat tujuan.</small>
-                                    </div>
-                                </div>
-                            </div>
-                    </div> 
-                )
-            
-            }
-            </div>
-            </>
-        ) : 
-        
-        (
-        <Result
-            status="500"
-            title="Error!"
-            subTitle="Silahkan Anda login terlebih dahulu."
-            style={{ color: 'white' }} // Ini akan memastikan warna teks menjadi putih
-            extra={
-                <Button
-                    style={{ color: 'white' }} // Ini akan memastikan warna teks menjadi putih
-                    className="bg-blue-600 text-white hover:text-gray-100 focus:text-gray-100 active:text-gray-200"
-                    onClick={() => window.location = '/'}
-                >Back Home</Button>
-            }
-        />
-
-        )
-        
-        }
+          <Page500 />
         </>
-    )
+      ) : errPage === true ? (
+        <>
+          <Page400 />
+        </>
+      ) : (
+        <>
+          <div className="text-sm judul-search mt-4 font-bold text-slate-600">
+            PILIH JADWAL
+          </div>
+          <div className="mt-8">
+            <div className="block lg:flex justify-between">
+              <div className="flex items-center justify-start space-x-3 xl:space-x-4">
+                <small className="text-xs font-bold text-slate-600">
+                  {stasiunBerangkat}, {kotaBerangkat}
+                </small>
+                <div className="bg-blue-500 p-1 rounded-full">
+                  <VscArrowSwap
+                    className="font-bold text-xs text-white"
+                    size={16}
+                  />
+                </div>
+                <small className="text-xs font-bold text-slate-600">
+                  {stasiunTujuan}, {kotaTujuan}
+                </small>
+                <div className="hidden md:block font-normal text-slate-600">
+                  |
+                </div>
+                <small className="hidden md:block text-xs font-bold text-slate-600">
+                  {tanggal_keberangkatan_kereta}
+                </small>
+                <div className="hidden md:block font-normal text-slate-600">
+                  |
+                </div>
+                <small className="hidden md:block text-xs font-bold text-slate-600">
+                  {parseInt(adult) + parseInt(infant)} Penumpang
+                </small>
+              </div>
+              <div className="mt-4 lg:mt-0 flex space-x-4 mr-0 xl:mr-16">
+                <Link to="/" className="flex space-x-2 items-center">
+                  <IoArrowBackOutline className="text-blue-500" size={16} />
+                  <div className="text-blue-500 text-sm font-bold">Kembali</div>
+                </Link>
+                <button
+                  onClick={() => setUbahPencarian((prev) => !prev)}
+                  className="block border p-2 px-4 md:px-4 mr-0 xl:mr-16 bg-blue-500 text-white rounded-md text-xs font-bold"
+                >
+                  Ubah Pencarian
+                </button>
+              </div>
+            </div>
+            {ubahPencarian ? (
+              <div className="mt-8">
+                <KAISearch />
+              </div>
+            ) : null}
+            <div className="flex justify-between mt-6">
+              <div className="relative flex items-center space-x-2 text-slate-600 text-xs font-bold">
+                <div className="hidden md:block">FILTER : </div>
+                <button
+                  ref={btnRefHarga}
+                  onClick={() => setShowHarga((prev) => !prev)}
+                  className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300"
+                >
+                  HARGA
+                </button>
+                <button
+                  ref={btnRefWaktu}
+                  onClick={() => setShowWaktu((prev) => !prev)}
+                  className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300"
+                >
+                  WAKTU
+                </button>
+                <button
+                  ref={btnRefKelas}
+                  onClick={() => setShowKelas((prev) => !prev)}
+                  className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300"
+                >
+                  KELAS
+                </button>
+                {showHarga ? (
+                  <div className="w-auto absolute top-10 z-50 opacity-100 bg-white p-4 text-xs">
+                    <Box sx={{ width: 200 }}>
+                      <Typography
+                        theme={theme}
+                        id="track-inverted-slider"
+                        gutterBottom
+                      >
+                        Range antara Rp.{toRupiah(valHargaRange[0])} - Rp.
+                        {toRupiah(valHargaRange[1])}
+                      </Typography>
+                      <Slider
+                        size="small"
+                        track="inverted"
+                        aria-labelledby="track-inverted-range-slider"
+                        onChange={hargraRangeChange}
+                        value={valHargaRange}
+                        min={0}
+                        max={1500000}
+                      />
+                    </Box>
+                  </div>
+                ) : null}
+                {showWaktu ? (
+                  <div className="w-auto absolute top-10 left-28 z-50 opacity-100 bg-white p-4 text-xs">
+                    <Box sx={{ width: 120 }}>
+                      <FormGroup>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={waktuFilter[0]}
+                              value="06:00-11:59"
+                              onChange={handleWaktuFilterChange}
+                              size="small"
+                            />
+                          }
+                          label={
+                            <span style={{ fontSize: "12px" }}>
+                              06.00 - 12.00
+                            </span>
+                          }
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={waktuFilter[1]}
+                              value="12:00-17:59"
+                              onChange={handleWaktuFilterChange}
+                              size="small"
+                            />
+                          }
+                          label={
+                            <span style={{ fontSize: "12px" }}>
+                              12.00 - 18.00
+                            </span>
+                          }
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={waktuFilter[2]}
+                              value="18:00-23:59"
+                              onChange={handleWaktuFilterChange}
+                              size="small"
+                            />
+                          }
+                          label={
+                            <span style={{ fontSize: "12px" }}>
+                              18.00 - 00.00
+                            </span>
+                          }
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={waktuFilter[3]}
+                              value="00:00-05:59"
+                              onChange={handleWaktuFilterChange}
+                              size="small"
+                            />
+                          }
+                          label={
+                            <span style={{ fontSize: "12px" }}>
+                              00.00 - 06.00
+                            </span>
+                          }
+                        />
+                      </FormGroup>
+                    </Box>
+                  </div>
+                ) : null}
+                {showKelas ? (
+                  <div className="w-auto absolute top-10 left-48 z-50 opacity-100 bg-white p-4 text-xs">
+                    <Box sx={{ width: 120 }}>
+                      <FormGroup>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={gradeFilter[0]}
+                              value={0}
+                              onChange={handleGradeFilterChange}
+                              size="small"
+                            />
+                          }
+                          label={
+                            <span style={{ fontSize: "12px" }}>Ekonomi</span>
+                          }
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={gradeFilter[1]}
+                              value={1}
+                              onChange={handleGradeFilterChange}
+                              size="small"
+                            />
+                          }
+                          label={
+                            <span style={{ fontSize: "12px" }}>Eksekutif</span>
+                          }
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={gradeFilter[2]}
+                              value={2}
+                              onChange={handleGradeFilterChange}
+                              size="small"
+                            />
+                          }
+                          label={
+                            <span style={{ fontSize: "12px" }}>Bisnis</span>
+                          }
+                        />
+                      </FormGroup>
+                    </Box>
+                  </div>
+                ) : null}
+              </div>
+              <div>
+                <div className="flex space-x-2 items-center p-4 px-4 md:px-4 mr-0 xl:mr-16 text-gray-500 rounded-md text-xs font-bold">
+                  <div>URUTKAN</div>
+                  <MdOutlineKeyboardArrowDown />
+                </div>
+              </div>
+            </div>
+            <div></div>
+          </div>
+          <div>
+            {isLoading ? (
+              skeleton.map(() => (
+                <div className="row mt-4 w-full p-2 pr-0 xl:pr-16">
+                  <Box sx={{ width: "100%" }}>
+                    <Skeleton />
+                    <Skeleton />
+                    <Skeleton />
+                    <Skeleton />
+                    <Skeleton />
+                  </Box>
+                </div>
+              ))
+            ) : notFound !== true ? (
+              <div className="row mb-24 w-full p-2 pr-0 xl:pr-16">
+                {filteredData.map(
+                  (
+                    e //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
+                  ) => (
+                    <div
+                      class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${
+                        e.seats[0].availability > 0 ? "bg-white" : "bg-gray-200"
+                      } border border-gray-200 rounded-lg shadow-sm  hover:border transition-transform transform hover:scale-105`}
+                    >
+                      {/* desktop cari */}
+
+                      <div className="hidden xl:block w-full text-gray-700 ">
+                        <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
+                          <div className="col-span-1 xl:col-span-2">
+                            <h1 className="text-sm font-bold">
+                              {e.trainName}{" "}
+                            </h1>
+                            <small>
+                              {e.seats[0].grade === "E"
+                                ? "Eksekutif"
+                                : e.seats[0].grade === "B"
+                                ? "Bisnis"
+                                : "Ekonomi"}{" "}
+                              Class ({e.seats[0].class})
+                            </small>
+                          </div>
+                          <div className="flex">
+                            <div className="">
+                              <h1 className="mt-4 xl:mt-0 text-sm font-bold">
+                                {e.departureTime}
+                              </h1>
+                              <small>
+                                {kotaBerangkat} ({origin})
+                              </small>
+                            </div>
+                            <HiOutlineArrowNarrowRight size={24} />
+                          </div>
+                          <div>
+                            <h1 className="text-sm font-bold">
+                              {e.arrivalTime}
+                            </h1>
+                            <small>
+                              {kotaTujuan} ({destination})
+                            </small>
+                          </div>
+                          <div>
+                            <h1 className="mt-4 xl:mt-0 text-sm font-bold">
+                              {e.duration}
+                            </h1>
+                            <small>Langsung</small>
+                          </div>
+                          <div className="">
+                            <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">
+                              Rp.{toRupiah(e.seats[0].priceAdult)}
+                            </h1>
+                            <small className="text-red-500">
+                              {e.seats[0].availability} set(s) left
+                            </small>
+                          </div>
+                          <div>
+                            {e.seats[0].availability > 0 ? (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  bookingHandlerDetail(e.trainNumber)
+                                }
+                                class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2"
+                              >
+                                <div className="text-white font-bold">
+                                  PILIH
+                                </div>
+                              </button>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        {/* mobile cari */}
+                        <div
+                          onClick={() => bookingHandlerDetail(e.trainNumber)}
+                          className="cursor-pointer block xl:hidden w-full text-gray-700"
+                        >
+                          <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
+                            <div className="flex justify-between">
+                              <div className="col-span-1 xl:col-span-2">
+                                <h1 className="text-xs font-bold">
+                                  {e.trainName}
+                                </h1>
+                                <small>
+                                  {e.seats[0].grade === "E"
+                                    ? "Eksekutif"
+                                    : e.seats[0].grade === "B"
+                                    ? "Bisnis"
+                                    : "Ekonomi"}{" "}
+                                  Class ({e.seats[0].class})
+                                </small>
+                              </div>
+                              <div className="text-right">
+                                <h1 className="text-xs font-bold text-blue-500">
+                                  Rp. {toRupiah(e.seats[0].priceAdult)}
+                                </h1>
+                                <small className="text-red-500">
+                                  {e.seats[0].availability} set(s)
+                                </small>
+                              </div>
+                            </div>
+                            <div className="flex justify-start">
+                              <div className="flex space-x-2 items-start">
+                                <div>
+                                  <h1 className="mt-10 xl:mt-0 text-xs font-bold">
+                                    {e.departureTime}
+                                  </h1>
+                                  <small className="text-gray-400">
+                                    {origin}
+                                  </small>
+                                </div>
+                                <div className="w-full mt-12 px-4 border-b-2"></div>
+                                <div className="text-xs">
+                                  <h1 className="text-xs mt-10 xl:mt-0 text-gray-400">
+                                    {e.duration}
+                                  </h1>
+                                  <small className="text-gray-400">
+                                    Langsung
+                                  </small>
+                                </div>
+                                <div className="w-full mt-12 px-4 border-b-2"></div>
+                                <div>
+                                  <h1 className="mt-10 xl:mt-0 text-xs font-bold">
+                                    {e.arrivalTime}
+                                  </h1>
+                                  <small className="text-gray-400">
+                                    {destination}
+                                  </small>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                )}
+              </div>
+            ) : (
+              <div className="row mt-6 mb-24 w-full p-2 pr-0 xl:pr-16">
+                <div className="flex justify-center">
+                  <img src={"/nodata.jpg"} width={350} alt="nodata" />
+                </div>
+                <div className="flex justify-center w-full text-gray-700">
+                  <div className="text-gray-500 text-center">
+                    <div>
+                      <div className="text-lg font-bold">
+                        Maaf, sepertinya rute ini belum dibuka kembali
+                      </div>
+                      <small>
+                        Namun jangan khawatir, masih ada pilihan kendaraan lain
+                        yang tetap bisa mengantarkan Anda ke tempat tujuan.
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+    </>
+  );
 }

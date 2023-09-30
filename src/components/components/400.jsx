@@ -1,0 +1,26 @@
+import { Button, Result } from "antd";
+import React from "react";
+
+
+const Page400 = () => {
+	return (
+		<Result
+		status="500"
+		title="Page Error!"
+		//error dalam masalah session nya habis, kalau ngak parameter urlnya tidak benar.
+		subTitle="Terjadi Kesalahan pada page. Silahkan lakukan booking ulang."
+		style={{ color: "white" }}
+		extra={
+		<Button
+			style={{ color: "white" }}
+			className="bg-blue-600 text-white hover:text-gray-100 focus:text-gray-100 active:text-gray-200"
+			onClick={() => window.location = '/'}
+		>
+			Back Home
+		</Button>
+		}
+	/>
+	)
+}
+
+export default Page400;

@@ -266,8 +266,6 @@ function KAI(){
                 str += key + "=" + encodeURIComponent(params[key]);
             } 
             
-            localStorage.setItem('k_search', JSON.stringify(params))
-
             window.location = `search?${str}`;  
 
         }, 1000);

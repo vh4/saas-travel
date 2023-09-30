@@ -6,6 +6,8 @@ import axios from "axios";
 import { Placeholder } from 'rsuite';
 import {HiOutlineArrowNarrowRight} from 'react-icons/hi'
 import { Button, Modal, message } from 'antd';
+import { toRupiah } from '../../helpers/rupiah';
+import { remainingTime } from '../../helpers/date';
 
 export default function ViewBooking({path}) {
 
@@ -55,35 +57,6 @@ export default function ViewBooking({path}) {
         }catch (e) {
             setIsLoading(false);
         }
-    }
-
-
-    function toRupiah(angka) {
-        var rupiah = '';
-        var angkarev = angka.toString().split('').reverse().join('');
-        for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
-        return rupiah.split('',rupiah.length-1).reverse().join('');
-    }
-
-    function remainingTime(targetDate) {
-            
-        let currentDate = new Date();
-        let timeDifference = new Date(targetDate) - currentDate;
-        
-        let hours = Math.floor(timeDifference / (1000 * 60 * 60));
-        let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-        let seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-        
-        if(hours === 0){
-            return ` ${minutes} menit ${seconds} detik`;
-
-        }else if(hours ===0 && minutes === 0){
-            return ` ${seconds} detik`;
-
-        }else{
-            return ` ${hours} jam ${minutes} menit ${seconds} detik`;
-
-        }    
     }
 
     function openModalBayar(e, i){

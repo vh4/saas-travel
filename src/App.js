@@ -67,14 +67,14 @@ function App() {
           <Route path="/train/search" element={< SearchKai/>}></Route>
           <Route path="/flight/search" element={< SearchPlane/>}></Route>
           <Route path="/pelni/search" element={< SearchPelni/>}></Route>
-          <Route path="/pelni/booking" element={< BookingPelni/>}></Route>
-          <Route path="/pelni/payment" element={< PaymentPelni/>}></Route>
+          <Route path="/pelni/booking/:id" element={< BookingPelni/>}></Route>
+          <Route path="/pelni/payment/:id" element={< PaymentPelni/>}></Route>
           <Route path="/flight/booking/:PesawatNumber" element={< BookingPesawat/>}></Route>
           <Route path="/flight/payment/:PesawatNumber" element={< PembayaranPesawat/>}></Route>
           <Route path="/flight/tiket-pesawat" element={< TiketPesawat/>}></Route>
-          <Route path="/train/booking/:trainNumber" element={< BookingKai/>}></Route>
-          <Route path="/train/konfirmasi/:trainNumber" element={< KonfirmasiKai/>}></Route>
-          <Route path="/train/bayar/:trainNumber" element={< PembayaranKai/>}></Route>
+          <Route path="/train/booking/:id" element={< BookingKai/>}></Route>
+          <Route path="/train/konfirmasi" element={< KonfirmasiKai/>}></Route>
+          <Route path="/train/bayar" element={< PembayaranKai/>}></Route>
           <Route path="/train/tiket-kai" element={< TiketKai/>}></Route>
           <Route path="/transaksi/kai" element={<TransaksiKai />}></Route>
           <Route path="/transaksi/pesawat" element={<TransaksiPesawat />}></Route>

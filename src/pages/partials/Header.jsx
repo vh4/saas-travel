@@ -35,6 +35,9 @@ export default function Header({toogleSidebar, valueSidebar}){
     const handleOpen = () => setShowModal(true);
     const handleClose = () => setShowModal(false);
 
+    const [isExpired, setIsExpired] = useState(false);
+    const [api, contextHolder] = notification.useNotification();
+
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
@@ -67,7 +70,14 @@ export default function Header({toogleSidebar, valueSidebar}){
         });
       };
 
-    
+      const suksesLogoutAutomatic= () => {
+        api['warning']({
+          message: 'Warning!',
+          description:
+          'Waktu login anda sudah habis. Silahkan login kembali.',
+        });
+    };
+
     const navigate = useNavigate();
     const LogoutHandler = (e) => {
         e.preventDefault();
@@ -120,23 +130,12 @@ export default function Header({toogleSidebar, valueSidebar}){
                 token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)) == null ? 'Logout' : JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
             }).then((data) => {
                 localStorage.clear();
+                suksesLogoutAutomatic()
                 navigate('/')
             });
         }catch(e){
         }
     }
-
-    const [isExpired, setIsExpired] = useState(false);
-    const [api, contextHolder] = notification.useNotification();
-
-    const suksesLogoutAutomatic= () => {
-        api['warning']({
-          message: 'Warning!',
-          description:
-          'Waktu login anda sudah habis. Silahkan login kembali.',
-          duration: null,
-        });
-      };
 
     useEffect(() => {
       const expiredDate = localStorage.getItem("expired_date");
@@ -151,7 +150,6 @@ export default function Header({toogleSidebar, valueSidebar}){
     useEffect(() => {
       if (isExpired) {
         logout();
-        suksesLogoutAutomatic();
       }
     }, [isExpired]);    
 
