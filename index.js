@@ -1,19 +1,46 @@
 const express = require('express');
 const cors = require('cors');
-const Routes = require("./routes/api");
+
+//router
+const MainRoutes = require('./routes/main');
+const PelniRouter = require('./routes/pelni');
+const KeretaRouter = require('./routes/kereta');
+const PesawatRouter = require('./routes/pesawat');
+
 const logger = require('./utils/logger.js');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+
 const app = express();
 const port = 9999;
 
+// Use cookie-parser middleware
+app.use(cookieParser());
+
+// Configure express-session
+app.use(session({
+  secret: 'bimasakithebestforever@secret',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 3600000,
+    secure:false
+  },
+}));
+
 app.use(cors({
-    origin:["*", "http://localhost:3000", "http://10.0.9.88:3000", "http://10.0.9.88:1111", "http://localhost:1111"],
-    methods: ['GET', 'POST','DELETE', 'PUT'],
-    credentials:true
-})); 
+  origin:["*", "http://localhost:3000", "http://10.0.9.88:3000", "http://10.0.9.88:1111", "http://localhost:1111"],
+  methods: ['GET', 'POST', 'DELETE', 'PUT'],
+  credentials: true
+}));
 
 app.use(express.json());
-app.use(Routes);
 
-app.listen(port, ()=>{
-    logger.info("server listening on port " + port);
-})
+app.use(MainRoutes);
+app.use(PelniRouter);
+app.use(KeretaRouter);
+app.use(PesawatRouter);
+
+app.listen(port, () => {
+  logger.info("server listening on port " + port);
+});
