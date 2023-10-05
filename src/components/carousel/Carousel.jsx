@@ -20,8 +20,7 @@ export default function Carousels(props) {
         infinite: true,
         slidesToShow: 2,
         slidesToScroll: 1,
-        autoplay: true,
-        speed: 5000,
+        autoplay: false,
         focusOnSelect: true,
         draggable: true,
         edgeFriction: 1,
@@ -65,13 +64,17 @@ export default function Carousels(props) {
                 <small >nikmati promo menarik lainya untuk kamu.</small>
             </div>
             <div className="hidden xl:block pl-24">
-              <div className="flex space-x-4 pl-12 pr-16 text-white">
+              <div className="flex space-x-4 pl-24 pr-24 text-white">
                 <img className="" src="/join.svg" width={160} alt="carousal.png" />
                 <div>
                 <h1 className="2xl:px-8 text-xl font-bold">Hai Traveler, Welcome!</h1>
                 <div className="mt-2 2xl:px-8">
-                  <div className="mt-4">Cukup login dan booking semua tiket dengan mudah.</div>
-                  <div className="mt-4">Jangan lupa mengecek promo terbaru untuk mendapatkan diskon murah.</div>
+                <div className="mt-4">
+                    Cukup login ke akun Anda dan melakukan pemesanan tiket untuk berbagai macam perjalanan.
+                  </div>
+                  <div className="mt-6">
+                    Nikmati perjalanan anda di beberapa menu travel kereta, kapal, dan pesawat.
+                  </div>
                 </div>
                 </div>
               </div>
