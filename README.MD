@@ -4,11 +4,12 @@
 - npm run start or 
 - node index.js
 
-## Loggers 
+## Requirements
 
-- foldernya : ./logs/2023-10-03.txt,dll. setiap hari ada logggernya.
+- NPM npm version 9.6.7 / npx version  9.6.7
+- NODE v18.17.0
 
 ## Requests 
 
 - untuk loggers nya minta tolong di kasih ke elastic kak.
-- sama hapus loggers nya jika sudah 7 hari. :)
+- untuk .env variable FRONTEND_URL_OR_IP_ACCESS_CORS samakan url / ip frontend.
