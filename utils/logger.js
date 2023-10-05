@@ -2,17 +2,17 @@ const pino = require("pino");
 const pinoPretty = require("pino-pretty");
 const winston = require("winston");
 const path = require("path");
-const fs = require("fs");
+// const fs = require("fs");
 
 const prettyStream = pinoPretty();
 const prettyLogger = pino({}, prettyStream);
 
-const logDirectory = path.join(__dirname, "../logs");
-if (!fs.existsSync(logDirectory)) {
-  fs.mkdirSync(logDirectory);
-}
+// const logDirectory = path.join(__dirname, "../logs");
+// if (!fs.existsSync(logDirectory)) {
+//   fs.mkdirSync(logDirectory);
+// }
 
-const logFilePath = path.join(logDirectory, `logger-${getCurrentDate()}.txt`);
+// const logFilePath = path.join(logDirectory, `logger-${getCurrentDate()}.txt`);
 
 const winstonLogger = winston.createLogger({
   format: winston.format.combine(
@@ -21,12 +21,6 @@ const winstonLogger = winston.createLogger({
       return `${timestamp} [${level}]: ${message}`;
     })
   ),
-  transports: [
-    new winston.transports.File({
-      filename: logFilePath,
-      level: "info",
-    }),
-  ],
 });
 
 function getCurrentDate() {

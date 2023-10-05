@@ -140,8 +140,6 @@ Router.post('/travel/refresh-date', async function (req, res) {
   }
 });
 
-
-
 Router.post('/travel/app/sign_out', async function (req, res) {
   const { token } = req.body;
   const data = req.body;
