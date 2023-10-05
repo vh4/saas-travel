@@ -19,7 +19,7 @@ export default function MainPage(){
         <Layout>
         {/* carousel fitur  */}
         <div className="w-full">
-            <div className="bg-gradient-to-r xl:from-[#337AFF] xl:to-blue-500">
+            <div className="bg-gradient-to-r from-cyan-500 to-blue-500">
                 <div className="py-4 md:py-8 relative z-10">
                     <Carousels />
                 </div>
