@@ -12,4 +12,7 @@
 ## Requests 
 
 - untuk loggers nya minta tolong di kasih ke elastic kak.
+
+## Noted
+
 - untuk .env variable FRONTEND_URL_OR_IP_ACCESS_CORS samakan url / ip frontend.
