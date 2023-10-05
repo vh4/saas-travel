@@ -2,6 +2,8 @@ const express = require('express');
 const axios = require('axios'); // Mengganti 'request' dengan 'axios'
 const logger = require('../utils/logger.js');
 const { v4: uuidv4 } = require('uuid');
+const { AuthLogin } = require('../middleware/auth.js');
+const { apiLimiter } = require('../middleware/limit.js');
 const Router = express.Router();
 require('dotenv').config()
 
@@ -22,7 +24,6 @@ Router.post('/travel/train/station', async function (req, res) { // Menambahkan 
     logger.info(`Response /travel/train/station: ${JSON.stringify(response.data)}`);
     return res.send(response.data);
   } catch (error) {
-    console.error(error);
     logger.error(`Error /travel/train/station: ${error.message}`);
     return res.status(500).send(error.message);
   }
@@ -48,14 +49,13 @@ Router.post('/travel/train/search', async function (req, res) { // Menambahkan a
     logger.info(`Response /travel/train/search: ${JSON.stringify(response.data)}`);
     return res.send(response.data);
   } catch (error) {
-    console.error(error);
     logger.error(`Error /travel/train/search: ${error.message}`);
     return res.status(500).send(error.message);
   }
 });
 
 //insert data train to session storage.
-Router.post('/travel/train/search/k_search', async (req, res) => {
+Router.post('/travel/train/search/k_search', AuthLogin, apiLimiter, async (req, res) => {
   const data = req.body;
 
   if (typeof data == 'object') {
@@ -79,7 +79,7 @@ Router.post('/travel/train/search/k_search', async (req, res) => {
 });
 
 //retrieve data train from session storage.
-Router.get('/travel/train/search/k_search/:id', async (req, res) => {
+Router.get('/travel/train/search/k_search/:id', AuthLogin, async (req, res) => {
   const uuid = req.params.id;
   logger.info(`PARAMS /travel/train/search/k_search/:id: ${uuid}`);
 
@@ -101,9 +101,8 @@ Router.get('/travel/train/search/k_search/:id', async (req, res) => {
   }
 });
 
-
 //insert data hasil booking to session storage.
-Router.post('/travel/train/book/k_book', async (req, res) => {
+Router.post('/travel/train/book/k_book', AuthLogin, apiLimiter, async (req, res) => {
 	const data = req.body;
   
 	if (typeof data == 'object') {
@@ -127,7 +126,7 @@ Router.post('/travel/train/book/k_book', async (req, res) => {
 });
 
 //retrieve data booking from session storage.
-Router.get('/travel/train/book/k_book/:id', async (req, res) => {
+Router.get('/travel/train/book/k_book/:id', AuthLogin, async (req, res) => {
   const uuid = req.params.id;
   logger.info(`PARAMS /travel/train/book/k_book/:id: ${uuid}`);
 
@@ -150,7 +149,7 @@ Router.get('/travel/train/book/k_book/:id', async (req, res) => {
 });
 
 //update seats data hasil booking :
-Router.put('/travel/train/book/k_book', async (req, res) => {
+Router.put('/travel/train/book/k_book', AuthLogin, apiLimiter, async (req, res) => {
 	const data = req.body;
 	const uuid = req.body.uuid;
   
@@ -202,7 +201,6 @@ Router.post('/travel/train/get_seat_layout', async function (req, res) { // Mena
     logger.info(`Response /travel/train/get_seat_layout: ${JSON.stringify(response.data)}`);
     return res.send(response.data);
   } catch (error) {
-    console.error(error);
     logger.error(`Error /travel/train/get_seat_layout: ${error.message}`);
     return res.status(500).send(error.message);
   }
@@ -221,7 +219,6 @@ Router.post('/travel/train/book', async function (req, res) { // Menambahkan asy
     logger.info(`Response /travel/train/book: ${JSON.stringify(response.data)}`);
     return res.send(response.data);
   } catch (error) {
-    console.error(error);
     logger.error(`Error /travel/train/book: ${error.message}`);
     return res.status(500).send(error.message);
   }
@@ -240,7 +237,6 @@ Router.post('/travel/train/payment', async function (req, res) { // Menambahkan 
     logger.info(`Response /travel/train/payment: ${JSON.stringify(response.data)}`);
     return res.send(response.data);
   } catch (error) {
-    console.error(error);
     logger.error(`Error /travel/train/payment: ${error.message}`);
     return res.status(500).send(error.message);
   }
@@ -259,7 +255,6 @@ Router.post('/travel/train/change_seat', async function (req, res) { // Menambah
     logger.info(`Response /travel/train/change_seat: ${JSON.stringify(response.data)}`);
     return res.send(response.data);
   } catch (error) {
-    console.error(error);
     logger.error(`Error /travel/train/change_seat: ${error.message}`);
     return res.status(500).send(error.message);
   }
@@ -278,7 +273,6 @@ Router.post('/travel/train/fare', async function (req, res) { // Menambahkan asy
     logger.info(`Response /travel/train/fare: ${JSON.stringify(response.data)}`);
     return res.send(response.data);
   } catch (error) {
-    console.error(error);
     logger.error(`Error /travel/train/fare: ${error.message}`);
     return res.status(500).send(error.message);
   }
