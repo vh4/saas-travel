@@ -18,7 +18,8 @@ export default function Layout({ children }) {
   const { nav, setNav } = useContext(NavContext);
 
   return (
-    <div className="block">
+    <div className="flex flex-col min-h-screen">
+    <div className="flex-grow">
       <div className="">
         <Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
       </div>
@@ -67,7 +68,8 @@ export default function Layout({ children }) {
         </Box>
         {/* footer */}
       </div>
-      <Footer />
+    </div>
+    <Footer />
     </div>
   );
 }

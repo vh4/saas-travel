@@ -15,6 +15,8 @@ import { useNavigate, createSearchParams } from "react-router-dom";
 import onClickOutside from "react-onclickoutside";
 import { makeStyles } from '@mui/styles';
 import { Button } from 'antd';
+import Cookies from 'js-cookie';
+import { isObject } from 'lodash';
 
 function KAI(){
 
@@ -68,20 +70,51 @@ function KAI(){
     
     const classes = useStyles();
     
-    const [kai, setKAI] = React.useState({});
+    const [kai, setKAI] = React.useState({}); //
+
     const [kaiData, setKAIData] = React.useState([]);
+    
     const i = 0;
 
     const [openBerangka, SetopenBerangka] = React.useState(false);
     const [openTujuan, setOpenTujuan] = React.useState(false);
     
-
     const loadingBerangkat = openBerangka && kaiData.length === 0;
     const loadingTujuan = openTujuan && kaiData.length === 0;
+    
+    let coockie = Cookies.get('v-train');
 
+    let depa = null;
+    let arri = null;
+
+    try {
+        coockie = coockie ? JSON.parse(coockie) : null;
+        depa = coockie.keberangkatan
+        arri = coockie.tujuan
+    } catch (error) {
+        coockie = null;
+        depa = null;
+        arri = null;
+    }
+    
+    try {
+      depa = depa ? depa : null;
+    } catch (error) {
+      depa = null;
+    }
+    
+    try {
+      arri = arri ? arri : null;
+    } catch (error) {
+      arri = null;
+    }
+    
+    depa = depa?.id_stasiun && depa?.nama_kota ? depa : null;
+    arri = arri?.id_stasiun && arri?.nama_kota ? arri : null;
+    
     //input
-    const [keberangkatan, setKeberangkatan] = React.useState();
-    const [tujuan, setTujuan] = React.useState();
+    const [keberangkatan, setKeberangkatan] = React.useState(depa);
+    const [tujuan, setTujuan] = React.useState(arri);
     const [tanggal, setTanggal] = React.useState();
     const [isLoading, setLoading] = React.useState(false);
     const [adult, setadult] = React.useState(1);
@@ -94,70 +127,91 @@ function KAI(){
 
     KAI.handleClickOutside = () =>{
         setAnchorEl('hidden');
-      };
+    };
 
+    React.useEffect(() => {
 
-      function sleep(delay = 0) {
-        return new Promise((resolve) => {
-          setTimeout(resolve, delay);
-        });
-      }
+        getKAIdata();
 
-      //berangkat
-      React.useEffect(() => {
-        let active = true;
+    }, []);
+
+    async function getKAIdata(){
+
+        try {
+
+            const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/station`, {
+                token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
+            });
     
-        if (!loadingBerangkat) {
-          return undefined;
+            setKAI(response.data);
+            
+        } catch (error) {
+            setKAI([]);
         }
-        
-        (async () => {
-          await sleep(1e3); // For demo purposes.
+
+    }
+
+    function sleep(delay = 0) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, delay);
+    });
+    }
+
+    //berangkat
+    React.useEffect(() => {
+    let active = true;
+
+    if (!loadingBerangkat) {
+        return undefined;
+    }
     
-          if (active) {
-            setKAIData([...kai.data]);
-          }
-        })();
-    
-        return () => {
-          active = false;
-        };
-      }, [loadingBerangkat]);
-    
-      React.useEffect(() => {
-        if (!openBerangka) {
-            setKAIData([]);
+    (async () => {
+        await sleep(1e3); // For demo purposes.
+
+        if (active) {
+        setKAIData([...kai.data]);
         }
-      }, [openBerangka]);
+    })();
+
+    return () => {
+        active = false;
+    };
+    }, [loadingBerangkat]);
+
+    React.useEffect(() => {
+    if (!openBerangka) {
+        setKAIData([]);
+    }
+    }, [openBerangka]);
 
 
-      //tujuan
-      React.useEffect(() => {
-        let active = true;
+    //tujuan
+    React.useEffect(() => {
+    let active = true;
+
+    if (!loadingTujuan) {
+        return undefined;
+    }
     
-        if (!loadingTujuan) {
-          return undefined;
+    (async () => {
+        await sleep(1e3); // For demo purposes.
+
+        if (active) {
+        setKAIData([...kai.data]);
         }
-        
-        (async () => {
-          await sleep(1e3); // For demo purposes.
-    
-          if (active) {
-            setKAIData([...kai.data]);
-          }
-        })();
-    
-        return () => {
-          active = false;
-        };
-      }, [loadingTujuan]);
-    
-      React.useEffect(() => {
-        if (!openTujuan) {
-            setKAIData([]);
-        }
-      }, [openTujuan]);
-    
+    })();
+
+    return () => {
+        active = false;
+    };
+    }, [loadingTujuan]);
+
+    React.useEffect(() => {
+    if (!openTujuan) {
+        setKAIData([]);
+    }
+    }, [openTujuan]);
+
 
     const navigate = useNavigate();
 
@@ -205,27 +259,6 @@ function KAI(){
 
     }
 
-    React.useEffect(() => {
-
-        getKAIdata();
-
-    }, []);
-
-    async function getKAIdata(){
-
-        try {
-
-            const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/station`, {
-                token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
-            });
-    
-            setKAI(response.data);
-            
-        } catch (error) {
-            setKAI({message: error.message});
-        }
-
-    }
 
     function addLeadingZero(num) {
         if (num < 10) {
@@ -233,17 +266,17 @@ function KAI(){
         } else {
           return '' + num;
         }
-      }
+    }
 
     async function handlerCariKai(e){
 
         setLoading(true);
 
         let tanggalNullFill = new Date();
-        tanggalNullFill = tanggalNullFill.getFullYear() + '-' + parseInt(tanggalNullFill.getMonth()) + 1 + '-' + tanggalNullFill.getDate();
+        tanggalNullFill = tanggalNullFill.getFullYear() + '-' + (parseInt(tanggalNullFill.getMonth()) + 1) + '-' + tanggalNullFill.getDate();
 
         const tanggalParse = tanggal !== undefined && tanggal !== null ? tanggal.$y + '-' + (addLeadingZero(parseInt(tanggal.$M) + 1)).toString()  + '-' + addLeadingZero(parseInt(tanggal.$D)).toString() : tanggalNullFill;
-
+        
         setTimeout(() => {
             e.preventDefault();
             setLoading(false);
@@ -260,6 +293,18 @@ function KAI(){
                 adult:adult,
                 infant:infant,
             }
+
+            const expirationDate = new Date();
+            expirationDate.setDate(expirationDate.getDate() + 7);
+
+            const cookieOptions = {
+            expires: expirationDate,
+            };
+
+            Cookies.set('v-train', JSON.stringify({
+                keberangkatan,
+                tujuan,
+            }), cookieOptions);
 
             navigate({
                 pathname: '/train/search',
@@ -312,6 +357,7 @@ function KAI(){
                                         isOptionEqualToValue={(option, value) => option.title === value.title}
                                         getOptionLabel={(option) => option.nama_stasiun + ' - ' + option.nama_kota + ' - ' + option.id_stasiun}
                                         options={kaiData}
+                                        value={keberangkatan}
                                         onChange={(event, newValue) => {
                                             setKeberangkatan(newValue);
                                         }}
@@ -364,6 +410,7 @@ function KAI(){
                                         isOptionEqualToValue={(option, value) => option.title === value.title}
                                         getOptionLabel={(option) => option.nama_stasiun + ' - ' + option.nama_kota + ' - ' + option.id_stasiun}
                                         options={kaiData}
+                                        value={tujuan}
                                         onChange={(event, newValue) => {
                                             setTujuan(newValue);
                                         }}

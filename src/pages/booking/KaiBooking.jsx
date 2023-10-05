@@ -14,6 +14,8 @@ export default function TransaksiPesawat(){
     const navigate = useNavigate();
 
     useEffect(() =>{
+        document.title = 'Travel - list booking kereta';
+
         if(!localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)){
             navigate('/');
         }else{

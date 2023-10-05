@@ -5,16 +5,20 @@ import Plane from "../../components/plane/Plane";
 import KAI from "../../components/kai/KAI";
 import Sidebar from "../partials/sidebar/desktop/Sidebar"
 import SideBarMobile from "../partials/sidebar/mobile/SideBarMobile"
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Carousels from '../../components/carousel/Carousel'
-import PesawatCarousel from "../../components/carousel/PesawatCarousel";
+// import PesawatCarousel from "../../components/carousel/PesawatCarousel";
 import Pelni from "../../components/pelni/Pelni";
-import Description from "../../components/main/Description";
-import WhyFastravel from "../../components/main/WhyFastravel";
-import { CiLinkedin, CiFacebook, CiTwitter, CiInstagram} from 'react-icons/ci';
+// import Description from "../../components/main/Description";
+// import WhyFastravel from "../../components/main/WhyFastravel";
+// import { CiLinkedin, CiFacebook, CiTwitter, CiInstagram} from 'react-icons/ci';
 export default function MainPage(){
 
     const [nameMenu, setNameMenu] = useState('plane');
+    useEffect(() => {
+        document.title = 'Travel kereta, pesawat, dan pelni';
+    }, []);
+    
     return(
         <Layout>
         {/* carousel fitur  */}
@@ -56,7 +60,7 @@ export default function MainPage(){
                     {/* <div className="-mt-4 md:mt-12 mx-0 lg:mx-12 xl:mx-32 2xl:mx-64">
                         <HotelCarousel />
                     </div> */}
-                    <div className="mt-2  md:mt-12 mx-0 lg:mx-12 xl:mx-32 2xl:mx-64">
+                    {/* <div className="mt-2  md:mt-12 mx-0 lg:mx-12 xl:mx-32 2xl:mx-64">
                         <PesawatCarousel />
                     </div>
                     <div className="md:mt-24 mx-0 lg:mx-12 xl:mx-32 2xl:mx-64">
@@ -64,7 +68,7 @@ export default function MainPage(){
                     </div>
                     <div className="md:mt-24 mx-0 lg:mx-12 xl:mx-32 2xl:mx-64">
                         <WhyFastravel />
-                    </div>
+                    </div> */}
                     {/* <footer className="mt-24 md:mt-48 border-t hidden md:block">
                         <div className="p-8 md:p-0 mx-0 lg:mx-12 xl:mx-32 2xl:mx-64 bg-white grid grid-cols-1 md:grid-cols-4">
                             <div className="mt-8 md:mt-16 col-span-1">

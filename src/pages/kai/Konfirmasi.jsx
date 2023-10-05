@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "../BookingLayout";
 import KonfirmasiComponent from '../../components/kai/Konfirmasi'
 
 export default function Konfirmasi(){
+    useEffect(() => {
+        document.title = 'Travel - train confirmation';
+    }, []);
+
     return(
         <Layout>
         <div className="container">

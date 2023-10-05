@@ -24,10 +24,12 @@ import TiketKai from "./pages/kai/Tiket";
 import BookingPesawat from "./pages/plane/Booking";
 import PembayaranPesawat from "./pages/plane/Pembayaran";
 import TiketPesawat from "./pages/plane/Tiket";
+import Page404 from "./pages/partials/404";
+import Logout from "./pages/Logout";
 
 export const TiketContext = createContext();
 export const NavContext = createContext();
-
+export const LogoutContent = createContext();
 
 function App() {
 
@@ -37,6 +39,11 @@ function App() {
 
   const initialStateNavigation = {
     isActive: 0,
+
+  }
+
+  const initialStateLogout = {
+    IsLogout: false,
 
   }
 
@@ -51,39 +58,47 @@ function App() {
         case 'NAVIGATION':return{
           isActive:action.isActive
         }
+        case 'LOGOUT': return{
+          IsLogout: true
+        }
       }
   }
 
   const [pay, dispatch] =  useReducer(reducer, initialStatePembayaran);
+  const [logout, setLogout] =  useReducer(reducer, initialStateLogout);
   const [nav, setNav] =  useReducer(reducer, initialStateNavigation);
 
   return (
     <div className="App">
        <BrowserRouter>
-      <TiketContext.Provider value={{pay,dispatch}}>
-      <NavContext.Provider value={{nav,setNav}}>
-        <Routes>
-          <Route exact path="/" element={<MainPage />}></Route>
-          <Route path="/train/search" element={< SearchKai/>}></Route>
-          <Route path="/flight/search" element={< SearchPlane/>}></Route>
-          <Route path="/pelni/search" element={< SearchPelni/>}></Route>
-          <Route path="/pelni/booking/:id" element={< BookingPelni/>}></Route>
-          <Route path="/pelni/payment/:id" element={< PaymentPelni/>}></Route>
-          <Route path="/flight/booking/:PesawatNumber" element={< BookingPesawat/>}></Route>
-          <Route path="/flight/payment/:PesawatNumber" element={< PembayaranPesawat/>}></Route>
-          <Route path="/flight/tiket-pesawat" element={< TiketPesawat/>}></Route>
-          <Route path="/train/booking/:id" element={< BookingKai/>}></Route>
-          <Route path="/train/konfirmasi" element={< KonfirmasiKai/>}></Route>
-          <Route path="/train/bayar" element={< PembayaranKai/>}></Route>
-          <Route path="/train/tiket-kai" element={< TiketKai/>}></Route>
-          <Route path="/transaksi/kai" element={<TransaksiKai />}></Route>
-          <Route path="/transaksi/pesawat" element={<TransaksiPesawat />}></Route>
-          <Route path="/booking/kai" element={<BookingKaiList />}></Route>
-          <Route path="/booking/pesawat" element={<BookingPesawatList />}></Route>
-          <Route path="/profile/view" element={<Profile />}></Route>
-        </Routes>
-        </NavContext.Provider>  
+       <LogoutContent.Provider value={{logout,setLogout}} >
+        <TiketContext.Provider value={{pay,dispatch}}>
+          <NavContext.Provider value={{nav,setNav}}>
+            <Routes>
+              <Route exact path="/" element={<MainPage />}></Route>
+              <Route path="/train/search" element={< SearchKai/>}></Route>
+              <Route path="/flight/search" element={< SearchPlane/>}></Route>
+              <Route path="/pelni/search" element={< SearchPelni/>}></Route>
+              <Route path="/pelni/booking/:id" element={< BookingPelni/>}></Route>
+              <Route path="/pelni/payment/:id" element={< PaymentPelni/>}></Route>
+              <Route path="/flight/booking/:id" element={< BookingPesawat/>}></Route>
+              <Route path="/flight/payment/" element={< PembayaranPesawat/>}></Route>
+              <Route path="/flight/tiket-pesawat" element={< TiketPesawat/>}></Route>
+              <Route path="/train/booking/:id" element={< BookingKai/>}></Route>
+              <Route path="/train/konfirmasi" element={< KonfirmasiKai/>}></Route>
+              <Route path="/train/bayar" element={< PembayaranKai/>}></Route>
+              <Route path="/train/tiket-kai" element={< TiketKai/>}></Route>
+              <Route path="/transaksi/kai" element={<TransaksiKai />}></Route>
+              <Route path="/transaksi/pesawat" element={<TransaksiPesawat />}></Route>
+              <Route path="/booking/kai" element={<BookingKaiList />}></Route>
+              <Route path="/booking/pesawat" element={<BookingPesawatList />}></Route>
+              <Route path="/profile/view" element={<Profile />}></Route>
+              <Route path="/logout" element={<Logout />}></Route>
+              <Route path="/*" element={<Page404 />} />
+            </Routes>
+          </NavContext.Provider>  
         </TiketContext.Provider>  
+        </LogoutContent.Provider>
       </BrowserRouter>     
     </div>
   );

@@ -11,6 +11,10 @@ export default function Tiket(){
     const [isPayed, setIsPayed] = useState(pay.isPayed)
 
     useEffect(() => {
+        document.title = 'Travel - plane tiket receipt';
+    }, []);
+
+    useEffect(() => {
         if(isPayed !== true){
             navigate('/')
         }

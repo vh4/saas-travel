@@ -688,7 +688,7 @@ export default function Search() {
                 )}
               </div>
             ) : (
-              <div className="row mt-6 mb-24 w-full p-2 pr-0 xl:pr-16">
+              <div className="row mt-12 mb-24 w-full p-2 pr-0 xl:pr-16">
                 <div className="flex justify-center">
                   <img src={"/nodata.jpg"} width={350} alt="nodata" />
                 </div>

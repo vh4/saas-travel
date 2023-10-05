@@ -4,6 +4,9 @@ import PembayaranComponent from '../../components/plane/Pembayaran'
 
 
 export default function Pembayaran(){
+    useEffect(() => {
+        document.title = 'Travel - plane payment';
+    }, []);
 
     return(
         <Layout>

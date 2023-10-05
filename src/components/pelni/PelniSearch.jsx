@@ -12,6 +12,7 @@ import { makeStyles } from "@mui/styles";
 import { Button } from "antd";
 import { IoBoatSharp } from "react-icons/io5";
 import { DateRangePicker } from "rsuite";
+import Cookies from "js-cookie";
 
 function PELNI() {
   const useStyles = makeStyles((theme) => ({
@@ -74,9 +75,28 @@ function PELNI() {
   const loadingBerangkat = openBerangka && pelniData.length === 0;
   const loadingTujuan = openTujuan && pelniData.length === 0;
 
+
+  let depa = Cookies.get('d-depa');
+  let arri = Cookies.get('d-arri');
+  
+  try {
+    depa = depa ? JSON.parse(depa) : null;
+  } catch (error) {
+    depa = null;
+  }
+  
+  try {
+    arri = arri ? JSON.parse(arri) : null;
+  } catch (error) {
+    arri = null;
+  }
+  
+  depa = depa?.CODE && depa?.NAME ? depa : null;
+  arri = arri?.CODE && arri?.NAME ? arri : null;
+
   //input
-  const [keberangkatan, setKeberangkatan] = React.useState();
-  const [tujuan, setTujuan] = React.useState();
+  const [keberangkatan, setKeberangkatan] = React.useState(depa);
+  const [tujuan, setTujuan] = React.useState(arri);
   const [tanggal, setTanggal] = React.useState();
   const [isLoading, setLoading] = React.useState(false);
   const [laki, setLaki] = React.useState(1);
@@ -252,6 +272,18 @@ function PELNI() {
         wanita: wanita,
       };
 
+
+      const expirationDate = new Date();
+      expirationDate.setDate(expirationDate.getDate() + 7);
+
+      const cookieOptions = {
+      expires: expirationDate,
+      };
+
+      Cookies.set('d-depa', JSON.stringify(keberangkatan), cookieOptions);
+      Cookies.set('d-arri', JSON.stringify(tujuan), cookieOptions);
+
+
       var str = "";
       for (var key in params) {
         if (str != "") {
@@ -317,6 +349,7 @@ function PELNI() {
                       }
                       getOptionLabel={(option) => option.NAME}
                       options={pelniData}
+                      value={keberangkatan}
                       onChange={(event, newValue) => {
                         setKeberangkatan(newValue);
                       }}
@@ -379,6 +412,7 @@ function PELNI() {
                       }
                       getOptionLabel={(option) => option.NAME}
                       options={pelniData}
+                      value={tujuan}
                       onChange={(event, newValue) => {
                         setTujuan(newValue);
                       }}

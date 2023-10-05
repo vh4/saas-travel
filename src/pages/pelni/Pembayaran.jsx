@@ -4,7 +4,10 @@ import PembayaranComponent from '../../components/pelni/Pembayaran'
 
 
 export default function Pembayaran(){
-
+    useEffect(() => {
+        document.title = 'Travel - pelni booking';
+    }, []);
+    
     return(
         <Layout>
         <div className="container">

@@ -15,6 +15,7 @@ import onClickOutside from "react-onclickoutside";
 import { createSearchParams, useNavigate } from "react-router-dom"
 import { makeStyles } from '@mui/styles';
 import { Button } from "antd";
+import Cookies from "js-cookie";
 
 function Plane(){
 
@@ -43,9 +44,27 @@ function Plane(){
     const loadingBerangkat = openBerangka && pesawatData.length === 0;
     const loadingTujuan = openTujuan && pesawatData.length === 0;
 
+    let depa = Cookies.get('p-depa');
+    let arri = Cookies.get('p-arri');
+    
+    try {
+      depa = depa ? JSON.parse(depa) : null;
+    } catch (error) {
+      depa = null;
+    }
+    
+    try {
+      arri = arri ? JSON.parse(arri) : null;
+    } catch (error) {
+      arri = null;
+    }
+    
+    depa = depa?.bandara && depa?.code && depa?.group && depa?.name ? depa : null;
+    arri = arri?.bandara && arri?.code && arri?.group && arri?.name ? arri : null;
+
     //input
-    const [keberangkatan, setKeberangkatan] = React.useState();
-    const [tujuan, setTujuan] = React.useState();
+    const [keberangkatan, setKeberangkatan] = React.useState(depa);
+    const [tujuan, setTujuan] = React.useState(arri);
     const [tanggalKeberangkatan, setTanggalKeberangkatan] = React.useState();
     const [tanggalTujuan, setTanggalTujuan] = React.useState();
 
@@ -277,7 +296,15 @@ function Plane(){
                 infant : infant,
             }
 
-            localStorage.setItem('v-search', JSON.stringify(params));
+            const expirationDate = new Date();
+            expirationDate.setDate(expirationDate.getDate() + 7);
+
+            const cookieOptions = {
+            expires: expirationDate,
+            };
+
+            Cookies.set('p-depa', JSON.stringify(keberangkatan), cookieOptions);
+            Cookies.set('p-arri', JSON.stringify(tujuan), cookieOptions);
 
             navigate({
                 pathname: '/flight/search',
@@ -296,7 +323,7 @@ function Plane(){
                     <form className="w-full">
                         <>
                         <div className="w-64 xl:w-48 mx-0">
-                            <div class="mx-0 md:mx-12 xl:mx-6">
+                            {/* <div class="mx-0 md:mx-12 xl:mx-6">
                             <label class="w-auto flex items-center mr-4 mb-3 cursor-pointer">
                                 <input type="checkbox" value={pulang} onChange={() => setPulang(prev => !prev)} id="A3-yes"class="opacity-0 absolute h-2 w-2" />
                                 <div class="bg-white border-2 rounded-md border-gray-400 w-5 h-5 flex flex-shrink-0 justify-center items-center mr-2 focus-within:border-gray-500">
@@ -310,7 +337,7 @@ function Plane(){
                                 </div>
                                 <small for="A3-yes" class="select-none text-gray-500">Tanggal pulang</small>
                             </label>
-                            </div>                          
+                            </div>                           */}
                             </div>
                                 <div className="block xl:flex justify-between">
                                 <div className={`grid grid-cols-1 lg:grid-cols-3 ${pulang ? 'xl:grid-cols-5' : 'xl:grid-cols-4'} mx-0 md:mx-12 xl:mx-4`}>
@@ -343,6 +370,7 @@ function Plane(){
                                 isOptionEqualToValue={(option, value) => option.title === value.title}
                                 getOptionLabel={(option) => option.bandara + " - " + option.name + " - " + option.code}            
                                 options={pesawatData}
+                                value={keberangkatan}
                                 onChange={(event, newValue) => {
                                     setKeberangkatan(newValue);
                                 }}
@@ -394,6 +422,7 @@ function Plane(){
                                 isOptionEqualToValue={(option, value) => option.title === value.title}
                                 getOptionLabel={(option) => option.bandara + " - " + option.name + " - " + option.code}            
                                 options={pesawatData}
+                                value={tujuan}
                                 onChange={(event, newValue) => {
                                     setTujuan(newValue);
                                 }}

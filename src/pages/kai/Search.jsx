@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "../BookingLayout";
 import SearchComponent from '../../components/kai/Search'
 
 export default function Search(){
+    useEffect(() => {
+        document.title = 'Travel - train searching';
+    }, []);
+
     return(
         <Layout>
         <div className="container">

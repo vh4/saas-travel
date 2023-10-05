@@ -1,7 +1,7 @@
 //make create function reactjs
 
 import { Link } from "react-router-dom";
-import React, {useEffect, useState } from 'react'
+import React, {useContext, useEffect, useState } from 'react'
 import {CiSettings} from 'react-icons/ci'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -16,6 +16,8 @@ import SidebarMobileUser from "./sidebar/mobile/SidebarMobileUser";
 import { Modal, Form } from 'rsuite';
 import {Button} from 'antd'
 import { notification } from 'antd';
+import { toRupiah } from "../../helpers/rupiah";
+import { LogoutContent } from "../../App";
 
 function TextField(props) {
     const { name, label, accepter, ...rest } = props;
@@ -37,6 +39,7 @@ export default function Header({toogleSidebar, valueSidebar}){
 
     const [isExpired, setIsExpired] = useState(false);
     const [api, contextHolder] = notification.useNotification();
+    const { setLogout } = useContext(LogoutContent);
 
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -87,6 +90,7 @@ export default function Header({toogleSidebar, valueSidebar}){
         }).then(() => {
             localStorage.clear();
             suksesLogout();
+
             navigate('/')
         });
         
@@ -94,6 +98,8 @@ export default function Header({toogleSidebar, valueSidebar}){
 
 
     const user = localStorage.getItem('v_') != 'undefined' && localStorage.getItem('v_') !== null ? JSON.parse(localStorage.getItem('v_')) : null;
+    const expiredDate = localStorage.getItem("expired_date") != 'undefined' && localStorage.getItem("expired_date") !== null ? localStorage.getItem("expired_date") : null; ;
+
     const [usr, setUsr] = useState();
 
     useEffect(() =>  {
@@ -101,23 +107,33 @@ export default function Header({toogleSidebar, valueSidebar}){
             userProfile()
         }
     }, [user]);
+
+    useEffect(() =>  {
+         expiredDateTime()
+    }, [expiredDate]);
     
     const userProfile = async () =>  {
         const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/account`, {
             token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
         });
-        setUsr(response.data.data)
-        localStorage.setItem('v_', JSON.stringify({
-            namaPemilik:response.data.data.namaPemilik,
-            balance:response.data.data.balance
-        }))
+        if(response.data && response.data.rc == '00'){
+            setUsr(response.data.data)
+            localStorage.setItem('v_', JSON.stringify({
+                namaPemilik:response.data.data.namaPemilik,
+                balance:response.data.data.balance
+            }))
+        }
     }
 
-    function toRupiah(angka) {
-        var rupiah = '';
-        var angkarev = angka.toString().split('').reverse().join('');
-        for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
-        return rupiah.split('',rupiah.length-1).reverse().join('');
+    const expiredDateTime = async () =>  {
+        const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/refresh-date`, {
+            token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
+        });
+
+        if(response.data.data && response.data.data.rc == '00'){
+            localStorage.setItem("expired_date", response.data.data.data.expired_date);
+        }
+
     }
 
     const [uid, setuid] = useState();
@@ -131,14 +147,19 @@ export default function Header({toogleSidebar, valueSidebar}){
             }).then((data) => {
                 localStorage.clear();
                 suksesLogoutAutomatic()
-                navigate('/')
+                
+                setLogout({
+                    type: "LOGOUT",
+                });    
+
+                navigate('/logout')
             });
         }catch(e){
         }
     }
 
     useEffect(() => {
-      const expiredDate = localStorage.getItem("expired_date");
+      const expiredDate = localStorage.getItem("expired_date")
       const currentDate = new Date();
       const diffTime = new Date(expiredDate) - currentDate;
       const timeout = setTimeout(() => {

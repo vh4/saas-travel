@@ -10,6 +10,7 @@ export default function Profile(){
     const navigate = useNavigate();
 
     useEffect(() =>{
+        document.title = 'Travel - data pengguna';
         if(!localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)){
             navigate('/');
         }else{

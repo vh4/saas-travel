@@ -139,7 +139,6 @@ export default function Search() {
     } catch (error) {
       setLoading(false);
       setError(true);
-      console.error("Error:", error);
     }
   };
 
@@ -176,7 +175,6 @@ export default function Search() {
         F: data.F,
       };
     } catch (error) {
-      console.error("Error in handleAvailbillity:", error);
       return {
         M: 0, // Handle error case gracefully
         F: 0, // Handle error case gracefully
@@ -346,7 +344,7 @@ export default function Search() {
                     </Box>
                   </div>
                 ))
-              ) : notFound !== true ? (
+              ) : notFound !== true && dataSearch.length !== 0 ? (
                 <div className="row mb-24 w-full p-2 pr-0 xl:pr-16">
                   {dataSearch.map(
                     (
@@ -534,7 +532,7 @@ export default function Search() {
                   )}
                 </div>
               ) : (
-                <div className="row mt-6 mb-24 w-full p-2 pr-0 xl:pr-16">
+                <div className="row mt-12 mb-24 w-full p-2 pr-0 xl:pr-16">
                   <div className="flex justify-center">
                     <img src={"/nodata.jpg"} width={350} alt="nodata" />
                   </div>

@@ -4,7 +4,10 @@ import PembayaranComponent from '../../components/kai/Pembayaran'
 
 
 export default function Pembayaran(){
-
+    useEffect(() => {
+        document.title = 'Travel - train payment';
+    }, []);
+    
     return(
         <Layout>
         <div className="container">

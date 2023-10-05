@@ -59,13 +59,9 @@ export default function BookingPelni() {
     }
   }, [
     token,
-
   ]);
 
   useEffect(() => {
-    if (token === null || token === undefined) {
-      setErr(true);
-    }
 
     Promise.all([getDataPelniSearch()])
       .then(([bookResponse]) => {
@@ -117,7 +113,7 @@ export default function BookingPelni() {
         setIsLoadingPage(false);
         setErrPage(true);
       });
-  }, [id, token]);
+  }, [id]);
 
   async function getDataPelniSearch() {
     try {
@@ -130,12 +126,7 @@ export default function BookingPelni() {
       throw error;
     }
   }
-
-  function addLeadingZero(num) {
-    return num < 10 ? `0${num}` : num;
-  }
   
-
   const handleUsiasubCatagoryChange =
     (e, i, category, type = "pria") =>
     (e) => {

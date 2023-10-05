@@ -27,20 +27,26 @@ export default function SidebarMobileUser({pathSidebar}) {
     const nd = x ? x[0] ? x[0] : '' : '';
     const nb =  x ? x[1] ? x[1] : '' : ''
     
-    const avatar_nd = nd !== '' && nd !== undefined ? nd.substring(0,1).toUpperCase() : 'X';
-    const avatar_nb = nb !== '' && nb !== undefined ? nb.substring(0,1).toUpperCase() : 'X';
     const userProfile = async () =>  {
         setIsLoading(true);
         try{
+
             const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/account`, {
                 token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
             });
-            setUsr(response.data.data)
+            
+            if(response.data && response.data.rc == '00'){
+
+                setUsr(response.data.data)
+                localStorage.setItem('v_', JSON.stringify({
+                    namaPemilik:response.data.data.namaPemilik,
+                    balance:response.data.data.balance
+                }))
+
+            }
+
             setIsLoading(false);
-            localStorage.setItem('v_', JSON.stringify({
-                namaPemilik:response.data.data.namaPemilik,
-                balance:response.data.data.balance
-            }))
+
         }catch(e){
             setIsLoading(false);
         }
