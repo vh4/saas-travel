@@ -12,5 +12,6 @@
 
 ## Noted
 
-- pada file .env variable REACT_APP_HOST_API di sesuaikan pada ip / domain backendnya. 
+- Pada file .env variable REACT_APP_HOST_API di sesuaikan pada ip / domain backendnya. 
+- REACT_APP_SECTRET_LOGIN_API samakan yang existing.
 
