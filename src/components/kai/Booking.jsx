@@ -18,6 +18,7 @@ import { getCurrentDate, parseTanggal } from "../../helpers/date";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
 import { Loading } from "../components/Loading";
+import ManyRequest from "../components/Manyrequest";
 
 export default function BookingKai() {
   const [api, contextHolder] = notification.useNotification();
@@ -40,7 +41,7 @@ export default function BookingKai() {
   );
 
   const [isLoading, setIsLoading] = useState(false);
-  const [inputBooking, setInputBooking] = useState([]);
+  const [manyRequestBook, setmanyRequestBook] = useState(false);
   const [dataBookingTrain, setdataBookingTrain] = useState([]);
   const [dataDetailTrain, setdataDetailTrain] = useState([]);
 
@@ -239,6 +240,14 @@ export default function BookingKai() {
     );
 
     if (response.data.rc !== "00") {
+
+      console.log(response.data)
+
+      if(response.data.rc === "11"){
+        setIsLoading(false);
+        setmanyRequestBook(true);
+      }
+
       failedNotification(response.data.rd);
     } else {
 
@@ -297,7 +306,15 @@ export default function BookingKai() {
         <>
           <Page400 />
         </>
-      ) : (
+      ) : 
+
+      manyRequestBook === true ? (
+        <>
+          <ManyRequest />
+        </>
+      ) :
+      
+      (
         <>
         {isLoadingPage === true ? (
             <>

@@ -19,6 +19,7 @@ import {parseDate, getCurrentDate} from '../../helpers/date'
 import Page400 from "../components/400";
 import Page500 from "../components/500";
 import { Loading } from "../components/Loading";
+import ManyRequest from "../components/Manyrequest";
 
 export default function BookingPelni() {
   const [api, contextHolder] = notification.useNotification();
@@ -39,6 +40,8 @@ export default function BookingPelni() {
   const [isLoading, setIsLoading] = useState(false);
   const [dataDetailPelni, setdataDetailPelni] = useState(null);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
+  const [manyRequestBook, setmanyRequestBook] = useState(false);
+
   const [err, setErr] = useState(false);
   const [errPage, setErrPage] = useState(false);
   const token = JSON.parse(
@@ -290,25 +293,6 @@ export default function BookingPelni() {
       token: token,
     };
 
-    const WanitaArr = Array.from({ length: TotalWanita }, () => ({
-      name: "",
-      birthdate: getCurrentDate(),
-      identityNumber: "",
-      gender: "F",
-      usia: "adult",
-    }));
-
-    const PriaArr = Array.from({ length: TotalPria }, () => ({
-      name: "",
-      birthdate: getCurrentDate(),
-      identityNumber: "",
-      gender: "M",
-      usia: "adult",
-    }));
-
-    setWanita([WanitaArr]);
-    setPria([PriaArr]);
-
     const response = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/pelni/book`,
       params
@@ -319,6 +303,12 @@ export default function BookingPelni() {
     }, 1000);
 
     if (response.data.rc !== "00") {
+
+      if(response.data.rc === "11"){
+        setIsLoading(false);
+        setmanyRequestBook(true);
+      }
+
       failedNotification(response.data.rd);
     } else {
       const data = response.data.data;
@@ -401,7 +391,15 @@ export default function BookingPelni() {
         <>
           < Loading />
         </>
-      ) : (
+      ) : 
+
+      manyRequestBook === true ? (
+        <>
+          <ManyRequest />
+        </>
+      ) :
+      
+      (
         <>
         <div className="xl:mt-0">
         {/* header kai flow */}

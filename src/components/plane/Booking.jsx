@@ -22,6 +22,7 @@ import {
 import { Loading } from "../components/Loading";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
+import ManyRequest from '../components/Manyrequest'
 
 export default function BookingPesawat() {
   useEffect(() => {
@@ -42,6 +43,7 @@ export default function BookingPesawat() {
   const [adult, setAdult] = useState(null);
   const [child, setChild] = useState(null);
   const [infant, setInfant] = useState(null);
+  const [manyRequestBook, setmanyRequestBook] = useState(false);
 
   const [email, setEmail] = useState();
   const [hp, setHp] = useState();
@@ -293,34 +295,6 @@ export default function BookingPesawat() {
       token: token,
     };
 
-    const AdultArr = Array.from({ length: TotalAdult }, () => ({
-      gender: "MR",
-      nama_depan: "",
-      nama_belakang: "",
-      birthdate: getCurrentDate(),
-      idNumber: "",
-    }));
-
-    const InfantArr = Array.from({ length: TotalInfant }, () => ({
-      gender: "MSTR",
-      nama_depan: "",
-      nama_belakang: "",
-      birthdate: getCurrentDate(),
-    }));
-
-    const ChildArr = Array.from({ length: TotalChild }, () => ({
-      gender: "MSTR",
-      nama_depan: "",
-      nama_belakang: "",
-      birthdate: getCurrentDate(),
-      idNumber: "",
-    }));
-
-
-    setInfant([InfantArr]);
-    setChild([ChildArr]);
-    setAdult([AdultArr]);
-
     const bookingResponse = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/flight/book`, book
     );
@@ -355,7 +329,11 @@ export default function BookingPesawat() {
       setIsLoading(false);
       if (bookingResponse.data.rc === "73") {
         failedNotification(bookingResponse.data.rd);
-      } else {
+      }
+      if (bookingResponse.data.rc === "11") {
+        setmanyRequestBook(true);
+      } 
+      else {
         failedNotification(bookingResponse.data.rd);
       }
     }
@@ -408,7 +386,15 @@ export default function BookingPesawat() {
         <>
           <Page400 />
         </>
-      ) : (
+      ) : 
+      
+      manyRequestBook === true ? (
+        <>
+          <ManyRequest />
+        </>
+      ) :
+      
+      (
         <>
           <div className="-mt-2 xl:mt-0">
             {/* header kai flow */}
