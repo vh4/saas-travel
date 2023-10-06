@@ -293,6 +293,34 @@ export default function BookingPesawat() {
       token: token,
     };
 
+    const AdultArr = Array.from({ length: TotalAdult }, () => ({
+      gender: "MR",
+      nama_depan: "",
+      nama_belakang: "",
+      birthdate: getCurrentDate(),
+      idNumber: "",
+    }));
+
+    const InfantArr = Array.from({ length: TotalInfant }, () => ({
+      gender: "MSTR",
+      nama_depan: "",
+      nama_belakang: "",
+      birthdate: getCurrentDate(),
+    }));
+
+    const ChildArr = Array.from({ length: TotalChild }, () => ({
+      gender: "MSTR",
+      nama_depan: "",
+      nama_belakang: "",
+      birthdate: getCurrentDate(),
+      idNumber: "",
+    }));
+
+
+    setInfant([InfantArr]);
+    setChild([ChildArr]);
+    setAdult([AdultArr]);
+
     const bookingResponse = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/flight/book`, book
     );

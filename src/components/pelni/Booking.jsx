@@ -52,6 +52,8 @@ export default function BookingPelni() {
   const [tanggal_keberangkatan_pelni, Settanggal_keberangkatan_pelni] = useState(null);
   const [tanggal_tujuan_pelni, Settanggal_tujuan_pelni] = useState(null);
   const [duration, setDuration] = useState(null);
+  const [TotalPria, setTotalPria] = useState(0);
+  const [TotalWanita, setTotalWanita] = useState(0);
 
   useEffect(() => {
     if (token === null || token === undefined) {
@@ -70,6 +72,9 @@ export default function BookingPelni() {
 
           const TotalWanita = parseInt(bookResponse.data.female) || 0;
           const TotalPria = parseInt(bookResponse.data.male) || 0;
+
+          setTotalPria(TotalPria)
+          setTotalWanita(TotalWanita);
          
           const WanitaArr = Array.from({ length: TotalWanita }, () => ({
             name: "",
@@ -284,6 +289,25 @@ export default function BookingPelni() {
       },
       token: token,
     };
+
+    const WanitaArr = Array.from({ length: TotalWanita }, () => ({
+      name: "",
+      birthdate: getCurrentDate(),
+      identityNumber: "",
+      gender: "F",
+      usia: "adult",
+    }));
+
+    const PriaArr = Array.from({ length: TotalPria }, () => ({
+      name: "",
+      birthdate: getCurrentDate(),
+      identityNumber: "",
+      gender: "M",
+      usia: "adult",
+    }));
+
+    setWanita([WanitaArr]);
+    setPria([PriaArr]);
 
     const response = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/pelni/book`,

@@ -183,7 +183,6 @@ export default function Header({toogleSidebar, valueSidebar}){
   
     useEffect(() => {
       if (isExpired && login) {
-        console.log(login);
         logout();
       }
     }, [isExpired]);    

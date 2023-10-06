@@ -79,36 +79,24 @@ function KAI(){
     const loadingBerangkat = openBerangka && kaiData.length === 0;
     const loadingTujuan = openTujuan && kaiData.length === 0;
 
-    let cookie = Cookies.get('v-train');
-
-    let depa = null;
-    let arri = null;
-
-    try {
-        cookie = cookie ? JSON.parse(cookie) : null;
-        depa = cookie.keberangkatan
-        arri = cookie.tujuan
-    } catch (error) {
-        cookie = null;
-        depa = null;
-        arri = null;
-    }
+    let depa = Cookies.get('k-depa');
+    let arri = Cookies.get('k-arri');
     
     try {
-      depa = depa ? depa : null;
+      depa = depa ? JSON.parse(depa) : null;
     } catch (error) {
       depa = null;
     }
     
     try {
-      arri = arri ? arri : null;
+      arri = arri ? JSON.parse(arri) : null;
     } catch (error) {
       arri = null;
     }
     
     depa = depa?.id_stasiun && depa?.nama_kota ? depa : null;
     arri = arri?.id_stasiun && arri?.nama_kota ? arri : null;
-    
+
     //input
     const [keberangkatan, setKeberangkatan] = React.useState(depa);
     const [tujuan, setTujuan] = React.useState(arri);
@@ -269,10 +257,7 @@ function KAI(){
         let tanggalNullFill = new Date();
         tanggalNullFill = tanggalNullFill.getFullYear() + '-' + (parseInt(tanggalNullFill.getMonth()) + 1) + '-' + tanggalNullFill.getDate();
 
-        const tanggal = new Date(tanggal);
         const tanggalParse = tanggal !== undefined && tanggal !== null ? tanggal.$y + '-' + (addLeadingZero(parseInt(tanggal.$M) + 1)).toString()  + '-' + addLeadingZero(parseInt(tanggal.$D)).toString() : tanggalNullFill;
-        console.log(tanggal);
-        console.log(tanggalParse)
 
         setTimeout(() => {
             e.preventDefault();
@@ -293,16 +278,14 @@ function KAI(){
             }
 
             const expirationDate = new Date();
-            expirationDate.setHours(expirationDate.getHours() + 1);
+            expirationDate.setDate(expirationDate.getDate() + 7);
 
             const cookieOptions = {
             expires: expirationDate,
             };
 
-            Cookies.set('v-train', JSON.stringify({
-                keberangkatan,
-                tujuan,
-            }), cookieOptions);
+            Cookies.set('k-depa', JSON.stringify(keberangkatan), cookieOptions);
+            Cookies.set('k-arri', JSON.stringify(tujuan), cookieOptions);
 
             var str = "";
             for (var key in params) {
@@ -312,7 +295,7 @@ function KAI(){
                 str += key + "=" + encodeURIComponent(params[key]);
             } 
             
-            // window.location = `search?${str}`;  
+            window.location = `search?${str}`;  
 
         }, 1000);
 

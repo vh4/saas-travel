@@ -192,6 +192,23 @@ export default function BookingKai() {
       }
     });
 
+
+    const AdultArr = Array.from({ length: TotalAdult }, () => ({
+      name: "",
+      birthdate: getCurrentDate(),
+      idNumber: "",
+      phone: "",
+    }));
+
+    const InfantArr = Array.from({ length: TotalInfant }, () => ({
+      name: "",
+      birthdate: getCurrentDate(),
+      idNumber: "",
+    }));
+
+    setAdult([AdultArr]);
+    setInfant([InfantArr]);
+
     // const Fare = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/book`, {
     //     productCode : "WKAI",
     //     origin : dataDetailTrain[0].berangkat_id_station,
