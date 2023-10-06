@@ -6,8 +6,8 @@ const AuthLogin = async (req, res, next) => {
 
 		return res.send({
 			rc:'03',
-			rd: 'Server telah dilakukan maintenance!. silahkan logout, kemudian login kembali.'
-		})
+			rd: 'Server sedang dalam tahap maintenance. Silakan keluar (logout) dan masuk (login) kembali.'
+		});
 
 	}
 
