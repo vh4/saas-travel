@@ -38,6 +38,7 @@ export default function Header({toogleSidebar, valueSidebar}){
     const handleClose = () => setShowModal(false);
 
     const [isExpired, setIsExpired] = useState(false);
+    const [login, setLogin] = useState(false);
     const [api, contextHolder] = notification.useNotification();
     const { setLogout } = useContext(LogoutContent);
 
@@ -48,6 +49,18 @@ export default function Header({toogleSidebar, valueSidebar}){
     const handleCloses = () => {
       setAnchorEl(null);
     };
+
+    const token =  localStorage.getItem('v_loggers');
+
+    useEffect(() =>{
+
+        if(token != null || token != undefined){
+
+            setLogin(true);
+
+        }
+
+    }, [token])
 
     const gagalLogin = (rd) => {
         api['error']({
@@ -169,7 +182,8 @@ export default function Header({toogleSidebar, valueSidebar}){
     }, []);
   
     useEffect(() => {
-      if (isExpired) {
+      if (isExpired && login) {
+        console.log(login);
         logout();
       }
     }, [isExpired]);    
@@ -187,6 +201,7 @@ export default function Header({toogleSidebar, valueSidebar}){
                 if(data.data.rc === "00"){
                     setShowModal(false)
                     setLoading(false);
+                    setLogin(true);
                     localStorage.setItem(process.env.REACT_APP_SECTRET_LOGIN_API, JSON.stringify(data.data.token));
                     userProfile();
                     suksesLogin();
