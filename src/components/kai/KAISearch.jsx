@@ -79,24 +79,36 @@ function KAI(){
     const loadingBerangkat = openBerangka && kaiData.length === 0;
     const loadingTujuan = openTujuan && kaiData.length === 0;
 
-    let depa = Cookies.get('k-depa');
-    let arri = Cookies.get('k-arri');
+    let cookie = Cookies.get('v-train');
+
+    let depa = null;
+    let arri = null;
+
+    try {
+        cookie = cookie ? JSON.parse(cookie) : null;
+        depa = cookie.keberangkatan
+        arri = cookie.tujuan
+    } catch (error) {
+        cookie = null;
+        depa = null;
+        arri = null;
+    }
     
     try {
-      depa = depa ? JSON.parse(depa) : null;
+      depa = depa ? depa : null;
     } catch (error) {
       depa = null;
     }
     
     try {
-      arri = arri ? JSON.parse(arri) : null;
+      arri = arri ? arri : null;
     } catch (error) {
       arri = null;
     }
     
     depa = depa?.id_stasiun && depa?.nama_kota ? depa : null;
     arri = arri?.id_stasiun && arri?.nama_kota ? arri : null;
-
+    
     //input
     const [keberangkatan, setKeberangkatan] = React.useState(depa);
     const [tujuan, setTujuan] = React.useState(arri);
@@ -278,14 +290,16 @@ function KAI(){
             }
 
             const expirationDate = new Date();
-            expirationDate.setDate(expirationDate.getDate() + 7);
+            expirationDate.setHours(expirationDate.getHours() + 1);
 
             const cookieOptions = {
             expires: expirationDate,
             };
 
-            Cookies.set('k-depa', JSON.stringify(keberangkatan), cookieOptions);
-            Cookies.set('k-arri', JSON.stringify(tujuan), cookieOptions);
+            Cookies.set('v-train', JSON.stringify({
+                keberangkatan,
+                tujuan,
+            }), cookieOptions);
 
             var str = "";
             for (var key in params) {
