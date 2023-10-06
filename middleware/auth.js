@@ -6,7 +6,7 @@ const AuthLogin = async (req, res, next) => {
 
 		return res.send({
 			rc:'03',
-			rd: 'Token sudah expired. silahkan login kembali.'
+			rd: 'Server telah dilakukan maintenance!. silahkan logout, kemudian login kembali.'
 		})
 
 	}
