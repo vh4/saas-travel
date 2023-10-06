@@ -3,7 +3,7 @@ const axios = require('axios');
 const logger = require('../utils/logger.js');
 const { v4:uuidv4} = require('uuid');
 const { AuthLogin } = require('../middleware/auth.js');
-const { apiLimiter } = require('../middleware/limit.js');
+const { apiLimiter, apiLimiterKhususBooking } = require('../middleware/limit.js');
 require('dotenv').config()
 
 const Router = express.Router();
@@ -129,7 +129,7 @@ Router.get('/travel/pesawat/search/flight/:id', AuthLogin, async (req, res) => {
   }
 });
 
-Router.post('/travel/flight/book', async function (req, res) {
+Router.post('/travel/flight/book', apiLimiterKhususBooking, async function (req, res) {
   const data = req.body;
   logger.info(`Request /travel/flight/book: ${JSON.stringify(data)}`);
   try {

@@ -3,7 +3,7 @@ const axios = require('axios'); // Mengganti 'request' dengan 'axios'
 const logger = require('../utils/logger.js');
 const { v4: uuidv4 } = require('uuid');
 const { AuthLogin } = require('../middleware/auth.js');
-const { apiLimiter } = require('../middleware/limit.js');
+const { apiLimiter, apiLimiterKhususBooking } = require('../middleware/limit.js');
 const Router = express.Router();
 require('dotenv').config()
 
@@ -206,7 +206,7 @@ Router.post('/travel/train/get_seat_layout', async function (req, res) { // Mena
   }
 });
 
-Router.post('/travel/train/book', async function (req, res) { // Menambahkan async
+Router.post('/travel/train/book', apiLimiterKhususBooking, async function (req, res) { // Menambahkan async
   try {
     const data = req.body;
 

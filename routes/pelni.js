@@ -3,7 +3,7 @@ const axios = require('axios');
 const logger = require('../utils/logger.js');
 const { v4:uuidv4} = require('uuid');
 const { AuthLogin } = require('../middleware/auth.js');
-const { apiLimiter } = require('../middleware/limit.js');
+const { apiLimiter, apiLimiterKhususBooking } = require('../middleware/limit.js');
 
 require('dotenv').config()
 const Router = express.Router();
@@ -119,7 +119,7 @@ Router.get('/travel/pelni/search/p_search/:id', AuthLogin, async (req, res) => {
 });
 
 //insert data booking to session storage.
-Router.post('/travel/pelni/book', async (req, res) => {
+Router.post('/travel/pelni/book', apiLimiterKhususBooking, async (req, res) => {
   const data = req.body;
   logger.info(`Request /travel/pelni/book: ${JSON.stringify(data)}`);
   try {
