@@ -16,7 +16,6 @@ check:
   allow_failure: false
   only:
     refs:
-      - master
       - backend
   tags:
     - sonarrunner
@@ -25,22 +24,21 @@ build staging:
   stage: build staging
   environment: staging
   before_script:
-    - sudo docker login -u $REGISTRY_USER -p $REGISTRY_PASS https://dockregistry.bm.co.id
+    - docker login -u $REGISTRY_USER -p $REGISTRY_PASS https://dockregistry.bm.co.id
   script:
     - cp $ENV_BE .env
-    - sudo docker build -f docker/Dockerfile -t dockregistry.bm.co.id/bimasakti/saas-travel-backend:staging-latest .
-    - sudo docker push dockregistry.bm.co.id/bimasakti/saas-travel-backend:staging-latest
+    - docker build -f docker/Dockerfile -t dockregistry.bm.co.id/bimasakti/saas-travel-backend:staging-latest .
+    - docker push dockregistry.bm.co.id/bimasakti/saas-travel-backend:staging-latest
   after_script:
-    - sudo docker logout dockregistry.bm.co.id
+    - docker logout dockregistry.bm.co.id
   needs: [check]
   when: on_success
   allow_failure: false
   only:
     refs:
-      - master
       - backend
   tags:
-    - gitlabrunner01
+    - gitlab
 
 deploy staging:
   stage: deploy staging
@@ -56,7 +54,6 @@ deploy staging:
   allow_failure: false
   only:
     refs:
-      - master
       - backend
   tags:
     - fpstaging
@@ -70,7 +67,6 @@ test staging:
   allow_failure: false
   only:
     refs:
-      - master
       - backend
   tags:
     - h2htravel01
@@ -79,22 +75,21 @@ build prod:
   stage: build prod
   environment: prod
   before_script:
-    - sudo docker login -u $REGISTRY_USER -p $REGISTRY_PASS https://dockregistry.bm.co.id
+    - docker login -u $REGISTRY_USER -p $REGISTRY_PASS https://dockregistry.bm.co.id
   script:
     - cp $ENV_BE .env
-    - sudo docker build -f docker/Dockerfile -t dockregistry.bm.co.id/bimasakti/saas-travel-backend:latest .
-    - sudo docker push dockregistry.bm.co.id/bimasakti/saas-travel-backend:latest
+    - docker build -f docker/Dockerfile -t dockregistry.bm.co.id/bimasakti/saas-travel-backend:latest .
+    - docker push dockregistry.bm.co.id/bimasakti/saas-travel-backend:latest
   after_script:
-    - sudo docker logout dockregistry.bm.co.id
+    - docker logout dockregistry.bm.co.id
   needs: [check]
   when: manual
   allow_failure: false
   only:
     refs:
-      - master
       - backend
   tags:
-    - gitlabrunner01
+    - gitlab
 
 deploy prod:
   stage: deploy prod
@@ -110,7 +105,6 @@ deploy prod:
   allow_failure: false
   only:
     refs:
-      - master
       - backend
   tags:
     - h2htravel01
