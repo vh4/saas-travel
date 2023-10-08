@@ -3,7 +3,6 @@ docker/*
 **/k3s
 .gitlab-ci*
 k8s.gitlab-ci*
-.env*
 README*
 **/.git
 **/.svn
