@@ -20,8 +20,8 @@
 
 &nbsp;
 ## Endpoint
-- [x] Prod h2htravel01 --> [10.9.43.5:8002](https://10.9.43.5:8002)
-- [x] Staging h2htravel01 --> [10.9.43.5:8001](https://10.9.43.5:8001)
+- [x] Prod h2htravel01 --> [10.9.43.5:9002](https://10.9.43.5:9002)
+- [x] Staging h2htravel01 --> [10.9.43.5:9001](https://10.9.43.5:9001)
 
 ## Logs
 - [x] [Dashboard saas-travel-backend prod](https://log-h2h.rotit.art/app/r/s/ugly-many-egg)

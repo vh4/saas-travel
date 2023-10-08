@@ -61,7 +61,7 @@ deploy staging:
 test staging:
   stage: test staging
   script:
-    - curl 10.9.43.5:8001
+    - curl 10.9.43.5:9001
   needs: [check, build staging, deploy staging]
   when: on_success
   allow_failure: false
