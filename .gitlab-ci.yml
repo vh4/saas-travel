@@ -27,7 +27,7 @@ build staging:
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS https://dockregistry.bm.co.id
   script:
     - cp $ENV_BE .env
-    - docker build -f ./docker/Dockerfile -t dockregistry.bm.co.id/bimasakti/saas-travel-backend:staging-latest .
+    - docker build -f docker/dockerfile -t dockregistry.bm.co.id/bimasakti/saas-travel-backend:staging-latest .
     - docker push dockregistry.bm.co.id/bimasakti/saas-travel-backend:staging-latest
   after_script:
     - docker logout dockregistry.bm.co.id
@@ -78,7 +78,7 @@ build prod:
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS https://dockregistry.bm.co.id
   script:
     - cp $ENV_BE .env
-    - docker build -f docker/Dockerfile -t dockregistry.bm.co.id/bimasakti/saas-travel-backend:latest .
+    - docker build -f docker/dockerfile -t dockregistry.bm.co.id/bimasakti/saas-travel-backend:latest .
     - docker push dockregistry.bm.co.id/bimasakti/saas-travel-backend:latest
   after_script:
     - docker logout dockregistry.bm.co.id
