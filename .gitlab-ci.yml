@@ -56,7 +56,7 @@ deploy staging:
     refs:
       - backend
   tags:
-    - fpstaging
+    - h2htravel01
 
 test staging:
   stage: test staging
