@@ -1,5 +1,5 @@
 k8s/*
-**/docker
+docker/*
 **/k3s
 .gitlab-ci*
 k8s.gitlab-ci*
