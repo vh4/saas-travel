@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  saas-travel-frontend-staging:
+    container_name: saas-travel-frontend-staging
+    image: dockregistry.bm.co.id/bimasakti/saas-travel-frontend:staging-latest
+    ports:
+      - 9003:80
+    network_mode: bridge
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 10.9.43.5:2324
+        tag: docker-{{.Name}}.log
+
+  saas-travel-frontend:
+    container_name: saas-travel-frontend
+    image: dockregistry.bm.co.id/bimasakti/saas-travel-frontend:latest
+    ports:
+      - 9004:80
+    network_mode: bridge
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 10.9.43.5:2324
+        tag: docker-{{.Name}}.log

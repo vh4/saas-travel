@@ -1,0 +1,110 @@
+stages:
+  - check
+  - build staging
+  - deploy staging
+  - test staging
+  - build prod
+  - deploy prod
+
+check:
+  stage: check
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  script:
+    - sonar-scanner -X -Dproject.settings=$SONAR_PROPERTIES
+  allow_failure: false
+  only:
+    refs:
+      - production
+  tags:
+    - sonarrunner
+
+build staging:
+  stage: build staging
+  environment: staging
+  before_script:
+    - docker login -u $REGISTRY_USER -p $REGISTRY_PASS https://dockregistry.bm.co.id
+  script:
+    - cp $ENV_BE .env
+    - docker build -f docker/Dockerfile -t dockregistry.bm.co.id/bimasakti/saas-travel-frontend:staging-latest .
+    - docker push dockregistry.bm.co.id/bimasakti/saas-travel-frontend:staging-latest
+  after_script:
+    - docker logout dockregistry.bm.co.id
+  needs: [check]
+  when: on_success
+  allow_failure: false
+  only:
+    refs:
+      - production
+  tags:
+    - gitlab
+
+deploy staging:
+  stage: deploy staging
+  before_script:
+    - docker login -u $REGISTRY_USER -p $REGISTRY_PASS https://dockregistry.bm.co.id
+  script:
+    - docker compose -f docker/docker-compose.yml pull saas-travel-frontend-staging
+    - docker compose -f docker/docker-compose.yml -p saas-travel-frontend-staging up -d saas-travel-frontend-staging
+  after_script:
+    - docker logout dockregistry.bm.co.id
+  needs: [check, build staging]
+  when: on_success
+  allow_failure: false
+  only:
+    refs:
+      - production
+  tags:
+    - h2htravel01
+
+test staging:
+  stage: test staging
+  script:
+    - curl 10.9.43.5:9003
+  needs: [check, build staging, deploy staging]
+  when: on_success
+  allow_failure: false
+  only:
+    refs:
+      - production
+  tags:
+    - h2htravel01
+
+build prod:
+  stage: build prod
+  environment: prod
+  before_script:
+    - docker login -u $REGISTRY_USER -p $REGISTRY_PASS https://dockregistry.bm.co.id
+  script:
+    - cp $ENV_BE .env
+    - docker build -f docker/Dockerfile -t dockregistry.bm.co.id/bimasakti/saas-travel-frontend:latest .
+    - docker push dockregistry.bm.co.id/bimasakti/saas-travel-frontend:latest
+  after_script:
+    - docker logout dockregistry.bm.co.id
+  needs: [check]
+  when: manual
+  allow_failure: false
+  only:
+    refs:
+      - production
+  tags:
+    - gitlab
+
+deploy prod:
+  stage: deploy prod
+  before_script:
+    - docker login -u $REGISTRY_USER -p $REGISTRY_PASS https://dockregistry.bm.co.id
+  script:
+    - docker compose -f docker/docker-compose.yml pull saas-travel-frontend
+    - docker compose -f docker/docker-compose.yml -p saas-travel-frontend up -d saas-travel-frontend
+  after_script:
+    - docker logout dockregistry.bm.co.id
+  needs: [check, build prod]
+  when: on_success
+  allow_failure: false
+  only:
+    refs:
+      - production
+  tags:
+    - h2htravel01
