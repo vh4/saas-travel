@@ -1,6 +1,5 @@
-FROM node:18.17.0-alpine
+FROM node:18.17.0-alpine AS builder
 
-ENV PORT=1111
 ENV TZ=Asia/Jakarta
 RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
@@ -10,10 +9,11 @@ WORKDIR /app
 RUN npm i --force
 RUN npm run build
 
-#build image too long, disable it
-# RUN addgroup --system bms \
-#     && adduser --system bms --ingroup bms \
-#     && chown -R bms:bms /app
-# USER bms
+FROM webdevops/nginx:alpine
 
-ENTRYPOINT ["npx","serve","-p","1111"]
+ENV WEB_DOCUMENT_ROOT=/app
+ENV WEB_DOCUMENT_INDEX=index.html
+RUN cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
+
+COPY --from=builder /app/build/* /app/
+WORKDIR /app
