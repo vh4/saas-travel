@@ -14,7 +14,7 @@ import Page400 from "../components/400";
 import Page500 from "../components/500";
 import { parseTanggal } from "../../helpers/date";
 import { toRupiah } from "../../helpers/rupiah";
-import { Loading } from "../components/Loading";
+import BayarLoading from "../components/pelniskeleton/bayar";
 
 export default function Pembayaran() {
   const navigate = useNavigate();
@@ -71,7 +71,10 @@ export default function Pembayaran() {
           setErrPage(true);
         }
 
-        setIsLoadingPage(false);
+        setTimeout(() => {
+          setIsLoadingPage(false);
+        }, 2000);
+        
       })
       .catch(() => {
         setIsLoadingPage(false);
@@ -201,7 +204,7 @@ export default function Pembayaran() {
             isLoadingPage === true ? 
             (
               <>
-              <Loading />
+              <BayarLoading />
               </>
             ) : (
               <>
