@@ -15,7 +15,7 @@ import { parseTanggal } from "../../helpers/date";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
 import PageExpired from "../components/Expired";
-import BayarLoading from "../components/skeleton/bayar";
+import BayarLoading from "../components/trainskeleton/bayar";
 
 export default function Pembayaran() {
   const navigate = useNavigate();

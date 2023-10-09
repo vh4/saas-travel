@@ -19,7 +19,7 @@ import {
   getCurrentDate,
   parseTanggal as tanggalParse,
 } from "../../helpers/date";
-import { Loading } from "../components/Loading";
+import BookingLoading from "../components/planeskeleton/booking";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
 import ManyRequest from '../components/Manyrequest'
@@ -146,7 +146,10 @@ export default function BookingPesawat() {
           setErrPage(true);
         }
 
-        setIsLoadingPage(false);
+        setTimeout(() => {
+          setIsLoadingPage(false);
+        
+        }, 2000);
       })
       .catch(() => {
         setIsLoadingPage(false);
@@ -170,7 +173,16 @@ export default function BookingPesawat() {
     let adultCategory = adult[0];
 
     if (category == "birthdate") {
-      let tanggalParse = getCurrentDate(e);
+      let tanggalParse = new Date(e)
+      .toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+      .split("/")
+      .reverse()
+      .join("-");
+      
       adultCategory[i][category] = tanggalParse;
     } else {
       if (category == "gender") {
@@ -186,7 +198,16 @@ export default function BookingPesawat() {
     let childCategory = child[0];
 
     if (category == "birthdate") {
-      let tanggalParse = getCurrentDate(e);
+      let tanggalParse = new Date(e)
+      .toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+      .split("/")
+      .reverse()
+      .join("-");
+
       childCategory[i][category] = tanggalParse;
     } else {
       childCategory[i][category] = e.target.value;
@@ -198,7 +219,17 @@ export default function BookingPesawat() {
     let infantCategory = infant[0];
 
     if (category == "birthdate") {
-      let tanggalParse = getCurrentDate(e);
+      let tanggalParse = new Date(e)
+      .toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+      .split("/")
+      .reverse()
+      .join("-");
+      
+
       infantCategory[i][category] = tanggalParse;
     } else {
       infantCategory[i][category] = e.target.value;
@@ -330,10 +361,9 @@ export default function BookingPesawat() {
       if (bookingResponse.data.rc === "73") {
         failedNotification(bookingResponse.data.rd);
       }
-      if (bookingResponse.data.rc === "11") {
+      else if (bookingResponse.data.rc === "11") {
         setmanyRequestBook(true);
-      } 
-      else {
+      } else {
         failedNotification(bookingResponse.data.rd);
       }
     }
@@ -435,7 +465,7 @@ export default function BookingPesawat() {
 
             {isLoadingPage === true ? (
               <>
-                <Loading />
+                <BookingLoading TotalAdult={TotalAdult} TotalChild={TotalChild} TotalInfant={TotalInfant} />
               </>
             ) : (
               <>

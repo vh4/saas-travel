@@ -19,7 +19,7 @@ import Page500 from "../components/500";
 import Page400 from "../components/400";
 import { Loading } from "../components/Loading";
 import ManyRequest from "../components/Manyrequest";
-import BookingLoading from "../components/skeleton/booking";
+import BookingLoading from "../components/trainskeleton/booking";
 
 export default function BookingKai() {
   const [api, contextHolder] = notification.useNotification();

@@ -19,7 +19,7 @@ import Page500 from "../components/500";
 import Page400 from "../components/400";
 import PageExpired from "../components/Expired";
 import { Loading } from "../components/Loading";
-import KonfirmasiLoading from "../components/skeleton/konfirmasi";
+import KonfirmasiLoading from "../components/trainskeleton/konfirmasi";
 
 const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData }) => {
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);

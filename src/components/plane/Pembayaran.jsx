@@ -14,7 +14,7 @@ import { parseTanggal as tanggalParse } from "../../helpers/date";
 import { toRupiah } from "../../helpers/rupiah";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
-import { Loading } from "../components/Loading";
+import BayarLoading from "../components/planeskeleton/bayar";
 
 export default function Pembayaran() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -87,7 +87,13 @@ export default function Pembayaran() {
           setErrPage(true);
         }
 
-        setIsLoadingPage(false);
+        setTimeout(() => {
+
+          setIsLoadingPage(false);
+          
+        }, 2000);
+
+        
       })
       .catch(() => {
         setIsLoadingPage(false);
@@ -219,7 +225,7 @@ export default function Pembayaran() {
 
           {isLoadingPage === true ? (
             <>
-              <Loading />
+              <BayarLoading TotalAdult={TotalAdult} TotalChild={TotalChild} TotalInfant={TotalInfant} />
             </>
           ) : (
             <>
