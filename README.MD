@@ -20,8 +20,8 @@
 
 &nbsp;
 ## Endpoint
-- [x] Prod h2htravel01 --> [10.9.43.5:9002](https://10.9.43.5:9002)
-- [x] Staging h2htravel01 --> [10.9.43.5:9001](https://10.9.43.5:9001)
+- [x] Prod saas-travel-backend@h2htravel01 --> [10.9.43.5:9002](https://10.9.43.5:9002)
+- [x] Staging saas-travel-backend-staging@h2htravel01 --> [10.9.43.5:9001](https://10.9.43.5:9001)
 
 ## Logs
 - [x] [Dashboard saas-travel-backend prod](https://log-h2h.rotit.art/app/r/s/ugly-many-egg)
