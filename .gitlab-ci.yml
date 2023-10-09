@@ -26,7 +26,7 @@ build staging:
   before_script:
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS https://dockregistry.bm.co.id
   script:
-    - cp $ENV_BE .env
+    - cp $ENV_FE .env
     - docker build -f docker/Dockerfile -t dockregistry.bm.co.id/bimasakti/saas-travel-frontend:staging-latest .
     - docker push dockregistry.bm.co.id/bimasakti/saas-travel-frontend:staging-latest
   after_script:
@@ -77,7 +77,7 @@ build prod:
   before_script:
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS https://dockregistry.bm.co.id
   script:
-    - cp $ENV_BE .env
+    - cp $ENV_FE .env
     - docker build -f docker/Dockerfile -t dockregistry.bm.co.id/bimasakti/saas-travel-frontend:latest .
     - docker push dockregistry.bm.co.id/bimasakti/saas-travel-frontend:latest
   after_script:
