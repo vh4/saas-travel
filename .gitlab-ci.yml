@@ -16,7 +16,7 @@ check:
   allow_failure: false
   only:
     refs:
-      - frontend
+      - production
   tags:
     - sonarrunner
 
@@ -36,7 +36,7 @@ build staging:
   allow_failure: false
   only:
     refs:
-      - frontend
+      - production
   tags:
     - gitlab
 
@@ -54,7 +54,7 @@ deploy staging:
   allow_failure: false
   only:
     refs:
-      - frontend
+      - production
   tags:
     - h2htravel01
 
@@ -67,7 +67,7 @@ test staging:
   allow_failure: false
   only:
     refs:
-      - frontend
+      - production
   tags:
     - h2htravel01
 
@@ -87,7 +87,7 @@ build prod:
   allow_failure: false
   only:
     refs:
-      - frontend
+      - production
   tags:
     - gitlab
 
@@ -105,6 +105,6 @@ deploy prod:
   allow_failure: false
   only:
     refs:
-      - frontend
+      - production
   tags:
     - h2htravel01
