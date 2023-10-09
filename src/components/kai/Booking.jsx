@@ -383,7 +383,7 @@ export default function BookingKai() {
         ) : (
           <>
                       {/* sidebar mobile kai*/}
-         <div className="mt-8 block xl:hidden w-full rounded-md border border-gray-200 shadow-sm">
+            <div className="mt-8 block xl:hidden w-full rounded-md border border-gray-200 shadow-sm">
               <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                 <div className="text-gray-700 ">Keberangkatan kereta</div>
                 <small className="text-gray-700">

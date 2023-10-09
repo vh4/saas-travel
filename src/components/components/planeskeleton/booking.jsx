@@ -7,7 +7,7 @@ const Body = ({ TotalAdult, TotalChild, TotalInfant }) => {
   return (
     <>
       <div className="mt-12 w-full border pl-8 pr-6 py-6">
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-2">
           <div className="col">
             <div className="mt-2 w-36 mb-4">
               <Skeleton className="h-4" />
@@ -46,8 +46,8 @@ const Body = ({ TotalAdult, TotalChild, TotalInfant }) => {
 		</div>
 
 		<div className="mt-8 mb-4 xl:mt-12 ml-2 xl:ml-0 w-full border pl-8 pr-6 py-6">
-			<div className="grid grid-cols-2 gap-2">
-				<div className="col-span-2">
+			<div className="grid grid-cols-1 xl:grid-cols-2 gap-2">
+				<div className="col-span-1 xl:col-span-2">
 					<div>
 						<div className='mt-2 w-36 mb-4'>
 							<Skeleton className='h-4'/>
