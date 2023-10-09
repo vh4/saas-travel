@@ -26,6 +26,7 @@
     "react-fast-marquee": "^1.6.0",
     "react-hook-form": "^7.41.5",
     "react-icons": "^4.7.1",
+    "react-loading-skeleton": "^3.3.1",
     "react-multi-carousel": "^2.8.2",
     "react-onclickoutside": "^6.12.2",
     "react-phone-input-2": "^2.15.1",

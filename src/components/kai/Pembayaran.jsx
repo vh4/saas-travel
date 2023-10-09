@@ -6,7 +6,7 @@ import { RxCrossCircled } from "react-icons/rx";
 import { MdHorizontalRule } from "react-icons/md";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import { TiketContext } from "../../App";
-import { Button as ButtonAnt, Modal as Modals, Result } from "antd";
+import { Button as ButtonAnt } from "antd";
 import { notification } from "antd";
 import Marquee from "react-fast-marquee";
 import { Alert } from "antd";
@@ -15,7 +15,7 @@ import { parseTanggal } from "../../helpers/date";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
 import PageExpired from "../components/Expired";
-import { Loading } from "../components/Loading";
+import BayarLoading from "../components/skeleton/bayar";
 
 export default function Pembayaran() {
   const navigate = useNavigate();
@@ -115,7 +115,10 @@ export default function Pembayaran() {
           setErrPage(true);
         }
 
-        setIsLoadingPage(false);
+        setTimeout(() => {
+          setIsLoadingPage(false);
+        }, 2000);
+
       })
       .catch((error) => {
         setIsLoadingPage(false);
@@ -281,7 +284,7 @@ export default function Pembayaran() {
           </div>
           {isLoadingPage === true ? (
             <>
-              <Loading />
+              <BayarLoading TotalAdult={TotalAdult} TotalInfant={TotalInfant} />
             </>
           ) : (
             <>

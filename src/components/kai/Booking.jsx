@@ -19,6 +19,7 @@ import Page500 from "../components/500";
 import Page400 from "../components/400";
 import { Loading } from "../components/Loading";
 import ManyRequest from "../components/Manyrequest";
+import BookingLoading from "../components/skeleton/booking";
 
 export default function BookingKai() {
   const [api, contextHolder] = notification.useNotification();
@@ -71,6 +72,8 @@ export default function BookingKai() {
           const dataTrain = trainDataResponse.data.train[0];
           const dataTrainDetail = trainDataResponse.data.train_detail[0];
 
+          console.log(dataTrainDetail);
+
           const classTrain =
                 dataTrain.seats.grade === "E"
               ? "Eksekutif"
@@ -119,7 +122,9 @@ export default function BookingKai() {
           setErrPage(true);
         }
   
-        setIsLoadingPage(false);
+        setTimeout(() => {
+          setIsLoadingPage(false);
+        }, 2000);
 
       })
       .catch(() => {
@@ -316,14 +321,8 @@ export default function BookingKai() {
       
       (
         <>
-        {isLoadingPage === true ? (
-            <>
-                <Loading />
-            </>
-        ) : (
-          <div className="xl:mt-0">
-            {/* header kai flow */}
-            <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
+          {/* header kai flow */}
+          <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
               <div className="flex space-x-2 items-center">
                 <div className="hidden xl:flex text-blue-500 font-bold">
                   Detail pesanan
@@ -369,8 +368,22 @@ export default function BookingKai() {
                 <div className="text-slate-500">E-Tiket</div>
               </div>
             </div>
-            {/* sidebar mobile kai*/}
-            <div className="mt-8 block xl:hidden w-full rounded-md border border-gray-200 shadow-sm">
+          <div className="xl:mt-0">
+          
+          {isLoadingPage === true ? (
+            <>
+               <BookingLoading total={(parseInt(TotalAdult) + parseInt(TotalInfant))} />
+            </>
+        ) : (
+          <>
+            
+          {isLoadingPage === true ? (
+            <>   
+            </>
+        ) : (
+          <>
+                      {/* sidebar mobile kai*/}
+         <div className="mt-8 block xl:hidden w-full rounded-md border border-gray-200 shadow-sm">
               <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                 <div className="text-gray-700 ">Keberangkatan kereta</div>
                 <small className="text-gray-700">
@@ -454,12 +467,23 @@ export default function BookingKai() {
                 </ol>
               </div>
             </div>
+          </>
+        )}
+
             <div className="w-full mb-24 block xl:flex xl:space-x-10">
               {/* detail passengger kai*/}
+              
               <Form
                 onFinish={handleSubmit(handlerBookingSubmit)}
                 className="block w-full mt-0 xl:mt-4 mb-4"
               >
+
+        {isLoadingPage === true ? ( 
+            <>
+               
+            </>
+        ) : (
+            <>
                 {/* adult loop */}
 
                 {adult &&
@@ -567,7 +591,7 @@ export default function BookingKai() {
                                       )}
                                     />
                                   </Form.Item>
-                                  <div className="mt-2 text-gray-400">
+                                  <div className="-mt-4 text-gray-400">
                                     <small>Contoh: (+62) 812345678</small>
                                   </div>
                                 </div>
@@ -752,6 +776,9 @@ export default function BookingKai() {
                       </div>
                     </>
                   ))}
+              </>
+
+              )}
 
                 <div className="flex justify-end mr-2 mt-8">
                   <Button
@@ -766,8 +793,15 @@ export default function BookingKai() {
                   </Button>
                 </div>
               </Form>
-              {/* sidebra desktop*/}
-              <div className="w-1/2 xl:mt-16">
+
+              {isLoadingPage === true ? ( 
+
+                <>
+                </>
+              ) :(
+                <>
+                   {/* sidebra desktop*/}
+            <div className="w-1/2 xl:mt-16">
                 <div className="hidden xl:block rounded-md border border-gray-200 shadow-sm">
                   <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                     <div className="text-gray-700 text-sm font-bold">
@@ -863,9 +897,12 @@ export default function BookingKai() {
                   </div>
                 </div>
               </div>
+                </>
+              )}
+
             </div>
+          </>)}
           </div>
-        )}
         </>
       )}
     </>

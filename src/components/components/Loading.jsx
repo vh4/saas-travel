@@ -4,7 +4,7 @@ export const Loading = () => {
   const { Sider, Content } = Layout;
 
   return (
-    <div className='mt-4'>
+    <div className='mt-20'>
       <Layout style={{ minHeight: "50vh", marginTop: "12px" }}>
         <Layout style={{ flex: 1, flexDirection: "row-reverse" }}>
           <Sider width={400} theme="light" style={{ padding: "12px" }}>
