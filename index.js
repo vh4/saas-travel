@@ -44,6 +44,12 @@ app.use(MainRoutes);
 app.use(PelniRouter);
 app.use(KeretaRouter);
 app.use(PesawatRouter);
+app.get('*', (req, res) => {
+  return res.status(404).json({
+    rc:'04',
+    rd:'HTTP/1.1 404 Not Found.'
+  })
+})
 
 app.listen(port, () => {
   logger.info("server listening on port " + port);
