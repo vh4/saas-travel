@@ -16,4 +16,4 @@ RUN npm run build
 #     && chown -R bms:bms /app
 # USER bms
 
-ENTRYPOINT ["npx","serve","-s","build","-p","1111"]
+ENTRYPOINT ["npx","serve","-p","1111"]
