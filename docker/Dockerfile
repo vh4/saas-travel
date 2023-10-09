@@ -10,9 +10,10 @@ WORKDIR /app
 RUN npm i --force
 RUN npm run build
 
-RUN addgroup --system bms \
-    && adduser --system bms --ingroup bms \
-    && chown -R bms:bms /app
-USER bms
+#build image too long, disable it
+# RUN addgroup --system bms \
+#     && adduser --system bms --ingroup bms \
+#     && chown -R bms:bms /app
+# USER bms
 
 ENTRYPOINT ["npx","serve","-s","build","-p","1111"]
