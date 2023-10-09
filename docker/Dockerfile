@@ -15,5 +15,5 @@ ENV WEB_DOCUMENT_ROOT=/app
 ENV WEB_DOCUMENT_INDEX=index.html
 RUN cp /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
 
-COPY --from=builder /app/build/* /app/
+COPY --from=builder /app/build/ /app/
 WORKDIR /app
