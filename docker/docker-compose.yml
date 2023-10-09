@@ -5,7 +5,7 @@ services:
     container_name: saas-travel-frontend-staging
     image: dockregistry.bm.co.id/bimasakti/saas-travel-frontend:staging-latest
     ports:
-      - 9003:1111
+      - 9003:80
     network_mode: bridge
     logging:
       driver: fluentd
@@ -17,7 +17,7 @@ services:
     container_name: saas-travel-frontend
     image: dockregistry.bm.co.id/bimasakti/saas-travel-frontend:latest
     ports:
-      - 9004:1111
+      - 9004:80
     network_mode: bridge
     logging:
       driver: fluentd
