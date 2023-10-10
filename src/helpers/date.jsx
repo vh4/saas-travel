@@ -151,25 +151,29 @@ export const parseTanggal = (d) => {
   }
 
   export const remainingTime = (targetDate) => {
-            
     let currentDate = new Date();
     let timeDifference = new Date(targetDate) - currentDate;
-    
+  
     let hours = Math.floor(timeDifference / (1000 * 60 * 60));
     let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
     let seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-    
-    if(hours === 0){
-      return ` ${minutes} menit ${seconds} detik`;
   
-    }else if(hours ===0 && minutes === 0){
-      return ` ${seconds} detik`;
+    // Tambahkan padding 0 jika hours, minutes, atau seconds < 10
+    const formattedHours = hours.toString().padStart(2, '0');
+    const formattedMinutes = minutes.toString().padStart(2, '0');
+    const formattedSeconds = seconds.toString().padStart(2, '0');
   
-    }else{
-      return ` ${hours} jam ${minutes} menit ${seconds} detik`;
+    if (hours === 0) {
+      if (minutes === 0) {
+        return ` ${formattedSeconds} detik`;
+      } else {
+        return ` ${formattedMinutes} menit ${formattedSeconds} detik`;
+      }
+    } else {
+      return ` ${formattedHours} jam ${formattedMinutes} menit ${formattedSeconds} detik`;
+    }
+  };
   
-    }    
-  }
 
 
   export const getCurrentDate = () => {

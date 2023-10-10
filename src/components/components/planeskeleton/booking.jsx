@@ -3,7 +3,6 @@ import { TbArrowsLeftRight } from "react-icons/tb";
 import { Button } from "antd";
 
 const Body = ({ TotalAdult, TotalChild, TotalInfant }) => {
-	console.log(parseInt(TotalChild) + parseInt(TotalInfant) + parseInt(TotalAdult))
   return (
     <>
       <div className="mt-12 w-full border pl-8 pr-6 py-6">

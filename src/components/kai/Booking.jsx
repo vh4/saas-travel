@@ -76,8 +76,6 @@ export default function BookingKai() {
           const dataTrain = trainDataResponse.data.train[0];
           const dataTrainDetail = trainDataResponse.data.train_detail[0];
 
-          console.log(dataTrainDetail);
-
           const classTrain =
                 dataTrain.seats.grade === "E"
               ? "Eksekutif"
@@ -251,8 +249,6 @@ export default function BookingKai() {
     );
 
     if (response.data.rc !== "00") {
-
-      console.log(response.data)
 
       if(response.data.rc === "11"){
         setIsLoading(false);

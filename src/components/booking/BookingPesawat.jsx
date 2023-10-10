@@ -73,6 +73,48 @@ export default function ViewBooking({path}) {
         }, 1000)
     }
 
+    const intervalRef = React.useRef(null);
+
+    const [remainingTimes, setRemainingTimes] = useState([]);
+
+
+  useEffect(() => {
+    if (data !== undefined && data.length > 0) {
+      const y = [];
+  
+      data.forEach((x, i) => {
+        const res = x?.expiredDate;
+        y.push(res);
+      });
+  
+      setRemainingTimes(y);
+    }
+  }, [data]);
+  
+  // Cleanup interval when component unmounts
+  useEffect(() => {
+    if (data !== undefined  && data.length > 0) {
+      intervalRef.current = setInterval(() => {
+        const updatedRemainingTimes = remainingTimes.map((time) => {
+          time = new Date(time).getTime();
+          if (time > 0) {
+            time = time - 1;
+            return time;
+          }
+          return 0;
+        });
+  
+        setRemainingTimes(updatedRemainingTimes);
+      }, 1000);
+    }
+  
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [data, remainingTimes]);
+
     const handleBayar = async () => {
         setLoading(true);
 
@@ -115,7 +157,7 @@ export default function ViewBooking({path}) {
                 <Button key="back" onClick={handleClose}>
                   Cancel
                 </Button>,
-                <Button key="submit" type="primary" className='bg-blue-500' loading={loading} onClick={handleBayar}>
+                <Button key="submit" type="primary" className='bg-blue-500' loading={loading} disabled>
                   Bayar Langsung
                 </Button>,
               ]}
@@ -251,7 +293,7 @@ export default function ViewBooking({path}) {
                         {data && data.map((e, i) => (
                             <div className='w-full mb-6'>
                                 <div className="w-full rounded-md shadow-sm border profile-header">
-                                    <div className='p-4'>
+                                    <div className='p-8'>
                                         <div className='flex justify-between items-end'>
                                             <div className='flex space-x-2  items-end'>
                                                 <div className='text-xs text-gray-500'>ID Transaksi</div>
@@ -261,21 +303,21 @@ export default function ViewBooking({path}) {
                                                 Rp. {toRupiah(e.nominal)}
                                             </div>
                                         </div>
-                                        <div className='border-t mt-2'>
+                                        <div className='border-t mt-8'>
                                             <div className='flex space-x-2 mt-4 text-sm font-bold text-gray-500'>
                                                 <ImAirplane className='text-blue-500' size={16} />
-                                                <div className='flex space-x-2 items-center'><div>{e.origin.toLowerCase()}</div><BsArrowRightShort /><div>{e.destination.toLowerCase()}</div></div>
+                                                <div className='flex space-x-2 items-center'><div>{e.origin.toUpperCase()}</div><BsArrowRightShort /><div>{e.destination.toUpperCase()}</div></div>
                                             </div>
                                             <div className='pl-1'>
-                                                <div className='mt-4 text-xs  text-gray-500'>
+                                                <div className='mt-8 text-xs  text-gray-500'>
                                                     Date
                                                 </div>
-                                                <div className='mt-1 text-sm font-bold text-gray-500'>
+                                                <div className='mt-2 text-sm font-bold text-gray-500'>
                                                     {e.tanggal_transaksi}
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className='mt-4 border-t block lg:flex md:justify-between  lg:items-center'>
+                                        <div className='mt-8 border-t block lg:flex md:justify-between  lg:items-center'>
                                             <div className='mt-2 flex space-x-2 items-end'>
                                                 <div className='mt-1 text-xs  text-gray-500'>
                                                     Kode Booking
@@ -284,8 +326,8 @@ export default function ViewBooking({path}) {
                                                     {e.kode_booking}
                                                 </div>
                                             </div>
-                                            <div className='flex space-x-2  items-center pt-4'>
-                                                <div className='text-xs py-1 px-3 rounded-full bg-blue-500 text-white'>sisa waktu {remainingTime(e.expiredDate)}</div>
+                                            <div className='flex space-x-2  items-center pt-8'>
+                                                <div className='text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white'>Sisa waktu {remainingTimes[i] ? remainingTime(remainingTimes[i])  : 'habis.'}</div>
                                                 <div onClick={(e) => openModalBayar(e, i)} type="button" className='cursor-pointer text-blue-500 font-bold text-xs'>lanjut bayar</div>
                                             </div>
                                         </div>
