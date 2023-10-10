@@ -11,29 +11,19 @@ import {IoMdArrowDropdown} from "react-icons/io"
 import { FaRegUser, FaListAlt } from "react-icons/fa";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { Drawer, Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import SidebarMobileUser from "./sidebar/mobile/SidebarMobileUser";
-import { Modal, Form } from 'rsuite';
-import {Button} from 'antd'
+import { Drawer, Typography, Modal, Form, Input, Button } from "antd";
 import { notification } from 'antd';
 import { toRupiah } from "../../helpers/rupiah";
 import { LogoutContent } from "../../App";
-
-function TextField(props) {
-    const { name, label, accepter, ...rest } = props;
-    return (
-      <Form.Group controlId={`${name}-3`}>
-        <Form.ControlLabel>{label} </Form.ControlLabel>
-        <Form.Control name={name} accepter={accepter} {...rest} />
-      </Form.Group>
-    );
-  }
 
 export default function Header({toogleSidebar, valueSidebar}){
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const [showModal, setShowModal] = React.useState(false);
+    const [form] = Form.useForm();
     const handleOpen = () => setShowModal(true);
     const handleClose = () => setShowModal(false);
 
@@ -49,6 +39,10 @@ export default function Header({toogleSidebar, valueSidebar}){
     const handleCloses = () => {
       setAnchorEl(null);
     };
+
+    const onReset = () => {
+        form.resetFields();
+      };
 
     const token =  localStorage.getItem('v_loggers');
 
@@ -189,14 +183,19 @@ export default function Header({toogleSidebar, valueSidebar}){
 
 
     const handlerLogin = async (e) => {
+        onReset();
+
         e.preventDefault();
         try {
             setLoading(true);
+
+            
             await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/sign_in`, {
-                outletId:uid,
-                pin:pin,
+                username:uid,
+                password:pin,
                 key: ''
             }).then((data) => {
+                
                 if(data.data.rc === "00"){
                     setShowModal(false)
                     setLoading(false);
@@ -347,59 +346,56 @@ export default function Header({toogleSidebar, valueSidebar}){
 
             {/* mobile sidebar */}
             <Drawer
-                anchor='left'
+                anchor="left"
                 open={isDrawerOpen}
-                onClose={() => setIsDrawerOpen(false)}>
-                <Box p={2} width='250px' role='presentation' textAlign='center'>
-                <Typography variant='h6' component='div'>
+                onClose={() => setIsDrawerOpen(false)}
+            >
+                <Box p={2} width="250px" role="presentation" textAlign="center">
+                <Typography variant="h6" component="div">
                     <SidebarMobileUser />
                 </Typography>
                 </Box>
-            </Drawer> 
+            </Drawer>
 
         {/* untuk toggle sidebar di mobile dan desktop */}
 
-        <Modal size="xs" open={showModal} onClose={handleClose}>
-        <Modal.Header>
-            <Modal.Title>
-                <div className="text-gray-500 font-bold mt-2">
-                Login Users
-                </div>
-                <small>
-                    Masukan username dan password untuk login.
-                </small>
-            </Modal.Title>
-            </Modal.Header>
-        <Modal.Body>
-
-            {/*content*/}
-        <div className="w-full">
-            <form>
-                {/*body*/}
-                <div className="relative p-4 flex-auto">
-                <Form>
-                <TextField onChange={(e) => setuid(e)} type="text" name="username" label="username / uid" />
-                <TextField onChange={(e) => setpin(e)} type="password" name="pin" label="pin password" />
-                </Form>
-                </div>
-                {/* <div className="pl-8 -mt-5 xl:pl-16">
-                    <p className="text-blue-500">lupa password ?</p>
-                </div> */}
-                {/*footer*/}
-            </form>
-        </div>   
-        </Modal.Body>
-        <Modal.Footer>
-            <div className="flex justify-end space-x-4">
-            <Button key="submit" type="primary" className='bg-blue-500' loading={isLoading} onClick={handlerLogin}>
-                Submit
-             </Button>
-          <Button onClick={handleClose}>
+        <Modal
+        title="Login Users"
+        visible={showModal}
+        onOk={handleClose}
+        onCancel={handleClose}
+        footer={[
+          <Button
+            key="submit"
+            type="primary"
+            className="bg-blue-500"
+            loading={isLoading}
+            onClick={handlerLogin}
+          >
+            Submit
+          </Button>,
+          <Button key="cancel" onClick={handleClose}>
             Cancel
-          </Button>
-            </div>
-        </Modal.Footer>
-      </Modal>                    
+          </Button>,
+        ]}
+      >
+        <p>Masukan username dan password untuk login.</p>
+        <Form onFinish={handlerLogin}>
+        <Form.Item className="mt-4" label="username" name="username">
+            <Input
+            onChange={(e) => setuid(e.target.value)}
+            value={uid} // Pastikan value sesuai dengan nilai state uid
+            />
+        </Form.Item>
+        <Form.Item label="password" name="pin">
+            <Input.Password
+            onChange={(e) => setpin(e.target.value)}
+            value={pin} // Pastikan value sesuai dengan nilai state pin
+            />
+        </Form.Item>
+        </Form>
+
+      </Modal>                  
         
         </nav>
     )
