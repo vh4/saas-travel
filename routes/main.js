@@ -144,6 +144,8 @@ Router.post('/travel/app/sign_out', async function (req, res) {
       token: token,
     });
 
+    req.session.destroy()
+
     logger.info(`Response /travel/app/sign_out: ${JSON.stringify(data)}`);
     return res.send(data);
   } catch (error) {
