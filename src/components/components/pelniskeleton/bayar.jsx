@@ -8,6 +8,7 @@ const BayarLoading = ({total}) => {
 		<>
                 <div className="block xl:flex xl:justify-around mb-24 xl:mx-16 xl:space-x-4">
                   	<div className="mt-4 w-full mx-0 2xl:mx-4">
+					  {Array.from({ length: total }, (_, i) => (
 						<div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
 						<div className="p-2">
 							<div className="px-2 xl:px-4 py-2 text-gray-600 border-b border-gray-200 text-sm font-bold">
@@ -35,6 +36,7 @@ const BayarLoading = ({total}) => {
 							</div>
 						</div>
 						</div>
+					  ))}
 
 						<div className="p-2 mt-2 w-full rounded-md border border-gray-200 shadow-sm">
 						<div className="p-4">

@@ -23,7 +23,10 @@ import ManyRequest from "../components/Manyrequest";
 
 export default function BookingPelni() {
   const [api, contextHolder] = notification.useNotification();
-
+  const [form] = Form.useForm();
+  const onReset = () => {
+    form.resetFields();
+  };
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -198,6 +201,8 @@ export default function BookingPelni() {
 
     let totalAdult = 0;
     let totalInfant = 0;
+
+    onReset();
 
     pria[0].forEach((x) => {
       if (x.usia == "adult") {
@@ -502,6 +507,7 @@ export default function BookingPelni() {
           <div className="w-full mb-24 block xl:flex xl:space-x-10">
             {/* detail passengger kai*/}
             <Form
+            form={form}
               onFinish={handleSubmit(handlerBookingSubmit)}
               className="block w-full  mt-8 mb-4 xl:mt-12"
             >

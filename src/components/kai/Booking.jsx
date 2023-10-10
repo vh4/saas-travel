@@ -9,10 +9,10 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { RxCrossCircled } from "react-icons/rx";
 import "react-phone-input-2/lib/bootstrap.css";
-import { Button, DatePicker, Result } from "antd";
+import { Button, DatePicker, Form } from "antd";
 import dayjs from "dayjs";
 import PhoneInput from "react-phone-input-2";
-import { Input, Form } from "antd";
+import { Input } from "antd";
 import { notification } from "antd";
 import { getCurrentDate, parseTanggal } from "../../helpers/date";
 import Page500 from "../components/500";
@@ -23,6 +23,10 @@ import BookingLoading from "../components/trainskeleton/booking";
 
 export default function BookingKai() {
   const [api, contextHolder] = notification.useNotification();
+  const [form] = Form.useForm();
+  const onReset = () => {
+    form.resetFields();
+  };
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -184,6 +188,8 @@ export default function BookingKai() {
 
   const handlerBookingSubmit = async () => {
     setIsLoading(true);
+
+    onReset();
 
     var priceInfantChild;
     TotalInfant > 0
@@ -474,6 +480,7 @@ export default function BookingKai() {
               {/* detail passengger kai*/}
               
               <Form
+                 form={form}
                 onFinish={handleSubmit(handlerBookingSubmit)}
                 className="block w-full mt-0 xl:mt-4 mb-4"
               >

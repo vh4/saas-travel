@@ -183,13 +183,13 @@ export default function Header({toogleSidebar, valueSidebar}){
 
 
     const handlerLogin = async (e) => {
-        onReset();
 
         e.preventDefault();
         try {
             setLoading(true);
 
-            
+            onReset();
+
             await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/sign_in`, {
                 username:uid,
                 password:pin,
@@ -380,7 +380,7 @@ export default function Header({toogleSidebar, valueSidebar}){
         ]}
       >
         <p>Masukan username dan password untuk login.</p>
-        <Form onFinish={handlerLogin}>
+        <Form form={form} onFinish={handlerLogin}>
         <Form.Item className="mt-4" label="username" name="username">
             <Input
             onChange={(e) => setuid(e.target.value)}

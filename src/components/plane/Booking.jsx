@@ -30,6 +30,10 @@ export default function BookingPesawat() {
   }, []);
 
   const { id } = useParams();
+  const [form] = Form.useForm();
+  const onReset = () => {
+    form.resetFields();
+  };
 
   const { PesawatNumber } = useParams();
   const token = JSON.parse(
@@ -243,6 +247,8 @@ export default function BookingPesawat() {
     let end_adult = [];
     let end_child = [];
     let end_infant = [];
+
+    onReset();
 
     setIsLoading(true);
 
@@ -547,6 +553,7 @@ export default function BookingPesawat() {
                 <div className=" w-full mb-24 block xl:flex xl:space-x-10">
                   {/* detail passengger Pesawat*/}
                   <Form
+                    form={form}
                     onFinish={handleSubmit(handlerBookingSubmit)}
                     className="block w-full  mt-8 mb-4 xl:mt-12"
                   >

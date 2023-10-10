@@ -204,7 +204,7 @@ export default function Pembayaran() {
             isLoadingPage === true ? 
             (
               <>
-              <BayarLoading />
+              <BayarLoading total={parseInt(TotalAdult) + parseInt(TotalInfant)} />
               </>
             ) : (
               <>
