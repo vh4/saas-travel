@@ -7,37 +7,31 @@ const https = require('https')
 const Router = express.Router();
 
 Router.post('/travel/app/sign_in', async function (req, res) {
-  const { outletId, pin, key } = req.body;
+  const { username, password, key } = req.body;
   logger.info(`Request /travel/app/sign_in: ${JSON.stringify(req.body)}`);
   logger.info(`Request HIT API RAJABILLER JSON: ${JSON.stringify({
-    uid: outletId,
-    method: "rajabiller.outlet_travel",
-    pin: pin
+    username: username,
+    method: "rajabiller.login_travel",
+    password: password
   })}`);
 
   try {
     const response = await axios.post(process.env.HOST_AUTH, {
-      uid: outletId,
-      method: "rajabiller.outlet_travel",
-      pin: pin
-    }, {
-      httpsAgent: new https.Agent({ rejectUnauthorized: false }) // Opsional, hanya digunakan untuk debugging
+      username: username,
+      method: "rajabiller.login_travel",
+      password: password
     });
 
     logger.info(`Response HIT RAJABILLER JSON: ${JSON.stringify(response.data)}`);
 
-    if (response.status !== 200) {
+    if (response.data.rc !== '00') {
       return res.send({
-        rc: '03',
-        rd: response.data
+        rc: response.data.rc,
+        rd: response.data.rd
       });
     }
 
-    const { data } = await axios.post(`${process.env.URL_HIT}/travel/app/sign_in`, {
-      outletId: outletId,
-      pin: pin,
-      key: key
-    });
+    const data = response.data;
 
     const expired = new Date(new Date().getTime() + 60 * 60 * 1000);
     data.expired_date = expired;
