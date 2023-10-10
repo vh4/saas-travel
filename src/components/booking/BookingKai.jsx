@@ -119,7 +119,9 @@ export default function ViewBooking({ path }) {
       intervalRef.current = setInterval(() => {
         const updatedRemainingTimes = remainingTimes.map((time) => {
           time = new Date(time).getTime();
-          if (time > 0) {
+          const timenow = new Date().getTime();
+
+          if (time > timenow) {
             time = time - 1;
             return time;
           }
