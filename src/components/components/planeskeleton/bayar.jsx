@@ -141,7 +141,8 @@ const BayarLoading = ({TotalAdult, TotalChild, TotalInfant}) => {
 					<div className="sidebar w-full xl:w-1/2">
 						<div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
 							<div className="px-4 py-2">
-							<div className="text-gray-500 text-xs">Booking ID</div>
+							{/* <div className="text-gray-500 text-xs">Booking ID</div> */}
+							<div className="text-gray-500 text-xs">Transaksi ID</div>
 							<div className="mt-1 font-bold text-blue-500 text-xs">
 								{/* Skeleton Placeholder for Booking Code */}
 								<Skeleton width={100} height={12} />

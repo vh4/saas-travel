@@ -324,7 +324,7 @@ export default function ViewBooking({path}) {
                                                     Kode Booking
                                                 </div>
                                                 <div className='mt-1 text-sm font-bold text-gray-500'>
-                                                    {e.kode_booking}
+                                                    - (Not Permitted)
                                                 </div>
                                             </div>
                                             <div className='flex space-x-2  items-center pt-8'>
