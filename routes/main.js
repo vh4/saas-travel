@@ -7,13 +7,13 @@ const Router = express.Router();
 
 Router.post('/travel/app/sign_in', async function (req, res) {
   const { username, password, token } = req.body;
-  const secret_key = '6Lch9ZAoAAAAAAKc_xakCybsoxKnrZffN0yknCbx';
+  const secret_key = process.env.SECRET_KEY;
 
   logger.info(`Request /travel/app/sign_in: ${JSON.stringify(req.body)}`);
   logger.info(`Request HIT API RAJABILLER JSON: ${JSON.stringify({
     username: username,
     method: "rajabiller.login_travel",
-    password: '-------',
+    password: 'xxxxxx',
     token:token,
   })}`);
 
