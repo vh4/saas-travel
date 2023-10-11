@@ -966,7 +966,7 @@ export default function Konfirmasi() {
                       <div className="text-gray-500 text-sm">Transaksi ID</div>
                       <div className="font-bold text-blue-500 ">
                         {/* {hasilBooking && hasilBooking.bookingCode} */}
-                        {hasilBooking && hasilBooking.id_transaksi}                        
+                        {hasilBooking && hasilBooking.transactionId}                        
                       </div>
                     </div>
                   </div>

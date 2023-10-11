@@ -428,7 +428,7 @@ export default function Pembayaran() {
 
                       <div className="mt-1 font-bold text-blue-500 text-xs">
                         {/* {hasilBooking && hasilBooking.bookingCode} */}
-                        {hasilBooking && hasilBooking.id_transaksi}                        
+                        {hasilBooking && hasilBooking.transactionId}                        
                       </div>
                     </div>
                     <div className="p-4 border-t">
