@@ -7,7 +7,7 @@ const Router = express.Router();
 
 Router.post('/travel/app/sign_in', async function (req, res) {
   const { username, password, token } = req.body;
-  const secret_key = process.env.SECRET_KEY;
+  const captcha_keys = '6Lch9ZAoAAAAAAKc_xakCybsoxKnrZffN0yknCbx';
 
   logger.info(`Request /travel/app/sign_in: ${JSON.stringify(req.body)}`);
   logger.info(`Request HIT API RAJABILLER JSON: ${JSON.stringify({
@@ -18,7 +18,8 @@ Router.post('/travel/app/sign_in', async function (req, res) {
 
   try {
 
-    const captcharesponse = await axios.post(`https://www.google.com/recaptcha/api/siteverify?secret=${secret_key}&response=${token}`)
+    const captcharesponse = await axios.post(`https://www.google.com/recaptcha/api/siteverify?secret=${captcha_keys}&response=${token}`)
+    logger.info(`Response Captcha: ${JSON.stringify(captcharesponse.data)}`);
 
     if(captcharesponse.data.success === true){
 
