@@ -404,7 +404,7 @@ export default function Header({toogleSidebar, valueSidebar}){
             <Form.Item label="recaptcha">
                 <ReCAPTCHA
                     onChange={onChange}
-                    sitekey="6Lch9ZAoAAAAALsl_FIUwyWxXQ_H29fm86LuTe6d"
+                    sitekey="6LdGRpEoAAAAAOqcTSI_5GvfV0_FwqiyOAarv9KM"
                 />
             </Form.Item>
         </Form>
