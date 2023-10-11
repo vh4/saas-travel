@@ -2,50 +2,68 @@ const express = require('express');
 const axios = require('axios');
 const logger = require('../utils/logger.js');
 require('dotenv').config()
-const https = require('https')
 
 const Router = express.Router();
 
 Router.post('/travel/app/sign_in', async function (req, res) {
-  const { username, password, key } = req.body;
+  const { username, password, token } = req.body;
+  const secret_key = process.env.SECRET_KEY;
+  console.log(secret_key);
+
   logger.info(`Request /travel/app/sign_in: ${JSON.stringify(req.body)}`);
   logger.info(`Request HIT API RAJABILLER JSON: ${JSON.stringify({
     username: username,
     method: "rajabiller.login_travel",
-    password: password
+    password: '-------',
+    token:token,
   })}`);
 
   try {
-    const response = await axios.post(process.env.HOST_AUTH, {
-      username: username,
-      method: "rajabiller.login_travel",
-      password: password
-    });
 
-    logger.info(`Response HIT RAJABILLER JSON: ${JSON.stringify(response.data)}`);
+    const captcharesponse = await axios.post(`https://www.google.com/recaptcha/api/siteverify?secret=${secret_key}&response=${token}`)
 
-    if (response.data.rc !== '00') {
+    if(captcharesponse.data.success === true){
+
+        const response = await axios.post(process.env.HOST_AUTH, {
+          username: username,
+          method: "rajabiller.login_travel",
+          password: password
+        });
+    
+        logger.info(`Response HIT RAJABILLER JSON: ${JSON.stringify(response.data)}`);
+    
+        if (response.data.rc !== '00') {
+          return res.send({
+            rc: response.data.rc,
+            rd: response.data.rd
+          });
+        }
+    
+        const data = response.data;
+    
+        const expired = new Date(new Date().getTime() + 60 * 60 * 1000);
+        data.expired_date = expired;
+    
+        if (data.rc == '00') {
+          req.session['v_session'] = data.token;
+          req.session['expired_session'] = expired;
+    
+          logger.info(`INSERTING TOKEN TO SESSION: ${JSON.stringify(data.token)}`);
+    
+        }
+    
+        logger.info(`Response /travel/app/sign_in: ${JSON.stringify(data)}`);
+        return res.send(data);
+    }else{
+
       return res.send({
-        rc: response.data.rc,
-        rd: response.data.rd
+        rc: '04',
+        rd: 'Captcha anda tidak valid.'
       });
-    }
-
-    const data = response.data;
-
-    const expired = new Date(new Date().getTime() + 60 * 60 * 1000);
-    data.expired_date = expired;
-
-    if (data.rc == '00') {
-      req.session['v_session'] = data.token;
-      req.session['expired_session'] = expired;
-
-      logger.info(`INSERTING TOKEN TO SESSION: ${JSON.stringify(data.token)}`);
 
     }
 
-    logger.info(`Response /travel/app/sign_in: ${JSON.stringify(data)}`);
-    return res.send(data);
+
   } catch (error) {
     logger.error(`Error /travel/app/sign_in: ${error.message}`);
     return res.send({
