@@ -17,6 +17,7 @@ import { Drawer, Typography, Modal, Form, Input, Button } from "antd";
 import { notification } from 'antd';
 import { toRupiah } from "../../helpers/rupiah";
 import { LogoutContent } from "../../App";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function Header({toogleSidebar, valueSidebar}){
 
@@ -145,7 +146,12 @@ export default function Header({toogleSidebar, valueSidebar}){
 
     const [uid, setuid] = useState();
     const [pin, setpin] = useState();
+    const [captcha, setcaptcha] = useState();
     const [isLoading, setLoading] = useState(false);
+
+    function onChange(value) {
+        setcaptcha(value)
+    }
 
     const logout = () => {
         try{
@@ -185,15 +191,15 @@ export default function Header({toogleSidebar, valueSidebar}){
     const handlerLogin = async (e) => {
 
         e.preventDefault();
+
         try {
             setLoading(true);
-
             onReset();
 
             await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/sign_in`, {
                 username:uid,
                 password:pin,
-                key: ''
+                token: captcha,
             }).then((data) => {
                 
                 if(data.data.rc === "00"){
@@ -380,19 +386,27 @@ export default function Header({toogleSidebar, valueSidebar}){
         ]}
       >
         <p>Masukan username dan password untuk login.</p>
-        <Form form={form} onFinish={handlerLogin}>
+        <Form className="mt-8" form={form} onFinish={handlerLogin}>
         <Form.Item className="mt-4" label="username" name="username">
             <Input
             onChange={(e) => setuid(e.target.value)}
             value={uid} // Pastikan value sesuai dengan nilai state uid
+            required
             />
         </Form.Item>
         <Form.Item label="password" name="pin">
             <Input.Password
             onChange={(e) => setpin(e.target.value)}
             value={pin} // Pastikan value sesuai dengan nilai state pin
+            required
             />
         </Form.Item>
+            <Form.Item label="recaptcha">
+                <ReCAPTCHA
+                    onChange={onChange}
+                    sitekey="6Lch9ZAoAAAAALsl_FIUwyWxXQ_H29fm86LuTe6d"
+                />
+            </Form.Item>
         </Form>
 
       </Modal>                  
