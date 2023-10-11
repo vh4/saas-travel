@@ -13,7 +13,6 @@ Router.post('/travel/app/sign_in', async function (req, res) {
   logger.info(`Request HIT API RAJABILLER JSON: ${JSON.stringify({
     username: username,
     method: "rajabiller.login_travel",
-    password: 'xxxxxx',
     token:token,
   })}`);
 
