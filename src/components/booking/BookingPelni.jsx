@@ -47,10 +47,12 @@ export default function ViewBooking({ path }) {
     try {
       const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/transaction_book_list`, {
         token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
-        product: "KERETA",
+        product: "KAPAL",
       });
 
       const datas = response.data;
+	  console.log(datas.data)
+
       setData(datas.data);
       setIsLoading(false);
     } catch (e) {
@@ -71,29 +73,6 @@ export default function ViewBooking({ path }) {
   const handleBayar = async () => {
     setLoading(true);
 
-    const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/payment`,
-      {
-        productCode: "WKAI",
-        bookingCode: byrdata.kode_booking,
-        transactionId: byrdata.id_transaksi,
-        nominal: byrdata.nominal,
-        nominal_admin: byrdata.nominal_admin,
-        discount: 0,
-        pay_type: "TUNAI",
-        token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
-      });
-    setTimeout(() => {
-      setLoading(false);
-      setOpen(false);
-    }, 1000);
-
-    if (response.data.rc !== "00") {
-      gagal(response.data.rd);
-      handleClose();
-    } else {
-      success();
-      handleClose();
-    }
   };
 
   const intervalRef = React.useRef(null);
@@ -130,6 +109,8 @@ export default function ViewBooking({ path }) {
   
         setRemainingTimes(updatedRemainingTimes);
       }, 1000);
+    }else{
+      setRemainingTimes([]);
     }
   
     return () => {
@@ -143,125 +124,6 @@ export default function ViewBooking({ path }) {
     <>
       {/* meessage bayar */}
       {contextHolder}
-
-      <Modal
-        width={1000}
-        open={showModal}
-        onOk={handleClose}
-        onCancel={handleClose}
-        footer={[
-          <Button key="back" onClick={handleClose}>
-            Cancel
-          </Button>,
-          <Button key="submit" type="primary" className='bg-blue-500' loading={loading} disabled>
-            Bayar Langsung
-          </Button>,
-        ]}
-      >
-        {loadBayar !== true ? (
-          <div className='mt-4 mb-12'>
-            <div className='mt-4 mb-4 font-bold text-lg'>
-              <div>Passengers</div>
-            </div>
-            {byrdata.penumpang.map((e) => (
-              <>
-                <div className=' border rounded-md p-4 grid grid-cols-1 md:grid-cols-5 gap-2 mt-4'>
-                  <div className=''>
-                    <div className='font-semibold'>Nama</div>
-                    <div>
-                      {e.nama}
-                    </div>
-                  </div>
-                  <div className=''>
-                    <div className='font-semibold'>Nik</div>
-                    <div>
-                      {e.nomor_identitas !== '' ? e.nomor_identitas : '-'}
-                    </div>
-                  </div>
-                  <div className=''>
-                    <div className='font-semibold'>No. HP</div>
-                    <div>
-                      {e.telepon !== '' ? e.telepon : '-'}
-                    </div>
-                  </div>
-                  <div className=''>
-                    <div className='font-semibold'>No. Kursi</div>
-                    <div>
-                      {e.kursi !== '' ? e.kursi : '-'}
-                    </div>
-                  </div>
-                </div>
-              </>
-            ))}
-
-            <div className='mt-4 mb-4 font-bold text-lg'>
-              <div>Description</div>
-            </div>
-            {/* desktop */}
-            <div className="p-4 w-full hidden mt-4 xl:gap-4 lg:grid lg:grid-cols-10">
-              <div className="col-span-2">
-                <h1 className="text-sm font-bold">{byrdata.nama_kereta} </h1>
-                <small>{byrdata.class === 'EKS' ? 'Eksekutif' : byrdata.class === 'EKO' ? 'Ekonomi' : 'Bisnis'} {byrdata.kode_kereta.substring(4, 5)} - ({byrdata.kode_kereta.split('/')[1]})</small>
-              </div>
-              <div className="col-span-2">
-                <h1 className="text-sm font-bold">{new Date(byrdata.tanggal_keberangkatan.slice(0, 4), parseInt(byrdata.tanggal_keberangkatan.slice(4, 6)) - 1, byrdata.tanggal_keberangkatan.slice(6, 8)).toLocaleDateString("id-ID", { weekday: "long", year: "numeric", month: "long", day: "numeric" })} </h1>
-                <small>Tanggal Keberangkatan</small>
-              </div>
-              <div className="flex col-span-2">
-                <div className="">
-                  <h1 className="mt-4 xl:mt-0 text-sm font-bold">{byrdata.jam_keberangkatan.toString().padStart(4, "0").replace(/(\d{2})(\d{2})/, "$1:$2")}</h1>
-                  <small>{byrdata.origin}</small>
-                </div>
-                < HiOutlineArrowNarrowRight size={24} />
-              </div>
-              <div className='col-span-2'>
-                <h1 className="text-sm font-bold">{byrdata.jam_kedatangan.toString().padStart(4, "0").replace(/(\d{2})(\d{2})/, "$1:$2")}</h1>
-                <small>{byrdata.destination}</small>
-              </div>
-              <div className="col-span-2">
-                <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">Rp. {toRupiah(parseInt(byrdata.nominal) + parseInt(byrdata.nominal_admin))}</h1>
-                <small>Total (Admin Rp. {toRupiah(byrdata.nominal_admin)})</small>
-              </div>
-            </div>
-            {/* mobile */}
-            <div className="p-4 w-full block mt-4 lg:hidden">
-              <div className="">
-                <h1 className="text-sm font-bold">{byrdata.nama_kereta} </h1>
-                <small>{byrdata.class === 'EKS' ? 'Eksekutif' : byrdata.class === 'EKO' ? 'Ekonomi' : 'Bisnis'} {byrdata.kode_kereta.substring(4, 5)} - ({byrdata.kode_kereta.split('/')[1]})</small>
-              </div>
-              <div className="mt-4">
-                <h1 className="text-sm font-bold">{new Date(byrdata.tanggal_keberangkatan.slice(0, 4), parseInt(byrdata.tanggal_keberangkatan.slice(4, 6)) - 1, byrdata.tanggal_keberangkatan.slice(6, 8)).toLocaleDateString("id-ID", { weekday: "long", year: "numeric", month: "long", day: "numeric" })} </h1>
-                <small>Tanggal Keberangkatan</small>
-              </div>
-              <div className='flex space-x-4 items-center'>
-                <div className="">
-                  <div className="">
-                    <h1 className="mt-4 xl:mt-0 text-sm font-bold">{byrdata.jam_keberangkatan.toString().padStart(4, "0").replace(/(\d{2})(\d{2})/, "$1:$2")}</h1>
-                    <small>{byrdata.origin}</small>
-                  </div>
-                </div>
-                < HiOutlineArrowNarrowRight size={24} />
-                <div className=''>
-                  <div>
-                    <h1 className="mt-4  text-sm font-bold">{byrdata.jam_kedatangan.toString().padStart(4, "0").replace(/(\d{2})(\d{2})/, "$1:$2")}</h1>
-                    <small>{byrdata.destination}</small>
-                  </div>
-                </div>
-              </div>
-              <div className="">
-                <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">Rp. {toRupiah(parseInt(byrdata.nominal) + parseInt(byrdata.nominal_admin))}</h1>
-                <small>Total (Admin Rp. {toRupiah(byrdata.nominal_admin)})</small>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className='mt-2'>
-              <Placeholder.Paragraph />
-            </div>
-          </>
-        )}
-      </Modal>
       <div className=''>
         <div className='w-full mt-8'>
           <div className="w-full rounded-md shadow-sm border profile-header">
@@ -284,7 +146,7 @@ export default function ViewBooking({ path }) {
                             <div className='text-sm text-blue-500 font-bold'>{e.id_transaksi}</div>
                           </div>
                           <div className='text-sm text-slate-500 font-bold '>
-                            Rp. {toRupiah(e.nominal)}
+                            Rp. {e.nominal ? toRupiah(e.nominal) : '-' }
                           </div>
                         </div>
                         <div className='border-t mt-8'>
@@ -311,10 +173,9 @@ export default function ViewBooking({ path }) {
                             </div>
                           </div>
                           <div className='flex space-x-2  items-center pt-4'>
-                            <div className='text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white'>sisa waktu
+                            <div className='text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white'>sisa waktu 
                             {remainingTimes[i] && (new Date(e.expiredDate).getTime() > new Date().getTime()) ? remainingTime(remainingTimes[i])  : ' habis.'}
                             </div>
-                            <div onClick={(e) => openModalBayar(e, i)} className='cursor-pointer text-blue-500 font-bold text-xs'>lanjut bayar</div>
                           </div>
                         </div>
                       </div>

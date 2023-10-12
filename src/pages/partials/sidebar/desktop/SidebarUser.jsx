@@ -104,6 +104,11 @@ export default function SidebarUser({pathSidebar}) {
                                     Booking Pesawat
                                 </div>
                             </Link>
+                            <Link to='/booking/pelni' className={`${ pathSidebar === '/booking/pelni' ? 'bg-cyan-100' : ''} block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500`}>
+                                <div className=' '>
+                                    Booking Pelni
+                                </div>
+                            </Link>
                         </div>
                     </li>
                 </ul>

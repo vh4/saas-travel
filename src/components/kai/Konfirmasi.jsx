@@ -452,8 +452,10 @@ export default function Konfirmasi() {
     );
     setOpen(false);
 
+    hasilBookingData['transactionId'] = response.data.transactionId
+
     if (response.data.rc === "00") {
-      //update hasil booking seats.
+
       const response = await axios.put(
         `${process.env.REACT_APP_HOST_API}/travel/train/book/k_book`,
         {

@@ -36,7 +36,7 @@ export default function MainPage(){
                         </div>
                     </div>
                     {/* for desktop */}
-                    <div className='hidden md:block mt-2'>                   
+                    <div className='block mt-2'>                   
                         <div className="w-full"> 
                             {/* menu fitur  */}
                             {nameMenu == 'plane' ? (
