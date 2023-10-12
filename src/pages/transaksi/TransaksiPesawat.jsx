@@ -5,28 +5,20 @@ import TransaksiPesawatComponent from "../../components/transaksi/TransaksiPesaw
 import Layout from "../LayoutUser";
 import { useLocation } from "react-router-dom";
 import _ from 'lodash'
-import { useNavigate } from "react-router-dom";
 
 export default function TransaksiPesawat(){
 
     const location = useLocation();
     const path = _.startCase(location.pathname.toString()).split('  ').join('/');
 
-    const navigate = useNavigate();
 
     useEffect(() =>{
         document.title = 'Travel - list transaksi pesawat';
 
-        if(!localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)){
-            navigate('/');
-        }else{
-            return;
-        }
-    }, [navigate]);
+    }, []);
 
     return(
         <>
-        {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
         <Layout>
             <div className="mt-4 px-4 md:px-12">
                 {/* Profile fitur  */}
@@ -34,7 +26,6 @@ export default function TransaksiPesawat(){
                 
             </div>
         </Layout>
-        ) : null }
         </>
     )
 }

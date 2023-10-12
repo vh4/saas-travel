@@ -8,6 +8,7 @@ import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
 import { Button, Modal, message } from 'antd';
 import { toRupiah } from '../../helpers/rupiah';
 import { remainingTime } from '../../helpers/date';
+import Page500 from '../components/500';
 
 export default function ViewBooking({ path }) {
   const [data, setData] = useState([]);
@@ -20,6 +21,18 @@ export default function ViewBooking({ path }) {
   const [loading, setLoading] = useState(false);
   const handleOpen = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
+  const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
+
+  const [err, setErr] = useState(false);
+  const [errPage, setErrPage] = useState(false);
+
+  useEffect(() => {
+
+    if(token == null || token == undefined) {
+        setErr(true);
+    }
+
+  }, [token]);
 
   function success() {
     messageApi.open({
@@ -45,18 +58,23 @@ export default function ViewBooking({ path }) {
     setIsLoading(true);
 
     try {
+     
       const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/transaction_book_list`, {
         token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
         product: "KAPAL",
       });
 
+      if(response.data.rc !== '00' && response.data.rc !== '33'){
+        setErrPage(true);
+      }
+
       const datas = response.data;
-	  console.log(datas.data)
 
       setData(datas.data);
       setIsLoading(false);
     } catch (e) {
       setIsLoading(false);
+      setErrPage(true);
     }
   };
 
@@ -122,80 +140,93 @@ export default function ViewBooking({ path }) {
 
   return (
     <>
-      {/* meessage bayar */}
+
       {contextHolder}
       <div className=''>
-        <div className='w-full mt-8'>
+        <div className='w-full mt-2 md:mt-8'>
           <div className="w-full rounded-md shadow-sm border profile-header">
             <div className="text-gray-500 p-4 flex space-x-2 items-center">
               < AiOutlineHome size={20} /> <span>Home</span> <span>/</span> <span>{path}</span>
             </div>
           </div>
         </div>
-        {isLoading === false ? (
-          <>
-            {data !== null && data !== undefined && data.length !== undefined && data.length !== 0 ? (
-              <div className='mt-6'>
-                {data.map((e, i) => (
-                  <div className='w-full mb-6'>
-                    <div className="w-full rounded-lg shadow-sm border profile-header">
-                      <div className='p-8'>
-                        <div className='flex justify-between items-end'>
-                          <div className='flex space-x-2  items-end'>
-                            <div className='text-xs text-gray-500'>ID Transaksi</div>
-                            <div className='text-sm text-blue-500 font-bold'>{e.id_transaksi}</div>
-                          </div>
-                          <div className='text-sm text-slate-500 font-bold '>
-                            Rp. {e.nominal ? toRupiah(e.nominal) : '-' }
-                          </div>
-                        </div>
-                        <div className='border-t mt-8'>
-                          <div className='flex space-x-2 mt-4 text-sm font-bold text-gray-500'>
-                            <MdOutlineTrain className='text-blue-500' size={16} />
-                            <div className='flex space-x-2 items-center'><div>{e.origin.toUpperCase()}</div><BsArrowRightShort /><div>{e.destination.toUpperCase()}</div></div>
-                          </div>
-                          <div className='pl-1'>
-                            <div className='mt-4 text-xs  text-gray-500'>
-                              Date
+    
+     {/* meessage bayar */}
+
+      {err === true ? (
+      <>
+          <Page500 />
+      </>
+      ) : errPage === true ? (
+        <>
+          <Page500 />
+        </>
+      ) : (
+      <>
+          {isLoading === false ? (
+            <>
+              {data !== null && data !== undefined && data.length !== undefined && data.length !== 0 ? (
+                <div className='mt-6'>
+                  {data.map((e, i) => (
+                    <div className='w-full mb-6'>
+                      <div className="w-full rounded-lg shadow-sm border profile-header">
+                        <div className='p-8'>
+                          <div className='flex justify-between items-end'>
+                            <div className='flex space-x-2  items-end'>
+                              <div className='text-xs text-gray-500'>ID Transaksi</div>
+                              <div className='text-sm text-blue-500 font-bold'>{e.id_transaksi}</div>
                             </div>
-                            <div className='mt-1 text-sm font-bold text-gray-500'>
-                              {e.tanggal_transaksi}
-                            </div>
-                          </div>
-                        </div>
-                        <div className='mt-8 border-t block lg:flex lg:justify-between  lg:items-center'>
-                          <div className='mt-2 flex space-x-2 items-end'>
-                            <div className='mt-1 text-xs  text-gray-500'>
-                              Kode Booking
-                            </div>
-                            <div className='mt-1 text-sm font-bold text-gray-500'>
-                              {/* {e.kode_booking} */} - (Not Permitted)
+                            <div className='text-sm text-slate-500 font-bold '>
+                              Rp. {e.nominal ? toRupiah(e.nominal) : '-' }
                             </div>
                           </div>
-                          <div className='flex space-x-2  items-center pt-4'>
-                            <div className='text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white'>sisa waktu 
-                            {remainingTimes[i] && (new Date(e.expiredDate).getTime() > new Date().getTime()) ? remainingTime(remainingTimes[i])  : ' habis.'}
+                          <div className='border-t mt-8'>
+                            <div className='flex space-x-2 mt-4 text-sm font-bold text-gray-500'>
+                              <MdOutlineTrain className='text-blue-500' size={16} />
+                              <div className='flex space-x-2 items-center'><div>{e.origin.toUpperCase()}</div><BsArrowRightShort /><div>{e.destination.toUpperCase()}</div></div>
+                            </div>
+                            <div className='pl-1'>
+                              <div className='mt-4 text-xs  text-gray-500'>
+                                Date
+                              </div>
+                              <div className='mt-1 text-sm font-bold text-gray-500'>
+                                {e.tanggal_transaksi}
+                              </div>
+                            </div>
+                          </div>
+                          <div className='mt-8 border-t block lg:flex lg:justify-between  lg:items-center'>
+                            <div className='mt-2 flex space-x-2 items-end'>
+                              <div className='mt-1 text-xs  text-gray-500'>
+                                Kode Booking
+                              </div>
+                              <div className='mt-1 text-sm font-bold text-gray-500'>
+                                {/* {e.kode_booking} */} - (Not Permitted)
+                              </div>
+                            </div>
+                            <div className='flex space-x-2  items-center pt-4'>
+                              <div className='text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white'>sisa waktu 
+                              {remainingTimes[i] && (new Date(e.expiredDate).getTime() > new Date().getTime()) ? remainingTime(remainingTimes[i])  : ' habis.'}
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>) : (
-              <>
-                <div className='flex justify-center items-center'>
-                  <div className='text-center'>
-                    <img className='block mx-auto' width={270} src="/emptyy.png" alt="empty.png" />
-                    <div className='text-slate-600 font-bold text-center'>Data Tidak Ditemukan</div>
-                    <div className='mt-2 text-center text-gray-500 text-sm'>
-                      Maaf, History Data Booking Tidak ditemukan. Lakukan Booking terlebih dahulu.
+                  ))}
+                </div>) : (
+                <>
+                  <div className='flex justify-center items-center'>
+                    <div className='text-center'>
+                      <img className='block mx-auto' width={270} src="/emptyy.png" alt="empty.png" />
+                      <div className='text-slate-600 font-bold text-center'>Data Tidak Ditemukan</div>
+                      <div className='mt-2 text-center text-gray-500 text-sm'>
+                        Maaf, History Data Booking Tidak ditemukan. Lakukan Booking terlebih dahulu.
+                      </div>
                     </div>
                   </div>
-                </div>
-              </>)}
-          </>
-        )
+                </>)}
+            </>
+          )
           :
           (
             <>
@@ -212,6 +243,7 @@ export default function ViewBooking({ path }) {
               </div>
             </>
           )}
+      </>)}
       </div>
     </>
   );

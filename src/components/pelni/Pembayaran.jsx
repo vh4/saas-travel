@@ -311,7 +311,6 @@ export default function Pembayaran() {
                         {/* <div className="text-gray-500 text-xs">Status Booking</div> */}
                         <div className="text-gray-500 text-xs">Transaksi ID</div>
                         <div className="mt-1 font-bold text-blue-500 text-xs">
-                          {console.log(book)}
                           {book && book.transactionId}
                         </div>
                       </div>

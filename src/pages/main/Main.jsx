@@ -7,6 +7,8 @@ import Sidebar from "../partials/sidebar/desktop/Sidebar"
 import SideBarMobile from "../partials/sidebar/mobile/SideBarMobile"
 import React, {useEffect, useState} from "react";
 import Carousels from '../../components/carousel/Carousel'
+import CarouselsMobile from '../../components/carousel/CarouselMobile'
+
 import Pelni from "../../components/pelni/Pelni";
 export default function MainPage(){
 
@@ -19,9 +21,12 @@ export default function MainPage(){
         <Layout>
         {/* carousel fitur  */}
         <div className="w-full">
-            <div className="bg-gradient-to-r from-cyan-500 to-blue-500">
-                <div className="py-4 md:py-8 relative z-10">
+            <div className="md:bg-gradient-to-r md:from-cyan-500 md:to-blue-500">
+                <div className="hidden md:block py-4 md:py-8 relative z-10">
                     <Carousels />
+                </div>
+                <div className="block md:hidden py-4 md:py-8 relative z-10">
+                    <CarouselsMobile />
                 </div>
             </div>
             <div className="mt-0 md:mt-4 xl:-mt-8">
@@ -32,11 +37,11 @@ export default function MainPage(){
                             <Sidebar nameMenu={nameMenu} setNameMenu={setNameMenu}/>
                         </div>
                         <div className="block md:hidden">
-                            <SideBarMobile />
+                            <SideBarMobile nameMenu={nameMenu} setNameMenu={setNameMenu} />
                         </div>
                     </div>
                     {/* for desktop */}
-                    <div className='hidden md:block mt-2'>                   
+                    <div className='block mt-2'>                   
                         <div className="w-full"> 
                             {/* menu fitur  */}
                             {nameMenu == 'plane' ? (

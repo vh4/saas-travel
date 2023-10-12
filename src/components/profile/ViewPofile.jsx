@@ -1,80 +1,112 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios'
 import {TfiPencilAlt} from 'react-icons/tfi'
+import Page500 from "../components/500";
 
 export default function EditProfile(){
 
     const [data, setData] = useState({});
+    const [err, setErr] = useState(false);
+    const [errPage, setErrPage] = useState(false);
+
+    const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
+
+    useEffect(() => {
+
+        if(token === undefined || token === null){
+            setErr(true);
+        }
+
+    }, [token]);
 
     useEffect(() => {
         getProfileUser();
     },[]);
 
     const getProfileUser = async () =>{
-        const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/account`, {
-            token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API))
-        });
+        try {
 
-        const datas = response.data;
-        setData(datas.data);
+            const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/account`, {
+                token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API))
+            });
+
+            if(response.data.rc !== '00'){
+                setErrPage(true);
+            }
+    
+            const datas = response.data;
+            setData(datas.data);
+            
+        } catch (error) {
+            setErrPage(true);
+            console.log(error);
+        }
 
     }
 
     return(
         <div className="w-full mt-8">
-        {/* view rekening */}
-        <div class="">
-            <div class="w-full relative rounded-2xl shadow-sm border transition-transform transform hover:scale-105">
-                <div class="relative p-0 md:p-4 object-cover w-full h-full rounded-2xl">
-                    <div class="w-full p-4">
-                        <div class="flex justify-between">
-                            <div class="text-gray-500">
-                                <p class="font-light text-sm xl:text-md">
-                                    Nama Pemilik
-                                </p>
-                                <p class="font-medium tracking-widest text-sm xl:text-md">
-                                {data.namaPemilik ? data.namaPemilik : '-'}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="pt-8 pb-4 text-center">
-                            <p class="text-gray-500 font-bold text-md xl:text-2xl tracking-more-wider">
-                            {data.norek ? data.norek : 'xxxx-xxxx-xxxx-xxxx-xxxx'}
-                            </p>
-                        </div>
-                        <div class="pt-4 xl:pt-8 pr-6">
+
+        {err === true ? (
+            <><Page500 /></>
+        ) : errPage === true ? (
+            <><Page500 /></>
+        ) : (
+            <>
+            
+            {/* view rekening */}
+            <div class="">
+                <div class="w-full relative rounded-2xl shadow-sm border transition-transform transform hover:scale-105">
+                    <div class="relative p-0 md:p-4 object-cover w-full h-full rounded-2xl">
+                        <div class="w-full p-4">
                             <div class="flex justify-between">
                                 <div class="text-gray-500">
-                                    <p class="font-light text-xs">
-                                        ID Outlet
+                                    <p class="font-light text-sm xl:text-md">
+                                        Nama Pemilik
                                     </p>
-                                    <p class="font-medium tracking-wider text-sm">
-                                    {data.idOutlet ? data.idOutlet : '-'}
-                                    </p>
-                                </div>
-                                <div class="text-gray-500">
-                                    <p class="font-light text-xs">
-                                        Upline
-                                    </p>
-                                    <p class="font-medium tracking-wider text-sm">
-                                    {data.upline ? data.upline : '-'}
+                                    <p class="font-medium tracking-widest text-sm xl:text-md">
+                                    {data.namaPemilik ? data.namaPemilik : '-'}
                                     </p>
                                 </div>
-        
-                                <div class="text-gray-500">
-                                    <p class="font-light text-xs">
-                                        Pin
-                                    </p>
-                                    <p class="font-bold tracking-more-wider text-sm">
-                                        ******
-                                    </p>
+                            </div>
+                            <div class="pt-8 pb-4 text-center">
+                                <p class="text-gray-500 font-bold text-md xl:text-2xl tracking-more-wider">
+                                {data.norek ? data.norek : 'xxxx-xxxx-xxxx-xxxx-xxxx'}
+                                </p>
+                            </div>
+                            <div class="pt-4 xl:pt-8 pr-6">
+                                <div class="flex justify-between">
+                                    <div class="text-gray-500">
+                                        <p class="font-light text-xs">
+                                            ID Outlet
+                                        </p>
+                                        <p class="font-medium tracking-wider text-sm">
+                                        {data.idOutlet ? data.idOutlet : '-'}
+                                        </p>
+                                    </div>
+                                    <div class="text-gray-500">
+                                        <p class="font-light text-xs">
+                                            Upline
+                                        </p>
+                                        <p class="font-medium tracking-wider text-sm">
+                                        {data.upline ? data.upline : '-'}
+                                        </p>
+                                    </div>
+            
+                                    <div class="text-gray-500">
+                                        <p class="font-light text-xs">
+                                            Pin
+                                        </p>
+                                        <p class="font-bold tracking-more-wider text-sm">
+                                            ******
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
             {/* edit profile -> data */}
             <div className="border rounded-lg p-4 md:p-8 mt-8">
                 <div className="text-md font-bold text-gray-500">
@@ -115,6 +147,11 @@ export default function EditProfile(){
                     </div>
                 </div>
             </div>
+            
+            </>
+        )}
+
+
         </div>
     )
 }

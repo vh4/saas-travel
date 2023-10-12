@@ -8,6 +8,7 @@ import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
 import { Button, Modal, message } from 'antd';
 import { toRupiah } from '../../helpers/rupiah';
 import { remainingTime } from '../../helpers/date';
+import Page500 from '../components/500';
 
 export default function ViewBooking({ path }) {
   const [data, setData] = useState([]);
@@ -18,6 +19,20 @@ export default function ViewBooking({ path }) {
   const [open, setOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(false);
+
+  const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
+
+  const [err, setErr] = useState(false);
+  const [errPage, setErrPage] = useState(false);
+
+  useEffect(() => {
+
+      if(token === undefined || token === null) {
+        setErr(true);
+      }
+
+  }, [token]);
+
   const handleOpen = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
 
@@ -50,11 +65,16 @@ export default function ViewBooking({ path }) {
         product: "KERETA",
       });
 
+      if(response.data.rc !== '00' && response.data.rc !== '33'){
+        setErrPage(true);
+      }
+
       const datas = response.data;
       setData(datas.data);
       setIsLoading(false);
     } catch (e) {
       setIsLoading(false);
+      setErrPage(true);
     }
   };
 
@@ -263,78 +283,88 @@ export default function ViewBooking({ path }) {
         )}
       </Modal>
       <div className=''>
-        <div className='w-full mt-8'>
+        <div className='w-full mt-2 md:mt-8'>
           <div className="w-full rounded-md shadow-sm border profile-header">
             <div className="text-gray-500 p-4 flex space-x-2 items-center">
               < AiOutlineHome size={20} /> <span>Home</span> <span>/</span> <span>{path}</span>
             </div>
           </div>
         </div>
-        {isLoading === false ? (
-          <>
-            {data !== null && data !== undefined && data.length !== undefined && data.length !== 0 ? (
-              <div className='mt-6'>
-                {data.map((e, i) => (
-                  <div className='w-full mb-6'>
-                    <div className="w-full rounded-lg shadow-sm border profile-header">
-                      <div className='p-8'>
-                        <div className='flex justify-between items-end'>
-                          <div className='flex space-x-2  items-end'>
-                            <div className='text-xs text-gray-500'>ID Transaksi</div>
-                            <div className='text-sm text-blue-500 font-bold'>{e.id_transaksi}</div>
-                          </div>
-                          <div className='text-sm text-slate-500 font-bold '>
-                            Rp. {toRupiah(e.nominal)}
-                          </div>
-                        </div>
-                        <div className='border-t mt-8'>
-                          <div className='flex space-x-2 mt-4 text-sm font-bold text-gray-500'>
-                            <MdOutlineTrain className='text-blue-500' size={16} />
-                            <div className='flex space-x-2 items-center'><div>{e.origin.toUpperCase()}</div><BsArrowRightShort /><div>{e.destination.toUpperCase()}</div></div>
-                          </div>
-                          <div className='pl-1'>
-                            <div className='mt-4 text-xs  text-gray-500'>
-                              Date
+
+        { err === true ? (
+        <>
+          <Page500 />
+        </>) : errPage === true ? (
+        <>
+           <Page500 />
+        </>
+        ) :(
+        <>
+          {isLoading === false ? (
+            <>
+              {data !== null && data !== undefined && data.length !== undefined && data.length !== 0 ? (
+                <div className='mt-6'>
+                  {data.map((e, i) => (
+                    <div className='w-full mb-6'>
+                      <div className="w-full rounded-lg shadow-sm border profile-header">
+                        <div className='p-8'>
+                          <div className='flex justify-between items-end'>
+                            <div className='flex space-x-2  items-end'>
+                              <div className='text-xs text-gray-500'>ID Transaksi</div>
+                              <div className='text-sm text-blue-500 font-bold'>{e.id_transaksi}</div>
                             </div>
-                            <div className='mt-1 text-sm font-bold text-gray-500'>
-                              {e.tanggal_transaksi}
+                            <div className='text-sm text-slate-500 font-bold '>
+                              Rp. {toRupiah(e.nominal)}
                             </div>
                           </div>
-                        </div>
-                        <div className='mt-8 border-t block lg:flex lg:justify-between  lg:items-center'>
-                          <div className='mt-2 flex space-x-2 items-end'>
-                            <div className='mt-1 text-xs  text-gray-500'>
-                              Kode Booking
+                          <div className='border-t mt-8'>
+                            <div className='flex space-x-2 mt-4 text-sm font-bold text-gray-500'>
+                              <MdOutlineTrain className='text-blue-500' size={16} />
+                              <div className='flex space-x-2 items-center'><div>{e.origin.toUpperCase()}</div><BsArrowRightShort /><div>{e.destination.toUpperCase()}</div></div>
                             </div>
-                            <div className='mt-1 text-sm font-bold text-gray-500'>
-                              {/* {e.kode_booking} */} - (Not Permitted)
+                            <div className='pl-1'>
+                              <div className='mt-4 text-xs  text-gray-500'>
+                                Date
+                              </div>
+                              <div className='mt-1 text-sm font-bold text-gray-500'>
+                                {e.tanggal_transaksi}
+                              </div>
                             </div>
                           </div>
-                          <div className='flex space-x-2  items-center pt-4'>
-                            <div className='text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white'>sisa waktu
-                            {remainingTimes[i] && (new Date(e.expiredDate).getTime() > new Date().getTime()) ? remainingTime(remainingTimes[i])  : ' habis.'}
+                          <div className='mt-8 border-t block lg:flex lg:justify-between  lg:items-center'>
+                            <div className='mt-2 flex space-x-2 items-end'>
+                              <div className='mt-1 text-xs  text-gray-500'>
+                                Kode Booking
+                              </div>
+                              <div className='mt-1 text-sm font-bold text-gray-500'>
+                                {/* {e.kode_booking} */} - (Not Permitted)
+                              </div>
                             </div>
-                            <div onClick={(e) => openModalBayar(e, i)} className='cursor-pointer text-blue-500 font-bold text-xs'>lanjut bayar</div>
+                            <div className='flex space-x-2  items-center pt-4'>
+                              <div className='text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white'>sisa waktu
+                              {remainingTimes[i] && (new Date(e.expiredDate).getTime() > new Date().getTime()) ? remainingTime(remainingTimes[i])  : ' habis.'}
+                              </div>
+                              <div onClick={(e) => openModalBayar(e, i)} className='cursor-pointer text-blue-500 font-bold text-xs'>lanjut bayar</div>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>) : (
-              <>
-                <div className='flex justify-center items-center'>
-                  <div className='text-center'>
-                    <img className='block mx-auto' width={270} src="/emptyy.png" alt="empty.png" />
-                    <div className='text-slate-600 font-bold text-center'>Data Tidak Ditemukan</div>
-                    <div className='mt-2 text-center text-gray-500 text-sm'>
-                      Maaf, History Data Booking Tidak ditemukan. Lakukan Booking terlebih dahulu.
+                  ))}
+                </div>) : (
+                <>
+                  <div className='flex justify-center items-center'>
+                    <div className='text-center'>
+                      <img className='block mx-auto' width={270} src="/emptyy.png" alt="empty.png" />
+                      <div className='text-slate-600 font-bold text-center'>Data Tidak Ditemukan</div>
+                      <div className='mt-2 text-center text-gray-500 text-sm'>
+                        Maaf, History Data Booking Tidak ditemukan. Lakukan Booking terlebih dahulu.
+                      </div>
                     </div>
                   </div>
-                </div>
-              </>)}
-          </>
-        )
+                </>)}
+            </>
+          )
           :
           (
             <>
@@ -351,6 +381,9 @@ export default function ViewBooking({ path }) {
               </div>
             </>
           )}
+        </>
+        )}
+
       </div>
     </>
   );

@@ -3,7 +3,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "react-multi-carousel/lib/styles.css";
 import Slider from "react-slick";
 
-export default function Carousels(props) {
+export default function CarouselsMobile(props) {
 
     const SlickArrowRight = () => {
       return(
@@ -16,7 +16,7 @@ export default function Carousels(props) {
       arrows: true,
       nextArrow: <SlickArrowRight />,
       infinite: true,
-      slidesToShow: 2,
+      slidesToShow: 1,
       slidesToScroll: 1,
       autoplay: false,
       focusOnSelect: true,
@@ -25,8 +25,6 @@ export default function Carousels(props) {
       swipeToSlide: true,
       accessibility: true,
       autoplaySpeed: 2000,
-      centerMode: true,        // Menyertakan centerMode
-      centerPadding: "100px",  // Sesuaikan dengan jumlah padding yang Anda inginkan
       responsive: [
         {
           breakpoint: 1024,
@@ -61,8 +59,8 @@ export default function Carousels(props) {
     return (
         <div className="xl:grid xl:grid-cols-2 w-full px-0 xl:px-4 xl:py-8">
             <div className='block md:hidden px-4 mb-4 text-gray-500'>
-                <div className="font-semibold text-sm">Haii kamu,</div>
-                <small >nikmati promo menarik lainya untuk kamu.</small>
+                <div className="font-semibold text-sm">Haii traveler</div>
+                <small >Selamat datang di travel rajabiller.com</small>
             </div>
             <div className="hidden xl:block pl-24">
               <div className="flex space-x-4 pl-24 pr-24 text-white">

@@ -8,7 +8,7 @@ const Page400 = () => {
 	const navigate = useNavigate();
 	return (
 		<>
-		<div className="mt-16">
+		<div className="mt-2 md:mt-16">
 			<Result
 			status="500"
 			title="Page Error!"
