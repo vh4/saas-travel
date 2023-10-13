@@ -98,6 +98,8 @@ export default function Header({ toogleSidebar, valueSidebar }) {
         localStorage.clear();
         suksesLogout();
 
+        setIsDrawerOpen(false);
+
         navigate("/");
       });
   };
@@ -423,15 +425,13 @@ export default function Header({ toogleSidebar, valueSidebar }) {
               </button>
             ) : (
                 <>
-                    <div className="block md:hidden flex items-center pr-4 py-2.5">
-                        <button
-                        onClick={handleOpen}
-                        type="button"
-                        className="text-slate-600"
-                        >
-                        <IoIosLogIn size={30} />
-                        </button>
-                    </div>
+                <div className="pr-5 py-2.5">       
+                    <Button className="flex md:hidden  items-center px-6" 
+                     onClick={handleOpen}
+                    >
+                        Login
+                    </Button>
+                </div>
                 </>
             )
             
