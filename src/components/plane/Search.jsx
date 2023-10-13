@@ -167,6 +167,7 @@ export default function Search() {
     "TPTR",
     "TPMV",
     "TPTN",
+    "TPIP",
   ];
 
   const handlerSearch = async () => {

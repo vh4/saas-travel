@@ -46,19 +46,38 @@ export default function Search() {
   );
   const navigate = useNavigate();
 
-  const [showHarga, setShowHarga] = React.useState(false);
-  const [showWaktu, setShowWaktu] = React.useState(false);
-  const [showKelas, setShowKelas] = React.useState(false);
+  const [showHarga, setShowHarga] = useState(false);
+  const [showWaktu, setShowWaktu] = useState(false);
+  const [showKelas, setShowKelas] = useState(false);
+
+  const btnRefHarga = useRef(null);
+  const btnRefWaktu = useRef(null);
+  const btnRefKelas = useRef(null);
+
+  useEffect(() => {
+    const closeFilter = (e) => {
+      if (
+        e.target !== btnRefHarga.current &&
+        e.target !== btnRefWaktu.current &&
+        e.target !== btnRefKelas.current
+      ) {
+        setShowHarga(false);
+        setShowWaktu(false);
+        setShowKelas(false);
+      }
+    };
+
+    document.body.addEventListener("click", closeFilter);
+
+    return () => document.body.removeEventListener("click", closeFilter);
+  }, []);
+
   const [gradeFilter, setGradeFilter] = useState([false, false, false]);
   const [waktuFilter, setWaktuFilter] = useState([false, false, false, false]);
   const [selectedTime, setSelectedTime] = useState([]);
   const [ubahPencarian, setUbahPencarian] = useState(false);
   const [err, setErr] = useState(false);
   const [errPage, setErrPage] = useState(false);
-
-  const btnRefHarga = useRef();
-  const btnRefWaktu = useRef();
-  const btnRefKelas = useRef();
 
   const [valHargaRange, setHargaRange] = useState([0, 1000000]);
 
@@ -79,6 +98,8 @@ export default function Search() {
     newGradeFilter[e.target.value] = e.target.checked;
     setGradeFilter(newGradeFilter);
   };
+
+  
 
   const handleWaktuFilterChange = (e) => {
     let newWktuFilter = waktuFilter;
@@ -102,24 +123,6 @@ export default function Search() {
       setSelectedTime([...selectedTime, time]);
     }
   };
-
-  useEffect(() => {
-    const closeFilter = (e) => {
-      const category = e.path ? e.path[0] : null;
-      if (category !== btnRefHarga.current) {
-        setShowHarga(false);
-      }
-      if (category !== btnRefWaktu.current) {
-        setShowWaktu(false);
-      }
-      if (category !== btnRefKelas.current) {
-        setShowKelas(false);
-      }
-    };
-    document.body.addEventListener("click", closeFilter);
-
-    return () => document.body.removeEventListener("click", closeFilter);
-  }, []);
 
   function hargraRangeChange(e, data) {
     setHargaRange(data);
@@ -359,22 +362,22 @@ export default function Search() {
               <div className="relative flex items-center space-x-2 text-slate-600 text-xs font-bold">
                 <div className="hidden md:block">FILTER : </div>
                 <button
+                  onClick={() => setShowHarga(!showHarga)} 
                   ref={btnRefHarga}
-                  onClick={() => setShowHarga((prev) => !prev)}
                   className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300"
                 >
                   HARGA
                 </button>
                 <button
+                  onClick={() => setShowWaktu(!showWaktu)} 
                   ref={btnRefWaktu}
-                  onClick={() => setShowWaktu((prev) => !prev)}
                   className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300"
                 >
                   WAKTU
                 </button>
                 <button
+                  onClick={() => setShowKelas(!showKelas)} 
                   ref={btnRefKelas}
-                  onClick={() => setShowKelas((prev) => !prev)}
                   className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300"
                 >
                   KELAS
