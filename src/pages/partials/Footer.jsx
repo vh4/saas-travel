@@ -5,13 +5,13 @@ import React from "react";
 export default function Footer() {
   return (
     <>
-      <footer className=" bg-white text-center text-gray-600 lg:text-left">        
+      <footer className="container mx-auto bg-white text-center text-gray-600 lg:text-left">        
         <div class="container mx-auto flex items-center justify-center border-b-2 border-neutral-200 p-6 lg:justify-between">
           <div class="mr-12 hidden lg:block">
             <span>Terhubunglah dengan kami di jaringan sosial:</span>
           </div>
           <div class="flex justify-center">
-            <a href="https://twitter.com/h2hrajabiller" target="_blank"  class="mr-6 text-neutral-600 ">
+            <a href="https://twitter.com/h2hrajabiller" class="mr-6 text-neutral-600 ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-4 w-4"

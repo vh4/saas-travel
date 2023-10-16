@@ -79,7 +79,7 @@ export default function Search() {
   const [err, setErr] = useState(false);
   const [errPage, setErrPage] = useState(false);
 
-  const [valHargaRange, setHargaRange] = useState([0, 1000000]);
+  const [valHargaRange, setHargaRange] = useState([0, 10000000]);
 
   const [api, contextHolder] = notification.useNotification();
 

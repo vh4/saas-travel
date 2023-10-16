@@ -34,7 +34,7 @@ export default function MainPage(){
                 </div>
             </div>
             <div className="mt-0 md:mt-4 xl:-mt-8">
-                <div className="relative container mx-auto mb-24">
+                <div className="relative container mx-auto mb-6">
                     <div className="-mt-4 md:mt-0 z-10 bg-white mx-0 lg:mx-12 xl:mx-32 2xl:mx-64 md:border md:rounded-md md:shadow-lg">
                     <div className={`block md:flex xl:flex 2xl:flex justify-start`}>
                         <div className="hidden md:flex justify-start px-10">
