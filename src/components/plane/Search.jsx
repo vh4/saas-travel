@@ -418,7 +418,6 @@ export default function Search() {
     });
   }).filter((harga) => {
     if(harga.classes[0] === undefined){
-      console.log(harga)
     }
     return harga.classes[0].some((harga) => {
       return (
@@ -658,7 +657,6 @@ export default function Search() {
                               </h1>
                               <div className="text-sm">
                                 {e.classes[0][0].flightCode}
-                                {console.log(e)}
                               </div>
                               <div>
                                 <img
