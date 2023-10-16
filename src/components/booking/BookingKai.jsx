@@ -221,7 +221,7 @@ export default function ViewBooking({ path }) {
             <div className="p-4 w-full hidden mt-4 xl:gap-4 lg:grid lg:grid-cols-10">
               <div className="col-span-2">
                 <h1 className="text-sm font-bold">{byrdata.nama_kereta} </h1>
-                <small>{byrdata.class === 'EKS' ? 'Eksekutif' : byrdata.class === 'EKO' ? 'Ekonomi' : 'Bisnis'} {byrdata.kode_kereta.substring(4, 5)} - ({byrdata.kode_kereta.split('/')[1]})</small>
+                <small>{byrdata.classes === 'EKS' ? 'Eksekutif' : byrdata.classes === 'EKO' ? 'Ekonomi' : 'Bisnis'} {byrdata.kode_kereta.substring(4, 5)} - ({byrdata.kode_kereta.split('/')[1]})</small>
               </div>
               <div className="col-span-2">
                 <h1 className="text-sm font-bold">{new Date(byrdata.tanggal_keberangkatan.slice(0, 4), parseInt(byrdata.tanggal_keberangkatan.slice(4, 6)) - 1, byrdata.tanggal_keberangkatan.slice(6, 8)).toLocaleDateString("id-ID", { weekday: "long", year: "numeric", month: "long", day: "numeric" })} </h1>
@@ -337,7 +337,7 @@ export default function ViewBooking({ path }) {
                                 Kode Booking
                               </div>
                               <div className='mt-1 text-sm font-bold text-gray-500'>
-                                {/* {e.kode_booking} */} - (Not Permitted)
+                                {/* {e.kode_booking} */} - 
                               </div>
                             </div>
                             <div className='flex space-x-2  items-center pt-4'>

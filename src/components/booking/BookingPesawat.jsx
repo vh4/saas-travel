@@ -432,10 +432,10 @@ export default function ViewBooking({ path }) {
                                   Kode Booking
                                 </div>
                                 <div className="mt-1 text-sm font-bold text-gray-500">
-                                  - (Not Permitted)
+                                  - 
                                 </div>
                               </div>
-                              <div className="flex space-x-2  items-center pt-8">
+                              <div className="block md:flex space-x-2 items-center pt-8">
                                 <div className="text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white">
                                   sisa waktu{" "}
                                   {remainingTimes[i] &&
@@ -447,7 +447,7 @@ export default function ViewBooking({ path }) {
                                 <div
                                   onClick={(e) => openModalBayar(e, i)}
                                   type="button"
-                                  className="cursor-pointer text-blue-500 font-bold text-xs"
+                                  className="mt-4 md:mt-0 cursor-pointer text-blue-500 font-bold text-xs"
                                 >
                                   lanjut bayar
                                 </div>

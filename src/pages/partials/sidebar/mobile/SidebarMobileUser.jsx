@@ -137,37 +137,15 @@ export default function SidebarMobileUser({ pathSidebar }) {
                   Booking Pesawat
                 </div>
               </Link>
+              <Link
+                to="/booking/pelni"
+                className="block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500"
+              >
+                <div className="text-gray-500 text-left text-base font-normal">
+                  Booking Pelni
+                </div>
+              </Link>
             </div>
-            <Link to="/kai">
-              <div
-                className={`mt-2 mb-2 flex cursor-pointer items-center p-1 text-base font-normal text-gray-500 rounded-lg `}
-              >
-                <div className="flex">
-                  <MdOutlineTrain className="text-fuchsia-500" size={24} />
-                  <span className="flex-1 ml-3 whitespace-nowrap">Kereta</span>
-                </div>
-              </div>
-            </Link>
-            <Link to="/pesawat">
-              <div
-                className={`flex cursor-pointer items-center p-2 text-base font-normal text-gray-500 rounded-lg `}
-              >
-                <div className="flex">
-                  <GiCommercialAirplane className="text-blue-500" size={20} />
-                  <span className="flex-1 ml-3 whitespace-nowrap">Pesawat</span>
-                </div>
-              </div>
-            </Link>
-            <Link to="/pelni">
-              <div
-                className={`flex cursor-pointer items-center p-2 text-base font-normal text-gray-500 rounded-lg `}
-              >
-                <div className="flex">
-                  <IoBoatOutline className="text-red-500" size={20} />
-                  <span className="flex-1 ml-3 whitespace-nowrap">Kapal</span>
-                </div>
-              </div>
-            </Link>
             <Link onClick={LogoutHandler}>
               <div
                 className={`flex cursor-pointer items-center p-2 text-base font-normal text-gray-500 rounded-lg `}

@@ -1,7 +1,7 @@
 //make create function reactjs
 
 import { Link } from "react-router-dom";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { CiSettings } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -21,6 +21,8 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { UserOutlined } from "@ant-design/icons";
 
 export default function Header({ toogleSidebar, valueSidebar }) {
+
+  const captchaRef = useRef(null);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [showModal, setShowModal] = React.useState(false);
@@ -238,6 +240,9 @@ export default function Header({ toogleSidebar, valueSidebar }) {
           token: captcha,
         })
         .then((data) => {
+
+          captchaRef.current.reset();
+
           if (data.data.rc === "00") {
             setShowModal(false);
             setLoading(false);
@@ -342,9 +347,6 @@ export default function Header({ toogleSidebar, valueSidebar }) {
                                 Akun saya
                               </li>
                             </Link>
-                            <li class="hover:bg-gray-200 py-2 px-4 w-full border-b border-gray-200 ">
-                              Lupa password pin
-                            </li>
                             <li
                               onClick={LogoutHandler}
                               class="hover:bg-gray-200 py-2 px-4 w-full border-b border-gray-200 "
@@ -501,6 +503,7 @@ export default function Header({ toogleSidebar, valueSidebar }) {
           </Form.Item>
           <Form.Item label="recaptcha">
             <ReCAPTCHA
+              ref={captchaRef} // Tambahkan ref ke reCAPTCHA
               onChange={onChange}
               sitekey="6LdGRpEoAAAAAOqcTSI_5GvfV0_FwqiyOAarv9KM"
             />

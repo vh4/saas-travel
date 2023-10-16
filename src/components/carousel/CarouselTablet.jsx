@@ -69,7 +69,7 @@ export default function CarouselsTablet(props) {
               <div className="flex space-x-4 pl-12 2xl:pl-24 pr-12 text-white">
                 <img className="" src="/join.svg" width={160} alt="carousal.png" />
                 <div>
-                <h1 className="2xl:px-8 text-xl font-bold">Hai Traveler, Welcome!</h1>
+                <h1 className="2xl:px-8 text-xl font-bold">Hai Traveler,</h1>
                 <div className="mt-2 2xl:px-8">
                 <div className="mt-4">
                     Cukup login ke akun Anda dan melakukan pemesanan tiket untuk berbagai macam perjalanan.
