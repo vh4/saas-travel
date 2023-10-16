@@ -3,7 +3,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "react-multi-carousel/lib/styles.css";
 import Slider from "react-slick";
 
-export default function CarouselsMobile(props) {
+export default function CarouselsTablet(props) {
 
     const SlickArrowRight = () => {
       return(
@@ -17,7 +17,7 @@ export default function CarouselsMobile(props) {
       nextArrow: <SlickArrowRight />,
       infinite: true,
       slidesToShow: 1,
-      slidesToScroll: 1,
+      slidesToScroll: 2,
       autoplay: false,
       focusOnSelect: true,
       draggable: true,
@@ -25,12 +25,15 @@ export default function CarouselsMobile(props) {
       swipeToSlide: true,
       accessibility: true,
       autoplaySpeed: 2000,
+      centerMode: true,        // Menyertakan centerMode
+      centerPadding: "150px",  // Sesuaikan dengan jumlah padding yang Anda inginkan
+      width: "100%", // Sesuaikan dengan
       responsive: [
         {
           breakpoint: 1024,
           settings: {
-            slidesToShow: 3,
-            slidesToScroll: 3,
+            slidesToShow: 2,
+            slidesToScroll: 2,
             infinite: true,
             dots: true
           }
@@ -38,9 +41,9 @@ export default function CarouselsMobile(props) {
         {
           breakpoint: 600,
           settings: {
-            slidesToShow: 2,
-            slidesToScroll: 2,
-            initialSlide: 2
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            initialSlide: 1
           }
         },
         {
@@ -58,12 +61,12 @@ export default function CarouselsMobile(props) {
 
     return (
         <div className="xl:grid xl:grid-cols-2 w-full px-0 xl:px-4 xl:py-8">
-            <div className='block md:hidden px-4 mb-4 text-gray-500'>
-                <div className="font-semibold text-sm">Haii traveler</div>
-                <small >Selamat datang di travel rajabiller.com.</small>
+            <div className='block md:hidden mb-4 text-gray-500'>
+                <div className="font-semibold text-sm">Haii kamu,</div>
+                <small >nikmati promo menarik lainya untuk kamu.</small>
             </div>
-            <div className="hidden xl:block pl-24">
-              <div className="flex space-x-4 pl-24 pr-24 text-white">
+            <div className="hidden xl:block">
+              <div className="flex space-x-4 pl-12 2xl:pl-24 pr-12 text-white">
                 <img className="" src="/join.svg" width={160} alt="carousal.png" />
                 <div>
                 <h1 className="2xl:px-8 text-xl font-bold">Hai Traveler, Welcome!</h1>

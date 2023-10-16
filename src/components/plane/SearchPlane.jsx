@@ -1,5 +1,5 @@
 
-import {Popper } from "@mui/material";
+import {ButtonBase, Popper } from "@mui/material";
 import * as React from 'react';
 import FormControl from '@mui/material/FormControl';
 import axios from "axios";
@@ -12,14 +12,57 @@ import {FaPlaneDeparture, FaPlaneArrival} from 'react-icons/fa'
 import { Chip } from "@mui/material";
 import CircularProgress from '@mui/material/CircularProgress';
 import onClickOutside from "react-onclickoutside";
-import { useNavigate } from "react-router-dom"
+import { createSearchParams, useNavigate } from "react-router-dom"
 import { makeStyles } from '@mui/styles';
-import { Button } from "antd";
+import { Button, Tooltip } from "antd";
 import Cookies from "js-cookie";
+import { Modal, Placeholder } from "rsuite";
+import { CheckboxGroup, Checkbox } from 'rsuite';
+import { SearchOutlined } from '@ant-design/icons';
 
 function Plane(){
 
     const [anchorEl, setAnchorEl] = React.useState('hidden');
+
+    const [open, setOpen] = React.useState(false);
+    const [size, setSize] = React.useState();
+    const [loadingModal, setLoadingModal] = React.useState(false);
+
+    var j = '{"TPGA":"GARUDA INDONESIA","TPIP":"PELITA AIR","TPJQ":"JETSTAR","TPJT":"LION AIR","TPMV":"TRANS NUSA","TPQG":"CITILINK","TPQZ":"AIR ASIA","TPSJ":"SRIWIJAYA","TPTN":"TRIGANA AIR","TPTR":"TIGER AIR","TPXN":"XPRESS AIR"}';
+    var djremix = JSON.parse(j);
+    
+    var keysArray = Object.keys(djremix);    
+
+    const [selectedOptions, setSelectedOptions] = React.useState(keysArray);
+    const [isSelectAll, setIsSelectAll] = React.useState(true);
+
+    const handleCheckboxChange = (value) => {
+    
+    setSelectedOptions(value);
+  };
+
+  const toggleSelectAll = () => {
+    if (isSelectAll) {
+      setSelectedOptions([]);
+      setIsSelectAll(false);
+    } else {
+      setSelectedOptions(Object.keys(djremix));
+      setIsSelectAll(true);
+    }
+  };
+
+    const handleOpen = value => {
+      setSize(value);
+      setOpen(true);
+      setLoadingModal(true);
+
+      setTimeout(() => {
+        setLoadingModal(false);
+      }, 1000);
+
+    };
+    const handleClose = () => setOpen(false);
+    
     const handleClick = () => {
         anchorEl === 'hidden' ? setAnchorEl('grid') : setAnchorEl('hidden');
     }
@@ -208,6 +251,7 @@ function Plane(){
         }
         
     }
+    
 
 
     function plusInfant(e){
@@ -294,6 +338,7 @@ function Plane(){
                 adult : adult,
                 child : child,
                 infant : infant,
+                maskapai:selectedOptions.join('#'),
             }
 
             const expirationDate = new Date();
@@ -316,33 +361,73 @@ function Plane(){
 
             window.location = `/flight/search?${str}`;
 
-        }, 1000);
+        });
 
     }
 
 
     return (
-        <>     
+        <> 
+            <Modal size={size} open={open} onClose={handleClose}>
+                <Modal.Header>
+                <Modal.Title>Pilih Maskapai</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {loadingModal === true ? (
+                    <>
+                        <Placeholder.Paragraph />
+                    </>) :
+                    (
+                    <>
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-4">
+                                <Checkbox
+                                    checked={isSelectAll}
+                                    onChange={toggleSelectAll}
+                                >
+                                    Select All
+                                </Checkbox>
+                                </div>
+                                {Object.keys(djremix).map((key) => (
+                                <div className="col-2" key={key}>
+                                    <CheckboxGroup
+                                    inline
+                                    value={selectedOptions}
+                                    onChange={handleCheckboxChange}
+                                    >
+                                    <Checkbox value={key}>
+                                        {djremix[key]}
+                                    </Checkbox>
+                                    </CheckboxGroup>
+                                </div>
+                                ))}
+                            </div>
+                            </div>
+
+                    </>)}
+                    
+                </Modal.Body>
+                <Modal.Footer>
+                <Button onClick={handleClose} appearance="subtle">
+                    Cancel
+                </Button>
+                <Button onClick={handleClose} appearance="primary">
+                    Ok
+                </Button>
+                </Modal.Footer>
+            </Modal>  
            <div className="pl-4 flex justify-center row bg-white border-t border-gray-200 w-full pr-0">
-                <div class="w-full p-4 py-4 rounded-lg shadow-xs ">
+                <div class="w-full p-4 py-4 rounded-lg shadow-xs">
                     <form className="w-full">
                         <>
                         <div className="w-64 xl:w-48 mx-0">
-                            {/* <div class="mx-0 md:mx-12 xl:mx-6">
-                            <label class="w-auto flex items-center mr-4 mb-3 cursor-pointer">
-                                <input type="checkbox" value={pulang} onChange={() => setPulang(prev => !prev)} id="A3-yes"class="opacity-0 absolute h-2 w-2" />
-                                <div class="bg-white border-2 rounded-md border-gray-400 w-5 h-5 flex flex-shrink-0 justify-center items-center mr-2 focus-within:border-gray-500">
-                                <svg class={`${pulang ? 'block' : 'hidden'} fill-current w-2 h-2 text-gray-500 pointer-events-none"`} version="1.1" viewBox="0 0 17 12" xmlns="http://www.w3.org/2000/svg">
-                                    <g fill="none" fill-rule="evenodd">
-                                    <g transform="translate(-9 -11)" fill="#1F73F1" fill-rule="nonzero">
-                                        <path d="m25.576 11.414c0.56558 0.55188 0.56558 1.4439 0 1.9961l-9.404 9.176c-0.28213 0.27529-0.65247 0.41385-1.0228 0.41385-0.37034 0-0.74068-0.13855-1.0228-0.41385l-4.7019-4.588c-0.56584-0.55188-0.56584-1.4442 0-1.9961 0.56558-0.55214 1.4798-0.55214 2.0456 0l3.679 3.5899 8.3812-8.1779c0.56558-0.55214 1.4798-0.55214 2.0456 0z" />
-                                    </g>
-                                    </g>
-                                </svg>
-                                </div>
-                                <small for="A3-yes" class="select-none text-gray-500">Tanggal pulang</small>
-                            </label>
-                            </div>                           */}
+                            <div class="mx-0 md:mx-12 xl:mx-6 mb-2">
+                                <small className="mb-2 text-gray-500">Pilih Maskapai</small>
+                                <Tooltip title="cari maskapai">
+                                    <Button onClick={() => handleOpen('lg')} type="primary" shape="default" className="block mt-2 bg-blue-500" icon={<SearchOutlined />} >List Maskapai</Button>
+                                </Tooltip>
+                            </div>                          
                             </div>
                                 <div className="block xl:flex justify-between">
                                 <div className={`grid grid-cols-1 lg:grid-cols-3 ${pulang ? 'xl:grid-cols-5' : 'xl:grid-cols-4'} mx-0 md:mx-12 xl:mx-4`}>

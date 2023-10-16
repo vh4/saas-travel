@@ -11,6 +11,12 @@ export default function Carousels(props) {
       )
     }
 
+    const SlickArrowLeft = () => {
+      return(
+        <></>
+      )
+    }
+
     var settings = {
       dots: true,
       arrows: true,
@@ -26,7 +32,7 @@ export default function Carousels(props) {
       accessibility: true,
       autoplaySpeed: 2000,
       centerMode: true,        // Menyertakan centerMode
-      centerPadding: "100px",  // Sesuaikan dengan jumlah padding yang Anda inginkan
+      centerPadding: "50px",  // Sesuaikan dengan jumlah padding yang Anda inginkan
       responsive: [
         {
           breakpoint: 1024,
@@ -59,13 +65,13 @@ export default function Carousels(props) {
       
 
     return (
-        <div className="xl:grid xl:grid-cols-2 w-full px-0 xl:px-4 xl:py-8">
+        <div className="container mx-auto xl:grid xl:grid-cols-2 w-full px-0 xl:px-4 xl:py-8">
             <div className='block md:hidden px-4 mb-4 text-gray-500'>
                 <div className="font-semibold text-sm">Haii kamu,</div>
                 <small >nikmati promo menarik lainya untuk kamu.</small>
             </div>
-            <div className="hidden xl:block pl-24">
-              <div className="flex space-x-4 pl-24 pr-24 text-white">
+            <div className="hidden xl:block ">
+              <div className="flex space-x-4 pl-12 text-white">
                 <img className="" src="/join.svg" width={160} alt="carousal.png" />
                 <div>
                 <h1 className="2xl:px-8 text-xl font-bold">Hai Traveler, Welcome!</h1>

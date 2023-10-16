@@ -17,18 +17,17 @@ export default function Sidebar({nameMenu, setNameMenu}) {
                         </div>
                     </li>                    
                     <li>
-                        <div onClick={() => setNameMenu('pelni')} className={`flex cursor-pointer px-4 ${ nameMenu === 'pelni' ? 'border-b-2 border-blue-500' : ''} items-center p-2 text-base font-normal text-gray-900   hover:border-blue-500 hover:border-b-2 `}>
-                        <IoBoatOutline className='text-fuchsia-500' size={20} />
-                            <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Pelni Kapal</span>
-                        </div>
-                    </li>
-                    <li>
                         <div onClick={() => setNameMenu('train')} className={`flex cursor-pointer px-4 ${ nameMenu === 'train' ? 'border-b-2 border-blue-500' : ''} items-center p-2 text-base font-normal text-gray-900   hover:border-blue-500 hover:border-b-2 `}>
                         <MdOutlineTrain className='text-orange-500' size={20} />
                             <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Kereta Api</span>
                         </div>
                     </li>
-
+                    <li>
+                        <div onClick={() => setNameMenu('pelni')} className={`flex cursor-pointer px-4 ${ nameMenu === 'pelni' ? 'border-b-2 border-blue-500' : ''} items-center p-2 text-base font-normal text-gray-900   hover:border-blue-500 hover:border-b-2 `}>
+                        <IoBoatOutline className='text-fuchsia-500' size={20} />
+                            <span className="flex-1 ml-3 whitespace-nowrap font-semibold text-[15px] text-slate-800">Pelni Kapal</span>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </aside>

@@ -55,11 +55,17 @@ export default function Search() {
     isLowestPrice,
     adult,
     child,
-    infant;
+    infant,
+    maskapai;
 
-  departure = searchParams.get("departure")
+    maskapai = searchParams.get("maskapai")
+    ? searchParams.get("maskapai")
+    : null;
+
+    departure = searchParams.get("departure")
     ? searchParams.get("departure")
     : null;
+
   departureName = searchParams.get("departureName")
     ? searchParams.get("departureName")
     : null;
@@ -127,6 +133,15 @@ export default function Search() {
     if (departure === null || departure === undefined) {
       setPageErr(true);
     }
+
+    if (departure === null || departure === undefined) {
+      setPageErr(true);
+    }
+
+    if (maskapai === null || maskapai === undefined) {
+      setPageErr(true);
+    }
+
   }, [
     token,
     departure,
@@ -139,6 +154,7 @@ export default function Search() {
     adult,
     child,
     infant,
+    maskapai
   ]);
 
   const tanggal_keberangkatan = parseTanggal(departureDate);
@@ -155,20 +171,7 @@ export default function Search() {
   useEffect(() => {
     handlerSearch();
   }, []);
-  const ListKodePesawat = [
-    "TPQZ",
-    "TPQG",
-    "TPXN",
-    "TPGA",
-    "TPJQ",
-    "TPKP",
-    "TPJT",
-    "TPSJ",
-    "TPTR",
-    "TPMV",
-    "TPTN",
-    "TPIP",
-  ];
+  const ListKodePesawat = maskapai.split('#');
 
   const handlerSearch = async () => {
     setLoading(true);

@@ -10,6 +10,7 @@ import Carousels from '../../components/carousel/Carousel'
 import CarouselsMobile from '../../components/carousel/CarouselMobile'
 
 import Pelni from "../../components/pelni/Pelni";
+import CarouselsTablet from "../../components/carousel/CarouselTablet";
 export default function MainPage(){
 
     const [nameMenu, setNameMenu] = useState('plane');
@@ -22,11 +23,14 @@ export default function MainPage(){
         {/* carousel fitur  */}
         <div className="w-full">
             <div className="md:bg-gradient-to-r md:from-cyan-500 md:to-blue-500">
-                <div className="hidden md:block py-4 md:py-8 relative z-10">
-                    <Carousels />
+                <div className="hidden md:block xl:block 2xl:hidden py-4 md:py-8 relative z-10">
+                    <CarouselsTablet />
                 </div>
                 <div className="block md:hidden py-4 md:py-8 relative z-10">
                     <CarouselsMobile />
+                </div>
+                <div className="hidden 2xl:block py-4 md:py-8 relative z-10">
+                    <Carousels />
                 </div>
             </div>
             <div className="mt-0 md:mt-4 xl:-mt-8">
