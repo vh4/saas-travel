@@ -291,15 +291,17 @@ export default function Search() {
                   <div className="hidden md:block font-normal text-slate-600">
                     |
                   </div>
-                  <small className="hidden md:block text-xs font-bold text-slate-600">
-                    {parseTanggal(startDate)}
-                  </small>
-                  <div className="hidden md:block font-normal text-slate-600">
-                    |
+                  <div className="hidden md:flex space-x-0 md:space-x-4 text-xs font-bold text-slate-600">
+                    <div>
+                      {parseTanggal(startDate)}
+                    </div>
+                    <div>
+                      s.d 
+                    </div>
+                    <div>
+                      {parseTanggal(endDate)}
+                    </div>
                   </div>
-                  <small className="hidden md:block text-xs font-bold text-slate-600">
-                    {parseTanggal(endDate)}
-                  </small>
                   <div className="hidden md:block font-normal text-slate-600">
                     |
                   </div>
