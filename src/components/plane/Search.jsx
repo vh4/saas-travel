@@ -128,6 +128,7 @@ export default function Search() {
     ? searchParams.get("maskapai")
     : null;
 
+
     departure = searchParams.get("departure")
     ? searchParams.get("departure")
     : null;
@@ -204,10 +205,6 @@ export default function Search() {
       setPageErr(true);
     }
 
-    if (maskapai === null || maskapai === undefined) {
-      setPageErr(true);
-    }
-
   }, [
     token,
     departure,
@@ -234,10 +231,16 @@ export default function Search() {
   const [detailTiket, setDetailTiket] = React.useState(null);
   const [detailHarga, setDetailHarga] = React.useState(null);
 
+  var j = '{"TPGA":"GARUDA INDONESIA","TPIP":"PELITA AIR","TPJQ":"JETSTAR","TPJT":"LION AIR","TPMV":"TRANS NUSA","TPQG":"CITILINK","TPQZ":"AIR ASIA","TPSJ":"SRIWIJAYA","TPTN":"TRIGANA AIR","TPTR":"TIGER AIR","TPXN":"XPRESS AIR"}';
+  var djremix = JSON.parse(j);
+  
+  var keysArray = Object.keys(djremix);  
+
   useEffect(() => {
     handlerSearch();
   }, []);
-  const ListKodePesawat = maskapai.split('#');
+
+  const ListKodePesawat = maskapai !== null && maskapai !== undefined && maskapai !== '' ? maskapai.split('#') : keysArray;
 
   const handlerSearch = async () => {
     setLoading(true);
