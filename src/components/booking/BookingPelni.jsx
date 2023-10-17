@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { AiOutlineHome } from 'react-icons/ai';
 import { BsArrowRightShort } from 'react-icons/bs';
-import { MdOutlineTrain } from 'react-icons/md';
 import axios from 'axios';
-import { Placeholder } from 'rsuite';
-import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
-import { Button, Modal, message } from 'antd';
+import {  message } from 'antd';
 import { toRupiah } from '../../helpers/rupiah';
 import { remainingTime } from '../../helpers/date';
 import Page500 from '../components/500';
+import { IoBoatSharp } from "react-icons/io5";
 
 export default function ViewBooking({ path }) {
   const [data, setData] = useState([]);
@@ -182,7 +180,7 @@ export default function ViewBooking({ path }) {
                           </div>
                           <div className='border-t mt-8'>
                             <div className='flex space-x-2 mt-4 text-sm font-bold text-gray-500'>
-                              <MdOutlineTrain className='text-blue-500' size={16} />
+                              <IoBoatSharp className='text-blue-500' size={16} />
                               <div className='flex space-x-2 items-center'><div>{e.origin.toUpperCase()}</div><BsArrowRightShort /><div>{e.destination.toUpperCase()}</div></div>
                             </div>
                             <div className='pl-1'>
@@ -195,14 +193,14 @@ export default function ViewBooking({ path }) {
                             </div>
                           </div>
                           <div className='mt-8 border-t block lg:flex lg:justify-between  lg:items-center'>
-                            <div className='mt-2 flex space-x-2 items-end'>
+                            {/* <div className='mt-2 flex space-x-2 items-end'>
                               <div className='mt-1 text-xs  text-gray-500'>
                                 Kode Booking
                               </div>
                               <div className='mt-1 text-sm font-bold text-gray-500'>
-                                {/* {e.kode_booking} */} - 
+                                - 
                               </div>
-                            </div>
+                            </div> */}
                             <div className='flex space-x-2  items-center pt-4'>
                               <div className='text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white'>sisa waktu 
                               {remainingTimes[i] && (new Date(e.expiredDate).getTime() > new Date().getTime()) ? remainingTime(remainingTimes[i])  : ' habis.'}

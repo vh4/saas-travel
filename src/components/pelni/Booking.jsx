@@ -8,7 +8,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { RxCrossCircled } from "react-icons/rx";
 import "react-phone-input-2/lib/bootstrap.css";
-import { Button, DatePicker } from "antd";
+import { Button, DatePicker, Modal } from "antd";
 import dayjs from "dayjs";
 import PhoneInput from "react-phone-input-2";
 import { Input, Form } from "antd";
@@ -20,6 +20,8 @@ import Page400 from "../components/400";
 import Page500 from "../components/500";
 import BookingLoading from "../components/pelniskeleton/booking";
 import ManyRequest from "../components/Manyrequest";
+import { ExclamationCircleFilled } from '@ant-design/icons';
+
 
 export default function BookingPelni() {
   const [api, contextHolder] = notification.useNotification();
@@ -329,6 +331,7 @@ export default function BookingPelni() {
 
       if (infobooking.data.rc !== "00") {
         failedNotification(infobooking.data.rd);
+        setIsLoading(false);
       } else {
 
         const transactionId = await axios.post(
@@ -346,9 +349,13 @@ export default function BookingPelni() {
 
           } else {
             failedNotification(transactionId.data.rd);
+            setIsLoading(false);
           }
       }
     }
+
+    hideModal()
+
   };
 
   const data = [
@@ -381,6 +388,16 @@ export default function BookingPelni() {
     return current && current > endOfDays;
   };
 
+
+  const [open, setOpen] = useState(false);
+  const showModal = () => {
+    setOpen(true);
+  };
+  const hideModal = () => {
+    setOpen(false);
+  };
+
+
   return (
     <>
       {/* message notification  */}
@@ -406,6 +423,45 @@ export default function BookingPelni() {
         <>
         <div className="xl:mt-0">
         {/* header kai flow */}
+        <Modal
+              title={
+                (<>
+                  <div className="flex space-x-2 items-center">
+                      <ExclamationCircleFilled className="text-orange-500 text-xl" />
+                      <div className="text-bold text-xl text-orange-500">Are you sure?</div>
+                  </div>
+                </>)
+              }
+              open={open}
+              onOk={hideModal}
+              onCancel={hideModal}
+              okText="Cancel"
+              cancelText="Submit"
+              maskClosable={false}
+              footer={
+                <>
+                <div className="blok mt-8">
+                  <div className="flex justify-end space-x-2">
+                  <Button key="back" onClick={hideModal}>
+                    Cancel
+                  </Button>
+                  <Button
+                      htmlType="submit"
+                      key="submit"
+                      type="primary"
+                      className="bg-blue-500"
+                      loading={isLoading}
+                      onClick={handlerBookingSubmit}
+                    >
+                      Submit
+                    </Button>
+                  </div>
+                </div>
+              </>
+              }
+            >
+              <p>Apakah Anda yakin ingin submit data?</p>
+            </Modal>
         <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
           <div className="flex space-x-2 items-center">
             <div className="hidden xl:flex text-blue-500 font-bold">
@@ -428,7 +484,7 @@ export default function BookingPelni() {
             </div>
             <div className="block xl:hidden text-slate-500">Payment</div>
           </div>
-          <div>
+          {/* <div>
             <MdHorizontalRule
               size={20}
               className="text-gray-500 hidden xl:flex"
@@ -437,7 +493,7 @@ export default function BookingPelni() {
           <div className="flex space-x-2 items-center">
             <RxCrossCircled size={20} className="text-slate-500" />
             <div className="text-slate-500">E-Tiket</div>
-          </div>
+          </div> */}
         </div>
 
       {isLoadingPage === true ? (
@@ -508,7 +564,7 @@ export default function BookingPelni() {
             {/* detail passengger kai*/}
             <Form
             form={form}
-              onFinish={handleSubmit(handlerBookingSubmit)}
+              onFinish={handleSubmit(showModal)}
               className="block w-full  mt-8 mb-4 xl:mt-12"
             >
               <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-2 gap-12">
@@ -1063,7 +1119,6 @@ export default function BookingPelni() {
                   key="submit"
                   type="primary"
                   className="bg-blue-500 mx-2 font-semibold"
-                  loading={isLoading}
                 >
                   Lanjut ke Konfirmasi
                 </Button>

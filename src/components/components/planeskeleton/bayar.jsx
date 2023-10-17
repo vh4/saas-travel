@@ -160,27 +160,10 @@ const BayarLoading = ({TotalAdult, TotalChild, TotalInfant}) => {
 							</div>
 						</div>
 						<div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
-							<div className="px-4 py-2 text-sm text-gray-500">
-							<Alert
-								banner
-								message={
-								<Marquee pauseOnHover gradient={false}>
-									<span>
-									Untuk menu pembayaran, masih dalam proses
-									pengembangan.{" "}
-									</span>
-								</Marquee>
-								}
-							/>
-							</div>
 							<div className="flex justify-center">
 							<div className="flex justify-center px-8 py-4 text-sm text-gray-500">
 								<div className="">
-								Tekan tombol{" "}
-								<span className="text-center text-blue-500">
-									bayar langsung
-								</span>{" "}
-								untuk melakukan pembayaran secara tunai.
+								Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
 								</div>
 							</div>
 							</div>

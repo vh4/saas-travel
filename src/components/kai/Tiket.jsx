@@ -46,13 +46,13 @@ export default function Konfirmasi(){
                         <div className='hidden xl:block text-slate-500'>Pembayaran tiket</div>
                         <div className='block xl:hidden text-slate-500'>Payment</div>
                     </div>
-                    <div>
+                    {/* <div>
                         <MdHorizontalRule size={20} className='text-gray-500 hidden xl:flex' />
                     </div>
                     <div className='flex space-x-2 items-center'>
                         <AiOutlineCheckCircle className='text-slate-500'  size={20} />
                         <div className='text-slate-500'>E-Tiket</div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="w-full mt-8 xl:px-28 mb-16">
                     <div className="border rounded-md pb-12">
@@ -77,7 +77,7 @@ export default function Konfirmasi(){
                             </div>
                             <div className="mt-2 text-gray-500 flex justify-between">
                                 <div>Transaksi ID</div>
-                                <div>{data.id_transaksi}</div>
+                                <div className="text-[18px]">{data.id_transaksi}</div>
                             </div>
                             <div className="mt-8 text-gray-500 font-bold flex justify-between">
                                 <div>Total Dibayar</div>

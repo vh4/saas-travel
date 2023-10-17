@@ -9,7 +9,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { RxCrossCircled } from "react-icons/rx";
 import "react-phone-input-2/lib/bootstrap.css";
-import { Button, DatePicker, Form } from "antd";
+import { Button, DatePicker, Form, Modal } from "antd";
 import dayjs from "dayjs";
 import PhoneInput from "react-phone-input-2";
 import { Input } from "antd";
@@ -20,6 +20,7 @@ import Page400 from "../components/400";
 import { Loading } from "../components/Loading";
 import ManyRequest from "../components/Manyrequest";
 import BookingLoading from "../components/trainskeleton/booking";
+import { ExclamationCircleFilled } from '@ant-design/icons';
 
 export default function BookingKai() {
   const [api, contextHolder] = notification.useNotification();
@@ -288,6 +289,7 @@ export default function BookingKai() {
     }
 
     setIsLoading(false);
+    hideModal();
 
   };
 
@@ -298,6 +300,15 @@ export default function BookingKai() {
 
     return current && (current < twoYearsAgo || current > currentDate);
     
+  };
+
+
+  const [open, setOpen] = useState(false);
+  const showModal = () => {
+    setOpen(true);
+  };
+  const hideModal = () => {
+    setOpen(false);
   };
 
   return (
@@ -324,6 +335,45 @@ export default function BookingKai() {
       (
         <>
           {/* header kai flow */}
+          <Modal
+              title={
+                (<>
+                  <div className="flex space-x-2 items-center">
+                      <ExclamationCircleFilled className="text-orange-500 text-xl" />
+                      <div className="text-bold text-xl text-orange-500">Are you sure?</div>
+                  </div>
+                </>)
+              }
+              open={open}
+              onOk={hideModal}
+              onCancel={hideModal}
+              okText="Cancel"
+              cancelText="Submit"
+              maskClosable={false}
+              footer={
+                <>
+                <div className="blok mt-8">
+                  <div className="flex justify-end space-x-2">
+                  <Button key="back" onClick={hideModal}>
+                    Cancel
+                  </Button>
+                  <Button
+                      htmlType="submit"
+                      key="submit"
+                      type="primary"
+                      className="bg-blue-500"
+                      loading={isLoading}
+                      onClick={handlerBookingSubmit}
+                    >
+                      Submit
+                    </Button>
+                  </div>
+                </div>
+              </>
+              }
+            >
+              <p>Apakah Anda yakin ingin submit data?</p>
+            </Modal>
           <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
               <div className="flex space-x-2 items-center">
                 <div className="hidden xl:flex text-blue-500 font-bold">
@@ -359,7 +409,7 @@ export default function BookingKai() {
                 </div>
                 <div className="block xl:hidden text-slate-500">Payment</div>
               </div>
-              <div>
+              {/* <div>
                 <MdHorizontalRule
                   size={20}
                   className="text-gray-500 hidden xl:flex"
@@ -368,7 +418,7 @@ export default function BookingKai() {
               <div className="flex space-x-2 items-center">
                 <RxCrossCircled size={20} className="text-slate-500" />
                 <div className="text-slate-500">E-Tiket</div>
-              </div>
+              </div> */}
             </div>
           <div className="xl:mt-0">
           
@@ -477,7 +527,7 @@ export default function BookingKai() {
               
               <Form
                  form={form}
-                onFinish={handleSubmit(handlerBookingSubmit)}
+                onFinish={handleSubmit(showModal)}
                 className="block w-full mt-0 xl:mt-4 mb-4"
               >
 
@@ -790,7 +840,6 @@ export default function BookingKai() {
                     key="submit"
                     type="primary"
                     className="bg-blue-500 mx-2 font-semibold"
-                    loading={isLoading}
                   >
                     Lanjut ke Konfirmasi
                   </Button>

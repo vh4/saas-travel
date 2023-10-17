@@ -69,11 +69,7 @@ export default function EditProfile(){
                                     </p>
                                 </div>
                             </div>
-                            <div class="pt-8 pb-4 text-center">
-                                <p class="text-gray-500 font-bold text-md xl:text-2xl tracking-more-wider">
-                                {data.norek ? data.norek : 'xxxx-xxxx-xxxx-xxxx-xxxx'}
-                                </p>
-                            </div>
+                  
                             <div class="pt-4 xl:pt-8 pr-6">
                                 <div class="flex justify-between">
                                     <div class="text-gray-500">
@@ -84,14 +80,7 @@ export default function EditProfile(){
                                         {data.idOutlet ? data.idOutlet : '-'}
                                         </p>
                                     </div>
-                                    <div class="text-gray-500">
-                                        <p class="font-light text-xs">
-                                            Upline
-                                        </p>
-                                        <p class="font-medium tracking-wider text-sm">
-                                        {data.upline ? data.upline : '-'}
-                                        </p>
-                                    </div>
+                    
             
                                     <div class="text-gray-500">
                                         <p class="font-light text-xs">

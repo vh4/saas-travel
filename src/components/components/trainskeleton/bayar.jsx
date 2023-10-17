@@ -149,7 +149,7 @@ const BayarLoading = ({TotalAdult, TotalInfant}) => {
 					<Alert banner message={<Marquee pauseOnHover gradient={false}><span>Untuk menu pembayaran, masih dalam proses pengembangan.</span></Marquee>} />
 					</div>
 					<div className="px-8 py-4 text-sm text-gray-500">
-					Tekan tombol <span className="text-blue-500">bayar langsung</span> untuk melakukan pembayaran secara tunai.
+					Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut.
 					</div>
 					<div className="flex justify-center">
 					{/* Skeleton Placeholder for Payment Button */}

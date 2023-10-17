@@ -10,7 +10,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { RxCrossCircled } from "react-icons/rx";
 import "react-phone-input-2/lib/bootstrap.css";
-import { Button, DatePicker, Result } from "antd";
+import { Button, DatePicker, Modal, Result } from "antd";
 import { Input, Form } from "antd";
 import { Select } from "antd";
 import dayjs from "dayjs";
@@ -23,6 +23,7 @@ import BookingLoading from "../components/planeskeleton/booking";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
 import ManyRequest from '../components/Manyrequest'
+import { ExclamationCircleFilled } from '@ant-design/icons';
 
 export default function BookingPesawat() {
   useEffect(() => {
@@ -373,6 +374,9 @@ export default function BookingPesawat() {
         failedNotification(bookingResponse.data.rd);
       }
     }
+
+    hideModal();
+
   };
 
   const disabledDate = (current, e, i) => {
@@ -410,6 +414,14 @@ export default function BookingPesawat() {
     formState: { errors },
   } = useForm();
 
+  const [open, setOpen] = useState(false);
+  const showModal = () => {
+    setOpen(true);
+  };
+  const hideModal = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       {contextHolder}
@@ -433,6 +445,45 @@ export default function BookingPesawat() {
       (
         <>
           <div className="-mt-2 xl:mt-0">
+            <Modal
+              title={
+                (<>
+                  <div className="flex space-x-2 items-center">
+                      <ExclamationCircleFilled className="text-orange-500 text-xl" />
+                      <div className="text-bold text-xl text-orange-500">Are you sure?</div>
+                  </div>
+                </>)
+              }
+              open={open}
+              onOk={hideModal}
+              onCancel={hideModal}
+              okText="Cancel"
+              cancelText="Submit"
+              maskClosable={false}
+              footer={
+                <>
+                <div className="blok mt-8">
+                  <div className="flex justify-end space-x-2">
+                  <Button key="back" onClick={hideModal}>
+                    Cancel
+                  </Button>
+                  <Button
+                      htmlType="submit"
+                      key="submit"
+                      type="primary"
+                      className="bg-blue-500"
+                      loading={isLoading}
+                      onClick={handlerBookingSubmit}
+                    >
+                      Submit
+                    </Button>
+                  </div>
+                </div>
+              </>
+              }
+            >
+              <p>Apakah Anda yakin ingin submit data?</p>
+            </Modal>
             {/* header kai flow */}
             <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-4 items-center">
               <div className="flex space-x-2 items-center">
@@ -456,7 +507,7 @@ export default function BookingPesawat() {
                 </div>
                 <div className="block xl:hidden text-slate-500">Payment</div>
               </div>
-              <div>
+              {/* <div>
                 <MdHorizontalRule
                   size={20}
                   className="text-gray-500 hidden xl:flex"
@@ -465,7 +516,7 @@ export default function BookingPesawat() {
               <div className="flex space-x-2 items-center">
                 <RxCrossCircled size={20} className="text-slate-500" />
                 <div className="text-slate-500">E-Tiket</div>
-              </div>
+              </div> */}
             </div>
             {/* sidebar mobile plane*/}
 
@@ -554,7 +605,7 @@ export default function BookingPesawat() {
                   {/* detail passengger Pesawat*/}
                   <Form
                     form={form}
-                    onFinish={handleSubmit(handlerBookingSubmit)}
+                    onFinish={showModal}
                     className="block w-full  mt-8 mb-4 xl:mt-12"
                   >
                     <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-2 gap-12">
@@ -1302,7 +1353,6 @@ export default function BookingPesawat() {
                         key="submit"
                         type="primary"
                         className="bg-blue-500 mx-2 font-semibold"
-                        loading={isLoading}
                       >
                         Lanjut ke Pembayaran
                       </Button>

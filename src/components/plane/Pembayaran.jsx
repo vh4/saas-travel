@@ -211,7 +211,7 @@ export default function Pembayaran() {
                 Payment
               </div>
             </div>
-            <div>
+            {/* <div>
               <MdHorizontalRule
                 size={20}
                 className="text-gray-500 hidden xl:flex"
@@ -220,7 +220,7 @@ export default function Pembayaran() {
             <div className="flex space-x-2 items-center">
               <RxCrossCircled size={20} className="text-slate-500" />
               <div className="text-slate-500">E-Tiket</div>
-            </div>
+            </div> */}
           </div>
 
           {isLoadingPage === true ? (
@@ -383,9 +383,12 @@ export default function Pembayaran() {
                     <div className="px-4 py-2">
                       {/* <div className="text-gray-500 text-xs">Booking ID</div> */}
                       <div className="text-gray-500 text-xs">Transaksi ID</div>                      
-                      <div className="mt-1 font-bold text-blue-500 text-xs">
+                      <div className="mt-1  font-bold text-blue-500 text-[18px]">
                         {/* {hasilBooking && hasilBooking.bookingCode} */}
                         {hasilBooking && hasilBooking.transactionId}
+                      </div>
+                      <div className="text-grapy-500 text-xs">
+                        Gunakan transaksi id diatas untuk melakukan inq ulang dan pembayaran.
                       </div>
                     </div>
                     <div className="p-4 border-t">
@@ -455,27 +458,10 @@ export default function Pembayaran() {
                         </div> */}
                   </div>
                   <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
-                    <div className="px-4 py-2 text-sm text-gray-500">
-                      <Alert
-                        banner
-                        message={
-                          <Marquee pauseOnHover gradient={false}>
-                            <span>
-                              Untuk menu pembayaran, masih dalam proses
-                              pengembangan.{" "}
-                            </span>
-                          </Marquee>
-                        }
-                      />
-                    </div>
                     <div className="flex justify-center">
                       <div className="flex justify-center px-8 py-4 text-sm text-gray-500">
                         <div className="">
-                          Tekan tombol{" "}
-                          <span className="text-center text-blue-500">
-                            bayar langsung
-                          </span>{" "}
-                          untuk melakukan pembayaran secara tunai.
+                        Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut.
                         </div>
                       </div>
                     </div>

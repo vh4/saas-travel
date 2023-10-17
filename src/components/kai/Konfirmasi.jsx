@@ -18,7 +18,6 @@ import { parseTanggal } from "../../helpers/date";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
 import PageExpired from "../components/Expired";
-import { Loading } from "../components/Loading";
 import KonfirmasiLoading from "../components/trainskeleton/konfirmasi";
 
 const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData }) => {
@@ -701,7 +700,7 @@ export default function Konfirmasi() {
               </div>
               <div className="block xl:hidden text-slate-500">Payment</div>
             </div>
-            <div>
+            {/* <div>
               <MdHorizontalRule
                 size={20}
                 className="text-gray-500 hidden xl:flex"
@@ -710,7 +709,7 @@ export default function Konfirmasi() {
             <div className="flex space-x-2 items-center">
               <RxCrossCircled size={20} className="text-slate-500" />
               <div className="text-slate-500">E-Tiket</div>
-            </div>
+            </div> */}
           </div>
 
           {isLoadingPage === true ? (
@@ -966,11 +965,14 @@ export default function Konfirmasi() {
                     <div className="flex items-center justify-between p-4">
                       {/* <div className="text-gray-500 text-sm">Booking ID</div> */}
                       <div className="text-gray-500 text-sm">Transaksi ID</div>
-                      <div className="font-bold text-blue-500 ">
+                      <div className="font-bold text-blue-500 text-[18px]">
                         {/* {hasilBooking && hasilBooking.bookingCode} */}
                         {hasilBooking && hasilBooking.transactionId}                        
                       </div>
                     </div>
+                    <div className="px-4 text-grapy-500 text-xs">
+                        Gunakan transaksi id diatas untuk melakukan inq ulang dan pembayaran.
+                      </div>
                   </div>
                   <button onClick={handlerPilihKursi} className="block w-full">
                     <div className="mt-2 rounded-md border border-gray-200 shadow-sm  hover:bg-gray-100">
