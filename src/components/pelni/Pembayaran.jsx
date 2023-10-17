@@ -170,7 +170,7 @@ export default function Pembayaran() {
             </div>
             <div className="flex space-x-2 items-center">
               <AiOutlineCheckCircle className="text-slate-500" size={20} />
-              <div className="hidden xl:flex text-slate-500 font-bold">
+              <div className="hidden xl:flex text-slate-500">
                 Konfirmasi pesanan
               </div>
               <div className="block xl:hidden text-slate-500 font-bold">
