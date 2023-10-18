@@ -46,6 +46,9 @@ export default function Search() {
   const btnRefHarga = useRef(null);
   const btnRefWaktu = useRef(null);
 
+  const [uuid, setuuid] =useState(null)
+
+
   useEffect(() => {
     const closeFilter = (e) => {
       if (
@@ -205,6 +208,8 @@ export default function Search() {
       if (response.data.rc === "00") {
         const dataParsing = response.data.data;
 
+        setuuid(response.data.uuid);
+
         for (let k = 0; k < dataParsing.length; k++) {
           const e = dataParsing[k];
           for (let i = 0; i < e.fares.length; i++) {
@@ -244,6 +249,7 @@ export default function Search() {
       subClass: e.fares[i].SUBCLASS,
       male: 1,
       female: e.fares[i].AVAILABILITY.F,
+      uuid:uuid,
       token: JSON.parse(
         localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
       ),
