@@ -30,6 +30,7 @@ export default function Search() {
   });
 
   const [searchParams, setSearchParams] = useSearchParams();
+  const [uuids, setuuid] = useState(null);
 
   const origin = searchParams.get("origin");
   const destination = searchParams.get("destination");
@@ -217,6 +218,7 @@ export default function Search() {
       } else {
         setError(false);
         setDataSearch(response.data.data);
+        setuuid(response.data.uuid)
         setLoading(false);
       }
     } catch (error) {
@@ -245,11 +247,12 @@ export default function Search() {
     const dataLengkap = {
       train: detailBooking,
       train_detail: detailKereta,
+      uuid:uuids
     };
 
     const uuid = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/train/search/k_search`,
-      dataLengkap
+      dataLengkap,
     );
 
     if (uuid.data.rc == "00") {

@@ -227,6 +227,7 @@ export default function Konfirmasi() {
 
   const uuid_book = searchParams.get("k_book");
   const uuid_train_data = searchParams.get("k_train");
+  const uuid_auth = searchParams.get("k_auth");
 
   const [dataBookingTrain, setdataBookingTrain] = useState(null);
   const [dataDetailTrain, setdataDetailTrain] = useState(null);
@@ -461,6 +462,7 @@ export default function Konfirmasi() {
           uuid: uuid_book,
           passengers: passengers,
           hasil_book: hasilBookingData,
+          uuid_permission:uuid_auth
         }
       );
 
@@ -478,7 +480,7 @@ export default function Konfirmasi() {
 
         setTimeout(() => {
           window.location.reload(response.data.rd);
-        }, 1500);
+        }, 1000);
       }
     } else if (response.data.rc === "55") {
       setisLoadingPindahKursi(false);
@@ -486,14 +488,14 @@ export default function Konfirmasi() {
 
       setTimeout(() => {
         window.location.reload(response.data.rd);
-      }, 1500);
+      }, 1000);
     } else {
       setisLoadingPindahKursi(false);
       failedNotification();
 
       setTimeout(() => {
         window.location.reload(response.data.rd);
-      }, 1500);
+      }, 1000);
     }
   };
 
@@ -700,16 +702,6 @@ export default function Konfirmasi() {
               </div>
               <div className="block xl:hidden text-slate-500">Payment</div>
             </div>
-            {/* <div>
-              <MdHorizontalRule
-                size={20}
-                className="text-gray-500 hidden xl:flex"
-              />
-            </div>
-            <div className="flex space-x-2 items-center">
-              <RxCrossCircled size={20} className="text-slate-500" />
-              <div className="text-slate-500">E-Tiket</div>
-            </div> */}
           </div>
 
           {isLoadingPage === true ? (

@@ -58,6 +58,8 @@ export default function Search() {
   const btnRefHarga = useRef(null);
   const btnRefWaktu = useRef(null);
 
+  const [uuids, setuuids] = useState(null);
+
   useEffect(() => {
     const closeFilter = (e) => {
       if (
@@ -264,6 +266,9 @@ export default function Search() {
       );
 
       if (response.data.data && response.data.data !== undefined && response.data.data.length !== 0) {
+        
+        setuuids(uuids);
+
         x = x + 15; //loading per-15%
         setTimeout(() => {
           setPercent(x + 30);
@@ -351,7 +356,8 @@ export default function Search() {
         `${process.env.REACT_APP_HOST_API}/travel/pesawat/search/flight`,
         {
             _flight:next,
-            _flight_forBooking:forBooking
+            _flight_forBooking:forBooking,
+            uuid:uuids
         }
     );
 

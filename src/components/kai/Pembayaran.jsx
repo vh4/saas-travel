@@ -2,14 +2,11 @@ import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import { AiOutlineCheckCircle } from "react-icons/ai";
-import { RxCrossCircled } from "react-icons/rx";
 import { MdHorizontalRule } from "react-icons/md";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import { TiketContext } from "../../App";
 import { Button as ButtonAnt } from "antd";
 import { notification } from "antd";
-import Marquee from "react-fast-marquee";
-import { Alert } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
 import { parseTanggal } from "../../helpers/date";
 import Page500 from "../components/500";
@@ -271,16 +268,6 @@ export default function Pembayaran() {
               </div>
               <div className="block xl:hidden text-blue-500">Payment</div>
             </div>
-            {/* <div>
-              <MdHorizontalRule
-                size={20}
-                className="text-gray-500 hidden xl:flex"
-              />
-            </div>
-            <div className="flex space-x-2 items-center">
-              <RxCrossCircled size={20} className="text-slate-500" />
-              <div className="text-slate-500">E-Tiket</div>
-            </div> */}
           </div>
           {isLoadingPage === true ? (
             <>
@@ -481,10 +468,6 @@ export default function Pembayaran() {
                     </div>
                   </div>
                   <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
-                    {/* <div className="px-8 py-4 text-sm text-gray-500">
-                        Tekan tombol <span className="text-blue-500">bayar langsung</span> untuk melakukan pembayaran secara tunai.
-                    </div> */}
-
                     <div className="px-8 py-4 text-sm text-gray-500">
                     Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
                     </div>

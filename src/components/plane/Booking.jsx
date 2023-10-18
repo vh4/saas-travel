@@ -347,7 +347,8 @@ export default function BookingPesawat() {
                     children: child[0],
                     infants: infant[0],
                 },
-                _Bookingflight: bookingResponse.data.data
+                _Bookingflight: bookingResponse.data.data,
+                uuid:bookingResponse.data.uuid
             }
           );
 
