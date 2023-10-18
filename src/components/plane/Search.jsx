@@ -267,29 +267,27 @@ export default function Search() {
       );
 
       if (response.data.data && response.data.data !== undefined && response.data.data.length !== 0) {
+        
         x = x + 15; //loading per-15%
 
-        setTimeout(() => {
-
-          if(panjang <= 2 ){
-            setPercent(x + 80);
-          }
-
-          if(panjang > 2 && panjang <= 4){
-            setPercent(x + 40);
-          }
-
-          if(panjang >= 5){
-            setPercent(x + 25);
-          }
+        if(panjang >= 2 && panjang <= 4){
           
-        });
+            setPercent(x + 40);          
+        }
+
+        if(panjang >= 5){
+            setPercent(x + 30);
+        }
+
         setDataSearch((dataSearch) => [...dataSearch, ...response.data.data]);
         setLoading(false);
         setError(false);
         x++;
       }
+
     }
+
+    console.log(percent)
 
     setLoading(false);
 
