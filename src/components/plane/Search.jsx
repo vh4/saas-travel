@@ -267,7 +267,7 @@ export default function Search() {
 
       if (response.data.data && response.data.data !== undefined && response.data.data.length !== 0) {
         
-        setuuids(uuids);
+        setuuids(response.data.uuid);
 
         x = x + 15; //loading per-15%
         setTimeout(() => {

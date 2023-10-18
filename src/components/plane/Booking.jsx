@@ -337,6 +337,8 @@ export default function BookingPesawat() {
       `${process.env.REACT_APP_HOST_API}/travel/flight/book`, book
     );
 
+    console.log(bookingResponse)
+
     if (bookingResponse.data.rc === "00") {
 
         const uuid = await axios.post(
