@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { VscArrowSwap } from "react-icons/vsc";
 import axios from "axios";
@@ -8,22 +8,15 @@ import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Searchpelni from "./PelniSearch";
-import { Typography, notification } from "antd";
+import { notification } from "antd";
 import Page400 from "../components/400";
 import Page500 from "../components/500";
 import { duration, durationFull } from "../../helpers/pelni";
 import { parseTanggal, parseTanggalPelni } from "../../helpers/date";
 import { toRupiah } from "../../helpers/rupiah";
 import moment from "moment";
-import { Checkbox, FormControlLabel, FormGroup, Slider, createTheme } from "@mui/material";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 
 export default function Search() {
-  const theme = createTheme({
-    typography: {
-      fontSize: 8,
-    },
-  });
 
   const [searchParams, setSearchParams] = useSearchParams();
   const origin = searchParams.get("origin");
@@ -40,34 +33,7 @@ export default function Search() {
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
 
-  const [showHarga, setShowHarga] = useState(false);
-  const [showWaktu, setShowWaktu] = useState(false);
-
-  const btnRefHarga = useRef(null);
-  const btnRefWaktu = useRef(null);
-
   const [uuid, setuuid] =useState(null)
-
-
-  useEffect(() => {
-    const closeFilter = (e) => {
-      if (
-        e.target !== btnRefHarga.current &&
-        e.target !== btnRefWaktu.current
-      ) {
-        setShowHarga(false);
-        setShowWaktu(false);
-      }
-    };
-
-    document.body.addEventListener("click", closeFilter);
-
-    return () => document.body.removeEventListener("click", closeFilter);
-  }, []);
-
-  const [waktuFilter, setWaktuFilter] = useState([false, false, false, false]);
-  const [selectedTime, setSelectedTime] = useState([]);
-  const [valHargaRange, setHargaRange] = useState([0, 10000000]);
 
   const navigate = useNavigate();
   const [ubahPencarian, setUbahPencarian] = useState(false);
@@ -139,57 +105,6 @@ export default function Search() {
   useEffect(() => {
     handlerSearch();
   }, []);
-
-
-  const handleWaktuFilterChange = (e) => {
-    let newWktuFilter = waktuFilter;
-
-    if (e.target.value == "06:00-11:59") {
-      newWktuFilter[0] = newWktuFilter[0] ? false : true;
-    } else if (e.target.value == "12:00-17:59") {
-      newWktuFilter[1] = newWktuFilter[1] ? false : true;
-    } else if (e.target.value == "18:00-23:59") {
-      newWktuFilter[2] = newWktuFilter[2] ? false : true;
-    } else if (e.target.value == "00:00-05:59") {
-      newWktuFilter[3] = newWktuFilter[3] ? false : true;
-    }
-
-    setWaktuFilter(newWktuFilter);
-
-    const time = e.target.value;
-    if (selectedTime.includes(time)) {
-      setSelectedTime(selectedTime.filter((t) => t !== time));
-    } else {
-      setSelectedTime([...selectedTime, time]);
-    }
-  };
-
-  function hargraRangeChange(e, data) {
-    setHargaRange(data);
-  }
-
-  const filteredData = dataSearch
-  .filter((d) => {
-    if (selectedTime.length === 0) {
-      return true;
-    }
-    const departureTime = moment(d.DEP_TIME, "HHmm").format("HH:mm");
-    return selectedTime.some((t) => {
-      const [start, end] = t.split("-");
-      return moment(departureTime, "HH:mm").isBetween(
-        moment(start, "HH:mm"),
-        moment(end, "HH:mm")
-      );
-    });
-  })
-  .filter((pelni) => {
-    return pelni.fares.some((pelni) => {
-      return (
-        valHargaRange[0] <= pelni.FARE_DETAIL.A.TOTAL &&
-        pelni.FARE_DETAIL.A.TOTAL <= valHargaRange[1]
-      );
-    });
-  });
 
   const handlerSearch = async () => {
     setLoading(true);
@@ -419,123 +334,6 @@ export default function Search() {
                 <Searchpelni />
               </div>
             ) : null}
-            <div className="flex justify-between mt-6">
-              <div className="relative flex items-center space-x-2 text-slate-600 text-xs font-bold">
-                <div className="hidden md:block">FILTER : </div>
-                <button
-                  onClick={() => setShowHarga(!showHarga)} 
-                  ref={btnRefHarga}
-                  className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300"
-                >
-                  HARGA
-                </button>
-                <button
-                  onClick={() => setShowWaktu(!showWaktu)} 
-                  ref={btnRefWaktu}
-                  className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300"
-                >
-                  WAKTU
-                </button>
-                {showHarga ? (
-                  <div className="w-auto absolute top-10 z-50 opacity-100 bg-white p-4 text-xs">
-                    <Box sx={{ width: 200 }}>
-                      <Typography
-                        theme={theme}
-                        id="track-inverted-slider"
-                        gutterBottom
-                      ><div className="text-xs font-thin">
-                        Range antara Rp.{toRupiah(valHargaRange[0])} - Rp.
-                        {toRupiah(valHargaRange[1])}
-                      </div>
-                      </Typography>
-                      <Slider
-                        size="small"
-                        track="inverted"
-                        aria-labelledby="track-inverted-range-slider"
-                        onChange={hargraRangeChange}
-                        value={valHargaRange}
-                        min={0}
-                        max={10000000}
-                      />
-                    </Box>
-                  </div>
-                ) : null}
-                {showWaktu ? (
-                  <div className="w-auto absolute top-10 left-28 z-50 opacity-100 bg-white p-4 text-xs">
-                    <Box sx={{ width: 120 }}>
-                      <FormGroup>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={waktuFilter[0]}
-                              value="06:00-11:59"
-                              onChange={handleWaktuFilterChange}
-                              size="small"
-                            />
-                          }
-                          label={
-                            <span style={{ fontSize: "12px" }}>
-                              06.00 - 12.00
-                            </span>
-                          }
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={waktuFilter[1]}
-                              value="12:00-17:59"
-                              onChange={handleWaktuFilterChange}
-                              size="small"
-                            />
-                          }
-                          label={
-                            <span style={{ fontSize: "12px" }}>
-                              12.00 - 18.00
-                            </span>
-                          }
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={waktuFilter[2]}
-                              value="18:00-23:59"
-                              onChange={handleWaktuFilterChange}
-                              size="small"
-                            />
-                          }
-                          label={
-                            <span style={{ fontSize: "12px" }}>
-                              18.00 - 00.00
-                            </span>
-                          }
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={waktuFilter[3]}
-                              value="00:00-05:59"
-                              onChange={handleWaktuFilterChange}
-                              size="small"
-                            />
-                          }
-                          label={
-                            <span style={{ fontSize: "12px" }}>
-                              00.00 - 06.00
-                            </span>
-                          }
-                        />
-                      </FormGroup>
-                    </Box>
-                  </div>
-                ) : null}
-              </div>
-              <div>
-                <div className="flex space-x-2 items-center p-4 px-4 md:px-4 mr-0 xl:mr-16 text-gray-500 rounded-md text-xs font-bold">
-                  <div>URUTKAN</div>
-                  <MdOutlineKeyboardArrowDown />
-                </div>
-              </div>
-            </div>
             <div>
               {isLoading ? (
                 skeleton.map(() => (
@@ -551,7 +349,7 @@ export default function Search() {
                 ))
               ) : notFound !== true && dataSearch.length !== 0 ? (
                 <div className="row mb-24 w-full p-2 pr-0 xl:pr-16">
-                  {filteredData.map(
+                  {dataSearch.map(
                     (
                       e //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
                     ) => (
