@@ -287,8 +287,6 @@ export default function Search() {
 
     }
 
-    console.log(percent)
-
     setLoading(false);
 
     if (percent < 90) {
