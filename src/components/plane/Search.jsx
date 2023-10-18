@@ -247,6 +247,9 @@ export default function Search() {
     var x = 0;
 
     for (let e of ListKodePesawat) {
+
+      const panjang = ListKodePesawat.length;
+
       let response = await axios.post(
         `${process.env.REACT_APP_HOST_API}/travel/flight/search`,
         {
@@ -265,8 +268,21 @@ export default function Search() {
 
       if (response.data.data && response.data.data !== undefined && response.data.data.length !== 0) {
         x = x + 15; //loading per-15%
+
         setTimeout(() => {
-          setPercent(x + 30);
+
+          if(panjang <= 2 ){
+            setPercent(x + 80);
+          }
+
+          if(panjang > 2 && panjang <= 4){
+            setPercent(x + 40);
+          }
+
+          if(panjang >= 5){
+            setPercent(x + 25);
+          }
+          
         });
         setDataSearch((dataSearch) => [...dataSearch, ...response.data.data]);
         setLoading(false);
