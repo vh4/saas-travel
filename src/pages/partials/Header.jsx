@@ -100,14 +100,14 @@ export default function Header({ toogleSidebar, valueSidebar }) {
         localStorage.clear();
         suksesLogout();
 
-        setIsDrawerOpen(false);
+        setIsDrawerOpen(false); //
 
         setLogout({
           type: "LOGOUT",
         });
 
         navigate("/logout");
-        
+
       });
   };
 
