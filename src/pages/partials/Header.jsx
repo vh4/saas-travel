@@ -107,6 +107,7 @@ export default function Header({ toogleSidebar, valueSidebar }) {
         });
 
         navigate("/logout");
+        
       });
   };
 
