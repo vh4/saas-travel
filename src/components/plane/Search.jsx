@@ -465,7 +465,7 @@ export default function Search() {
         </div>
         <div className="mt-8">
           <div className="block md:flex justify-between">
-            <div className="flex items-center justify-start space-x-3 xl:space-x-4">
+            <div className="flex items-center space-x-3 xl:space-x-4 text-center md:text-left">
               <small className="text-xs font-bold text-slate-600">
                 {departureName} ({departure})
               </small>
@@ -492,7 +492,7 @@ export default function Search() {
                 Penumpang
               </small>
             </div>
-            <div className="mt-4 md:mt-0 flex space-x-4 mr-0 xl:mr-16">
+            <div className="mt-4 md:mt-0 flex space-x-4 md:mr-0 xl:mr-16 justify-center md:justify-end">
               <Link to="/" className="flex space-x-2 items-center">
                 <IoArrowBackOutline className="text-blue-500" size={16} />
                 <div className="text-blue-500 text-sm font-bold">Kembali</div>
@@ -1205,7 +1205,7 @@ export default function Search() {
                           {/* mobile cari */}
                           <div
                             type="button"
-                            onClick={(e) => e.classes[0][0].availability > 0 ? bookingHandlerDetail(e, index) : "" }
+                            onClick={(f) => e.classes[0][0].availability > 0 ? bookingHandlerDetail(f, index) : "" }
                             className="cursor-pointer block xl:hidden w-full text-gray-700"
                           >
                             <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">

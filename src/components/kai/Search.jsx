@@ -317,7 +317,7 @@ export default function Search() {
           </div>
           <div className="mt-8">
             <div className="block lg:flex justify-between">
-              <div className="flex items-center justify-start space-x-3 xl:space-x-4">
+              <div className="flex items-center space-x-3 xl:space-x-4 text-center md:text-left">
                 <small className="text-xs font-bold text-slate-600">
                   {stasiunBerangkat}, {kotaBerangkat}
                 </small>
@@ -343,7 +343,7 @@ export default function Search() {
                   {parseInt(adult) + parseInt(infant)} Penumpang
                 </small>
               </div>
-              <div className="mt-4 lg:mt-0 flex space-x-4 mr-0 xl:mr-16">
+              <div className="mt-4 md:mt-0 flex space-x-4 md:mr-0 xl:mr-16 justify-center md:justify-end">
                 <Link to="/" className="flex space-x-2 items-center">
                   <IoArrowBackOutline className="text-blue-500" size={16} />
                   <div className="text-blue-500 text-sm font-bold">Kembali</div>
