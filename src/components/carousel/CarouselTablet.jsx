@@ -64,7 +64,7 @@ export default function CarouselsMobile(props) {
                 <small >Selamat datang di travel rajabiller.com.</small>
             </div>
             <div className="hidden xl:block">
-              <div className="flex space-x-4 pl-24 pr-24 text-white">
+              <div className="flex space-x-4 pl-18 2xl:pl-24 pr-16 2xl:pr-24 text-white">
                 <img className="" src="/join.svg" width={160} alt="carousal.png" />
                 <div>
                 <h1 className="2xl:px-8 text-xl font-bold">Hai Traveler, Welcome!</h1>
