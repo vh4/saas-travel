@@ -99,7 +99,7 @@ const Sidebar = () => {
 		<div>
 		<div className="hidden xl:block rounded-md border border-gray-200 shadow-sm">
 		<div className="p-2 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-		<div className="text-gray-700 text-sm font-bold">
+		<div className="text-gray-700 text-sm ">
 			<Skeleton width={150} />
 		</div>
 		<small className="text-xs text-gray-700">
@@ -107,7 +107,7 @@ const Sidebar = () => {
 		</small>
 		</div>
 		<div className="px-4 xl:px-8 p-4 flex justify-between space-x-12 items-center">
-		<div className="text-xs font-bold text-slate-600">
+		<div className="text-xs  text-slate-600">
 			<div>
 			<Skeleton width={100} />
 			</div>
@@ -118,7 +118,7 @@ const Sidebar = () => {
 		<div className="rounded-full p-2 bg-blue-500 text-white">
 			<TbArrowsLeftRight />
 		</div>
-		<div className="text-xs font-bold text-slate-600">
+		<div className="text-xs  text-slate-600">
 			<div>
 			<Skeleton width={100} />
 			</div>
@@ -129,7 +129,7 @@ const Sidebar = () => {
 		</div>
 
 		<div className="p-4 pl-8 text-gray-700">
-		<div className="text-xs font-bold">
+		<div className="text-xs ">
 			<Skeleton width={150} />
 		</div>
 		<small>
@@ -141,14 +141,14 @@ const Sidebar = () => {
 			<li className="mb-10 ml-4 text-sm">
 			<div className="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-400 "></div>
 			<div className="flex space-x-12">
-				<time className="mb-1 text-xs font-bold leading-none text-gray-400 ">
+				<time className="mb-1 text-xs  leading-none text-gray-400 ">
 				<Skeleton width={100} />
 				</time>
 				<div className="-mt-2">
-				<h3 className="text-left text-xs font-bold text-slate-600 ">
+				<h3 className="text-left text-xs  text-slate-600 ">
 					<Skeleton width={100} />
 				</h3>
-				<p className="text-left text-xs font-bold text-gray-500 ">
+				<p className="text-left text-xs  text-gray-500 ">
 					<Skeleton width={50} />
 				</p>
 				</div>
@@ -157,14 +157,14 @@ const Sidebar = () => {
 			<li className="ml-4 text-sm mt-10">
 			<div className="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white "></div>
 			<div className="flex space-x-12">
-				<time className="mb-1 text-xs font-bold leading-none text-gray-400 ">
+				<time className="mb-1 text-xs  leading-none text-gray-400 ">
 				<Skeleton width={100} />
 				</time>
 				<div className="-mt-2">
-				<h3 className="text-left text-xs font-bold text-slate-600 ">
+				<h3 className="text-left text-xs  text-slate-600 ">
 					<Skeleton width={100} />
 				</h3>
-				<p className="text-left text-xs font-bold text-gray-500 ">
+				<p className="text-left text-xs  text-gray-500 ">
 					<Skeleton width={50} />
 				</p>
 				</div>
@@ -184,7 +184,7 @@ const SidebarMobile = () => {
 		<div>
 		<div className="block xl:hidden rounded-md border border-gray-200 shadow-sm">
 		<div className="p-2 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-		<div className="text-gray-700 text-sm font-bold">
+		<div className="text-gray-700 text-sm ">
 			<Skeleton width={150} />
 		</div>
 		<small className="text-xs text-gray-700">
@@ -192,7 +192,7 @@ const SidebarMobile = () => {
 		</small>
 		</div>
 		<div className="px-4 xl:px-8 p-4 flex justify-between space-x-12 items-center">
-		<div className="text-xs font-bold text-slate-600">
+		<div className="text-xs  text-slate-600">
 			<div>
 			<Skeleton width={100} />
 			</div>
@@ -203,7 +203,7 @@ const SidebarMobile = () => {
 		<div className="rounded-full p-2 bg-blue-500 text-white">
 			<TbArrowsLeftRight />
 		</div>
-		<div className="text-xs font-bold text-slate-600">
+		<div className="text-xs  text-slate-600">
 			<div>
 			<Skeleton width={100} />
 			</div>
@@ -214,7 +214,7 @@ const SidebarMobile = () => {
 		</div>
 
 		<div className="p-4 pl-8 text-gray-700">
-		<div className="text-xs font-bold">
+		<div className="text-xs ">
 			<Skeleton width={150} />
 		</div>
 		<small>
@@ -226,14 +226,14 @@ const SidebarMobile = () => {
 			<li className="mb-10 ml-4 text-sm">
 			<div className="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-400 "></div>
 			<div className="flex space-x-12">
-				<time className="mb-1 text-xs font-bold leading-none text-gray-400 ">
+				<time className="mb-1 text-xs  leading-none text-gray-400 ">
 				<Skeleton width={100} />
 				</time>
 				<div className="-mt-2">
-				<h3 className="text-left text-xs font-bold text-slate-600 ">
+				<h3 className="text-left text-xs  text-slate-600 ">
 					<Skeleton width={100} />
 				</h3>
-				<p className="text-left text-xs font-bold text-gray-500 ">
+				<p className="text-left text-xs  text-gray-500 ">
 					<Skeleton width={50} />
 				</p>
 				</div>
@@ -242,14 +242,14 @@ const SidebarMobile = () => {
 			<li className="ml-4 text-sm mt-10">
 			<div className="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white "></div>
 			<div className="flex space-x-12">
-				<time className="mb-1 text-xs font-bold leading-none text-gray-400 ">
+				<time className="mb-1 text-xs  leading-none text-gray-400 ">
 				<Skeleton width={100} />
 				</time>
 				<div className="-mt-2">
-				<h3 className="text-left text-xs font-bold text-slate-600 ">
+				<h3 className="text-left text-xs  text-slate-600 ">
 					<Skeleton width={100} />
 				</h3>
-				<p className="text-left text-xs font-bold text-gray-500 ">
+				<p className="text-left text-xs  text-gray-500 ">
 					<Skeleton width={50} />
 				</p>
 				</div>

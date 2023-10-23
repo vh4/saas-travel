@@ -116,7 +116,7 @@ const Sidebar = () => {
       <div className="w-1/2">
         <div className="hidden xl:block rounded-md border border-gray-200 shadow-sm mb-4">
           <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-            <div className="text-gray-700 text-sm font-bold">
+            <div className="text-gray-700 text-sm ">
               {/* Skeleton Placeholder for Keberangkatan Pesawat */}
               <Skeleton width={150} height={12} />
             </div>
@@ -126,7 +126,7 @@ const Sidebar = () => {
             </small>
           </div>
           <div className="px-4 p-8 flex justify-between space-x-8 mx-4 items-center">
-            <div className="text-xs font-bold text-slate-600">
+            <div className="text-xs  text-slate-600">
               <div>
                 {/* Skeleton Placeholder for Keberangkatan Kota */}
                 <Skeleton width={80} height={12} />
@@ -139,7 +139,7 @@ const Sidebar = () => {
             <div className="rounded-full p-1 bg-blue-500 ">
               <TbArrowsLeftRight className="text-white" size={18} />
             </div>
-            <div className="text-xs font-bold text-slate-600">
+            <div className="text-xs  text-slate-600">
               <div>
                 {/* Skeleton Placeholder for Kedatangan Kota */}
                 <Skeleton width={80} height={12} />
@@ -157,7 +157,7 @@ const Sidebar = () => {
 					<div className="w-16 h-16 bg-gray-300 rounded-full animate-pulse"></div>
 				</div>
 			</div>
-              <div className="text-gray-500 text-xs font-bold">
+              <div className="text-gray-500 text-xs ">
                 {/* Skeleton Placeholder for Nama Maskapai */}
                 <Skeleton width={120} height={12} />
               </div>
@@ -168,16 +168,16 @@ const Sidebar = () => {
               <li className="mb-10 ml-4 text-sm">
                 <div className="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-400  "></div>
                 <div className="flex space-x-12">
-                  <time className="mb-1 text-xs font-bold leading-none text-gray-400 ">
+                  <time className="mb-1 text-xs  leading-none text-gray-400 ">
                     {/* Skeleton Placeholder for Waktu Keberangkatan */}
                     <Skeleton width={40} height={10} />
                   </time>
                   <div className="-mt-2">
-                    <h3 className="text-left text-xs font-bold text-slate-600 ">
+                    <h3 className="text-left text-xs  text-slate-600 ">
                       {/* Skeleton Placeholder for Nama Keberangkatan Kota */}
                       <Skeleton width={80} height={12} />
                     </h3>
-                    <p className="text-left text-xs font-bold text-gray-500 ">
+                    <p className="text-left text-xs  text-gray-500 ">
                       {/* Skeleton Placeholder for Kode Keberangkatan Kota */}
                       <Skeleton width={40} height={10} />
                     </p>
@@ -187,16 +187,16 @@ const Sidebar = () => {
               <li className="ml-4 text-sm mt-10">
                 <div className="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white  "></div>
                 <div className="flex space-x-12">
-                  <time className="mb-1 text-xs font-bold leading-none text-gray-400 ">
+                  <time className="mb-1 text-xs  leading-none text-gray-400 ">
                     {/* Skeleton Placeholder for Waktu Kedatangan */}
                     <Skeleton width={40} height={10} />
                   </time>
                   <div className="-mt-2">
-                    <h3 className="text-left text-xs font-bold text-slate-600 ">
+                    <h3 className="text-left text-xs  text-slate-600 ">
                       {/* Skeleton Placeholder for Nama Kedatangan Kota */}
                       <Skeleton width={80} height={12} />
                     </h3>
-                    <p className="text-left text-xs font-bold text-gray-500 ">
+                    <p className="text-left text-xs  text-gray-500 ">
                       {/* Skeleton Placeholder for Kode Kedatangan Kota */}
                       <Skeleton width={40} height={10} />
                     </p>
@@ -216,7 +216,7 @@ const BookingLoading = ({ TotalAdult, TotalChild, TotalInfant }) => {
     <>
       <div className="mt-8 xl:mt-0 block xl:hidden rounded-md border border-gray-200 shadow-sm">
         <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-          <div className="text-gray-700 text-sm font-bold">
+          <div className="text-gray-700 text-sm ">
             {/* Skeleton Placeholder for Keberangkatan Pesawat */}
             <Skeleton width={150} height={12} />
           </div>
@@ -226,7 +226,7 @@ const BookingLoading = ({ TotalAdult, TotalChild, TotalInfant }) => {
           </small>
         </div>
         <div className="px-4 xl:px-8 p-4 flex justify-between space-x-12 items-center">
-          <div className="text-xs font-bold text-slate-600">
+          <div className="text-xs  text-slate-600">
             <div>
               {/* Skeleton Placeholder for Keberangkatan Kota */}
               <Skeleton width={80} height={12} />
@@ -239,7 +239,7 @@ const BookingLoading = ({ TotalAdult, TotalChild, TotalInfant }) => {
           <div className="rounded-full p-1 bg-blue-500 ">
             <TbArrowsLeftRight className="text-white" size={18} />
           </div>
-          <div className="text-xs font-bold text-slate-600">
+          <div className="text-xs  text-slate-600">
             <div>
               {/* Skeleton Placeholder for Kedatangan Kota */}
               <Skeleton width={80} height={12} />
@@ -257,7 +257,7 @@ const BookingLoading = ({ TotalAdult, TotalChild, TotalInfant }) => {
 					<div className="w-16 h-16 bg-gray-300 rounded-full animate-pulse"></div>
 				</div>
 			</div>
-              <div className="text-gray-500 text-xs font-bold">
+              <div className="text-gray-500 text-xs ">
                 {/* Skeleton Placeholder for Nama Maskapai */}
                 <Skeleton width={120} height={12} />
               </div>
@@ -268,16 +268,16 @@ const BookingLoading = ({ TotalAdult, TotalChild, TotalInfant }) => {
             <li class="mb-10 ml-4 text-sm">
               <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-400"></div>
               <div className="flex space-x-12">
-                <time class="mb-1 text-xs font-bold leading-none text-gray-400">
+                <time class="mb-1 text-xs  leading-none text-gray-400">
                   {/* Skeleton Placeholder for Waktu Keberangkatan */}
                   <Skeleton width={40} height={10} />
                 </time>
                 <div className="-mt-2">
-                  <h3 class="text-left text-xs font-bold text-slate-600">
+                  <h3 class="text-left text-xs  text-slate-600">
                     {/* Skeleton Placeholder for Nama Keberangkatan Kota */}
                     <Skeleton width={80} height={12} />
                   </h3>
-                  <p class="text-left text-xs font-bold text-gray-500">
+                  <p class="text-left text-xs  text-gray-500">
                     {/* Skeleton Placeholder for Kode Keberangkatan Kota */}
                     <Skeleton width={40} height={10} />
                   </p>
@@ -287,16 +287,16 @@ const BookingLoading = ({ TotalAdult, TotalChild, TotalInfant }) => {
             <li class="ml-4 text-sm mt-10">
               <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white"></div>
               <div className="flex space-x-12">
-                <time class="mb-1 text-xs font-bold leading-none text-gray-400">
+                <time class="mb-1 text-xs  leading-none text-gray-400">
                   {/* Skeleton Placeholder for Waktu Kedatangan */}
                   <Skeleton width={40} height={10} />
                 </time>
                 <div className="-mt-2">
-                  <h3 class="text-left text-xs font-bold text-slate-600">
+                  <h3 class="text-left text-xs  text-slate-600">
                     {/* Skeleton Placeholder for Nama Kedatangan Kota */}
                     <Skeleton width={80} height={12} />
                   </h3>
-                  <p class="text-left text-xs font-bold text-gray-500">
+                  <p class="text-left text-xs  text-gray-500">
                     {/* Skeleton Placeholder for Kode Kedatangan Kota */}
                     <Skeleton width={40} height={10} />
                   </p>

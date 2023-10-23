@@ -16,17 +16,17 @@ const BayarLoading = ({TotalAdult, TotalInfant}) => {
 								{/* Skeleton Placeholder for the name */}
 								<Skeleton width={100} height={16} />
 								<div className="mt-2 block md:flex md:space-x-8">
-								<div className="px-2 md:px-4 py-2 text-sm font-bold">
+								<div className="px-2 md:px-4 py-2 text-sm ">
 									<div className="text-gray-500">NIK</div>
 									{/* Skeleton Placeholder for NIK */}
 									<Skeleton width={100} height={12} />
 								</div>
-								<div className="px-2 md:px-4 py-2 text-sm font-bold">
+								<div className="px-2 md:px-4 py-2 text-sm ">
 									<div className="text-gray-500">Nomor HP</div>
 									{/* Skeleton Placeholder for Nomor HP */}
 									<Skeleton width={100} height={12} />
 								</div>
-								<div className="px-2 md:px-4 py-2 text-sm font-bold">
+								<div className="px-2 md:px-4 py-2 text-sm ">
 									<div className="text-gray-500">Kursi</div>
 									{/* Skeleton Placeholder for Kursi */}
 									<Skeleton width={100} height={12} />
@@ -45,17 +45,17 @@ const BayarLoading = ({TotalAdult, TotalInfant}) => {
 									{/* Skeleton Placeholder for the name */}
 									<Skeleton width={100} height={16} />
 									<div className="mt-2 flex space-x-8">
-									<div className="px-4 py-2 text-sm font-bold">
+									<div className="px-4 py-2 text-sm ">
 										<div className="text-gray-500">NIK</div>
 										{/* Skeleton Placeholder for NIK */}
 										<Skeleton width={100} height={12} />
 									</div>
-									<div className="px-4 py-2 text-sm font-bold">
+									<div className="px-4 py-2 text-sm ">
 										<div className="text-gray-500">Tanggal Lahir</div>
 										{/* Skeleton Placeholder for Tanggal Lahir */}
 										<Skeleton width={100} height={12} />
 									</div>
-									<div className="px-4 py-2 text-sm font-bold">
+									<div className="px-4 py-2 text-sm ">
 										<div className="text-gray-500">Kursi</div>
 										{/* Skeleton Placeholder for Kursi */}
 										<Skeleton width={100} height={12} />
@@ -69,7 +69,7 @@ const BayarLoading = ({TotalAdult, TotalInfant}) => {
 
 					<div className="p-2 mt-2 w-full rounded-md border border-gray-200 shadow-sm">
 					<div className="p-4">
-						<div className="text-xs text-slate-500 font-bold flex justify-between">
+						<div className="text-xs text-slate-500  flex justify-between">
 						<div>
 							{/* Skeleton Placeholder for Train Name and Quantity */}
 							<Skeleton width={150} height={12} />
@@ -79,21 +79,21 @@ const BayarLoading = ({TotalAdult, TotalInfant}) => {
 							<Skeleton width={60} height={12} />
 						</div>
 						</div>
-						<div className="mt-2 text-xs text-slate-500 font-bold flex justify-between">
+						<div className="mt-2 text-xs text-slate-500  flex justify-between">
 						<div>Biaya Admin (Fee)</div>
 						<div>
 							{/* Skeleton Placeholder for Admin Fee */}
 							<Skeleton width={60} height={12} />
 						</div>
 						</div>
-						<div className="mt-2 text-xs text-slate-500 font-bold flex justify-between">
+						<div className="mt-2 text-xs text-slate-500  flex justify-between">
 						<div>Diskon (Rp.)</div>
 						<div>
 							{/* Skeleton Placeholder for Discount */}
 							<Skeleton width={60} height={12} />
 						</div>
 						</div>
-						<div className="mt-4 pt-2 border-t border-gray-200 text-sm text-slate-500 font-bold flex justify-between">
+						<div className="mt-4 pt-2 border-t border-gray-200 text-sm text-slate-500  flex justify-between">
 						<div>Total Harga</div>
 						<div>
 							{/* Skeleton Placeholder for Total Price */}
@@ -119,7 +119,7 @@ const BayarLoading = ({TotalAdult, TotalInfant}) => {
 					<div className="text-xs text-gray-500">TRAIN DESCRIPTION</div>
 					{/* Skeleton Placeholder for Train Description */}
 					<Skeleton width={200} height={12} />
-					<div className="mt-1 text-xs text-slate-700 font-bold">
+					<div className="mt-1 text-xs text-slate-700 ">
 						{/* Skeleton Placeholder for Train Route */}
 						<Skeleton width={150} height={12} />
 					</div>
@@ -135,11 +135,11 @@ const BayarLoading = ({TotalAdult, TotalInfant}) => {
 					<div className="p-4 border-t">
 					<div className="text-xs text-gray-500">LIST PASSENGERS</div>
 					{/* Skeleton Placeholder for Passengers */}
-					<div className="mt-3 text-xs text-slate-700 font-bold">
+					<div className="mt-3 text-xs text-slate-700 ">
 						<Skeleton width={150} height={12} />
 					</div>
 					{/* Repeat this line for each passenger */}
-					{/* <div className="mt-3 text-xs text-slate-700 font-bold">
+					{/* <div className="mt-3 text-xs text-slate-700 ">
 						<Skeleton width={150} height={12} />
 					</div> */}
 					</div>
