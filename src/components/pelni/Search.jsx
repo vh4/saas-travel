@@ -372,14 +372,7 @@ export default function Search() {
                                       {e.SHIP_NAME}{" "}
                                     </h1>
                                     <small>
-                                      {e.fares[i].CLASS?.substring(0, 2) == "EK"
-                                        ? "Ekonomi " +
-                                          e.fares[i].CLASS?.substring(2)
-                                        : e.fares[i].CLASS?.substring(0, 2) ==
-                                          "BI"
-                                        ? e.fares[i].CLASS
-                                        : "Eksekutif " +
-                                          e.fares[i].CLASS?.substring(3)}{" "}
+                                      {e.fares[i].CLASS}{" "}
                                       Subclass ({e.fares[i].SUBCLASS})
                                     </small>
                                   </div>
@@ -457,19 +450,7 @@ export default function Search() {
                                           {e.SHIP_NAME}
                                         </h1>
                                         <small>
-                                          {e.fares[i].CLASS?.substring(0, 2) ==
-                                          "EK"
-                                            ? "Ekonomi " +
-                                              e.fares[i].CLASS?.substring(2)
-                                            : e.fares[i].CLASS?.substring(
-                                                0,
-                                                2
-                                              ) == "BI"
-                                            ? e.fares[i].CLASS
-                                            : "Eksekutif " +
-                                              e.fares[i].CLASS?.substring(
-                                                3
-                                              )}{" "}
+                                          {e.fares[i].CLASS}{" "}
                                           Subclass ({e.fares[i].SUBCLASS})
                                         </small>
                                       </div>
