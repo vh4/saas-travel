@@ -145,9 +145,6 @@ const BayarLoading = ({TotalAdult, TotalInfant}) => {
 					</div>
 				</div>
 				<div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
-					<div className="px-4 py-2 text-sm text-gray-500">
-					<Alert banner message={<Marquee pauseOnHover gradient={false}><span>Untuk menu pembayaran, masih dalam proses pengembangan.</span></Marquee>} />
-					</div>
 					<div className="px-8 py-4 text-sm text-gray-500">
 					Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut.
 					</div>

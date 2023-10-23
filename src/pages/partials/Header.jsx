@@ -102,7 +102,12 @@ export default function Header({ toogleSidebar, valueSidebar }) {
 
         setIsDrawerOpen(false);
 
-        navigate("/");
+        setLogout({
+          type: "LOGOUT",
+        });
+
+        navigate("/logout");
+
       });
   };
 

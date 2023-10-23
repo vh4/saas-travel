@@ -341,7 +341,8 @@ export default function ViewBooking({ path }) {
                               </div>
                             </div> */}
                             <div className='flex space-x-2  items-center pt-4'>
-                              <div className='text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white'>sisa waktu
+                            <div className="text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white inline-block"> 
+                            sisa waktu{" "}
                               {remainingTimes[i] && (new Date(e.expiredDate).getTime() > new Date().getTime()) ? remainingTime(remainingTimes[i])  : ' habis.'}
                               </div>
                               {/* <div onClick={(e) => openModalBayar(e, i)} className='cursor-pointer text-blue-500 font-bold text-xs'>lanjut bayar</div> */}

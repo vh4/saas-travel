@@ -227,6 +227,7 @@ export default function Konfirmasi() {
 
   const uuid_book = searchParams.get("k_book");
   const uuid_train_data = searchParams.get("k_train");
+  const uuid_auth = searchParams.get("k_auth");
 
   const [dataBookingTrain, setdataBookingTrain] = useState(null);
   const [dataDetailTrain, setdataDetailTrain] = useState(null);
@@ -461,6 +462,7 @@ export default function Konfirmasi() {
           uuid: uuid_book,
           passengers: passengers,
           hasil_book: hasilBookingData,
+          uuid_permission:uuid_auth
         }
       );
 
@@ -478,7 +480,7 @@ export default function Konfirmasi() {
 
         setTimeout(() => {
           window.location.reload(response.data.rd);
-        }, 1500);
+        }, 1000);
       }
     } else if (response.data.rc === "55") {
       setisLoadingPindahKursi(false);
@@ -486,14 +488,14 @@ export default function Konfirmasi() {
 
       setTimeout(() => {
         window.location.reload(response.data.rd);
-      }, 1500);
+      }, 1000);
     } else {
       setisLoadingPindahKursi(false);
       failedNotification();
 
       setTimeout(() => {
         window.location.reload(response.data.rd);
-      }, 1500);
+      }, 1000);
     }
   };
 
@@ -700,16 +702,6 @@ export default function Konfirmasi() {
               </div>
               <div className="block xl:hidden text-slate-500">Payment</div>
             </div>
-            {/* <div>
-              <MdHorizontalRule
-                size={20}
-                className="text-gray-500 hidden xl:flex"
-              />
-            </div>
-            <div className="flex space-x-2 items-center">
-              <RxCrossCircled size={20} className="text-slate-500" />
-              <div className="text-slate-500">E-Tiket</div>
-            </div> */}
           </div>
 
           {isLoadingPage === true ? (
@@ -791,7 +783,7 @@ export default function Konfirmasi() {
                   </div>
                   {/* adult */}
                   {passengers.adults && passengers.adults.length > 0 ? (
-                    <div className="text-sm xl:text-sm font-bold text-slate-600 mt-12">
+                    <div className="text-sm xl:text-sm font-bold text-gray-900 mt-12">
                       <p>ADULT PASSENGERS</p>
                     </div>
                   ) : (
@@ -806,19 +798,19 @@ export default function Konfirmasi() {
                                 {e.name}
                               </div>
                               <div className="mt-2 block md:flex md:space-x-8">
-                                <div className="px-2 md:px-4 py-2 text-sm font-bold">
+                                <div className="px-2 md:px-4 py-2 text-sm">
                                   <div className="text-gray-500">NIK</div>
-                                  <div className="text-gray-600">
+                                  <div className="text-gray-900">
                                     {e.idNumber}
                                   </div>
                                 </div>
-                                <div className="px-2 md:px-4 py-2 text-sm font-bold">
+                                <div className="px-2 md:px-4 py-2 text-sm">
                                   <div className="text-gray-500">Nomor HP</div>
                                   <div className="text-gray-600">{e.phone}</div>
                                 </div>
-                                <div className="px-2 md:px-4 py-2 text-sm font-bold">
+                                <div className="px-2 md:px-4 py-2 text-sm">
                                   <div className="text-gray-500">Kursi</div>
-                                  <div className="text-gray-600">
+                                  <div className="text-gray-900">
                                     {hasilBooking !== null
                                       ? hasilBooking.seats[i][0] === "EKO"
                                         ? "Ekonomi"
@@ -847,7 +839,7 @@ export default function Konfirmasi() {
                   {/* infants */}
 
                   {passengers.infants && passengers.infants.length > 0 ? (
-                    <div className="text-sm xl:text-sm font-bold text-slate-600 mt-12">
+                    <div className="text-sm xl:text-sm font-bold text-gray-900 mt-12">
                       <p>INFANTS PASSENGERS</p>
                     </div>
                   ) : (
@@ -862,9 +854,9 @@ export default function Konfirmasi() {
                                 {e.name}
                               </div>
                               <div className="mt-2 flex space-x-8">
-                                <div className="px-4 py-2 text-sm font-bold">
+                                <div className="px-4 py-2 text-sm">
                                   <div className="text-gray-500">NIK</div>
-                                  <div className="text-gray-600">
+                                  <div className="text-gray-900">
                                     {e.idNumber}
                                   </div>
                                 </div>
@@ -872,13 +864,13 @@ export default function Konfirmasi() {
                                   <div className="text-gray-500">
                                     Tanggal Lahir
                                   </div>
-                                  <div className="text-gray-600">
+                                  <div className="text-gray-900">
                                     {e.birthdate}
                                   </div>
                                 </div>
-                                <div className="px-4 py-2 text-sm font-bold">
+                                <div className="px-4 py-2 text-sm">
                                   <div className="text-gray-500">Kursi</div>
-                                  <div className="text-gray-600">
+                                  <div className="text-gray-900">
                                     {hasilBooking !== null
                                       ? hasilBooking.seats[i][0] === "EKO"
                                         ? "Ekonomi"
@@ -909,7 +901,7 @@ export default function Konfirmasi() {
                   </div>
                   <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                     <div className="p-4">
-                      <div className="text-xs text-slate-500 font-bold flex justify-between">
+                      <div className="text-xs text-gray-900 font-bold flex justify-between">
                         <div>
                           {dataBookingTrain && dataBookingTrain[0].trainName}{" "}
                           {TotalAdult > 0 ? `(Adults) x${TotalAdult}` : ""}{" "}
@@ -921,18 +913,18 @@ export default function Konfirmasi() {
                           {hasilBooking && toRupiah(hasilBooking.normalSales)}
                         </div>
                       </div>
-                      <div className="mt-2 text-xs text-slate-500 font-bold flex justify-between">
+                      <div className="mt-2 text-xs text-gray-900 font-bold flex justify-between">
                         <div>Biaya Admin (Fee)</div>
                         <div>
                           Rp.{" "}
                           {hasilBooking && toRupiah(hasilBooking.nominalAdmin)}
                         </div>
                       </div>
-                      <div className="mt-2 text-xs text-slate-500 font-bold flex justify-between">
+                      <div className="mt-2 text-xs text-gray-900 font-bold flex justify-between">
                         <div>Diskon (Rp.)</div>
                         <div>Rp. {hasilBooking && hasilBooking.discount}</div>
                       </div>
-                      <div className="mt-4 pt-2 border-t border-gray-200 text-sm text-slate-500 font-bold flex justify-between">
+                      <div className="mt-4 pt-2 border-t border-gray-200 text-sm text-gray-900 font-bold flex justify-between">
                         <div>Total Harga</div>
                         <div>
                           Rp.{" "}
@@ -984,7 +976,7 @@ export default function Konfirmasi() {
                               className="text-blue-500"
                             />
                           </div>
-                          <div className="block text-gray-500 text-sm">
+                          <div className="block text-gray-900 text-sm">
                             <div className="text-sm font-bold">
                               Pindah Kursi
                             </div>

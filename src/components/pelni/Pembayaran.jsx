@@ -232,13 +232,13 @@ export default function Pembayaran() {
                                     <div className="text-gray-500 text-sm">
                                       Nomor HP
                                     </div>
-                                    <div className="font-bold text-xs text-gray-600">
+                                    <div className="font-bold text-xs text-gray-900">
                                       {bookInfo.CALLER}
                                     </div>
                                   </div>
                                   <div className="px-2 md:px-4 py-2">
                                     <div className="text-gray-500 text-sm">Kursi</div>
-                                    <div className="font-bold text-xs text-gray-600">
+                                    <div className="font-bold text-xs text-gray-900">
                                       {bookInfo.PAX_LIST[i][6] == "N/A"
                                         ? " Non Seats"
                                         : `${
@@ -252,7 +252,7 @@ export default function Pembayaran() {
                                   </div>
                                   <div className="px-2 md:px-4 py-2">
                                     <div className="text-sm text-gray-500">Kelas</div>
-                                    <div className="font-bold text-xs text-gray-600">
+                                    <div className="font-bold text-xs text-gray-900">
                                       {bookInfo.CLASS} / Subclass ({bookInfo.SUBCLASS}
                                       )
                                     </div>
@@ -265,7 +265,7 @@ export default function Pembayaran() {
                       : ""}
                     <div className="p-2 mt-2 w-full rounded-md border border-gray-200 shadow-sm">
                       <div className="p-4">
-                        <div className="text-xs text-gray-600 font-bold flex justify-between">
+                        <div className="text-xs text-gray-900 font-bold flex justify-between">
                           <div>
                             {bookInfo && bookInfo.SHIP_NAME}{" "}
                             {TotalAdult > 0 ? `(Adult) x${TotalAdult}` : ""}{" "}
@@ -273,7 +273,7 @@ export default function Pembayaran() {
                           </div>
                           <div>Rp. {book && toRupiah(book.normalSales)}</div>
                         </div>
-                        <div className="mt-2 text-xs text-gray-600 font-bold flex justify-between">
+                        <div className="mt-2 text-xs text-gray-900 font-bold flex justify-between">
                           <div>Biaya Admin (Fee) x{TotalAdult + TotalInfant}</div>
                           <div>
                             Rp.{" "}
@@ -283,11 +283,11 @@ export default function Pembayaran() {
                               )}
                           </div>
                         </div>
-                        <div className="mt-2 text-xs text-gray-600 font-bold flex justify-between">
+                        <div className="mt-2 text-xs text-gray-900 font-bold flex justify-between">
                           <div>Diskon (Rp.)</div>
                           <div>Rp. {book && book.discount}</div>
                         </div>
-                        <div className="mt-4 pt-2 border-t border-gray-200 text-sm text-gray-600 font-bold flex justify-between">
+                        <div className="mt-4 pt-2 border-t border-gray-200 text-sm text-gray-900 font-bold flex justify-between">
                           <div>Total Harga</div>
                           <div>
                             Rp.{" "}
@@ -319,23 +319,23 @@ export default function Pembayaran() {
                       </div>
                       <div className="p-4 border-t">
                         <div className="text-xs text-gray-500">PELNI DESCRIPTION</div>
-                        <div className="mt-3 text-xs text-gray-500">
+                        <div className="mt-3 text-xs text-gray-900">
                           {book.SHIP_NAME}
                         </div>
                         <div className="flex space-x-4">
-                          <div className="mt-1 text-xs text-slate-700 font-bold">
+                          <div className="mt-1 text-xs text-gray-900 font-bold">
                             {passengers.pelabuhan_asal}
                           </div>
-                          <TbArrowsLeftRight className="text-gray-500" size={18} />
-                          <div className="mt-1 text-xs text-slate-700 font-bold">
+                          <TbArrowsLeftRight className="text-gray-900" size={18} />
+                          <div className="mt-1 text-xs text-gray-900 font-bold">
                             {passengers.pelabuhan_tujuan}
                           </div>
                         </div>
-                        <div className="mt-3 text-xs text-gray-500">
+                        <div className="mt-3 text-xs text-gray-900">
                           {parseTanggal(passengers.departureDate)} -{" "}
                           {parseTanggal(book.arrivalDate)}
                         </div>
-                        <div className="mt-1 text-xs text-gray-500">
+                        <div className="mt-1 text-xs text-gray-900">
                           {book.departureTime} - {book.arrivalTime}
                         </div>
                       </div>
@@ -344,7 +344,7 @@ export default function Pembayaran() {
                         {passengers.passengers.adults &&
                         passengers.passengers.adults.length > 0
                           ? passengers.passengers.adults.map((e, i) => (
-                              <div className="mt-3 text-xs text-slate-700 font-bold">
+                              <div className="mt-3 text-xs text-gray-900 font-bold">
                                 {e.name} (Adult)
                               </div>
                             ))
@@ -352,7 +352,7 @@ export default function Pembayaran() {
                         {passengers.passengers.infants &&
                         passengers.passengers.infants.length > 0
                           ? passengers.passengers.infants.map((e, i) => (
-                              <div className="mt-3 text-xs text-slate-700 font-bold">
+                              <div className="mt-3 text-xs text-gray-900 font-bold">
                                 {e.name} (Infants)
                               </div>
                             ))

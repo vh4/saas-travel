@@ -203,23 +203,6 @@ export default function BookingKai() {
       }
     });
 
-    // const Fare = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/book`, {
-    //     productCode : "WKAI",
-    //     origin : dataDetailTrain[0].berangkat_id_station,
-    //     destination : dataDetailTrain[0].tujuan_id_station,
-    //     date : dataBookingTrain[0].departureDate,
-    //     trainNumber : parseInt(dataBookingTrain[0].trainNumber),
-    //     grade : dataBookingTrain[0].seats[0].grade,
-    //     class : dataBookingTrain[0].seats[0].class,
-    //     adult : TotalAdult,
-    //     infant : TotalInfant,
-    //     trainName : dataBookingTrain[0].trainName,
-    //     departureStation : dataDetailTrain[0].stasiunBerangkat,
-    //     departureTime : dataBookingTrain[0].departureTime,
-    //     arrivalStation : dataDetailTrain[0].stasiunTujuan,
-    //     arrivalTime : dataBookingTrain[0].arrivalTime,
-    // }); // karena di booking sudah punya biaya admin, maka fare dihilangkan
-
     const response = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/train/book`,
       {
@@ -262,13 +245,15 @@ export default function BookingKai() {
       const hasilDataBooking = response.data.data;
 
       const uuid_hasilBooking = await axios.post(
+
         `${process.env.REACT_APP_HOST_API}/travel/train/book/k_book`,
         {
             passengers:{
                 adults: adult[0],
                 infants: TotalInfant > 0 ? infant[0] : []
             },
-            hasil_book:hasilDataBooking
+            hasil_book:hasilDataBooking,
+            uuid:response.data.uuid,
         }
       );
 
@@ -277,7 +262,7 @@ export default function BookingKai() {
         // localStorage.setItem(dataBookingTrain[0].trainNumber + '_fareAdmin', JSON.stringify(Fare.data.data));
         navigate({
             pathname: `/train/konfirmasi`,
-            search: `?k_train=${id}&k_book=${uuid_hasilBooking.data.uuid}`,
+            search: `?k_train=${id}&k_book=${uuid_hasilBooking.data.uuid}&k_auth=${response.data.uuid}`,
           });
 
       } else {
@@ -409,16 +394,6 @@ export default function BookingKai() {
                 </div>
                 <div className="block xl:hidden text-slate-500">Payment</div>
               </div>
-              {/* <div>
-                <MdHorizontalRule
-                  size={20}
-                  className="text-gray-500 hidden xl:flex"
-                />
-              </div>
-              <div className="flex space-x-2 items-center">
-                <RxCrossCircled size={20} className="text-slate-500" />
-                <div className="text-slate-500">E-Tiket</div>
-              </div> */}
             </div>
           <div className="xl:mt-0">
           

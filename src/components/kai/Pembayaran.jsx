@@ -2,14 +2,11 @@ import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import { AiOutlineCheckCircle } from "react-icons/ai";
-import { RxCrossCircled } from "react-icons/rx";
 import { MdHorizontalRule } from "react-icons/md";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import { TiketContext } from "../../App";
 import { Button as ButtonAnt } from "antd";
 import { notification } from "antd";
-import Marquee from "react-fast-marquee";
-import { Alert } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
 import { parseTanggal } from "../../helpers/date";
 import Page500 from "../components/500";
@@ -271,16 +268,6 @@ export default function Pembayaran() {
               </div>
               <div className="block xl:hidden text-blue-500">Payment</div>
             </div>
-            {/* <div>
-              <MdHorizontalRule
-                size={20}
-                className="text-gray-500 hidden xl:flex"
-              />
-            </div>
-            <div className="flex space-x-2 items-center">
-              <RxCrossCircled size={20} className="text-slate-500" />
-              <div className="text-slate-500">E-Tiket</div>
-            </div> */}
           </div>
           {isLoadingPage === true ? (
             <>
@@ -296,23 +283,23 @@ export default function Pembayaran() {
                         <>
                           <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                             <div className="p-2">
-                              <div className="px-2 xl:px-4 py-2 text-gray-500 border-b border-gray-200 text-sm font-bold">
+                              <div className="px-2 xl:px-4 py-2 text-gray-900 border-b border-gray-200 text-sm font-bold">
                                 {e.name}
                               </div>
                               <div className="mt-2 block md:flex md:space-x-8">
                                 <div className="px-2 md:px-4 py-2 text-sm font-bold">
                                   <div className="text-gray-500">NIK</div>
-                                  <div className="text-gray-600">
+                                  <div className="text-gray-900">
                                     {e.idNumber}
                                   </div>
                                 </div>
                                 <div className="px-2 md:px-4 py-2 text-sm font-bold">
                                   <div className="text-gray-500">Nomor HP</div>
-                                  <div className="text-gray-600">{e.phone}</div>
+                                  <div className="text-gray-900">{e.phone}</div>
                                 </div>
                                 <div className="px-2 md:px-4 py-2 text-sm font-bold">
                                   <div className="text-gray-500">Kursi</div>
-                                  <div className="text-gray-600">
+                                  <div className="text-gray-900">
                                     {hasilBooking !== null
                                       ? hasilBooking.seats[i][0] === "EKO"
                                         ? "Ekonomi"
@@ -351,7 +338,7 @@ export default function Pembayaran() {
                               <div className="mt-2 flex space-x-8">
                                 <div className="px-4 py-2 text-sm font-bold">
                                   <div className="text-gray-500">NIK</div>
-                                  <div className="text-gray-600">
+                                  <div className="text-gray-900">
                                     {e.idNumber}
                                   </div>
                                 </div>
@@ -359,13 +346,13 @@ export default function Pembayaran() {
                                   <div className="text-gray-500">
                                     Tanggal Lahir
                                   </div>
-                                  <div className="text-gray-600">
+                                  <div className="text-gray-900">
                                     {e.birthdate}
                                   </div>
                                 </div>
                                 <div className="px-4 py-2 text-sm font-bold">
                                   <div className="text-gray-500">Kursi</div>
-                                  <div className="text-gray-600">
+                                  <div className="text-gray-900">
                                     {hasilBooking.seats[i][0] === "EKO"
                                       ? "Ekonomi"
                                       : hasilBooking.seats[i][0]}{" "}
@@ -382,7 +369,7 @@ export default function Pembayaran() {
                     : ""}
                   <div className="p-2 mt-2 w-full rounded-md border border-gray-200 shadow-sm">
                     <div className="p-4">
-                      <div className="text-xs text-slate-500 font-bold flex justify-between">
+                      <div className="text-xs text-gray-900 font-bold flex justify-between">
                         <div>
                           {dataBookingTrain && dataBookingTrain[0].trainName}{" "}
                           {TotalAdult > 0 ? `(Adults) x${TotalAdult}` : ""}{" "}
@@ -393,18 +380,18 @@ export default function Pembayaran() {
                           {hasilBooking && toRupiah(hasilBooking.normalSales)}
                         </div>
                       </div>
-                      <div className="mt-2 text-xs text-slate-500 font-bold flex justify-between">
+                      <div className="mt-2 text-xs text-gray-900 font-bold flex justify-between">
                         <div>Biaya Admin (Fee)</div>
                         <div>
                           Rp.{" "}
                           {hasilBooking && toRupiah(hasilBooking.nominalAdmin)}
                         </div>
                       </div>
-                      <div className="mt-2 text-xs text-slate-500 font-bold flex justify-between">
+                      <div className="mt-2 text-xs text-gray-900 font-bold flex justify-between">
                         <div>Diskon (Rp.)</div>
                         <div>Rp. {hasilBooking && hasilBooking.discount}</div>
                       </div>
-                      <div className="mt-4 pt-2 border-t border-gray-200 text-sm text-slate-500 font-bold flex justify-between">
+                      <div className="mt-4 pt-2 border-t border-gray-200 text-sm text-gray-900 font-bold flex justify-between">
                         <div>Total Harga</div>
                         <div>
                           Rp.{" "}
@@ -481,10 +468,6 @@ export default function Pembayaran() {
                     </div>
                   </div>
                   <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
-                    {/* <div className="px-8 py-4 text-sm text-gray-500">
-                        Tekan tombol <span className="text-blue-500">bayar langsung</span> untuk melakukan pembayaran secara tunai.
-                    </div> */}
-
                     <div className="px-8 py-4 text-sm text-gray-500">
                     Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
                     </div>

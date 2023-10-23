@@ -321,10 +321,6 @@ function KAI(){
             <div className="row bg-white border-t border-gray-200 w-full p-2 pr-0">
                 <div class="w-full p-4 py-4 xl:px-8 rounded-lg shadow-xs ">
                     <form className="w-full">
-                        {/* <div className="space-x-2 items-center flex">
-                            < BiTrain className="text-gray-600" size={24} />
-                            <div className="text-sm md:text-sm font-bold text-slate-700">TRAINS</div>
-                        </div> */}
                             <>
                             <div className='block xl:flex justify-between'>
                                 <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 md:mx-12 xl:mx-6">
