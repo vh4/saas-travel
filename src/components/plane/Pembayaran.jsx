@@ -237,7 +237,7 @@ export default function Pembayaran() {
                         <>
                           <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                             <div className="p-2">
-                              <div className="px-2 xl:px-4 py-2 text-gray-500 border-b border-gray-200 text-sm font-bold">
+                              <div className="px-2 xl:px-4 py-2 text-gray-900 border-b border-gray-200 text-sm font-bold">
                                 {e.nama_depan} {e.nama_belakang}
                               </div>
                               <div className="mt-2 block md:flex md:space-x-8">
@@ -245,7 +245,7 @@ export default function Pembayaran() {
                                   <div className="text-gray-500 font-medium">
                                     NIK
                                   </div>
-                                  <div className="text-gray-500">
+                                  <div className="text-gray-900">
                                     {e.idNumber}
                                   </div>
                                 </div>
@@ -253,20 +253,20 @@ export default function Pembayaran() {
                                   <div className="text-gray-500  font-medium">
                                     Nomor HP
                                   </div>
-                                  <div className="text-gray-500">{e.nomor}</div>
+                                  <div className="text-gray-900">{e.nomor}</div>
                                 </div>
                                 <div className="px-2 md:px-4 py-2 text-sm">
                                   <div className="text-gray-500  font-medium">
                                     Email
                                   </div>
-                                  <div className="text-gray-500">{e.email}</div>
+                                  <div className="text-gray-900">{e.email}</div>
                                 </div>
                               </div>
                               <div className="px-2 md:px-4 py-2 text-sm">
                                 <div className="text-gray-500 font-medium">
                                   Tanggal Lahir
                                 </div>
-                                <div className="text-gray-500">
+                                <div className="text-gray-900">
                                   {e.birthdate}
                                 </div>
                               </div>
@@ -283,7 +283,7 @@ export default function Pembayaran() {
                         <>
                           <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                             <div className="p-2">
-                              <div className="p-4 text-gray-500 border-b border-gray-200 text-sm font-bold">
+                              <div className="p-4 text-gray-900 border-b border-gray-200 text-sm font-bold">
                                 {e.nama_depan} {e.nama_belakang}
                               </div>
                               <div className="mt-2 flex space-x-8">
@@ -291,7 +291,7 @@ export default function Pembayaran() {
                                   <div className="text-gray-500 font-medium">
                                     NIK/ No.Ktp
                                   </div>
-                                  <div className="text-gray-600">
+                                  <div className="text-gray-900">
                                     {e.idNumber}
                                   </div>
                                 </div>
@@ -299,7 +299,7 @@ export default function Pembayaran() {
                                   <div className="text-gray-500 font-medium">
                                     Tanggal Lahir
                                   </div>
-                                  <div className="text-gray-600">
+                                  <div className="text-gray-900">
                                     {e.birthdate}
                                   </div>
                                 </div>
@@ -316,7 +316,7 @@ export default function Pembayaran() {
                         <>
                           <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                             <div className="p-4">
-                              <div className="p-4 text-gray-500 border-b border-gray-200 text-sm font-bold">
+                              <div className="p-4 text-gray-900 border-b border-gray-200 text-sm font-bold">
                                 {e.nama_depan} {e.nama_belakang}
                               </div>
                               <div className="mt-2 flex space-x-8">
@@ -324,7 +324,7 @@ export default function Pembayaran() {
                                   <div className="text-gray-500">
                                     NIK/ No.Ktp
                                   </div>
-                                  <div className="text-gray-600">
+                                  <div className="text-gray-900">
                                     {e.idNumber}
                                   </div>
                                 </div>
@@ -332,7 +332,7 @@ export default function Pembayaran() {
                                   <div className="text-gray-500">
                                     Tanggal Lahir
                                   </div>
-                                  <div className="text-gray-600">
+                                  <div className="text-gray-900">
                                     {e.birthdate}
                                   </div>
                                 </div>
@@ -344,7 +344,7 @@ export default function Pembayaran() {
                     : ""}
                   <div className="p-2 mt-2 w-full rounded-md border border-gray-200 shadow-sm">
                     <div className="p-4">
-                      <div className="text-xs text-slate-500 font-bold flex justify-between">
+                      <div className="text-xs text-gray-900 font-bold flex justify-between">
                         <div>
                           {dataDetail && dataDetail.airlineName}{" "}
                           {TotalAdult > 0 ? `(Adults) x${TotalAdult}` : ""}{" "}
@@ -355,14 +355,14 @@ export default function Pembayaran() {
                           Rp. {toRupiah(hasilBooking && hasilBooking.nominal)}
                         </div>
                       </div>
-                      <div className="mt-2 text-xs text-slate-500 font-bold flex justify-between">
+                      <div className="mt-2 text-xs text-gray-900 font-bold flex justify-between">
                         <div>Biaya Admin (Fee)</div>
                         <div>
                           Rp.{" "}
                           {toRupiah(hasilBooking && hasilBooking.nominalAdmin)}
                         </div>
                       </div>
-                      <div className="mt-4 pt-2 border-t border-gray-200 text-sm text-slate-500 font-bold flex justify-between">
+                      <div className="mt-4 pt-2 border-t border-gray-200 text-sm text-gray-900 font-bold flex justify-between">
                         <div>Total Harga</div>
                         <div>
                           Rp.{" "}

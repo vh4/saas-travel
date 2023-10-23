@@ -436,8 +436,8 @@ export default function ViewBooking({ path }) {
                                 </div>
                               </div> */}
                               <div className="block md:flex space-x-2 items-center pt-8">
-                                <div className="text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white">
-                                  sisa waktu{" "}
+                              <div className="text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white inline-block">
+                                sisa waktu{" "}
                                   {remainingTimes[i] &&
                                   new Date(e.expiredDate).getTime() >
                                     new Date().getTime()

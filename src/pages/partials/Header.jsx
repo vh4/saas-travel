@@ -276,12 +276,12 @@ export default function Header({ toogleSidebar, valueSidebar }) {
     <nav className="bg-white px-2 sm:px-4 py-2  block sticky top-0 w-full z-50 left-0 border-b border-gray-200 ">
       {contextHolder}
       <div className="container mx-auto">
-        <div className="flex justify-between items-center sm:-mx-6 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24">
+        <div className="flex justify-between items-center -mx-2 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24">
           <div className="">
             <Link to={"/"} className="flex items-center">
               <img
                 src="/logo-rb.png"
-                className="w-36 -my-2 md:-my-0 md:w-40 mr-3"
+                className="w-36 -my-2 md:-my-0 md:w-40 -mr-4"
                 alt="Rajabiller Logo"
               />
             </Link>
@@ -404,7 +404,7 @@ export default function Header({ toogleSidebar, valueSidebar }) {
               <button
                 data-collapse-toggle="navbar-sticky"
                 type="button"
-                className="inline-flex items-center py-2 px-4 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 "
+                className="md:mr-0 inline-flex items-center py-4 px-4 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-gray-200 "
                 aria-controls="navbar-sticky"
                 aria-expanded="false"
               >
@@ -427,8 +427,8 @@ export default function Header({ toogleSidebar, valueSidebar }) {
               </button>
             ) : (
                 <>
-                <div className="pr-5 py-2.5">       
-                    <Button className="flex md:hidden  items-center px-6" 
+                <div className="pr-4 py-3">       
+                    <Button className="flex md:hidden  items-center px-8 py-4" 
                      onClick={handleOpen}
                     >
                         Login

@@ -526,7 +526,7 @@ export default function BookingPelni() {
                 {dataDetailPelni.shipName}
               </div>
               <small>
-                dataDetailPelni.class Subclass ({dataDetailPelni.subClass})
+                <span>{dataDetailPelni.class}</span> Subclass ({dataDetailPelni.subClass})
               </small>
             </div>
             <div className="p-4 pl-8 mb-4">
@@ -564,7 +564,7 @@ export default function BookingPelni() {
             {/* detail passengger kai*/}
             <Form
             form={form}
-              onFinish={handleSubmit(showModal)}
+              onFinish={showModal}
               className="block w-full  mt-8 mb-4 xl:mt-12"
             >
               <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-2 gap-12">
@@ -1160,7 +1160,7 @@ export default function BookingPelni() {
                     {dataDetailPelni && dataDetailPelni.shipName}
                   </div>
                   <small>
-                    {dataDetailPelni.class} / Subclass (
+                    <span>{dataDetailPelni.class}</span> / Subclass (
                     {dataDetailPelni.subClass})
                   </small>
                 </div>
