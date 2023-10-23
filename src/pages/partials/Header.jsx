@@ -106,7 +106,7 @@ export default function Header({ toogleSidebar, valueSidebar }) {
           type: "LOGOUT",
         });
 
-        navigate("/logout");
+        navigate("/logout"); //
         
       });
   };
