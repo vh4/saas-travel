@@ -629,7 +629,7 @@ export default function Search() {
                       <div>
                         {/* mobile cari */}
                         <div
-                          onClick={() => bookingHandlerDetail(e.trainNumber)}
+                          onClick={() => e.seats[0].availability > 0 ? bookingHandlerDetail(e.trainNumber) : " "}
                           className="cursor-pointer block xl:hidden w-full text-gray-700"
                         >
                           <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
