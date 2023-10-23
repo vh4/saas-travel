@@ -33,7 +33,7 @@ const url = process.env.FRONTEND_URL_OR_IP_ACCESS_CORS;
 logger.info(`.env production is alive. url hit frontend: ${url}`);
 
 app.use(cors({
-  origin:["http://localhost:3000", "http://localhost:1111", url, "https://travel.rajabiller.com"],
+  origin:["*", "http://localhost:3000", "http://localhost:1111", url, "https://travel.rajabiller.com"],
   methods: ['GET', 'POST', 'DELETE', 'PUT'],
   credentials: true
 }));
