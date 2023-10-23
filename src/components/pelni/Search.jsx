@@ -372,7 +372,7 @@ export default function Search() {
                                       {e.SHIP_NAME}{" "}
                                     </h1>
                                     <small>
-                                      {e.fares[i].CLASS}{" "}
+                                      Class {e.fares[i].CLASS}{" "}
                                       Subclass ({e.fares[i].SUBCLASS})
                                     </small>
                                   </div>
@@ -450,7 +450,7 @@ export default function Search() {
                                           {e.SHIP_NAME}
                                         </h1>
                                         <small>
-                                          {e.fares[i].CLASS}{" "}
+                                          Class {e.fares[i].CLASS}{" "}
                                           Subclass ({e.fares[i].SUBCLASS})
                                         </small>
                                       </div>
