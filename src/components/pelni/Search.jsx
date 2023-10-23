@@ -446,8 +446,8 @@ export default function Search() {
                               <div>
                                 {/* mobile cari */}
                                 <div
-                                  onClick={async () => e.fares[i]["M_available"] != "0" &&
-                                  e.fares[i]["F_available"] != "0" ? handleSubmit(e, i) : ""}
+                                  onClick={async () => e.fares[i]["M_available"] == "0" &&
+                                  e.fares[i]["F_available"] == "0" ? "" : handleSubmit(e, i)}
                                   className="cursor-pointer block xl:hidden w-full text-gray-700"
                                 >
                                   <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
