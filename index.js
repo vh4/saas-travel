@@ -32,7 +32,12 @@ app.use(session({
 const url = process.env.FRONTEND_URL_OR_IP_ACCESS_CORS;
 logger.info(`.env production is alive. url hit frontend: ${url}`);
 
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+}));
 
 app.use(express.json());
 
