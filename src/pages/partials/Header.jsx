@@ -292,15 +292,6 @@ export default function Header({ toogleSidebar, valueSidebar }) {
             </Link>
           </div>
           <div className="flex space-x-6 items-center xl:order-2">
-            <a href="https://www.rajabiller.com/register" target="_blank">
-              <div className="hidden md:flex cursor-pointer space-x-2 text-sm items-center text-slate-700">
-                <MdOutlineCorporateFare
-                  className="text-blue-500 font-bold"
-                  size={18}
-                />
-                <div className="text-[15px] text-slate-800">B2B</div>
-              </div>
-            </a>
             {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
               <Link
                 to="/transaksi/pesawat"
@@ -324,14 +315,29 @@ export default function Header({ toogleSidebar, valueSidebar }) {
               {!localStorage.getItem(
                 process.env.REACT_APP_SECTRET_LOGIN_API
               ) ? (
-                <button
-                  onClick={handleOpen}
-                  type="button"
+                <div
                   className="hidden md:flex text-slate-700 space-x-2 items-center"
                 >
-                  <FaRegUser size={16} />
-                  <div className="text-[15px] text-slate-800">Masuk</div>
-                </button>
+                  <Button
+                  onClick={handleOpen}
+                  type="outline"
+                  className="bg-white text-blue-500 border-blue-500" 
+                  >
+                    <div>Masuk</div>
+                  </Button>
+                  <div className="text-blue-500">
+                    | 
+                  </div>
+                  <a href="https://www.rajabiller.com/register" className="text-[15px] text-slate-800">
+                  <Button
+                    key="submit"
+                    type="primary"
+                    className="bg-blue-500"
+                  >
+                    Registrasi
+                  </Button>
+                  </a>
+                </div>
               ) : (
                 <div className="hidden relative group space-x-2 text-gray-500 md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 py-2.5 md:inline-flex group-hover:block items-end ml-2 mb-2">
                   {user !== null && user !== undefined ? (
@@ -377,31 +383,6 @@ export default function Header({ toogleSidebar, valueSidebar }) {
                   )}
                 </div>
               )}
-              <div className="hidden md:flex cursor-pointer space-x-3 text-sm items-center text-slate-700">
-                <div className="">
-                  <button onClick={handleClick}>
-                    <div className="flex space-x-4 text-slate-500 text-sm items-center">
-                      <div className="flex items-center space-x-2">
-                        <img src="/ina.png" width={24} alt="flag.png" />
-                        <div>ID</div>
-                      </div>
-                      <IoMdArrowDropdown className="font-bold" size={18} />
-                    </div>
-                  </button>
-                  <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleCloses}
-                    MenuListProps={{
-                      "aria-labelledby": "basic-button",
-                    }}
-                  >
-                    <MenuItem onClick={handleCloses}>Indonesia</MenuItem>
-                  </Menu>
-                </div>
-              </div>
-
               {/* end Untuk  login */}
             </>
             {/* Button */}

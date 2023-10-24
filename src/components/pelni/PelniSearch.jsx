@@ -6,13 +6,15 @@ import { Chip } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Popper } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { IoBoatSharp } from "react-icons/io5";
+import { useNavigate, createSearchParams } from "react-router-dom";
 import onClickOutside from "react-onclickoutside";
 import { makeStyles } from "@mui/styles";
-import { Button } from "antd";
-import { IoBoatSharp } from "react-icons/io5";
 import { DateRangePicker } from "rsuite";
+import "rsuite/dist/rsuite.min.css";
+import { Button } from "antd";
 import Cookies from "js-cookie";
+import { AiOutlineSwap } from "react-icons/ai";
 
 function PELNI() {
   const useStyles = makeStyles((theme) => ({
@@ -296,6 +298,15 @@ function PELNI() {
     }, 1000);
   }
 
+
+  const changeStatiun = () => {
+
+    setKeberangkatan(tujuan);
+    setTujuan(keberangkatan);
+
+  }
+
+
   const { allowedMaxDays, beforeToday, combine } = DateRangePicker;
 
   const disabledDateRule = combine(
@@ -306,18 +317,25 @@ function PELNI() {
   return (
     <>
       <div className="row bg-white border-t border-gray-200 w-full p-2 pr-0">
-        <div class="w-full p-4 py-4 xl:px-8 rounded-lg shadow-xs">
+        <div class="w-full rounded-lg shadow-xs">
           <form className="w-full">
             {/* <div className="space-x-2 items-center flex">
                     < BiTrain className="text-gray-600" size={24} />
                     <div className="text-sm md:text-md font-bold text-slate-700">TRAINS</div>
                 </div> */}
+          <form className="w-full">
+            {/* <div className="space-x-2 items-center flex">
+                  < BiTrain className="text-gray-600" size={24} />
+                  <div className="text-sm md:text-md font-bold text-slate-700">TRAINS</div>
+               </div> */}
             <>
               <div className="block xl:flex justify-between">
-                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 md:mx-12 xl:mx-6">
+                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0">
+                <div className="w-full col col-span-1 md:col-span-2">
+                    <div className="w-full flex items-center">
                   <FormControl
                     className=""
-                    sx={{ m: 1, minWidth: 120, outline: "none" }}
+                    sx={{ m: 1, minWidth: 145, outline: "none" }}
                   >
                     <small className="mb-2 text-gray-500">Pelabuhan Asal</small>
                     <Autocomplete
@@ -376,9 +394,15 @@ function PELNI() {
                       )}
                     />
                   </FormControl>
+                  <div
+                        onClick={changeStatiun}
+                        className="cursor-pointer mt-4 flex justify-center items-center bg-blue-500 rounded-full p-1"
+                      >
+                        <AiOutlineSwap className="text-white" size={24} />
+                  </div>
                   <FormControl
                     className=""
-                    sx={{ m: 1, minWidth: 120, outline: "none" }}
+                    sx={{ m: 1, minWidth: 145, outline: "none" }}
                   >
                     <small className="mb-2 text-gray-500">
                       Pelabuhan Tujuan
@@ -439,18 +463,21 @@ function PELNI() {
                       )}
                     />
                   </FormControl>
+                    </div>
+                  </div>
                   <FormControl sx={{ m: 1, minWidth: 120 }}>
                     <small className="mb-2 text-gray-500">Range Tanggal</small>
                     <div className="w-full">
-                      <DateRangePicker
-                        block
-                        onChange={(e) => setTanggal(e)}
-                        size="lg"
-                        sx={{ width: "100%" }}
-                        placeholder="yyyy-mm-dd yyyy-mm-dd"
-                        className="text-gray-300"
-                        disabledDate={disabledDateRule}
-                      />
+                    <DateRangePicker
+                      block
+                      onChange={(e) => setTanggal(e)}
+                      size="lg"
+                      sx={{ width: "100%" }}
+                      placeholder="yyyy-mm-dd yyyy-mm-dd"
+                      className="text-gray-300 cursor-pointer"
+                      disabledDate={disabledDateRule}
+                    />
+
                     </div>
                   </FormControl>
                   <FormControl sx={{ m: 1, minWidth: 120 }}>
@@ -540,6 +567,7 @@ function PELNI() {
                 </div>
               </div>
             </>
+          </form>
           </form>
         </div>
       </div>
