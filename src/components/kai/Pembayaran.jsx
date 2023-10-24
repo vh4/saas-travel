@@ -13,11 +13,13 @@ import Page500 from "../components/500";
 import Page400 from "../components/400";
 import PageExpired from "../components/Expired";
 import BayarLoading from "../components/trainskeleton/bayar";
+import {Typography } from 'antd';
 
 export default function Pembayaran() {
   const navigate = useNavigate();
 
   const [searchParams, setSearchParams] = useSearchParams();
+  const { Paragraph } = Typography;
 
   const uuid_book = searchParams.get("k_book");
   const uuid_train_data = searchParams.get("k_train");
@@ -415,7 +417,9 @@ export default function Pembayaran() {
 
                       <div className="mt-1 font-bold text-blue-500 text-[18px]">
                         {/* {hasilBooking && hasilBooking.bookingCode} */}
-                        {hasilBooking && hasilBooking.transactionId}                        
+                        <Paragraph copyable>{hasilBooking && hasilBooking.transactionId} </Paragraph>
+
+                                               
                       </div>
                       <div className="text-grapy-500 text-xs">
                         Gunakan transaksi id diatas untuk melakukan inq ulang dan pembayaran.

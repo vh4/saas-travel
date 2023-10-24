@@ -19,6 +19,7 @@ import Page500 from "../components/500";
 import Page400 from "../components/400";
 import PageExpired from "../components/Expired";
 import KonfirmasiLoading from "../components/trainskeleton/konfirmasi";
+import {Typography } from 'antd';
 
 const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData }) => {
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
@@ -200,6 +201,7 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData }) => {
 
 export default function Konfirmasi() {
   const [api, contextHolder] = notification.useNotification();
+  const { Paragraph } = Typography;
 
   const failedNotification = (rd) => {
     api["error"]({
@@ -954,12 +956,12 @@ export default function Konfirmasi() {
                 {/* desktop sidebar */}
                 <div className="sidebar w-full xl:w-1/2">
                   <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
-                    <div className="flex items-center justify-between p-4">
+                    <div className="flex items-center justify-between py-2 px-4">
                       {/* <div className="text-gray-500 text-sm">Booking ID</div> */}
-                      <div className="text-gray-500 text-sm">Transaksi ID</div>
+                      <div className="-mt-4  text-gray-500 text-sm">Transaksi ID</div>
                       <div className="font-bold text-blue-500 text-[18px]">
                         {/* {hasilBooking && hasilBooking.bookingCode} */}
-                        {hasilBooking && hasilBooking.transactionId}                        
+                        <Paragraph copyable>{hasilBooking && hasilBooking.transactionId}</Paragraph>
                       </div>
                     </div>
                     <div className="px-4 text-grapy-500 text-xs">

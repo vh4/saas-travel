@@ -8,18 +8,19 @@ import { useNavigate, createSearchParams } from "react-router-dom";
 import { TiketContext } from "../../App";
 import { BsArrowRightShort } from "react-icons/bs";
 import { Button, message } from "antd";
-import Marquee from "react-fast-marquee";
-import { Alert } from "antd";
 import { parseTanggal as tanggalParse } from "../../helpers/date";
 import { toRupiah } from "../../helpers/rupiah";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
 import BayarLoading from "../components/planeskeleton/bayar";
+import {Typography } from 'antd';
 
 export default function Pembayaran() {
   const [searchParams, setSearchParams] = useSearchParams();
   const v_flight = searchParams.get("v_flight");
   const v_book = searchParams.get("v_book");
+  const { Paragraph } = Typography;
+
 
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
@@ -383,10 +384,10 @@ export default function Pembayaran() {
                     <div className="px-4 py-2">
                       {/* <div className="text-gray-500 text-xs">Booking ID</div> */}
                       <div className="text-gray-500 text-xs">Transaksi ID</div>                      
-                      <div className="mt-1  font-bold text-blue-500 text-[18px]">
-                        {/* {hasilBooking && hasilBooking.bookingCode} */}
-                        {hasilBooking && hasilBooking.transactionId}
-                      </div>
+                        <div className="mt-1  font-bold text-blue-500 text-[18px]">
+                          {/* {hasilBooking && hasilBooking.bookingCode} */}
+                          <Paragraph copyable>{hasilBooking && hasilBooking.transactionId}</Paragraph>
+                        </div>
                       <div className="text-grapy-500 text-xs">
                         Gunakan transaksi id diatas untuk melakukan inq ulang dan pembayaran.
                       </div>

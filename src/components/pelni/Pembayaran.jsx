@@ -1,25 +1,24 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { AiOutlineCheckCircle } from "react-icons/ai";
-import { RxCrossCircled } from "react-icons/rx";
 import { MdHorizontalRule } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import { TiketContext } from "../../App";
 import { Button as ButtonAnt } from "antd";
 import { notification } from "antd";
-import Marquee from "react-fast-marquee";
-import { Alert } from "antd";
 import { TbArrowsLeftRight } from "react-icons/tb";
 import Page400 from "../components/400";
 import Page500 from "../components/500";
 import { parseTanggal } from "../../helpers/date";
 import { toRupiah } from "../../helpers/rupiah";
 import BayarLoading from "../components/pelniskeleton/bayar";
+import {Typography } from 'antd';
 
 export default function Pembayaran() {
   const navigate = useNavigate();
 
   const { dispatch } = useContext(TiketContext);
+  const { Paragraph } = Typography;
 
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
@@ -311,7 +310,7 @@ export default function Pembayaran() {
                         {/* <div className="text-gray-500 text-xs">Status Booking</div> */}
                         <div className="text-gray-500 text-xs">Transaksi ID</div>
                         <div className="mt-1 font-bold text-blue-500 text-[18px]">
-                          {book && book.transactionId}
+                        <Paragraph copyable>{book && book.transactionId}</Paragraph>
                         </div>
                         <div className="text-grapy-500 text-xs">
                         Gunakan transaksi id diatas untuk melakukan inq ulang dan pembayaran.
