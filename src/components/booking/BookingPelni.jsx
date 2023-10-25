@@ -2,11 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { AiOutlineHome } from 'react-icons/ai';
 import { BsArrowRightShort } from 'react-icons/bs';
 import axios from 'axios';
-import {  message } from 'antd';
+import {  Modal, message } from 'antd';
 import { toRupiah } from '../../helpers/rupiah';
 import { remainingTime } from '../../helpers/date';
 import Page500 from '../components/500';
 import { IoBoatSharp } from "react-icons/io5";
+import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
+import { Placeholder } from "rsuite";
 
 export default function ViewBooking({ path }) {
   const [data, setData] = useState([]);
@@ -143,6 +145,114 @@ export default function ViewBooking({ path }) {
       <div className=''>
   
      {/* meessage bayar */}
+     <Modal
+        width={1000}
+        open={showModal}
+        onOk={handleClose}
+        onCancel={handleClose}
+        footer={[
+          // <Button key="back" onClick={handleClose}>
+          //   Cancel
+          // </Button>,
+          // <Button key="submit" type="primary" className='bg-blue-500' loading={loading} disabled>
+          //   Bayar Langsung
+          // </Button>,
+        ]}
+      >
+        {loadBayar !== true ? (
+          <div className='mt-4 mb-12'>
+            <div className='mt-4 mb-4 font-bold text-lg'>
+              <div>Passengers</div>
+            </div>
+            {byrdata.penumpang.map((e) => (
+              <>
+                <div className=' border rounded-md p-4 grid grid-cols-1 md:grid-cols-5 gap-2 mt-4'>
+                  <div className=''>
+                    <div className='font-semibold'>Nama</div>
+                    <div>
+                      {e.nama}
+                    </div>
+                  </div>
+                </div>
+              </>
+            ))}
+
+            <div className='mt-4 mb-4 font-bold text-lg'>
+              <div>Description</div>
+            </div>
+            {/* desktop */}
+            <div className="p-4 w-full hidden mt-4 xl:gap-4 lg:grid lg:grid-cols-12">
+              <div className="col-span-2">
+                <h1 className="text-sm font-bold">{byrdata.nama_kapal} </h1>
+                <small>Subclass {byrdata.subClass}</small>
+              </div>
+              <div className="col-span-2">
+                <h1 className="text-sm font-bold">{new Date(byrdata.tanggal_keberangkatan.slice(0, 4), parseInt(byrdata.tanggal_keberangkatan.slice(4, 6)) - 1, byrdata.tanggal_keberangkatan.slice(6, 8)).toLocaleDateString("id-ID", { weekday: "long", year: "numeric", month: "long", day: "numeric" })} </h1>
+                <small>Tanggal Keberangkatan</small>
+              </div>
+              <div className="flex col-span-2">
+                <div className="">
+                  <h1 className="mt-4 xl:mt-0 text-sm font-bold">{byrdata.jam_keberangkatan.toString().padStart(4, "0").replace(/(\d{2})(\d{2})/, "$1:$2")}</h1>
+                  <small>{byrdata.origin}</small>
+                </div>
+                < HiOutlineArrowNarrowRight size={24} />
+              </div>
+              <div className="col-span-2">
+                <h1 className="text-sm font-bold">{new Date(byrdata.tanggal_kedatangan.slice(0, 4), parseInt(byrdata.tanggal_kedatangan.slice(4, 6)) - 1, byrdata.tanggal_kedatangan.slice(6, 8)).toLocaleDateString("id-ID", { weekday: "long", year: "numeric", month: "long", day: "numeric" })} </h1>
+                <small>Tanggal Kedatangan</small>
+              </div>
+              <div className='col-span-2'>
+                <h1 className="text-sm font-bold">{byrdata.jam_kedatangan.toString().padStart(4, "0").replace(/(\d{2})(\d{2})/, "$1:$2")}</h1>
+                <small>{byrdata.destination}</small>
+              </div>
+              <div className="col-span-2">
+                <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">Rp. {((parseInt(byrdata.nominal) || 0) + (parseInt(byrdata.nominal_admin) || 0)).toLocaleString('id-ID')}</h1>
+                <small>Total (Admin Rp. {(toRupiah(byrdata.nominal_admin ? byrdata.nominal_admin : 0)) ?? 0})</small>
+              </div>
+            </div>
+            {/* mobile */}
+            <div className="p-4 w-full block mt-4 lg:hidden">
+              <div className="">
+                <h1 className="text-sm font-bold">{byrdata.nama_kapal}  </h1>
+                <small>Subclass {byrdata.subClass}</small>
+              </div>
+              <div className="mt-4">
+                <h1 className="text-sm font-bold">{new Date(byrdata.tanggal_keberangkatan.slice(0, 4), parseInt(byrdata.tanggal_keberangkatan.slice(4, 6)) - 1, byrdata.tanggal_keberangkatan.slice(6, 8)).toLocaleDateString("id-ID", { weekday: "long", year: "numeric", month: "long", day: "numeric" })} </h1>
+                <small>Tanggal Keberangkatan</small>
+              </div>
+              <div className="mt-4">
+                <h1 className="text-sm font-bold">{new Date(byrdata.tanggal_kedatangan.slice(0, 4), parseInt(byrdata.tanggal_kedatangan.slice(4, 6)) - 1, byrdata.tanggal_kedatangan.slice(6, 8)).toLocaleDateString("id-ID", { weekday: "long", year: "numeric", month: "long", day: "numeric" })} </h1>
+                <small>Tanggal Kedatangan</small>
+              </div>
+              <div className='flex space-x-4 items-center'>
+                <div className="">
+                  <div className="">
+                    <h1 className="mt-4 xl:mt-0 text-sm font-bold">{byrdata.jam_keberangkatan.toString().padStart(4, "0").replace(/(\d{2})(\d{2})/, "$1:$2")}</h1>
+                    <small>{byrdata.origin}</small>
+                  </div>
+                </div>
+                < HiOutlineArrowNarrowRight size={24} />
+                <div className=''>
+                  <div>
+                    <h1 className="mt-4  text-sm font-bold">{byrdata.jam_kedatangan.toString().padStart(4, "0").replace(/(\d{2})(\d{2})/, "$1:$2")}</h1>
+                    <small>{byrdata.destination}</small>
+                  </div>
+                </div>
+              </div>
+              <div className="">
+              <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">Rp. {((parseInt(byrdata.nominal) || 0) + (parseInt(byrdata.nominal_admin) || 0)).toLocaleString('id-ID')}</h1>
+                <small>Total (Admin Rp. {(toRupiah(byrdata.nominal_admin ? byrdata.nominal_admin : 0)) ?? 0})</small>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className='mt-2'>
+              <Placeholder.Paragraph />
+            </div>
+          </>
+        )}
+      </Modal>
 
       {err === true ? (
       <>
@@ -156,13 +266,13 @@ export default function ViewBooking({ path }) {
       <>
           {isLoading === false ? (
             <>
-        <div className='w-full mt-2 md:mt-8'>
-          <div className="w-full rounded-md shadow-sm border profile-header">
-            <div className="text-gray-500 p-4 flex space-x-2 items-center">
-              < AiOutlineHome size={20} /> <span>Home</span> <span>/</span> <span>{path}</span>
+            <div className='w-full mt-2 md:mt-8'>
+              <div className="w-full rounded-md shadow-sm border profile-header">
+                <div className="text-gray-500 p-4 flex space-x-2 items-center">
+                  < AiOutlineHome size={20} /> <span>Home</span> <span>/</span> <span>{path}</span>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
               {data !== null && data !== undefined && data.length !== undefined && data.length !== 0 ? (
                 <div className='mt-6'>
                   {data.map((e, i) => (
@@ -185,7 +295,7 @@ export default function ViewBooking({ path }) {
                             </div>
                             <div className='pl-1'>
                               <div className='mt-4 text-xs  text-gray-500'>
-                                Date
+                                Tanggal Transaksi
                               </div>
                               <div className='mt-1 text-sm font-bold text-gray-500'>
                                 {e.tanggal_transaksi}
@@ -201,11 +311,18 @@ export default function ViewBooking({ path }) {
                                 - 
                               </div>
                             </div> */}
-                            <div className='flex space-x-2 items-center pt-4'>
-                            <div className="text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white inline-block">
-                              sisa waktu{" "}
-                              {remainingTimes[i] && (new Date(e.expiredDate).getTime() > new Date().getTime()) ? remainingTime(remainingTimes[i])  : ' habis.'}
-                              </div>
+                            <div className='block md:flex space-x-2 items-center pt-8'>
+                                <div className="text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white inline-block">
+                                  sisa waktu{" "}
+                                  {remainingTimes[i] && (new Date(e.expiredDate).getTime() > new Date().getTime()) ? remainingTime(remainingTimes[i])  : ' habis.'}
+                                </div>
+                                <div
+                                  onClick={(e) => openModalBayar(e, i)}
+                                  type="button"
+                                  className="mt-4 md:mt-0 cursor-pointer text-blue-500 font-bold text-xs"
+                                >
+                                  Lihat Detail
+                                </div>
                             </div>
                           </div>
                         </div>

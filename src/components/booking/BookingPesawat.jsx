@@ -187,18 +187,18 @@ export default function ViewBooking({ path }) {
             onOk={handleClose}
             onCancel={handleClose}
             footer={[
-              <Button key="back" onClick={handleClose}>
-                Cancel
-              </Button>,
-              <Button
-                key="submit"
-                type="primary"
-                className="bg-blue-500"
-                loading={loading}
-                disabled
-              >
-                Bayar Langsung
-              </Button>,
+              // <Button key="back" onClick={handleClose}>
+              //   Cancel
+              // </Button>,
+              // <Button
+              //   key="submit"
+              //   type="primary"
+              //   className="bg-blue-500"
+              //   loading={loading}
+              //   disabled
+              // >
+              //   Bayar Langsung
+              // </Button>,
             ]}
           >
             {loadBayar !== true ? (
@@ -263,7 +263,7 @@ export default function ViewBooking({ path }) {
                 </div>
                 {/* desktop */}
                 <div className="mt-4 hidden md:block">
-                  <div className="border p-4 grid grid-cols-6 gap-2 items-center">
+                  <div className="border p-4 grid grid-cols-8 gap-2 items-center">
                     <div className="">
                       <div className="max-w-[80px]">
                         <img src={byrdata.airlineIcon} alt="logo.png" />
@@ -271,6 +271,10 @@ export default function ViewBooking({ path }) {
                       <div className="font-semibold">
                         {byrdata.nama_maskapai}
                       </div>
+                    </div>
+                    <div className="col-span-2">
+                        <h1 className="text-sm font-bold">{byrdata.hari_keberangkatan}, {byrdata.tanggal_keberangkatan} </h1>
+                        <small>Tanggal Keberangkatan</small>
                     </div>
                     <div className="">
                       <div className="font-semibold">
@@ -314,13 +318,19 @@ export default function ViewBooking({ path }) {
                     <div className="flex space-x-2 items-center">
                       <div className="mr-8">
                         <div>
-                          <img src={byrdata.airlineIcon} alt="logo.png" />
+                          <img src={byrdata.airlineIcon} width={60} alt="logo.png" />
                         </div>
-                        <div className=" font-semibold">
+                        <div className="mt-2 font-semibold">
                           {byrdata.nama_maskapai}
                         </div>
                       </div>
-                      <div className="">
+                    </div>
+                      <div className="mt-4 col-span-2">
+                        <h1 className="text-sm font-bold">{byrdata.hari_keberangkatan}, {byrdata.tanggal_keberangkatan} </h1>
+                        <small>Tanggal Keberangkatan</small>
+                      </div>
+                    <div className="mt-4 flex space-x-4">
+                    <div className="">
                         <div className=" font-semibold">
                           {byrdata.jam_keberangkatan}
                         </div>
@@ -348,7 +358,8 @@ export default function ViewBooking({ path }) {
                         <div className="font-semibold">{byrdata.duration}</div>
                         <div className="text-xs font-normal">Langsung</div>
                       </div>
-                      <div className="">
+                    </div>
+                    <div className="mt-4">
                         <div className="font-semibold">
                           Rp. {toRupiah(byrdata.nominal)}
                         </div>
@@ -356,7 +367,6 @@ export default function ViewBooking({ path }) {
                           Admin Rp. {toRupiah(byrdata.nominal_admin)}
                         </div>
                       </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -418,7 +428,7 @@ export default function ViewBooking({ path }) {
                               </div>
                               <div className="pl-1">
                                 <div className="mt-8 text-xs  text-gray-500">
-                                  Date
+                                  Tanggal Transaksi
                                 </div>
                                 <div className="mt-2 text-sm font-bold text-gray-500">
                                   {e.tanggal_transaksi}
@@ -443,13 +453,13 @@ export default function ViewBooking({ path }) {
                                     ? remainingTime(remainingTimes[i])
                                     : " habis."}
                                 </div>
-                                {/* <div
+                                <div
                                   onClick={(e) => openModalBayar(e, i)}
                                   type="button"
                                   className="mt-4 md:mt-0 cursor-pointer text-blue-500 font-bold text-xs"
                                 >
-                                  lanjut bayar
-                                </div> */}
+                                  Lihat Detail
+                                </div>
                               </div>
                             </div>
                           </div>

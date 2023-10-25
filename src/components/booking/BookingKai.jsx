@@ -170,12 +170,12 @@ export default function ViewBooking({ path }) {
         onOk={handleClose}
         onCancel={handleClose}
         footer={[
-          <Button key="back" onClick={handleClose}>
-            Cancel
-          </Button>,
-          <Button key="submit" type="primary" className='bg-blue-500' loading={loading} disabled>
-            Bayar Langsung
-          </Button>,
+          // <Button key="back" onClick={handleClose}>
+          //   Cancel
+          // </Button>,
+          // <Button key="submit" type="primary" className='bg-blue-500' loading={loading} disabled>
+          //   Bayar Langsung
+          // </Button>,
         ]}
       >
         {loadBayar !== true ? (
@@ -323,7 +323,7 @@ export default function ViewBooking({ path }) {
                             </div>
                             <div className='pl-1'>
                               <div className='mt-4 text-xs  text-gray-500'>
-                                Date
+                                Tanggal Transaksi
                               </div>
                               <div className='mt-1 text-sm font-bold text-gray-500'>
                                 {e.tanggal_transaksi}
@@ -344,7 +344,7 @@ export default function ViewBooking({ path }) {
                             sisa waktu{" "}
                               {remainingTimes[i] && (new Date(e.expiredDate).getTime() > new Date().getTime()) ? remainingTime(remainingTimes[i])  : ' habis.'}
                               </div>
-                              {/* <div onClick={(e) => openModalBayar(e, i)} className='cursor-pointer text-blue-500 font-bold text-xs'>lanjut bayar</div> */}
+                              <div onClick={(e) => openModalBayar(e, i)} className='cursor-pointer text-blue-500 font-bold text-xs'>Lihat Detail</div>
                             </div>
                           </div>
                         </div>
