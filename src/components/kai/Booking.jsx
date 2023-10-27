@@ -262,7 +262,7 @@ export default function BookingKai() {
         // localStorage.setItem(dataBookingTrain[0].trainNumber + '_fareAdmin', JSON.stringify(Fare.data.data));
         navigate({
             pathname: `/train/konfirmasi`,
-            search: `?k_train=${id}&k_book=${uuid_hasilBooking.data.uuid}&k_auth=${response.data.uuid}`,
+            search: `?k_train=${id}&k_book=${uuid_hasilBooking.data.uuid}`,
           });
 
       } else {

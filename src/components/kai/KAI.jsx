@@ -17,6 +17,7 @@ import Cookies from "js-cookie";
 import { AiOutlineSwap } from "react-icons/ai";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import DateRangeIcon from "@mui/icons-material/DateRange"; // Import the DateRangeIcon
+import { InputGroup, InputNumber } from "rsuite";
 
 function KAI() {
   const useStyles = makeStyles((theme) => ({
@@ -221,6 +222,7 @@ function KAI() {
 
   function plusAdult(e) {
     e.preventDefault();
+    
     if (adult >= 4) {
       setadult(4);
     } else {
@@ -240,11 +242,17 @@ function KAI() {
 
   function plusInfant(e) {
     e.preventDefault();
-    if (infant >= 4) {
-      setinfant(4);
-    } else {
-      setinfant(infant + 1);
+
+    if(adult <= infant){
+      setinfant(infant);
+    }else{
+      if (infant >= 4) {
+        setinfant(4);
+      } else {
+        setinfant(infant + 1);
+      }
     }
+
   }
 
   function minusInfant(e) {
@@ -525,56 +533,30 @@ function KAI() {
                       id="basic-menu"
                       className={`${anchorEl} absolute top-20 z-10 grid w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}
                     >
-                      <div className="w-full ml-4 block md:mx-0">
+                      <div className="w-48 ml-4 block md:mx-0">
                         <div className="mt-4 w-full items-center text-gray-600">
-                          <div className="text-sm text-center header-number">
+                          <div className="w-full items-center text-gray-600">
+                          <div className="text-sm text-center header-number mb-4">
                             <p>Adult (Dewasa {">"} 12 thn)</p>
                           </div>
-                          <div class="flex flex-row h-10 w-full rounded-lg relative mt-2">
-                            <button
-                              onClick={plusAdult}
-                              class=" bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-l cursor-pointer outline-none"
-                            >
-                              <span class="m-auto text-2xl font-thin">+</span>
-                            </button>
-                            <input
-                              type="number"
-                              class="focus:outline-none text-center w-full bg-gray-50 font-semibold text-md md:text-basecursor-default flex items-center text-gray-500  outline-none"
-                              name="custom-input-number"
-                              value={adult}
-                            />
-                            <button
-                              onClick={minusAdult}
-                              class="bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-r cursor-pointer"
-                            >
-                              <span class="m-auto text-2xl font-thin">-</span>
-                            </button>
-                          </div>
+                          <InputGroup>
+                            <InputGroup.Button onClick={minusAdult}>-</InputGroup.Button>
+                            <InputNumber className={'custom-input-number'} value={adult} onChange={setadult} min={1} max={4} />
+                            <InputGroup.Button onClick={plusAdult}>+</InputGroup.Button>
+                          </InputGroup>
+                        </div>
                         </div>
                         <div className="mt-4 w-full items-center text-gray-600">
-                          <div className="text-sm text-center header-number">
+                          <div className="mt-4 w-full items-center text-gray-600">
+                          <div className="text-sm text-center header-number mb-4">
                             <p>Infant (Infant 0-2 thn)</p>
                           </div>
-                          <div class="flex flex-row h-10 w-full rounded-lg relative mt-2">
-                            <button
-                              onClick={plusInfant}
-                              class=" bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-l cursor-pointer outline-none"
-                            >
-                              <span class="m-auto text-2xl font-thin">+</span>
-                            </button>
-                            <input
-                              type="number"
-                              class="focus:outline-none text-center w-full bg-gray-50 font-semibold text-md md:text-basecursor-default flex items-center text-gray-500  outline-none"
-                              name="custom-input-number"
-                              value={infant}
-                            />
-                            <button
-                              onClick={minusInfant}
-                              class="bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-r cursor-pointer"
-                            >
-                              <span class="m-auto text-2xl font-thin">-</span>
-                            </button>
-                          </div>
+                          <InputGroup>
+                            <InputGroup.Button onClick={minusInfant}>-</InputGroup.Button>
+                            <InputNumber className={'custom-input-number'} value={infant} onChange={setinfant} min={0} max={4} />
+                            <InputGroup.Button onClick={plusInfant}>+</InputGroup.Button>
+                          </InputGroup>
+                        </div>
                         </div>
                       </div>
                     </div>

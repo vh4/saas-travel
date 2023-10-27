@@ -11,7 +11,7 @@ import { IoIosArrowDropright } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import "./SeatMap.css";
 import { Modal, Placeholder, Button } from "rsuite";
-import { notification } from "antd";
+import { Alert, Select, notification } from "antd";
 import { Button as ButtonAnt } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
 import { parseTanggal } from "../../helpers/date";
@@ -21,7 +21,7 @@ import PageExpired from "../components/Expired";
 import KonfirmasiLoading from "../components/trainskeleton/konfirmasi";
 import {Typography } from 'antd';
 
-const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData }) => {
+const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCount, setSelectedCount, setgerbongsamawajib, gerbongsamawajib }) => {
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
 
   function limitFunction() {
@@ -37,13 +37,43 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData }) => {
   }
 
   const limit = limitFunction();
+  const handleOnChange = (e, row, cols, seats) => {
 
-  const [selectedCount, setSelectedCount] = useState(0);
-
-  const handleOnChange = (e, row, cols) => {
     if (e.target.checked) {
+      
+      
       if (selectedCount < limit) {
         setSelectedCount(selectedCount + 1);
+        setgerbongsamawajib(gerbongsamawajib + 1);
+        
+        const handlersetSelectedCheckboxes = (prevSelectedCheckboxes) => {
+          if (
+            prevSelectedCheckboxes.includes(
+              `${row}-${cols}-${parseInt(clickSeatsData) + 1}`
+            )
+          ) {
+            return prevSelectedCheckboxes.filter(
+              (checkbox) =>
+                checkbox !== `${row}-${cols}-${parseInt(clickSeatsData) + 1}`
+            );
+          } else {
+            return [
+              ...prevSelectedCheckboxes,
+              `${row}-${cols}-${parseInt(clickSeatsData) + 1}`,
+            ];
+          }
+        }
+
+          setSelectedCheckboxes(handlersetSelectedCheckboxes(selectedCheckboxes));
+
+        }
+    else {
+          e.target.checked = false;
+    }
+      } else {
+        setSelectedCount(selectedCount - 1);
+        setgerbongsamawajib(gerbongsamawajib - 1);
+
         setSelectedCheckboxes((prevSelectedCheckboxes) => {
           if (
             prevSelectedCheckboxes.includes(
@@ -61,29 +91,7 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData }) => {
             ];
           }
         });
-      } else {
-        e.target.checked = false;
       }
-    } else {
-      setSelectedCount(selectedCount - 1);
-      setSelectedCheckboxes((prevSelectedCheckboxes) => {
-        if (
-          prevSelectedCheckboxes.includes(
-            `${row}-${cols}-${parseInt(clickSeatsData) + 1}`
-          )
-        ) {
-          return prevSelectedCheckboxes.filter(
-            (checkbox) =>
-              checkbox !== `${row}-${cols}-${parseInt(clickSeatsData) + 1}`
-          );
-        } else {
-          return [
-            ...prevSelectedCheckboxes,
-            `${row}-${cols}-${parseInt(clickSeatsData) + 1}`,
-          ];
-        }
-      });
-    }
   };
 
   useEffect(() => {
@@ -95,22 +103,25 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData }) => {
           selectedCheckboxes[i] !== undefined
         ) {
           let splittingSeat = selectedCheckboxes[i].split("-");
+
           changeStateData[i].row = parseInt(splittingSeat[0]);
           changeStateData[i].type = "adult";
           changeStateData[i].column = splittingSeat[1];
           changeStateData[i].wagonNumber = parseInt(splittingSeat[2]);
         } else {
           setSelectedCount(0);
+          setgerbongsamawajib(gerbongsamawajib - 1);
           alert("Mohon maaf, pilih gerbong yang sama !");
-        }
+        } 
       }
 
       setChangeSet([changeStateData]);
     }
+
   }, [limit, selectedCount, selectedCheckboxes]);
 
   return (
-    <div className="">
+    <div className="flex space-x-2">
       <div className="grid px-4 md:px-20 grid-rows-10 grid-cols-5">
         {seats.map((seat, i) => {
           const { row, column, class: seatClass, isFilled } = seat;
@@ -131,7 +142,7 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData }) => {
                       <input
                         type="checkbox"
                         onChange={(e) =>
-                          handleOnChange(e, seat.row, seat.column)
+                          handleOnChange(e, seat.row, seat.column, seat)
                         }
                         class="sr-only peer"
                       />
@@ -202,6 +213,7 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData }) => {
 export default function Konfirmasi() {
   const [api, contextHolder] = notification.useNotification();
   const { Paragraph } = Typography;
+  const [selectedCount, setSelectedCount] = useState(0);
 
   const failedNotification = (rd) => {
     api["error"]({
@@ -210,6 +222,7 @@ export default function Konfirmasi() {
         rd.toLowerCase().charAt(0).toUpperCase() +
         rd.slice(1).toLowerCase() +
         "",
+        duration: 7,
     });
   };
 
@@ -256,9 +269,12 @@ export default function Konfirmasi() {
   const [dataSeats, setDataSeats] = useState([]);
 
   const [changeState, setChangeSet] = useState({}); //change seats.
+  const [changeStateKetikaGagalTidakUpdate, setchangeStateKetikaGagalTidakUpdate] = useState({}); //change seats.
+
+  const [gerbongsamawajib, setgerbongsamawajib] = useState(0);
 
   const [open, setOpen] = React.useState(false);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {setOpen(false);setSelectedCount(0); setgerbongsamawajib(0)};
 
   useEffect(() => {
     if (token === null || token === undefined) {
@@ -312,6 +328,7 @@ export default function Konfirmasi() {
           });
 
           setChangeSet([initialChanges]);
+          setchangeStateKetikaGagalTidakUpdate([initialChanges])
           setTotalAdult(passengers.adults.length);
           //   setTotalChild(passengers.children ? passengers.children.length : 0);
           setTotalInfant(passengers.infants.length);
@@ -366,6 +383,8 @@ export default function Konfirmasi() {
     e.preventDefault();
     setOpen(true);
 
+
+
     const response = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/train/get_seat_layout`,
       {
@@ -399,13 +418,19 @@ export default function Konfirmasi() {
     }, 1000);
   };
 
+  console.log(passengers)
+  
+
   const handlerPindahKursi = async (e) => {
     e.preventDefault();
-    let changeStateFix = changeState;
-
+  
+    const changeStateFix = JSON.parse(JSON.stringify(changeState)); // Create a deep copy
+  
     let wagonNumber = changeStateFix[0][0]["wagonNumber"];
     let className = changeStateFix[0][0]["class"];
+
     setisLoadingPindahKursi(true);
+    setgerbongsamawajib(0);
 
     changeStateFix[0].forEach((item) => {
       delete item.name;
@@ -414,6 +439,7 @@ export default function Konfirmasi() {
       delete item.wagonNumber;
     });
 
+  
     let gantiKursiFix = {
       productCode: "WKAI",
       bookingCode: hasilBooking.bookingCode,
@@ -421,27 +447,20 @@ export default function Konfirmasi() {
       wagonNumber: wagonNumber,
       wagonCode: className,
       seats: changeStateFix[0],
-      token: JSON.parse(
-        localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-      ),
+      token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
     };
-
-    gantiKursiFix.seats = gantiKursiFix.seats.filter(
-      (seat) => seat.type !== "infant"
-    );
-
+  
+    gantiKursiFix.seats = gantiKursiFix.seats.filter((seat) => seat.type !== "infant");
+  
     gantiKursiFix.seats.forEach((item) => {
       delete item.type;
     });
-
-    //   let z = Object.assign(gantiKursiFix, passengers);
+  
     let hasilBookingData = hasilBooking;
-
+    setSelectedCount(0);
+  
     for (var i = 0; i < changeStateFix[0].length; i++) {
-      if (
-        gantiKursiFix.seats[i] !== undefined &&
-        gantiKursiFix.seats[i] !== null
-      ) {
+      if (gantiKursiFix.seats[i] !== undefined && gantiKursiFix.seats[i] !== null) {
         hasilBookingData.seats[i][1] = wagonNumber;
         hasilBookingData.seats[i][2] = gantiKursiFix.seats[i].row.toString();
         hasilBookingData.seats[i][3] = gantiKursiFix.seats[i].column;
@@ -452,54 +471,51 @@ export default function Konfirmasi() {
       `${process.env.REACT_APP_HOST_API}/travel/train/change_seat`,
       gantiKursiFix
     );
+
     setOpen(false);
-
-    hasilBookingData['transactionId'] = response.data.transactionId
-
+    hasilBookingData['transactionId'] = response.data.transactionId;
+  
     if (response.data.rc === "00") {
 
+      //passenger nya harusmya di update yang baru change seats.
       const response = await axios.put(
         `${process.env.REACT_APP_HOST_API}/travel/train/book/k_book`,
         {
           uuid: uuid_book,
           passengers: passengers,
           hasil_book: hasilBookingData,
-          uuid_permission:uuid_auth
+          uuid_permission: uuid_auth,
         }
       );
 
-      if (response.data.rc == "00") {
+      console.log(        {
+        uuid: uuid_book,
+        passengers: passengers,
+        hasil_book: hasilBookingData,
+        uuid_permission: uuid_auth,
+      })
+  
+      if (response.data.rc === "00") {
         setHasilBooking(hasilBookingData);
         setisLoadingPindahKursi(false);
         successNotification();
-
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
       } else {
         setisLoadingPindahKursi(false);
-        failedNotification();
-
-        setTimeout(() => {
-          window.location.reload(response.data.rd);
-        }, 1000);
+        failedNotification(response.data.rd);
       }
     } else if (response.data.rc === "55") {
+      setChangeSet(changeStateKetikaGagalTidakUpdate);
       setisLoadingPindahKursi(false);
-      failedNotification();
-
-      setTimeout(() => {
-        window.location.reload(response.data.rd);
-      }, 1000);
+      failedNotification(response.data.rd);
     } else {
+      setChangeSet(changeStateKetikaGagalTidakUpdate);
       setisLoadingPindahKursi(false);
-      failedNotification();
-
-      setTimeout(() => {
-        window.location.reload(response.data.rd);
-      }, 1000);
+      failedNotification(response.data.rd);
     }
   };
+
+  const [backdrop, setBackdrop] = React.useState('static');
+  const handleOpen = () => setOpen(true);
 
   return (
     <>
@@ -520,16 +536,17 @@ export default function Konfirmasi() {
         </>
       ) : (
         <>
-          <Modal size="md" open={open} onClose={handleClose}>
+          <Modal size="md" backdrop={backdrop} keyboard={false} open={open} onClose={handleClose}>
             <Modal.Header>
               <Modal.Title>
                 <div className="text-gray-500 font-bold mt-2">Pindah Kursi</div>
                 <small>
-                  tekan tombol pilih kursi untuk ganti kursi terbaru.
+                  tekan tombol warna biru untuk ganti kursi.
                 </small>
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
+
               {dataSeats.data !== undefined ? (
                 <>
                   <div className="flex flex-col w-full bg-white outline-none focus:outline-none">
@@ -546,11 +563,12 @@ export default function Konfirmasi() {
                                 <>
                                   {e.type === "adult" && (
                                     <div className="border m-2 rounded-md mt-2 text-xs font-bold">
-                                      <div className="flex space-x-4 items-center p-4 text-gray-700">
+                                      <div className="flex space-x-4 items-center py-2 px-4 text-gray-700">
                                         <div className="text-2xl font-bold">
                                           {i + 1}
                                         </div>
                                         <div>
+                                          
                                           <div className="font-bold mt-2">
                                             {e.name}
                                           </div>
@@ -572,41 +590,70 @@ export default function Konfirmasi() {
                                   )}
                                 </>
                               ))}
+                              <div className="mt-4 md:mt-4 ml-2">
+                                <div className="flex space-x-2 items-center">
+                                  <label
+                                    class={`select-none block py-1.5 items-center cursor-pointer`}
+                                  >
+                                    <div class="w-8 text-white-500 text-white h-8 bg-gray-500 rounded-lg">
+                                      <div class="flex justify-center py-1.5">X</div>
+                                    </div>
+                                  </label>
+                                  <div className="text-md text-black font-bold">
+                                    Seats not available.
+                                  </div>
+                                </div>
+                                <div className="flex space-x-2 items-center">
+                                  <label
+                                    class={`select-none block py-1.5 items-center cursor-pointer`}
+                                  >
+                                    <div class="w-8 text-white-500 h-8 bg-blue-500 rounded-lg">
+                                    </div>
+                                  </label>
+                                  <div className="text-md text-black font-bold">
+                                    Seats available.
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                             {/* seats cols and rows kereta premium dan bisnis */}
                             <div className="col-span-2 w-full h-[540px]">
                               <div className="flex justify-center mb-8 mt-4">
                                 <>
-                                  <div className="w-1/2 ">
+                                  <div className="w-full mx-0 md:mx-8 text-center">
                                     <label
                                       for="underline_select"
                                       class="sr-only"
                                     >
                                       Underline select
                                     </label>
-                                    <select
-                                      onChange={(e) =>
-                                        setClickSeats(e.target.value)
-                                      }
-                                      id="underline_select"
-                                      class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none  focus:outline-none focus:ring-0 focus:border-gray-200 peer"
-                                    >
-                                      {dataSeats !== undefined ||
-                                      dataSeats !== null ? (
-                                        dataSeats.data.map((data, i) => (
-                                          <option value={i}>
-                                            {data.wagonCode === "EKO"
-                                              ? "Ekonomi"
-                                              : data.wagonCode === "EKS"
-                                              ? "Eksekutif"
-                                              : "Bisnis"}{" "}
-                                            {data.wagonNumber}
-                                          </option>
-                                        ))
-                                      ) : (
-                                        <></>
-                                      )}
-                                    </select>
+                                    {gerbongsamawajib === 0 ? (
+                                      <Select
+                                        onChange={(value) => setClickSeats(value)}
+                                        id="underline_select"
+                                        style={{ width: '100%' }}
+                                        defaultValue={0}
+                                      >
+                                        {dataSeats !== undefined && dataSeats !== null ? (
+                                          dataSeats.data.map((data, i) => (
+                                            <Select.Option key={i} value={i}>
+                                              {data.wagonCode === "EKO" ? "Ekonomi" :
+                                              data.wagonCode === "EKS" ? "Eksekutif" : "Bisnis"} {data.wagonNumber}
+                                            </Select.Option>
+                                          ))
+                                        ) : (
+                                          <Select.Option value="empty">Data kosong</Select.Option>
+                                        )}
+                                      </Select>
+                                    ) : (
+                                      <Alert
+                                        className="text-xs"
+                                        message="Batalkan pilihan anda yang telah dipilih untuk mengganti gerbang!."
+                                        type="warning"
+                                        showIcon
+                                        closable
+                                      />
+                                    )}
                                   </div>
                                 </>
                               </div>
@@ -616,6 +663,10 @@ export default function Konfirmasi() {
                                   <>
                                     <SeatMap
                                       changeState={changeState}
+                                      gerbongsamawajib={gerbongsamawajib}
+                                      setgerbongsamawajib={setgerbongsamawajib}
+                                      selectedCount={selectedCount}
+                                      setSelectedCount={setSelectedCount}
                                       setChangeSet={setChangeSet}
                                       clickSeatsData={clickSeats}
                                       seats={dataSeats.data[clickSeats].layout}

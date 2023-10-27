@@ -10,7 +10,7 @@ import { IoBoatSharp } from "react-icons/io5";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import onClickOutside from "react-onclickoutside";
 import { makeStyles } from "@mui/styles";
-import { DateRangePicker } from "rsuite";
+import { DateRangePicker, InputGroup, InputNumber } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
 import { Button } from "antd";
 import Cookies from "js-cookie";
@@ -484,56 +484,26 @@ function Pelni() {
                       id="basic-menu"
                       className={`${anchorEl} absolute top-20 z-10 grid w-auto px-8 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}
                     >
-                      <div className="w-full ml-4 block md:mx-0">
+                      <div className="w-48 ml-4 block md:mx-0">
                         <div className="mt-4 w-full items-center text-gray-600">
-                          <div className="text-sm text-center header-number">
+                          <div className="text-sm text-center header-number mb-4">
                             <p>laki (Laki-laki {">"} 12 thn)</p>
                           </div>
-                          <div class="flex flex-row h-10 w-full rounded-lg relative mt-2">
-                            <button
-                              onClick={plusLaki}
-                              class=" bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-l cursor-pointer outline-none"
-                            >
-                              <span class="m-auto text-2xl font-thin">+</span>
-                            </button>
-                            <input
-                              type="number"
-                              class="focus:outline-none text-center w-full bg-gray-50 font-semibold text-md md:text-basecursor-default flex items-center text-gray-500  outline-none"
-                              name="custom-input-number"
-                              value={laki}
-                            />
-                            <button
-                              onClick={minusLaki}
-                              class="bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-r cursor-pointer"
-                            >
-                              <span class="m-auto text-2xl font-thin">-</span>
-                            </button>
-                          </div>
+                          <InputGroup>
+                            <InputGroup.Button onClick={minusLaki}>-</InputGroup.Button>
+                            <InputNumber className={'custom-input-number'} value={laki} onChange={setLaki} min={0} max={4} />
+                            <InputGroup.Button onClick={plusLaki}>+</InputGroup.Button>
+                          </InputGroup>
                         </div>
                         <div className="mt-4 mb-8 w-full items-center text-gray-600">
-                          <div className="text-sm text-center header-number">
+                          <div className="text-sm text-center header-number mb-4">
                             <p>Wanita (Wanita {">"} 12 thn)</p>
                           </div>
-                          <div class="flex flex-row h-10 w-full rounded-lg relative mt-2">
-                            <button
-                              onClick={plusWanita}
-                              class=" bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-l cursor-pointer outline-none"
-                            >
-                              <span class="m-auto text-2xl font-thin">+</span>
-                            </button>
-                            <input
-                              type="number"
-                              class="focus:outline-none text-center w-full bg-gray-50 font-semibold text-md md:text-basecursor-default flex items-center text-gray-500  outline-none"
-                              name="custom-input-number"
-                              value={wanita}
-                            />
-                            <button
-                              onClick={minusWanita}
-                              class="bg-gray-100 text-gray-600 hover:text-gray-500 hover:bg-gray-200 h-full w-20 rounded-r cursor-pointer"
-                            >
-                              <span class="m-auto text-2xl font-thin">-</span>
-                            </button>
-                          </div>
+                          <InputGroup>
+                            <InputGroup.Button onClick={minusWanita}>-</InputGroup.Button>
+                            <InputNumber className={'custom-input-number'} value={wanita} onChange={setWanita} min={0} max={4} />
+                            <InputGroup.Button onClick={plusWanita}>+</InputGroup.Button>
+                          </InputGroup>
                         </div>
                       </div>
                     </div>
