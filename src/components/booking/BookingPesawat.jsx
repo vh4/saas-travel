@@ -10,7 +10,6 @@ import { message } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
 import { remainingTime } from "../../helpers/date";
 import Page500 from "../components/500";
-import ExpiredLogin from "../../pages/partials/ExpiredLogin";
 
 export default function ViewBooking({ path }) {
   const [data, setData] = useState([]);

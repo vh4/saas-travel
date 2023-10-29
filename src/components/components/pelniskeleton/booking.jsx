@@ -1,6 +1,5 @@
 import Skeleton from 'react-loading-skeleton'
 import { TbArrowsLeftRight } from "react-icons/tb";
-import { Button } from 'antd';
 
 const Body = () => {
 	return(

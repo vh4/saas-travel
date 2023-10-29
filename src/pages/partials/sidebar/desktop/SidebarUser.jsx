@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {FaUserCircle, FaListAlt, FaInbox} from 'react-icons/fa'
+import {FaUserCircle, FaListAlt} from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import {MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp} from "react-icons/md"
 import axios from 'axios'

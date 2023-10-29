@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { FaUserCircle, FaListAlt, FaInbox } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { FaUserCircle, FaListAlt } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 import {
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,
 } from "react-icons/md";
 import axios from "axios";
-import { Button, notification } from "antd";
-import { MdOutlineTrain } from "react-icons/md";
-import { GiCommercialAirplane } from "react-icons/gi";
-import { IoBoatOutline, IoExitOutline } from "react-icons/io5";
+import { notification } from "antd";
+import { IoExitOutline } from "react-icons/io5";
+import { LogoutContent } from "../../../../App";
 
 export default function SidebarMobileUser({ pathSidebar }) {
   const [dropdownTransaksi, setDropdownTransaksi] = useState(false);
   const [dropdownBooking, setDropdownBooking] = useState(false);
   const [api, contextHolder] = notification.useNotification();
+  const { setLogout } = useContext(LogoutContent);
+  const navigate = useNavigate();
 
   const suksesLogout = () => {
     api["success"]({
@@ -32,9 +33,17 @@ export default function SidebarMobileUser({ pathSidebar }) {
           localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
         ),
       })
+
       .then(() => {
         localStorage.clear();
         suksesLogout();
+
+        setLogout({
+          type: "LOGOUT",
+        });
+
+        navigate("/logout");
+
       });
   }
 

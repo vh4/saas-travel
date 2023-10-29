@@ -79,12 +79,18 @@ export default function Search() {
       setPageErr(true);
     }
 
-    if (laki === null || laki === undefined) {
+    if (laki === null || laki === undefined || isNaN(parseInt(laki)) === true ) {
       setPageErr(true);
     }
-    if (wanita === null || wanita === undefined) {
+
+    if (wanita === null || wanita === undefined || isNaN(parseInt(wanita)) === true ) {
       setPageErr(true);
     }
+
+    if(parseInt(wanita) <= 0 && parseInt(laki) <= 0){
+        setPageErr(true);
+    }
+
   }, [
     token,
     origin,

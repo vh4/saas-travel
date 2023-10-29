@@ -80,10 +80,16 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCou
               `${row}-${cols}-${parseInt(clickSeatsData) + 1}`
             )
           ) {
+            // return prevSelectedCheckboxes.filter(
+            //   (checkbox) =>
+            //     checkbox !== `${row}-${cols}-${parseInt(clickSeatsData) + 1}`
+            // );
+
             return prevSelectedCheckboxes.filter(
               (checkbox) =>
                 checkbox !== `${row}-${cols}-${parseInt(clickSeatsData) + 1}`
             );
+            
           } else {
             return [
               ...prevSelectedCheckboxes,
@@ -93,6 +99,7 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCou
         });
       }
   };
+
 
   useEffect(() => {
     let changeStateData = changeState[0];
@@ -114,6 +121,7 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCou
           alert("Mohon maaf, pilih gerbong yang sama !");
         } 
       }
+      console.log(selectedCheckboxes);
 
       setChangeSet([changeStateData]);
     }
@@ -122,7 +130,7 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCou
 
   return (
     <div className="flex space-x-2">
-      <div className="grid px-4 md:px-20 grid-rows-10 grid-cols-5">
+      <div className="grid md:px-20 grid-rows-10 grid-cols-5">
         {seats.map((seat, i) => {
           const { row, column, class: seatClass, isFilled } = seat;
           return (
@@ -416,10 +424,7 @@ export default function Konfirmasi() {
         search: `?k_train=${uuid_train_data}&k_book=${uuid_book}`,
       });
     }, 1000);
-  };
-
-  console.log(passengers)
-  
+  };  
 
   const handlerPindahKursi = async (e) => {
     e.preventDefault();
@@ -439,7 +444,8 @@ export default function Konfirmasi() {
       delete item.wagonNumber;
     });
 
-  
+    console.log(changeStateFix[0]);
+
     let gantiKursiFix = {
       productCode: "WKAI",
       bookingCode: hasilBooking.bookingCode,
@@ -467,6 +473,7 @@ export default function Konfirmasi() {
       }
     }
 
+
     const response = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/train/change_seat`,
       gantiKursiFix
@@ -487,13 +494,6 @@ export default function Konfirmasi() {
           uuid_permission: uuid_auth,
         }
       );
-
-      console.log(        {
-        uuid: uuid_book,
-        passengers: passengers,
-        hasil_book: hasilBookingData,
-        uuid_permission: uuid_auth,
-      })
   
       if (response.data.rc === "00") {
         setHasilBooking(hasilBookingData);

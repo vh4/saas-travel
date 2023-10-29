@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AiOutlineHome } from 'react-icons/ai';
 import { BsArrowRightShort } from 'react-icons/bs';
 import axios from 'axios';
@@ -16,7 +16,6 @@ export default function ViewBooking({ path }) {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [loadBayar, setLoadBayar] = useState(true);
-  const [open, setOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(false);
   const handleOpen = () => setShowModal(true);

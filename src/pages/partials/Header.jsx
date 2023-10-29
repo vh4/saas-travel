@@ -1,4 +1,3 @@
-//make create function reactjs
 
 import { Link } from "react-router-dom";
 import React, { useContext, useEffect, useState, useRef } from "react";
@@ -6,24 +5,19 @@ import { CiSettings } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Skeleton from "@mui/material/Skeleton";
-import { MdOutlineCorporateFare } from "react-icons/md";
-import { IoIosLogIn, IoMdArrowDropdown } from "react-icons/io";
-import { FaRegUser, FaListAlt } from "react-icons/fa";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import { Box } from "@mui/material";
 import SidebarMobileUser from "./sidebar/mobile/SidebarMobileUser";
 import { Drawer, Typography, Modal, Form, Input, Button, Avatar } from "antd";
 import { notification } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
 import { LogoutContent } from "../../App";
+import { FaListAlt } from "react-icons/fa";
 import ReCAPTCHA from "react-google-recaptcha";
 import { UserOutlined } from "@ant-design/icons";
 
-export default function Header({ toogleSidebar, valueSidebar }) {
+export default function Header() {
 
   const captchaRef = useRef(null);
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [showModal, setShowModal] = React.useState(false);
   const [form] = Form.useForm();
@@ -34,14 +28,6 @@ export default function Header({ toogleSidebar, valueSidebar }) {
   const [login, setLogin] = useState(false);
   const [api, contextHolder] = notification.useNotification();
   const { setLogout } = useContext(LogoutContent);
-
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleCloses = () => {
-    setAnchorEl(null);
-  };
 
   const onReset = () => {
     form.resetFields();
@@ -97,17 +83,11 @@ export default function Header({ toogleSidebar, valueSidebar }) {
         ),
       })
       .then(() => {
+        
         localStorage.clear();
         suksesLogout();
+        navigate('/');
 
-        setIsDrawerOpen(false);
-
-        setLogout({
-          type: "LOGOUT",
-        });
-
-        navigate("/logout"); //
-        
       });
   };
 
@@ -325,9 +305,6 @@ export default function Header({ toogleSidebar, valueSidebar }) {
                   >
                     <div>Masuk</div>
                   </Button>
-                  <div className="text-blue-500">
-                    | 
-                  </div>
                   <a href="https://www.rajabiller.com/register" className="text-[15px] text-slate-800">
                   <Button
                     key="submit"

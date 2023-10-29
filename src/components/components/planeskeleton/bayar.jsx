@@ -1,7 +1,5 @@
 import Skeleton from 'react-loading-skeleton'
-import { TbArrowsLeftRight } from "react-icons/tb";
-import { Alert, Button } from 'antd';
-import Marquee from 'react-fast-marquee';
+import { Button } from 'antd';
 
 const Body = ({TotalAdult, TotalChild, TotalInfant}) => {
 	return(

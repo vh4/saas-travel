@@ -47,7 +47,7 @@ function App() {
     IsLogout: false,
 
   }
-
+  
   const reducer = (state, action) => {
       switch(action.type) {
         case 'PAY_TRAIN': return {
@@ -72,36 +72,36 @@ function App() {
   return (
     <div className="App">
        <BrowserRouter>
-       <LogoutContent.Provider value={{logout,setLogout}} >
-        <TiketContext.Provider value={{pay,dispatch}}>
-          <NavContext.Provider value={{nav,setNav}}>
-            <Routes>
-              <Route exact path="/" element={<MainPage />}></Route>
-              <Route path="/train/search" element={< SearchKai/>}></Route>
-              <Route path="/flight/search" element={< SearchPlane/>}></Route>
-              <Route path="/pelni/search" element={< SearchPelni/>}></Route>
-              <Route path="/pelni/booking/:id" element={< BookingPelni/>}></Route>
-              <Route path="/pelni/payment/:id" element={< PaymentPelni/>}></Route>
-              <Route path="/flight/booking/:id" element={< BookingPesawat/>}></Route>
-              <Route path="/flight/payment/" element={< PembayaranPesawat/>}></Route>
-              <Route path="/flight/tiket-pesawat" element={< TiketPesawat/>}></Route>
-              <Route path="/train/booking/:id" element={< BookingKai/>}></Route>
-              <Route path="/train/konfirmasi" element={< KonfirmasiKai/>}></Route>
-              <Route path="/train/bayar" element={< PembayaranKai/>}></Route>
-              <Route path="/train/tiket-kai" element={< TiketKai/>}></Route>
-              <Route path="/transaksi/kai" element={<TransaksiKai />}></Route>
-              <Route path="/transaksi/pesawat" element={<TransaksiPesawat />}></Route>
-              <Route path="/booking/kai" element={<BookingKaiList />}></Route>
-              <Route path="/booking/pesawat" element={<BookingPesawatList />}></Route>
-              <Route path="/booking/pelni" element={<BookingPelniList />}></Route>
+        <LogoutContent.Provider value={{logout,setLogout}} >
+          <TiketContext.Provider value={{pay,dispatch}}>
+            <NavContext.Provider value={{nav,setNav}}>
+              <Routes>
+                <Route exact path="/" element={<MainPage />}></Route>
+                <Route path="/train/search" element={< SearchKai/>}></Route>
+                <Route path="/flight/search" element={< SearchPlane/>}></Route>
+                <Route path="/pelni/search" element={< SearchPelni/>}></Route>
+                <Route path="/pelni/booking/:id" element={< BookingPelni/>}></Route>
+                <Route path="/pelni/payment/:id" element={< PaymentPelni/>}></Route>
+                <Route path="/flight/booking/:id" element={< BookingPesawat/>}></Route>
+                <Route path="/flight/payment/" element={< PembayaranPesawat/>}></Route>
+                <Route path="/flight/tiket-pesawat" element={< TiketPesawat/>}></Route>
+                <Route path="/train/booking/:id" element={< BookingKai/>}></Route>
+                <Route path="/train/konfirmasi" element={< KonfirmasiKai/>}></Route>
+                <Route path="/train/bayar" element={< PembayaranKai/>}></Route>
+                <Route path="/train/tiket-kai" element={< TiketKai/>}></Route>
+                <Route path="/transaksi/kai" element={<TransaksiKai />}></Route>
+                <Route path="/transaksi/pesawat" element={<TransaksiPesawat />}></Route>
+                <Route path="/booking/kai" element={<BookingKaiList />}></Route>
+                <Route path="/booking/pesawat" element={<BookingPesawatList />}></Route>
+                <Route path="/booking/pelni" element={<BookingPelniList />}></Route>
 
-              <Route path="/profile/view" element={<Profile />}></Route>
-              <Route path="/logout" element={<Logout />}></Route>
-              <Route path="/*" element={<Page404 />} />
-            </Routes>
-          </NavContext.Provider>  
-        </TiketContext.Provider>  
-        </LogoutContent.Provider>
+                <Route path="/profile/view" element={<Profile />}></Route>
+                <Route path="/logout" element={<Logout />}></Route>
+                <Route path="/*" element={<Page404 />} />
+              </Routes>
+            </NavContext.Provider>  
+          </TiketContext.Provider>  
+          </LogoutContent.Provider>
       </BrowserRouter>     
     </div>
   );

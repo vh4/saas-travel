@@ -162,13 +162,22 @@ export default function Search() {
       setErrPage(true);
     }
 
-    if (infant === null || infant === undefined) {
+    if (infant === null || infant === undefined || isNaN(parseInt(infant)) === true) {
       setErrPage(true);
     }
 
-    if (adult === null || adult === undefined) {
+    if (adult === null || adult === undefined || isNaN(parseInt(adult)) === true) {
       setErrPage(true);
     }
+
+    if(parseInt(adult) < parseInt(infant)) {
+      setErrPage(true);
+    }
+
+    if(parseInt(adult) <= 0){
+      setErrPage(true);
+    }
+
   }, [
     token,
     stasiunBerangkat,

@@ -1,6 +1,5 @@
 import Skeleton from 'react-loading-skeleton'
-import { Alert, Button as ButtonAnt } from 'antd';
-import Marquee from 'react-fast-marquee';
+import { Button as ButtonAnt } from 'antd';
 import { TbArrowsLeftRight } from 'react-icons/tb';
 
 const BayarLoading = ({total}) => {

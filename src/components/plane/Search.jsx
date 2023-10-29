@@ -160,16 +160,16 @@ export default function Search() {
       setErr(true);
     }
 
-    if (infant === null || infant === undefined) {
+    if (infant === null || infant === undefined || isNaN(parseInt(infant)) == true) {
       setPageErr(true);
     }
 
-    if (child === null || child === undefined) {
+    if (child === null || child === undefined || isNaN(parseInt(child)) == true) {
       setPageErr(true);
 
     }
 
-    if (adult === null || adult === undefined) {
+    if (adult === null || adult === undefined || isNaN(parseInt(adult)) == true) {
       setPageErr(true);
     }
 
@@ -204,6 +204,10 @@ export default function Search() {
     }
 
     if (departure === null || departure === undefined) {
+      setPageErr(true);
+    }
+
+    if(parseInt(adult) <= 0){
       setPageErr(true);
     }
 

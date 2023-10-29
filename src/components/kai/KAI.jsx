@@ -226,30 +226,35 @@ function KAI() {
     if (adult >= 4) {
       setadult(4);
     } else {
-      setadult(adult + 1);
+      setadult(parseInt(adult) + 1);
     }
   }
 
   function minusAdult(e) {
     e.preventDefault();
 
-    if (adult < 1 || adult === 1) {
-      setadult(1);
-    } else {
-      setadult(adult - 1);
+    if((adult <= infant)){
+      setadult(parseInt(adult))
+    }else{      
+      if (adult < 1 || adult === 1) {
+        setadult(1);
+      } else {
+        setadult(parseInt(adult) - 1);
+      }
     }
+
   }
 
   function plusInfant(e) {
     e.preventDefault();
 
     if(adult <= infant){
-      setinfant(infant);
+      setinfant(parseInt(infant));
     }else{
       if (infant >= 4) {
         setinfant(4);
       } else {
-        setinfant(infant + 1);
+        setinfant(parseInt(infant) + 1);
       }
     }
 
@@ -261,7 +266,7 @@ function KAI() {
     if (infant < 0 || infant === 0) {
       setinfant(0);
     } else {
-      setinfant(infant - 1);
+      setinfant(parseInt(infant) - 1);
     }
   }
 

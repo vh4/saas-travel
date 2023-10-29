@@ -1,9 +1,6 @@
 import {GiCommercialAirplane} from 'react-icons/gi'
-import {RiHotelLine} from 'react-icons/ri'
-import {IoBoatOutline, IoBusOutline} from 'react-icons/io5'
+import {IoBoatOutline} from 'react-icons/io5'
 import {MdOutlineTrain} from 'react-icons/md' 
-import {FaUmbrellaBeach} from 'react-icons/fa'
-import { Link } from 'react-router-dom'
 
 export default function Sidebar({nameMenu, setNameMenu}) {
     return (

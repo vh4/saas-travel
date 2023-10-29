@@ -1,11 +1,10 @@
-import { ButtonBase, Popper } from "@mui/material";
+import { Popper } from "@mui/material";
 import * as React from "react";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Autocomplete from "@mui/material/Autocomplete";
 import { FaPlaneDeparture, FaPlaneArrival } from "react-icons/fa";
 import { Chip } from "@mui/material";
@@ -239,17 +238,21 @@ function Plane() {
     if (adult >= 4) {
       setadult(4);
     } else {
-      setadult(adult + 1);
+      setadult(parseInt(adult) + 1);
     }
   }
 
   function minusAdult(e) {
     e.preventDefault();
 
-    if (adult < 1 || adult === 1) {
-      setadult(1);
-    } else {
-      setadult(adult - 1);
+    if((adult <= infant) || (adult <= child)){
+      setadult(parseInt(adult))
+    }else{
+      if (adult < 1 || adult === 1) {
+        setadult(1);
+      } else {
+        setadult(parseInt(adult) - 1);
+      }
     }
   }
 
@@ -257,12 +260,12 @@ function Plane() {
     e.preventDefault();
 
     if(adult <= infant){
-      setinfant(infant);
+      setinfant(parseInt(infant));
     }else{
       if (infant >= 4) {
         setinfant(4);
       } else {
-        setinfant(infant + 1);
+        setinfant(parseInt(infant) + 1);
       }
     }
 
@@ -274,20 +277,20 @@ function Plane() {
     if (infant < 0 || infant === 0) {
       setinfant(0);
     } else {
-      setinfant(infant - 1);
+      setinfant(parseInt(infant) - 1);
     }
   }
 
   function plusChild(e) {
 
     if(adult <= child){
-      setChild(child);
+      setChild(infant(child));
     }else{
       e.preventDefault();
       if (child >= 4) {
         setChild(4);
       } else {
-        setChild(child + 1);
+        setChild(parseInt(child) + 1);
       }
     }
   }
@@ -298,7 +301,7 @@ function Plane() {
     if (child < 0 || child === 0) {
       setChild(0);
     } else {
-      setChild(child - 1);
+      setChild(parseInt(child) - 1);
     }
   }
 

@@ -17,7 +17,6 @@ import { notification } from "antd";
 import { getCurrentDate, parseTanggal } from "../../helpers/date";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
-import { Loading } from "../components/Loading";
 import ManyRequest from "../components/Manyrequest";
 import BookingLoading from "../components/trainskeleton/booking";
 import { ExclamationCircleFilled } from '@ant-design/icons';
@@ -599,7 +598,6 @@ export default function BookingKai() {
                                       hiddenLabel={true}
                                       inputProps={{
                                         required: true,
-                                        autoFocus: true,
                                       }}
                                       country="id"
                                       inputStyle={{

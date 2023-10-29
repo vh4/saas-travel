@@ -1,8 +1,6 @@
 import {GiCommercialAirplane} from 'react-icons/gi'
 import {IoBoatOutline} from 'react-icons/io5'
 import {MdOutlineTrain} from 'react-icons/md' 
-import {CiGrid41} from 'react-icons/ci'
-import { Link } from 'react-router-dom'
 
 export default function SideBarMobile({nameMenu, setNameMenu}) {
     return (

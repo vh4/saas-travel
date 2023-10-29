@@ -1,6 +1,4 @@
 import Skeleton from "react-loading-skeleton";
-import { TbArrowsLeftRight } from "react-icons/tb";
-import { Button } from "antd";
 import { MdOutlineAirlineSeatReclineExtra } from "react-icons/md";
 import { IoIosArrowDropright } from "react-icons/io";
 
