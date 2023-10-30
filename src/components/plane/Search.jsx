@@ -207,6 +207,11 @@ export default function Search() {
       setPageErr(true);
     }
 
+
+    if(parseInt(adult) < parseInt(child || parseInt(adult) < parseInt(infant))) {
+      setPageErr(true);
+    }
+
     if(parseInt(adult) <= 0){
       setPageErr(true);
     }
