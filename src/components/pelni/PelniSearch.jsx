@@ -503,7 +503,7 @@ function PELNI() {
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusLaki}>-</InputGroup.Button>
-                            <InputNumber className={'custom-input-number'} value={laki} onChange={setLaki} min={0} max={4} />
+                            <InputNumber className={'custom-input-number'} value={laki} onChange={setLaki} min={0} max={4} readOnly/>
                             <InputGroup.Button onClick={plusLaki}>+</InputGroup.Button>
                           </InputGroup>
                         </div>
@@ -513,7 +513,7 @@ function PELNI() {
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusWanita}>-</InputGroup.Button>
-                            <InputNumber className={'custom-input-number'} value={wanita} onChange={setWanita} min={0} max={4} />
+                            <InputNumber className={'custom-input-number'} value={wanita} onChange={setWanita} min={0} max={4} readOnly/>
                             <InputGroup.Button onClick={plusWanita}>+</InputGroup.Button>
                           </InputGroup>
                         </div>

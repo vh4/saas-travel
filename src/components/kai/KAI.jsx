@@ -546,7 +546,7 @@ function KAI() {
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusAdult}>-</InputGroup.Button>
-                            <InputNumber className={'custom-input-number'} value={adult} onChange={setadult} min={1} max={4} />
+                            <InputNumber className={'custom-input-number'} value={adult} onChange={setadult} min={1} max={4} readOnly/>
                             <InputGroup.Button onClick={plusAdult}>+</InputGroup.Button>
                           </InputGroup>
                         </div>
@@ -558,7 +558,7 @@ function KAI() {
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusInfant}>-</InputGroup.Button>
-                            <InputNumber className={'custom-input-number'} value={infant} onChange={setinfant} min={0} max={4} />
+                            <InputNumber className={'custom-input-number'} value={infant} onChange={setinfant} min={0} max={4} readOnly/>
                             <InputGroup.Button onClick={plusInfant}>+</InputGroup.Button>
                           </InputGroup>
                         </div>
