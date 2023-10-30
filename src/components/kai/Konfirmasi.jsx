@@ -21,9 +21,7 @@ import PageExpired from "../components/Expired";
 import KonfirmasiLoading from "../components/trainskeleton/konfirmasi";
 import {Typography } from 'antd';
 
-const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCount, setSelectedCount, setgerbongsamawajib, gerbongsamawajib }) => {
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
-
+const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCount, setSelectedCount, setgerbongsamawajib, gerbongsamawajib,  selectedCheckboxes, setSelectedCheckboxes}) => {
   function limitFunction() {
     var x = 0;
     changeState[0].map((e, i) => {
@@ -40,7 +38,6 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCou
   const handleOnChange = (e, row, cols, seats) => {
 
     if (e.target.checked) {
-      
       
       if (selectedCount < limit) {
         setSelectedCount(selectedCount + 1);
@@ -68,6 +65,7 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCou
 
         }
     else {
+          alert('Melebihi jumlah penumpang.')
           e.target.checked = false;
     }
       } else {
@@ -121,7 +119,6 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCou
           alert("Mohon maaf, pilih gerbong yang sama !");
         } 
       }
-      console.log(selectedCheckboxes);
 
       setChangeSet([changeStateData]);
     }
@@ -275,6 +272,7 @@ export default function Konfirmasi() {
 
   const [clickSeats, setClickSeats] = useState(0);
   const [dataSeats, setDataSeats] = useState([]);
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
 
   const [changeState, setChangeSet] = useState({}); //change seats.
   const [changeStateKetikaGagalTidakUpdate, setchangeStateKetikaGagalTidakUpdate] = useState({}); //change seats.
@@ -391,8 +389,6 @@ export default function Konfirmasi() {
     e.preventDefault();
     setOpen(true);
 
-
-
     const response = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/train/get_seat_layout`,
       {
@@ -443,8 +439,6 @@ export default function Konfirmasi() {
       delete item.class;
       delete item.wagonNumber;
     });
-
-    console.log(changeStateFix[0]);
 
     let gantiKursiFix = {
       productCode: "WKAI",
@@ -517,6 +511,20 @@ export default function Konfirmasi() {
   const [backdrop, setBackdrop] = React.useState('static');
   const handleOpen = () => setOpen(true);
 
+  function gantigerbong(value){
+
+    setSelectedCount(0); 
+    setgerbongsamawajib(0); 
+    setClickSeats(value); 
+    setSelectedCheckboxes([]);
+
+    const checkboxInputs = document.querySelectorAll('input[type="checkbox"]');
+    checkboxInputs.forEach((input) => {
+      input.checked = false;
+    });
+
+  }
+
   return (
     <>
       {/* meessage bayar */}
@@ -539,10 +547,18 @@ export default function Konfirmasi() {
           <Modal size="md" backdrop={backdrop} keyboard={false} open={open} onClose={handleClose}>
             <Modal.Header>
               <Modal.Title>
-                <div className="text-gray-500 font-bold mt-2">Pindah Kursi</div>
+                <div className="text-gray-500 font-bold mt-2 mb-2">Pindah Kursi</div>
                 <small>
                   tekan tombol warna biru untuk ganti kursi.
                 </small>
+                {/* <Alert
+                  className="mt-4"
+                  message="Notification!"
+                  description={(<><div className="text-xs">Pilih kursi hanya dalam satu gerbong yang sama.</div></>)}
+                  type="info"
+                  showIcon
+                  closable
+                /> */}
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -590,8 +606,9 @@ export default function Konfirmasi() {
                                   )}
                                 </>
                               ))}
+                              
                               <div className="mt-4 md:mt-4 ml-2">
-                                <div className="flex space-x-2 items-center">
+                                <div className="flex space-x-2 items-center mt-2 ">
                                   <label
                                     class={`select-none block py-1.5 items-center cursor-pointer`}
                                   >
@@ -627,9 +644,8 @@ export default function Konfirmasi() {
                                     >
                                       Underline select
                                     </label>
-                                    {gerbongsamawajib === 0 ? (
-                                      <Select
-                                        onChange={(value) => setClickSeats(value)}
+                                    <Select
+                                        onChange={(value) => {gantigerbong(value)}}
                                         id="underline_select"
                                         style={{ width: '100%' }}
                                         defaultValue={0}
@@ -645,15 +661,6 @@ export default function Konfirmasi() {
                                           <Select.Option value="empty">Data kosong</Select.Option>
                                         )}
                                       </Select>
-                                    ) : (
-                                      <Alert
-                                        className="text-xs"
-                                        message="Batalkan pilihan anda yang telah dipilih untuk mengganti gerbang!."
-                                        type="warning"
-                                        showIcon
-                                        closable
-                                      />
-                                    )}
                                   </div>
                                 </>
                               </div>
@@ -670,6 +677,8 @@ export default function Konfirmasi() {
                                       setChangeSet={setChangeSet}
                                       clickSeatsData={clickSeats}
                                       seats={dataSeats.data[clickSeats].layout}
+                                      selectedCheckboxes={selectedCheckboxes}
+                                      setSelectedCheckboxes={setSelectedCheckboxes}
                                     />
                                   </>
                                 )}
