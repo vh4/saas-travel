@@ -847,7 +847,7 @@ export default function Konfirmasi() {
                         <>
                           <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                             <div className="p-2">
-                              <div className="px-2 xl:px-4 py-2 text-gray-500 border-b border-gray-200 text-sm font-bold">
+                              <div className="px-2 xl:px-4 py-2 text-gray-900 border-b border-gray-200 text-sm font-bold">
                                 {e.name}
                               </div>
                               <div className="mt-2 block md:flex md:space-x-8">
@@ -859,7 +859,7 @@ export default function Konfirmasi() {
                                 </div>
                                 <div className="px-2 md:px-4 py-2 text-sm">
                                   <div className="text-gray-500">Nomor HP</div>
-                                  <div className="text-gray-600">{e.phone}</div>
+                                  <div className="text-gray-900">{e.phone}</div>
                                 </div>
                                 <div className="px-2 md:px-4 py-2 text-sm">
                                   <div className="text-gray-500">Kursi</div>
@@ -903,7 +903,7 @@ export default function Konfirmasi() {
                         <>
                           <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                             <div className="p-4">
-                              <div className="p-4 text-gray-500 border-b border-gray-200 text-sm font-bold">
+                              <div className="p-4 text-gray-900 border-b border-gray-200 text-sm font-bold">
                                 {e.name}
                               </div>
                               <div className="mt-2 flex space-x-8">
@@ -913,7 +913,7 @@ export default function Konfirmasi() {
                                     {e.idNumber}
                                   </div>
                                 </div>
-                                <div className="px-4 py-2 text-sm font-bold">
+                                <div className="px-4 py-2 text-sm">
                                   <div className="text-gray-500">
                                     Tanggal Lahir
                                   </div>
