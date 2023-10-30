@@ -208,7 +208,7 @@ export default function Search() {
     }
 
 
-    if(parseInt(adult) < parseInt(child || parseInt(adult) < parseInt(infant))) {
+    if(parseInt(adult) < parseInt(child) || parseInt(adult) < parseInt(infant)) {
       setPageErr(true);
     }
 
