@@ -308,7 +308,7 @@ function Pelni() {
 
   return (
     <>
-      <div className="row bg-white border-t border-gray-200 w-full p-2 pr-0">
+      <div className="row bg-white border-t border-gray-200 w-full p-2 md:p-0 pr-0">
         <div class="w-full p-4 py-4 xl:px-8 rounded-lg shadow-xs">
           <form className="w-full">
             {/* <div className="space-x-2 items-center flex">
@@ -317,7 +317,7 @@ function Pelni() {
                </div> */}
             <>
               <div className="block xl:flex justify-between">
-                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 md:mx-12 xl:mx-6">
+                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 md:mx-12 xl:mx-6 gap-4 md:gap-0">
                 <div className="w-full col col-span-1 md:col-span-2">
                     <div className="w-full flex items-center">
                   <FormControl
@@ -471,6 +471,7 @@ function Pelni() {
                     <small className="mb-2 text-gray-500">
                       Total Penumpang
                     </small>
+                    <div className="hidden md:block">  
                     <TextField
                       onClick={handleClick}
                       sx={{ input: { cursor: "pointer" } }}
@@ -480,11 +481,15 @@ function Pelni() {
                       id="outlined-basic"
                       value={`${parseInt(laki) + parseInt(wanita)} Penumpang`}
                     />
+                    </div>
+                    <Button className="w-full block md:hidden text-gray-500" size="large" onClick={handleClick}>
+                      {`${parseInt(laki) + parseInt(wanita)} Penumpang`}
+                    </Button>
                     <div
                       id="basic-menu"
                       className={`${anchorEl} absolute top-20 z-10 grid w-auto px-8 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}
                     >
-                      <div className="w-48 ml-4 block md:mx-0">
+                      <div className="w-full md:w-48 ml-4 block md:mx-0">
                         <div className="mt-4 w-full items-center text-gray-600">
                           <div className="text-sm text-center header-number mb-4">
                             <p>laki (Laki-laki {">"} 12 thn)</p>
@@ -509,13 +514,13 @@ function Pelni() {
                     </div>
                   </FormControl>
                 </div>
-                <div className="w-full pr-4 xl:mr-0 xl:pl-4 xl:w-1/4 flex justify-end xl:justify-start mt-8 py-0.5">
+                <div className="w-full xl:w-1/4 flex justify-end xl:justify-start mt-8 py-0.5">
                   <Button
                     block
                     size="large"
                     key="submit"
                     type="primary"
-                    className="bg-blue-500 mx-2 font-semibold"
+                    className="bg-blue-500 mx-2 md:mx-0 font-semibold"
                     loading={isLoading}
                     onClick={handleSubmitPelni}
                   >

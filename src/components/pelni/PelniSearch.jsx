@@ -329,7 +329,7 @@ function PELNI() {
                </div> */}
             <>
               <div className="block xl:flex justify-between">
-                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0">
+                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 gap-4 md:gap-6">
                 <div className="w-full col col-span-1 md:col-span-2">
                     <div className="w-full flex items-center">
                   <FormControl
@@ -483,6 +483,7 @@ function PELNI() {
                     <small className="mb-2 text-gray-500">
                       Total Penumpang
                     </small>
+                    <div className="hidden md:block">  
                     <TextField
                       onClick={handleClick}
                       sx={{ input: { cursor: "pointer" } }}
@@ -492,11 +493,15 @@ function PELNI() {
                       id="outlined-basic"
                       value={`${parseInt(laki) + parseInt(wanita)} Penumpang`}
                     />
+                    </div>
+                    <Button className="w-full block md:hidden text-gray-500" size="large" onClick={handleClick}>
+                      {`${parseInt(laki) + parseInt(wanita)} Penumpang`}
+                    </Button>
                     <div
                       id="basic-menu"
                       className={`${anchorEl} absolute top-20 z-10 grid w-auto px-8 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}
                     >
-                      <div className="w-48 ml-4 block md:mx-0">
+                      <div className="w-full md:w-48 ml-4 block md:mx-0">
                         <div className="mt-4 w-full items-center text-gray-600">
                           <div className="text-sm text-center header-number mb-4">
                             <p>laki (Laki-laki {">"} 12 thn)</p>

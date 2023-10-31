@@ -459,7 +459,7 @@ function Plane() {
               <div className="w-64 xl:w-48 mx-0"></div>
               <div className="block xl:flex justify-between">
                 <div
-                  className={`grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-6`}
+                  className={`grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-4 md:gap-6`}
                 >
                   <div class="w-full mt-1.5 pl-2 md:pl-0 mx-0">
                     <small className="mb-2 text-gray-500">Pilih Maskapai</small>
@@ -662,12 +662,13 @@ function Plane() {
                     <small className="mb-2 text-gray-500">
                       Total Penumpang
                     </small>
+                    <div className="hidden md:block">
                     <TextField
-                      InputProps={{
+                    InputProps={{
                         readOnly: true,
-                      }}
+                        }}
                       onClick={handleClick}
-                      sx={{ input: { cursor: "pointer" } }}
+                      sx={{ input: { cursor: "pointer", } }}
                       size="medium"
                       classes={classes}
                       id="outlined-basic"
@@ -676,11 +677,17 @@ function Plane() {
                       } Penumpang`}
                       variant="outlined"
                     />
+                    </div>
+                    <Button className="w-full block md:hidden text-gray-500" size="large" onClick={handleClick}>
+                    {`${
+                        parseInt(adult) + parseInt(infant) + parseInt(child)
+                      } Penumpang`}
+                    </Button>
                     <div
                       id="basic-menu"
                       className={`${anchorEl} absolute top-20 z-10 grid w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg`}
                     >
-                      <div className="w-48 ml-4 block md:mx-0">
+                      <div className="w-full md:w-48 ml-4 block md:mx-0">
                         <div className="w-full items-center text-gray-600">
                           <div className="text-sm text-center header-number mb-4">
                             <p>Adult (Dewasa {">"} 12 thn)</p>

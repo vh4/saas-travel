@@ -336,8 +336,8 @@ function KAI(){
       }
 
     return (
-        <div className="row bg-white border-t border-gray-200 w-full p-2 pr-0">
-        <div class="w-full p-4 py-4 xl:px-8 rounded-lg shadow-xs ">
+        <div className="row bg-white border-t border-gray-200 w-full pr-0">
+        <div class="w-full py-4 xl:px-8 rounded-lg shadow-xs ">
           <form className="w-full">
             <>
               <div className="block xl:flex justify-between">
@@ -346,7 +346,7 @@ function KAI(){
                     <div className="w-full flex items-center">
                         <FormControl
                             className=""
-                            sx={{ m: 1, minWidth: 145, outline: "none" }}
+                            sx={{ m: 1, minWidth: 150, outline: "none" }}
                         >
                             <small className="mb-2 text-gray-500">Stasiun Asal</small>
                             <Autocomplete
@@ -520,21 +520,26 @@ function KAI(){
                     <small className="mb-2 text-gray-500">
                       Total Penumpang
                     </small>
-                    <TextField
-                      readOnly
-                      onClick={handleClick}
-                      sx={{ input: { cursor: "pointer" } }}
-                      size="medium"
-                      classes={classes}
-                      id="outlined-basic"
-                      value={`${parseInt(adult) + parseInt(infant)} Penumpang`}
-                      variant="outlined"
-                    />
+                    <div className="hidden md:block">
+                      <TextField
+                        readOnly
+                        onClick={handleClick}
+                        sx={{ input: { cursor: "pointer" } }}
+                        size="medium"
+                        classes={classes}
+                        id="outlined-basic"
+                        value={`${parseInt(adult) + parseInt(infant)} Penumpang`}
+                        variant="outlined"
+                      />
+                    </div>
+                      <Button className="w-full block md:hidden text-gray-500" size="large" onClick={handleClick}>
+                      {`${parseInt(adult) + parseInt(infant)} Penumpang`}
+                      </Button>
                     <div
                       id="basic-menu"
                       className={`${anchorEl} absolute top-20 z-10 grid w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}
                     >
-                      <div className="w-48 ml-4 block md:mx-0">
+                      <div className="w-full md:w-48 ml-4 block md:mx-0">
                         <div className="mt-4 w-full items-center text-gray-600">
                           <div className="w-full items-center text-gray-600">
                           <div className="text-sm text-center header-number mb-4">
@@ -563,7 +568,7 @@ function KAI(){
                     </div>
                   </FormControl>
                 </div>
-                <div className="w-full pr-4 xl:mr-0 xl:pl-4 xl:w-1/4 flex justify-end xl:justify-start mt-8 py-0.5">
+                <div className="w-full xl:mr-0 xl:pl-4 xl:w-2/5 flex justify-end xl:justify-start mt-8 py-0.5">
                   <Button
                     block
                     size="large"
