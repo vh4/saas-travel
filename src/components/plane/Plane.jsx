@@ -677,7 +677,7 @@ function Plane() {
                       <div className="w-full md:w-48 ml-4 block md:mx-0">
                         <div className="w-full items-center text-gray-600">
                           <div className="text-sm text-center header-number mb-4">
-                            <p>Adult (Dewasa {">"} 12 thn)</p>
+                            <p>Adult (12 thn keatas)</p>
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusAdult}>-</InputGroup.Button>
@@ -687,7 +687,7 @@ function Plane() {
                         </div>
                         <div className="mt-4 mb-4 w-full items-center text-gray-600">
                           <div className="text-sm text-center header-number mb-4">
-                            <p>Child (Child 2-11 thn)</p>
+                            <p>Child (2 - 11 thn)</p>
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusChild}>-</InputGroup.Button>
@@ -697,7 +697,7 @@ function Plane() {
                         </div>
                         <div className="mt-4 w-full items-center text-gray-600">
                           <div className="text-sm text-center header-number mb-4">
-                            <p>Infant (Infant 0-2 thn)</p>
+                            <p>Infant (dibawah 2 thn)</p>
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusInfant}>-</InputGroup.Button>

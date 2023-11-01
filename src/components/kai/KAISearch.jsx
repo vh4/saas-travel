@@ -543,7 +543,7 @@ function KAI(){
                         <div className="mt-4 w-full items-center text-gray-600">
                           <div className="w-full items-center text-gray-600">
                           <div className="text-sm text-center header-number mb-4">
-                            <p>Adult (Dewasa {">"} 12 thn)</p>
+                            <p>Adult (≥ 3 thn)</p>
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusAdult}>-</InputGroup.Button>
@@ -555,7 +555,7 @@ function KAI(){
                         <div className="mt-4 w-full items-center text-gray-600">
                           <div className="mt-4 w-full items-center text-gray-600">
                           <div className="text-sm text-center header-number mb-4">
-                            <p>Infant (Infant 0-2 thn)</p>
+                              <p>Infant ({`<`} 3 thn) </p>
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusInfant}>-</InputGroup.Button>
