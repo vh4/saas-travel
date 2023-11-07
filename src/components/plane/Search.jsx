@@ -27,7 +27,6 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Slider from "@mui/material/Slider";
 import Checkbox from "@mui/material/Checkbox";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { createTheme } from "@mui/material";
 import moment from "moment";
 
