@@ -3,10 +3,10 @@ import { AiOutlineHome } from "react-icons/ai";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { ImAirplane } from "react-icons/im";
 import axios from "axios";
-import { Button, Modal, Space } from "antd";
+import { Modal } from "antd";
 import { Placeholder } from "rsuite";
 import { BsArrowRightShort } from "react-icons/bs";
-import { message } from "antd";
+// import { message } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
 import { remainingTime } from "../../helpers/date";
 import Page500 from "../components/500";
@@ -17,9 +17,9 @@ export default function ViewBooking({ path }) {
   const [showModal, setShowModal] = React.useState(false);
   const handleOpen = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
-  const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [messageApi, contextHolder] = message.useMessage();
+  // const [loading, setLoading] = useState(false);
+  // const [open, setOpen] = useState(false);
+  // const [messageApi, contextHolder] = message.useMessage();
 
   const [err, setErr] = useState(false);
   const [errPage, setErrPage] = useState(false);
@@ -29,31 +29,31 @@ export default function ViewBooking({ path }) {
   );
 
   useEffect(() => {
-    if (token == undefined || token == null) {
+    if (token === undefined || token === null) {
       setErr(true);
     }
   }, [token]);
 
-  function success() {
-    messageApi.open({
-      type: "success",
-      content:
-        "Pembayaran anda berhasil, silahkan check tiket anda di menu transaksi.",
-      duration: 7,
-    });
-  }
+  // function success() {
+  //   messageApi.open({
+  //     type: "success",
+  //     content:
+  //       "Pembayaran anda berhasil, silahkan check tiket anda di menu transaksi.",
+  //     duration: 7,
+  //   });
+  // }
 
-  function gagal(rd) {
-    messageApi.open({
-      type: "error",
-      content:
-        "Failed, " +
-        rd.toLowerCase().charAt(0).toUpperCase() +
-        rd.slice(1).toLowerCase() +
-        "",
-      duration: 7,
-    });
-  }
+  // function gagal(rd) {
+  //   messageApi.open({
+  //     type: "error",
+  //     content:
+  //       "Failed, " +
+  //       rd.toLowerCase().charAt(0).toUpperCase() +
+  //       rd.slice(1).toLowerCase() +
+  //       "",
+  //     duration: 7,
+  //   });
+  // }
 
   const [isLoading, setIsLoading] = useState(false);
   const [loadBayar, setloadBayar] = useState(true);
@@ -143,42 +143,42 @@ export default function ViewBooking({ path }) {
     };
   }, [data, remainingTimes]);
 
-  const handleBayar = async () => {
-    setLoading(true);
+  // const handleBayar = async () => {
+  //   // setLoading(true);
 
-    const response = await axios.post(
-      `${process.env.REACT_APP_HOST_API}/travel/flight/payment`,
-      {
-        airline: byrdata.id_produk,
-        transactionId: byrdata.id_transaksi,
-        bookingCode: byrdata.kode_booking,
-        simulateSuccess: process.env.REACT_APP_SIMUATION_PAYMENT,
-        paymentCode: "",
-        token: JSON.parse(
-          localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-        ),
-      }
-    );
-    setTimeout(() => {
-      setLoading(false);
-      setOpen(false);
-    }, 1000);
+  //   const response = await axios.post(
+  //     `${process.env.REACT_APP_HOST_API}/travel/flight/payment`,
+  //     {
+  //       airline: byrdata.id_produk,
+  //       transactionId: byrdata.id_transaksi,
+  //       bookingCode: byrdata.kode_booking,
+  //       simulateSuccess: process.env.REACT_APP_SIMUATION_PAYMENT,
+  //       paymentCode: "",
+  //       token: JSON.parse(
+  //         localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+  //       ),
+  //     }
+  //   );
+  //   setTimeout(() => {
+  //     // setLoading(false);
+  //     // setOpen(false);
+  //   }, 1000);
 
-    if (response.data.rc !== "00") {
-      gagal(response.data.rd);
-      handleClose();
-    } else {
-      success();
-      handleClose();
-    }
-  };
+  //   if (response.data.rc !== "00") {
+  //     gagal(response.data.rd);
+  //     handleClose();
+  //   } else {
+  //     success();
+  //     handleClose();
+  //   }
+  // };
 
   return (
     <>
 
         <div className="">
           {/* meessage bayar */}
-          {contextHolder}
+          {/* {contextHolder} */}
 
           <Modal
             width={1000}
@@ -226,7 +226,7 @@ export default function ViewBooking({ path }) {
                         <div className="font-semibold">Nik</div>
                         <div>
                           {e.nik.toLowerCase().charAt(0).toUpperCase() +
-                            e.nik.slice(1).toLowerCase() !=
+                            e.nik.slice(1).toLowerCase() !==
                           "Undefined"
                             ? e.nik.toLowerCase().charAt(0).toUpperCase() +
                               e.nik.slice(1).toLowerCase()
@@ -238,7 +238,7 @@ export default function ViewBooking({ path }) {
                           <div className="font-semibold">No</div>
                           <div>
                             {e.no_hp.toLowerCase().charAt(0).toUpperCase() +
-                              e.no_hp.slice(1).toLowerCase() !=
+                              e.no_hp.slice(1).toLowerCase() !==
                             "Undefined"
                               ? e.no_hp.toLowerCase().charAt(0).toUpperCase() +
                                 e.no_hp.slice(1).toLowerCase()
