@@ -12,17 +12,17 @@ import { FaTrain } from "react-icons/fa";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import onClickOutside from "react-onclickoutside";
 import { makeStyles } from "@mui/styles";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import Cookies from "js-cookie";
 import { AiOutlineSwap } from "react-icons/ai";
-import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
-import DateRangeIcon from "@mui/icons-material/DateRange"; // Import the DateRangeIcon
 import { InputGroup, InputNumber } from "rsuite";
+import dayjs from "dayjs";
+import { DatePicker } from "antd";
 
 function KAI() {
   const useStyles = makeStyles((theme) => ({
     inputRoot: {
-      color: "#6b7280",
+      color: "black",
       "& .MuiOutlinedInput-notchedOutline": {
         borderColor: "#e5e7eb",
       },
@@ -37,6 +37,7 @@ function KAI() {
       },
       "&&& $input": {
         padding: 1,
+        color:"black"
       },
     },
     root: {
@@ -46,7 +47,7 @@ function KAI() {
           borderRadius: 10,
           cursor:"pointer",
         },
-        color: "#6b7280",
+        color: "black",
         "& .MuiOutlinedInput-notchedOutline": {
           borderColor: "#e5e7eb",
         },
@@ -82,11 +83,47 @@ function KAI() {
 
   const loadingBerangkat = openBerangka && kaiData.length === 0;
   const loadingTujuan = openTujuan && kaiData.length === 0;
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const errorBerangkat = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'Stasiun Asal tidak boleh sama dengan Stasiun Tujuan.',
+      duration: 10, // Durasi pesan 5 detik
+      top: '50%', // Posisi pesan di tengah layar
+      className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
+    });
+  };
+  
+
+  const errorTujuan = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'Stasiun Tujuan tidak boleh sama dengan Stasiun Asal.',
+      duration: 10, // Durasi pesan 5 detik
+      top: '50%', // Posisi pesan di tengah layar
+      className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
+    });
+  };
+
+  const messageCustomError = (message) => {
+    messageApi.open({
+      type: 'error',
+      content: message,
+      duration: 10, // Durasi pesan 5 detik
+      top: '50%', // Posisi pesan di tengah layar
+      className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
+    });
+  };
+
 
   let coockie = Cookies.get("v-train");
 
-  let depa = null;
-  let arri = null;
+  let depa = { id_stasiun: "PSE", nama_stasiun: "PASAR SENEN", nama_kota: "JAKARTA", is_active: 1 };
+  let arri = { id_stasiun: "SGU", nama_stasiun: "SURABAYA GUBENG", nama_kota: "SURABAYA", is_active: 1 };
+  let dateCookie = Cookies.get("v-date") ? Cookies.get("v-date") : dayjs();
+  let adultCookie = parseInt(Cookies.get("v-adult") ? Cookies.get("v-adult") : '');
+  let infantCookie = parseInt(Cookies.get("v-infant") ? Cookies.get("v-infant") : '');
 
   try {
     coockie = coockie ? JSON.parse(coockie) : null;
@@ -94,24 +131,48 @@ function KAI() {
     arri = coockie.tujuan;
   } catch (error) {
     coockie = null;
-    depa = null;
-    arri = null;
+    depa = { id_stasiun: "PSE", nama_stasiun: "PASAR SENEN", nama_kota: "JAKARTA", is_active: 1 };;
+    arri = { id_stasiun: "SGU", nama_stasiun: "SURABAYA GUBENG", nama_kota: "SURABAYA", is_active: 1 };
   }
 
   try {
-    depa = depa ? depa : null;
+    dateCookie = dayjs(dateCookie).isValid() ? dateCookie : null;
+
   } catch (error) {
-    depa = null;
+    dateCookie = null;
   }
 
   try {
-    arri = arri ? arri : null;
+    adultCookie = !isNaN(adultCookie) ? adultCookie : null;
+
   } catch (error) {
-    arri = null;
+    adultCookie = null;
+  }
+
+  try {
+    infantCookie = !isNaN(infantCookie) ? infantCookie : null;
+
+  } catch (error) {
+    infantCookie = null;
+  }
+
+  try {
+    depa = depa ? depa : { id_stasiun: "PSE", nama_stasiun: "PASAR SENEN", nama_kota: "JAKARTA", is_active: 1 };
+  } catch (error) {
+    depa = { id_stasiun: "PSE", nama_stasiun: "PASAR SENEN", nama_kota: "JAKARTA", is_active: 1 };
+  }
+
+  try {
+    arri = arri ? arri : { id_stasiun: "SGU", nama_stasiun: "SURABAYA GUBENG", nama_kota: "SURABAYA", is_active: 1 };
+  } catch (error) {
+    arri = { id_stasiun: "SGU", nama_stasiun: "SURABAYA GUBENG", nama_kota: "SURABAYA", is_active: 1 };
   }
 
   depa = depa?.id_stasiun && depa?.nama_kota ? depa : null;
   arri = arri?.id_stasiun && arri?.nama_kota ? arri : null;
+  dateCookie = dateCookie ? dayjs(dateCookie) : dayjs();
+  adultCookie = adultCookie ? adultCookie : 1;
+  infantCookie = infantCookie ? infantCookie : 0;
 
   const changeStatiun = () => {
 
@@ -123,10 +184,10 @@ function KAI() {
   //input
   const [keberangkatan, setKeberangkatan] = React.useState(depa);
   const [tujuan, setTujuan] = React.useState(arri);
-  const [tanggal, setTanggal] = React.useState();
+  const [tanggal, setTanggal] = React.useState(dateCookie);
   const [isLoading, setLoading] = React.useState(false);
-  const [adult, setadult] = React.useState(1);
-  const [infant, setinfant] = React.useState(0);
+  const [adult, setadult] = React.useState(adultCookie);
+  const [infant, setinfant] = React.useState(infantCookie);
 
   const [anchorEl, setAnchorEl] = React.useState("hidden");
   const handleClick = () => {
@@ -302,44 +363,63 @@ function KAI() {
       e.preventDefault();
       setLoading(false);
 
-      const params = {
-        origin: keberangkatan.id_stasiun,
-        destination: tujuan.id_stasiun,
-        productCode: "WKAI",
-        date: tanggalParse,
-        kotaBerangkat: keberangkatan.nama_kota,
-        kotaTujuan: tujuan.nama_kota,
-        stasiunBerangkat: keberangkatan.nama_stasiun,
-        stasiunTujuan: tujuan.nama_stasiun,
-        adult: adult,
-        infant: infant,
-      };
+      if(keberangkatan === null && tujuan === null){
+        messageCustomError('Pilih Stasiun Asal & Stasiun Tujuan.')
+      }
+      else if(keberangkatan === null){
+        messageCustomError('Pilih Stasiun Asal.')
+        
+      }else if(tujuan === null){
+        messageCustomError('Pilih Stasiun Tujuan.')
 
-      const expirationDate = new Date();
-      expirationDate.setDate(expirationDate.getDate() + 7);
+      }else{
 
-      const cookieOptions = {
-        expires: expirationDate,
-      };
+        const params = {
+          origin: keberangkatan.id_stasiun,
+          destination: tujuan.id_stasiun,
+          productCode: "WKAI",
+          date: tanggalParse,
+          kotaBerangkat: keberangkatan.nama_kota,
+          kotaTujuan: tujuan.nama_kota,
+          stasiunBerangkat: keberangkatan.nama_stasiun,
+          stasiunTujuan: tujuan.nama_stasiun,
+          adult: adult,
+          infant: infant,
+        };
+  
+        const expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + 7);
+  
+        const cookieOptions = {
+          expires: expirationDate,
+        };
+  
+        Cookies.set(
+          "v-train",
+          JSON.stringify({
+            keberangkatan,
+            tujuan,
+          }),
+          cookieOptions
+        );
+  
+        Cookies.set("v-date", tanggal.toString(), cookieOptions);
+        Cookies.set("v-adult", adult, cookieOptions);
+        Cookies.set("v-infant", infant, cookieOptions);
 
-      Cookies.set(
-        "v-train",
-        JSON.stringify({
-          keberangkatan,
-          tujuan,
-        }),
-        cookieOptions
-      );
+        navigate({
+          pathname: "/train/search",
+          search: `?${createSearchParams(params)}`,
+        });
 
-      navigate({
-        pathname: "/train/search",
-        search: `?${createSearchParams(params)}`,
-      });
+      }
+
     }, 1000);
   }
 
   return (
     <>
+    {contextHolder}
       <div className="row bg-white border-t border-gray-200 w-full p-2 md:p-0 pr-0">
         <div class="w-full p-4 py-4 xl:px-8 rounded-lg shadow-xs ">
           <form className="w-full">
@@ -390,7 +470,12 @@ function KAI() {
                             options={kaiData}
                             value={keberangkatan}
                             onChange={(event, newValue) => {
+                              if((newValue == tujuan) || (newValue?.id_stasiun == tujuan?.id_stasiun)){
+                                errorBerangkat();
+                                setKeberangkatan(keberangkatan)
+                              }else{
                                 setKeberangkatan(newValue);
+                              }
                             }}
                             loading={loadingBerangkat}
                             renderInput={(params) => (
@@ -460,7 +545,12 @@ function KAI() {
                             options={kaiData}
                             value={tujuan}
                             onChange={(event, newValue) => {
-                                setTujuan(newValue);
+                                if((newValue == keberangkatan) || (newValue?.id_stasiun == keberangkatan?.id_stasiun)){
+                                  errorTujuan();
+                                  setTujuan(tujuan);
+                                }else{
+                                  setTujuan(newValue);
+                                }
                             }}
                             loading={loadingTujuan}
                             renderInput={(params) => (
@@ -495,28 +585,22 @@ function KAI() {
                       dateAdapter={AdapterDayjs}
                       style={{ cursor: "pointer" }}
                     >
-                      <MobileDatePicker
-                        style={{ cursor: "pointer" }}
-                        minDate={new Date()}
-                        value={tanggal}
-                        className={classes.root}
-                        inputFormat="YYYY-MM-DD"
-                        onChange={(newValue) => {
-                          setTanggal(newValue);
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            style={{ cursor: "pointer" }}
-                            {...params}
-                            InputProps={{
-                              // Place the DateRangeIcon here
-                              endAdornment: (
-                                <DateRangeIcon className="cursor-pointer text-gray-400" />
-                              ),
-                            }}
-                          />
-                        )}
-                      />
+                     <DatePicker
+                      style={{ cursor: 'pointer' }}
+                      className="border-gray-240 py-2"
+                      appearance="subtle"
+                      value={tanggal}
+                      inputStyle={{ color: 'red' }}
+                      format="DD/MM/YYYY"
+                      onChange={(value) => {
+                        setTanggal(value);
+                      }}
+                      size="large"
+                      disabledDate={(current) => {
+                        const currentDate = dayjs();
+                        return current && current < currentDate.startOf('day');
+                      }}
+                    />
                     </LocalizationProvider>
                   </FormControl>
 

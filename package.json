@@ -36,7 +36,7 @@
     "react-router-dom": "^6.6.0",
     "react-scripts": "^5.0.1",
     "react-slick": "^0.29.0",
-    "rsuite": "^5.25.0",
+    "rsuite": "latest",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.6"
   },

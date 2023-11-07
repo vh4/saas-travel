@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { MdHorizontalRule } from "react-icons/md";
 import "react-phone-number-input/style.css";
 import "../../index.css";
-import { TbArrowsLeftRight } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -14,12 +13,14 @@ import dayjs from "dayjs";
 import PhoneInput from "react-phone-input-2";
 import { Input } from "antd";
 import { notification } from "antd";
+import { InputNumber } from "rsuite";
 import { getCurrentDate, parseTanggal } from "../../helpers/date";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
 import ManyRequest from "../components/Manyrequest";
 import BookingLoading from "../components/trainskeleton/booking";
 import { ExclamationCircleFilled } from '@ant-design/icons';
+import { IoArrowForwardOutline } from "react-icons/io5";
 
 export default function BookingKai() {
   const [api, contextHolder] = notification.useNotification();
@@ -154,8 +155,7 @@ export default function BookingKai() {
   const handleAdultsubCatagoryChange = (i, category) => (e) => {
     const adultCategory = adult[0];
 
-    if (category === "phone") {
-      adultCategory[i]["phone"] = e;
+    if (category === "phone" || category == 'idNumber') {
       adultCategory[i][category] = e;
     } else {
       adultCategory[i][category] = e.target.value;
@@ -176,6 +176,8 @@ export default function BookingKai() {
         "-" +
         addLeadingZero(parseInt(tanggalParse.getDay())).toString();
       infantCategory[i][category] = tanggalParse;
+    }else if(category == 'idNumber'){
+      infantCategory[i][category] = e;
     } else {
       infantCategory[i][category] = e.target.value;
     }
@@ -428,7 +430,7 @@ export default function BookingKai() {
                   </div>
                 </div>
                 <div className="rounded-full p-2 bg-blue-500">
-                  <TbArrowsLeftRight className="text-white" size={18} />
+                  <IoArrowForwardOutline className="text-white" size={18} />
                 </div>
                 <div className="text-slate-600 text-xs">
                   <div>
@@ -543,12 +545,21 @@ export default function BookingKai() {
                                         {
                                           required: true,
                                           message:
-                                            "Tolong diisi input nama lengkap",
+                                            "Nama Lengkap tidak boleh kosong.",
                                         },
                                         {
                                           min: 5,
                                           message:
-                                            "Nama lengkap harus min. 5 huruf.",
+                                            "Nama Lengkap minimal 5 karakter.",
+                                        },
+                                        {
+                                          max: 25,
+                                          message:
+                                            "Nama Lengkap maksimal 25 karakter.",
+                                        },
+                                        {
+                                          pattern: /^[A-Za-z\s]+$/,
+                                          message: 'Nama Lengkap hanya boleh terdiri dari huruf alfabet.',
                                         },
                                       ]}
                                     >
@@ -586,11 +597,11 @@ export default function BookingKai() {
                                     rules={[
                                       {
                                         required: true,
-                                        message: "Tolong diisi input nomor HP",
+                                        message: "No Hp tidak boleh kosong.",
                                       },
                                       {
-                                        min: 5,
-                                        message: "Nomor HP harus min. 10.",
+                                        min: 10,
+                                        message: "Minimal Nomor HP pemesan adalah 10 digit.",
                                       },
                                     ]}
                                   >
@@ -623,39 +634,38 @@ export default function BookingKai() {
                                 </div>
                                 {/* mobile & desktop NIK*/}
                                 <div className="w-full p-4 xl:p-0 mt-2 xl:mt-0">
-                                  <div className="text-gray-500 text-sm">
-                                    No.Ktp / Nik
+                                  <div className="text-gray-500 text-sm mb-2">
+                                    No. Ktp
                                   </div>
-                                  <Form.Item
-                                    name={`niktpAdult${i}`}
-                                    rules={[
-                                      {
-                                        required: true,
-                                        message: "Tolong diisi input ktp / nik",
-                                      },
-                                      {
-                                        min: 16,
-                                        message: "Nik /No.ktp harus min. 16.",
-                                      },
-                                      {
-                                        max: 16,
-                                        message: "Nik /No.ktp harus min. 16.",
-                                      },
-                                    ]}
-                                  >
-                                    <Input
-                                      size="large"
-                                      className="mt-2"
-                                      value={e.idNumber}
-                                      onChange={handleAdultsubCatagoryChange(
-                                        i,
-                                        "idNumber"
-                                      )}
-                                      type="text"
-                                      placeholder="No.Ktp / Nik"
-                                      id="default-input"
-                                    />
-                                  </Form.Item>
+                                    <Form.Item
+                                      name={`niktpAdult${i}`}
+                                      rules={[
+                                        {
+                                          required: true,
+                                          message: "NIK tidak boleh kosong.",
+                                        },
+                  
+                                        ({ getFieldValue }) => ({
+                                          validator(_, value) {
+                                            if (!isNaN(value) && value !== null && value.toString().length === 16) {
+                                               return Promise.resolve();
+                                            }
+                                            return Promise.reject("Panjang NIK harus 16 digit.");
+                                          },
+                                        }),
+                                      ]}
+                                    >
+                                      <InputNumber
+                                        style={{ width: '100%' }}
+                                        size="lg"
+                                        min={0}
+                                        value={e.idNumber}
+                                        onChange={handleAdultsubCatagoryChange(i, 'idNumber')}
+                                        placeholder="No.Ktp / NIK"
+                                        id="default-input"
+                                      />
+                                    </Form.Item>
+
                                   <div className="block -mt-4 text-gray-400">
                                     <small>
                                       Contoh: harus berupa digit jumlah 16.
@@ -701,12 +711,21 @@ export default function BookingKai() {
                                         {
                                           required: true,
                                           message:
-                                            "Tolong diisi input nama lengkap",
+                                            "Nama Lengkap tidak boleh kosong.",
                                         },
                                         {
                                           min: 5,
                                           message:
-                                            "Nama lengkap harus min. 5 huruf.",
+                                            "Nama Lengkap minimal 5 karakter.",
+                                        },
+                                        {
+                                          max: 25,
+                                          message:
+                                            "Nama Lengkap maksimal 25 karakter.",
+                                        },
+                                        {
+                                          pattern: /^[A-Za-z\s]+$/,
+                                          message: 'Nama Lengkap hanya boleh terdiri dari huruf alfabet.',
                                         },
                                       ]}
                                     >
@@ -756,39 +775,38 @@ export default function BookingKai() {
                                 </div>
                                 {/* mobile & desktop NIK*/}
                                 <div className="p-4 xl:p-0 w-full">
-                                  <div className="text-gray-500 text-sm mb-0 xl:mb-2">
-                                    No.Ktp / Nik
+                                  <div className="text-gray-500 text-sm mb-2">
+                                  No. Ktp
                                   </div>
                                   <Form.Item
                                     name={`infantktpnik${i}`}
                                     rules={[
                                       {
                                         required: true,
-                                        message:
-                                          "Tolong diisi input Nik / No.ktp lengkap",
+                                        message: "NIK tidak boleh kosong.",
                                       },
-                                      {
-                                        min: 16,
-                                        message: "Nik /No.ktp harus min. 16.",
-                                      },
-                                      {
-                                        max: 16,
-                                        message: "Nik /No.ktp harus min. 16.",
-                                      },
+
+                                      ({ getFieldValue }) => ({
+                                        validator(_, value) {
+                                          if (!isNaN(value) && value !== null && value.toString().length === 16) {                                            
+                                            return Promise.resolve();
+                                          }
+                                          return Promise.reject("Panjang NIK harus 16 digit.");
+                                        },
+                                      }),
                                     ]}
                                   >
-                                    <Input
-                                      size="large"
+                                    <InputNumber
+                                      style={{ width: '100%' }}
+                                      size="lg"
+                                      min={0}
                                       value={e.idNumber}
-                                      onChange={handleInfantsubCatagoryChange(
-                                        i,
-                                        "idNumber"
-                                      )}
-                                      type="text"
-                                      placeholder="NIK"
+                                      onChange={handleInfantsubCatagoryChange(i, 'idNumber')}
+                                      placeholder="No.Ktp / NIK"
                                       id="default-input"
                                     />
                                   </Form.Item>
+
                                   <div className="block -mt-4 text-gray-400">
                                     <small>
                                       Contoh: harus berupa digit jumlah 16.
@@ -850,7 +868,7 @@ export default function BookingKai() {
                       </div>
                     </div>
                     <div className="rounded-full p-1 bg-blue-500 ">
-                      <TbArrowsLeftRight className="text-white" size={18} />
+                      <IoArrowForwardOutline className="text-white" size={18} />
                     </div>
                     <div className="text-xs font-bold text-slate-600">
                       <div>

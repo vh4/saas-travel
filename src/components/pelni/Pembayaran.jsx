@@ -6,13 +6,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { TiketContext } from "../../App";
 import { Button as ButtonAnt } from "antd";
 import { notification } from "antd";
-import { TbArrowsLeftRight } from "react-icons/tb";
 import Page400 from "../components/400";
 import Page500 from "../components/500";
 import { parseTanggal } from "../../helpers/date";
 import { toRupiah } from "../../helpers/rupiah";
 import BayarLoading from "../components/pelniskeleton/bayar";
 import {Typography } from 'antd';
+import { IoArrowForwardOutline } from "react-icons/io5";
 
 export default function Pembayaran() {
   const navigate = useNavigate();
@@ -325,7 +325,7 @@ export default function Pembayaran() {
                           <div className="mt-1 text-xs text-gray-900 font-bold">
                             {passengers.pelabuhan_asal}
                           </div>
-                          <TbArrowsLeftRight className="text-gray-900" size={18} />
+                          <IoArrowForwardOutline className="text-gray-900" size={18} />
                           <div className="mt-1 text-xs text-gray-900 font-bold">
                             {passengers.pelabuhan_tujuan}
                           </div>

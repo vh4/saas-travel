@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { MdHorizontalRule } from "react-icons/md";
 import "react-phone-number-input/style.css";
 import "../../index.css";
-import { TbArrowsLeftRight } from "react-icons/tb";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { RxCrossCircled } from "react-icons/rx";
 import "react-phone-input-2/lib/bootstrap.css";
 import { Button, DatePicker, Modal } from "antd";
+import { InputNumber } from "rsuite";
 import dayjs from "dayjs";
 import PhoneInput from "react-phone-input-2";
 import { Input, Form } from "antd";
@@ -21,6 +21,7 @@ import Page500 from "../components/500";
 import BookingLoading from "../components/pelniskeleton/booking";
 import ManyRequest from "../components/Manyrequest";
 import { ExclamationCircleFilled } from '@ant-design/icons';
+import { IoArrowForwardOutline } from "react-icons/io5";
 
 
 export default function BookingPelni() {
@@ -173,6 +174,8 @@ export default function BookingPelni() {
           .reverse()
           .join("-");
         data[i][category] = tanggalParse;
+      }else if(category == 'identityNumber'){
+        data[i][category] = e;
       } else {
         if (category == "usia") {
           data[i][category] = e;
@@ -514,7 +517,7 @@ export default function BookingPelni() {
                 <div>{tanggal_keberangkatan_pelni}</div>
               </div>
               <div className="rounded-full p-2 bg-blue-500">
-                <TbArrowsLeftRight className="text-white" size={18} />
+                <IoArrowForwardOutline className="text-white" size={18} />
               </div>
               <div className="text-slate-600 text-xs">
                 <div>{dataDetailPelni && dataDetailPelni.pelabuhan_tujuan}</div>
@@ -581,7 +584,13 @@ export default function BookingPelni() {
                               {
                                 required: true,
                                 type: "email",
-                                message: "Tolong diisi input email yang benar",
+                                message:
+                                  "Format Email tidak sesuai.",
+                              },
+                              {
+                                max: 150,
+                                message:
+                                  "Email maksimal 150 karakter.",
                               },
                             ]}
                           >
@@ -719,12 +728,21 @@ export default function BookingPelni() {
                                         {
                                           required: true,
                                           message:
-                                            "Tolong diisi input nama depan",
+                                            "Nama Depan tidak boleh kosong.",
                                         },
                                         {
                                           min: 3,
                                           message:
-                                            "Nama depan harus min. 3 huruf.",
+                                            "Nama Depan minimal 3 karakter.",
+                                        },
+                                        {
+                                          max: 25,
+                                          message:
+                                            "Nama Depan maksimal 25 karakter.",
+                                        },
+                                        {
+                                          pattern: /^[A-Za-z\s]+$/,
+                                          message: 'Nama Depan hanya boleh terdiri dari huruf alfabet.',
                                         },
                                       ]}
                                     >
@@ -754,12 +772,21 @@ export default function BookingPelni() {
                                         {
                                           required: true,
                                           message:
-                                            "Tolong diisi input nama belakang",
+                                            "Nama Belakang tidak boleh kosong.",
                                         },
                                         {
-                                          min: 2,
+                                          min: 3,
                                           message:
-                                            "Nama belakang harus min. 2 huruf.",
+                                            "Nama Belakang minimal 3 karakter.",
+                                        },
+                                        {
+                                          max: 25,
+                                          message:
+                                            "Nama Belakang maksimal 25 karakter.",
+                                        },
+                                        {
+                                          pattern: /^[A-Za-z\s]+$/,
+                                          message: 'Nama Belakang hanya boleh terdiri dari huruf alfabet.',
                                         },
                                       ]}
                                     >
@@ -796,7 +823,7 @@ export default function BookingPelni() {
                                     {
                                       required: true,
                                       message:
-                                        "Tolong diisi input tanggal lahir",
+                                        "Harap input Tanggal Lahir.",
                                     },
                                   ]}
                                 >
@@ -834,24 +861,25 @@ export default function BookingPelni() {
                                     rules={[
                                       {
                                         required: true,
-                                        message:
-                                          "Tolong diisi input ktp atau nik",
+                                        message: "NIK tidak boleh kosong.",
                                       },
-                                      {
-                                        min: 16,
-                                        message: "Nik / No.ktp harus 16 huruf.",
-                                      },
-                                      {
-                                        max: 16,
-                                        message: "Nik / No.ktp harus 16 huruf.",
-                                      },
+                                      ({ getFieldValue }) => ({
+                                        validator(_, value) {
+                                          if (!isNaN(value) && value !== null && value.toString().length === 16) {
+                                            return Promise.resolve();
+                                          }
+                                          return Promise.reject("Panjang NIK harus 16 digit.");
+                                        },
+                                      }),
                                     ]}
                                   >
-                                    <Input
+                                    <InputNumber
                                       name={`nikPria${i}`}
-                                      size="large"
+                                      style={{ width: '100%' }}
+                                      size="lg"
                                       className="mt-2"
                                       value={e.identityNumber}
+                                      min={0}
                                       onChange={handleUsiasubCatagoryChange(
                                         e,
                                         i,
@@ -954,12 +982,21 @@ export default function BookingPelni() {
                                         {
                                           required: true,
                                           message:
-                                            "Tolong diisi input nama depan",
+                                            "Nama Depan tidak boleh kosong.",
                                         },
                                         {
                                           min: 3,
                                           message:
-                                            "Nama depan harus min. 3 huruf.",
+                                            "Nama Depan minimal 3 karakter.",
+                                        },
+                                        {
+                                          max: 25,
+                                          message:
+                                            "Nama Depan maksimal 25 karakter.",
+                                        },
+                                        {
+                                          pattern: /^[A-Za-z\s]+$/,
+                                          message: 'Nama Depan hanya boleh terdiri dari huruf alfabet.',
                                         },
                                       ]}
                                     >
@@ -989,12 +1026,21 @@ export default function BookingPelni() {
                                         {
                                           required: true,
                                           message:
-                                            "Tolong diisi input nama belakang",
+                                            "Nama Belakang tidak boleh kosong.",
                                         },
                                         {
-                                          min: 2,
+                                          min: 3,
                                           message:
-                                            "Nama belakang harus min. 2 huruf.",
+                                            "Nama Belakang minimal 3 karakter.",
+                                        },
+                                        {
+                                          max: 25,
+                                          message:
+                                            "Nama Belakang maksimal 25 karakter.",
+                                        },
+                                        {
+                                          pattern: /^[A-Za-z\s]+$/,
+                                          message: 'Nama Belakang hanya boleh terdiri dari huruf alfabet.',
                                         },
                                       ]}
                                     >
@@ -1031,7 +1077,7 @@ export default function BookingPelni() {
                                     {
                                       required: true,
                                       message:
-                                        "Tolong diisi input tanggal lahir",
+                                        "Harap input Tanggal Lahir.",
                                     },
                                   ]}
                                 >
@@ -1069,24 +1115,25 @@ export default function BookingPelni() {
                                     rules={[
                                       {
                                         required: true,
-                                        message:
-                                          "Tolong diisi input ktp atau nik",
+                                        message: "NIK tidak boleh kosong.",
                                       },
-                                      {
-                                        min: 16,
-                                        message: "Nik / No.ktp harus 16 huruf.",
-                                      },
-                                      {
-                                        max: 16,
-                                        message: "Nik / No.ktp harus 16 huruf.",
-                                      },
+                                      ({ getFieldValue }) => ({
+                                        validator(_, value) {
+                                          if (!isNaN(value) && value !== null && value.toString().length === 16) {
+                                            return Promise.resolve();
+                                          }
+                                          return Promise.reject("Panjang NIK harus 16 digit.");
+                                        },
+                                      }),
                                     ]}
                                   >
-                                    <Input
+                                    <InputNumber
                                       name={`nikWanita${i}`}
-                                      size="large"
+                                      style={{ width: '100%' }}
+                                      size="lg"
                                       className="mt-2"
                                       value={e.identityNumber}
+                                      min={0}
                                       onChange={handleUsiasubCatagoryChange(
                                         e,
                                         i,
@@ -1143,7 +1190,7 @@ export default function BookingPelni() {
                     </small>
                   </div>
                   <div className="rounded-full p-1 bg-blue-500 ">
-                    <TbArrowsLeftRight className="text-white" size={18} />
+                    <IoArrowForwardOutline className="text-white" size={18} />
                   </div>
                   <div className="text-xs">
                     <div className=" font-bold text-slate-600">

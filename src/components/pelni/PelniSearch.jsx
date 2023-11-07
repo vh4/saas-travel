@@ -11,14 +11,14 @@ import onClickOutside from "react-onclickoutside";
 import { makeStyles } from "@mui/styles";
 import { DateRangePicker, InputGroup, InputNumber } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import Cookies from "js-cookie";
 import { AiOutlineSwap } from "react-icons/ai";
 
 function PELNI() {
   const useStyles = makeStyles((theme) => ({
     inputRoot: {
-      color: "#6b7280",
+      color: "black",
       "& .MuiOutlinedInput-notchedOutline": {
         borderColor: "#e5e7eb",
       },
@@ -33,6 +33,7 @@ function PELNI() {
       },
       "&&& $input": {
         padding: 1,
+        color:"black"
       },
     },
     root: {
@@ -41,7 +42,7 @@ function PELNI() {
           padding: 9,
           borderRadius: 10,
         },
-        color: "#6b7280",
+        color: "black",
         "& .MuiOutlinedInput-notchedOutline": {
           borderColor: "#e5e7eb",
         },
@@ -75,11 +76,62 @@ function PELNI() {
 
   const loadingBerangkat = openBerangka && pelniData.length === 0;
   const loadingTujuan = openTujuan && pelniData.length === 0;
+  const [messageApi, contextHolder] = message.useMessage();
 
+  const errorBerangkat = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'Pelabuhan berangkat tidak boleh sama dengan pelabuhan tujuan.',
+      duration: 10, // Durasi pesan 5 detik
+      top: '50%', // Posisi pesan di tengah layar
+      className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
+    });
+  };
+
+  const errorTujuan = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'Pelabuhan tujuan tidak boleh sama dengan pelabuhan berangkat.',
+      duration: 10, // Durasi pesan 5 detik
+      top: '50%', // Posisi pesan di tengah layar
+      className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
+    });
+  };
+
+
+  const messageCustomError = (message) => {
+    messageApi.open({
+      type: 'error',
+      content: message,
+      duration: 10, // Durasi pesan 5 detik
+      top: '50%', // Posisi pesan di tengah layar
+      className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
+    });
+  };
 
   let depa = Cookies.get('d-depa');
   let arri = Cookies.get('d-arri');
+  let lakiCookie = Cookies.get('d-laki');
+  let wanitaCookie = Cookies.get('d-wanita');
+
+  const tgl = Cookies.get('d-tanggal');
   
+  let parsedTgl = null;
+
+  try {
+    lakiCookie = !isNaN(lakiCookie) ? lakiCookie : null;
+
+  } catch (error) {
+    lakiCookie = null;
+  }
+
+  try {
+    wanitaCookie = !isNaN(wanitaCookie) ? wanitaCookie : null;
+
+  } catch (error) {
+    wanitaCookie = null;
+  }
+
   try {
     depa = depa ? JSON.parse(depa) : null;
   } catch (error) {
@@ -92,17 +144,45 @@ function PELNI() {
     arri = null;
   }
   
-  depa = depa?.CODE && depa?.NAME ? depa : null;
-  arri = arri?.CODE && arri?.NAME ? arri : null;
+  try {
+    parsedTgl = tgl ? JSON.parse(tgl) : null;
+    if (Array.isArray(parsedTgl) && parsedTgl.length === 2) {
+      const isValidDate = parsedTgl.every(dateStr =>
+        !isNaN(new Date(dateStr).getTime())
+      );
+      parsedTgl = isValidDate ? parsedTgl : null;
+    } else {
+      parsedTgl = null;
+    }
+  } catch (error) {
+    parsedTgl = null;
+  }
+  
+  depa = depa?.CODE && depa?.NAME ? depa : { CODE: "431", NAME: "TANJUNG PRIOK (JAKARTA)" };
+  arri = arri?.CODE && arri?.NAME ? arri : { CODE: "144", NAME: "BELAWAN (MEDAN)" };
+  lakiCookie = lakiCookie ? lakiCookie : 1;
+  wanitaCookie = wanitaCookie ? wanitaCookie : 0;
 
-  //input
+  const today = parsedTgl ? new Date(parsedTgl[0]) : new Date();
+  let nextMonth;
+  
+  if (parsedTgl !== null) {
+    nextMonth = new Date(parsedTgl[1]);
+  } else {
+    nextMonth = new Date(today);
+    nextMonth.setMonth(today.getMonth() + 1);
+  }
+  
+  // Input
+  const [tanggal, setTanggal] = React.useState([today, nextMonth]);
+  const [laki, setLaki] = React.useState(lakiCookie);
+  const [wanita, setWanita] = React.useState(wanitaCookie);
+
   const [keberangkatan, setKeberangkatan] = React.useState(depa);
   const [tujuan, setTujuan] = React.useState(arri);
-  const [tanggal, setTanggal] = React.useState();
-  const [isLoading, setLoading] = React.useState(false);
-  const [laki, setLaki] = React.useState(1);
-  const [wanita, setWanita] = React.useState(0);
 
+  //input
+  const [isLoading, setLoading] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState("hidden");
   const handleClick = () => {
     anchorEl === "hidden" ? setAnchorEl("grid") : setAnchorEl("hidden");
@@ -177,7 +257,7 @@ function PELNI() {
     if (laki >= 4) {
       setLaki(4);
     } else {
-      setLaki(laki + 1);
+      setLaki(parseInt(laki) + 1);
     }
   }
 
@@ -187,7 +267,7 @@ function PELNI() {
     if (laki < 1 || laki === 1) {
       setLaki(1);
     } else {
-      setLaki(laki - 1);
+      setLaki(parseInt(laki) - 1);
     }
   }
 
@@ -196,7 +276,7 @@ function PELNI() {
     if (wanita >= 4) {
       setWanita(4);
     } else {
-      setWanita(wanita + 1);
+      setWanita(parseInt(wanita) + 1);
     }
   }
 
@@ -206,7 +286,7 @@ function PELNI() {
     if (wanita < 0 || wanita === 0) {
       setWanita(0);
     } else {
-      setWanita(wanita - 1);
+      setWanita(parseInt(wanita) - 1);
     }
   }
 
@@ -262,38 +342,54 @@ function PELNI() {
       e.preventDefault();
       setLoading(false);
 
-      const params = {
-        origin: keberangkatan.CODE,
-        destination: tujuan.CODE,
-        originName: keberangkatan.NAME,
-        destinationName: tujuan.NAME,
-        startDate: startDate,
-        endDate: endDate,
-        laki: laki,
-        wanita: wanita,
-      };
 
+      if(keberangkatan === null && tujuan === null){
+        messageCustomError('Pilih Pelabuhan Asal & Pelabuhan Tujuan.')
+      }
+      else if(keberangkatan === null){
+        messageCustomError('Pilih Pelabuhan Asal.')
+        
+      }else if(tujuan === null){
+        messageCustomError('Pilih Pelabuhan Tujuan.')
 
-      const expirationDate = new Date();
-      expirationDate.setDate(expirationDate.getDate() + 7);
+      }else{
 
-      const cookieOptions = {
-      expires: expirationDate,
-      };
-
-      Cookies.set('d-depa', JSON.stringify(keberangkatan), cookieOptions);
-      Cookies.set('d-arri', JSON.stringify(tujuan), cookieOptions);
-
-
-      var str = "";
-      for (var key in params) {
-        if (str != "") {
-          str += "&";
+        const params = {
+          origin: keberangkatan.CODE,
+          destination: tujuan.CODE,
+          originName: keberangkatan.NAME,
+          destinationName: tujuan.NAME,
+          startDate: startDate,
+          endDate: endDate,
+          laki: laki,
+          wanita: wanita,
+        };
+  
+        const expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + 7);
+  
+        const cookieOptions = {
+        expires: expirationDate,
+        };
+  
+        Cookies.set('d-depa', JSON.stringify(keberangkatan), cookieOptions);
+        Cookies.set('d-arri', JSON.stringify(tujuan), cookieOptions);
+        Cookies.set('d-laki', laki, cookieOptions);
+        Cookies.set('d-wanita', wanita, cookieOptions);
+        Cookies.set('d-tanggal', JSON.stringify(tanggal), cookieOptions);
+  
+        var str = "";
+        for (var key in params) {
+          if (str != "") {
+            str += "&";
+          }
+          str += key + "=" + encodeURIComponent(params[key]);
         }
-        str += key + "=" + encodeURIComponent(params[key]);
+  
+        window.location = `search?${str}`;
+
       }
 
-      window.location = `search?${str}`;
     }, 1000);
   }
 
@@ -315,6 +411,7 @@ function PELNI() {
 
   return (
     <>
+    {contextHolder}
       <div className="row bg-white border-t border-gray-200 w-full p-2 pr-0">
         <div class="w-full rounded-lg shadow-xs">
           <form className="w-full">
@@ -368,7 +465,12 @@ function PELNI() {
                       options={pelniData}
                       value={keberangkatan}
                       onChange={(event, newValue) => {
-                        setKeberangkatan(newValue);
+                        if((newValue == tujuan) || (newValue?.CODE == tujuan?.CODE)){
+                          errorBerangkat();
+                          setKeberangkatan(keberangkatan);
+                        }else{
+                          setKeberangkatan(newValue);
+                        }
                       }}
                       loading={loadingBerangkat}
                       renderInput={(params) => (
@@ -437,7 +539,12 @@ function PELNI() {
                       options={pelniData}
                       value={tujuan}
                       onChange={(event, newValue) => {
-                        setTujuan(newValue);
+                        if((newValue == keberangkatan) || (newValue?.CODE == keberangkatan?.CODE)){
+                          errorTujuan();
+                          setTujuan(tujuan);
+                        }else{
+                          setTujuan(newValue);
+                        }
                       }}
                       loading={loadingTujuan}
                       renderInput={(params) => (
@@ -468,14 +575,17 @@ function PELNI() {
                     <small className="mb-2 text-gray-500">Range Tanggal</small>
                     <div className="w-full">
                     <DateRangePicker
-                      block
-                      onChange={(e) => setTanggal(e)}
-                      size="lg"
-                      sx={{ width: "100%" }}
-                      placeholder="yyyy-mm-dd yyyy-mm-dd"
-                      className="text-gray-300 cursor-pointer"
-                      disabledDate={disabledDateRule}
-                    />
+                        block
+                        onChange={(e) => setTanggal(e)}
+                        size="lg"
+                        sx={{ width: "100%", color:"black !important" }}
+                        placeholder="dd/mm/yyyy dd-mm-yyyy"
+                        className="cursor-pointer text-black"
+                        disabledDate={disabledDateRule}
+                        value={tanggal}
+                        format="dd/MM/yyyy"
+                        style={{ color: "black !important" }}
+                      />
 
                     </div>
                   </FormControl>

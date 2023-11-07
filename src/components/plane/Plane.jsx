@@ -3,8 +3,6 @@ import * as React from "react";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Autocomplete from "@mui/material/Autocomplete";
 import { FaPlaneDeparture, FaPlaneArrival } from "react-icons/fa";
 import { Chip } from "@mui/material";
@@ -12,15 +10,15 @@ import CircularProgress from "@mui/material/CircularProgress";
 import onClickOutside from "react-onclickoutside";
 import { createSearchParams, useNavigate } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
-import { Button, Tooltip } from "antd";
+import { Button, message, Tooltip } from "antd";
 import Cookies from "js-cookie";
 import { Modal, Placeholder } from "rsuite";
 import { CheckboxGroup, Checkbox } from "rsuite";
 import { SearchOutlined } from "@ant-design/icons";
 import { AiOutlineSwap } from "react-icons/ai";
-import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
-import DateRangeIcon from '@mui/icons-material/DateRange'; // Import the DateRangeIcon
 import { InputNumber, InputGroup } from 'rsuite';
+import { DatePicker } from 'antd';
+import dayjs from "dayjs";
 
 function Plane() {
   const [anchorEl, setAnchorEl] = React.useState("hidden");
@@ -28,6 +26,39 @@ function Plane() {
   const [open, setOpen] = React.useState(false);
   const [size, setSize] = React.useState();
   const [loadingModal, setLoadingModal] = React.useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const errorBerangkat = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'Stasiun Asal tidak boleh sama dengan Stasiun Tujuan.',
+      duration: 10, // Durasi pesan 5 detik
+      top: '50%', // Posisi pesan di tengah layar
+      className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
+    });
+  };
+  
+
+  const errorTujuan = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'Stasiun Tujuan tidak boleh sama dengan Stasiun Asal.',
+      duration: 10, // Durasi pesan 5 detik
+      top: '50%', // Posisi pesan di tengah layar
+      className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
+    });
+  };
+
+  const messageCustomError = (message) => {
+    messageApi.open({
+      type: 'error',
+      content: message,
+      duration: 10, // Durasi pesan 5 detik
+      top: '50%', // Posisi pesan di tengah layar
+      className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
+    });
+  };
+
 
   var j =
     '{"TPGA":"GARUDA INDONESIA","TPIP":"PELITA AIR","TPJQ":"JETSTAR","TPJT":"LION AIR","TPMV":"TRANS NUSA","TPQG":"CITILINK","TPQZ":"AIR ASIA","TPSJ":"SRIWIJAYA","TPTN":"TRIGANA AIR","TPTR":"TIGER AIR","TPXN":"XPRESS AIR"}';
@@ -85,9 +116,6 @@ function Plane() {
   const [isLoading, setLoading] = React.useState(false);
   const [pulang, setPulang] = React.useState(false);
   const [pesawatStasiun, setpesawatStasiun] = React.useState({});
-  const [adult, setadult] = React.useState(1);
-  const [infant, setinfant] = React.useState(0);
-  const [child, setChild] = React.useState(0);
 
   const [openBerangka, SetopenBerangka] = React.useState(false);
   const [openTujuan, setOpenTujuan] = React.useState(false);
@@ -99,10 +127,45 @@ function Plane() {
   let depa = Cookies.get("p-depa");
   let arri = Cookies.get("p-arri");
 
+
+  let dateCookie = Cookies.get("p-date") ? Cookies.get("p-date") : dayjs();
+  let adultCookie = parseInt(Cookies.get("p-adult") ? Cookies.get("p-adult") : '');
+  let childCookie = parseInt(Cookies.get("p-child") ? Cookies.get("p-child") : '');
+  let infantCookie = parseInt(Cookies.get("p-infant") ? Cookies.get("p-infant") : '');
+
   try {
     depa = depa ? JSON.parse(depa) : null;
+
   } catch (error) {
     depa = null;
+  }
+
+  try {
+    dateCookie = dayjs(dateCookie).isValid() ? dateCookie : null;
+
+  } catch (error) {
+    dateCookie = null;
+  }
+
+  try {
+    adultCookie = !isNaN(adultCookie) ? adultCookie : null;
+
+  } catch (error) {
+    adultCookie = null;
+  }
+
+  try {
+    infantCookie = !isNaN(infantCookie) ? infantCookie : null;
+
+  } catch (error) {
+    infantCookie = null;
+  }
+
+  try {
+    childCookie = !isNaN(childCookie) ? childCookie : null;
+
+  } catch (error) {
+    childCookie = null;
   }
 
   try {
@@ -111,20 +174,27 @@ function Plane() {
     arri = null;
   }
 
-  depa = depa?.bandara && depa?.code && depa?.group && depa?.name ? depa : null;
-  arri = arri?.bandara && arri?.code && arri?.group && arri?.name ? arri : null;
+  depa = depa?.bandara && depa?.code && depa?.group && depa?.name ? depa : { code: "CGK", name: "Jakarta (CGK)", bandara: "Soekarno – Hatta", group: "Domestik" };
+  arri = arri?.bandara && arri?.code && arri?.group && arri?.name ? arri : { code: "SUB", name: "Surabaya (SUB)", bandara: "Juanda", group: "Domestik" };
+  dateCookie = dateCookie ? dayjs(dateCookie) : dayjs();
+  adultCookie = adultCookie ? adultCookie : 1;
+  infantCookie = infantCookie ? infantCookie : 0;
+  childCookie = childCookie ? childCookie : 0;
 
   //input
   const [keberangkatan, setKeberangkatan] = React.useState(depa);
   const [tujuan, setTujuan] = React.useState(arri);
-  const [tanggalKeberangkatan, setTanggalKeberangkatan] = React.useState();
-  const [tanggalTujuan, setTanggalTujuan] = React.useState();
+  const [tanggalKeberangkatan, setTanggalKeberangkatan] = React.useState(dateCookie);
+  const [tanggalTujuan, setTanggalTujuan] = React.useState(dateCookie);
+  const [adult, setadult] = React.useState(adultCookie);
+  const [infant, setinfant] = React.useState(infantCookie);
+  const [child, setChild] = React.useState(childCookie);
 
   const i = 0;
 
   const useStyles = makeStyles((theme) => ({
     inputRoot: {
-      color: "#e5e7eb", // Ubah warna teks
+      color: "black", // Ubah warna teks
       "& .MuiOutlinedInput-notchedOutline": {
         borderColor: "#e5e7eb", // Ubah warna border
       },
@@ -136,7 +206,7 @@ function Plane() {
       },
       "&&& $input": {
         padding: 1,
-        color: "#71717a", // Ubah warna teks
+        color: "black", // Ubah warna teks
       },
     },
     root: {
@@ -144,7 +214,7 @@ function Plane() {
         "& .MuiInputBase-input": {
           padding: 10,
           borderRadius: 16,
-          color: "#71717a", // Ubah warna teks
+          color: "black", // Ubah warna teks
           cursor: "pointer"
         },
         "& .MuiOutlinedInput-notchedOutline": {
@@ -235,8 +305,8 @@ function Plane() {
 
   function plusAdult(e) {
     e.preventDefault();
-    if (adult >= 4) {
-      setadult(4);
+    if (adult >= 7) {
+      setadult(7);
     } else {
       setadult(parseInt(adult) + 1);
     }
@@ -262,8 +332,8 @@ function Plane() {
     if(adult <= infant){
       setinfant(parseInt(infant));
     }else{
-      if (infant >= 4) {
-        setinfant(4);
+      if (infant >= 7) {
+        setinfant(7);
       } else {
         setinfant(parseInt(infant) + 1);
       }
@@ -287,8 +357,8 @@ function Plane() {
       setChild(infant(child));
     }else{
       e.preventDefault();
-      if (child >= 4) {
-        setChild(4);
+      if (child >= 7) {
+        setChild(7);
       } else {
         setChild(parseInt(child) + 1);
       }
@@ -359,35 +429,53 @@ function Plane() {
       e.preventDefault();
       setLoading(false);
 
-      const params = {
-        departure: keberangkatan.code,
-        departureName: keberangkatan.bandara,
-        arrival: tujuan.code,
-        arrivalName: tujuan.bandara,
-        departureDate: tanggalKeberangkatanParse,
-        returnDate: pulang ? tanggalTujuanParse : "",
-        isLowestPrice: true,
-        adult: adult,
-        child: child,
-        infant: infant,
-        maskapai: selectedOptions.join("#"),
-      };
+      if(keberangkatan === null && tujuan === null){
+        messageCustomError('Pilih Stasiun Asal & Stasiun Tujuan.')
+      }
+      else if(keberangkatan === null){
+        messageCustomError('Pilih Stasiun Asal.')
+        
+      }else if(tujuan === null){
+        messageCustomError('Pilih Stasiun Tujuan.')
 
-      const expirationDate = new Date();
-      expirationDate.setDate(expirationDate.getDate() + 7);
+      }else{
 
-      const cookieOptions = {
-        expires: expirationDate,
-      };
+        const params = {
+          departure: keberangkatan.code,
+          departureName: keberangkatan.bandara,
+          arrival: tujuan.code,
+          arrivalName: tujuan.bandara,
+          departureDate: tanggalKeberangkatanParse,
+          returnDate: pulang ? tanggalTujuanParse : "",
+          isLowestPrice: true,
+          adult: adult,
+          child: child,
+          infant: infant,
+          maskapai: selectedOptions.join("#"),
+        };
+  
+        const expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + 7);
+  
+        const cookieOptions = {
+          expires: expirationDate,
+        };
+  
+        Cookies.set("p-depa", JSON.stringify(keberangkatan), cookieOptions);
+        Cookies.set("p-arri", JSON.stringify(tujuan), cookieOptions);
+        Cookies.set("p-mask", JSON.stringify(selectedOptions), cookieOptions);
+        Cookies.set("p-date", tanggalKeberangkatan.toString(), cookieOptions);
+        Cookies.set("p-adult", adult, cookieOptions);
+        Cookies.set("p-child", child, cookieOptions);
+        Cookies.set("p-infant", infant, cookieOptions);
 
-      Cookies.set("p-depa", JSON.stringify(keberangkatan), cookieOptions);
-      Cookies.set("p-arri", JSON.stringify(tujuan), cookieOptions);
-      Cookies.set("p-mask", JSON.stringify(selectedOptions), cookieOptions);
+        navigate({
+          pathname: "/flight/search",
+          search: `?${createSearchParams(params)}`,
+        });
 
-      navigate({
-        pathname: "/flight/search",
-        search: `?${createSearchParams(params)}`,
-      });
+      }
+
     }, 1000);
   }
 
@@ -398,8 +486,13 @@ function Plane() {
 
   }
 
+  const tanggalMinimum = new Date(); // Ganti dengan tanggal minimum yang diinginkan
+
+  const isDisabled = tanggalKeberangkatan < tanggalMinimum;
+
   return (
     <>
+      {contextHolder}
       <Modal size={size} open={open} onClose={handleClose}>
         <Modal.Header>
           <Modal.Title>Pilih Maskapai</Modal.Title>
@@ -435,12 +528,14 @@ function Plane() {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose} appearance="subtle">
-            Cancel
-          </Button>
-          <Button onClick={handleClose} appearance="primary">
-            Ok
-          </Button>
+          <div className="flex space-x-4 justify-end">
+            <Button onClick={handleClose} appearance="subtle">
+              Cancel
+            </Button>
+            <Button onClick={handleClose} appearance="primary">
+              Ok
+            </Button>
+            </div>
         </Modal.Footer>
       </Modal>
       <div className="pl-4 flex justify-center row bg-white border-t border-gray-200 w-full pr-0">
@@ -460,7 +555,7 @@ function Plane() {
                         size="large"
                         type="default"
                         shape="default" // Use 'default' shape for no rounding
-                        className="text-zinc-500 block mt-2 bg-white border-gray-200"
+                        className="text-black block mt-2 bg-white border-gray-200"
                         icon={<SearchOutlined />}
                         >
                         List Maskapai
@@ -469,6 +564,7 @@ function Plane() {
                   </div>
                   <div className="w-full col col-span-1 md:col-span-2">
                     <div className="w-full flex items-center">
+                      <div>
                       <FormControl
                         className=""
                         sx={{ m: 1, minWidth: 135, outline: "none" }}
@@ -513,7 +609,12 @@ function Plane() {
                           options={pesawatData}
                           value={keberangkatan}
                           onChange={(event, newValue) => {
-                            setKeberangkatan(newValue);
+                            if((newValue == tujuan) || (newValue?.code == tujuan?.code)){
+                              errorBerangkat();
+                              setKeberangkatan(keberangkatan);
+                            }else{
+                              setKeberangkatan(newValue);
+                            }
                           }}
                           loading={loadingBerangkat}
                           renderInput={(params) => (
@@ -541,109 +642,111 @@ function Plane() {
                           )}
                         />
                       </FormControl>
+                      </div>
                       <div onClick={changeStatiun} className="cursor-pointer mt-4 flex justify-center items-center bg-blue-500 rounded-full p-1">
                         <AiOutlineSwap className="text-white" size={24} />
                       </div>
-                      <FormControl
-                        className=""
-                        sx={{ m: 1, minWidth: 145}}
-                      >
-                        <small className="mb-2 text-gray-500">
-                          Stasiun Tujuan
-                        </small>
-                        <Autocomplete
-                          classes={classes}
-                          PopperComponent={PopperMy}
-                          id="asynchronous-demo"
-                          open={openTujuan}
-                          hiddenLabel={true}
-                          onOpen={() => {
-                            setOpenTujuan(true);
-                          }}
-                          onClose={() => {
-                            setOpenTujuan(false);
-                          }}
-                          renderTags={(value, getTagProps) => (
-                            <div style={{ width: "100%" }}>
-                              {value.map((option, index) => (
-                                <Chip
-                                  variant="outlined"
-                                  label={option}
-                                  {...getTagProps({ index })}
-                                />
-                              ))}
-                            </div>
-                          )}
-                          isOptionEqualToValue={(option, value) =>
-                            option.title === value.title
-                          }
-                          getOptionLabel={(option) =>
-                            option.bandara +
-                            " - " +
-                            option.name +
-                            " - " +
-                            option.code
-                          }
-                          options={pesawatData}
-                          value={tujuan}
-                          onChange={(event, newValue) => {
-                            setTujuan(newValue);
-                          }}
-                          loading={loadingTujuan}
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              InputProps={{
-                                ...params.InputProps,
-                                startAdornment: (
-                                  <FaPlaneArrival className="text-gray-400" />
-                                ),
-                                placeholder: "Tujuan",
-                                endAdornment: (
-                                  <React.Fragment>
-                                    {loadingTujuan ? (
-                                      <CircularProgress
-                                        color="inherit"
-                                        size={20}
-                                      />
-                                    ) : null}
-                                    {params.InputProps.endAdornment}
-                                  </React.Fragment>
-                                ),
-                              }}
-                            />
-                          )}
-                        />
-                      </FormControl>
+                      <div>
+                        <FormControl
+                          className=""
+                          sx={{ m: 1, minWidth: 145}}
+                        >
+                          <small className="mb-2 text-gray-500">
+                            Stasiun Tujuan
+                          </small>
+                          <Autocomplete
+                            classes={classes}
+                            PopperComponent={PopperMy}
+                            id="asynchronous-demo"
+                            open={openTujuan}
+                            hiddenLabel={true}
+                            onOpen={() => {
+                              setOpenTujuan(true);
+                            }}
+                            onClose={() => {
+                              setOpenTujuan(false);
+                            }}
+                            renderTags={(value, getTagProps) => (
+                              <div style={{ width: "100%" }}>
+                                {value.map((option, index) => (
+                                  <Chip
+                                    variant="outlined"
+                                    label={option}
+                                    {...getTagProps({ index })}
+                                  />
+                                ))}
+                              </div>
+                            )}
+                            isOptionEqualToValue={(option, value) =>
+                              option.title === value.title
+                            }
+                            getOptionLabel={(option) =>
+                              option.bandara +
+                              " - " +
+                              option.name +
+                              " - " +
+                              option.code
+                            }
+                            options={pesawatData}
+                            value={tujuan}
+                            onChange={(event, newValue) => {
+                              if((keberangkatan == newValue) || (keberangkatan?.code == newValue?.code)){
+                                errorTujuan()
+                                setTujuan(tujuan);
+                              }else{
+
+                                setTujuan(newValue);
+                              }
+                            }}
+                            loading={loadingTujuan}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                InputProps={{
+                                  ...params.InputProps,
+                                  startAdornment: (
+                                    <FaPlaneArrival className="text-gray-400" />
+                                  ),
+                                  placeholder: "Tujuan",
+                                  endAdornment: (
+                                    <React.Fragment>
+                                      {loadingTujuan ? (
+                                        <CircularProgress
+                                          color="inherit"
+                                          size={20}
+                                        />
+                                      ) : null}
+                                      {params.InputProps.endAdornment}
+                                    </React.Fragment>
+                                  ),
+                                }}
+                              />
+                            )}
+                          />
+                        </FormControl>
+                      </div>
                     </div>
                   </div>
                   <FormControl sx={{ m: 1, minWidth: 160 }}>
                     <small className="mb-2 text-gray-500">
                       Tanggal Berangkat
                     </small>
-                    <LocalizationProvider dateAdapter={AdapterDayjs} style={{ cursor: 'pointer' }}>
-                        <MobileDatePicker
-                            style={{ cursor: 'pointer' }}
-                            minDate={new Date()}
-                            value={tanggalKeberangkatan}
-                            className={classes.root}
-                            inputFormat="YYYY-MM-DD"
-                            onChange={(newValue) => {
-                            setTanggalKeberangkatan(newValue);
-                            }}
-                            renderInput={(params) => (
-                            <TextField
-                                style={{ cursor: 'pointer' }}
-                                {...params}
-                                InputProps={{
-                                endAdornment: (
-                                    <DateRangeIcon className="cursor-pointer text-gray-400" /> // Place the DateRangeIcon here
-                                ),
-                                }}
-                            />
-                            )}
-                        />
-                    </LocalizationProvider>
+                    <DatePicker
+                      style={{ cursor: 'pointer' }}
+                      className="border-gray-240 py-2"
+                      appearance="subtle"
+                      value={tanggalKeberangkatan}
+                      inputStyle={{ color: 'red' }}
+                      format="DD/MM/YYYY"
+                      onChange={(value) => {
+                        setTanggalKeberangkatan(value);
+                      }}
+                      size="large"
+                      disabledDate={(current) => {
+                        const currentDate = dayjs();
+                        return current && current < currentDate.startOf('day');
+                      }}
+                    />
                   </FormControl>
                   <FormControl sx={{ m: 1, minWidth: 130 }}>
                     <small className="mb-2 text-gray-500">
@@ -681,7 +784,7 @@ function Plane() {
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusAdult}>-</InputGroup.Button>
-                            <InputNumber className={'custom-input-number'} value={adult} onChange={setadult} min={1} max={4} readOnly/>
+                            <InputNumber className={'custom-input-number'} value={adult} onChange={setadult} min={1} max={7} readOnly />
                             <InputGroup.Button onClick={plusAdult}>+</InputGroup.Button>
                           </InputGroup>
                         </div>
@@ -691,7 +794,7 @@ function Plane() {
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusChild}>-</InputGroup.Button>
-                            <InputNumber className={'custom-input-number'} value={child} onChange={setChild} min={0} max={4} readOnly/>
+                            <InputNumber className={'custom-input-number'} value={child} onChange={setChild} min={0} max={7} readOnly/>
                             <InputGroup.Button onClick={plusChild}>+</InputGroup.Button>
                           </InputGroup>
                         </div>
@@ -701,7 +804,7 @@ function Plane() {
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusInfant}>-</InputGroup.Button>
-                            <InputNumber className={'custom-input-number'} value={infant} onChange={setinfant} min={0} max={4} readOnly/>
+                            <InputNumber className={'custom-input-number'} value={infant} onChange={setinfant} min={0} max={7} readOnly/>
                             <InputGroup.Button onClick={plusInfant}>+</InputGroup.Button>
                           </InputGroup>
                         </div>

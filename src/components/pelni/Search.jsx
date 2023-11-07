@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { VscArrowSwap } from "react-icons/vsc";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import { IoArrowBackOutline } from "react-icons/io5";
+import { IoArrowBackOutline, IoArrowForwardOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Searchpelni from "./PelniSearch";
 import { notification } from "antd";
@@ -293,7 +292,7 @@ export default function Search() {
                     {originName}
                   </small>
                   <div className="bg-blue-500 p-1 rounded-full">
-                    <VscArrowSwap
+                    <IoArrowForwardOutline
                       className="font-bold text-xs text-white"
                       size={16}
                     />

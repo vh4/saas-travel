@@ -1,6 +1,6 @@
 import Skeleton from 'react-loading-skeleton'
 import { Button as ButtonAnt } from 'antd';
-import { TbArrowsLeftRight } from 'react-icons/tb';
+import { IoArrowForwardOutline } from 'react-icons/io5';
 
 const BayarLoading = ({total}) => {
 	return(
@@ -84,7 +84,7 @@ const BayarLoading = ({total}) => {
 							<div className="mt-1 text-xs text-gray-800 ">
 							<Skeleton width={130} height={16} />
 							</div>
-							<TbArrowsLeftRight className="text-gray-500" size={18} />
+							<IoArrowForwardOutline className="text-gray-500" size={18} />
 							<div className="mt-1 text-xs text-gray-800 ">
 							<Skeleton width={130} height={16} />
 							</div>

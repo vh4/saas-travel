@@ -22,17 +22,21 @@ export default function LayoutUser({ children }) {
   const { nav, setNav } = useContext(NavContext);
 
   const pathSidebar = location.pathname.toString();
+  const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
 
   return (
     <div className="flex flex-col min-h-screen">
       <Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
 
-      <div className="flex-grow md:flex relative ml-0 md:ml-16 xl:ml-0 2xl:ml-0 mt-4 md:mt-0 md:justify-center">
-        <div
-          className={`${sidebarOpen} w-full md:w-1/2 xl:w-auto 2xl:w-auto md:block xl:block 2xl:block`}
-        >
-          <Sidebar pathSidebar={pathSidebar} />
-        </div>
+        <div className="flex-grow md:flex relative ml-0 md:ml-16 xl:ml-0 2xl:ml-0 mt-4 md:mt-0 md:justify-center">
+       {token === null || token === undefined ? (<>
+       </>) : (
+          <div
+            className={`${sidebarOpen} w-full md:w-1/2 xl:w-auto 2xl:w-auto md:block xl:block 2xl:block`}
+          >
+            <Sidebar pathSidebar={pathSidebar} />
+          </div>
+       )}
 
         <div
           className={

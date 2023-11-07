@@ -1,6 +1,6 @@
 import Skeleton from "react-loading-skeleton";
-import { TbArrowsLeftRight } from "react-icons/tb";
 import { Button } from "antd";
+import { IoArrowForwardOutline } from "react-icons/io5";
 
 const Body = ({ TotalAdult, TotalChild, TotalInfant }) => {
   return (
@@ -137,7 +137,7 @@ const Sidebar = () => {
               </div>
             </div>
             <div className="rounded-full p-1 bg-blue-500 ">
-              <TbArrowsLeftRight className="text-white" size={18} />
+              <IoArrowForwardOutline className="text-white" size={18} />
             </div>
             <div className="text-xs  text-slate-600">
               <div>
@@ -237,7 +237,7 @@ const BookingLoading = ({ TotalAdult, TotalChild, TotalInfant }) => {
             </div>
           </div>
           <div className="rounded-full p-1 bg-blue-500 ">
-            <TbArrowsLeftRight className="text-white" size={18} />
+            <IoArrowForwardOutline className="text-white" size={18} />
           </div>
           <div className="text-xs  text-slate-600">
             <div>

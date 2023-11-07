@@ -3,7 +3,6 @@ import { MdHorizontalRule } from "react-icons/md";
 import FormControl from "@mui/material/FormControl";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-input-2";
-import { TbArrowsLeftRight } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -11,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { RxCrossCircled } from "react-icons/rx";
 import "react-phone-input-2/lib/bootstrap.css";
 import { Button, DatePicker, Modal, Result } from "antd";
+import { InputNumber } from "rsuite";
 import { Input, Form } from "antd";
 import { Select } from "antd";
 import dayjs from "dayjs";
@@ -24,6 +24,7 @@ import Page500 from "../components/500";
 import Page400 from "../components/400";
 import ManyRequest from '../components/Manyrequest'
 import { ExclamationCircleFilled } from '@ant-design/icons';
+import { IoArrowForwardOutline } from "react-icons/io5";
 
 export default function BookingPesawat() {
   useEffect(() => {
@@ -61,27 +62,27 @@ export default function BookingPesawat() {
 
   const data = [
     {
-      label: "Mr.",
-      value: "MR",
+      label: "Tuan.",
+      value: "Tuan",
     },
     {
-      label: "Mrs.",
-      value: "MRS",
+      label: "Nyonya.",
+      value: "Nyonya",
     },
     {
-      label: "Miss.",
-      value: "MISS",
-    },
-    {
-      label: "Mstr.",
-      value: "MSTR",
+      label: "Nona.",
+      value: "Nona",
     },
   ];
 
   const dataInfChld = [
     {
-      label: "Mstr.",
-      value: "MSTR",
+      label: "Tuan.",
+      value: "Tuan",
+    },
+    {
+      label: "Nona.",
+      value: "Nona",
     },
   ];
 
@@ -122,7 +123,7 @@ export default function BookingPesawat() {
           setTotalInfant(TotalInfant);
 
           const AdultArr = Array.from({ length: TotalAdult }, () => ({
-            gender: "MR",
+            gender: "Tuan",
             nama_depan: "",
             nama_belakang: "",
             birthdate: getCurrentDate(),
@@ -130,14 +131,14 @@ export default function BookingPesawat() {
           }));
 
           const InfantArr = Array.from({ length: TotalInfant }, () => ({
-            gender: "MSTR",
+            gender: "Tuan",
             nama_depan: "",
             nama_belakang: "",
             birthdate: getCurrentDate(),
           }));
 
           const ChildArr = Array.from({ length: TotalChild }, () => ({
-            gender: "MSTR",
+            gender: "Tuan",
             nama_depan: "",
             nama_belakang: "",
             birthdate: getCurrentDate(),
@@ -190,7 +191,7 @@ export default function BookingPesawat() {
       
       adultCategory[i][category] = tanggalParse;
     } else {
-      if (category == "gender") {
+      if (category == "gender" || category == 'idNumber') {
         adultCategory[i][category] = e;
       } else {
         adultCategory[i][category] = e.target.value;
@@ -214,7 +215,10 @@ export default function BookingPesawat() {
       .join("-");
 
       childCategory[i][category] = tanggalParse;
-    } else {
+    }else if(category == "gender" || category == 'idNumber'){
+      childCategory[i][category] = e;
+
+    }else {
       childCategory[i][category] = e.target.value;
     }
     setChild([childCategory]);
@@ -236,6 +240,8 @@ export default function BookingPesawat() {
       
 
       infantCategory[i][category] = tanggalParse;
+    }else if(category == "gender" || category == 'idNumber'){
+      infantCategory[i][category] = e;
     } else {
       infantCategory[i][category] = e.target.value;
     }
@@ -393,21 +399,23 @@ export default function BookingPesawat() {
   const disabledDateAdult = (current) => {
     const TenYearsAgo = dayjs().subtract(12, "year");
 
-    const endOfMonth = TenYearsAgo.endOf("month");
-    const endOfDays = endOfMonth.subtract(1, "day");
+    // const endOfMonth = TenYearsAgo.endOf("month");
+    // const endOfDays = endOfMonth.subtract(1, "day");
 
-    return current && current > endOfDays;
+    return current && current > TenYearsAgo;
   };
 
   const disabledDateChild = (current) => {
     const twoYearsAgo = dayjs().subtract(2, "year");
     const TenYearsAgo = dayjs().subtract(12, "year");
 
-    const startOfMonth = TenYearsAgo.endOf("month");
-    const endOfDays = startOfMonth.subtract(1, "day");
-    const endOfMonth = twoYearsAgo.endOf("month");
+    // const startOfMonth = TenYearsAgo.endOf("month");
+    // const endOfDays = startOfMonth.subtract(1, "day");
+    // const endOfMonth = twoYearsAgo.endOf("month");
+    const endOfMonth = twoYearsAgo.subtract(1, "day");
+    const startOfMonth = TenYearsAgo.subtract(1, "day");
 
-    return current && (current < endOfDays || current > endOfMonth);
+    return current && (current < startOfMonth || current > endOfMonth);
   };
 
   const {
@@ -544,7 +552,7 @@ export default function BookingPesawat() {
                           <div>({dataDetail.departure})</div>
                         </div>
                         <div className="rounded-full p-1 bg-blue-500 ">
-                          <TbArrowsLeftRight className="text-white" size={18} />
+                          <IoArrowForwardOutline className="text-white" size={18} />
                         </div>
                         <div className="text-xs font-bold text-slate-600">
                           <div>{dataDetail.arrivalName}</div>
@@ -626,7 +634,12 @@ export default function BookingPesawat() {
                                       required: true,
                                       type: "email",
                                       message:
-                                        "Tolong diisi input email yang benar",
+                                        "Format Email tidak sesuai.",
+                                    },
+                                    {
+                                      max: 150,
+                                      message:
+                                        "Email maksimal 150 karakter.",
                                     },
                                   ]}
                                 >
@@ -655,11 +668,11 @@ export default function BookingPesawat() {
                                 rules={[
                                   {
                                     required: true,
-                                    message: "Tolong diisi input nomor HP",
+                                    message: "No Hp tidak boleh kosong.",
                                   },
                                   {
                                     min: 10,
-                                    message: "Nomor HP harus min. 10 huruf.",
+                                    message: "Minimal Nomor HP pemesan adalah 10 digit.",
                                   },
                                 ]}
                               >
@@ -706,7 +719,7 @@ export default function BookingPesawat() {
                                   {/* mobile & desktop Nama*/}
                                   <div className="xl:w-full mt-4 xl:mt-0">
                                     <div className="text-gray-500 text-sm">
-                                      Titel Anda
+                                      Title Anda
                                     </div>
                                     <div className="hidden xl:block">
                                       <FormControl
@@ -757,12 +770,21 @@ export default function BookingPesawat() {
                                             {
                                               required: true,
                                               message:
-                                                "Tolong diisi input nama depan",
+                                                "Nama Depan tidak boleh kosong.",
                                             },
                                             {
                                               min: 3,
                                               message:
-                                                "Nama depan harus min. 3 huruf.",
+                                                "Nama Depan minimal 3 karakter.",
+                                            },
+                                            {
+                                              max: 25,
+                                              message:
+                                                "Nama Depan maksimal 25 karakter.",
+                                            },
+                                            {
+                                              pattern: /^[A-Za-z\s]+$/,
+                                              message: 'Nama Depan hanya boleh terdiri dari huruf alfabet.',
                                             },
                                           ]}
                                         >
@@ -790,12 +812,21 @@ export default function BookingPesawat() {
                                             {
                                               required: true,
                                               message:
-                                                "Tolong diisi input nama belakang",
+                                                "Nama Belakang tidak boleh kosong.",
                                             },
                                             {
-                                              min: 2,
+                                              min: 3,
                                               message:
-                                                "Nama belakang harus min. 2 huruf.",
+                                                "Nama Belakang minimal 3 karakter.",
+                                            },
+                                            {
+                                              max: 25,
+                                              message:
+                                                "Nama Belakang maksimal 25 karakter.",
+                                            },
+                                            {
+                                              pattern: /^[A-Za-z\s]+$/,
+                                              message: 'Nama Belakang hanya boleh terdiri dari huruf alfabet.',
                                             },
                                           ]}
                                         >
@@ -830,7 +861,7 @@ export default function BookingPesawat() {
                                         {
                                           required: true,
                                           message:
-                                            "Tolong diisi input tanggal lahir",
+                                            "Harap input Tanggal Lahir.",
                                         },
                                       ]}
                                     >
@@ -852,7 +883,7 @@ export default function BookingPesawat() {
                                   </div>
                                   <div className="w-full">
                                     <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
-                                      <div className="text-gray-500 text-sm">
+                                      <div className="text-gray-500 text-sm mb-2">
                                         No. Ktp
                                       </div>
                                       <Form.Item
@@ -860,31 +891,24 @@ export default function BookingPesawat() {
                                         rules={[
                                           {
                                             required: true,
-                                            message:
-                                              "Tolong diisi input ktp atau nik",
+                                            message: 'NIK tidak boleh kosong.',
                                           },
-                                          {
-                                            min: 16,
-                                            message:
-                                              "Nik / No.ktp harus 16 huruf.",
-                                          },
-                                          {
-                                            max: 16,
-                                            message:
-                                              "Nik / No.ktp harus 16 huruf.",
-                                          },
+                                          ({ getFieldValue }) => ({
+                                            validator(_, value) {
+                                              if (!isNaN(value) && value !== null && value.toString().length === 16) {
+                                                return Promise.resolve();
+                                              }
+                                              return Promise.reject('Panjang NIK harus 16 digit.');
+                                            },
+                                          }),
                                         ]}
                                       >
-                                        <Input
-                                          name={`nikAdult${i}`}
-                                          size="large"
-                                          className="mt-2"
+                                        <InputNumber
+                                          style={{ width: '100%' }}
+                                          size="lg"
+                                          min={0}
                                           value={e.idNumber}
-                                          onChange={handleAdultsubCatagoryChange(
-                                            i,
-                                            "idNumber"
-                                          )}
-                                          type="text"
+                                          onChange={handleAdultsubCatagoryChange(i, 'idNumber')}
                                           placeholder="No. Ktp / NIK"
                                           id="default-input"
                                         />
@@ -923,7 +947,7 @@ export default function BookingPesawat() {
                                   {/* mobile & desktop Nama*/}
                                   <div className="xl:w-full mt-4 xl:mt-0">
                                     <div className="text-gray-500 text-sm">
-                                      Titel Anda
+                                      Title Anda
                                     </div>
                                     <div className="hidden xl:block">
                                       <FormControl
@@ -974,12 +998,21 @@ export default function BookingPesawat() {
                                             {
                                               required: true,
                                               message:
-                                                "Tolong diisi input nama depan",
+                                                "Nama Depan tidak boleh kosong.",
                                             },
                                             {
                                               min: 3,
                                               message:
-                                                "Nama depan harus min. 3 huruf.",
+                                                "Nama Depan minimal 3 karakter.",
+                                            },
+                                            {
+                                              max: 25,
+                                              message:
+                                                "Nama Depan maksimal 25 karakter.",
+                                            },
+                                            {
+                                              pattern: /^[A-Za-z\s]+$/,
+                                              message: 'Nama Depan hanya boleh terdiri dari huruf alfabet.',
                                             },
                                           ]}
                                         >
@@ -998,7 +1031,21 @@ export default function BookingPesawat() {
                                               {
                                                 required: true,
                                                 message:
-                                                  "Tolong diisi input nama depan",
+                                                  "Nama Depan tidak boleh kosong.",
+                                              },
+                                              {
+                                                min: 3,
+                                                message:
+                                                  "Nama Depan minimal 3 karakter.",
+                                              },
+                                              {
+                                                max: 25,
+                                                message:
+                                                  "Nama Depan maksimal 25 karakter.",
+                                              },
+                                              {
+                                                pattern: /^[A-Za-z\s]+$/,
+                                                message: 'Nama Depan hanya boleh terdiri dari huruf alfabet.',
                                               },
                                             ]}
                                           />
@@ -1014,12 +1061,21 @@ export default function BookingPesawat() {
                                             {
                                               required: true,
                                               message:
-                                                "Tolong diisi input nama belakang",
+                                                "Nama Belakang tidak boleh kosong.",
                                             },
                                             {
-                                              min: 2,
+                                              min: 3,
                                               message:
-                                                "Nama belakang harus min. 2 huruf.",
+                                                "Nama Belakang minimal 3 karakter.",
+                                            },
+                                            {
+                                              max: 25,
+                                              message:
+                                                "Nama Belakang maksimal 25 karakter.",
+                                            },
+                                            {
+                                              pattern: /^[A-Za-z\s]+$/,
+                                              message: 'Nama Belakang hanya boleh terdiri dari huruf alfabet.',
                                             },
                                           ]}
                                         >
@@ -1038,7 +1094,21 @@ export default function BookingPesawat() {
                                               {
                                                 required: true,
                                                 message:
-                                                  "Tolong diisi input nama belakang",
+                                                  "Nama Belakang tidak boleh kosong.",
+                                              },
+                                              {
+                                                min: 3,
+                                                message:
+                                                  "Nama Belakang minimal 3 karakter.",
+                                              },
+                                              {
+                                                max: 25,
+                                                message:
+                                                  "Nama Belakang maksimal 25 karakter.",
+                                              },
+                                              {
+                                                pattern: /^[A-Za-z\s]+$/,
+                                                message: 'Nama Belakang hanya boleh terdiri dari huruf alfabet.',
                                               },
                                             ]}
                                           />
@@ -1061,7 +1131,7 @@ export default function BookingPesawat() {
                                         {
                                           required: true,
                                           message:
-                                            "Tolong diisi input tanggal lahir",
+                                            "Harap input Tanggal Lahir.",
                                         },
                                       ]}
                                     >
@@ -1077,13 +1147,13 @@ export default function BookingPesawat() {
                                         disabledDate={disabledDateChild}
                                       />
                                     </Form.Item>
-                                    <small className="blcok -mt-4 text-gray-400">
+                                    <small className="block -mt-4 text-gray-400">
                                       Contoh: dd-mm-yyyy
                                     </small>
                                   </div>
                                   <div className="w-full">
                                     <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
-                                      <div className="text-gray-500 text-sm">
+                                      <div className="text-gray-500 text-sm mb-2">
                                         No. Ktp
                                       </div>
                                       <Form.Item
@@ -1091,30 +1161,24 @@ export default function BookingPesawat() {
                                         rules={[
                                           {
                                             required: true,
-                                            message:
-                                              "Tolong diisi input Ktp / Nik anda",
+                                            message: 'NIK tidak boleh kosong.',
                                           },
-                                          {
-                                            min: 16,
-                                            message:
-                                              "Nik / No.ktp harus 16 huruf.",
-                                          },
-                                          {
-                                            max: 16,
-                                            message:
-                                              "Nik / No.ktp harus 16 huruf.",
-                                          },
+                                          ({ getFieldValue }) => ({
+                                            validator(_, value) {
+                                              if (!isNaN(value) && value !== null && value.toString().length === 16) {
+                                                return Promise.resolve();
+                                              }
+                                              return Promise.reject('Panjang NIK harus 16 digit.');
+                                            },
+                                          }),
                                         ]}
                                       >
-                                        <Input
-                                          size="large"
-                                          className="mt-2"
+                                        <InputNumber
+                                          style={{ width: '100%' }}
+                                          size="lg"
+                                          min={0}
                                           value={e.idNumber}
-                                          onChange={handleChildsubCatagoryChange(
-                                            i,
-                                            "idNumber"
-                                          )}
-                                          type="text"
+                                          onChange={handleChildsubCatagoryChange(i, 'idNumber')}
                                           placeholder="No. Ktp / NIK"
                                         />
                                       </Form.Item>
@@ -1152,7 +1216,7 @@ export default function BookingPesawat() {
                                   {/* mobile & desktop Nama*/}
                                   <div className="xl:w-full mt-4 xl:mt-0">
                                     <div className="text-gray-500 text-sm">
-                                      Titel Anda
+                                      Title Anda
                                     </div>
                                     <div className="hidden xl:block">
                                       <FormControl
@@ -1203,12 +1267,21 @@ export default function BookingPesawat() {
                                             {
                                               required: true,
                                               message:
-                                                "Tolong diisi input nama depan",
+                                                "Nama Depan tidak boleh kosong.",
                                             },
                                             {
                                               min: 3,
                                               message:
-                                                "Nama depan harus min. 3 huruf.",
+                                                "Nama Depan minimal 3 karakter.",
+                                            },
+                                            {
+                                              max: 25,
+                                              message:
+                                                "Nama Depan maksimal 25 karakter.",
+                                            },
+                                            {
+                                              pattern: /^[A-Za-z\s]+$/,
+                                              message: 'Nama Depan hanya boleh terdiri dari huruf alfabet.',
                                             },
                                           ]}
                                         >
@@ -1236,12 +1309,21 @@ export default function BookingPesawat() {
                                             {
                                               required: true,
                                               message:
-                                                "Tolong diisi input nama belakang",
+                                                "Nama Belakang tidak boleh kosong.",
                                             },
                                             {
-                                              min: 2,
+                                              min: 3,
                                               message:
-                                                "Nama belakang harus min. 2 huruf.",
+                                                "Nama Belakang minimal 3 karakter.",
+                                            },
+                                            {
+                                              max: 25,
+                                              message:
+                                                "Nama Belakang maksimal 25 karakter.",
+                                            },
+                                            {
+                                              pattern: /^[A-Za-z\s]+$/,
+                                              message: 'Nama Belakang hanya boleh terdiri dari huruf alfabet.',
                                             },
                                           ]}
                                         >
@@ -1276,7 +1358,7 @@ export default function BookingPesawat() {
                                         {
                                           required: true,
                                           message:
-                                            "Tolong diisi input tanggal lahir",
+                                            "Harap input Tanggal Lahir.",
                                         },
                                       ]}
                                     >
@@ -1298,41 +1380,35 @@ export default function BookingPesawat() {
                                   </div>
                                   <div className="w-full">
                                     <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
-                                      <div className="text-gray-500 text-sm">
+                                      <div className="text-gray-500 text-sm mb-2">
                                         No. Ktp
                                       </div>
                                       <Form.Item
-                                        name={`infantktp${i}`}
-                                        rules={[
-                                          {
-                                            required: true,
-                                            message:
-                                              "Tolong diisi input Ktp / Nik",
-                                          },
-                                          {
-                                            min: 16,
-                                            message:
-                                              "Nik / No.ktp harus 16 huruf.",
-                                          },
-                                          {
-                                            max: 16,
-                                            message:
-                                              "Nik / No.ktp harus 16 huruf.",
-                                          },
-                                        ]}
-                                      >
-                                        <Input
-                                          size="large"
-                                          className="mt-2"
-                                          value={e.idNumber}
-                                          onChange={handleInfantsubCatagoryChange(
-                                            i,
-                                            "idNumber"
-                                          )}
-                                          type="text"
-                                          placeholder="No. Ktp / NIK"
-                                        />
-                                      </Form.Item>
+                                          name={`infantktp${i}`}
+                                          rules={[
+                                            {
+                                              required: true,
+                                              message: "NIK tidak boleh kosong.",
+                                            },
+                                            ({ getFieldValue }) => ({
+                                              validator(_, value) {
+                                                if (!isNaN(value) && value !== null && value.toString().length === 16) {
+                                                  return Promise.resolve();
+                                                }
+                                                return Promise.reject("Panjang NIK harus 16 digit.");
+                                              },
+                                            }),
+                                          ]}
+                                        >
+                                          <InputNumber
+                                            style={{ width: '100%' }}
+                                            size="lg"
+                                            min={0}
+                                            value={e.idNumber}
+                                            onChange={handleInfantsubCatagoryChange(i, 'idNumber')}
+                                            placeholder="No. Ktp / NIK"
+                                          />
+                                        </Form.Item>
                                       <small className="block -mt-4 text-gray-400">
                                         Contoh: 16 digit nomor
                                       </small>
@@ -1380,7 +1456,7 @@ export default function BookingPesawat() {
                                 <div>({dataDetail.departure})</div>
                               </div>
                               <div className="rounded-full p-1 bg-blue-500 ">
-                                <TbArrowsLeftRight
+                                <IoArrowForwardOutline
                                   className="text-white"
                                   size={18}
                                 />

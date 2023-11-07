@@ -70,7 +70,7 @@ export default function Footer() {
                 Navigasi
               </h6>
               <p class="mb-4">
-                <a href="https://wr.rajabiller.com/index.php/login/index/noredirect" class="text-neutral-600 ">
+                <a href="https://wr.rajabiller.com/index.php/modulorder/modulTopup" class="text-neutral-600 ">
                 Tata Cara Deposit
                 </a>
               </p>

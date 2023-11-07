@@ -12,19 +12,18 @@ import { FaTrain } from "react-icons/fa";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import onClickOutside from "react-onclickoutside";
 import { makeStyles } from "@mui/styles";
-import { Button } from "antd";
+import { Button, DatePicker, message } from "antd";
 import Cookies from "js-cookie";
 import { AiOutlineSwap } from "react-icons/ai";
-import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
-import DateRangeIcon from "@mui/icons-material/DateRange"; // Import the DateRangeIcon
 import { InputGroup, InputNumber } from "rsuite";
+import dayjs from "dayjs";
 
 
 function KAI(){
 
     const useStyles = makeStyles((theme) => ({
         inputRoot: {
-            color:"#6b7280",
+            color:"black",
             "& .MuiOutlinedInput-notchedOutline": {
               borderColor: "#e5e7eb"
             },
@@ -39,6 +38,7 @@ function KAI(){
             },
             "&&& $input": {
               padding: 1,
+              color:"black"
             },
           },
           root: {
@@ -49,7 +49,7 @@ function KAI(){
                   borderRadius:10,
                   cursor: "pointer"
                 },
-                color:"#6b7280",
+                color:"black",
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: "#e5e7eb"
                 },
@@ -78,54 +78,114 @@ function KAI(){
     const i = 0;
 
     const [openBerangka, SetopenBerangka] = React.useState(false);
-    const [openTujuan, setOpenTujuan] = React.useState(false);
-    
+    const [openTujuan, setOpenTujuan] = React.useState(false); 
 
     const loadingBerangkat = openBerangka && kaiData.length === 0;
     const loadingTujuan = openTujuan && kaiData.length === 0;
-
-    let cookie = Cookies.get('v-train');
-
-    let depa = null;
-    let arri = null;
-
-    try {
-        cookie = cookie ? JSON.parse(cookie) : null;
-        depa = cookie.keberangkatan
-        arri = cookie.tujuan
-    } catch (error) {
-        cookie = null;
-        depa = null;
-        arri = null;
-    }
     
+    let coockie = Cookies.get("v-train");
+
+    let depa = { id_stasiun: "PSE", nama_stasiun: "PASAR SENEN", nama_kota: "JAKARTA", is_active: 1 };
+    let arri = { id_stasiun: "SGU", nama_stasiun: "SURABAYA GUBENG", nama_kota: "SURABAYA", is_active: 1 };
+    let dateCookie = Cookies.get("v-date") ? Cookies.get("v-date") : dayjs();
+    let adultCookie = parseInt(Cookies.get("v-adult") ? Cookies.get("v-adult") : '');
+    let infantCookie = parseInt(Cookies.get("v-infant") ? Cookies.get("v-infant") : '');
+  
     try {
-      depa = depa ? depa : null;
+      coockie = coockie ? JSON.parse(coockie) : null;
+      depa = coockie.keberangkatan;
+      arri = coockie.tujuan;
     } catch (error) {
-      depa = null;
+      coockie = null;
+      depa = { id_stasiun: "PSE", nama_stasiun: "PASAR SENEN", nama_kota: "JAKARTA", is_active: 1 };;
+      arri = { id_stasiun: "SGU", nama_stasiun: "SURABAYA GUBENG", nama_kota: "SURABAYA", is_active: 1 };
     }
-    
+  
     try {
-      arri = arri ? arri : null;
+      dateCookie = dayjs(dateCookie).isValid() ? dateCookie : null;
+  
     } catch (error) {
-      arri = null;
+      dateCookie = null;
     }
-    
+  
+    try {
+      adultCookie = !isNaN(adultCookie) ? adultCookie : null;
+  
+    } catch (error) {
+      adultCookie = null;
+    }
+  
+    try {
+      infantCookie = !isNaN(infantCookie) ? infantCookie : null;
+  
+    } catch (error) {
+      infantCookie = null;
+    }
+  
+    try {
+      depa = depa ? depa : { id_stasiun: "PSE", nama_stasiun: "PASAR SENEN", nama_kota: "JAKARTA", is_active: 1 };
+    } catch (error) {
+      depa = { id_stasiun: "PSE", nama_stasiun: "PASAR SENEN", nama_kota: "JAKARTA", is_active: 1 };
+    }
+  
+    try {
+      arri = arri ? arri : { id_stasiun: "SGU", nama_stasiun: "SURABAYA GUBENG", nama_kota: "SURABAYA", is_active: 1 };
+    } catch (error) {
+      arri = { id_stasiun: "SGU", nama_stasiun: "SURABAYA GUBENG", nama_kota: "SURABAYA", is_active: 1 };
+    }
+  
     depa = depa?.id_stasiun && depa?.nama_kota ? depa : null;
     arri = arri?.id_stasiun && arri?.nama_kota ? arri : null;
-    
+    dateCookie = dateCookie ? dayjs(dateCookie) : dayjs();
+    adultCookie = adultCookie ? adultCookie : 1;
+    infantCookie = infantCookie ? infantCookie : 0;
+
     //input
     const [keberangkatan, setKeberangkatan] = React.useState(depa);
     const [tujuan, setTujuan] = React.useState(arri);
-    const [tanggal, setTanggal] = React.useState();
+    const [tanggal, setTanggal] = React.useState(dateCookie);
     const [isLoading, setLoading] = React.useState(false);
-    const [adult, setadult] = React.useState(1);
-    const [infant, setinfant] = React.useState(0);
+    const [adult, setadult] = React.useState(adultCookie);
+    const [infant, setinfant] = React.useState(infantCookie);
 
     const [anchorEl, setAnchorEl] = React.useState('hidden');
     const handleClick = () => {
         anchorEl === 'hidden' ? setAnchorEl('grid') : setAnchorEl('hidden');
     }
+
+    const [messageApi, contextHolder] = message.useMessage();
+
+    const errorBerangkat = () => {
+      messageApi.open({
+        type: 'error',
+        content: 'Stasiun Asal tidak boleh sama dengan Stasiun Tujuan.',
+        duration: 10, // Durasi pesan 5 detik
+        top: '50%', // Posisi pesan di tengah layar
+        className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
+      });
+    };
+    
+  
+    const errorTujuan = () => {
+      messageApi.open({
+        type: 'error',
+        content: 'Stasiun Tujuan tidak boleh sama dengan Stasiun Asal.',
+        duration: 10, // Durasi pesan 5 detik
+        top: '50%', // Posisi pesan di tengah layar
+        className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
+      });
+    };
+
+    const messageCustomError = (message) => {
+      messageApi.open({
+        type: 'error',
+        content: message,
+        duration: 10, // Durasi pesan 5 detik
+        top: '50%', // Posisi pesan di tengah layar
+        className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
+      });
+    };
+  
 
     KAI.handleClickOutside = () =>{
         setAnchorEl('hidden');
@@ -287,41 +347,58 @@ function KAI(){
             e.preventDefault();
             setLoading(false);
 
-            const params = {
-                origin: keberangkatan.id_stasiun,
-                destination:tujuan.id_stasiun,
-                productCode: 'WKAI',
-                date:tanggalParse,
-                kotaBerangkat:keberangkatan.nama_kota,
-                kotaTujuan:tujuan.nama_kota,
-                stasiunBerangkat:keberangkatan.nama_stasiun,
-                stasiunTujuan:tujuan.nama_stasiun,
-                adult:adult,
-                infant:infant,
-                ubah:'cari'
+            if(keberangkatan === null && tujuan === null){
+              messageCustomError('Pilih Stasiun Asal & Stasiun Tujuan.')
             }
+            else if(keberangkatan === null){
+              messageCustomError('Pilih Stasiun Asal.')
+              
+            }else if(tujuan === null){
+              messageCustomError('Pilih Stasiun Tujuan.')
+      
+            }else{
 
-            const expirationDate = new Date();
-            expirationDate.setHours(expirationDate.getHours() + 1);
+              const params = {
+                  origin: keberangkatan.id_stasiun,
+                  destination:tujuan.id_stasiun,
+                  productCode: 'WKAI',
+                  date:tanggalParse,
+                  kotaBerangkat:keberangkatan.nama_kota,
+                  kotaTujuan:tujuan.nama_kota,
+                  stasiunBerangkat:keberangkatan.nama_stasiun,
+                  stasiunTujuan:tujuan.nama_stasiun,
+                  adult:adult,
+                  infant:infant,
+                  ubah:'cari'
+              }
 
-            const cookieOptions = {
-            expires: expirationDate,
-            };
+              const expirationDate = new Date();
+              expirationDate.setHours(expirationDate.getHours() + 1);
+  
+              const cookieOptions = {
+              expires: expirationDate,
+              };
+  
+              Cookies.set('v-train', JSON.stringify({
+                  keberangkatan,
+                  tujuan,
+              }), cookieOptions);
 
-            Cookies.set('v-train', JSON.stringify({
-                keberangkatan,
-                tujuan,
-            }), cookieOptions);
+              Cookies.set("v-date", tanggal.toString(), cookieOptions);
+              Cookies.set("v-adult", adult, cookieOptions);
+              Cookies.set("v-infant", infant, cookieOptions);
+  
+              var str = "";
+              for (var key in params) {
+                  if (str != "") {
+                      str += "&";
+                  }
+                  str += key + "=" + encodeURIComponent(params[key]);
+              } 
+              
+              window.location = `search?${str}`;  
 
-            var str = "";
-            for (var key in params) {
-                if (str != "") {
-                    str += "&";
-                }
-                str += key + "=" + encodeURIComponent(params[key]);
-            } 
-            
-            window.location = `search?${str}`;  
+            }
 
         }, 1000);
 
@@ -336,256 +413,264 @@ function KAI(){
       }
 
     return (
-        <div className="row bg-white border-t border-gray-200 w-full pr-0">
-        <div class="w-full py-4 xl:px-8 rounded-lg shadow-xs ">
-          <form className="w-full">
-            <>
-              <div className="block xl:flex justify-between">
-                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 md:mx-12 xl:mx-6 gap-4 md:gap-0">
-                <div className="w-full col col-span-1 md:col-span-2">
-                    <div className="w-full flex items-center">
-                        <FormControl
-                            className=""
-                            sx={{ m: 1, minWidth: 150, outline: "none" }}
-                        >
-                            <small className="mb-2 text-gray-500">Stasiun Asal</small>
-                            <Autocomplete
-                            classes={classes}
-                            id="asynchronous-demo"
-                            disableClearable
-                            PopperComponent={PopperMy}
-                            open={openBerangka}
-                            hiddenLabel={true}
-                            onOpen={() => {
-                                SetopenBerangka(true);
-                            }}
-                            onClose={() => {
-                                SetopenBerangka(false);
-                            }}
-                            renderTags={(value, getTagProps) => (
-                                <div style={{ width: "100%" }}>
-                                {value.map((option, index) => (
-                                    <Chip
-                                    variant="outlined"
-                                    label={option}
-                                    {...getTagProps({ index })}
-                                    />
-                                ))}
-                                </div>
-                            )}
-                            isOptionEqualToValue={(option, value) =>
-                                option.title === value.title
-                            }
-                            getOptionLabel={(option) =>
-                                option.nama_stasiun +
-                                " - " +
-                                option.nama_kota +
-                                " - " +
-                                option.id_stasiun
-                            }
-                            options={kaiData}
-                            value={keberangkatan}
-                            onChange={(event, newValue) => {
-                                setKeberangkatan(newValue);
-                            }}
-                            loading={loadingBerangkat}
-                            renderInput={(params) => (
-                                <TextField
-                                {...params}
-                                InputProps={{
-                                    ...params.InputProps,
-                                    startAdornment: (
-                                    <FaTrain className="text-gray-400" />
-                                    ),
-                                    placeholder: "Stasiun Asal",
-                                    endAdornment: (
-                                    <React.Fragment>
-                                        {loadingBerangkat ? (
-                                        <CircularProgress color="inherit" size={20} />
-                                        ) : null}
-                                        {params.InputProps.endAdornment}
-                                    </React.Fragment>
-                                    ),
-                                }}
-                                />
-                            )}
-                            />
-                        </FormControl>
-                        <div onClick={changeStatiun} className="cursor-pointer mt-4 flex justify-center items-center bg-blue-500 rounded-full p-1">
-                            <AiOutlineSwap className="text-white" size={24} />
-                        </div>
-                        <FormControl
-                            className=""
-                            sx={{ m: 1, minWidth: 145, outline: "none" }}
-                        >
-                            <small className="mb-2 text-gray-500">Stasiun Tujuan</small>
-                            <Autocomplete
-                            classes={classes}
-                            id="asynchronous-demo"
-                            disableClearable
-                            PopperComponent={PopperMy}
-                            open={openTujuan}
-                            hiddenLabel={true}
-                            onOpen={() => {
-                                setOpenTujuan(true);
-                            }}
-                            onClose={() => {
-                                setOpenTujuan(false);
-                            }}
-                            renderTags={(value, getTagProps) => (
-                                <div style={{ width: "100%" }}>
-                                {value.map((option, index) => (
-                                    <Chip
-                                    variant="outlined"
-                                    label={option}
-                                    {...getTagProps({ index })}
-                                    />
-                                ))}
-                                </div>
-                            )}
-                            isOptionEqualToValue={(option, value) =>
-                                option.title === value.title
-                            }
-                            getOptionLabel={(option) =>
-                                option.nama_stasiun +
-                                " - " +
-                                option.nama_kota +
-                                " - " +
-                                option.id_stasiun
-                            }
-                            options={kaiData}
-                            value={tujuan}
-                            onChange={(event, newValue) => {
-                                setTujuan(newValue);
-                            }}
-                            loading={loadingTujuan}
-                            renderInput={(params) => (
-                                <TextField
-                                {...params}
-                                InputProps={{
-                                    ...params.InputProps,
-                                    startAdornment: (
-                                    <FaTrain className="text-gray-400" />
-                                    ),
-                                    placeholder: "Stasiun Asal",
-                                    endAdornment: (
-                                    <React.Fragment>
-                                        {loadingTujuan ? (
-                                        <CircularProgress color="inherit" size={20} />
-                                        ) : null}
-                                        {params.InputProps.endAdornment}
-                                    </React.Fragment>
-                                    ),
-                                }}
-                                />
-                            )}
-                            />
-                        </FormControl>
-                    </div>
-                  </div>
-                  <FormControl sx={{ m: 1, minWidth: 160 }}>
-                    <small className="mb-2 text-gray-500">
-                      Tanggal Berangkat
-                    </small>
-                    <LocalizationProvider
-                      dateAdapter={AdapterDayjs}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <MobileDatePicker
-                        style={{ cursor: "pointer" }}
-                        minDate={new Date()}
-                        value={tanggal}
-                        className={classes.root}
-                        inputFormat="YYYY-MM-DD"
-                        onChange={(newValue) => {
-                          setTanggal(newValue);
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            style={{ cursor: "pointer" }}
-                            {...params}
-                            InputProps={{
-                              // Place the DateRangeIcon here
-                              endAdornment: (
-                                <DateRangeIcon className="cursor-pointer text-gray-400" />
-                              ),
-                            }}
-                          />
-                        )}
-                      />
-                    </LocalizationProvider>
-                  </FormControl>
+        <>
+          {contextHolder}
+          <div className="row bg-white border-t border-gray-200 w-full pr-0">
+          <div class="w-full py-4 xl:px-8 rounded-lg shadow-xs ">
+            <form className="w-full">
+              <>
+                <div className="block xl:flex justify-between">
+                  <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 gap-4 md:gap-8">
+                  <div className="w-full col col-span-1 md:col-span-2">
+                      <div className="w-full flex items-center">
+                          <FormControl
+                              className=""
+                              sx={{ m: 1, minWidth: 150, outline: "none" }}
+                          >
+                              <small className="mb-2 text-gray-500">Stasiun Asal</small>
+                              <Autocomplete
+                              classes={classes}
+                              id="asynchronous-demo"
+                              disableClearable
+                              PopperComponent={PopperMy}
+                              open={openBerangka}
+                              hiddenLabel={true}
+                              onOpen={() => {
+                                  SetopenBerangka(true);
+                              }}
+                              onClose={() => {
+                                  SetopenBerangka(false);
+                              }}
+                              renderTags={(value, getTagProps) => (
+                                  <div style={{ width: "100%" }}>
+                                  {value.map((option, index) => (
+                                      <Chip
+                                      variant="outlined"
+                                      label={option}
+                                      {...getTagProps({ index })}
+                                      />
+                                  ))}
+                                  </div>
+                              )}
+                              isOptionEqualToValue={(option, value) =>
+                                  option.title === value.title
+                              }
+                              getOptionLabel={(option) =>
+                                  option.nama_stasiun +
+                                  " - " +
+                                  option.nama_kota +
+                                  " - " +
+                                  option.id_stasiun
+                              }
+                              options={kaiData}
+                              value={keberangkatan}
+                              onChange={(event, newValue) => {
+                                if((newValue == tujuan) || (newValue?.id_stasiun == tujuan?.id_stasiun)){
+                                  errorBerangkat()
+                                  setKeberangkatan(keberangkatan);
+                                }else{
+                                  setKeberangkatan(newValue);
+                                }
+                              }}
+                              loading={loadingBerangkat}
+                              renderInput={(params) => (
+                                  <TextField
+                                  {...params}
+                                  InputProps={{
+                                      ...params.InputProps,
+                                      startAdornment: (
+                                      <FaTrain className="text-gray-400" />
+                                      ),
+                                      placeholder: "Stasiun Asal",
+                                      endAdornment: (
+                                      <React.Fragment>
+                                          {loadingBerangkat ? (
+                                          <CircularProgress color="inherit" size={20} />
+                                          ) : null}
+                                          {params.InputProps.endAdornment}
+                                      </React.Fragment>
+                                      ),
+                                  }}
+                                  />
+                              )}
+                              />
+                          </FormControl>
+                          <div onClick={changeStatiun} className="cursor-pointer mt-4 flex justify-center items-center bg-blue-500 rounded-full p-1">
+                              <AiOutlineSwap className="text-white" size={24} />
+                          </div>
+                          <FormControl
+                              className=""
+                              sx={{ m: 1, minWidth: 145, outline: "none" }}
+                          >
+                              <small className="mb-2 text-gray-500">Stasiun Tujuan</small>
+                              <Autocomplete
+                              classes={classes}
+                              id="asynchronous-demo"
+                              disableClearable
+                              PopperComponent={PopperMy}
+                              open={openTujuan}
+                              hiddenLabel={true}
+                              onOpen={() => {
+                                  setOpenTujuan(true);
+                              }}
+                              onClose={() => {
+                                  setOpenTujuan(false);
+                              }}
+                              renderTags={(value, getTagProps) => (
+                                  <div style={{ width: "100%" }}>
+                                  {value.map((option, index) => (
+                                      <Chip
+                                      variant="outlined"
+                                      label={option}
+                                      {...getTagProps({ index })}
+                                      />
+                                  ))}
+                                  </div>
+                              )}
+                              isOptionEqualToValue={(option, value) =>
+                                  option.title === value.title
+                              }
+                              getOptionLabel={(option) =>
+                                  option.nama_stasiun +
+                                  " - " +
+                                  option.nama_kota +
+                                  " - " +
+                                  option.id_stasiun
+                              }
+                              options={kaiData}
+                              value={tujuan}
+                              onChange={(event, newValue) => {
+                                  if((newValue == keberangkatan) || (newValue?.id_stasiun == keberangkatan?.id_stasiun)){
+                                    errorTujuan()
+                                    setTujuan(tujuan);
+                                  }else{
+                                    setTujuan(newValue);
+                                  }
 
-                  <FormControl sx={{ m: 1, minWidth: 120 }}>
-                    <small className="mb-2 text-gray-500">
-                      Total Penumpang
-                    </small>
-                    <div className="hidden md:block">
-                      <TextField
-                        readOnly
-                        onClick={handleClick}
-                        sx={{ input: { cursor: "pointer" } }}
-                        size="medium"
-                        classes={classes}
-                        id="outlined-basic"
-                        value={`${parseInt(adult) + parseInt(infant)} Penumpang`}
-                        variant="outlined"
-                      />
-                    </div>
-                      <Button className="w-full block md:hidden text-gray-500" size="large" onClick={handleClick}>
-                      {`${parseInt(adult) + parseInt(infant)} Penumpang`}
-                      </Button>
-                    <div
-                      id="basic-menu"
-                      className={`${anchorEl} absolute top-20 z-10 grid w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}
-                    >
-                      <div className="w-full md:w-48 ml-4 block md:mx-0">
-                        <div className="mt-4 w-full items-center text-gray-600">
-                          <div className="w-full items-center text-gray-600">
-                          <div className="text-sm text-center header-number mb-4">
-                            <p>Adult (≥ 3 thn)</p>
-                          </div>
-                          <InputGroup>
-                            <InputGroup.Button onClick={minusAdult}>-</InputGroup.Button>
-                            <InputNumber className={'custom-input-number'} value={adult} onChange={setadult} min={1} max={4} readOnly/>
-                            <InputGroup.Button onClick={plusAdult}>+</InputGroup.Button>
-                          </InputGroup>
-                        </div>
-                        </div>
-                        <div className="mt-4 w-full items-center text-gray-600">
-                          <div className="mt-4 w-full items-center text-gray-600">
-                          <div className="text-sm text-center header-number mb-4">
-                              <p>Infant ({`<`} 3 thn) </p>
-                          </div>
-                          <InputGroup>
-                            <InputGroup.Button onClick={minusInfant}>-</InputGroup.Button>
-                            <InputNumber className={'custom-input-number'} value={infant} onChange={setinfant} min={0} max={4} readOnly/>
-                            <InputGroup.Button onClick={plusInfant}>+</InputGroup.Button>
-                          </InputGroup>
-                        </div>
-                        </div>
+                              }}
+                              loading={loadingTujuan}
+                              renderInput={(params) => (
+                                  <TextField
+                                  {...params}
+                                  InputProps={{
+                                      ...params.InputProps,
+                                      startAdornment: (
+                                      <FaTrain className="text-gray-400" />
+                                      ),
+                                      placeholder: "Stasiun Asal",
+                                      endAdornment: (
+                                      <React.Fragment>
+                                          {loadingTujuan ? (
+                                          <CircularProgress color="inherit" size={20} />
+                                          ) : null}
+                                          {params.InputProps.endAdornment}
+                                      </React.Fragment>
+                                      ),
+                                  }}
+                                  />
+                              )}
+                              />
+                          </FormControl>
                       </div>
                     </div>
-                  </FormControl>
+                    <FormControl sx={{ m: 1, minWidth: 160 }}>
+                      <small className="mb-2 text-gray-500">
+                        Tanggal Berangkat
+                      </small>
+                      <LocalizationProvider
+                        dateAdapter={AdapterDayjs}
+                        style={{ cursor: "pointer" }}
+                      >
+                  <DatePicker
+                      style={{ cursor: 'pointer' }}
+                      className="border-gray-240 py-2"
+                      appearance="subtle"
+                      value={tanggal}
+                      inputStyle={{ color: 'red' }}
+                      format="DD/MM/YYYY"
+                      onChange={(value) => {
+                        setTanggal(value);
+                      }}
+                      size="large"
+                      disabledDate={(current) => {
+                        const currentDate = dayjs();
+                        return current && current < currentDate.startOf('day');
+                      }}
+                    />
+                      </LocalizationProvider>
+                    </FormControl>
+
+                    <FormControl sx={{ m: 1, minWidth: 120 }}>
+                      <small className="mb-2 text-gray-500">
+                        Total Penumpang
+                      </small>
+                      <div className="hidden md:block">
+                        <TextField
+                          readOnly
+                          onClick={handleClick}
+                          sx={{ input: { cursor: "pointer" } }}
+                          size="medium"
+                          classes={classes}
+                          id="outlined-basic"
+                          value={`${parseInt(adult) + parseInt(infant)} Penumpang`}
+                          variant="outlined"
+                        />
+                      </div>
+                        <Button className="w-full block md:hidden text-gray-500" size="large" onClick={handleClick}>
+                        {`${parseInt(adult) + parseInt(infant)} Penumpang`}
+                        </Button>
+                      <div
+                        id="basic-menu"
+                        className={`${anchorEl} absolute top-20 z-10 grid w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}
+                      >
+                        <div className="w-full md:w-48 ml-4 block md:mx-0">
+                          <div className="mt-4 w-full items-center text-gray-600">
+                            <div className="w-full items-center text-gray-600">
+                            <div className="text-sm text-center header-number mb-4">
+                              <p>Adult (≥ 3 thn)</p>
+                            </div>
+                            <InputGroup>
+                              <InputGroup.Button onClick={minusAdult}>-</InputGroup.Button>
+                              <InputNumber className={'custom-input-number'} value={adult} onChange={setadult} min={1} max={4} readOnly/>
+                              <InputGroup.Button onClick={plusAdult}>+</InputGroup.Button>
+                            </InputGroup>
+                          </div>
+                          </div>
+                          <div className="mt-4 w-full items-center text-gray-600">
+                            <div className="mt-4 w-full items-center text-gray-600">
+                            <div className="text-sm text-center header-number mb-4">
+                                <p>Infant ({`<`} 3 thn) </p>
+                            </div>
+                            <InputGroup>
+                              <InputGroup.Button onClick={minusInfant}>-</InputGroup.Button>
+                              <InputNumber className={'custom-input-number'} value={infant} onChange={setinfant} min={0} max={4} readOnly/>
+                              <InputGroup.Button onClick={plusInfant}>+</InputGroup.Button>
+                            </InputGroup>
+                          </div>
+                          </div>
+                        </div>
+                      </div>
+                    </FormControl>
+                  </div>
+                  <div className="w-full xl:mr-0 xl:pl-4 xl:w-2/5 flex justify-end xl:justify-start mt-8 py-0.5">
+                    <Button
+                      block
+                      size="large"
+                      key="submit"
+                      type="primary"
+                      className="bg-blue-500 font-semibold"
+                      loading={isLoading}
+                      onClick={handlerCariKai}
+                    >
+                      Cari Tiket
+                    </Button>
+                  </div>
                 </div>
-                <div className="w-full xl:mr-0 xl:pl-4 xl:w-2/5 flex justify-end xl:justify-start mt-8 py-0.5">
-                  <Button
-                    block
-                    size="large"
-                    key="submit"
-                    type="primary"
-                    className="bg-blue-500 font-semibold"
-                    loading={isLoading}
-                    onClick={handlerCariKai}
-                  >
-                    Cari Tiket
-                  </Button>
-                </div>
-              </div>
-            </>
-          </form>
-        </div>
-      </div>
+              </>
+            </form>
+          </div>
+          </div>
+        </>
     )
 }
 

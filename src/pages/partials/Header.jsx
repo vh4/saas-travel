@@ -214,6 +214,8 @@ export default function Header() {
   const handlerLogin = async (e) => {
     e.preventDefault();
 
+    await form.validateFields();
+
     try {
       setLoading(true);
       onReset();
@@ -256,6 +258,7 @@ export default function Header() {
     : null;
   const nd = x ? (x[0] ? x[0] : "") : "";
   const nb = x ? (x[1] ? x[1] : "") : "";
+  
 
   return (
     <nav className="bg-white px-2 sm:px-4 py-2  block sticky top-0 w-full z-50 left-0 border-b border-gray-200 ">
@@ -316,19 +319,19 @@ export default function Header() {
                   </a>
                 </div>
               ) : (
-                <div className="hidden relative group space-x-2 text-gray-500 md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 py-2.5 md:inline-flex group-hover:block items-end ml-2 mb-2">
+                <div className="hidden relative group space-x-2 text-gray-500 md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 md:inline-flex group-hover:block items-end ml-2 mb-2">
                   {user !== null && user !== undefined ? (
                     <>
                       {user.namaPemilik !== undefined ? (
                         <>
-                          <p className="text-gray-500 block">
-                            {nd} {nb}
-                          </p>
+                          <div className="flex space-x-2 items-center  mt-2">
+                          <div className="text-gray-500">
+                              <div className="font-bold"><small>{nd}</small> <small>{nb}</small></div>
+                              <small>Sisa saldo Rp.{toRupiah(user.balance)}</small>
+                          </div>
                           <CiSettings size={20} />
+                          </div>
                           {/* <small className="absolute group-hover top-8 left-4 text-slate-500">Sisa saldo {sisaSaldo(user.balance)}</small> */}
-                          <small className="absolute -left-0 group-hover top-7 text-slate-500">
-                            Sisa saldo Rp.{toRupiah(user.balance)}
-                          </small>
                           <ul class="transition-opacity duration-500 invisible group-hover:visible absolute top-0 mt-8 w-48 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 ">
                             <Link to="/profile/view">
                               <li class="hover:bg-gray-200 py-2 px-4 w-full rounded-t-lg border-b border-gray-200 ">
@@ -429,7 +432,7 @@ export default function Header() {
       {/* untuk toggle sidebar di mobile dan desktop */}
 
       <Modal
-        title="Login Users"
+        title="Login User"
         visible={showModal}
         onOk={handleClose}
         onCancel={handleClose}
@@ -448,23 +451,65 @@ export default function Header() {
           </Button>,
         ]}
       >
-        <p>Masukan username dan password untuk login.</p>
+        <p>Masukkan Username & Password untuk Login</p>
         <Form className="mt-8" form={form} onFinish={handlerLogin}>
-          <Form.Item className="mt-4" label="username" name="username">
+          <Form.Item 
+          rules={[
+            {
+              required: true,
+              message:
+                "Username harus diisi.",
+            },
+            {
+              max: 15,
+              message:
+                "Username maksimal 15 karakter.",
+            },
+            {      
+              pattern: /^[a-zA-Z0-9]*$/, 
+              message: "Username hanya boleh berisi huruf dan angka.",
+            },
+          ]}
+            className="mt-4" label="Username" name="uid">
             <Input
-              onChange={(e) => setuid(e.target.value)}
-              value={uid} // Pastikan value sesuai dengan nilai state uid
-              required
+                 onChange={(e) => {
+                  const value = e.target.value;
+                  setuid(value);
+                }}
+                value={uid}
             />
           </Form.Item>
-          <Form.Item label="password" name="pin">
+          <Form.Item 
+            rules={[
+              {
+                required: true,
+                message:
+                  "Password harus diisi.",
+              },
+              {
+                max: 15,
+                message:
+                  "Password maksimal 15 karakter.",
+              },
+              
+            ]}
+          
+          label="Password" name="pin">
             <Input.Password
               onChange={(e) => setpin(e.target.value)}
               value={pin} // Pastikan value sesuai dengan nilai state pin
               required
             />
           </Form.Item>
-          <Form.Item label="recaptcha">
+          <Form.Item label="Recaptcha" name="recaptcha"
+            rules={[
+              {
+                required: true,
+                message:
+                  "Recaptcha harus diisi.",
+              },
+            ]}
+          >
             <ReCAPTCHA
               ref={captchaRef} // Tambahkan ref ke reCAPTCHA
               onChange={onChange}

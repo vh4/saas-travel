@@ -1,5 +1,5 @@
 import Skeleton from 'react-loading-skeleton'
-import { TbArrowsLeftRight } from "react-icons/tb";
+import { IoArrowForwardOutline } from 'react-icons/io5';
 
 const Body = () => {
 	return(
@@ -76,7 +76,7 @@ const Sidebar = () => {
 			</div>
 		</div>
 		<div className="rounded-full p-2 bg-blue-500 text-white">
-			<TbArrowsLeftRight />
+			<IoArrowForwardOutline />
 		</div>
 		<div className="text-xs  text-slate-600">
 			<div>
@@ -161,7 +161,7 @@ const SidebarMobile = () => {
 			</div>
 		</div>
 		<div className="rounded-full p-2 bg-blue-500 text-white">
-			<TbArrowsLeftRight />
+			<IoArrowForwardOutline />
 		</div>
 		<div className="text-xs  text-slate-600">
 			<div>

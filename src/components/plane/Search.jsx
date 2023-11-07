@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { VscArrowSwap } from "react-icons/vsc";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import { IoArrowBackOutline } from "react-icons/io5";
+import { IoArrowBackOutline, IoArrowForwardOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import Timeline from "@mui/lab/Timeline";
@@ -479,7 +478,7 @@ export default function Search() {
                 {departureName} ({departure})
               </small>
               <div className="bg-blue-500 p-1 rounded-full">
-                <VscArrowSwap
+                <IoArrowForwardOutline
                   className="font-bold text-xs text-white"
                   size={16}
                 />
@@ -645,10 +644,10 @@ export default function Search() {
                 ) : null}
               </div>
               <div>
-                <div className="flex space-x-2 items-center p-4 px-4 md:px-4 mr-0 xl:mr-16 text-gray-500 rounded-md text-xs font-bold">
+                {/* <div className="flex space-x-2 items-center p-4 px-4 md:px-4 mr-0 xl:mr-16 text-gray-500 rounded-md text-xs font-bold">
                   <div>URUTKAN</div>
                   <MdOutlineKeyboardArrowDown />
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -709,7 +708,7 @@ export default function Search() {
                             <div className="flex">
                               <div className="">
                                 <h1 className="mt-4 xl:mt-0 text-sm font-medium">
-                                  {e.detailTitle[0].depart}
+                                  {e.detailTitle[0].depart} <span className="font-semibold text-xs text-blue-500">({e.classes[0][0].departureTimeZoneText})</span>
                                 </h1>
                                 <small>{departure}</small>
                               </div>
@@ -717,7 +716,7 @@ export default function Search() {
                             <HiOutlineArrowNarrowRight size={24} />
                             <div>
                               <h1 className="text-sm font-medium">
-                                {e.detailTitle[0].arrival}
+                                {e.detailTitle[0].arrival} <span className="font-semibold text-xs text-blue-500">({e.classes[0][0].arrivalTimeZoneText})</span>
                               </h1>
                               <small>{arrival}</small>
                             </div>
@@ -736,7 +735,7 @@ export default function Search() {
                                 Rp.{toRupiah(e.classes[0][0].price)}
                               </h1>
                               <small className="text-red-500">
-                                {e.classes[0][0].availability} set(s) left
+                                {e.classes[0][0].availability} seat(s) left
                               </small>
                             </div>
                             <div className="flex justify-center col-span-1 md:col-span-2">
@@ -803,6 +802,7 @@ export default function Search() {
 
                         {detailTiket == `open-${index}` ? (
                           <>
+                           {console.log(e.classes)}
                             {e.isTransit === true ? (
                               e.classes.map((x, i) => (
                                 <div className="hidden xl:flex xl:items-center xl:space-x-16 xl:mt-6 border-t">
@@ -832,7 +832,7 @@ export default function Search() {
                                     </div>
                                     <div className="">
                                       <div className="text-sm font-bold">
-                                        {x.arrivalTime}
+                                        {x[0].arrivalTime}
                                       </div>
                                       <div className="text-xs">
                                         {x[0].arrivalDate}
@@ -1234,8 +1234,15 @@ export default function Search() {
                                     Rp.{toRupiah(e.classes[0][0].price)}
                                   </h1>
                                   <small className="text-red-500">
-                                    {e.classes[0][0].availability} set(s)
+                                    {e.classes[0][0].availability} seat(s)
                                   </small>
+                                  <div>
+                                  <small>
+                                      {e.isTransit === true
+                                        ? `${e.classes.length - 1}x Transit`
+                                        : "Langsung"}
+                                  </small>
+                                  </div>
                                 </div>
                               </div>
                               <div className="flex justify-start">
@@ -1249,11 +1256,8 @@ export default function Search() {
                                   <div className="w-full mt-12 px-4 border-b-2"></div>
                                   <div className="text-xs">
                                     <div className="mt-10  xl:mt-0 text-gray-400">
-                                      {e.detailTitle[0].durationDetail}
+                                      {e.duration}                  
                                     </div>
-                                    <small className="text-gray-400">
-                                      {e.isTransit}
-                                    </small>
                                   </div>
                                   <div className="w-full mt-12 px-4 border-b-2"></div>
                                   <div>

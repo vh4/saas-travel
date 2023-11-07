@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { VscArrowSwap } from "react-icons/vsc";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import { IoArrowBackOutline } from "react-icons/io5";
+import { IoArrowBackOutline, IoArrowForwardOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
@@ -331,7 +330,7 @@ export default function Search() {
                   {stasiunBerangkat}, {kotaBerangkat}
                 </small>
                 <div className="bg-blue-500 p-1 rounded-full">
-                  <VscArrowSwap
+                  <IoArrowForwardOutline
                     className="font-bold text-xs text-white"
                     size={16}
                   />
@@ -534,10 +533,10 @@ export default function Search() {
                 ) : null}
               </div>
               <div>
-                <div className="flex space-x-2 items-center p-4 px-4 md:px-4 mr-0 xl:mr-16 text-gray-500 rounded-md text-xs font-bold">
+                {/* <div className="flex space-x-2 items-center p-4 px-4 md:px-4 mr-0 xl:mr-16 text-gray-500 rounded-md text-xs font-bold">
                   <div>URUTKAN</div>
                   <MdOutlineKeyboardArrowDown />
-                </div>
+                </div> */}
               </div>
             </div>
             <div></div>
@@ -555,7 +554,7 @@ export default function Search() {
                   </Box>
                 </div>
               ))
-            ) : notFound !== true ? (
+            ) : notFound !== true && filteredData.length !== 0 ? (
               <div className="row mb-24 w-full p-2 pr-0 xl:pr-16">
                 {filteredData.map(
                   (

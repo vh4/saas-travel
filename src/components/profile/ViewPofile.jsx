@@ -39,7 +39,6 @@ export default function EditProfile(){
             
         } catch (error) {
             setErrPage(true);
-            console.log(error);
         }
 
     }

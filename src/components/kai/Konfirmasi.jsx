@@ -22,6 +22,20 @@ import KonfirmasiLoading from "../components/trainskeleton/konfirmasi";
 import {Typography } from 'antd';
 
 const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCount, setSelectedCount, setgerbongsamawajib, gerbongsamawajib,  selectedCheckboxes, setSelectedCheckboxes}) => {
+  
+const groupColumnCounts = {};
+const rowCount = Math.max(...seats.map((seat) => seat.row));
+
+seats.forEach((seat) => {
+  const groupKey = `${seat.groupColumn}-${seat.row}`;
+  if (!groupColumnCounts[groupKey]) {
+    groupColumnCounts[groupKey] = 0;
+  }
+  if (seat.isFilled === 0) {
+    groupColumnCounts[groupKey]++;
+  }
+});
+
   function limitFunction() {
     var x = 0;
     changeState[0].map((e, i) => {
@@ -126,8 +140,19 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCou
   }, [limit, selectedCount, selectedCheckboxes]);
 
   return (
-    <div className="flex space-x-2">
-      <div className="grid md:px-20 grid-rows-10 grid-cols-5">
+    <div className="flex space-x-0 md:space-x-2 justify-center">
+      <div className="">
+      {Array.from({ length: rowCount }, (_, index) => (
+        <div className="block py-2 pl-0 md:pl-4">
+          <div class="select-none w-4 h-10 font-bold rounded-lg">
+          <div key={index} class="py-2 text-center text-black">
+            {index + 1}.
+          </div>
+        </div>
+        </div>
+        ))}
+      </div>
+      <div className="grid grid-rows-10 grid-cols-4 md:grid-cols-5">
         {seats.map((seat, i) => {
           const { row, column, class: seatClass, isFilled } = seat;
           return (
@@ -137,12 +162,12 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCou
                   key={`${row}-${column}`}
                   className={`
                               seat ${column}80
-                              ${row > 2 ? "mt-2" : ""}
+                              ${row > 2 ? "" : ""}
                             `}
                 >
                   {isFilled === 0 ? (
                     <label
-                      class={`block py-2 pl-2  items-center cursor-pointer`}
+                      class={`block py-2 pl-2 items-center cursor-pointer`}
                     >
                       <input
                         type="checkbox"
@@ -175,7 +200,7 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCou
                   key={`${row}-${column}`}
                   className={`
                               seat ${column}106
-                              ${row > 2 ? "mt-2" : ""}
+                              ${row > 2 ? "" : ""}
                             `}
                 >
                   {isFilled === 0 ? (
@@ -201,7 +226,7 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCou
                       class={`select-none block py-2 pl-2 items-center cursor-pointer`}
                     >
                       <div class="w-10 text-white-500 h-10 bg-gray-500 peer-focus:outline-none rounded-lg">
-                        <div class="text-center py-2 px-3.5">X</div>
+                        <div class="text-center py-2.5 px-3.5">X</div>
                       </div>
                     </label>
                   )}
