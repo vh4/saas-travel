@@ -359,7 +359,7 @@ export default function Konfirmasi() {
           });
 
           setChangeSet([initialChanges]);
-          setchangeStateKetikaGagalTidakUpdate([initialChanges])
+          setchangeStateKetikaGagalTidakUpdate(JSON.stringify([initialChanges]))
           setTotalAdult(passengers.adults.length);
           //   setTotalChild(passengers.children ? passengers.children.length : 0);
           setTotalInfant(passengers.infants.length);
@@ -412,8 +412,9 @@ export default function Konfirmasi() {
 
   async function handlerPilihKursi(e) {
     e.preventDefault();
+    setDataSeats([]); //untuk reset data.
+    
     setOpen(true);
-
     const response = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/train/get_seat_layout`,
       {
@@ -433,6 +434,8 @@ export default function Konfirmasi() {
         setDataSeats(response.data);
       }
     }
+
+    
   }
 
   const handlerKonfirmasi = (e) => {
@@ -481,7 +484,7 @@ export default function Konfirmasi() {
       delete item.type;
     });
   
-    let hasilBookingData = hasilBooking;
+    let hasilBookingData = {...hasilBooking};
     setSelectedCount(0);
   
     for (var i = 0; i < changeStateFix[0].length; i++) {
@@ -498,10 +501,11 @@ export default function Konfirmasi() {
       gantiKursiFix
     );
 
-    setOpen(false);
-    hasilBookingData['transactionId'] = response.data.transactionId;
-  
+    const idtrx = response.data.transactionId;
+
     if (response.data.rc === "00") {
+      
+      hasilBookingData['transactionId'] = idtrx;
 
       //passenger nya harusmya di update yang baru change seats.
       const response = await axios.put(
@@ -523,14 +527,17 @@ export default function Konfirmasi() {
         failedNotification(response.data.rd);
       }
     } else if (response.data.rc === "55") {
-      setChangeSet(changeStateKetikaGagalTidakUpdate);
+      setChangeSet(JSON.parse(changeStateKetikaGagalTidakUpdate));
       setisLoadingPindahKursi(false);
       failedNotification(response.data.rd);
     } else {
-      setChangeSet(changeStateKetikaGagalTidakUpdate);
+      setChangeSet(JSON.parse(changeStateKetikaGagalTidakUpdate));
       setisLoadingPindahKursi(false);
       failedNotification(response.data.rd);
     }
+
+    setOpen(false);
+    await handlerPilihKursi();
   };
 
   const [backdrop, setBackdrop] = React.useState('static');
