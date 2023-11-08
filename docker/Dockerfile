@@ -7,7 +7,8 @@ COPY . /app
 WORKDIR /app
 
 RUN npm i --force
-RUN npx update-browserslist-db@latest
+RUN npm install
+RUN npm install update-browserslist-db@latest
 RUN npm run build
 
 FROM webdevops/nginx:alpine
