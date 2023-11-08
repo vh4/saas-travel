@@ -88,7 +88,7 @@ function KAI() {
   const errorBerangkat = () => {
     messageApi.open({
       type: 'error',
-      content: 'Stasiun Asal tidak boleh sama dengan Stasiun Tujuan.',
+      content: 'Kota Asal tidak boleh sama dengan Kota Tujuan.',
       duration: 10, // Durasi pesan 5 detik
       top: '50%', // Posisi pesan di tengah layar
       className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
@@ -99,7 +99,7 @@ function KAI() {
   const errorTujuan = () => {
     messageApi.open({
       type: 'error',
-      content: 'Stasiun Tujuan tidak boleh sama dengan Stasiun Asal.',
+      content: 'Kota Tujuan tidak boleh sama dengan Kota Asal.',
       duration: 10, // Durasi pesan 5 detik
       top: '50%', // Posisi pesan di tengah layar
       className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
@@ -364,13 +364,13 @@ function KAI() {
       setLoading(false);
 
       if(keberangkatan === null && tujuan === null){
-        messageCustomError('Pilih Stasiun Asal & Stasiun Tujuan.')
+        messageCustomError('Pilih Kota Asal & Kota Tujuan.')
       }
       else if(keberangkatan === null){
-        messageCustomError('Pilih Stasiun Asal.')
+        messageCustomError('Pilih Kota Asal.')
         
       }else if(tujuan === null){
-        messageCustomError('Pilih Stasiun Tujuan.')
+        messageCustomError('Pilih Kota Tujuan.')
 
       }else{
 
@@ -432,7 +432,7 @@ function KAI() {
                             className=""
                             sx={{ m: 1, minWidth: 145, outline: "none" }}
                         >
-                            <small className="mb-2 text-gray-500">Stasiun Asal</small>
+                            <small className="mb-2 text-gray-500">Kota Asal</small>
                             <Autocomplete
                             classes={classes}
                             id="asynchronous-demo"
@@ -486,7 +486,7 @@ function KAI() {
                                     startAdornment: (
                                     <FaTrain className="text-gray-400" />
                                     ),
-                                    placeholder: "Stasiun Asal",
+                                    placeholder: "Kota Asal",
                                     endAdornment: (
                                     <React.Fragment>
                                         {loadingBerangkat ? (
@@ -507,7 +507,7 @@ function KAI() {
                             className=""
                             sx={{ m: 1, minWidth: 145, outline: "none" }}
                         >
-                            <small className="mb-2 text-gray-500">Stasiun Tujuan</small>
+                            <small className="mb-2 text-gray-500">Kota Tujuan</small>
                             <Autocomplete
                             classes={classes}
                             id="asynchronous-demo"
@@ -561,7 +561,7 @@ function KAI() {
                                     startAdornment: (
                                     <FaTrain className="text-gray-400" />
                                     ),
-                                    placeholder: "Stasiun Asal",
+                                    placeholder: "Kota Asal",
                                     endAdornment: (
                                     <React.Fragment>
                                         {loadingTujuan ? (

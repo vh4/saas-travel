@@ -244,7 +244,7 @@ export default function BookingPelni() {
 
     pria[0].forEach((x) => {
       const passengers = {
-        name: x.nama_depan + " " + x.nama_belakang,
+        name: x.nama_lengkap,
         birthDate: x.birthdate,
         gender: x.gender,
       };
@@ -261,7 +261,7 @@ export default function BookingPelni() {
 
     wanita[0].forEach((x) => {
       const passengers = {
-        name: x.nama_depan + " " + x.nama_belakang,
+        name: x.nama_lengkap,
         birthDate: x.birthdate,
         gender: x.gender,
       };
@@ -374,19 +374,17 @@ export default function BookingPelni() {
 
   const disabledDate = (current, e, i) => {
     const twoYearsAgo = dayjs().subtract(2, "year");
-    const endOfMonth = twoYearsAgo.endOf("month");
-    const endOfDays = endOfMonth.subtract(1, "day");
+    // const endOfMonth = twoYearsAgo.endOf("month");
+    const endOfDays = twoYearsAgo.subtract(2, "day");
 
-    const currentDate = dayjs().subtract(1, "day");
+    const currentDate = dayjs();
 
     return current && (current < endOfDays || current > currentDate);
   };
 
   const disabledDateAdult = (current) => {
     const TenYearsAgo = dayjs().subtract(2, "year");
-
-    const endOfMonth = TenYearsAgo.endOf("month");
-    const endOfDays = endOfMonth.subtract(1, "day");
+    const endOfDays = TenYearsAgo.subtract(2, "day");
 
     return current && current > endOfDays;
   };
@@ -717,91 +715,47 @@ export default function BookingPelni() {
                                     />
                                   </FormControl>
                                 </div>
-                                <div className="w-full grid grid-cols-2 gap-2">
+                                <div className="w-full grid grid-cols-1 mt-4">
                                   <div className="w-full">
                                     <div className="text-gray-500 text-sm">
-                                      Nama Depan
+                                      Nama Lengkap
                                     </div>
                                     <Form.Item
-                                      name={`namadepanPria${i}`}
+                                      name={`namalengkapPria${i}`}
                                       rules={[
                                         {
                                           required: true,
                                           message:
-                                            "Nama Depan tidak boleh kosong.",
+                                            "Nama Lengkap tidak boleh kosong.",
                                         },
                                         {
-                                          min: 3,
+                                          min: 5,
                                           message:
-                                            "Nama Depan minimal 3 karakter.",
+                                            "Nama Lengkap minimal 5 karakter.",
                                         },
                                         {
-                                          max: 25,
+                                          max: 50,
                                           message:
-                                            "Nama Depan maksimal 25 karakter.",
+                                            "Nama Lengkap maksimal 50 karakter.",
                                         },
                                         {
                                           pattern: /^[A-Za-z\s]+$/,
-                                          message: 'Nama Depan hanya boleh terdiri dari huruf alfabet.',
+                                          message: 'Nama Lengkap hanya boleh terdiri dari huruf alfabet.',
                                         },
                                       ]}
                                     >
                                       <Input
                                         size="large"
                                         className="mt-2"
-                                        value={e.nama_depan}
+                                        value={e.nama_lengkap}
                                         onChange={handleUsiasubCatagoryChange(
                                           e,
                                           i,
-                                          "nama_depan",
+                                          "nama_lengkap",
                                           "pria"
                                         )}
                                         type="text"
-                                        placeholder="Nama Depan"
-                                        id="default-input"
-                                      />
-                                    </Form.Item>
-                                  </div>
-                                  <div className="w-full">
-                                    <div className="text-gray-500 text-sm">
-                                      Nama Belakang
-                                    </div>
-                                    <Form.Item
-                                      name={`namabelakangPria${i}`}
-                                      rules={[
-                                        {
-                                          required: true,
-                                          message:
-                                            "Nama Belakang tidak boleh kosong.",
-                                        },
-                                        {
-                                          min: 3,
-                                          message:
-                                            "Nama Belakang minimal 3 karakter.",
-                                        },
-                                        {
-                                          max: 25,
-                                          message:
-                                            "Nama Belakang maksimal 25 karakter.",
-                                        },
-                                        {
-                                          pattern: /^[A-Za-z\s]+$/,
-                                          message: 'Nama Belakang hanya boleh terdiri dari huruf alfabet.',
-                                        },
-                                      ]}
-                                    >
-                                      <Input
-                                        size="large"
-                                        className="mt-2"
-                                        value={e.nama_belakang}
-                                        onChange={handleUsiasubCatagoryChange(
-                                          e,
-                                          i,
-                                          "nama_belakang",
-                                          "pria"
-                                        )}
-                                        type="text"
-                                        placeholder="Nama Belakang"
+                                        placeholder="Nama Lengkap"
                                         id="default-input"
                                       />
                                     </Form.Item>
@@ -810,7 +764,7 @@ export default function BookingPelni() {
                               </div>
                             </div>
                           </div>
-                          <div className="mb-8 mt-0 xl:mt-4">
+                          <div className="mb-8 mt-0">
                             <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
                               {/* mobile & desktop NIK*/}
                               <div className="w-full px-4 xl:px-0">
@@ -971,91 +925,47 @@ export default function BookingPelni() {
                                     />
                                   </FormControl>
                                 </div>
-                                <div className="w-full grid grid-cols-2 gap-2">
+                                <div className="w-full grid grid-cols-1 mt-4">
                                   <div className="w-full">
                                     <div className="text-gray-500 text-sm">
-                                      Nama Depan
+                                      Nama Lengkap
                                     </div>
                                     <Form.Item
-                                      name={`namadepanWanita${i}`}
+                                      name={`namalengkapWanita${i}`}
                                       rules={[
                                         {
                                           required: true,
                                           message:
-                                            "Nama Depan tidak boleh kosong.",
+                                            "Nama Lengkap tidak boleh kosong.",
                                         },
                                         {
-                                          min: 3,
+                                          min: 5,
                                           message:
-                                            "Nama Depan minimal 3 karakter.",
+                                            "Nama Lengkap minimal 5 karakter.",
                                         },
                                         {
-                                          max: 25,
+                                          max: 50,
                                           message:
-                                            "Nama Depan maksimal 25 karakter.",
+                                            "Nama Lengkap maksimal 50 karakter.",
                                         },
                                         {
                                           pattern: /^[A-Za-z\s]+$/,
-                                          message: 'Nama Depan hanya boleh terdiri dari huruf alfabet.',
+                                          message: 'Nama Lengkap hanya boleh terdiri dari huruf alfabet.',
                                         },
                                       ]}
                                     >
                                       <Input
                                         size="large"
                                         className="mt-2"
-                                        value={e.nama_depan}
+                                        value={e.nama_lengkap}
                                         onChange={handleUsiasubCatagoryChange(
                                           e,
                                           i,
-                                          "nama_depan",
+                                          "nama_lengkap",
                                           "wanita"
                                         )}
                                         type="text"
-                                        placeholder="Nama Depan"
-                                        id="default-input"
-                                      />
-                                    </Form.Item>
-                                  </div>
-                                  <div className="w-full">
-                                    <div className="text-gray-500 text-sm">
-                                      Nama Belakang
-                                    </div>
-                                    <Form.Item
-                                      name={`namabelakangWanita${i}`}
-                                      rules={[
-                                        {
-                                          required: true,
-                                          message:
-                                            "Nama Belakang tidak boleh kosong.",
-                                        },
-                                        {
-                                          min: 3,
-                                          message:
-                                            "Nama Belakang minimal 3 karakter.",
-                                        },
-                                        {
-                                          max: 25,
-                                          message:
-                                            "Nama Belakang maksimal 25 karakter.",
-                                        },
-                                        {
-                                          pattern: /^[A-Za-z\s]+$/,
-                                          message: 'Nama Belakang hanya boleh terdiri dari huruf alfabet.',
-                                        },
-                                      ]}
-                                    >
-                                      <Input
-                                        size="large"
-                                        className="mt-2"
-                                        value={e.nama_belakang}
-                                        onChange={handleUsiasubCatagoryChange(
-                                          e,
-                                          i,
-                                          "nama_belakang",
-                                          "wanita"
-                                        )}
-                                        type="text"
-                                        placeholder="Nama Belakang"
+                                        placeholder="Nama Lengkap"
                                         id="default-input"
                                       />
                                     </Form.Item>
@@ -1064,7 +974,7 @@ export default function BookingPelni() {
                               </div>
                             </div>
                           </div>
-                          <div className="mb-8 mt-0 xl:mt-4">
+                          <div className="mb-8 mt-0">
                             <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
                               {/* mobile & desktop NIK*/}
                               <div className="w-full px-4 xl:px-0">

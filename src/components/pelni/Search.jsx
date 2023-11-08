@@ -354,6 +354,7 @@ export default function Search() {
                 ))
               ) : notFound !== true && dataSearch.length !== 0 ? (
                 <div className="row mb-24 w-full p-2 pr-0 xl:pr-16">
+                  {/* untuk sorting yang  availbility nya tidak habis. */}
                   {dataSearch.map(
                     (
                       e //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
@@ -361,160 +362,363 @@ export default function Search() {
                       <>
                         {e.fares.map((z, i) => (
                           <>
-                            <div
-                              class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${
-                                e.fares[i]["M_available"] == "0" &&
-                                e.fares[i]["F_available"] == "0"
-                                  ? "bg-gray-200"
-                                  : "bg-white"
-                              } border border-gray-200 rounded-lg shadow-sm  hover:border transition-transform transform hover:scale-105`}
-                            >
-                              {/* desktop cari */}
-                              <div className="hidden xl:block w-full text-gray-700 ">
-                                <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-8">
-                                  <div className="col-span-1 xl:col-span-2">
-                                    <h1 className="text-sm font-bold">
-                                      {e.SHIP_NAME}{" "}
-                                    </h1>
-                                    <small>
-                                      Class {e.fares[i].CLASS}{" "}
-                                      Subclass ({e.fares[i].SUBCLASS})
-                                    </small>
-                                  </div>
-                                  <div className="flex">
-                                    <div className="">
-                                      <h1 className="mt-4 xl:mt-0 text-sm font-bold">{`${e.DEP_TIME.slice(
+                          {
+                            e.fares[i]["M_available"] != "0" ? (
+                            <>
+                              <div
+                                class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${
+                                  e.fares[i]["M_available"] == "0" &&
+                                  e.fares[i]["F_available"] == "0"
+                                    ? "bg-gray-200"
+                                    : "bg-white"
+                                } border border-gray-200 rounded-lg shadow-sm  hover:border transition-transform transform hover:scale-105`}
+                              >
+                                {/* desktop cari */}
+                                <div className="hidden xl:block w-full text-gray-700 ">
+                                  <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-8">
+                                    <div className="col-span-1 xl:col-span-2">
+                                      <h1 className="text-sm font-bold">
+                                        {e.SHIP_NAME}{" "}
+                                      </h1>
+                                      <div>
+                                      <small>
+                                        Class {e.fares[i].CLASS}{" "}
+                                        Subclass ({e.fares[i].SUBCLASS})
+                                      </small>
+                                      </div>
+                                      <div>
+                                      <small>
+                                        Ship No. {e.SHIP_NO}
+                                      </small>
+                                      </div>
+                                    </div>
+                                    <div className="flex">
+                                      <div className="">
+                                        <h1 className="mt-4 xl:mt-0 text-sm font-bold">{`${e.DEP_TIME.slice(
+                                          0,
+                                          2
+                                        )}:${e.DEP_TIME.slice(2)}`}</h1>
+                                        <small>{originName}</small>
+                                      </div>
+                                    </div>
+                                    <HiOutlineArrowNarrowRight size={24} />
+                                    <div>
+                                      <h1 className="text-sm font-bold">{`${e.ARV_TIME.slice(
                                         0,
                                         2
-                                      )}:${e.DEP_TIME.slice(2)}`}</h1>
-                                      <small>{originName}</small>
+                                      )}:${e.ARV_TIME.slice(2)}`}</h1>
+                                      <small>{destinationName}</small>
                                     </div>
-                                  </div>
-                                  <HiOutlineArrowNarrowRight size={24} />
-                                  <div>
-                                    <h1 className="text-sm font-bold">{`${e.ARV_TIME.slice(
-                                      0,
-                                      2
-                                    )}:${e.ARV_TIME.slice(2)}`}</h1>
-                                    <small>{destinationName}</small>
-                                  </div>
-                                  <div>
-                                    <h1 className="mt-4 xl:mt-0 text-sm font-bold">
-                                      {duration(
-                                        e.DEP_DATE,
-                                        e.ARV_DATE,
-                                        e.DEP_TIME,
-                                        e.ARV_TIME
+                                    <div>
+                                      <h1 className="mt-4 xl:mt-0 text-sm font-bold">
+                                        {duration(
+                                          e.DEP_DATE,
+                                          e.ARV_DATE,
+                                          e.DEP_TIME,
+                                          e.ARV_TIME
+                                        )}
+                                      </h1>
+                                      <small>Langsung</small>
+                                    </div>
+                                    <div className="">
+                                      <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">
+                                        Rp.
+                                        {toRupiah(e.fares[i].FARE_DETAIL.A.TOTAL)}
+                                      </h1>
+                                      <small className="text-red-500">
+                                        Infant Rp.
+                                        {toRupiah(e.fares[i].FARE_DETAIL.I.TOTAL)}
+                                      </small>
+                                    </div>
+                                    <div>
+                                      {e.fares[i]["M_available"] == "0" &&
+                                      e.fares[i]["F_available"] == "0" ? (
+                                        <></>
+                                      ) : (
+                                        <>
+                                          <button
+                                            onClick={async () =>
+                                              handleSubmit(e, i)
+                                            }
+                                            type="button"
+                                            class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2"
+                                          >
+                                            <div className="text-white font-bold">
+                                              PILIH
+                                            </div>
+                                          </button>
+                                        </>
                                       )}
-                                    </h1>
-                                    <small>Langsung</small>
-                                  </div>
-                                  <div className="">
-                                    <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">
-                                      Rp.
-                                      {toRupiah(e.fares[i].FARE_DETAIL.A.TOTAL)}
-                                    </h1>
-                                    <small className="text-red-500">
-                                      Infant Rp.
-                                      {toRupiah(e.fares[i].FARE_DETAIL.I.TOTAL)}
-                                    </small>
-                                  </div>
-                                  <div>
-                                    {e.fares[i]["M_available"] == "0" &&
-                                    e.fares[i]["F_available"] == "0" ? (
-                                      <></>
-                                    ) : (
-                                      <>
-                                        <button
-                                          onClick={async () =>
-                                            handleSubmit(e, i)
-                                          }
-                                          type="button"
-                                          class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2"
-                                        >
-                                          <div className="text-white font-bold">
-                                            PILIH
-                                          </div>
-                                        </button>
-                                      </>
-                                    )}
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                              <div>
-                                {/* mobile cari */}
-                                <div
-                                  onClick={async () => e.fares[i]["M_available"] == "0" &&
-                                  e.fares[i]["F_available"] == "0" ? "" : handleSubmit(e, i)}
-                                  className="cursor-pointer block xl:hidden w-full text-gray-700"
-                                >
-                                  <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
-                                    <div className="flex justify-between">
-                                      <div className="col-span-1 xl:col-span-2">
-                                        <h1 className="text-xs font-bold">
-                                          {e.SHIP_NAME}
-                                        </h1>
-                                        <small>
-                                          Class {e.fares[i].CLASS}{" "}
-                                          Subclass ({e.fares[i].SUBCLASS})
-                                        </small>
-                                      </div>
-                                      <div className="text-right">
-                                        <h1 className="text-xs font-bold text-blue-500">
-                                          Rp.
-                                          {toRupiah(
-                                            e.fares[0].FARE_DETAIL.A.TOTAL
-                                          )}
-                                        </h1>
-                                        <small className="text-red-500">
-                                          Infant Rp.
-                                          {toRupiah(
-                                            e.fares[0].FARE_DETAIL.I.TOTAL
-                                          )}
-                                        </small>
-                                      </div>
-                                    </div>
-                                    <div className="flex justify-start">
-                                      <div className="flex space-x-2 items-start">
-                                        <div>
-                                          <h1 className="mt-10 xl:mt-0 text-xs font-bold">{`${e.DEP_TIME.slice(
-                                            0,
-                                            2
-                                          )}:${e.DEP_TIME.slice(2)}`}</h1>
-                                          <small className="text-gray-400">
-                                            {originName}
+                                <div>
+                                  {/* mobile cari */}
+                                  <div
+                                    onClick={async () => e.fares[i]["M_available"] == "0" &&
+                                    e.fares[i]["F_available"] == "0" ? "" : handleSubmit(e, i)}
+                                    className="cursor-pointer block xl:hidden w-full text-gray-700"
+                                  >
+                                    <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
+                                      <div className="flex justify-between">
+                                        <div className="col-span-1 xl:col-span-2">
+                                          <h1 className="text-xs font-bold">
+                                            {e.SHIP_NAME}
+                                          </h1>
+                                          <div>
+                                          <small>
+                                            Class {e.fares[i].CLASS}{" "}
+                                            Subclass ({e.fares[i].SUBCLASS})
                                           </small>
+                                          </div>
+                                          <div>
+                                          <small>
+                                            Ship No. {e.SHIP_NO}
+                                          </small>
+                                          </div>
                                         </div>
-                                        <div className="w-full mt-12 px-4 border-b-2"></div>
-                                        <div className="text-xs">
-                                          <h1 className="text-xs mt-10 xl:mt-0 text-gray-400">
-                                            {duration(
-                                              e.DEP_DATE,
-                                              e.ARV_DATE,
-                                              e.DEP_TIME,
-                                              e.ARV_TIME
+                                        <div className="text-right">
+                                          <h1 className="text-xs font-bold text-blue-500">
+                                            Rp.
+                                            {toRupiah(
+                                              e.fares[0].FARE_DETAIL.A.TOTAL
                                             )}
                                           </h1>
-                                          <small className="text-gray-400">
-                                            Langsung
+                                          <small className="text-red-500">
+                                            Infant Rp.
+                                            {toRupiah(
+                                              e.fares[0].FARE_DETAIL.I.TOTAL
+                                            )}
                                           </small>
                                         </div>
-                                        <div className="w-full mt-12 px-4 border-b-2"></div>
-                                        <div>
-                                          <h1 className="mt-10 xl:mt-0 text-xs font-bold">{`${e.ARV_TIME.slice(
-                                            0,
-                                            2
-                                          )}:${e.ARV_TIME.slice(2)}`}</h1>
-                                          <small className="text-gray-400">
-                                            {destinationName}
-                                          </small>
+                                      </div>
+                                      <div className="flex justify-start">
+                                        <div className="flex space-x-2 items-start">
+                                          <div>
+                                            <h1 className="mt-10 xl:mt-0 text-xs font-bold">{`${e.DEP_TIME.slice(
+                                              0,
+                                              2
+                                            )}:${e.DEP_TIME.slice(2)}`}</h1>
+                                            <small className="text-gray-400">
+                                              {originName}
+                                            </small>
+                                          </div>
+                                          <div className="w-full mt-12 px-4 border-b-2"></div>
+                                          <div className="text-xs">
+                                            <h1 className="text-xs mt-10 xl:mt-0 text-gray-400">
+                                              {duration(
+                                                e.DEP_DATE,
+                                                e.ARV_DATE,
+                                                e.DEP_TIME,
+                                                e.ARV_TIME
+                                              )}
+                                            </h1>
+                                            <small className="text-gray-400">
+                                              Langsung
+                                            </small>
+                                          </div>
+                                          <div className="w-full mt-12 px-4 border-b-2"></div>
+                                          <div>
+                                            <h1 className="mt-10 xl:mt-0 text-xs font-bold">{`${e.ARV_TIME.slice(
+                                              0,
+                                              2
+                                            )}:${e.ARV_TIME.slice(2)}`}</h1>
+                                            <small className="text-gray-400">
+                                              {destinationName}
+                                            </small>
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
+                            </>) : (
+                            <>
+                            </>)
+                          }
+                          </>
+                        ))}
+                      </>
+                    )
+                  )}
+                  {/* untuk sorting yang tidak availbility nya habis. */}
+                  {dataSearch.map(
+                    (
+                      e //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
+                    ) => (
+                      <>
+                        {e.fares.map((z, i) => (
+                          <>
+                          {
+                            e.fares[i]["M_available"] == "0" &&
+                            e.fares[i]["F_available"] == "0" ? (
+                            <>
+                              <div
+                                class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${
+                                  e.fares[i]["M_available"] == "0" &&
+                                  e.fares[i]["F_available"] == "0"
+                                    ? "bg-gray-200"
+                                    : "bg-white"
+                                } border border-gray-200 rounded-lg shadow-sm  hover:border transition-transform transform hover:scale-105`}
+                              >
+                                {/* desktop cari */}
+                                <div className="hidden xl:block w-full text-gray-700 ">
+                                  <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-8">
+                                    <div className="col-span-1 xl:col-span-2">
+                                      <h1 className="text-sm font-bold">
+                                        {e.SHIP_NAME}{" "}
+                                      </h1>
+                                      <div>
+                                      <small>
+                                        Class {e.fares[i].CLASS}{" "}
+                                        Subclass ({e.fares[i].SUBCLASS})
+                                      </small>
+                                      </div>
+                                      <div>
+                                      <small>
+                                        Ship No. {e.SHIP_NO}
+                                      </small>
+                                      </div>
+                                    </div>
+                                    <div className="flex">
+                                      <div className="">
+                                        <h1 className="mt-4 xl:mt-0 text-sm font-bold">{`${e.DEP_TIME.slice(
+                                          0,
+                                          2
+                                        )}:${e.DEP_TIME.slice(2)}`}</h1>
+                                        <small>{originName}</small>
+                                      </div>
+                                    </div>
+                                    <HiOutlineArrowNarrowRight size={24} />
+                                    <div>
+                                      <h1 className="text-sm font-bold">{`${e.ARV_TIME.slice(
+                                        0,
+                                        2
+                                      )}:${e.ARV_TIME.slice(2)}`}</h1>
+                                      <small>{destinationName}</small>
+                                    </div>
+                                    <div>
+                                      <h1 className="mt-4 xl:mt-0 text-sm font-bold">
+                                        {duration(
+                                          e.DEP_DATE,
+                                          e.ARV_DATE,
+                                          e.DEP_TIME,
+                                          e.ARV_TIME
+                                        )}
+                                      </h1>
+                                      <small>Langsung</small>
+                                    </div>
+                                    <div className="">
+                                      <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">
+                                        Rp.
+                                        {toRupiah(e.fares[i].FARE_DETAIL.A.TOTAL)}
+                                      </h1>
+                                      <small className="text-red-500">
+                                        Infant Rp.
+                                        {toRupiah(e.fares[i].FARE_DETAIL.I.TOTAL)}
+                                      </small>
+                                    </div>
+                                    <div>
+                                      {e.fares[i]["M_available"] == "0" &&
+                                      e.fares[i]["F_available"] == "0" ? (
+                                        <></>
+                                      ) : (
+                                        <>
+                                          <button
+                                            onClick={async () =>
+                                              handleSubmit(e, i)
+                                            }
+                                            type="button"
+                                            class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2"
+                                          >
+                                            <div className="text-white font-bold">
+                                              PILIH
+                                            </div>
+                                          </button>
+                                        </>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div>
+                                  {/* mobile cari */}
+                                  <div
+                                    onClick={async () => e.fares[i]["M_available"] == "0" &&
+                                    e.fares[i]["F_available"] == "0" ? "" : handleSubmit(e, i)}
+                                    className="cursor-pointer block xl:hidden w-full text-gray-700"
+                                  >
+                                    <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
+                                      <div className="flex justify-between">
+                                        <div className="col-span-1 xl:col-span-2">
+                                          <h1 className="text-xs font-bold">
+                                            {e.SHIP_NAME}
+                                          </h1>
+                                          <small>
+                                            Class {e.fares[i].CLASS}{" "}
+                                            Subclass ({e.fares[i].SUBCLASS})
+                                          </small>
+                                        </div>
+                                        <div className="text-right">
+                                          <h1 className="text-xs font-bold text-blue-500">
+                                            Rp.
+                                            {toRupiah(
+                                              e.fares[0].FARE_DETAIL.A.TOTAL
+                                            )}
+                                          </h1>
+                                          <small className="text-red-500">
+                                            Infant Rp.
+                                            {toRupiah(
+                                              e.fares[0].FARE_DETAIL.I.TOTAL
+                                            )}
+                                          </small>
+                                        </div>
+                                      </div>
+                                      <div className="flex justify-start">
+                                        <div className="flex space-x-2 items-start">
+                                          <div>
+                                            <h1 className="mt-10 xl:mt-0 text-xs font-bold">{`${e.DEP_TIME.slice(
+                                              0,
+                                              2
+                                            )}:${e.DEP_TIME.slice(2)}`}</h1>
+                                            <small className="text-gray-400">
+                                              {originName}
+                                            </small>
+                                          </div>
+                                          <div className="w-full mt-12 px-4 border-b-2"></div>
+                                          <div className="text-xs">
+                                            <h1 className="text-xs mt-10 xl:mt-0 text-gray-400">
+                                              {duration(
+                                                e.DEP_DATE,
+                                                e.ARV_DATE,
+                                                e.DEP_TIME,
+                                                e.ARV_TIME
+                                              )}
+                                            </h1>
+                                            <small className="text-gray-400">
+                                              Langsung
+                                            </small>
+                                          </div>
+                                          <div className="w-full mt-12 px-4 border-b-2"></div>
+                                          <div>
+                                            <h1 className="mt-10 xl:mt-0 text-xs font-bold">{`${e.ARV_TIME.slice(
+                                              0,
+                                              2
+                                            )}:${e.ARV_TIME.slice(2)}`}</h1>
+                                            <small className="text-gray-400">
+                                              {destinationName}
+                                            </small>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </>) : (
+                            <>
+                            </>)
+                          }
                           </>
                         ))}
                       </>

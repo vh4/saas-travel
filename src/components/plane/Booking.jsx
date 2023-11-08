@@ -275,9 +275,7 @@ export default function BookingPesawat() {
         "/" +
         date.getFullYear();
       end_child.push(
-        `CHD;${item.gender};${item.nama_depan
-          .split(" ")[0]
-          .toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${
+        `CHD;${item.gender};${item.nama_depan.toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${
           item.idNumber
         };ID;ID;;;ID;`
       );
@@ -292,9 +290,7 @@ export default function BookingPesawat() {
         "/" +
         date.getFullYear();
       end_infant.push(
-        `INF;${item.gender};${item.nama_depan
-          .split(" ")[0]
-          .toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${
+        `INF;${item.gender};${item.nama_depan.toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${
           item.idNumber
         };ID;ID;;;ID`
       );
@@ -310,9 +306,7 @@ export default function BookingPesawat() {
         date.getFullYear();
       // end_adult.push(`ADT;${item.gender};${item.nama_depan.split(" ")[0].toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${item.idNumber};::${item.nomor};::${item.nomor};;;;${item.email};KTP;ID;ID;;;;`);
       end_adult.push(
-        `ADT;${item.gender};${item.nama_depan
-          .split(" ")[0]
-          .toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${
+        `ADT;${item.gender};${item.nama_depan.toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${
           item.idNumber
         };::${item.nomor};::${item.nomor};;;;${item.email};1;ID;ID;;;ID;`
       );

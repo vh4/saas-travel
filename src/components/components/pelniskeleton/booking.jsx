@@ -4,32 +4,6 @@ import { IoArrowForwardOutline } from 'react-icons/io5';
 const Body = () => {
 	return(
 	<>
-	<div className="mt-12 w-full border pl-8 pr-6 py-6">
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-2">
-          <div className="col">
-            <div className="mt-2 w-36 mb-4">
-              <Skeleton className="h-4" />
-            </div>
-            <div className="bg-gray-100">
-              <Skeleton className="h-8" />
-            </div>
-            <div className="mt-2 w-48 mb-4">
-              <Skeleton className="h-4" />
-            </div>
-          </div>
-          <div className="col">
-            <div className="mt-2 w-36 mb-4">
-              <Skeleton className="h-4" />
-            </div>
-            <div className="bg-gray-100">
-              <Skeleton className="h-8" />
-            </div>
-            <div className="mt-2 w-48 mb-4">
-              <Skeleton className="h-4" />
-            </div>
-          </div>
-        </div>
-      </div>
 		<div className="mt-14 mb-6">
 				<div className='w-48'>
 					<Skeleton className='h-4'/>
@@ -48,7 +22,7 @@ const Body = () => {
 						<Skeleton className='h-8'/>
 					</div>
 				</div>
-				<div className="col">
+				<div className="col col-span-2">
 					<div className='mt-2 w-36 mb-4'>
 						<Skeleton className='h-4'/>
 					</div>
@@ -56,15 +30,7 @@ const Body = () => {
 						<Skeleton className='h-8'/>
 					</div>
 				</div>
-				<div className="col">
-					<div className='mt-2 w-36 mb-4'>
-						<Skeleton className='h-4'/>
-					</div>
-					<div className="bg-gray-100  mb-4">
-						<Skeleton className='h-8'/>
-					</div>
-				</div>
-				<div className="col">
+				<div className="col col-span-2 md:col-span-1">
 					<div className='mt-2 w-36 mb-4'>
 						<Skeleton className='h-4'/>
 					</div>
@@ -75,7 +41,7 @@ const Body = () => {
 						<Skeleton className='h-4'/>
 					</div>
 				</div>
-				<div className="col">
+				<div className="col col-span-2 md:col-span-1">
 					<div className='mt-2 w-36 mb-4'>
 						<Skeleton className='h-4'/>
 					</div>
@@ -266,10 +232,36 @@ const BookingLoading = ({total}) => {
 	return(
 		<>
 			<div >
-				<div className="w-full block xl:flex xl:space-x-10">
+				<div className="w-full block xl:flex xl:space-x-10 mb-24 ">
 					<div className='w-full'>
 					<div className="mt-14 w-full">
 						<SidebarMobile />
+					</div>
+					<div className="mt-12 w-full border pl-8 pr-6 py-6">
+						<div className="grid grid-cols-1 xl:grid-cols-2 gap-2">
+						<div className="col">
+							<div className="mt-2 w-36 mb-4">
+							<Skeleton className="h-4" />
+							</div>
+							<div className="bg-gray-100">
+							<Skeleton className="h-8" />
+							</div>
+							<div className="mt-2 w-48 mb-4">
+							<Skeleton className="h-4" />
+							</div>
+						</div>
+						<div className="col">
+							<div className="mt-2 w-36 mb-4">
+							<Skeleton className="h-4" />
+							</div>
+							<div className="bg-gray-100">
+							<Skeleton className="h-8" />
+							</div>
+							<div className="mt-2 w-48 mb-4">
+							<Skeleton className="h-4" />
+							</div>
+						</div>
+						</div>
 					</div>
 					{Array.from({ length: total }, (_, i) => (
 						<Body />
