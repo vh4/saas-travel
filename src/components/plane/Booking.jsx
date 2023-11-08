@@ -294,7 +294,7 @@ export default function BookingPesawat() {
           item.idNumber
         };ID;ID;;;ID`
       );
-    });
+    }); //kok error jadinya
 
     data_adult.forEach((item) => {
       let date = new Date(item.birthdate);
