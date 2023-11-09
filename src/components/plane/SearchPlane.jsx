@@ -532,12 +532,14 @@ function Plane() {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={handleClose} appearance="subtle">
-            Cancel
-          </Button>
-          <Button onClick={handleClose} appearance="primary">
-            Ok
-          </Button>
+          <div className="flex space-x-4 justify-end">
+            <Button onClick={handleClose} appearance="subtle">
+              Cancel
+            </Button>
+            <Button onClick={handleClose} appearance="primary">
+              Ok
+            </Button>
+            </div>
         </Modal.Footer>
       </Modal>
       <div className="flex justify-center row bg-white border-t border-gray-200 w-full pr-0">
