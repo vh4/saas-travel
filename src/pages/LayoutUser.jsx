@@ -79,12 +79,12 @@ export default function LayoutUser({ children }) {
               label="Transaksi"
               icon={<IoIosListBox size={20} />}
             />
-            <BottomNavigationAction
+            {/* <BottomNavigationAction
               to="/profile/view"
               component={Link}
               label="Akun saya"
               icon={<HiUser size={22} />}
-            />
+            /> */}
           </BottomNavigation>
         </Box>
       </div>

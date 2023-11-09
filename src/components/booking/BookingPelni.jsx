@@ -288,7 +288,7 @@ export default function ViewBooking({ path }) {
                             </div>
                           </div>
                           <div className='border-t mt-8'>
-                            <div className='flex space-x-2 mt-4 text-sm font-bold text-gray-500'>
+                            <div className='flex space-x-2 mt-6 text-sm font-bold text-gray-500'>
                               <IoBoatSharp className='text-blue-500' size={16} />
                               <div className='flex space-x-2 items-center'><div>{e.origin.toUpperCase()}</div><BsArrowRightShort /><div>{e.destination.toUpperCase()}</div></div>
                             </div>
@@ -301,7 +301,7 @@ export default function ViewBooking({ path }) {
                               </div>
                             </div>
                           </div>
-                          <div className='mt-8 border-t block lg:flex lg:justify-between  lg:items-center'>
+                          <div className='mt-6 border-t block lg:flex lg:justify-between  lg:items-center'>
                             {/* <div className='mt-2 flex space-x-2 items-end'>
                               <div className='mt-1 text-xs  text-gray-500'>
                                 Kode Booking

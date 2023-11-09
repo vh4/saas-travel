@@ -23,14 +23,20 @@ export default function MainPage(){
         {/* carousel fitur  */}
         <div className="w-full">
             <div className="xl:bg-gradient-to-r xl:from-cyan-500 xl:to-blue-500">
-                <div className="hidden md:block xl:block 2xl:hidden py-4 md:py-8 relative z-10">
-                    <CarouselsTablet />
+                <div className="hidden md:block xl:block 2xl:hidden py-4 md:py-8 relative z-10 container mx-auto">
+                    <div className="mx-0 lg:mx-12 xl:mx-0 2xl:mx-0">
+                        <CarouselsTablet />
+                    </div>
                 </div>
-                <div className="block md:hidden py-4 md:py-8 relative z-10">
-                    <CarouselsMobile />
+                <div className="block md:hidden py-4 md:py-8 relative z-10 container mx-auto">
+                    <div className="mx-0 lg:mx-12 xl:mx-0 2xl:mx-0">
+                        <CarouselsMobile />
+                    </div>
                 </div>
-                <div className="hidden 2xl:block py-4 md:py-8 relative z-10">
-                    <Carousels />
+                <div className="hidden 2xl:block py-4 md:py-8 relative z-10 container mx-auto ">
+                    <div className="mx-0 lg:mx-12 xl:mx-0 2xl:mx-0">
+                        <Carousels />
+                    </div>
                 </div>
             </div>
             <div className="mt-0 md:mt-4 xl:-mt-8">

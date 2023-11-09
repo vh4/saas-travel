@@ -1,5 +1,5 @@
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { CiSettings } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,8 @@ import { LogoutContent } from "../../App";
 import { FaListAlt } from "react-icons/fa";
 import ReCAPTCHA from "react-google-recaptcha";
 import { UserOutlined } from "@ant-design/icons";
+import dayjs, { isDayjs } from "dayjs";
+import { IoLogOut, IoLogOutOutline, IoLogOutSharp } from "react-icons/io5";
 
 export default function Header() {
 
@@ -28,6 +30,10 @@ export default function Header() {
   const [login, setLogin] = useState(false);
   const [api, contextHolder] = notification.useNotification();
   const { setLogout } = useContext(LogoutContent);
+
+  const location = useLocation();
+  const { pathname, search } = location;
+  const newURL = pathname + search;
 
   const onReset = () => {
     form.resetFields();
@@ -241,7 +247,18 @@ export default function Header() {
             userProfile();
             suksesLogin();
             localStorage.setItem("expired_date", data.data.expired_date);
-          } else {
+            localStorage.setItem("c_at", dayjs());
+            localStorage.setItem("c_name", uid);
+
+            if(search.trim().length > 1){
+              setTimeout(() => {
+                window.location.reload();
+              }, 3000);
+            }else{
+              navigate(newURL);
+            }
+
+           } else {
             gagalLogin(data.data.rd);
             setLoading(false);
           }
@@ -261,7 +278,7 @@ export default function Header() {
   
 
   return (
-    <nav className="bg-white px-2 sm:px-4 py-2  block sticky top-0 w-full z-50 left-0 border-b border-gray-200 ">
+    <nav className="bg-white px-2 sm:px-4 py-3  block sticky top-0 w-full z-50 left-0 border-b border-gray-200 ">
       {contextHolder}
       <div className="container mx-auto">
         <div className="flex justify-between items-center -mx-2 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24">
@@ -299,20 +316,17 @@ export default function Header() {
                 process.env.REACT_APP_SECTRET_LOGIN_API
               ) ? (
                 <div
-                  className="hidden md:flex text-slate-700 space-x-2 items-center"
+                  className="hidden md:flex text-slate-700 space-x-4 items-center"
                 >
-                  <Button
-                  onClick={handleOpen}
-                  type="outline"
-                  className="bg-white text-blue-500 border-blue-500" 
-                  >
-                    <div>Masuk</div>
-                  </Button>
+                  <div className="flex space-x-2 items-center cursor-pointer hover:text-blue-500"  onClick={handleOpen}>
+                      <UserOutlined size={22} />
+                      <div>Masuk</div>
+                  </div>
                   <a href="https://www.rajabiller.com/register" className="text-[15px] text-slate-800">
                   <Button
                     key="submit"
-                    type="primary"
-                    className="bg-blue-500"
+                    type="default"
+                    className="px-8 text-gray-700"
                   >
                     Registrasi
                   </Button>
@@ -324,27 +338,24 @@ export default function Header() {
                     <>
                       {user.namaPemilik !== undefined ? (
                         <>
-                          <div className="flex space-x-2 items-center  mt-2">
-                          <div className="text-gray-500">
-                              <div className="font-bold"><small>{nd}</small> <small>{nb}</small></div>
-                              <small>Sisa saldo Rp.{toRupiah(user.balance)}</small>
+                          <div className="flex space-x-2 items-center mt-2">
+                          <div className="">
+                          <div className="text-slate-600 font-bold">
+                            {localStorage.getItem('c_name')
+                              ? localStorage.getItem('c_name').charAt(0).toUpperCase() + localStorage.getItem('c_name').slice(1)
+                              : 'Rb Travell'}
+                            </div>
+                              <small>{localStorage.getItem('c_at') ? 'Logged at ' + dayjs(localStorage.getItem('c_at')).format('ddd, DD MMM YYYY HH:mm:ss') : 'Logged at -'}</small>
                           </div>
-                          <CiSettings size={20} />
-                          </div>
-                          {/* <small className="absolute group-hover top-8 left-4 text-slate-500">Sisa saldo {sisaSaldo(user.balance)}</small> */}
-                          <ul class="transition-opacity duration-500 invisible group-hover:visible absolute top-0 mt-8 w-48 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 ">
-                            <Link to="/profile/view">
-                              <li class="hover:bg-gray-200 py-2 px-4 w-full rounded-t-lg border-b border-gray-200 ">
-                                Akun saya
-                              </li>
-                            </Link>
-                            <li
+                          <div>
+                          <div
                               onClick={LogoutHandler}
-                              class="hover:bg-gray-200 py-2 px-4 w-full border-b border-gray-200 "
+                              class="ml-4 flex justify-center bg-blue-500 py-2 rounded-full space-x-4 items-center w-full pl-1"
                             >
-                              Logout
-                            </li>
-                          </ul>
+                              <IoLogOutOutline size={18} className="text-white" />
+                            </div>
+                          </div>
+                          </div>
                         </>
                       ) : (
                         <Box sx={{ width: 100 }}>

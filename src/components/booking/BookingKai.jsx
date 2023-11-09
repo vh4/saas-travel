@@ -227,7 +227,7 @@ export default function ViewBooking({ path }) {
                 <h1 className="text-sm font-bold">{new Date(byrdata.tanggal_keberangkatan.slice(0, 4), parseInt(byrdata.tanggal_keberangkatan.slice(4, 6)) - 1, byrdata.tanggal_keberangkatan.slice(6, 8)).toLocaleDateString("id-ID", { weekday: "long", year: "numeric", month: "long", day: "numeric" })} </h1>
                 <small>Tanggal Keberangkatan</small>
               </div>
-              <div className="flex col-span-2">
+              <div className="flex col-span-2 justify-around">
                 <div className="">
                   <h1 className="mt-4 xl:mt-0 text-sm font-bold">{byrdata.jam_keberangkatan.toString().padStart(4, "0").replace(/(\d{2})(\d{2})/, "$1:$2")}</h1>
                   <small>{byrdata.origin}</small>
@@ -309,7 +309,7 @@ export default function ViewBooking({ path }) {
                         <div className='p-8'>
                           <div className='flex justify-between items-end'>
                             <div className='flex space-x-2  items-end'>
-                              <div className='text-xs text-gray-500'>ID Transaksi</div>
+                              <div className='text-xs text-gray-500'>Id Transaksi</div>
                               <div className='text-sm text-blue-500 font-bold'>{e.id_transaksi}</div>
                             </div>
                             <div className='text-sm text-slate-500 font-bold '>
@@ -317,7 +317,7 @@ export default function ViewBooking({ path }) {
                             </div>
                           </div>
                           <div className='border-t mt-8'>
-                            <div className='flex space-x-2 mt-4 text-sm font-bold text-gray-500'>
+                            <div className='flex space-x-2 mt-6 text-sm font-bold text-gray-500'>
                               <MdOutlineTrain className='text-blue-500' size={16} />
                               <div className='flex space-x-2 items-center'><div>{e.origin.toUpperCase()}</div><BsArrowRightShort /><div>{e.destination.toUpperCase()}</div></div>
                             </div>
@@ -330,7 +330,7 @@ export default function ViewBooking({ path }) {
                               </div>
                             </div>
                           </div>
-                          <div className='mt-8 border-t block lg:flex lg:justify-between  lg:items-center'>
+                          <div className='mt-6 border-t block lg:flex lg:justify-between  lg:items-center'>
                             {/* <div className='mt-2 flex space-x-2 items-end'>
                               <div className='mt-1 text-xs  text-gray-500'>
                                 Kode Booking

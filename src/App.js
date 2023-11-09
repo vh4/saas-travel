@@ -1,6 +1,6 @@
 import React, {createContext, useEffect, useReducer} from "react";
 import { BrowserRouter, Route, Routes} from "react-router-dom";
-import Profile from "./pages/profile/Profile";
+// import Profile from "./pages/profile/Profile";
 
 import TransaksiKai from "./pages/transaksi/TransaksiKai";
 import TransaksiPesawat from "./pages/transaksi/TransaksiPesawat";
@@ -95,7 +95,7 @@ function App() {
                 <Route path="/booking/pesawat" element={<BookingPesawatList />}></Route>
                 <Route path="/booking/pelni" element={<BookingPelniList />}></Route>
 
-                <Route path="/profile/view" element={<Profile />}></Route>
+                {/* <Route path="/profile/view" element={<Profile />}></Route> */}
                 <Route path="/logout" element={<Logout />}></Route>
                 <Route path="/*" element={<Page404 />} />
               </Routes>

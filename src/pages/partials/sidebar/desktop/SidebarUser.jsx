@@ -3,6 +3,8 @@ import {FaUserCircle, FaListAlt} from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import {MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp} from "react-icons/md"
 import axios from 'axios'
+import { Avatar } from 'antd'
+import { UserOutlined } from "@ant-design/icons";
 
 export default function SidebarUser({pathSidebar}) {
     
@@ -18,12 +20,9 @@ export default function SidebarUser({pathSidebar}) {
         }
     }, [user]);
 
-    const x = user ? user.namaPemilik.split(' ') : usr ? usr.namaPemilik.split(' ') : null;
-    const nd = x ? x[0] ? x[0] : 'Unknown' : 'Unknown';
-    const nb =  x ? x[1] ? x[1] : 'User' : 'User'
-    
+    const nd = localStorage.getItem('c_name') ? localStorage.getItem('c_name')[0] ? localStorage.getItem('c_name')[0] : 'Unknown' : 'Unknown';
     const avatar_nd = nd !== '' && nd !== undefined ? nd.substring(0,1).toUpperCase() : 'U';
-    const avatar_nb = nb !== '' && nb !== undefined ? nb.substring(0,1).toUpperCase() : 'S';
+
     const userProfile = async () =>  {
         const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/account`, {
             token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
@@ -46,19 +45,21 @@ export default function SidebarUser({pathSidebar}) {
             <div className="flex mb-8 justify-center overflow-y-auto py-4 px-3 rounded  h-full " >
                 <ul className="mt-8 md:mt-0 space-y-2 relative">
                     <li className='hidden md:block mb-4'>
-                        <div className={`flex items-center p-2 text-base font-normal text-gray-900 rounded-lg `}>
-                            <div className='hidden xl:block w-full text-xs xl:text-md text-gray-500 font-bold xl:py-6 xl:px-7 shadow-sm border rounded-full'><div>{avatar_nb} {avatar_nd}</div></div>
-                            <span className="text-sm font-bold text-gray-500 flex-1 ml-3 whitespace-nowrap">{nb} {nd}</span>
+                        <div className={`flex items-center p-2 text-base font-normal text-gray-500 rounded-lg `}>
+                            <div><Avatar size={48} icon={<UserOutlined />} /></div>
+                            <span className="text-sm font-bold text-gray-500 flex-1 ml-3 whitespace-nowrap">{localStorage.getItem('c_name')
+                              ? localStorage.getItem('c_name').charAt(0).toUpperCase() + localStorage.getItem('c_name').slice(1)
+                              : 'Rb Travell'}</span>
                         </div>
                     </li> 
-                    <Link to='/profile/view'>
+                    {/* <Link to='/profile/view'>
                     <li className='ml-4'>
                         <div  className={`flex cursor-pointer ${ pathSidebar === '/profile/view' ? 'bg-cyan-100' : ''} items-center p-2 text-base font-normal text-gray-500 rounded-lg  hover:bg-cyan-100 `}>
                             <FaUserCircle className='text-orange-500' size={20} />
                             <span className="flex-1 ml-3 whitespace-nowrap">Profile</span>
                         </div>
                     </li>
-                    </Link>
+                    </Link> */}
                     <li className='ml-4'>
                         <div onClick={(e) => dropdownTransaksi === true ? setDropdownTransaksi(false) : setDropdownTransaksi(true)}  className={`flex justify-between cursor-pointer items-center p-2 text-base font-normal text-gray-500 rounded-lg  hover:bg-cyan-100 `}>
                             <div className='flex items-center'>
