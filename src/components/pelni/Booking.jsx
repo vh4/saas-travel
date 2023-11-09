@@ -255,8 +255,10 @@ export default function BookingPelni() {
       }
 
       if (x.usia == "infant") {
+        passengers["identityNumber"] = x.identityNumber;
         infants.push(passengers);
       }
+      
     });
 
     wanita[0].forEach((x) => {
