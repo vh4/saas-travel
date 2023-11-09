@@ -213,7 +213,15 @@ function KAI() {
         }
       );
 
-      setKAI(response.data);
+
+      const resSetKai = {
+        data: response.data.data.filter(item => item.nama_kota !== "unknown"),
+        rc:'00',
+        rd:'success'
+      };
+
+      setKAI(resSetKai);
+      
     } catch (error) {
       setKAI([]);
     }

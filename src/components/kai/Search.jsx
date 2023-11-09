@@ -372,21 +372,21 @@ export default function Search() {
               <div className="relative flex items-center space-x-2 text-slate-600 text-xs font-bold">
                 <div className="hidden md:block">FILTER : </div>
                 <button
-                  onClick={() => setShowHarga(!showHarga)} 
+                  onClick={() => {setShowHarga(!showHarga); setShowWaktu(false); setShowKelas(false)}} 
                   ref={btnRefHarga}
                   className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300"
                 >
                   HARGA
                 </button>
                 <button
-                  onClick={() => setShowWaktu(!showWaktu)} 
+                  onClick={() => {setShowWaktu(!showWaktu); setShowHarga(false); setShowKelas(false)}} 
                   ref={btnRefWaktu}
                   className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300"
                 >
                   WAKTU
                 </button>
                 <button
-                  onClick={() => setShowKelas(!showKelas)} 
+                  onClick={() => {setShowKelas(!showKelas); setShowWaktu(false); setShowHarga(false)}} 
                   ref={btnRefKelas}
                   className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300"
                 >
@@ -561,7 +561,7 @@ export default function Search() {
                   ) => (
                     <div
                       class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${
-                        e.seats[0].availability > 0 ? "bg-white" : "bg-gray-200"
+                        (e.seats[0].availability > 0) && (parseInt(adult) + parseInt(infant) < e.seats[0].availability) ? "bg-white" : "bg-gray-200"
                       } border border-gray-200 rounded-lg shadow-sm  hover:border transition-transform transform hover:scale-105`}
                     >
                       {/* desktop cari */}
@@ -613,9 +613,12 @@ export default function Search() {
                             <small className="text-red-500">
                               {e.seats[0].availability} set(s) left
                             </small>
+                            <small className="text-red-500">
+                              {(e.seats[0].availability > 0) && (parseInt(adult) + parseInt(infant) < e.seats[0].availability) ? "" : ". (Tiket Habis)"}
+                            </small>
                           </div>
                           <div>
-                            {e.seats[0].availability > 0 ? (
+                            {(e.seats[0].availability > 0) && (parseInt(adult) + parseInt(infant) < e.seats[0].availability) ? (
                               <button
                                 type="button"
                                 onClick={() =>
@@ -636,7 +639,7 @@ export default function Search() {
                       <div>
                         {/* mobile cari */}
                         <div
-                          onClick={() => e.seats[0].availability > 0 ? bookingHandlerDetail(e.trainNumber) : " "}
+                          onClick={() => (e.seats[0].availability > 0) && (parseInt(adult) + parseInt(infant) < e.seats[0].availability) ? bookingHandlerDetail(e.trainNumber) : " "}
                           className="cursor-pointer block xl:hidden w-full text-gray-700"
                         >
                           <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
@@ -660,6 +663,9 @@ export default function Search() {
                                 </h1>
                                 <small className="text-red-500">
                                   {e.seats[0].availability} set(s)
+                                </small>
+                                <small className="text-red-500">
+                                  {(e.seats[0].availability > 0) && (parseInt(adult) + parseInt(infant) < e.seats[0].availability) ? "" : ". (Tiket Habis)"}
                                 </small>
                               </div>
                             </div>

@@ -537,14 +537,14 @@ export default function Search() {
               <div className="relative flex items-center space-x-2 text-slate-600 text-xs font-bold">
                 <div className="hidden md:block">FILTER : </div>
                 <button
-                  onClick={() => setShowHarga(!showHarga)} 
+                  onClick={() => {setShowHarga(!showHarga); setShowWaktu(false)}} 
                   ref={btnRefHarga}
                   className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300"
                 >
                   HARGA
                 </button>
                 <button
-                  onClick={() => setShowWaktu(!showWaktu)} 
+                  onClick={() => {setShowWaktu(!showWaktu); setShowHarga(false)}} 
                   ref={btnRefWaktu}
                   className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300"
                 >
@@ -673,7 +673,7 @@ export default function Search() {
                   <>
                     {e.classes[0][0].price !== 0 ? (
                       <div
-                        class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 bg-white border border-gray-200 rounded-md shadow-sm hover:border hover:border-gray-100 transition-transform transform hover:scale-105`}
+                        class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${(e.classes[0][0].availability > 0) && (e.classes[0][0].availability > (parseInt(child) + parseInt(adult) + parseInt(infant))) ? "bg-white " : "bg-gray-100 "}  border border-gray-200 rounded-md shadow-sm hover:border hover:border-gray-100 transition-transform transform hover:scale-105`}
                       >
                         {/* desktop cari */}
                         <div className="hidden xl:block w-full text-gray-700 ">
@@ -734,11 +734,12 @@ export default function Search() {
                                 Rp.{toRupiah(e.classes[0][0].price)}
                               </h1>
                               <small className="text-red-500">
-                                {e.classes[0][0].availability} seat(s) left
-                              </small>
+                                  {e.classes[0][0].availability} seat(s) left
+                                  {e.classes[0][0].availability > 0 && e.classes[0][0].availability > (parseInt(child) + parseInt(adult) + parseInt(infant)) ? '' : <span> (Tiket Habis)</span>}
+                                </small>
                             </div>
                             <div className="flex justify-center col-span-1 md:col-span-2">
-                              {e.classes[0][0].availability > 0 ? (
+                              {(e.classes[0][0].availability > 0) && (e.classes[0][0].availability > (parseInt(child) + parseInt(adult) + parseInt(infant))) ? (
                                 <div>
                                   <button
                                     type="button"
@@ -1209,11 +1210,11 @@ export default function Search() {
 
                         {/* end desktop detail harga */}
 
-                        <div>
+                        <div className="">
                           {/* mobile cari */}
                           <div
                             type="button"
-                            onClick={(f) => e.classes[0][0].availability > 0 ? bookingHandlerDetail(f, index) : "" }
+                            onClick={(f) => (e.classes[0][0].availability > 0) && (e.classes[0][0].availability > (parseInt(child) + parseInt(adult) + parseInt(infant))) ? bookingHandlerDetail(f, index) : "" }
                             className="cursor-pointer block xl:hidden w-full text-gray-700"
                           >
                             <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">

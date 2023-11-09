@@ -317,10 +317,16 @@ function KAI(){
                 token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
             });
     
-            setKAI(response.data);
+            const resSetKai = {
+              data: response.data.data.filter(item => item.nama_kota !== "unknown"),
+              rc:'00',
+              rd:'success'
+            };
+      
+            setKAI(resSetKai);
             
         } catch (error) {
-            setKAI({message: error.message});
+            setKAI([]);
         }
 
     }
