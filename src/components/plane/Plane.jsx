@@ -744,7 +744,10 @@ function Plane() {
                       size="large"
                       disabledDate={(current) => {
                         const currentDate = dayjs();
-                        return current && current < currentDate.startOf('day');
+                        const currentDateByYear = dayjs().add(2, 'years');;
+                        let aheadDate = currentDateByYear.add(6, 'months');
+                            aheadDate = aheadDate.add(1, 'days');
+                        return current && (current < currentDate.startOf('day') || current > aheadDate);
                       }}
                     />
                   </FormControl>

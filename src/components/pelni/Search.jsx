@@ -315,7 +315,7 @@ export default function Search() {
                     {parseInt(laki) + parseInt(wanita)} Penumpang
                   </small>
                 </div>
-                <div className="mt-4 md:mt-0 flex space-x-4 md:mr-0 xl:mr-16 justify-center md:justify-end">
+                <div className="mt-4 md:mt-0 flex space-x-4 md:mr-0 justify-center md:justify-end">
                   <Link to="/" className="flex space-x-2 items-center">
                     <IoArrowBackOutline className="text-blue-500" size={16} />
                     <div className="text-blue-500 text-sm font-bold">
@@ -324,7 +324,7 @@ export default function Search() {
                   </Link>
                   <button
                     onClick={() => setUbahPencarian((prev) => !prev)}
-                    className="block border p-2 px-4 md:px-4 xl:mr-16 bg-blue-500 text-white rounded-md text-xs font-bold"
+                    className="block border p-2 px-4 md:px-4  bg-blue-500 text-white rounded-md text-xs font-bold"
                   >
                     Ubah Pencarian
                   </button>
@@ -342,7 +342,7 @@ export default function Search() {
             <div>
               {isLoading ? (
                 skeleton.map(() => (
-                  <div className="row mt-4 w-full p-2 pr-0 xl:pr-16">
+                  <div className="row mt-4 w-full p-2">
                     <Box sx={{ width: "100%" }}>
                       <Skeleton />
                       <Skeleton />
@@ -353,7 +353,7 @@ export default function Search() {
                   </div>
                 ))
               ) : notFound !== true && dataSearch.length !== 0 ? (
-                <div className="row mb-24 w-full p-2 pr-0 xl:pr-16">
+                <div className="row mb-24 w-full p-2">
                   {/* untuk sorting yang  availbility nya tidak habis. */}
                   <div>
                   {dataSearch.map(
@@ -730,7 +730,7 @@ export default function Search() {
                   </div>
                 </div>
               ) : (
-                <div className="row mt-12 mb-24 w-full p-2 pr-0 xl:pr-16">
+                <div className="row mt-12 mb-24 w-full p-2">
                   <div className="flex justify-center">
                     <img src={"/nodata.jpg"} width={350} alt="nodata" />
                   </div>

@@ -412,7 +412,7 @@ function PELNI() {
   return (
     <>
     {contextHolder}
-      <div className="row bg-white border-t border-gray-200 w-full p-2 pr-0">
+      <div className="row bg-white border-t border-gray-200 w-full p-2 ">
         <div class="w-full rounded-lg shadow-xs">
           <form className="w-full">
             {/* <div className="space-x-2 items-center flex">

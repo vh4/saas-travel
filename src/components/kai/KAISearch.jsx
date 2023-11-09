@@ -415,7 +415,7 @@ function KAI(){
         <>
           {contextHolder}
           <div className="row bg-white border-t border-gray-200 w-full pr-0">
-          <div class="w-full py-4 xl:px-8 rounded-lg shadow-xs ">
+          <div class="w-full py-4 rounded-lg shadow-xs ">
             <form className="w-full">
               <>
                 <div className="block xl:flex justify-between">
@@ -593,7 +593,8 @@ function KAI(){
                       size="large"
                       disabledDate={(current) => {
                         const currentDate = dayjs();
-                        return current && current < currentDate.startOf('day');
+                        const aheadDate = dayjs().add(3, 'months')
+                        return current && (current < currentDate.startOf('day') || current > aheadDate);
                       }}
                     />
                       </LocalizationProvider>

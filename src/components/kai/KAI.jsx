@@ -598,7 +598,8 @@ function KAI() {
                       size="large"
                       disabledDate={(current) => {
                         const currentDate = dayjs();
-                        return current && current < currentDate.startOf('day');
+                        const aheadDate = dayjs().add(3, 'months')
+                        return current && (current < currentDate.startOf('day') || current > aheadDate);
                       }}
                     />
                     </LocalizationProvider>

@@ -142,11 +142,12 @@ function Pelni() {
 
   const [keberangkatan, setKeberangkatan] = React.useState(depa);
   const [tujuan, setTujuan] = React.useState(arri);
-  const disabledDateRule = combine(
-    allowedMaxDays(30), // Menonaktifkan tanggal lebih dari 7 hari dari tanggal saat ini
-    beforeToday() // Menonaktifkan tanggal yang kurang dari tanggal saat ini
-  );
 
+  const disabledDateRule = combine(
+    allowedMaxDays(30), // Disable dates more than 30 days in the future
+    beforeToday(), // Disable dates before today
+    
+  );
   const i = 0;
 
   const useStyles = makeStyles((theme) => ({
@@ -403,7 +404,7 @@ function Pelni() {
   return (
     <>
     {contextHolder}
-      <div className="row bg-white border-t border-gray-200 w-full p-2 md:p-0 pr-0">
+      <div className="row bg-white border-t border-gray-200 w-full p-2 md:p-0 ">
         <div class="w-full p-4 py-4 xl:px-8 rounded-lg shadow-xs">
           <form className="w-full">
             {/* <div className="space-x-2 items-center flex">
