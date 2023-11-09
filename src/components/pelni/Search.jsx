@@ -355,6 +355,7 @@ export default function Search() {
               ) : notFound !== true && dataSearch.length !== 0 ? (
                 <div className="row mb-24 w-full p-2 pr-0 xl:pr-16">
                   {/* untuk sorting yang  availbility nya tidak habis. */}
+                  <div>
                   {dataSearch.map(
                     (
                       e //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
@@ -542,7 +543,9 @@ export default function Search() {
                       </>
                     )
                   )}
+                  </div>
                   {/* untuk sorting yang tidak availbility nya habis. */}
+                  <div>
                   {dataSearch.map(
                     (
                       e //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
@@ -724,6 +727,7 @@ export default function Search() {
                       </>
                     )
                   )}
+                  </div>
                 </div>
               ) : (
                 <div className="row mt-12 mb-24 w-full p-2 pr-0 xl:pr-16">
