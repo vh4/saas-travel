@@ -250,7 +250,7 @@ export default function BookingPelni() {
       };
 
       if (x.usia == "adult") {
-        passengers["identityNumber"] = x.identityNumber;
+        passengers["identityNumber"] = x.identityNumber; // update 
         adults.push(passengers);
       }
 
