@@ -972,16 +972,18 @@ export default function Konfirmasi() {
                                         ? "Bisnis"
                                         : "Eksekutif"
                                       : ""}{" "}
-                                    {hasilBooking !== null
+                                      {"/"}
+                                      {" 0 "}
+                                    {/* {hasilBooking !== null
                                       ? hasilBooking.seats[i][1]
-                                      : ""}{" "}
+                                      : ""}{" "} */}
                                     -{" "}
-                                    {hasilBooking
+                                    {/* {hasilBooking
                                       ? hasilBooking.seats[i][2]
-                                      : ""}
-                                    {hasilBooking !== null
+                                      : ""} */}
+                                    {/* {hasilBooking !== null
                                       ? hasilBooking.seats[i][3]
-                                      : ""}
+                                      : ""} */}
                                   </div>
                                 </div>
                               </div>

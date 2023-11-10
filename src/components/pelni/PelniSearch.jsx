@@ -611,14 +611,14 @@ function PELNI() {
                       id="basic-menu"
                       className={`${anchorEl} absolute top-20 z-10 grid w-auto px-8 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}
                     >
-                      <div className="w-full md:w-48 ml-4 block md:mx-0">
+                     <div className="w-full md:w-48 ml-4 block md:mx-0">
                         <div className="mt-4 w-full items-center text-gray-600">
                           <div className="text-sm text-center header-number mb-4">
                             <p>laki (Laki-laki {">"} 12 thn)</p>
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusLaki}>-</InputGroup.Button>
-                            <InputNumber className={'custom-input-number'} value={laki} onChange={setLaki} min={0} max={4} readOnly/>
+                              <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={laki} onChange={setLaki} min={0} max={4} readOnly/>
                             <InputGroup.Button onClick={plusLaki}>+</InputGroup.Button>
                           </InputGroup>
                         </div>
@@ -628,7 +628,7 @@ function PELNI() {
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusWanita}>-</InputGroup.Button>
-                            <InputNumber className={'custom-input-number'} value={wanita} onChange={setWanita} min={0} max={4} readOnly/>
+                              <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={wanita} onChange={setWanita} min={0} max={4} readOnly/>
                             <InputGroup.Button onClick={plusWanita}>+</InputGroup.Button>
                           </InputGroup>
                         </div>

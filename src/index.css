@@ -1,7 +1,12 @@
+@import "rsuite/dist/rsuite.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "rsuite/dist/rsuite.css";
+
+/* Your global styles or in the same component where the InputNumber is used */
+.hide-dropdown-icon .rs-input-number-dropdown-toggle {
+  display: none;
+}
 
 @layer base {
     input[type="number"]::-webkit-inner-spin-button,
@@ -9,6 +14,7 @@
       -webkit-appearance: none;
       margin: 0;
     }
+
   }
 
   .input-phone-number input{

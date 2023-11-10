@@ -191,7 +191,7 @@ export default function BookingPesawat() {
       
       adultCategory[i][category] = tanggalParse;
     } else {
-      if (category == "gender" || category == 'idNumber') {
+      if (category == "gender") {
         adultCategory[i][category] = e;
       } else {
         adultCategory[i][category] = e.target.value;
@@ -215,7 +215,7 @@ export default function BookingPesawat() {
       .join("-");
 
       childCategory[i][category] = tanggalParse;
-    }else if(category == "gender" || category == 'idNumber'){
+    }else if(category == "gender"){
       childCategory[i][category] = e;
 
     }else {
@@ -238,9 +238,8 @@ export default function BookingPesawat() {
       .reverse()
       .join("-");
       
-
       infantCategory[i][category] = tanggalParse;
-    }else if(category == "gender" || category == 'idNumber'){
+    }else if(category == "gender"){
       infantCategory[i][category] = e;
     } else {
       infantCategory[i][category] = e.target.value;
@@ -897,13 +896,23 @@ export default function BookingPesawat() {
                                           }),
                                         ]}
                                       >
-                                        <InputNumber
-                                          style={{ width: '100%' }}
-                                          size="lg"
-                                          min={0}
+                                        <input
+                                          type="text"
+                                          pattern="[0-9]*"
+                                          onInput={(e) => {
+                                            e.target.value = e.target.value.replace(/[^\d]/g, ''); // Replace any non-digit characters
+                                            if (e.target.value.includes('.')) {
+                                              e.target.value = e.target.value.replace('.', ''); // Remove any dots
+                                            }
+                                          }}
+                                          onKeyPress={(e) => {
+                                            return (e.charCode >= 48 && e.charCode <= 57) || e.key !== '.'; // Disallow the dot
+                                          }}
+                                          className={'border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0'}
                                           value={e.idNumber}
-                                          onChange={handleAdultsubCatagoryChange(i, 'idNumber')}
                                           placeholder="No. Ktp / NIK"
+                                          onChange={handleAdultsubCatagoryChange(i, 'idNumber')}
+                                          min={0}
                                           id="default-input"
                                         />
                                       </Form.Item>
@@ -1167,13 +1176,24 @@ export default function BookingPesawat() {
                                           }),
                                         ]}
                                       >
-                                        <InputNumber
-                                          style={{ width: '100%' }}
-                                          size="lg"
-                                          min={0}
+                                        <input
+                                          type="text"
+                                          pattern="[0-9]*"
+                                          onInput={(e) => {
+                                            e.target.value = e.target.value.replace(/[^\d]/g, ''); // Replace any non-digit characters
+                                            if (e.target.value.includes('.')) {
+                                              e.target.value = e.target.value.replace('.', ''); // Remove any dots
+                                            }
+                                          }}
+                                          onKeyPress={(e) => {
+                                            return (e.charCode >= 48 && e.charCode <= 57) || e.key !== '.'; // Disallow the dot
+                                          }}
+                                          className={'border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0'}
                                           value={e.idNumber}
-                                          onChange={handleChildsubCatagoryChange(i, 'idNumber')}
                                           placeholder="No. Ktp / NIK"
+                                          onChange={handleChildsubCatagoryChange(i, 'idNumber')}
+                                          min={0}
+                                          id="default-input"
                                         />
                                       </Form.Item>
                                       <small className="block -mt-4 text-gray-400">
@@ -1394,14 +1414,25 @@ export default function BookingPesawat() {
                                             }),
                                           ]}
                                         >
-                                          <InputNumber
-                                            style={{ width: '100%' }}
-                                            size="lg"
-                                            min={0}
-                                            value={e.idNumber}
-                                            onChange={handleInfantsubCatagoryChange(i, 'idNumber')}
-                                            placeholder="No. Ktp / NIK"
-                                          />
+                                        <input
+                                          type="text"
+                                          pattern="[0-9]*"
+                                          onInput={(e) => {
+                                            e.target.value = e.target.value.replace(/[^\d]/g, ''); // Replace any non-digit characters
+                                            if (e.target.value.includes('.')) {
+                                              e.target.value = e.target.value.replace('.', ''); // Remove any dots
+                                            }
+                                          }}
+                                          onKeyPress={(e) => {
+                                            return (e.charCode >= 48 && e.charCode <= 57) || e.key !== '.'; // Disallow the dot
+                                          }}
+                                          className={'border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0'}
+                                          value={e.idNumber}
+                                          placeholder="No. Ktp / NIK"
+                                          onChange={handleInfantsubCatagoryChange(i, 'idNumber')}
+                                          min={0}
+                                          id="default-input"
+                                        />
                                         </Form.Item>
                                       <small className="block -mt-4 text-gray-400">
                                         Contoh: 16 digit nomor

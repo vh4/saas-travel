@@ -353,15 +353,27 @@ export default function Pembayaran() {
                                   </div>
                                 </div>
                                 <div className="px-4 py-2 text-sm">
-                                  <div className="text-gray-500">Kursi</div>
+                                <div className="text-gray-500">Kursi</div>
                                   <div className="text-gray-900">
-                                    {hasilBooking.seats[i][0] === "EKO"
-                                      ? "Ekonomi"
-                                      : hasilBooking.seats[i][0] === "BIS"
-                                      ? "Bisnis" : "Eksekutif"}{" "}
-                                    {hasilBooking.seats[i][1]} -{" "}
-                                    {hasilBooking.seats[i][2]}{" "}
-                                    {hasilBooking.seats[i][3]}
+                                    {hasilBooking !== null
+                                      ? hasilBooking.seats[i][0] === "EKO"
+                                        ? "Ekonomi"
+                                        : hasilBooking.seats[i][0] === "BIS"
+                                        ? "Bisnis"
+                                        : "Eksekutif"
+                                      : ""}{" "}
+                                      {"/"}
+                                      {" 0 "}
+                                    {/* {hasilBooking !== null
+                                      ? hasilBooking.seats[i][1]
+                                      : ""}{" "} */}
+                                    -{" "}
+                                    {/* {hasilBooking
+                                      ? hasilBooking.seats[i][2]
+                                      : ""} */}
+                                    {/* {hasilBooking !== null
+                                      ? hasilBooking.seats[i][3]
+                                      : ""} */}
                                   </div>
                                 </div>
                               </div>

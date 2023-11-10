@@ -786,11 +786,11 @@ function Plane() {
                       <div className="w-full md:w-48 ml-4 block md:mx-0">
                         <div className="w-full items-center text-gray-600">
                           <div className="text-sm text-center header-number mb-4">
-                          <p>Adult (12 thn keatas)</p>
+                            <p>Adult (12 thn keatas)</p>
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusAdult}>-</InputGroup.Button>
-                            <InputNumber className={'custom-input-number'} value={adult} onChange={setadult} min={1} max={7} readOnly/>
+                            <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={adult} onChange={setadult} min={1} max={7} readOnly/>
                             <InputGroup.Button onClick={plusAdult}>+</InputGroup.Button>
                           </InputGroup>
                         </div>
@@ -800,7 +800,7 @@ function Plane() {
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusChild}>-</InputGroup.Button>
-                            <InputNumber className={'custom-input-number'} value={child} onChange={setChild} min={0} max={7} readOnly/>
+                              <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={child} onChange={setChild} min={0} max={7} readOnly/>
                             <InputGroup.Button onClick={plusChild}>+</InputGroup.Button>
                           </InputGroup>
                         </div>
@@ -810,7 +810,7 @@ function Plane() {
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusInfant}>-</InputGroup.Button>
-                            <InputNumber className={'custom-input-number'} value={infant} onChange={setinfant} min={0} max={7} readOnly/>
+                              <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={infant} onChange={setinfant} min={0} max={7} readOnly/>
                             <InputGroup.Button onClick={plusInfant}>+</InputGroup.Button>
                           </InputGroup>
                         </div>

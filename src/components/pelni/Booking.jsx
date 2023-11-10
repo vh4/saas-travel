@@ -174,9 +174,7 @@ export default function BookingPelni() {
           .reverse()
           .join("-");
         data[i][category] = tanggalParse;
-      }else if(category == 'identityNumber'){
-        data[i][category] = e;
-      } else {
+      }else {
         if (category == "usia") {
           data[i][category] = e;
           data[i]["birthdate"] = null;
@@ -806,7 +804,7 @@ export default function BookingPelni() {
                                 </small>
                               </div>
                               <div className="w-full">
-                                <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
+                                <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-2">
                                   <div className="text-gray-500 text-sm">
                                     No. Ktp
                                   </div>
@@ -827,23 +825,31 @@ export default function BookingPelni() {
                                       }),
                                     ]}
                                   >
-                                    <InputNumber
-                                      name={`nikPria${i}`}
-                                      style={{ width: '100%' }}
-                                      size="lg"
-                                      className="mt-2"
-                                      value={e.identityNumber}
-                                      min={0}
-                                      onChange={handleUsiasubCatagoryChange(
-                                        e,
-                                        i,
-                                        "identityNumber",
-                                        "pria"
-                                      )}
-                                      type="text"
-                                      placeholder="No. Ktp / NIK"
-                                      id="default-input"
-                                    />
+                                    <input
+                                          name={`nikPria${i}`}
+                                          type="text"
+                                          pattern="[0-9]*"
+                                          onInput={(e) => {
+                                            e.target.value = e.target.value.replace(/[^\d]/g, ''); // Replace any non-digit characters
+                                            if (e.target.value.includes('.')) {
+                                              e.target.value = e.target.value.replace('.', ''); // Remove any dots
+                                            }
+                                          }}
+                                          onKeyPress={(e) => {
+                                            return (e.charCode >= 48 && e.charCode <= 57) || e.key !== '.'; // Disallow the dot
+                                          }}
+                                          className={'border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0'}
+                                          value={e.idNumber}
+                                          placeholder="No. Ktp / NIK"
+                                          onChange={handleUsiasubCatagoryChange(
+                                            e,
+                                            i,
+                                            "identityNumber",
+                                            "pria"
+                                          )}
+                                          min={0}
+                                          id="default-input"
+                                        />
                                   </Form.Item>
                                   <small className="block -mt-4 text-gray-400">
                                     Contoh: 16 digit nomor
@@ -1016,7 +1022,7 @@ export default function BookingPelni() {
                                 </small>
                               </div>
                               <div className="w-full">
-                                <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
+                                <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-2">
                                   <div className="text-gray-500 text-sm">
                                     No. Ktp
                                   </div>
@@ -1037,23 +1043,31 @@ export default function BookingPelni() {
                                       }),
                                     ]}
                                   >
-                                    <InputNumber
-                                      name={`nikWanita${i}`}
-                                      style={{ width: '100%' }}
-                                      size="lg"
-                                      className="mt-2"
-                                      value={e.identityNumber}
-                                      min={0}
-                                      onChange={handleUsiasubCatagoryChange(
-                                        e,
-                                        i,
-                                        "identityNumber",
-                                        "wanita"
-                                      )}
-                                      type="text"
-                                      placeholder="No. Ktp / NIK"
-                                      id="default-input"
-                                    />
+                                      <input
+                                          name={`nikWanita${i}`}
+                                          type="text"
+                                          pattern="[0-9]*"
+                                          onInput={(e) => {
+                                            e.target.value = e.target.value.replace(/[^\d]/g, ''); // Replace any non-digit characters
+                                            if (e.target.value.includes('.')) {
+                                              e.target.value = e.target.value.replace('.', ''); // Remove any dots
+                                            }
+                                          }}
+                                          onKeyPress={(e) => {
+                                            return (e.charCode >= 48 && e.charCode <= 57) || e.key !== '.'; // Disallow the dot
+                                          }}
+                                          className={'border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0'}
+                                          value={e.idNumber}
+                                          placeholder="No. Ktp / NIK"
+                                          onChange={handleUsiasubCatagoryChange(
+                                            e,
+                                            i,
+                                            "identityNumber",
+                                            "wanita"
+                                          )}
+                                          min={0}
+                                          id="default-input"
+                                        />
                                   </Form.Item>
                                   <small className="block -mt-4 text-gray-400">
                                     Contoh: 16 digit nomor
