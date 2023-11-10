@@ -463,7 +463,20 @@ export default function Header() {
         ]}
       >
         <p>Masukkan Username & Password untuk Login</p>
-        <Form className="mt-8" form={form} onFinish={handlerLogin}>
+        <Form 
+        labelCol={{
+          span: 5,
+        }}
+        
+        textAlign="left"
+        wrapperCol={{
+          span: 18,
+        }}
+        style={{
+          maxWidth: 1000,
+        }}
+        
+        className="mt-8" form={form} onFinish={handlerLogin}>
           <Form.Item 
           rules={[
             {

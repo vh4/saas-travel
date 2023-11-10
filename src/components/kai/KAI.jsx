@@ -215,9 +215,12 @@ function KAI() {
 
 
       const resSetKai = {
-        data: response.data.data.filter(item => item.nama_kota !== "unknown"),
-        rc:'00',
-        rd:'success'
+        data: response.data.data.map(item => ({
+          ...item,
+          nama_kota: item.nama_kota === "unknown" ? "LAINYA" : item.nama_kota,
+        })),
+        rc: '00',
+        rd: 'success',
       };
 
       setKAI(resSetKai);
