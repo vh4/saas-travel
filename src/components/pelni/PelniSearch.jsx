@@ -579,7 +579,7 @@ function PELNI() {
                         onChange={(e) => setTanggal(e)}
                         size="lg"
                         sx={{ width: "100%", color:"black !important" }}
-                        placeholder="dd/mm/yyyy dd-mm-yyyy"
+                        placeholder="Select Date"
                         className="cursor-pointer text-black"
                         disabledDate={disabledDateRule}
                         value={tanggal}

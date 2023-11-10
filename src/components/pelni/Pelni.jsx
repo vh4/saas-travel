@@ -566,7 +566,7 @@ function Pelni() {
                         onChange={(e) => setTanggal(e)}
                         size="lg"
                         sx={{ width: "100%", color:"black !important" }}
-                        placeholder="dd/mm/yyyy dd-mm-yyyy"
+                        placeholder="Select Date"
                         className="cursor-pointer text-black"
                         disabledDate={disabledDateRule}
                         value={tanggal}
@@ -600,7 +600,7 @@ function Pelni() {
                       <div className="w-full md:w-48 ml-4 block md:mx-0">
                         <div className="mt-4 w-full items-center text-gray-600">
                           <div className="text-sm text-center header-number mb-4">
-                            <p>laki (Laki-laki {">"} 12 thn)</p>
+                            <p>Laki-laki ({"≥"} 2 thn)</p>
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusLaki}>-</InputGroup.Button>
@@ -610,7 +610,7 @@ function Pelni() {
                         </div>
                         <div className="mt-4 mb-8 w-full items-center text-gray-600">
                           <div className="text-sm text-center header-number mb-4">
-                            <p>Wanita (Wanita {">"} 12 thn)</p>
+                            <p>Perempuan ({"≥"} 2 thn)</p>
                           </div>
                           <InputGroup>
                             <InputGroup.Button onClick={minusWanita}>-</InputGroup.Button>
