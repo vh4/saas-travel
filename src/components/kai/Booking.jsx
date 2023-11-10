@@ -770,7 +770,7 @@ export default function BookingKai() {
                                     size="large"
                                     className="w-full"
                                     value={dayjs(e.birthdate, "YYYY/MM/DD")}
-                                    format={"YYYY/MM/DD"}
+                                    format={"DD/MM/YYYY"}
                                     onChange={handleInfantsubCatagoryChange(
                                       i,
                                       "birthdate"

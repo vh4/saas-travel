@@ -783,7 +783,7 @@ export default function BookingPelni() {
                                     size="large"
                                     className="w-full"
                                     value={dayjs(e.birthdate, "YYYY/MM/DD")}
-                                    format={"YYYY/MM/DD"}
+                                    format={"DD/MM/YYYY"}
                                     onChange={handleUsiasubCatagoryChange(
                                       e,
                                       i,
