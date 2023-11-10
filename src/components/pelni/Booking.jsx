@@ -144,7 +144,7 @@ export default function BookingPelni() {
   }
   
   const handleUsiasubCatagoryChange =
-    (e, i, category, type = "pria") =>
+    (e, i, category, type) =>
     (e) => {
       let data = [
         {
@@ -238,9 +238,9 @@ export default function BookingPelni() {
       return;
     }
 
-    const adults = [];
+    const adults = Array();
     const children = [];
-    const infants = [];
+    const infants = Array();
 
     pria[0].forEach((x) => {
       const passengers = {
@@ -252,9 +252,7 @@ export default function BookingPelni() {
       if (x.usia == "adult") {
         passengers["identityNumber"] = x.identityNumber; // update 
         adults.push(passengers);
-      }
-
-      if (x.usia == "infant") {
+      }else if (x.usia == "infant") {
         passengers["identityNumber"] = x.identityNumber;
         infants.push(passengers);
       }
@@ -271,12 +269,12 @@ export default function BookingPelni() {
       if (x.usia == "adult") {
         passengers["identityNumber"] = x.identityNumber;
         adults.push(passengers);
-      }
-
-      if (x.usia == "infant") {
+      }else if (x.usia == "infant") {
+        passengers["identityNumber"] = x.identityNumber;
         infants.push(passengers);
       }
-    });
+
+    });    
 
     const params = {
       harga_dewasa: dataDetailPelni.harga_dewasa,
