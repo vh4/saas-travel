@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate, Route } from "react-router-dom";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
@@ -7,13 +7,14 @@ import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { IoArrowBackOutline, IoArrowForwardOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Searchpelni from "./PelniSearch";
-import { notification } from "antd";
+import { notification, Timeline } from "antd";
 import Page400 from "../components/400";
 import Page500 from "../components/500";
 import { duration, durationFull } from "../../helpers/pelni";
 import { parseTanggal, parseTanggalPelni } from "../../helpers/date";
 import { toRupiah } from "../../helpers/rupiah";
 import moment from "moment";
+import dayjs from "dayjs";
 
 export default function Search() {
 
@@ -268,6 +269,27 @@ export default function Search() {
     }
   }
 
+  const [pelniStatiun, setPelniStatiun] = useState();
+  const [openButton, setOpenButton] = useState(null);
+
+  async function getPelnitDataStasiun() {
+    const response = await axios.post(
+      `${process.env.REACT_APP_HOST_API}/travel/pelni/get_origin`,
+      {
+        token: JSON.parse(
+          localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+        ),
+      }
+    );
+
+    setPelniStatiun(response.data.data);
+  }
+
+  useEffect(() => {
+    getPelnitDataStasiun();
+  }, []);
+
+
   return (
     <>
       {err === true ? (
@@ -287,7 +309,7 @@ export default function Search() {
             </div>
             <div className="mt-8">
               <div className="flex flex-col md:flex-row md:justify-between items-center md:space-x-4">
-                <div className="flex items-center space-x-3 xl:space-x-4 text-center md:text-left">
+                <div className="flex items-center space-x-3 text-center md:text-left">
                   <small className="text-xs font-bold text-slate-600">
                     {originName}
                   </small>
@@ -358,7 +380,8 @@ export default function Search() {
                   <div>
                   {dataSearch.map(
                     (
-                      e //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
+                      e,
+                      k //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
                     ) => (
                       <>
                         {e.fares.map((z, i) => (
@@ -423,7 +446,7 @@ export default function Search() {
                                     </div>
                                     <div className="">
                                       <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">
-                                        Rp.
+                                        Dewasa Rp.
                                         {toRupiah(e.fares[i].FARE_DETAIL.A.TOTAL)}
                                       </h1>
                                       <small className="text-red-500">
@@ -450,8 +473,38 @@ export default function Search() {
                                           </button>
                                         </>
                                       )}
+                                      <div className="flex justify-center text-xs mt-2 text-blue-500 cursor-pointer text-center items-center mb-2" 
+                                      onClick={() =>
+                                        openButton == `open-${k + i}${e.SHIP_NO}`
+                                          ? setOpenButton(`close-${k + i}${e.SHIP_NO}`)
+                                          : setOpenButton(`open-${k + i}${e.SHIP_NO}`)
+                                      }
+                                      >
+                                        Lihat Detail
+                                      </div>
                                     </div>
                                   </div>
+                                  {openButton === `open-${k + i}${e.SHIP_NO}` ? (
+                                    <>
+                                      <div className="mt-16">
+                                           <div className="grid grid-rows-3 grid-flow-col">
+                                            <div className="row-span-3 flex justify-end items-start">
+                                              <div className="text-sm font-bold">{parseTanggal(dayjs(e.DEP_DATE, 'YYYYMMDD').format('YYYY-MM-DD'))}</div>
+                                            </div>
+                                            <div className="row-span-3 flex justify-center items-center">
+                                              <Timeline>
+                                                {e.ROUTE.split(/\/\d-/).filter(item => item !== "").map((h) => (
+                                                  <Timeline.Item key={h}>{pelniStatiun.find((z) => parseInt(z.CODE) === parseInt(h))?.NAME}</Timeline.Item>
+                                                ))}
+                                              </Timeline>
+                                            </div>
+                                            <div className="row-span-3 flex justify-start items-end">
+                                              <div className="block text-sm font-bold">{parseTanggal(dayjs(e.ARV_DATE, 'YYYYMMDD').format('YYYY-MM-DD'))}</div>
+                                            </div>
+                                          </div>
+                                      </div>
+                                    </>
+                                  ) : (<></>)}
                                 </div>
                                 <div>
                                   {/* mobile cari */}
@@ -480,7 +533,7 @@ export default function Search() {
                                         </div>
                                         <div className="text-right">
                                           <h1 className="text-xs font-bold text-blue-500">
-                                            Rp.
+                                            Dewasa Rp.
                                             {toRupiah(
                                               e.fares[0].FARE_DETAIL.A.TOTAL
                                             )}
@@ -614,7 +667,7 @@ export default function Search() {
                                     </div>
                                     <div className="">
                                       <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">
-                                        Rp.
+                                        Dewasa Rp.
                                         {toRupiah(e.fares[i].FARE_DETAIL.A.TOTAL)}
                                       </h1>
                                       <small className="text-red-500">
@@ -664,7 +717,7 @@ export default function Search() {
                                         </div>
                                         <div className="text-right">
                                           <h1 className="text-xs font-bold text-blue-500">
-                                            Rp.
+                                            Dewasa Rp.
                                             {toRupiah(
                                               e.fares[0].FARE_DETAIL.A.TOTAL
                                             )}

@@ -1,25 +1,24 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AiOutlineHome } from 'react-icons/ai';
 import { BsArrowRightShort } from 'react-icons/bs';
-import { MdOutlineTrain } from 'react-icons/md';
 import axios from 'axios';
-import { Placeholder } from 'rsuite';
-import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
-import { Button, Modal, message } from 'antd';
+import {  Modal, message } from 'antd';
 import { toRupiah } from '../../helpers/rupiah';
-import { remainingTime } from '../../helpers/date';
 import Page500 from '../components/500';
+import { IoBoatSharp } from "react-icons/io5";
+import { HiOutlineArrowNarrowRight } from 'react-icons/hi';
+import { Placeholder } from "rsuite";
 
-export default function ViewBooking({ path }) {
+export default function ViewTransaksi({ path }) {
   const [data, setData] = useState([]);
   const [byrdata, setByrData] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [loadBayar, setLoadBayar] = useState(true);
-  const [open, setOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(false);
-
+  const handleOpen = () => setShowModal(true);
+  const handleClose = () => setShowModal(false);
   const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
 
   const [err, setErr] = useState(false);
@@ -27,14 +26,11 @@ export default function ViewBooking({ path }) {
 
   useEffect(() => {
 
-      if(token === undefined || token === null) {
+    if(token == null || token == undefined) {
         setErr(true);
-      }
+    }
 
   }, [token]);
-
-  const handleOpen = () => setShowModal(true);
-  const handleClose = () => setShowModal(false);
 
   function success() {
     messageApi.open({
@@ -60,9 +56,10 @@ export default function ViewBooking({ path }) {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/transaction_book_list`, {
+     
+      const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/app/transaction_list`, {
         token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
-        product: "KERETA",
+        product: "KAPAL",
       });
 
       if(response.data.rc !== '00' && response.data.rc !== '33'){
@@ -70,6 +67,7 @@ export default function ViewBooking({ path }) {
       }
 
       const datas = response.data;
+
       setData(datas.data);
       setIsLoading(false);
     } catch (e) {
@@ -88,83 +86,14 @@ export default function ViewBooking({ path }) {
     }, 1000);
   }
 
-  const handleBayar = async () => {
-    setLoading(true);
-
-    const response = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/train/payment`,
-      {
-        productCode: "WKAI",
-        bookingCode: byrdata.kode_booking,
-        transactionId: byrdata.id_transaksi,
-        nominal: byrdata.nominal,
-        nominal_admin: byrdata.nominal_admin,
-        discount: 0,
-        pay_type: "TUNAI",
-        token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
-      });
-    setTimeout(() => {
-      setLoading(false);
-      setOpen(false);
-    }, 1000);
-
-    if (response.data.rc !== "00") {
-      gagal(response.data.rd);
-      handleClose();
-    } else {
-      success();
-      handleClose();
-    }
-  };
-
-  const intervalRef = React.useRef(null);
-
-  const [remainingTimes, setRemainingTimes] = useState([]);
-
-  useEffect(() => {
-    if (data !== undefined && data.length > 0) {
-      const y = [];
-  
-      data.forEach((x, i) => {
-        const res = x?.expiredDate;
-        y.push(res);
-      });
-  
-      setRemainingTimes(y);
-    }
-  }, [data]);
-  
-  // Cleanup interval when component unmounts
-  useEffect(() => {
-    if (data !== undefined  && data.length > 0) {
-      intervalRef.current = setInterval(() => {
-        const updatedRemainingTimes = remainingTimes.map((time) => {
-          time = new Date(time).getTime();
-          const timenow = new Date().getTime();
-
-          if (time > timenow) {
-            time = time - 1;
-            return time;
-          }
-          return 0;
-        });
-  
-        setRemainingTimes(updatedRemainingTimes);
-      }, 1000);
-    }
-  
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [data, remainingTimes]);
-
   return (
     <>
-      {/* meessage bayar */}
-      {contextHolder}
 
-      <Modal
+      {contextHolder}
+      <div className=''>
+  
+     {/* meessage bayar */}
+     <Modal
         width={1000}
         open={showModal}
         onOk={handleClose}
@@ -192,24 +121,6 @@ export default function ViewBooking({ path }) {
                       {e.nama}
                     </div>
                   </div>
-                  <div className=''>
-                    <div className='font-semibold'>Nik</div>
-                    <div>
-                      {e.nomor_identitas !== '' ? e.nomor_identitas : '-'}
-                    </div>
-                  </div>
-                  <div className=''>
-                    <div className='font-semibold'>No. HP</div>
-                    <div>
-                      {e.telepon !== '' ? e.telepon : '-'}
-                    </div>
-                  </div>
-                  <div className=''>
-                    <div className='font-semibold'>No. Kursi</div>
-                    <div>
-                      {e.kursi !== '' ? e.kursi : '-'}
-                    </div>
-                  </div>
                 </div>
               </>
             ))}
@@ -218,40 +129,48 @@ export default function ViewBooking({ path }) {
               <div>Description</div>
             </div>
             {/* desktop */}
-            <div className="p-4 w-full hidden mt-4 xl:gap-4 lg:grid lg:grid-cols-10">
+            <div className="p-4 w-full hidden mt-4 xl:gap-4 lg:grid lg:grid-cols-12">
               <div className="col-span-2">
-                <h1 className="text-sm font-bold">{byrdata.nama_kereta} </h1>
-                <small>{byrdata.classes === 'EKS' ? 'Eksekutif' : byrdata.classes === 'EKO' ? 'Ekonomi' : 'Bisnis'} {byrdata.kode_kereta.substring(4, 5)} - ({byrdata.kode_kereta.split('/')[1]})</small>
+                <h1 className="text-sm font-bold">{byrdata.nama_kapal} </h1>
+                <small>Subclass {byrdata.subClass}</small>
               </div>
               <div className="col-span-2">
                 <h1 className="text-sm font-bold">{new Date(byrdata.tanggal_keberangkatan.slice(0, 4), parseInt(byrdata.tanggal_keberangkatan.slice(4, 6)) - 1, byrdata.tanggal_keberangkatan.slice(6, 8)).toLocaleDateString("id-ID", { weekday: "long", year: "numeric", month: "long", day: "numeric" })} </h1>
                 <small>Tanggal Keberangkatan</small>
               </div>
-              <div className="flex col-span-2 justify-around">
+              <div className="flex col-span-2">
                 <div className="">
                   <h1 className="mt-4 xl:mt-0 text-sm font-bold">{byrdata.jam_keberangkatan.toString().padStart(4, "0").replace(/(\d{2})(\d{2})/, "$1:$2")}</h1>
                   <small>{byrdata.origin}</small>
                 </div>
                 < HiOutlineArrowNarrowRight size={24} />
               </div>
+              <div className="col-span-2">
+                <h1 className="text-sm font-bold">{new Date(byrdata.tanggal_kedatangan.slice(0, 4), parseInt(byrdata.tanggal_kedatangan.slice(4, 6)) - 1, byrdata.tanggal_kedatangan.slice(6, 8)).toLocaleDateString("id-ID", { weekday: "long", year: "numeric", month: "long", day: "numeric" })} </h1>
+                <small>Tanggal Kedatangan</small>
+              </div>
               <div className='col-span-2'>
                 <h1 className="text-sm font-bold">{byrdata.jam_kedatangan.toString().padStart(4, "0").replace(/(\d{2})(\d{2})/, "$1:$2")}</h1>
                 <small>{byrdata.destination}</small>
               </div>
               <div className="col-span-2">
-                <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">Rp. {toRupiah(parseInt(byrdata.nominal) + parseInt(byrdata.nominal_admin))}</h1>
-                <small>Total (Admin Rp. {toRupiah(byrdata.nominal_admin)})</small>
+                <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">Rp. {((parseInt(byrdata.nominal) || 0) + (parseInt(byrdata.nominal_admin) || 0)).toLocaleString('id-ID')}</h1>
+                <small>Total (Admin Rp. {(toRupiah(byrdata.nominal_admin ? byrdata.nominal_admin : 0)) ?? 0})</small>
               </div>
             </div>
             {/* mobile */}
             <div className="p-4 w-full block mt-4 lg:hidden">
               <div className="">
-                <h1 className="text-sm font-bold">{byrdata.nama_kereta} </h1>
-                <small>{byrdata.class === 'EKS' ? 'Eksekutif' : byrdata.class === 'EKO' ? 'Ekonomi' : 'Bisnis'} {byrdata.kode_kereta.substring(4, 5)} - ({byrdata.kode_kereta.split('/')[1]})</small>
+                <h1 className="text-sm font-bold">{byrdata.nama_kapal}  </h1>
+                <small>Subclass {byrdata.subClass}</small>
               </div>
               <div className="mt-4">
                 <h1 className="text-sm font-bold">{new Date(byrdata.tanggal_keberangkatan.slice(0, 4), parseInt(byrdata.tanggal_keberangkatan.slice(4, 6)) - 1, byrdata.tanggal_keberangkatan.slice(6, 8)).toLocaleDateString("id-ID", { weekday: "long", year: "numeric", month: "long", day: "numeric" })} </h1>
                 <small>Tanggal Keberangkatan</small>
+              </div>
+              <div className="mt-4">
+                <h1 className="text-sm font-bold">{new Date(byrdata.tanggal_kedatangan.slice(0, 4), parseInt(byrdata.tanggal_kedatangan.slice(4, 6)) - 1, byrdata.tanggal_kedatangan.slice(6, 8)).toLocaleDateString("id-ID", { weekday: "long", year: "numeric", month: "long", day: "numeric" })} </h1>
+                <small>Tanggal Kedatangan</small>
               </div>
               <div className='flex space-x-4 items-center'>
                 <div className="">
@@ -269,8 +188,8 @@ export default function ViewBooking({ path }) {
                 </div>
               </div>
               <div className="">
-                <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">Rp. {toRupiah(parseInt(byrdata.nominal) + parseInt(byrdata.nominal_admin))}</h1>
-                <small>Total (Admin Rp. {toRupiah(byrdata.nominal_admin)})</small>
+              <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">Rp. {((parseInt(byrdata.nominal) || 0) + (parseInt(byrdata.nominal_admin) || 0)).toLocaleString('id-ID')}</h1>
+                <small>Total (Admin Rp. {(toRupiah(byrdata.nominal_admin ? byrdata.nominal_admin : 0)) ?? 0})</small>
               </div>
             </div>
           </div>
@@ -282,23 +201,23 @@ export default function ViewBooking({ path }) {
           </>
         )}
       </Modal>
-      <div className=''>
-        <div className='w-full mt-2 md:mt-8'>
-          <div className="w-full rounded-md shadow-sm border profile-header">
-            <div className="text-gray-500 p-4 flex space-x-2 items-center">
-              < AiOutlineHome size={20} /> <span>Home</span> <span>/</span> <span>{path}</span>
-            </div>
+      <div className='w-full mt-2 md:mt-8'>
+        <div className="w-full rounded-md shadow-sm border profile-header">
+          <div className="text-gray-500 p-4 flex space-x-2 items-center">
+            < AiOutlineHome size={20} /> <span>Home</span> <span>/</span> <span>{path}</span>
           </div>
         </div>
-        { err === true ? (
+      </div>
+      {err === true ? (
+      <>
+          <Page500 />
+      </>
+      ) : errPage === true ? (
         <>
           <Page500 />
-        </>) : errPage === true ? (
-        <>
-           <Page500 />
         </>
-        ) :(
-        <>
+      ) : (
+      <>
           {isLoading === false ? (
             <>
               {data !== null && data !== undefined && data.length !== undefined && data.length !== 0 ? (
@@ -309,16 +228,16 @@ export default function ViewBooking({ path }) {
                         <div className='p-8'>
                           <div className='flex justify-between items-end'>
                             <div className='flex space-x-2  items-end'>
-                              <div className='text-xs text-gray-500'>Id Transaksi</div>
+                              <div className='text-xs text-gray-500'>ID Transaksi</div>
                               <div className='text-sm text-blue-500 font-bold'>{e.id_transaksi}</div>
                             </div>
                             <div className='text-sm text-slate-500 font-bold '>
-                              Rp. {toRupiah(e.nominal)}
+                              Rp. {e.nominal ? toRupiah(e.nominal) : '-' }
                             </div>
                           </div>
                           <div className='border-t mt-8'>
                             <div className='flex space-x-2 mt-6 text-sm font-bold text-gray-500'>
-                              <MdOutlineTrain className='text-blue-500' size={16} />
+                              <IoBoatSharp className='text-blue-500' size={16} />
                               <div className='flex space-x-2 items-center'><div>{e.origin.toUpperCase()}</div><BsArrowRightShort /><div>{e.destination.toUpperCase()}</div></div>
                             </div>
                             <div className='pl-1'>
@@ -336,15 +255,19 @@ export default function ViewBooking({ path }) {
                                 Kode Booking
                               </div>
                               <div className='mt-1 text-sm font-bold text-gray-500'>
-                                 - 
+                                - 
                               </div>
                             </div> */}
-                            <div className='flex space-x-2  items-center pt-4'>
-                            <div className="text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white inline-block"> 
-                            sisa waktu{" "}
-                              {remainingTimes[i] && (new Date(e.expiredDate).getTime() > new Date().getTime()) ? remainingTime(remainingTimes[i])  : ' habis.'}
+                            <div className='block md:flex space-x-2 items-center pt-8'>
+							  <div className="text-xs py-1 px-3 rounded-full bg-green-500 text-white">
+                                Transaksi Sukses
                               </div>
-                              <div onClick={(e) => openModalBayar(e, i)} className='cursor-pointer text-blue-500 font-bold text-xs'>Lihat Detail</div>
+                              <div
+                                onClick={(e) => openModalBayar(e, i)}
+                                className="cursor-pointer text-blue-500 font-bold text-xs"
+                              >
+                                Lihat Detail
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -381,9 +304,7 @@ export default function ViewBooking({ path }) {
               </div>
             </>
           )}
-        </>
-        )}
-
+      </>)}
       </div>
     </>
   );

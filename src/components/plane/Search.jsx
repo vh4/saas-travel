@@ -802,7 +802,6 @@ export default function Search() {
 
                         {detailTiket == `open-${index}` ? (
                           <>
-                           {console.log(e.classes)}
                             {e.isTransit === true ? (
                               e.classes.map((x, i) => (
                                 <div className="hidden xl:flex xl:items-center xl:space-x-16 xl:mt-6 border-t">

@@ -778,7 +778,7 @@ function Plane() {
                     </Button>
                     <div
                       id="basic-menu"
-                      className={`${anchorEl} absolute top-20 z-10 grid w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg`}
+                      className={`${anchorEl} absolute top-20 z-10 grid w-full md:w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg`}
                     >
                       <div className="w-full md:w-48 ml-4 block md:mx-0">
                         <div className="w-full items-center text-gray-600">

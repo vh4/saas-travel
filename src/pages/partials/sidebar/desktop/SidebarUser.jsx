@@ -81,6 +81,11 @@ export default function SidebarUser({pathSidebar}) {
                                     Transaksi Pesawat
                                 </div>
                             </Link>
+                            <Link to='/transaksi/pelni' className={`${ pathSidebar === '/transaksi/pelni' ? 'bg-cyan-100' : ''} block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500`}>
+                                <div className=' '>
+                                    Transaksi Pelni
+                                </div>
+                            </Link>
                         </div>
                     </li>
                     <li className='ml-4'>

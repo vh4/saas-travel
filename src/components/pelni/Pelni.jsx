@@ -595,7 +595,7 @@ function Pelni() {
                     </Button>
                     <div
                       id="basic-menu"
-                      className={`${anchorEl} absolute top-20 z-10 grid w-auto px-8 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}
+                      className={`${anchorEl} absolute top-20 z-10 grid w-full md:w-auto px-8 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}
                     >
                       <div className="w-full md:w-48 ml-4 block md:mx-0">
                         <div className="mt-4 w-full items-center text-gray-600">

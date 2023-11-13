@@ -252,7 +252,13 @@ export default function ViewBooking({ path }) {
           </>
         )}
       </Modal>
-
+      <div className='w-full mt-2 md:mt-8'>
+        <div className="w-full rounded-md shadow-sm border profile-header">
+          <div className="text-gray-500 p-4 flex space-x-2 items-center">
+            < AiOutlineHome size={20} /> <span>Home</span> <span>/</span> <span>{path}</span>
+          </div>
+        </div>
+      </div>
       {err === true ? (
       <>
           <Page500 />
@@ -265,13 +271,6 @@ export default function ViewBooking({ path }) {
       <>
           {isLoading === false ? (
             <>
-            <div className='w-full mt-2 md:mt-8'>
-              <div className="w-full rounded-md shadow-sm border profile-header">
-                <div className="text-gray-500 p-4 flex space-x-2 items-center">
-                  < AiOutlineHome size={20} /> <span>Home</span> <span>/</span> <span>{path}</span>
-                </div>
-              </div>
-            </div>
               {data !== null && data !== undefined && data.length !== undefined && data.length !== 0 ? (
                 <div className='mt-6'>
                   {data.map((e, i) => (

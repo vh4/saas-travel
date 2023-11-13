@@ -104,6 +104,14 @@ export default function SidebarMobileUser({ pathSidebar }) {
                   Transaksi Pesawat
                 </div>
               </Link>
+              <Link
+                to="/transaksi/pelni"
+                className={`block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500`}
+              >
+                <div className="text-gray-500 text-left text-base font-normal">
+                  Transaksi Pelni
+                </div>
+              </Link>
             </div>
 
             <div
