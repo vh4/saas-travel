@@ -1215,7 +1215,7 @@ export default function Search() {
                           {/* mobile cari */}
                           <div
                             type="button"
-                            onClick={(f) => (e.classes[0][0].availability > 0) && (e.classes[0][0].availability > (parseInt(child) + parseInt(adult) + parseInt(infant))) ? bookingHandlerDetail(f, index) : "" }
+                            onClick={(f) => (e.classes[0][0].availability > 0) && (e.classes[0][0].availability > (parseInt(child) + parseInt(adult) + parseInt(infant))) ? bookingHandlerDetail(index) : "" }
                             className="cursor-pointer block xl:hidden w-full text-gray-700"
                           >
                             <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
