@@ -12,7 +12,7 @@ import "react-phone-input-2/lib/bootstrap.css";
 import { Button, DatePicker, Modal, Result } from "antd";
 import { InputNumber } from "rsuite";
 import { Input, Form } from "antd";
-import { Select } from "antd";
+import { Select as SelectAnt } from "antd";
 import dayjs from "dayjs";
 import { notification } from "antd";
 import {
@@ -25,6 +25,7 @@ import Page400 from "../components/400";
 import ManyRequest from '../components/Manyrequest'
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { IoArrowForwardOutline } from "react-icons/io5";
+import Select from "react-select"
 
 export default function BookingPesawat() {
   useEffect(() => {
@@ -43,6 +44,7 @@ export default function BookingPesawat() {
   );
   const [dataDetail, setdataDetail] = React.useState(null);
   const [dataDetailForBooking, setdataDetailForBooking] = React.useState(null);
+  const [isInternational, setIsInternational] = React.useState(0);
   const [TotalAdult, SetTotalAdult] = React.useState(null);
   const [TotalChild, setTotalChild] = React.useState(null);
   const [TotalInfant, setTotalInfant] = React.useState(null);
@@ -103,6 +105,25 @@ export default function BookingPesawat() {
     }
   }, [token]);
 
+  const [selectedCountry, setSelectedCountry] = useState({});
+  const [countries, setCountries] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_HOST_API}/travel/country`);
+        const data = response.data;
+        setCountries(data.countries);
+        setSelectedCountry(data.userCountryCode);
+      } catch (error) {
+        setErrPage(true);
+        console.log(error.message || 'An error occurred while fetching data.');
+      }
+    };
+
+    fetchData();
+  }, []);
+
   useEffect(() => {
     Promise.all([getDataPesawatSearch()])
       .then(([bookResponse]) => {
@@ -110,8 +131,9 @@ export default function BookingPesawat() {
         if (bookResponse.data.rc === "00") {
           const dataDetailForBooking = bookResponse.data._flight_forBooking;
           const dataDetail = bookResponse.data._flight;
-
+        
           setdataDetailForBooking(dataDetailForBooking);
+          setIsInternational(dataDetailForBooking.isInternational)
           setdataDetail(dataDetail);
 
           const TotalAdult = parseInt(dataDetailForBooking.adult) || 0;
@@ -175,10 +197,12 @@ export default function BookingPesawat() {
     }
   }
 
+  
+
   const handleAdultsubCatagoryChange = (i, category) => (e) => {
     let adultCategory = adult[0];
 
-    if (category == "birthdate") {
+    if (category == "birthdate" || category == "expireddate") {
       let tanggalParse = new Date(e)
       .toLocaleDateString("id-ID", {
         day: "2-digit",
@@ -190,6 +214,8 @@ export default function BookingPesawat() {
       .join("-");
       
       adultCategory[i][category] = tanggalParse;
+    }else if(category == 'kewenegaraan' || category == 'issuingpassport'){
+        adultCategory[i][category] = e.value;
     } else {
       if (category == "gender") {
         adultCategory[i][category] = e;
@@ -203,7 +229,7 @@ export default function BookingPesawat() {
   const handleChildsubCatagoryChange = (i, category) => (e) => {
     let childCategory = child[0];
 
-    if (category == "birthdate") {
+    if (category == "birthdate" || category == 'expireddate') {
       let tanggalParse = new Date(e)
       .toLocaleDateString("id-ID", {
         day: "2-digit",
@@ -215,9 +241,10 @@ export default function BookingPesawat() {
       .join("-");
 
       childCategory[i][category] = tanggalParse;
-    }else if(category == "gender"){
+    }else if(category == 'kewenegaraan' || category == 'issuingpassport'){
+      childCategory[i][category] = e.value;
+    } else if(category == "gender"){
       childCategory[i][category] = e;
-
     }else {
       childCategory[i][category] = e.target.value;
     }
@@ -227,7 +254,7 @@ export default function BookingPesawat() {
   const handleInfantsubCatagoryChange = (i, category) => (e) => {
     let infantCategory = infant[0];
 
-    if (category == "birthdate") {
+    if (category == "birthdate" || category == 'expireddate') {
       let tanggalParse = new Date(e)
       .toLocaleDateString("id-ID", {
         day: "2-digit",
@@ -239,7 +266,9 @@ export default function BookingPesawat() {
       .join("-");
       
       infantCategory[i][category] = tanggalParse;
-    }else if(category == "gender"){
+    }else if(category == 'kewenegaraan' || category == 'issuingpassport'){
+      infantCategory[i][category] = e.value;
+    } else if(category == "gender"){
       infantCategory[i][category] = e;
     } else {
       infantCategory[i][category] = e.target.value;
@@ -273,10 +302,13 @@ export default function BookingPesawat() {
         date.getDate().toString().padStart(2, "0") +
         "/" +
         date.getFullYear();
+
+      //"CHD;".$child_title.";".$child_firstname.";".$child_lastname.";".$child_birthdate.";".$child_no_passport.";".$child_nationality.";".$child_issueby.";".$child_expdate.";".$child_issuedate.";".$child_issueby.";".$child_baggage
+
       end_child.push(
         `CHD;${item.gender};${item.nama_depan.toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${
           item.idNumber
-        };ID;ID;;;ID;`
+        };${item?.kewenegaraan ? item?.kewenegaraan : 'ID'};${item?.issuingpassport ? item?.issuingpassport : 'ID'};${item?.expireddate ? item?.expireddate : ''};;ID;`
       );
     });
 
@@ -291,7 +323,7 @@ export default function BookingPesawat() {
       end_infant.push(
         `INF;${item.gender};${item.nama_depan.toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${
           item.idNumber
-        };ID;ID;;;ID`
+        };${item?.kewenegaraan ? item?.kewenegaraan : 'ID'};${item?.issuingpassport ? item?.issuingpassport : 'ID'};${item?.expireddate ? item?.expireddate : ''};;ID`
       );
     }); //kok error jadinya
 
@@ -307,7 +339,7 @@ export default function BookingPesawat() {
       end_adult.push(
         `ADT;${item.gender};${item.nama_depan.toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${
           item.idNumber
-        };::${item.nomor};::${item.nomor};;;;${item.email};1;ID;ID;;;ID;`
+        };::${item.nomor};::${item.nomor};;;;${item.email};1;${item?.kewenegaraan ? item?.kewenegaraan : 'ID'};${item?.issuingpassport ? item?.issuingpassport : 'ID'};${item?.expireddate ? item?.expireddate : ''};${item?.issuingpassport ? item?.issuingpassport : 'ID'};ID;`
       );
     });
 
@@ -388,6 +420,17 @@ export default function BookingPesawat() {
     const currentDate = dayjs(dayBook).subtract(1, "day");
 
     return current && (current < endOfDays || current > currentDate);
+  };
+
+  const disabledDateExpiredDate = (current) => {
+    const lastDepartureDate = dayjs(dataDetail[dataDetail.length - 1]?.departureDate).add(1, "day");
+    const minDate = lastDepartureDate.add(6, "month");
+
+    const maxDate = lastDepartureDate.add(10, "year");
+    const maxDateMonth = maxDate.subtract(1, "month");
+    const maxDateDays = maxDateMonth.subtract(2, "day");
+
+    return current && (current < minDate || current > maxDateDays);
   };
 
   const disabledDateAdult = (current) => {
@@ -727,7 +770,7 @@ export default function BookingPesawat() {
                                         }}
                                         fullWidth
                                       >
-                                        <Select
+                                        <SelectAnt
                                           style={{ width: 120 }}
                                           options={data}
                                           value={e.gender}
@@ -744,7 +787,7 @@ export default function BookingPesawat() {
                                         sx={{ marginTop: 2, marginBottom: 2 }}
                                         fullWidth
                                       >
-                                        <Select
+                                        <SelectAnt
                                           style={{ width: 120 }}
                                           options={data}
                                           value={e.gender}
@@ -845,8 +888,9 @@ export default function BookingPesawat() {
                                   </div>
                                 </div>
                               </div>
+                              
                               <div className="mb-8 mt-0 xl:mt-4">
-                                <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
+                                <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6 ">
                                   {/* mobile & desktop NIK*/}
                                   <div className="w-full px-4 xl:px-0">
                                     <div className="xl:px-0 w-full text-gray-500 text-sm mb-2">
@@ -881,21 +925,21 @@ export default function BookingPesawat() {
                                   <div className="w-full">
                                     <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
                                       <div className="text-gray-500 text-sm mb-2">
-                                        No. Ktp
+                                        {isInternational == 1 ? "No. Passport" : "No. Ktp"}
                                       </div>
                                       <Form.Item
                                         name={`nikAdult${i}`}
                                         rules={[
                                           {
                                             required: true,
-                                            message: 'NIK tidak boleh kosong.',
+                                            message: isInternational == 1 ? 'NIK tidak boleh kosong.' : 'Passport tidak boleh kosong.',
                                           },
                                           ({ getFieldValue }) => ({
                                             validator(_, value) {
                                               if (!isNaN(value) && value !== null && value.toString().length === 16) {
                                                 return Promise.resolve();
                                               }
-                                              return Promise.reject('Panjang NIK harus 16 digit.');
+                                              return Promise.reject(isInternational == 1 ? "Panjang Passport harus 16 digit." : "Panjang NIK harus 16 digit.");
                                             },
                                           }),
                                         ]}
@@ -914,7 +958,7 @@ export default function BookingPesawat() {
                                           }}
                                           className={'border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0'}
                                           value={e.idNumber}
-                                          placeholder="No. Ktp / NIK"
+                                          placeholder={isInternational == 1 ? "No. Passport" : "No. Ktp / NIK"}
                                           onChange={handleAdultsubCatagoryChange(i, 'idNumber')}
                                           min={0}
                                           id="default-input"
@@ -928,6 +972,100 @@ export default function BookingPesawat() {
                                   </div>
                                 </div>
                               </div>
+
+                              {/* passport */}
+                              {isInternational === 1 && (
+                                <>
+                                  {/* passport */}
+                                  <div className="mt-8 mb-8 xl:mt-16">
+                                    <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
+                                      <div className="w-full px-4 xl:px-0">
+                                        <div className="xl:px-0 w-full text-gray-500 text-sm mb-2">
+                                          Kewarganegaraan
+                                        </div>
+                                        <Form.Item
+                                          name={`kewenegaraanAdult${i}`}
+                                          rules={[
+                                            {
+                                              required: true,
+                                              message:
+                                                "Harap input Kewenegaraan.",
+                                            },
+                                          ]}
+                                        >
+                                          <Select
+                                            options={countries}
+                                            value={e.kewenegaraan}
+                                            onChange={handleAdultsubCatagoryChange(i, 'kewenegaraan')}
+                                          />
+                                        </Form.Item>
+                                        <small className="block -mt-4 text-gray-400">
+                                          Contoh: indonesia
+                                        </small>
+                                      </div>
+                                      <div className="w-full px-4 xl:px-0">
+                                        <div className="xl:px-0 w-full text-gray-500 text-sm mb-2">
+                                          Issuing Passport
+                                        </div>
+                                        <Form.Item
+                                          name={`issuingpassportAdult${i}`}
+                                          rules={[
+                                            {
+                                              required: true,
+                                              message:
+                                                "Harap input Issuing Passport.",
+                                            },
+                                          ]}
+                                        >
+                                          <Select
+                                            options={countries}
+                                            value={e.issuingpassport}
+                                            onChange={handleAdultsubCatagoryChange(i, 'issuingpassport')}
+                                          />
+                                        </Form.Item>
+                                        <small className="block -mt-4 text-gray-400">
+                                          Contoh: indonesia
+                                        </small>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  {/* passport */}
+                                  <div className="mt-8 mb-8 xl:mt-16">
+                                      <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
+                                      <div className="w-full px-4 xl:px-0">
+                                        <div className="xl:px-0 w-full text-gray-500 text-sm mb-2">
+                                          Expired Date
+                                        </div>
+                                        <Form.Item
+                                          name={`expiredDateAdult${i}`}
+                                          rules={[
+                                            {
+                                              required: true,
+                                              message:
+                                                "Harap input Expired Date.",
+                                            },
+                                          ]}
+                                        >
+                                          <DatePicker
+                                            size="large"
+                                            className="w-full"
+                                            value={dayjs(e.expireddate, "YYYY/MM/DD")}
+                                            format={"DD/MM/YYYY"}
+                                            onChange={handleAdultsubCatagoryChange(
+                                              i,
+                                              "expireddate"
+                                            )}
+                                            disabledDate={disabledDateExpiredDate}
+                                          />
+                                        </Form.Item>
+                                        <small className="block -mt-4 text-gray-400">
+                                          Contoh: dd-mm-yyyy
+                                        </small>
+                                      </div>
+                                      </div>
+                                  </div>
+                                </>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -965,7 +1103,7 @@ export default function BookingPesawat() {
                                         }}
                                         fullWidth
                                       >
-                                        <Select
+                                        <SelectAnt
                                           style={{ width: 120 }}
                                           options={dataInfChld}
                                           value={e.gender}
@@ -982,7 +1120,7 @@ export default function BookingPesawat() {
                                         sx={{ marginTop: 2, marginBottom: 2 }}
                                         fullWidth
                                       >
-                                        <Select
+                                        <SelectAnt
                                           style={{ width: 120 }}
                                           options={dataInfChld}
                                           value={e.gender}
@@ -1161,21 +1299,21 @@ export default function BookingPesawat() {
                                   <div className="w-full">
                                     <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
                                       <div className="text-gray-500 text-sm mb-2">
-                                        No. Ktp
+                                          {isInternational == 1 ? "No. Passport" : "No. Ktp"}
                                       </div>
                                       <Form.Item
                                         name={`noktpChild${i}`}
                                         rules={[
                                           {
                                             required: true,
-                                            message: 'NIK tidak boleh kosong.',
+                                            message: isInternational == 1 ? 'Passport tidak boleh kosong.' : 'NIK tidak boleh kosong.',
                                           },
                                           ({ getFieldValue }) => ({
                                             validator(_, value) {
                                               if (!isNaN(value) && value !== null && value.toString().length === 16) {
                                                 return Promise.resolve();
                                               }
-                                              return Promise.reject('Panjang NIK harus 16 digit.');
+                                              return Promise.reject(isInternational == 1 ? "Panjang Passport harus 16 digit." : "Panjang NIK harus 16 digit.");
                                             },
                                           }),
                                         ]}
@@ -1194,7 +1332,7 @@ export default function BookingPesawat() {
                                           }}
                                           className={'border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0'}
                                           value={e.idNumber}
-                                          placeholder="No. Ktp / NIK"
+                                          placeholder={isInternational == 1 ? "No. Passport" : "No. Ktp / NIK"}
                                           onChange={handleChildsubCatagoryChange(i, 'idNumber')}
                                           min={0}
                                           id="default-input"
@@ -1208,7 +1346,100 @@ export default function BookingPesawat() {
                                   </div>
                                 </div>
                               </div>
-                            </div>
+                           {/* passport */}
+                            {isInternational === 1 && (
+                                <>
+                                  {/* passport */}
+                                  <div className="mt-8 mb-8 xl:mt-16">
+                                    <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
+                                      <div className="w-full px-4 xl:px-0">
+                                        <div className="xl:px-0 w-full text-gray-500 text-sm mb-2">
+                                          Kewarganegaraan
+                                        </div>
+                                        <Form.Item
+                                          name={`kewenegaraanChild${i}`}
+                                          rules={[
+                                            {
+                                              required: true,
+                                              message:
+                                                "Harap input Kewenegaraan.",
+                                            },
+                                          ]}
+                                        >
+                                          <Select
+                                            options={countries}
+                                            value={e.kewenegaraan}
+                                            onChange={handleChildsubCatagoryChange(i, 'kewenegaraan')}
+                                          />
+                                        </Form.Item>
+                                        <small className="block -mt-4 text-gray-400">
+                                          Contoh: indonesia
+                                        </small>
+                                      </div>
+                                      <div className="w-full px-4 xl:px-0">
+                                        <div className="xl:px-0 w-full text-gray-500 text-sm mb-2">
+                                          Issuing Passport
+                                        </div>
+                                        <Form.Item
+                                          name={`issuingpassportChild${i}`}
+                                          rules={[
+                                            {
+                                              required: true,
+                                              message:
+                                                "Harap input Issuing Passport.",
+                                            },
+                                          ]}
+                                        >
+                                          <Select
+                                            options={countries}
+                                            value={e.issuingpassport}
+                                            onChange={handleChildsubCatagoryChange(i, 'issuingpassport')}
+                                          />
+                                        </Form.Item>
+                                        <small className="block -mt-4 text-gray-400">
+                                          Contoh: indonesia
+                                        </small>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  {/* passport */}
+                                  <div className="mt-8 mb-8 xl:mt-16">
+                                      <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
+                                      <div className="w-full px-4 xl:px-0">
+                                        <div className="xl:px-0 w-full text-gray-500 text-sm mb-2">
+                                          Expired Date
+                                        </div>
+                                        <Form.Item
+                                          name={`expiredDateChild${i}`}
+                                          rules={[
+                                            {
+                                              required: true,
+                                              message:
+                                                "Harap input Expired Date.",
+                                            },
+                                          ]}
+                                        >
+                                          <DatePicker
+                                            size="large"
+                                            className="w-full"
+                                            value={dayjs(e.expireddate, "YYYY/MM/DD")}
+                                            format={"DD/MM/YYYY"}
+                                            onChange={handleChildsubCatagoryChange(
+                                              i,
+                                              "expireddate"
+                                            )}
+                                            disabledDate={disabledDateExpiredDate}
+                                          />
+                                        </Form.Item>
+                                        <small className="block -mt-4 text-gray-400">
+                                          Contoh: dd-mm-yyyy
+                                        </small>
+                                      </div>
+                                      </div>
+                                  </div>
+                                </>
+                              )}
+                            </div>                           
                           </div>
                         </div>
                       </>
@@ -1245,7 +1476,7 @@ export default function BookingPesawat() {
                                         }}
                                         fullWidth
                                       >
-                                        <Select
+                                        <SelectAnt
                                           style={{ width: 120 }}
                                           options={dataInfChld}
                                           value={e.gender}
@@ -1262,7 +1493,7 @@ export default function BookingPesawat() {
                                         sx={{ marginTop: 2, marginBottom: 2 }}
                                         fullWidth
                                       >
-                                        <Select
+                                        <SelectAnt
                                           style={{ width: 120 }}
                                           options={dataInfChld}
                                           value={e.gender}
@@ -1399,21 +1630,21 @@ export default function BookingPesawat() {
                                   <div className="w-full">
                                     <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
                                       <div className="text-gray-500 text-sm mb-2">
-                                        No. Ktp
+                                        {isInternational == 1 ? "No. Passport" : "No. Ktp"}
                                       </div>
                                       <Form.Item
                                           name={`infantktp${i}`}
                                           rules={[
                                             {
                                               required: true,
-                                              message: "NIK tidak boleh kosong.",
+                                              message: isInternational == 1 ? 'Passport tidak boleh kosong.' : 'NIK tidak boleh kosong.',
                                             },
                                             ({ getFieldValue }) => ({
                                               validator(_, value) {
                                                 if (!isNaN(value) && value !== null && value.toString().length === 16) {
                                                   return Promise.resolve();
                                                 }
-                                                return Promise.reject("Panjang NIK harus 16 digit.");
+                                                return Promise.reject(isInternational == 1 ? "Panjang Passport harus 16 digit." : "Panjang NIK harus 16 digit.");
                                               },
                                             }),
                                           ]}
@@ -1432,7 +1663,7 @@ export default function BookingPesawat() {
                                           }}
                                           className={'border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0'}
                                           value={e.idNumber}
-                                          placeholder="No. Ktp / NIK"
+                                          placeholder={isInternational == 1 ? "No. Passport" : "No. Ktp / NIK"}
                                           onChange={handleInfantsubCatagoryChange(i, 'idNumber')}
                                           min={0}
                                           id="default-input"
@@ -1446,6 +1677,100 @@ export default function BookingPesawat() {
                                   </div>
                                 </div>
                               </div>
+                            
+                            {/* passport */}
+                            {isInternational === 1 && (
+                                <>
+                                  {/* passport */}
+                                  <div className="mt-8 mb-8 xl:mt-16">
+                                    <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
+                                      <div className="w-full px-4 xl:px-0">
+                                        <div className="xl:px-0 w-full text-gray-500 text-sm mb-2">
+                                          Kewarganegaraan
+                                        </div>
+                                        <Form.Item
+                                          name={`kewenegaraanInfant${i}`}
+                                          rules={[
+                                            {
+                                              required: true,
+                                              message:
+                                                "Harap input Kewenegaraan.",
+                                            },
+                                          ]}
+                                        >
+                                          <Select
+                                            options={countries}
+                                            value={e.kewenegaraan}
+                                            onChange={handleInfantsubCatagoryChange(i, 'kewenegaraan')}
+                                          />
+                                        </Form.Item>
+                                        <small className="block -mt-4 text-gray-400">
+                                          Contoh: indonesia
+                                        </small>
+                                      </div>
+                                      <div className="w-full px-4 xl:px-0">
+                                        <div className="xl:px-0 w-full text-gray-500 text-sm mb-2">
+                                          Issuing Passport
+                                        </div>
+                                        <Form.Item
+                                          name={`issuingpassportInfant${i}`}
+                                          rules={[
+                                            {
+                                              required: true,
+                                              message:
+                                                "Harap input Issuing Passport.",
+                                            },
+                                          ]}
+                                        >
+                                          <Select
+                                            options={countries}
+                                            value={e.issuingpassport}
+                                            onChange={handleInfantsubCatagoryChange(i, 'issuingpassport')}
+                                          />
+                                        </Form.Item>
+                                        <small className="block -mt-4 text-gray-400">
+                                          Contoh: indonesia
+                                        </small>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  {/* passport */}
+                                  <div className="mt-8 mb-8 xl:mt-16">
+                                      <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
+                                      <div className="w-full px-4 xl:px-0">
+                                        <div className="xl:px-0 w-full text-gray-500 text-sm mb-2">
+                                          Expired Date
+                                        </div>
+                                        <Form.Item
+                                          name={`expiredDateInfant${i}`}
+                                          rules={[
+                                            {
+                                              required: true,
+                                              message:
+                                                "Harap input Expired Date.",
+                                            },
+                                          ]}
+                                        >
+                                          <DatePicker
+                                            size="large"
+                                            className="w-full"
+                                            value={dayjs(e.expireddate, "YYYY/MM/DD")}
+                                            format={"DD/MM/YYYY"}
+                                            onChange={handleInfantsubCatagoryChange(
+                                              i,
+                                              "expireddate"
+                                            )}
+                                            disabledDate={disabledDateExpiredDate}
+                                          />
+                                        </Form.Item>
+                                        <small className="block -mt-4 text-gray-400">
+                                          Contoh: dd-mm-yyyy
+                                        </small>
+                                      </div>
+                                      </div>
+                                  </div>
+                                </>
+                              )}
                             </div>
                           </div>
                         </div>

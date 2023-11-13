@@ -480,7 +480,7 @@ export default function Search() {
                                           : setOpenButton(`open-${k + i}${e.SHIP_NO}`)
                                       }
                                       >
-                                        Detail Route
+                                        DETAIL ROUTE
                                       </div>
                                     </div>
                                   </div>
@@ -488,7 +488,7 @@ export default function Search() {
                                     <>
                                       <div className="mt-16">
                                            <div className="text-md font-bold text-center mb-12">
-                                              Detail Route
+                                            DETAIL ROUTE
                                            </div>
                                            <div className="grid grid-rows-3 grid-flow-col">
                                             <div className="row-span-3 flex justify-end items-start">

@@ -305,11 +305,36 @@ export default function Search() {
 
   };
 
-  async function bookingHandlerDetail(e, i) {
-    e.preventDefault();
+
+  const filteredData = dataSearch
+  .filter((d) => {
+    if (selectedTime.length === 0) {
+      return true;
+    }
+    const departureTime = moment(d.detailTitle[0].depart, "HH:mm").format("HH:mm");
+    return selectedTime.some((t) => {
+      const [start, end] = t.split("-");
+      return moment(departureTime, "HH:mm").isBetween(
+        moment(start, "HH:mm"),
+        moment(end, "HH:mm")
+      );
+    });
+  }).filter((harga) => {
+    if(harga.classes[0] === undefined){
+    }
+    return harga.classes[0].some((harga) => {
+      return (
+        valHargaRange[0] <= harga.price &&
+        harga.price <= valHargaRange[1]
+      );
+    });
+  });
+
+  async function bookingHandlerDetail(i)  {
+
     setisLoadingPilihTiket(`true-${i}`);
 
-    let filterDataSearching = dataSearch.filter((_, index) => index === i);
+    let filterDataSearching = filteredData.filter((_, index) => index === i);
 
     let detailKereta = {
       airline: filterDataSearching[0].airlineCode,
@@ -338,6 +363,7 @@ export default function Search() {
       child: child,
       infant: infant,
       seats: [filterDataSearching[0].classes[0][0].seat],
+      isInternational: filterDataSearching[0]?.classes[filterDataSearching[0]?.classes.length - 1][0]?.isInternational ?? 0,
     };
 
     if (response.data.rc === "00") {
@@ -429,30 +455,6 @@ export default function Search() {
 
     }
   }
-
-  const filteredData = dataSearch
-  .filter((d) => {
-    if (selectedTime.length === 0) {
-      return true;
-    }
-    const departureTime = moment(d.detailTitle[0].depart, "HH:mm").format("HH:mm");
-    return selectedTime.some((t) => {
-      const [start, end] = t.split("-");
-      return moment(departureTime, "HH:mm").isBetween(
-        moment(start, "HH:mm"),
-        moment(end, "HH:mm")
-      );
-    });
-  }).filter((harga) => {
-    if(harga.classes[0] === undefined){
-    }
-    return harga.classes[0].some((harga) => {
-      return (
-        valHargaRange[0] <= harga.price &&
-        harga.price <= valHargaRange[1]
-      );
-    });
-  });
 
   return (
     <>
@@ -715,7 +717,7 @@ export default function Search() {
                             <HiOutlineArrowNarrowRight size={24} />
                             <div>
                               <h1 className="text-sm font-medium">
-                                {e.detailTitle[0].arrival} <span className="font-semibold text-xs text-blue-500">({e.classes[0][0].arrivalTimeZoneText})</span>
+                                {e.detailTitle[e.detailTitle.length - 1].arrival} <span className="font-semibold text-xs text-blue-500">({e.classes[0][0].arrivalTimeZoneText})</span>
                               </h1>
                               <small>{arrival}</small>
                             </div>
@@ -743,8 +745,8 @@ export default function Search() {
                                 <div>
                                   <button
                                     type="button"
-                                    onClick={(e) =>
-                                      bookingHandlerDetail(e, index)
+                                    onClick={() =>
+                                      bookingHandlerDetail(index)
                                     }
                                     class={`${
                                       isLoadingPilihTiket == "true-" + index
@@ -1261,10 +1263,10 @@ export default function Search() {
                                   <div className="w-full mt-12 px-4 border-b-2"></div>
                                   <div>
                                     <h1 className="mt-4 xl:mt-0 text-sm font-medium">
-                                      {e.detailTitle[0].arrival}
+                                      {e.detailTitle[e.detailTitle.length - 1].arrival}
                                     </h1>
                                     <small>
-                                      {e.detailTitle[0].destination}
+                                      {e.detailTitle[e.detailTitle.length - 1].destination}
                                     </small>
                                   </div>
                                 </div>
