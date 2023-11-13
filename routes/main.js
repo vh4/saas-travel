@@ -5,6 +5,7 @@ const { getCountry } = require('../utils/utils.js');
 require('dotenv').config()
 
 const Router = express.Router();
+const country = getCountry();
 
 Router.post('/travel/app/sign_in', async function (req, res) {
   const { username, password, token } = req.body;
@@ -178,7 +179,7 @@ Router.post('/travel/app/sign_out', async function (req, res) {
 //get country
 Router.get('/travel/country', (req, res) => {
 
-  return res.status(200).json(getCountry());
+  return res.status(200).json(country);
 
 })
 
