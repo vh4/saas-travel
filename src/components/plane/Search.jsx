@@ -351,7 +351,7 @@ export default function Search() {
     const response = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/flight/fare`,
       detailKereta
-    );
+    ); //kocak broooWWW
 
     const forBooking = {
       airline: filterDataSearching[0].airlineCode,
