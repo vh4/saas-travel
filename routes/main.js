@@ -1,6 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const logger = require('../utils/logger.js');
+const { getCountry } = require('../utils/utils.js');
 require('dotenv').config()
 
 const Router = express.Router();
@@ -173,6 +174,13 @@ Router.post('/travel/app/sign_out', async function (req, res) {
     });
   }
 });
+
+//get country
+Router.get('/travel/country', (req, res) => {
+
+  return res.status(200).json(getCountry());
+
+})
 
 Router.post('/travel/app/transaction_list', async function (req, res) {
   const { token, product } = req.body;
