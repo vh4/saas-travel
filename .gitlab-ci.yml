@@ -38,7 +38,7 @@ build staging:
     refs:
       - backend
   tags:
-    - gitlab
+    - gitlabrunner01
 
 deploy staging:
   stage: deploy staging
@@ -89,7 +89,7 @@ build prod:
     refs:
       - backend
   tags:
-    - gitlab
+    - gitlabrunner01
 
 deploy prod:
   stage: deploy prod
