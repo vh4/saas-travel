@@ -480,14 +480,14 @@ export default function Search() {
                                           : setOpenButton(`open-${k + i}${e.SHIP_NO}`)
                                       }
                                       >
-                                        DETAIL ROUTE
+                                        Detail Route
                                       </div>
                                     </div>
                                   </div>
                                   {openButton === `open-${k + i}${e.SHIP_NO}` ? (
                                     <>
                                       <div className="mt-16">
-                                           <div className="text-md font-bold text-center mb-12">
+                                           <div className="text-md font-extrabold text-center mb-12">
                                             DETAIL ROUTE
                                            </div>
                                            <div className="grid grid-rows-3 grid-flow-col">
