@@ -380,17 +380,20 @@ export default function BookingPesawat() {
   };
 
   const disabledDate = (current, e, i) => {
-    const twoYearsAgo = dayjs().subtract(2, "year");
-    const endOfMonth = twoYearsAgo.endOf("month");
-    const endOfDays = endOfMonth.subtract(1, "day");
+    const dayBook = dayjs(dataDetail[dataDetail.length - 1]?.departureDate).add(1, "day");
 
-    const currentDate = dayjs().subtract(1, "day");
+    const twoYearsAgo = dayjs(dayBook).subtract(2, "year");
+    const endOfDays = twoYearsAgo.subtract(1, "day");
+
+    const currentDate = dayjs(dayBook).subtract(1, "day");
 
     return current && (current < endOfDays || current > currentDate);
   };
 
   const disabledDateAdult = (current) => {
-    const TenYearsAgo = dayjs().subtract(12, "year");
+    const dayBook = dayjs(dataDetail[dataDetail.length - 1]?.departureDate).add(1, "day");
+
+    const TenYearsAgo = dayjs(dayBook).subtract(12, "year");
 
     // const endOfMonth = TenYearsAgo.endOf("month");
     // const endOfDays = endOfMonth.subtract(1, "day");
@@ -399,16 +402,17 @@ export default function BookingPesawat() {
   };
 
   const disabledDateChild = (current) => {
-    const twoYearsAgo = dayjs().subtract(2, "year");
-    const TenYearsAgo = dayjs().subtract(12, "year");
+    const dayBook = dayjs(dataDetail[dataDetail.length - 1]?.departureDate).add(1, "day");
+    const twoYearsAgo = dayjs(dayBook).subtract(2, "year");
+    const TenYearsAgo = dayjs(dayBook).subtract(12, "year");
 
     // const startOfMonth = TenYearsAgo.endOf("month");
     // const endOfDays = startOfMonth.subtract(1, "day");
     // const endOfMonth = twoYearsAgo.endOf("month");
-    const endOfMonth = twoYearsAgo.subtract(1, "day");
-    const startOfMonth = TenYearsAgo.subtract(1, "day");
+    // const endOfMonth = twoYearsAgo.subtract(1, "day");
+    // const startOfMonth = TenYearsAgo.subtract(1, "day");
 
-    return current && (current < startOfMonth || current > endOfMonth);
+    return current && (current < TenYearsAgo || current > twoYearsAgo);
   };
 
   const {

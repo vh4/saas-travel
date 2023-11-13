@@ -399,7 +399,7 @@ export default function Search() {
                               >
                                 {/* desktop cari */}
                                 <div className="hidden xl:block w-full text-gray-700 ">
-                                  <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-8">
+                                  <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-8 gap-0 md:gap-4">
                                     <div className="col-span-1 xl:col-span-2">
                                       <h1 className="text-sm font-bold">
                                         {e.SHIP_NAME}{" "}
@@ -446,7 +446,7 @@ export default function Search() {
                                     </div>
                                     <div className="">
                                       <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">
-                                        Dewasa Rp.
+                                      Adult Rp.
                                         {toRupiah(e.fares[i].FARE_DETAIL.A.TOTAL)}
                                       </h1>
                                       <small className="text-red-500">
@@ -480,13 +480,16 @@ export default function Search() {
                                           : setOpenButton(`open-${k + i}${e.SHIP_NO}`)
                                       }
                                       >
-                                        Lihat Detail
+                                        Detail Route
                                       </div>
                                     </div>
                                   </div>
                                   {openButton === `open-${k + i}${e.SHIP_NO}` ? (
                                     <>
                                       <div className="mt-16">
+                                           <div className="text-md font-bold text-center mb-12">
+                                              Detail Route
+                                           </div>
                                            <div className="grid grid-rows-3 grid-flow-col">
                                             <div className="row-span-3 flex justify-end items-start">
                                               <div className="text-sm font-bold">{parseTanggal(dayjs(e.DEP_DATE, 'YYYYMMDD').format('YYYY-MM-DD'))}</div>
@@ -533,7 +536,7 @@ export default function Search() {
                                         </div>
                                         <div className="text-right">
                                           <h1 className="text-xs font-bold text-blue-500">
-                                            Dewasa Rp.
+                                            Adult Rp.
                                             {toRupiah(
                                               e.fares[0].FARE_DETAIL.A.TOTAL
                                             )}
@@ -620,7 +623,7 @@ export default function Search() {
                               >
                                 {/* desktop cari */}
                                 <div className="hidden xl:block w-full text-gray-700 ">
-                                  <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-8">
+                                  <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-8 gap-0 md:gap-4">
                                     <div className="col-span-1 xl:col-span-2">
                                       <h1 className="text-sm font-bold">
                                         {e.SHIP_NAME}{" "}
@@ -667,7 +670,7 @@ export default function Search() {
                                     </div>
                                     <div className="">
                                       <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">
-                                        Dewasa Rp.
+                                        Adult Rp.
                                         {toRupiah(e.fares[i].FARE_DETAIL.A.TOTAL)}
                                       </h1>
                                       <small className="text-red-500">
@@ -717,7 +720,7 @@ export default function Search() {
                                         </div>
                                         <div className="text-right">
                                           <h1 className="text-xs font-bold text-blue-500">
-                                            Dewasa Rp.
+                                            Adult Rp.
                                             {toRupiah(
                                               e.fares[0].FARE_DETAIL.A.TOTAL
                                             )}
