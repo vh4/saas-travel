@@ -9,8 +9,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { RxCrossCircled } from "react-icons/rx";
 import "react-phone-input-2/lib/bootstrap.css";
-import { Button, DatePicker, Modal, Result } from "antd";
-import { InputNumber } from "rsuite";
+import { Button, DatePicker, Modal } from "antd";
 import { Input, Form } from "antd";
 import { Select as SelectAnt } from "antd";
 import dayjs from "dayjs";
@@ -412,14 +411,33 @@ export default function BookingPesawat() {
   };
 
   const disabledDate = (current, e, i) => {
-    const dayBook = dayjs(dataDetail[dataDetail.length - 1]?.departureDate).add(1, "day");
 
-    const twoYearsAgo = dayjs(dayBook).subtract(2, "year");
-    const endOfDays = twoYearsAgo.subtract(1, "day");
+    if(isInternational == 1){
+ 
+      const dayBook = dayjs(dataDetail[dataDetail.length - 1]?.departureDate).add(1, "day");
+  
+      const twoYearsAgo = dayjs(dayBook).subtract(2, "year");
+      const endOfDays = twoYearsAgo.subtract(1, "day");
+  
+      const currentDate = dayjs(dayBook).subtract(10, "day");
+  
+      return current && (current < endOfDays || current > currentDate);
 
-    const currentDate = dayjs(dayBook).subtract(1, "day");
+    }else{
 
-    return current && (current < endOfDays || current > currentDate);
+      const currentDay = dayjs().add(1, "day");
+  
+      const dayBookStart = dayjs(dataDetail[dataDetail.length - 1]?.departureDate).add(1, "day");
+      const twoYearsAgo = dayjs(dayBookStart).subtract(2, "year");
+      const endOfDays = twoYearsAgo.subtract(1, "day");
+  
+      const currentDate = dayjs(currentDay).subtract(1, "day");
+  
+      return current && (current < endOfDays || current > currentDate);
+
+    }
+
+
   };
 
   const disabledDateExpiredDate = (current) => {
@@ -453,9 +471,9 @@ export default function BookingPesawat() {
     // const endOfDays = startOfMonth.subtract(1, "day");
     // const endOfMonth = twoYearsAgo.endOf("month");
     // const endOfMonth = twoYearsAgo.subtract(1, "day");
-    // const startOfMonth = TenYearsAgo.subtract(1, "day");
+    const startOfMonth = TenYearsAgo.subtract(1, "day");
 
-    return current && (current < TenYearsAgo || current > twoYearsAgo);
+    return current && (current < startOfMonth || current > twoYearsAgo);
   };
 
   const {
