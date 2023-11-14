@@ -305,9 +305,6 @@ export default function Search() {
 
   };
 
-
-  console.log(JSON.stringify(dataSearch))
-
   const filteredData = dataSearch
   .filter((d, i) => {
     if (selectedTime.length === 0) {
