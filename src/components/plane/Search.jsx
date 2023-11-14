@@ -717,7 +717,7 @@ export default function Search() {
                             <HiOutlineArrowNarrowRight size={24} />
                             <div>
                               <h1 className="text-sm font-medium">
-                                {e.detailTitle[e.detailTitle.length - 1].arrival} <span className="font-semibold text-xs text-blue-500">({e.classes[0][0].arrivalTimeZoneText})</span>
+                                {e.detailTitle[e.detailTitle.length - 1].arrival} <span className="font-semibold text-xs text-blue-500">({e.classes[e.classes.length - 1][0].arrivalTimeZoneText})</span>
                               </h1>
                               <small>{arrival}</small>
                             </div>
