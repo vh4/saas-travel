@@ -74,7 +74,7 @@ export default function Search() {
     return () => document.body.removeEventListener("click", closeFilter);
   }, []);
 
-  const [valHargaRange, setHargaRange] = useState([0, 10000000]);
+  const [valHargaRange, setHargaRange] = useState([0, 100000000]);
   const handleWaktuFilterChange = (e) => {
     let newWktuFilter = waktuFilter;
 
@@ -306,8 +306,10 @@ export default function Search() {
   };
 
 
+  console.log(JSON.stringify(dataSearch))
+
   const filteredData = dataSearch
-  .filter((d) => {
+  .filter((d, i) => {
     if (selectedTime.length === 0) {
       return true;
     }
@@ -319,16 +321,18 @@ export default function Search() {
         moment(end, "HH:mm")
       );
     });
-  }).filter((harga) => {
-    if(harga.classes[0] === undefined){
-    }
-    return harga.classes[0].some((harga) => {
+  })
+  .filter((flight, i) => {
+    return flight.classes[0].some((harga) => {
+      if (harga.price === undefined) {
+        return false; // Skip if price is undefined
+      }
       return (
-        valHargaRange[0] <= harga.price &&
-        harga.price <= valHargaRange[1]
+        (valHargaRange[0] <= harga.price && harga.price <= valHargaRange[1])
       );
     });
   });
+
 
   async function bookingHandlerDetail(i)  {
 
@@ -570,7 +574,7 @@ export default function Search() {
                         onChange={hargraRangeChange}
                         value={valHargaRange}
                         min={0}
-                        max={10000000}
+                        max={100000000}
                       />
                     </Box>
                   </div>
@@ -717,7 +721,7 @@ export default function Search() {
                             <HiOutlineArrowNarrowRight size={24} />
                             <div>
                               <h1 className="text-sm font-medium">
-                                {e.detailTitle[e.detailTitle.length - 1].arrival} <span className="font-semibold text-xs text-blue-500">({e.classes[e.classes.length - 1][0].arrivalTimeZoneText})</span>
+                                {e.detailTitle[e.detailTitle.length - 1].arrival} <span className="font-semibold text-xs text-blue-500">({e.classes[0][0].arrivalTimeZoneText})</span>
                               </h1>
                               <small>{arrival}</small>
                             </div>
