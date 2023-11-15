@@ -285,8 +285,8 @@ export default function Header() {
           <div className="">
             <Link to={"/"} className="flex items-center">
               <img
-                src="/logo-rb.png"
-                className="w-36 -my-2 md:-my-0 md:w-40 -mr-4"
+                src="/logo.png"
+                className="w-32 -my-2 md:my-1 md:w-32 -mr-2 md:-mr-4 pl-4 md:pl-0"
                 alt="Rajabiller Logo"
               />
             </Link>
