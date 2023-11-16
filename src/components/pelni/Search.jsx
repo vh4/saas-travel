@@ -485,28 +485,29 @@ export default function Search() {
                                     </div>
                                   </div>
                                   {openButton === `open-${k + i}${e.SHIP_NO}` ? (
-                                    <>
-                                      <div className="mt-16">
-                                           <div className="text-md font-extrabold text-center mb-12">
-                                            DETAIL ROUTE
-                                           </div>
-                                           <div className="grid grid-rows-3 grid-flow-col">
-                                            <div className="row-span-3 flex justify-end items-start">
-                                              <div className="text-sm font-bold">{parseTanggal(dayjs(e.DEP_DATE, 'YYYYMMDD').format('YYYY-MM-DD'))}</div>
-                                            </div>
-                                            <div className="row-span-3 flex justify-center items-center">
-                                              <Timeline>
-                                                {e.ROUTE.split(/\/\d-/).filter(item => item !== "").map((h) => (
-                                                  <Timeline.Item key={h}>{pelniStatiun.find((z) => parseInt(z.CODE) === parseInt(h))?.NAME}</Timeline.Item>
-                                                ))}
-                                              </Timeline>
-                                            </div>
-                                            <div className="row-span-3 flex justify-start items-end">
-                                              <div className="block text-sm font-bold">{parseTanggal(dayjs(e.ARV_DATE, 'YYYYMMDD').format('YYYY-MM-DD'))}</div>
-                                            </div>
+                                    <div className={`transition-all ease-in-out duration-500 ${openButton === `open-${k + i}${e.SHIP_NO}` ? 'max-h-96' : 'max-h-0'} overflow-hidden`}>
+                                      <div className="px-4 mt-4">
+                                        <div className="mb-2 text-sm font-bold">
+                                          Tanggal Keberangkatan
+                                        </div>
+                                        <div className="block mb-16">
+                                          <div className="text-xs">{parseTanggal(dayjs(e.DEP_DATE, 'YYYYMMDD').format('YYYY-MM-DD'))}</div>
+                                        </div>
+                                          <div>
+                                            <Timeline>
+                                              {e.ROUTE.split(/\/\d-/).filter(item => item !== "").map((h) => (
+                                                <Timeline.Item key={h}>{pelniStatiun.find((z) => parseInt(z.CODE) === parseInt(h))?.NAME}</Timeline.Item>
+                                              ))}
+                                            </Timeline>
                                           </div>
+                                        <div className="mb-2 text-sm font-bold">
+                                          Tanggal Tujuan
+                                        </div>
+                                        <div className="flex justify-start items-end">
+                                          <div className="block text-xs">{parseTanggal(dayjs(e.ARV_DATE, 'YYYYMMDD').format('YYYY-MM-DD'))}</div>
+                                        </div>
                                       </div>
-                                    </>
+                                    </div>
                                   ) : (<></>)}
                                 </div>
                                 <div>
