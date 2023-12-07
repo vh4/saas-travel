@@ -36,7 +36,7 @@ Router.post('/travel/app/redirect', async function (req, res) {
           username: splitlogin[0] || '',
           method: "rajabiller.login_travel",
           password: splitlogin[1] || '',
-          info: getInfoClientAll(req),
+          info: JSON.stringify(getInfoClientAll(req)),
           from: 'Web Travel Auth'
         });
     
@@ -113,7 +113,7 @@ Router.post('/travel/app/sign_in', async function (req, res) {
           username: username,
           method: "rajabiller.login_travel",
           password: password,
-          info: getInfoClientAll(req),
+          info: JSON.stringify(getInfoClientAll(req)),
           from: 'Web Travel Input Form Modal'
         });
     
