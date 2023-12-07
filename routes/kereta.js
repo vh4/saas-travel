@@ -209,7 +209,7 @@ Router.post('/travel/train/book', apiLimiterKhususBooking, async function (req, 
 
     data['username'] = req.session['v_uname'] || ''
 
-    logger.info(`Request /travel/train/book: ${JSON.stringify(req.body)}`);
+    logger.info(`Request /travel/train/book: ${JSON.stringify(data)}`);
 
     const response = await axios.post(
       `${process.env.URL_HIT}/travel/train/book`,data
