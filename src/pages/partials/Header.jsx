@@ -10,14 +10,19 @@ import SidebarMobileUser from "./sidebar/mobile/SidebarMobileUser";
 import { Drawer, Typography, Modal, Form, Input, Button, Avatar } from "antd";
 import { notification } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
-import { LogoutContent } from "../../App";
 import { FaListAlt } from "react-icons/fa";
 import ReCAPTCHA from "react-google-recaptcha";
 import { UserOutlined } from "@ant-design/icons";
 import dayjs, { isDayjs } from "dayjs";
 import { IoLogOut, IoLogOutOutline, IoLogOutSharp } from "react-icons/io5";
+import { LoginContent, LogoutContent } from "../../App";
 
 export default function Header() {
+
+  const customStyle = {
+    color: "white", // Warna teks
+    padding: "20px",
+  };
 
   const captchaRef = useRef(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -25,6 +30,7 @@ export default function Header() {
   const [form] = Form.useForm();
   const handleOpen = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
+  const { loginComponent, setLoginComponent } = useContext(LoginContent);
 
   const [isExpired, setIsExpired] = useState(false);
   const [login, setLogin] = useState(false);
@@ -44,6 +50,10 @@ export default function Header() {
   useEffect(() => {
     if (token != null || token != undefined) {
       setLogin(true);
+      setLoginComponent({
+        type: "NAVIGATION",
+        setLogin: true,
+      });
     }
   }, [token]);
 
@@ -111,12 +121,6 @@ export default function Header() {
   const [usr, setUsr] = useState();
 
   useEffect(() => {
-    if (user === null || user === undefined) {
-      userProfile();
-    }
-  }, [user]);
-
-  useEffect(() => {
     expiredDateTime();
   }, [expiredDate]);
 
@@ -140,6 +144,11 @@ export default function Header() {
       );
     }
   };
+
+  if (user === null || user === undefined) {
+    userProfile();
+  }
+
 
   const expiredDateTime = async () => {
     const response = await axios.post(
@@ -205,15 +214,10 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    if (isExpired && login) {
+    if ((isExpired && login) || (isExpired && loginComponent.setLogin)) {
       logout();
     }
   }, [isExpired]);
-
-  const customStyle = {
-    color: "white", // Warna teks
-    padding: "20px",
-  };
 
   const onCloseDrawer = () => setIsDrawerOpen(false);
 
@@ -267,15 +271,6 @@ export default function Header() {
       setLoading(false);
     }
   };
-
-  const x = user
-    ? user.namaPemilik.split(" ")
-    : usr
-    ? usr.namaPemilik.split(" ")
-    : null;
-  const nd = x ? (x[0] ? x[0] : "") : "";
-  const nb = x ? (x[1] ? x[1] : "") : "";
-  
 
   return (
     <nav className="bg-white px-2 sm:px-4 py-3  block sticky top-0 w-full z-50 left-0 border-b border-gray-200 ">
@@ -340,13 +335,24 @@ export default function Header() {
                         <>
                           <div className="flex space-x-2 items-center mt-2">
                           <div className="">
-                          <div className="text-slate-600 font-bold">
-                            {localStorage.getItem('c_name')
-                              ? localStorage.getItem('c_name').charAt(0).toUpperCase() + localStorage.getItem('c_name').slice(1)
-                              : 'Rb Travell'}
+                              <div className="text-slate-600 font-bold">
+                                {localStorage.getItem("c_name")
+                                  ? localStorage
+                                      .getItem("c_name")
+                                      .charAt(0)
+                                      .toUpperCase() +
+                                    localStorage.getItem("c_name").slice(1)
+                                  : "Rb Travell"}
+                              </div>
+                              <small>
+                                {localStorage.getItem("c_at")
+                                  ? "Logged at " +
+                                    dayjs(localStorage.getItem("c_at")).format(
+                                      "ddd, DD MMM YYYY HH:mm:ss"
+                                    )
+                                  : "Logged at -"}
+                              </small>
                             </div>
-                              <small>{localStorage.getItem('c_at') ? 'Logged at ' + dayjs(localStorage.getItem('c_at')).format('ddd, DD MMM YYYY HH:mm:ss') : 'Logged at -'}</small>
-                          </div>
                           <div>
                           <div
                               onClick={LogoutHandler}
