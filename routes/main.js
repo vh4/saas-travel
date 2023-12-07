@@ -7,7 +7,7 @@ require('dotenv').config()
 const Router = express.Router();
 const country = getCountry();
 
-//pipeline keok.//
+//pipeline keok.// //
 Router.post('/travel/app/redirect', async function (req, res) {
   const {auth} = req.body;
   try {
