@@ -482,6 +482,7 @@ export default function Search() {
                                       >
                                         Detail Route
                                       </div>
+                                      {/*  */}
                                     </div>
                                   </div>
                                   {openButton === `open-${k + i}${e.SHIP_NO}` ? (
