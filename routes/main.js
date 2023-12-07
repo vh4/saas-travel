@@ -98,7 +98,7 @@ Router.post('/travel/app/sign_in', async function (req, res) {
     username: username,
     method: "rajabiller.login_travel",
     token:token,
-    info: getInfoClientAll(req),
+    info: JSON.stringify(getInfoClientAll(req)),
     from: 'Web Travel Auth'
   })}`);
 
@@ -113,7 +113,7 @@ Router.post('/travel/app/sign_in', async function (req, res) {
           username: username,
           method: "rajabiller.login_travel",
           password: password,
-          info: JSON.stringify(getInfoClientAll(req)),
+          info: getInfoClientAll(req),
           from: 'Web Travel Input Form Modal'
         });
     
