@@ -27,6 +27,7 @@ export default function MainPage() {
   const urlForLogin = window.location.pathname;
   const [api, contextHolder] = notification.useNotification();
   const [loading, setLoading] = React.useState(false);
+  console.log(urlForLogin);
 
   const { loginComponent, setLoginComponent } = useContext(LoginContent);
 
