@@ -24,7 +24,7 @@ module.exports = {
 
     getInfoClientAll: function(req){
         
-        const clientIP = req.ip;
+        const clientIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress ;
         const userAgent = req.useragent;
         return {
           ip: clientIP,
