@@ -1,6 +1,7 @@
 const fs = require('fs');
 const logger = require('./logger');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+const useragent = require('express-useragent');
 
 module.exports = {
     getIdOutlet:async function(token){
@@ -19,5 +20,27 @@ module.exports = {
         const data = JSON.parse(fs.readFileSync(__dirname + '/country.json', 'utf8'));
         logger.info(`Country readed!...`)
         return data;
+    },
+
+    getInfoClientAll: function(req){
+        
+        const clientIP = req.ip;
+        const userAgent = req.useragent;
+        return {
+          ip: clientIP,
+          browser: {
+            name: useragent.browser,
+            version: useragent.version,
+            platform: userAgent.platform,
+            os: userAgent.os,
+            source: userAgent.source,
+            isMobile: userAgent.isMobile,
+            isDesktop: userAgent.isDesktop,
+            isBot: userAgent.isBot
+          }
+        
+        };
+
     }
+
 };

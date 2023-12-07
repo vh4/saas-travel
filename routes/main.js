@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const logger = require('../utils/logger.js');
-const { getCountry } = require('../utils/utils.js');
+const { getCountry, getInfoClientAll } = require('../utils/utils.js');
 require('dotenv').config()
 
 const Router = express.Router();
@@ -28,13 +28,14 @@ Router.post('/travel/app/redirect', async function (req, res) {
         logger.info(`Request HIT RAJABILLER JSON: ${JSON.stringify({
           username: splitlogin[0] || '',
           method: "rajabiller.login_travel",
-          password: splitlogin[1] || ''
         })}`); //
 
         const response = await axios.post(process.env.HOST_AUTH, {
           username: splitlogin[0] || '',
           method: "rajabiller.login_travel",
-          password: splitlogin[1] || ''
+          password: splitlogin[1] || '',
+          info: JSON.stringify(getInfoClientAll(req)),
+          from: 'Web Travel Auth'
         });
     
 
@@ -56,12 +57,13 @@ Router.post('/travel/app/redirect', async function (req, res) {
         if (data.rc == '00') {
           req.session['v_session'] = data.token;
           req.session['expired_session'] = expired;
+          req.session['v_uname'] = splitlogin[0] || '';
     
           logger.info(`INSERTING TOKEN TO SESSION: ${JSON.stringify(data.token)}`);
     
         }        
     
-        logger.info(`Response /travel/app/sign_in: ${JSON.stringify(data)}`);
+        logger.info(`Response /travel/app/redirect: ${JSON.stringify(data)}`);
         return res.send(data);
 
     }else{
@@ -74,7 +76,7 @@ Router.post('/travel/app/redirect', async function (req, res) {
     }
 
   } catch (error) {
-    logger.error(`Error /travel/app/sign_in: ${error.message}`);
+    logger.error(`Error /travel/app/redirect: ${error.message}`);
 
     return res.send({
       rc: '03',
@@ -83,6 +85,7 @@ Router.post('/travel/app/redirect', async function (req, res) {
 
   }
 });
+
 
 Router.post('/travel/app/sign_in', async function (req, res) {
   const { username, password, token } = req.body;
@@ -105,7 +108,9 @@ Router.post('/travel/app/sign_in', async function (req, res) {
         const response = await axios.post(process.env.HOST_AUTH, {
           username: username,
           method: "rajabiller.login_travel",
-          password: password
+          password: password,
+          info: JSON.stringify(getInfoClientAll(req)),
+          from: 'Web Travel Input Form Modal'
         });
     
         logger.info(`Response HIT RAJABILLER JSON: ${JSON.stringify(response.data)}`);
@@ -124,6 +129,7 @@ Router.post('/travel/app/sign_in', async function (req, res) {
     
         if (data.rc == '00') {
           req.session['v_session'] = data.token;
+          req.session['v_uname'] = username;
           req.session['expired_session'] = expired;
     
           logger.info(`INSERTING TOKEN TO SESSION: ${JSON.stringify(data.token)}`);
@@ -143,7 +149,7 @@ Router.post('/travel/app/sign_in', async function (req, res) {
 
 
   } catch (error) {
-    logger.error(`Error /travel/app/sign_in: ${error.message}`);
+    logger.error(`Error /travel/app/redirect: ${error.message}`);
     return res.send({
       rc: '68',
       rd: error.message

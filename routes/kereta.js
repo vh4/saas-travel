@@ -210,6 +210,8 @@ Router.post('/travel/train/book', apiLimiterKhususBooking, async function (req, 
   try {
     const data = req.body;
 
+    data['username'] = req.session['v_uname'] || ''
+
     logger.info(`Request /travel/train/book: ${JSON.stringify(req.body)}`);
 
     const response = await axios.post(
@@ -229,7 +231,7 @@ Router.post('/travel/train/payment', async function (req, res) { // Menambahkan 
     const data = req.body;
 
     logger.info(`Request /travel/train/payment: ${JSON.stringify(data)}`);
-
+r
     const response = await axios.post(
       `${process.env.URL_HIT}/travel/train/payment`,data
     );

@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const useragent = require('express-useragent');
 require('dotenv').config();
 
 //router
@@ -11,13 +12,14 @@ const PesawatRouter = require('./routes/pesawat');
 const logger = require('./utils/logger.js');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const { getInfoClientAll } = require('./utils/utils');
 
 const app = express();
 const port = 9999;
 
 // Use cookie-parser middleware
 app.use(cookieParser());
-
+app.use(useragent.express());
 // Configure express-session
 app.use(session({
   secret: 'bimasakithebestforever@secret',
@@ -44,12 +46,18 @@ app.use(MainRoutes);
 app.use(PelniRouter);
 app.use(KeretaRouter);
 app.use(PesawatRouter);
+app.get('/whoareyou', (req, res) => {
+
+  return res.json(getInfoClientAll(req));
+});
+
 app.get('*', (req, res) => {
   return res.status(404).json({
     rc:'04',
     rd:'HTTP/1.1 404 Not Found.'
   })
 })
+
 
 app.listen(port, () => {
   logger.info("server listening on port " + port);

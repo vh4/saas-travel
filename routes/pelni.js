@@ -121,6 +121,9 @@ Router.get('/travel/pelni/search/p_search/:id', AuthLogin, async (req, res) => {
 //insert data booking to session storage.
 Router.post('/travel/pelni/book', apiLimiterKhususBooking, async (req, res) => {
   const data = req.body;
+  
+  data['username'] = req.session['v_uname'] || ''
+
   logger.info(`Request /travel/pelni/book: ${JSON.stringify(data)}`);
   try {
     const response = await makeAxiosPost(`${process.env.URL_HIT}/travel/pelni/book`, data);
