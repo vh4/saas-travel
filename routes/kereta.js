@@ -11,8 +11,6 @@ Router.post('/travel/train/station', async function (req, res) { // Menambahkan 
   try {
     const { product, token } = req.body;
 
-    logger.info(`Request /travel/train/station: ${JSON.stringify(req.body)}`);
-
     const response = await axios.post(
       `${process.env.URL_HIT}/travel/train/station`,
       {
@@ -21,7 +19,6 @@ Router.post('/travel/train/station', async function (req, res) { // Menambahkan 
       }
     );
 
-    logger.info(`Response /travel/train/station: ${JSON.stringify(response.data)}`);
     return res.send(response.data);
   } catch (error) {
     logger.error(`Error /travel/train/station: ${error.message}`);

@@ -20,10 +20,8 @@ async function makeAxiosPost(url, data) {
 //get get_origin
 Router.post('/travel/pelni/get_origin', async (req, res) => {
   const data = req.body;
-  logger.info(`Request /travel/pelni/get_origin: ${JSON.stringify(data)}`);
   try {
     const response = await makeAxiosPost(`${process.env.URL_HIT}/travel/pelni/get_origin`, data);
-    logger.info(`Response /travel/pelni/get_origin: ${JSON.stringify(response)}`);
     return res.send(response);
   } catch (error) {
     logger.error(`Error /travel/pelni/get_origin: ${error.message}`);

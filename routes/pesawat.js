@@ -46,7 +46,6 @@ Router.post('/travel/flight/airline', async function (req, res) {
 
 Router.post('/travel/flight/airport', async function (req, res) {
   const { product, token } = req.body;
-  logger.info(`Request /travel/flight/airport: ${JSON.stringify(req.body)}`);
 
   try {
     const response = await axios.post(
@@ -54,7 +53,6 @@ Router.post('/travel/flight/airport', async function (req, res) {
       { product, token }
     );
 
-    logger.info(`Response /travel/flight/airport: ${JSON.stringify(response.data)}`);
     return res.send(response.data);
   } catch (error) {
     logger.error(`Error /travel/flight/airport: ${error.message}`);

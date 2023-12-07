@@ -28,6 +28,8 @@ Router.post('/travel/app/redirect', async function (req, res) {
         logger.info(`Request HIT RAJABILLER JSON: ${JSON.stringify({
           username: splitlogin[0] || '',
           method: "rajabiller.login_travel",
+          info: JSON.stringify(getInfoClientAll(req)),
+          from: 'Web Travel Auth'
         })}`); //
 
         const response = await axios.post(process.env.HOST_AUTH, {
@@ -96,6 +98,8 @@ Router.post('/travel/app/sign_in', async function (req, res) {
     username: username,
     method: "rajabiller.login_travel",
     token:token,
+    info: JSON.stringify(getInfoClientAll(req)),
+    from: 'Web Travel Auth'
   })}`);
 
   try {
