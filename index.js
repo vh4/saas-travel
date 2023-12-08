@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const useragent = require('express-useragent');
+const requestIp = require('request-ip');
 require('dotenv').config();
 
 //router
@@ -20,6 +21,8 @@ const port = 9999;
 // Use cookie-parser middleware
 app.use(cookieParser());
 app.use(useragent.express());
+app.use(requestIp.mw())
+
 // Configure express-session
 app.use(session({
   secret: 'bimasakithebestforever@secret',

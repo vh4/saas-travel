@@ -24,10 +24,10 @@ module.exports = {
 
     getInfoClientAll: function(req){
         
-        const clientIP = req.headers['x-forwarded-for'] || req.socket.remoteAddress ;
         const userAgent = req.useragent;
+        const ip = req.clientIp;
         return {
-          ip: clientIP,
+          ip: ip,
           browser: {
             name: useragent.browser,
             version: useragent.version,
