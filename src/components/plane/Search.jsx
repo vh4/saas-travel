@@ -556,13 +556,13 @@ export default function Search() {
         </>
       ) : (
         <>
-          <div className="judul-search font-bold text-slate-600">
+          <div className="judul-search font-bold text-gray-800">
             PILIH JADWAL
           </div>
           <div className="mt-8">
             <div className="block md:flex justify-between">
               <div className="flex items-center justify-center space-x-3 xl:space-x-4 text-center md:text-left">
-                <small className="text-xs font-bold text-slate-600">
+                <small className="text-xs font-bold text-gray-800">
                   {departureName} ({departure})
                 </small>
                 <div className="bg-blue-500 p-1 rounded-full">
@@ -571,19 +571,19 @@ export default function Search() {
                     size={16}
                   />
                 </div>
-                <small className="text-xs font-bold text-slate-600">
+                <small className="text-xs font-bold text-gray-800">
                   {arrivalName} ({arrival})
                 </small>
-                <div className="hidden md:block font-normal text-slate-600">
+                <div className="hidden md:block font-normal text-gray-800">
                   |
                 </div>
-                <small className="hidden md:block text-xs font-bold text-slate-600">
+                <small className="hidden md:block text-xs font-bold text-gray-800">
                   {tanggal_keberangkatan}
                 </small>
-                <div className="hidden md:block font-normal text-slate-600">
+                <div className="hidden md:block font-normal text-gray-800">
                   |
                 </div>
-                <small className="hidden md:block text-xs font-bold text-slate-600">
+                <small className="hidden md:block text-xs font-bold text-gray-800">
                   {parseInt(adult) + parseInt(child) + parseInt(infant)}{" "}
                   Penumpang
                 </small>
@@ -623,7 +623,7 @@ export default function Search() {
             </div>
           ) : null}
           <div className="flex justify-between mt-6">
-            <div className="relative flex items-center space-x-2 text-slate-600 text-xs font-bold">
+            <div className="relative flex items-center space-x-2 text-gray-800 text-xs font-bold">
               <div className="hidden md:block">FILTER : </div>
               <Whisper
                 placement="top"
