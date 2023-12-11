@@ -19,6 +19,7 @@ import { parseTanggal } from "../../helpers/date";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
 import { notification } from "antd";
+import { Popover, Whisper } from "rsuite";
 
 export default function Search() {
   const theme = createTheme({
@@ -305,6 +306,131 @@ export default function Search() {
       });
     });
 
+
+    const hargaPopoOver = (
+      <Popover title="Filter Harga">
+        <div className="block text-xs px-2">
+          <div>
+            Range antara Rp.{toRupiah(valHargaRange[0])} - Rp.
+            {toRupiah(valHargaRange[1])}
+          </div>
+          <Slider
+            size="small"
+            track="inverted"
+            aria-labelledby="track-inverted-range-slider"
+            onChange={hargraRangeChange}
+            value={valHargaRange}
+            min={0}
+            max={10000000}
+          />
+        </div>
+      </Popover>
+    );
+
+
+    const KelasPopoOver = (
+      <Popover title="Filter Harga">
+        <div className="block px-2 text-xs">
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={gradeFilter[0]}
+                    value={0}
+                    onChange={handleGradeFilterChange}
+                    size="small"
+                  />
+                }
+                label={
+                  <span style={{ fontSize: "12px" }}>Ekonomi</span>
+                }
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={gradeFilter[1]}
+                    value={1}
+                    onChange={handleGradeFilterChange}
+                    size="small"
+                  />
+                }
+                label={
+                  <span style={{ fontSize: "12px" }}>Eksekutif</span>
+                }
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={gradeFilter[2]}
+                    value={2}
+                    onChange={handleGradeFilterChange}
+                    size="small"
+                  />
+                }
+                label={
+                  <span style={{ fontSize: "12px" }}>Bisnis</span>
+                }
+              />
+            </FormGroup>
+        </div>
+      </Popover>
+      );
+  
+    const waktuPopoOver = (
+      <Popover title="Filter Waktu">
+        <div className="">
+          <Box sx={{ width: 120 }}>
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={waktuFilter[0]}
+                    value="06:00-11:59"
+                    onChange={handleWaktuFilterChange}
+                    size="small"
+                  />
+                }
+                label={<span style={{ fontSize: "12px" }}>06.00 - 12.00</span>}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={waktuFilter[1]}
+                    value="12:00-17:59"
+                    onChange={handleWaktuFilterChange}
+                    size="small"
+                  />
+                }
+                label={<span style={{ fontSize: "12px" }}>12.00 - 18.00</span>}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={waktuFilter[2]}
+                    value="18:00-23:59"
+                    onChange={handleWaktuFilterChange}
+                    size="small"
+                  />
+                }
+                label={<span style={{ fontSize: "12px" }}>18.00 - 00.00</span>}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={waktuFilter[3]}
+                    value="00:00-05:59"
+                    onChange={handleWaktuFilterChange}
+                    size="small"
+                  />
+                }
+                label={<span style={{ fontSize: "12px" }}>00.00 - 06.00</span>}
+              />
+            </FormGroup>
+          </Box>
+        </div>
+      </Popover>
+    );
+
   return (
     <>
       {contextHolder}
@@ -319,7 +445,7 @@ export default function Search() {
         </>
       ) : (
         <>
-          <div className="text-sm judul-search mt-4 font-bold text-slate-600">
+          <div className="text-sm judul-search font-bold text-slate-600">
             PILIH JADWAL
           </div>
           <div className="mt-8">
@@ -370,166 +496,41 @@ export default function Search() {
             ) : null}
             <div className="flex justify-between mt-6">
               <div className="relative flex items-center space-x-2 text-slate-600 text-xs font-bold">
-                <div className="hidden md:block">FILTER : </div>
-                <button
-                  onClick={() => {setShowHarga(!showHarga); setShowWaktu(false); setShowKelas(false)}} 
-                  ref={btnRefHarga}
-                  className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300"
-                >
+              <Whisper
+                placement="top"
+                trigger="active"
+                controlId="control-id-active"
+                speaker={hargaPopoOver}
+                placement="bottomStart"
+              >
+                <button className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300">
                   HARGA
                 </button>
-                <button
-                  onClick={() => {setShowWaktu(!showWaktu); setShowHarga(false); setShowKelas(false)}} 
-                  ref={btnRefWaktu}
-                  className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300"
-                >
+              </Whisper>
+              <Whisper
+                placement="top"
+                trigger="active"
+                controlId="control-id-active"
+                speaker={waktuPopoOver}
+                placement="bottomStart"
+              >
+                <button className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300">
                   WAKTU
                 </button>
+              </Whisper>
+              <Whisper
+                placement="top"
+                trigger="active"
+                controlId="control-id-active"
+                speaker={KelasPopoOver}
+                placement="bottomStart"
+              >
                 <button
-                  onClick={() => {setShowKelas(!showKelas); setShowWaktu(false); setShowHarga(false)}} 
-                  ref={btnRefKelas}
                   className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300"
                 >
                   KELAS
                 </button>
-                {showHarga ? (
-                  <div className="w-auto absolute top-10 z-50 opacity-100 bg-white p-4 text-xs">
-                    <Box sx={{ width: 200 }}>
-                      <Typography
-                        theme={theme}
-                        id="track-inverted-slider"
-                        gutterBottom
-                      >
-                        Range antara Rp.{toRupiah(valHargaRange[0])} - Rp.
-                        {toRupiah(valHargaRange[1])}
-                      </Typography>
-                      <Slider
-                        size="small"
-                        track="inverted"
-                        aria-labelledby="track-inverted-range-slider"
-                        onChange={hargraRangeChange}
-                        value={valHargaRange}
-                        min={0}
-                        max={1500000}
-                      />
-                    </Box>
-                  </div>
-                ) : null}
-                {showWaktu ? (
-                  <div className="w-auto absolute top-10 left-28 z-50 opacity-100 bg-white p-4 text-xs">
-                    <Box sx={{ width: 120 }}>
-                      <FormGroup>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={waktuFilter[0]}
-                              value="06:00-11:59"
-                              onChange={handleWaktuFilterChange}
-                              size="small"
-                            />
-                          }
-                          label={
-                            <span style={{ fontSize: "12px" }}>
-                              06.00 - 12.00
-                            </span>
-                          }
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={waktuFilter[1]}
-                              value="12:00-17:59"
-                              onChange={handleWaktuFilterChange}
-                              size="small"
-                            />
-                          }
-                          label={
-                            <span style={{ fontSize: "12px" }}>
-                              12.00 - 18.00
-                            </span>
-                          }
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={waktuFilter[2]}
-                              value="18:00-23:59"
-                              onChange={handleWaktuFilterChange}
-                              size="small"
-                            />
-                          }
-                          label={
-                            <span style={{ fontSize: "12px" }}>
-                              18.00 - 00.00
-                            </span>
-                          }
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={waktuFilter[3]}
-                              value="00:00-05:59"
-                              onChange={handleWaktuFilterChange}
-                              size="small"
-                            />
-                          }
-                          label={
-                            <span style={{ fontSize: "12px" }}>
-                              00.00 - 06.00
-                            </span>
-                          }
-                        />
-                      </FormGroup>
-                    </Box>
-                  </div>
-                ) : null}
-                {showKelas ? (
-                  <div className="w-auto absolute top-10 left-48 z-50 opacity-100 bg-white p-4 text-xs">
-                    <Box sx={{ width: 120 }}>
-                      <FormGroup>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={gradeFilter[0]}
-                              value={0}
-                              onChange={handleGradeFilterChange}
-                              size="small"
-                            />
-                          }
-                          label={
-                            <span style={{ fontSize: "12px" }}>Ekonomi</span>
-                          }
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={gradeFilter[1]}
-                              value={1}
-                              onChange={handleGradeFilterChange}
-                              size="small"
-                            />
-                          }
-                          label={
-                            <span style={{ fontSize: "12px" }}>Eksekutif</span>
-                          }
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={gradeFilter[2]}
-                              value={2}
-                              onChange={handleGradeFilterChange}
-                              size="small"
-                            />
-                          }
-                          label={
-                            <span style={{ fontSize: "12px" }}>Bisnis</span>
-                          }
-                        />
-                      </FormGroup>
-                    </Box>
-                  </div>
-                ) : null}
+              </Whisper>
               </div>
               <div>
                 {/* <div className="flex space-x-2 items-center p-4 px-4 md:px-4 mr-0 xl:mr-16 text-gray-500 rounded-md text-xs font-bold">

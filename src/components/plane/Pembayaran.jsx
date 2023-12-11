@@ -21,6 +21,9 @@ export default function Pembayaran() {
   const v_book = searchParams.get("v_book");
   const { Paragraph } = Typography;
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
@@ -231,43 +234,91 @@ export default function Pembayaran() {
           ) : (
             <>
               <div className="block xl:flex xl:justify-around mb-24 xl:space-x-12 xl:mx-12">
+              {/* mobile sidebar */}
+                <div className="block xl:hidden sidebar w-full xl:w-1/2">
+                  <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                    <div className="px-4 py-2 mb-4">
+                      {/* <div className="text-gray-500 text-xs">Booking ID</div> */}
+                      <div className="text-gray-800 text-sm font-semibold">Transaksi ID</div>                      
+                        <div className="mt-2 font-bold text-blue-500 text-[18px]">
+                          {/* {hasilBooking && hasilBooking.bookingCode} */}
+                          <Paragraph copyable>{hasilBooking && hasilBooking.transactionId}</Paragraph>
+                        </div>
+                      <div className="text-grapy-500 text-xs">
+                        Gunakan transaksi id diatas untuk melakukan inq ulang dan pembayaran.
+                      </div>
+                    </div>
+                    <div className="p-4 border-t">
+                      {dataDetail &&
+                        dataDetail.map((dataDetail) => (
+                          <>
+                            <div className="mt-4 mb-4 flex items-center space-x-2">
+                              <div>
+                                <img
+                                  src={dataDetail.airlineIcon}
+                                  width={50}
+                                  alt="logo.png"
+                                />
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                {dataDetail.airlineName}
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-2 mt-1 text-xs text-slate-700 font-bold">
+                              <div>{dataDetail.departureName}</div>{" "}
+                              <BsArrowRightShort />{" "}
+                              <div>{dataDetail.arrivalName}</div>
+                            </div>
+                            <div className="mt-3 text-xs text-gray-500">
+                              {tanggalParse(dataDetail.departureDate)}
+                            </div>
+                            <div className="mt-1 text-xs text-gray-500">
+                              {dataDetail.departureTime} -{" "}
+                              {dataDetail.arrivalTime}
+                            </div>
+                          </>
+                        ))}
+                    </div>
+                  </div>
+                </div>
+               
                 <div className="mt-4 w-full mx-0 2xl:mx-4">
                   {/* adult */}
                   {dataDetailPassenger && dataDetailPassenger.adults.length > 0
                     ? dataDetailPassenger.adults.map((e, i) => (
                         <>
                           <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
-                            <div className="p-2">
-                              <div className="px-2 xl:px-4 py-2 text-gray-900 border-b border-gray-200 text-sm font-bold">
+                            <div className="mt-4">
+                              <div className="px-2 py-2 text-gray-900 border-b border-gray-200 text-sm font-bold">
                                 {e.nama_depan} {e.nama_belakang}
                               </div>
-                              <div className="mt-2 block md:flex md:space-x-8">
-                                <div className="px-2 md:px-4 py-2 text-sm">
-                                  <div className="text-gray-500 font-medium">
+                              <div className="grid grid-cols-2 mt-2">
+                                <div className="px-2 py-2 text-xs">
+                                  <div className="text-gray-800 font-bold">
                                     NIK
                                   </div>
-                                  <div className="text-gray-900">
+                                  <div className="mt-2 text-gray-800">
                                     {e.idNumber}
                                   </div>
                                 </div>
-                                <div className="px-2 md:px-4 py-2 text-sm">
-                                  <div className="text-gray-500  font-medium">
+                                <div className="px-2 py-2 text-xs">
+                                  <div className="text-gray-800  font-bold">
                                     Nomor HP
                                   </div>
-                                  <div className="text-gray-900">{e.nomor}</div>
+                                  <div className="mt-2 text-gray-800">{e.nomor}</div>
                                 </div>
-                                <div className="px-2 md:px-4 py-2 text-sm">
-                                  <div className="text-gray-500  font-medium">
+                                <div className="px-2 py-2 text-xs">
+                                  <div className="text-gray-800 font-bold">
                                     Email
                                   </div>
-                                  <div className="text-gray-900">{e.email}</div>
+                                  <div className="mt-2 text-gray-800">{e.email}</div>
                                 </div>
                               </div>
-                              <div className="px-2 md:px-4 py-2 text-sm">
-                                <div className="text-gray-500 font-medium">
+                              <div className="px-2 py-2 text-xs">
+                                <div className="text-gray-800 font-bold">
                                   Tanggal Lahir
                                 </div>
-                                <div className="text-gray-900">
+                                <div className="mt-2 text-gray-800">
                                   {e.birthdate}
                                 </div>
                               </div>
@@ -283,24 +334,24 @@ export default function Pembayaran() {
                     ? dataDetailPassenger.children.map((e, i) => (
                         <>
                           <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
-                            <div className="p-2">
-                              <div className="p-4 text-gray-900 border-b border-gray-200 text-sm font-bold">
+                            <div className="mt-4">
+                              <div className="px-2 py-2 text-gray-900 border-b border-gray-200 text-sm font-bold">
                                 {e.nama_depan} {e.nama_belakang}
                               </div>
-                              <div className="mt-2 flex space-x-8">
-                                <div className="px-4 py-2 text-sm">
-                                  <div className="text-gray-500 font-medium">
+                              <div className="flex space-x-8 mt-2 items-center">
+                                <div className="px-2 py-2 text-xs">
+                                  <div className="text-gray-800 font-bold">
                                     NIK/ No.Ktp
                                   </div>
-                                  <div className="text-gray-900">
+                                  <div className="mt-2 text-gray-800">
                                     {e.idNumber}
                                   </div>
                                 </div>
-                                <div className="px-4 py-2 text-sm">
-                                  <div className="text-gray-500 font-medium">
+                                <div className="px-2 py-2 text-xs">
+                                  <div className="text-gray-800 font-bold">
                                     Tanggal Lahir
                                   </div>
-                                  <div className="text-gray-900">
+                                  <div className="mt-2 text-gray-800">
                                     {e.birthdate}
                                   </div>
                                 </div>
@@ -316,24 +367,24 @@ export default function Pembayaran() {
                     ? dataDetailPassenger.infants.map((e, i) => (
                         <>
                           <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
-                            <div className="p-4">
-                              <div className="p-4 text-gray-900 border-b border-gray-200 text-sm font-bold">
+                            <div className="mt-4">
+                              <div className="px-2 py-2 text-gray-900 border-b border-gray-200 text-sm font-bold">
                                 {e.nama_depan} {e.nama_belakang}
                               </div>
                               <div className="mt-2 flex space-x-8">
-                                <div className="px-4 py-2 text-sm">
-                                  <div className="text-gray-500">
+                                <div className="px-2 py-2 text-xs">
+                                  <div className="text-gray-800 font-bold">
                                     NIK/ No.Ktp
                                   </div>
-                                  <div className="text-gray-900">
+                                  <div className="mt-2 text-gray-800">
                                     {e.idNumber}
                                   </div>
                                 </div>
-                                <div className="px-4 py-2 text-sm">
-                                  <div className="text-gray-500">
+                                <div className="px-2 py-2 text-xs">
+                                  <div className="text-gray-800 font-bold">
                                     Tanggal Lahir
                                   </div>
-                                  <div className="text-gray-900">
+                                  <div className="mt-2 text-gray-800">
                                     {e.birthdate}
                                   </div>
                                 </div>
@@ -343,8 +394,8 @@ export default function Pembayaran() {
                         </>
                       ))
                     : ""}
-                  <div className="p-2 mt-2 w-full rounded-md border border-gray-200 shadow-sm">
-                    <div className="p-4">
+                  <div className="p-4 mt-2 w-full rounded-md border border-gray-200 shadow-sm">
+                    <div className="mt-4">
                       <div className="text-xs text-gray-900 font-bold flex justify-between">
                         <div>
                           {dataDetail && dataDetail.airlineName}{" "}
@@ -356,14 +407,14 @@ export default function Pembayaran() {
                           Rp. {toRupiah(hasilBooking && hasilBooking.nominal)}
                         </div>
                       </div>
-                      <div className="mt-2 text-xs text-gray-900 font-bold flex justify-between">
+                      <div className="mt-4 text-xs text-gray-900 font-bold flex justify-between">
                         <div>Biaya Admin (Fee)</div>
                         <div>
                           Rp.{" "}
                           {toRupiah(hasilBooking && hasilBooking.nominalAdmin)}
                         </div>
                       </div>
-                      <div className="mt-4 pt-2 border-t border-gray-200 text-sm text-gray-900 font-bold flex justify-between">
+                      <div className="mt-8 pt-2 border-t border-gray-200 text-sm text-gray-900 font-bold flex justify-between">
                         <div>Total Harga</div>
                         <div>
                           Rp.{" "}
@@ -379,7 +430,7 @@ export default function Pembayaran() {
                   </div>
                 </div>
                 {/* desktop sidebar */}
-                <div className="sidebar w-full xl:w-1/2">
+                <div className="hidden xl:block sidebar w-full xl:w-1/2">
                   <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
                     <div className="px-4 py-2">
                       {/* <div className="text-gray-500 text-xs">Booking ID</div> */}
@@ -458,7 +509,9 @@ export default function Pembayaran() {
                             </div>
                         </div> */}
                   </div>
-                  <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+
+                  {/* desktop payment button */}
+                  <div className="hidden xl:block mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
                     <div className="flex justify-center">
                       <div className="flex justify-center px-8 py-4 text-sm text-gray-500">
                         <div className="">
@@ -481,6 +534,28 @@ export default function Pembayaran() {
                     </div>
                   </div>
                 </div>
+                <div className="block xl:hidden mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                    <div className="flex justify-center">
+                      <div className="flex justify-center px-8 py-4 text-sm text-gray-500">
+                        <div className="">
+                        Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut.
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex justify-center mb-4">
+                      <Button
+                        key="submit"
+                        size="large"
+                        type="primary"
+                        className="bg-blue-500"
+                        loading={isLoading}
+                        onClick={handlerPembayaran}
+                        disabled
+                      >
+                        Bayar Langsung
+                      </Button>
+                    </div>
+                  </div>
               </div>
             </>
           )}

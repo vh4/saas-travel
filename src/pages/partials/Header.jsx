@@ -253,6 +253,7 @@ export default function Header() {
             localStorage.setItem("expired_date", data.data.expired_date);
             localStorage.setItem("c_at", dayjs());
             localStorage.setItem("c_name", uid);
+            localStorage.setItem("hdrs_c", data.data.is_header_name_and_toast);
 
             if(search.trim().length > 1){
               setTimeout(() => {
@@ -329,53 +330,57 @@ export default function Header() {
                 </div>
               ) : (
                 <div className="hidden relative group space-x-2 text-gray-500 md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 md:inline-flex group-hover:block items-end ml-2 mb-2">
-                  {user !== null && user !== undefined ? (
+                  {localStorage.getItem('hdrs_c') != 'false'  && (
                     <>
-                      {user.namaPemilik !== undefined ? (
+                      {user !== null && user !== undefined ? (
                         <>
-                          <div className="flex space-x-2 items-center mt-2">
-                          <div className="">
-                              <div className="text-slate-600 font-bold">
-                                {localStorage.getItem("c_name")
-                                  ? localStorage
-                                      .getItem("c_name")
-                                      .charAt(0)
-                                      .toUpperCase() +
-                                    localStorage.getItem("c_name").slice(1)
-                                  : "Rb Travell"}
+                          {user.namaPemilik !== undefined ? (
+                            <>
+                              <div className="flex space-x-2 items-center mt-2">
+                              <div className="">
+                                  <div className="text-slate-600 font-bold">
+                                    {localStorage.getItem("c_name")
+                                      ? localStorage
+                                          .getItem("c_name")
+                                          .charAt(0)
+                                          .toUpperCase() +
+                                        localStorage.getItem("c_name").slice(1)
+                                      : "Rb Travell"}
+                                  </div>
+                                  <small>
+                                    {localStorage.getItem("c_at")
+                                      ? "Logged at " +
+                                        dayjs(localStorage.getItem("c_at")).format(
+                                          "ddd, DD MMM YYYY HH:mm:ss"
+                                        )
+                                      : "Logged at -"}
+                                  </small>
+                                </div>
+                              <div>
+                              <div
+                                  onClick={LogoutHandler}
+                                  class="ml-4 flex justify-center bg-blue-500 py-2 rounded-full space-x-4 items-center w-full pl-1"
+                                >
+                                  <IoLogOutOutline size={18} className="text-white" />
+                                </div>
                               </div>
-                              <small>
-                                {localStorage.getItem("c_at")
-                                  ? "Logged at " +
-                                    dayjs(localStorage.getItem("c_at")).format(
-                                      "ddd, DD MMM YYYY HH:mm:ss"
-                                    )
-                                  : "Logged at -"}
-                              </small>
-                            </div>
-                          <div>
-                          <div
-                              onClick={LogoutHandler}
-                              class="ml-4 flex justify-center bg-blue-500 py-2 rounded-full space-x-4 items-center w-full pl-1"
-                            >
-                              <IoLogOutOutline size={18} className="text-white" />
-                            </div>
-                          </div>
-                          </div>
+                              </div>
+                            </>
+                          ) : (
+                            <Box sx={{ width: 100 }}>
+                              <Skeleton animation="wave" />
+                              <Skeleton animation="wave" />
+                            </Box>
+                          )}
                         </>
                       ) : (
-                        <Box sx={{ width: 100 }}>
-                          <Skeleton animation="wave" />
-                          <Skeleton animation="wave" />
-                        </Box>
+                        <>
+                          <Box sx={{ width: 100 }}>
+                            <Skeleton animation="wave" />
+                            <Skeleton animation="wave" />
+                          </Box>
+                        </>
                       )}
-                    </>
-                  ) : (
-                    <>
-                      <Box sx={{ width: 100 }}>
-                        <Skeleton animation="wave" />
-                        <Skeleton animation="wave" />
-                      </Box>
                     </>
                   )}
                 </div>

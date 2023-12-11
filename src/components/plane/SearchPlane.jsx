@@ -511,7 +511,7 @@ function Plane() {
               <div className="container">
                 <div className="cookierow">
                   <div className="col-4">
-                    <Checkbox checked={isSelectAll} onChange={toggleSelectAll}>
+                    <Checkbox className="block -ml-2.5 md:-ml-0" checked={isSelectAll} onChange={toggleSelectAll}>
                       Select All
                     </Checkbox>
                   </div>
@@ -783,7 +783,7 @@ function Plane() {
                       id="basic-menu"
                       className={`${anchorEl} absolute top-20 z-10 grid w-full md:w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg`}
                     >
-                      <div className="w-full md:w-48 ml-4 block md:mx-0">
+                      <div className="w-full md:w-48 block md:mx-0">
                         <div className="w-full items-center text-gray-600">
                           <div className="text-sm text-center header-number mb-4">
                             <p>Adult (12 thn keatas)</p>

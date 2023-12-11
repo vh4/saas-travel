@@ -167,10 +167,14 @@ export default function SidebarMobileUser({ pathSidebar }) {
               <div
                 className={`flex cursor-pointer items-center p-2 text-base font-normal text-gray-500 rounded-lg `}
               >
-                <div className="flex mt-2">
-                  <IoExitOutline className="text-blue-500" size={20} />
-                  <span className="flex-1 ml-3 whitespace-nowrap">Logout</span>
-                </div>
+                {localStorage.getItem('hdrs_c') != 'false' && (
+                  <>
+                    <div className="flex mt-2">
+                      <IoExitOutline className="text-blue-500" size={20} />
+                      <span className="flex-1 ml-3 whitespace-nowrap">Logout</span>
+                    </div>
+                  </>
+                )}
               </div>
             </Link>
           </>

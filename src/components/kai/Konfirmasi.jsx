@@ -26,6 +26,10 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCou
 const groupColumnCounts = {};
 const rowCount = Math.max(...seats.map((seat) => seat.row));
 
+useEffect(() => {
+  window.scrollTo(0, 0);
+}, []);
+
 seats.forEach((seat) => {
   const groupKey = `${seat.groupColumn}-${seat.row}`;
   if (!groupColumnCounts[groupKey]) {
@@ -811,14 +815,14 @@ export default function Konfirmasi() {
                 <div className="w-full mx-0 2xl:mx-4">
                   <div className="mt-8 w-full rounded-md border border-gray-200 shadow-sm">
                     <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-                      <div className="text-slate-700 font-bold ">
+                      <div className="text-slate-800 font-bold ">
                         Keberangkatan kereta
                       </div>
-                      <small className="text-gray-700">
+                      <small className="text-gray-800">
                         {tanggal_keberangkatan_kereta}
                       </small>
                     </div>
-                    <div className="p-4 pl-8  text-gray-700">
+                    <div className="p-4 pl-8  text-gray-800">
                       <div className="text-xs font-bold">
                         {dataBookingTrain && dataBookingTrain[0].trainName}
                       </div>
@@ -829,20 +833,20 @@ export default function Konfirmasi() {
                     </div>
                     <div className="mt-2"></div>
                     <div className="p-4 pl-8 mb-4">
-                      <ol class="relative border-l border-dashed border-gray-500">
+                      <ol class="relative border-l border-dashed border-gray-800">
                         <li class="mb-10 ml-4">
-                          <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-500"></div>
+                          <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800"></div>
                           <div className="flex space-x-12">
-                            <time class="mb-1 text-sm font-normal leading-none text-gray-400">
+                            <time class="mb-1 text-sm font-normal leading-none text-gray-800">
                               {dataBookingTrain &&
                                 dataBookingTrain[0].departureTime}
                             </time>
                             <div className="-mt-2">
-                              <h3 class="text-left text-xs text-slate-600 font-bold ">
+                              <h3 class="text-left text-xs text-gray-800 font-bold ">
                                 {dataBookingTrain &&
                                   dataDetailTrain[0].berangkat_nama_kota}
                               </h3>
-                              <p class="text-left text-xs text-gray-500 ">
+                              <p class="text-left text-xs text-gray-800 ">
                                 (
                                 {dataBookingTrain &&
                                   dataDetailTrain[0].berangkat_id_station}
@@ -854,16 +858,16 @@ export default function Konfirmasi() {
                         <li class="ml-4">
                           <div class="absolute w-4 h-4 bg-blue-500 rounded-full mt-0 -left-2 border border-white "></div>
                           <div className="flex space-x-12">
-                            <time class="mb-1 text-sm leading-none text-gray-400">
+                            <time class="mb-1 text-sm leading-none text-gray-800">
                               {dataBookingTrain &&
                                 dataBookingTrain[0].arrivalTime}
                             </time>
                             <div className="-mt-2">
-                              <h3 class="text-left text-xs  text-slate-600 font-bold ">
+                              <h3 class="text-left text-xs  text-gray-800 font-bold ">
                                 {dataBookingTrain &&
                                   dataDetailTrain[0].tujuan_nama_kota}
                               </h3>
-                              <p class="text-left text-xs text-gray-500 ">
+                              <p class="text-left text-xs text-gray-800 ">
                                 (
                                 {dataBookingTrain &&
                                   dataDetailTrain[0].tujuan_id_station}
@@ -877,7 +881,7 @@ export default function Konfirmasi() {
                   </div>
                   {/* adult */}
                   {passengers.adults && passengers.adults.length > 0 ? (
-                    <div className="text-sm xl:text-sm font-bold text-gray-900 mt-12">
+                    <div className="text-sm xl:text-sm font-bold text-gray-800 mt-12">
                       <p>ADULT PASSENGERS</p>
                     </div>
                   ) : (
@@ -888,23 +892,23 @@ export default function Konfirmasi() {
                         <>
                           <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                             <div className="p-2">
-                              <div className="px-2 xl:px-4 py-2 text-gray-900 border-b border-gray-200 text-sm font-bold">
+                              <div className="px-2 xl:px-4 py-2 text-gray-800 border-b border-gray-200 text-sm font-bold">
                                 {e.name}
                               </div>
                               <div className="mt-2 block md:flex md:space-x-8">
                                 <div className="px-2 md:px-4 py-2 text-sm">
-                                  <div className="text-gray-500">NIK</div>
-                                  <div className="text-gray-900">
+                                  <div className="text-gray-800 font-bold">NIK</div>
+                                  <div className="mt-2 text-gray-800 text-xs">
                                     {e.idNumber}
                                   </div>
                                 </div>
                                 <div className="px-2 md:px-4 py-2 text-sm">
-                                  <div className="text-gray-500">Nomor HP</div>
-                                  <div className="text-gray-900">{e.phone}</div>
+                                  <div className="text-gray-800  font-bold">Nomor HP</div>
+                                  <div className="mt-2 text-gray-800 text-xs">{e.phone}</div>
                                 </div>
                                 <div className="px-2 md:px-4 py-2 text-sm">
-                                  <div className="text-gray-500">Kursi</div>
-                                  <div className="text-gray-900">
+                                  <div className="text-gray-800  font-bold">Kursi</div>
+                                  <div className="mt-2 text-gray-800 text-xs">
                                     {hasilBooking !== null
                                       ? hasilBooking.seats[i][0] === "EKO"
                                         ? "Ekonomi"
@@ -943,28 +947,28 @@ export default function Konfirmasi() {
                     ? passengers.infants.map((e, i) => (
                         <>
                           <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
-                            <div className="p-4">
-                              <div className="p-4 text-gray-900 border-b border-gray-200 text-sm font-bold">
+                            <div className="mt-2">
+                              <div className="px-4 py-2 text-gray-900 border-b border-gray-200 text-sm font-bold">
                                 {e.name}
                               </div>
-                              <div className="mt-2 flex space-x-8">
+                              <div className="mt-2 block md:flex md:space-x-8">
                                 <div className="px-4 py-2 text-sm">
-                                  <div className="text-gray-500">NIK</div>
-                                  <div className="text-gray-900">
+                                  <div className="text-gray-800 font-bold">NIK</div>
+                                  <div className="mt-2 text-gray-800 text-xs">
                                     {e.idNumber}
                                   </div>
                                 </div>
                                 <div className="px-4 py-2 text-sm">
-                                  <div className="text-gray-500">
+                                  <div className="text-gray-800 font-bold">
                                     Tanggal Lahir
                                   </div>
-                                  <div className="text-gray-900">
+                                  <div className="mt-2 text-gray-800 text-xs">
                                     {e.birthdate}
                                   </div>
                                 </div>
                                 <div className="px-4 py-2 text-sm">
-                                  <div className="text-gray-500">Kursi</div>
-                                  <div className="text-gray-900">
+                                  <div className="text-gray-800 font-bold">Kursi</div>
+                                  <div className="mt-2 text-gray-800 text-xs">
                                     {hasilBooking !== null
                                       ? hasilBooking.seats[i][0] === "EKO"
                                         ? "Ekonomi"
@@ -992,7 +996,7 @@ export default function Konfirmasi() {
                         </>
                       ))
                     : ""}
-                  <div className="text-sm xl:text-sm font-bold text-slate-600 mt-12">
+                  <div className="text-sm xl:text-sm font-bold text-gray-800 mt-12">
                     <p>PRICE DETAILT</p>
                   </div>
                   <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
@@ -1009,18 +1013,18 @@ export default function Konfirmasi() {
                           {hasilBooking && toRupiah(hasilBooking.normalSales)}
                         </div>
                       </div>
-                      <div className="mt-2 text-xs text-gray-900 font-bold flex justify-between">
+                      <div className="mt-4 text-xs text-gray-900 font-bold flex justify-between">
                         <div>Biaya Admin (Fee)</div>
                         <div>
                           Rp.{" "}
                           {hasilBooking && toRupiah(hasilBooking.nominalAdmin)}
                         </div>
                       </div>
-                      <div className="mt-2 text-xs text-gray-900 font-bold flex justify-between">
+                      <div className="mt-4 text-xs text-gray-900 font-bold flex justify-between">
                         <div>Diskon (Rp.)</div>
                         <div>Rp. {hasilBooking && hasilBooking.discount}</div>
                       </div>
-                      <div className="mt-4 pt-2 border-t border-gray-200 text-sm text-gray-900 font-bold flex justify-between">
+                      <div className="mt-8 pt-2 border-t border-gray-200 text-sm text-gray-900 font-bold flex justify-between">
                         <div>Total Harga</div>
                         <div>
                           Rp.{" "}

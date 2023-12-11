@@ -304,7 +304,7 @@ export default function Search() {
         <>
           <>
             {contextHolder}
-            <div className="judul-search mt-4 font-bold text-slate-600">
+            <div className="judul-search font-bold text-slate-600">
               PILIH JADWAL
             </div>
             <div className="mt-8">

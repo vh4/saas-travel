@@ -32,6 +32,10 @@ export default function BookingKai() {
   const navigate = useNavigate();
   const { id } = useParams();
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const failedNotification = (rd) => {
     api["error"]({
       message: "Error!",
@@ -411,13 +415,13 @@ export default function BookingKai() {
                       {/* sidebar mobile kai*/}
             <div className="mt-8 block xl:hidden w-full rounded-md border border-gray-200 shadow-sm">
               <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-                <div className="text-gray-700 ">Keberangkatan kereta</div>
-                <small className="text-gray-700">
+                <div className="text-gray-800 font-bold">Keberangkatan kereta</div>
+                <small className="text-gray-800">
                   {tanggal_keberangkatan_kereta}
                 </small>
               </div>
               <div className="p-4 px-4 flex justify-between space-x-12 items-center">
-                <div className="text-slate-600 text-xs">
+                <div className="text-gray-800 text-xs font-bold">
                   <div>
                     {dataDetailTrain && dataDetailTrain[0].berangkat_nama_kota}
                   </div>
@@ -430,7 +434,7 @@ export default function BookingKai() {
                 <div className="rounded-full p-2 bg-blue-500">
                   <IoArrowForwardOutline className="text-white" size={18} />
                 </div>
-                <div className="text-slate-600 text-xs">
+                <div className="text-gray-800 font-bold text-xs">
                   <div>
                     {dataDetailTrain && dataDetailTrain[0].tujuan_nama_kota}
                   </div>
@@ -439,7 +443,7 @@ export default function BookingKai() {
                   </div>
                 </div>
               </div>
-              <div className="p-4 pl-8  text-gray-700">
+              <div className="p-4 pl-8  text-gray-800">
                 <div className="text-xs font-bold">
                   {dataBookingTrain[0].trainName}
                 </div>
@@ -449,7 +453,7 @@ export default function BookingKai() {
                 </small>
               </div>
               <div className="p-4 pl-8 mb-4">
-                <ol class="relative border-l border-gray-500 ">
+                <ol class="relative border-l border-gray-800 ">
                   <li class="mb-10 ml-4">
                     <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-500 "></div>
                     <div className="flex space-x-12">
@@ -457,11 +461,11 @@ export default function BookingKai() {
                         {dataBookingTrain && dataBookingTrain[0].departureTime}
                       </time>
                       <div className="-mt-2">
-                        <h3 class="text-left text-xs text-slate-600 ">
+                        <h3 class="text-left text-xs text-gray-800 ">
                           {dataDetailTrain &&
                             dataDetailTrain[0].berangkat_nama_kota}
                         </h3>
-                        <p class="text-left text-xs text-gray-500 ">
+                        <p class="text-left text-xs text-gray-800 ">
                           (
                           {dataDetailTrain &&
                             dataDetailTrain[0].berangkat_id_station}
@@ -473,15 +477,15 @@ export default function BookingKai() {
                   <li class="ml-4">
                     <div class="absolute w-4 h-4 bg-blue-500 rounded-full mt-0 -left-2 border border-white "></div>
                     <div className="flex space-x-12">
-                      <time class="mb-1 text-sm leading-none text-gray-400 ">
+                      <time class="mb-1 text-sm leading-none text-gray-800 ">
                         {dataBookingTrain && dataBookingTrain[0].arrivalTime}
                       </time>
                       <div className="-mt-2">
-                        <h3 class="text-left text-xs  text-slate-600 ">
+                        <h3 class="text-left text-xs  text-slate-800 ">
                           {dataDetailTrain &&
                             dataDetailTrain[0].tujuan_nama_kota}
                         </h3>
-                        <p class="text-left text-xs text-gray-500 ">
+                        <p class="text-left text-xs text-gray-800 ">
                           (
                           {dataDetailTrain &&
                             dataDetailTrain[0].tujuan_id_station}
@@ -518,10 +522,10 @@ export default function BookingKai() {
                     <>
                       <div>
                         <div className="Booking ml-2 md:ml-0 mt-8 mb-4 xl:mt-12">
-                          <h1 className="text-sm font-bold text-gray-500">
+                          <h1 className="text-sm font-bold text-gray-800">
                             ADULT PASSENGER
                           </h1>
-                          <small className="text-gray-500">
+                          <small className="text-gray-800">
                             Isi sesuai dengan data anda
                           </small>
                         </div>
@@ -534,7 +538,7 @@ export default function BookingKai() {
                                 {/* mobile & desktop Nama*/}
                                 <div className="xl:w-full mt-4 xl:mt-0 ">
                                   <div className="w-full">
-                                    <div className="text-gray-500 text-sm">
+                                    <div className="text-gray-800 text-sm">
                                       Nama Lengkap
                                     </div>
                                     <Form.Item
@@ -587,7 +591,7 @@ export default function BookingKai() {
                               <div className="py-0 px-0 xl:px-8 block xl:grid xl:grid-cols-2 xl:gap-8">
                                 {/* desktop nomor hp */}
                                 <div className="w-full px-4 xl:px-0 mt-2 xl:mt-0">
-                                  <div className="text-gray-500 text-sm mb-2">
+                                  <div className="text-gray-800 text-sm mb-2">
                                     Nomor HP
                                   </div>
                                   <Form.Item
@@ -632,7 +636,7 @@ export default function BookingKai() {
                                 </div>
                                 {/* mobile & desktop NIK*/}
                                 <div className="w-full p-4 xl:p-0 mt-2 xl:mt-0">
-                                  <div className="text-gray-500 text-sm mb-2">
+                                  <div className="text-gray-800 text-sm mb-2">
                                     No. Ktp
                                   </div>
                                     <Form.Item
@@ -693,8 +697,8 @@ export default function BookingKai() {
                   infant[0].map((e, i) => (
                     <>
                       <div>
-                        <div className="Booking ml-2 mt-8 mb-4 xl:mt-12">
-                          <h1 className="xl:text-sm font-bold text-gray-500 text-sm">
+                        <div className="Booking ml-2  md:ml-0 mt-8 mb-4 xl:mt-12">
+                          <h1 className="xl:text-sm font-bold text-gray-800 text-sm">
                             INFANT PASSENGER
                           </h1>
                           <small className="text-gray-500">
@@ -710,7 +714,7 @@ export default function BookingKai() {
                                 {/* mobile & desktop Nama*/}
                                 <div className="xl:w-full mt-4 xl:mt-0">
                                   <div className="w-full">
-                                    <div className="text-gray-500 text-sm">
+                                    <div className="text-gray-800 text-sm">
                                       Nama Lengkap
                                     </div>
                                     <Form.Item
@@ -763,7 +767,7 @@ export default function BookingKai() {
                               <div className="py-0 px-0 xl:px-8 block xl:grid xl:grid-cols-2 mt-0 xl:gap-8">
                                 {/* desktop nomor hp */}
                                 <div className="p-4 xl:p-0 w-full">
-                                  <div className="text-gray-500 text-sm xl:mb-2">
+                                  <div className="text-gray-800 text-sm mb-2">
                                     Tanggal Lahir
                                   </div>
                                   <DatePicker
@@ -783,7 +787,7 @@ export default function BookingKai() {
                                 </div>
                                 {/* mobile & desktop NIK*/}
                                 <div className="p-4 xl:p-0 w-full">
-                                  <div className="text-gray-500 text-sm mb-2">
+                                  <div className="text-gray-800 text-sm mb-2">
                                   No. Ktp
                                   </div>
                                   <Form.Item
@@ -865,15 +869,15 @@ export default function BookingKai() {
             <div className="w-1/2 xl:mt-16">
                 <div className="hidden xl:block rounded-md border border-gray-200 shadow-sm">
                   <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-                    <div className="text-gray-700 text-sm font-bold">
+                    <div className="text-gray-800 text-sm font-bold">
                       Keberangkatan kereta
                     </div>
-                    <small className="text-xs text-gray-700">
+                    <small className="text-xs text-gray-800">
                       {tanggal_keberangkatan_kereta}
                     </small>
                   </div>
                   <div className="px-4 xl:px-8 p-4 flex justify-between space-x-12 items-center">
-                    <div className="text-xs font-bold text-slate-600">
+                    <div className="text-xs font-bold text-gray-800">
                       <div>
                         {dataDetailTrain &&
                           dataDetailTrain[0].berangkat_nama_kota}
@@ -888,7 +892,7 @@ export default function BookingKai() {
                     <div className="rounded-full p-1 bg-blue-500 ">
                       <IoArrowForwardOutline className="text-white" size={18} />
                     </div>
-                    <div className="text-xs font-bold text-slate-600">
+                    <div className="text-xs font-bold text-gray-800">
                       <div>
                         {dataDetailTrain && dataDetailTrain[0].tujuan_nama_kota}
                       </div>
@@ -901,7 +905,7 @@ export default function BookingKai() {
                     </div>
                   </div>
 
-                  <div className="p-4 pl-8 text-gray-700">
+                  <div className="p-4 pl-8 text-gray-800">
                     <div className=" text-xs font-bold">
                       {dataBookingTrain && dataBookingTrain[0].trainName}
                     </div>
@@ -911,20 +915,20 @@ export default function BookingKai() {
                     </small>
                   </div>
                   <div className="p-4 pl-12 mb-4">
-                    <ol class="relative border-l-2 border-dotted border-gray-300 ">
+                    <ol class="relative border-l-2 border-dotted border-gray-800">
                       <li class="mb-10 ml-4 text-sm">
-                        <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-400 "></div>
+                        <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800 "></div>
                         <div className="flex space-x-12">
-                          <time class="mb-1 text-xs font-bold leading-none text-gray-400 ">
+                          <time class="mb-1 text-xs font-bold leading-none text-gray-800 ">
                             {dataBookingTrain &&
                               dataBookingTrain[0].departureTime}
                           </time>
                           <div className="-mt-2">
-                            <h3 class="text-left text-xs font-bold text-slate-600 ">
+                            <h3 class="text-left text-xs font-bold text-gray-800 ">
                               {dataDetailTrain &&
                                 dataDetailTrain[0].berangkat_nama_kota}
                             </h3>
-                            <p class="text-left text-xs font-bold text-gray-500 ">
+                            <p class="text-left text-xs font-bold text-gray-800 ">
                               (
                               {dataDetailTrain &&
                                 dataDetailTrain[0].berangkat_id_station}
@@ -936,16 +940,16 @@ export default function BookingKai() {
                       <li class="ml-4 text-sm mt-10">
                         <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white "></div>
                         <div className="flex space-x-12">
-                          <time class="mb-1 text-xs font-bold leading-none text-gray-400 ">
+                          <time class="mb-1 text-xs font-bold leading-none text-gray-800 ">
                             {dataBookingTrain &&
                               dataBookingTrain[0].arrivalTime}
                           </time>
                           <div className="-mt-2">
-                            <h3 class="text-left text-xs font-bold text-slate-600 ">
+                            <h3 class="text-left text-xs font-bold text-gray-800">
                               {dataDetailTrain &&
                                 dataDetailTrain[0].tujuan_nama_kota}
                             </h3>
-                            <p class="text-left text-xs font-bold text-gray-500 ">
+                            <p class="text-left text-xs font-bold text-gray-800">
                               (
                               {dataDetailTrain &&
                                 dataDetailTrain[0].tujuan_id_station}

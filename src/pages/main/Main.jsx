@@ -27,26 +27,25 @@ export default function MainPage() {
   const urlForLogin = window.location.pathname;
   const [api, contextHolder] = notification.useNotification();
   const [loading, setLoading] = React.useState(false);
-  console.log(urlForLogin);
 
   const { loginComponent, setLoginComponent } = useContext(LoginContent);
 
-  const suksesLogin = () => {
-    api["success"]({
-      message: "Successfully!",
-      description: "Successfully, anda berhasil login.",
-    });
-  };
+  // const suksesLogin = () => {
+  //   api["success"]({
+  //     message: "Successfully!",
+  //     description: "Successfully, anda berhasil login.",
+  //   });
+  // };
 
-  const gagalLogin = (rd) => {
-    api["error"]({
-      message: "Error!",
-      description:
-        rd.toLowerCase().charAt(0).toUpperCase() +
-        rd.slice(1).toLowerCase() +
-        "",
-    });
-  };
+  // const gagalLogin = (rd) => {
+  //   api["error"]({
+  //     message: "Error!",
+  //     description:
+  //       rd.toLowerCase().charAt(0).toUpperCase() +
+  //       rd.slice(1).toLowerCase() +
+  //       "",
+  //   });
+  // };
 
   useEffect(() => {
     //
@@ -94,13 +93,14 @@ export default function MainPage() {
               JSON.stringify(data.data.token)
             );
 
-            suksesLogin();
+            // suksesLogin();
             localStorage.setItem("expired_date", data.data.expired_date);
             localStorage.setItem("c_at", dayjs());
+            localStorage.setItem("hdrs_c", data.data.is_header_name_and_toast);
             localStorage.setItem("c_name", data.data.username);
 
           } else {
-            gagalLogin(data.data.rd);
+            // gagalLogin(data.data.rd);
             setLoading(false);
           }
         });
