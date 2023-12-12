@@ -486,7 +486,7 @@ export default function Search() {
                                     </div>
                                   </div>
                                   {openButton === `open-${k + i}${e.SHIP_NO}` ? (
-                                    <div className={`transition-all ease-in-out duration-500 ${openButton === `open-${k + i}${e.SHIP_NO}` ? 'max-h-96' : 'max-h-0'} overflow-hidden`}>
+                                    <div className={`hidden xl:block transition-all ease-in-out duration-500 ${openButton === `open-${k + i}${e.SHIP_NO}` ? 'max-h-96' : 'max-h-0'} overflow-hidden`}>
                                       <div className="px-4 mt-4">
                                         <div className="mb-2 text-sm font-bold">
                                           Tanggal Keberangkatan
@@ -589,6 +589,42 @@ export default function Search() {
                                         </div>
                                       </div>
                                     </div>
+                                    <div className="flex justify-center text-xs mt-2 text-blue-500 cursor-pointer text-center items-center mb-2" 
+                                      onClick={(event) =>{
+                                        event.stopPropagation();
+                                        openButton == `open-${k + i}${e.SHIP_NO}`
+                                          ? setOpenButton(`close-${k + i}${e.SHIP_NO}`)
+                                          : setOpenButton(`open-${k + i}${e.SHIP_NO}`)
+                                      }
+                                    }
+                                      >
+                                  Detail Route
+                                      </div>
+                                  {openButton === `open-${k + i}${e.SHIP_NO}` ? (
+                                    <div className={`block xl:hidden transition-all ease-in-out duration-500 ${openButton === `open-${k + i}${e.SHIP_NO}` ? 'max-h-96' : 'max-h-0'} overflow-hidden`}>
+                                      <div className="px-4 mt-4">
+                                        <div className="mb-2 text-xs font-bold">
+                                          Tanggal Keberangkatan
+                                        </div>
+                                        <div className="block mb-8">
+                                          <div className="text-xs">{parseTanggal(dayjs(e.DEP_DATE, 'YYYYMMDD').format('YYYY-MM-DD'))}</div>
+                                        </div>
+                                          <div>
+                                            <Timeline>
+                                              {e.ROUTE.split(/\/\d-/).filter(item => item !== "").map((h) => (
+                                                <Timeline.Item key={h}><div className="text-xs">{pelniStatiun.find((z) => parseInt(z.CODE) === parseInt(h))?.NAME}</div></Timeline.Item>
+                                              ))}
+                                            </Timeline>
+                                          </div>
+                                        <div className="-mt-8 text-xs font-bold">
+                                          Tanggal Tujuan
+                                        </div>
+                                        <div className="flex justify-start items-end">
+                                          <div className="block text-xs">{parseTanggal(dayjs(e.ARV_DATE, 'YYYYMMDD').format('YYYY-MM-DD'))}</div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ) : (<></>)}
                                   </div>
                                 </div>
                               </div>
@@ -603,10 +639,11 @@ export default function Search() {
                   )}
                   </div>
                   {/* untuk sorting yang tidak availbility nya habis. */}
+
                   <div>
                   {dataSearch.map(
                     (
-                      e //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
+                      e, k //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
                     ) => (
                       <>
                         {e.fares.map((z, i) => (
@@ -687,7 +724,8 @@ export default function Search() {
                                       ) : (
                                         <>
                                           <button
-                                            onClick={async () =>
+                                            onClick={async (e) =>
+
                                               handleSubmit(e, i)
                                             }
                                             type="button"
@@ -773,6 +811,42 @@ export default function Search() {
                                         </div>
                                       </div>
                                     </div>
+                                    <div className="flex justify-center text-xs mt-2 text-blue-500 cursor-pointer text-center items-center mb-2" 
+                                      onClick={(event) =>{
+                                        event.stopPropagation();
+                                        openButton == `open-${k + i}${e.SHIP_NO}`
+                                          ? setOpenButton(`close-${k + i}${e.SHIP_NO}`)
+                                          : setOpenButton(`open-${k + i}${e.SHIP_NO}`)
+                                      }
+                                    }
+                                      >
+                                        Detail Route
+                                      </div>
+                                      {openButton === `open-${k + i}${e.SHIP_NO}` ? (
+                                    <div className={`block xl:hidden transition-all ease-in-out duration-500 ${openButton === `open-${k + i}${e.SHIP_NO}` ? 'max-h-96' : 'max-h-0'} overflow-hidden`}>
+                                      <div className="px-4 mt-4">
+                                        <div className="mb-2 text-xs font-bold">
+                                          Tanggal Keberangkatan
+                                        </div>
+                                        <div className="block mb-8">
+                                          <div className="text-xs">{parseTanggal(dayjs(e.DEP_DATE, 'YYYYMMDD').format('YYYY-MM-DD'))}</div>
+                                        </div>
+                                          <div>
+                                            <Timeline>
+                                              {e.ROUTE.split(/\/\d-/).filter(item => item !== "").map((h) => (
+                                                <Timeline.Item key={h}><div className="text-xs">{pelniStatiun.find((z) => parseInt(z.CODE) === parseInt(h))?.NAME}</div></Timeline.Item>
+                                              ))}
+                                            </Timeline>
+                                          </div>
+                                        <div className="-mt-8 text-xs font-bold">
+                                          Tanggal Tujuan
+                                        </div>
+                                        <div className="flex justify-start items-end">
+                                          <div className="block text-xs">{parseTanggal(dayjs(e.ARV_DATE, 'YYYYMMDD').format('YYYY-MM-DD'))}</div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ) : (<></>)}
                                   </div>
                                 </div>
                               </div>

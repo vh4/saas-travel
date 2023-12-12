@@ -412,7 +412,7 @@ export default function BookingKai() {
             </>
         ) : (
           <>
-                      {/* sidebar mobile kai*/}
+            {/* sidebar mobile kai*/}
             <div className="mt-8 block xl:hidden w-full rounded-md border border-gray-200 shadow-sm">
               <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                 <div className="text-gray-800 font-bold">Keberangkatan kereta</div>
@@ -421,7 +421,7 @@ export default function BookingKai() {
                 </small>
               </div>
               <div className="p-4 px-4 flex justify-between space-x-12 items-center">
-                <div className="text-gray-800 text-xs font-bold">
+                <div className="text-gray-800 text-xs">
                   <div>
                     {dataDetailTrain && dataDetailTrain[0].berangkat_nama_kota}
                   </div>
@@ -434,7 +434,7 @@ export default function BookingKai() {
                 <div className="rounded-full p-2 bg-blue-500">
                   <IoArrowForwardOutline className="text-white" size={18} />
                 </div>
-                <div className="text-gray-800 font-bold text-xs">
+                <div className="text-gray-800 text-xs">
                   <div>
                     {dataDetailTrain && dataDetailTrain[0].tujuan_nama_kota}
                   </div>
@@ -443,8 +443,8 @@ export default function BookingKai() {
                   </div>
                 </div>
               </div>
-              <div className="p-4 pl-8  text-gray-800">
-                <div className="text-xs font-bold">
+              <div className="p-4 pl-8 text-gray-800">
+                <div className="text-xs">
                   {dataBookingTrain[0].trainName}
                 </div>
                 <small>
@@ -453,18 +453,18 @@ export default function BookingKai() {
                 </small>
               </div>
               <div className="p-4 pl-8 mb-4">
-                <ol class="relative border-l border-gray-800 ">
+                <ol class="relative border-l-2 border-dotted border-gray-800 ">
                   <li class="mb-10 ml-4">
-                    <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-500 "></div>
+                    <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800 "></div>
                     <div className="flex space-x-12">
-                      <time class="mb-1 text-sm font-normal leading-none text-gray-400 ">
+                      <time class="mb-1 text-sm leading-none text-gray-800 ">
                         {dataBookingTrain && dataBookingTrain[0].departureTime}
                       </time>
                       <div className="-mt-2">
-                        <h3 class="text-left text-xs text-gray-800 ">
+                        <div class="text-left text-xs text-gray-800 ">
                           {dataDetailTrain &&
                             dataDetailTrain[0].berangkat_nama_kota}
-                        </h3>
+                        </div>
                         <p class="text-left text-xs text-gray-800 ">
                           (
                           {dataDetailTrain &&
@@ -481,10 +481,10 @@ export default function BookingKai() {
                         {dataBookingTrain && dataBookingTrain[0].arrivalTime}
                       </time>
                       <div className="-mt-2">
-                        <h3 class="text-left text-xs  text-slate-800 ">
+                        <div class="text-left text-xs  text-gray-800 ">
                           {dataDetailTrain &&
                             dataDetailTrain[0].tujuan_nama_kota}
-                        </h3>
+                        </div>
                         <p class="text-left text-xs text-gray-800 ">
                           (
                           {dataDetailTrain &&

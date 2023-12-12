@@ -568,11 +568,11 @@ export default function BookingPesawat() {
                 />
               </div>
               <div className="flex space-x-2 items-center">
-                <RxCrossCircled size={20} className="text-slate-500" />
-                <div className="hidden xl:block text-slate-500">
+                <RxCrossCircled size={20} className="text-gray-500" />
+                <div className="hidden xl:block text-gray-800">
                   Pembayaran tiket
                 </div>
-                <div className="block xl:hidden text-slate-500">Payment</div>
+                <div className="block xl:hidden text-gray-800">Payment</div>
               </div>
               {/* <div>
                 <MdHorizontalRule
@@ -605,14 +605,14 @@ export default function BookingPesawat() {
                         </small>
                       </div>
                       <div className="px-4 xl:px-8 p-4 flex justify-between space-x-12 items-center">
-                        <div className="text-xs font-bold text-slate-800">
+                        <div className="text-xs text-gray-800">
                           <div>{dataDetail.departureName}</div>
                           <div>({dataDetail.departure})</div>
                         </div>
                         <div className="rounded-full p-1 bg-blue-500 ">
                           <IoArrowForwardOutline className="text-white" size={18} />
                         </div>
-                        <div className="text-xs font-bold text-slate-800">
+                        <div className="text-xs text-gray-800">
                           <div>{dataDetail.arrivalName}</div>
                           <div>({dataDetail.arrival})</div>
                         </div>
@@ -635,14 +635,14 @@ export default function BookingPesawat() {
                           <li class="mb-10 ml-4 text-sm">
                             <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800  "></div>
                             <div className="flex space-x-12">
-                              <time class="mb-1 text-xs font-bold leading-none text-gray-800 ">
+                              <time class="mb-1 text-xs leading-none text-gray-800 ">
                                 {dataDetail.departureTime}
                               </time>
                               <div className="-mt-2">
-                                <h3 class="text-left text-xs font-bold text-slate-800 ">
+                                <div class="text-left text-sm text-gray-800 ">
                                   {dataDetail.departureName}
-                                </h3>
-                                <p class="text-left text-xs font-bold text-gray-800 ">
+                                </div>
+                                <p class="text-left text-xs text-gray-800 ">
                                   ({dataDetail.departure})
                                 </p>
                               </div>
@@ -651,14 +651,14 @@ export default function BookingPesawat() {
                           <li class="ml-4 text-sm mt-10">
                             <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white  "></div>
                             <div className="flex space-x-12">
-                              <time class="mb-1 text-xs font-bold leading-none text-gray-800 ">
+                              <time class="mb-1 text-xs leading-none text-gray-800 ">
                                 {dataDetail.arrivalTime}
                               </time>
                               <div className="-mt-2">
-                                <h3 class="text-left text-xs font-bold text-slate-800 ">
+                                <div class="text-left text-sm text-gray-800 ">
                                   {dataDetail.arrivalName}
-                                </h3>
-                                <p class="text-left text-xs font-bold text-gray-800 ">
+                                </div>
+                                <p class="text-left text-xs text-gray-800 ">
                                   ({dataDetail.arrival})
                                 </p>
                               </div>

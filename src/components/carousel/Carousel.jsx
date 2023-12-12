@@ -67,7 +67,7 @@ export default function Carousels(props) {
     return (
         <div className="container mx-auto xl:grid xl:grid-cols-2 w-full px-0 xl:px-4 xl:py-8">
             <div className='block md:hidden px-4 mb-4 text-gray-500'>
-                <div className="font-semibold text-sm">Haii kamu,</div>
+                <div className="font-semibold text-sm">Hai Traveler,</div>
                 <small >nikmati promo menarik lainya untuk kamu.</small>
             </div>
             <div className="hidden xl:block ">

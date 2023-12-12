@@ -833,7 +833,7 @@ export default function Konfirmasi() {
                     </div>
                     <div className="mt-2"></div>
                     <div className="p-4 pl-8 mb-4">
-                      <ol class="relative border-l border-dashed border-gray-800">
+                      <ol class="relative border-l-2 border-dashed border-gray-800">
                         <li class="mb-10 ml-4">
                           <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800"></div>
                           <div className="flex space-x-12">
@@ -842,10 +842,10 @@ export default function Konfirmasi() {
                                 dataBookingTrain[0].departureTime}
                             </time>
                             <div className="-mt-2">
-                              <h3 class="text-left text-xs text-gray-800 font-bold ">
+                              <div class="text-left text-xs text-gray-800">
                                 {dataBookingTrain &&
                                   dataDetailTrain[0].berangkat_nama_kota}
-                              </h3>
+                              </div>
                               <p class="text-left text-xs text-gray-800 ">
                                 (
                                 {dataBookingTrain &&
@@ -863,10 +863,10 @@ export default function Konfirmasi() {
                                 dataBookingTrain[0].arrivalTime}
                             </time>
                             <div className="-mt-2">
-                              <h3 class="text-left text-xs  text-gray-800 font-bold ">
+                              <div class="text-left text-xs  text-gray-800">
                                 {dataBookingTrain &&
                                   dataDetailTrain[0].tujuan_nama_kota}
-                              </h3>
+                              </div>
                               <p class="text-left text-xs text-gray-800 ">
                                 (
                                 {dataBookingTrain &&

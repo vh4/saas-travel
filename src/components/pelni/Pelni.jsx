@@ -10,13 +10,13 @@ import { IoBoatSharp } from "react-icons/io5";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import onClickOutside from "react-onclickoutside";
 import { makeStyles } from "@mui/styles";
-import { DateRangePicker, InputGroup, InputNumber } from "rsuite";
+import { InputGroup } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
-import { Button, message } from "antd";
+import { Button, DatePicker, message } from "antd";
 import Cookies from "js-cookie";
 import { AiOutlineSwap } from "react-icons/ai";
-
-const { allowedMaxDays, beforeToday, combine } = DateRangePicker;
+import dayjs from "dayjs";
+import { daDK } from "rsuite/esm/locales";
 
 function Pelni() {
   const [anchorEl, setAnchorEl] = React.useState("hidden");
@@ -107,12 +107,9 @@ function Pelni() {
   }
   
   try {
-    parsedTgl = tgl ? JSON.parse(tgl) : null;
-    if (Array.isArray(parsedTgl) && parsedTgl.length === 2) {
-      const isValidDate = parsedTgl.every(dateStr =>
-        !isNaN(new Date(dateStr).getTime())
-      );
-      parsedTgl = isValidDate ? parsedTgl : null;
+    parsedTgl = tgl ? tgl : null;
+    if (!isNaN(dayjs(parsedTgl))) {
+      parsedTgl = parsedTgl ? parsedTgl : null;
     } else {
       parsedTgl = null;
     }
@@ -125,29 +122,17 @@ function Pelni() {
   lakiCookie = lakiCookie ? lakiCookie : 1;
   wanitaCookie = wanitaCookie ? wanitaCookie : 0;
 
-  const today = parsedTgl ? new Date(parsedTgl[0]) : new Date();
-  let nextMonth;
-  
-  if (parsedTgl !== null) {
-    nextMonth = new Date(parsedTgl[1]);
-  } else {
-    nextMonth = new Date(today);
-    nextMonth.setMonth(today.getMonth() + 1);
-  }
-  
+  const today = parsedTgl ? dayjs(parsedTgl) : dayjs().startOf('month');
+
   // Input
-  const [tanggal, setTanggal] = React.useState([today, nextMonth]);
+  const [tanggal, setTanggal] = React.useState(today);
+
   const [laki, setLaki] = React.useState(lakiCookie);
   const [wanita, setWanita] = React.useState(wanitaCookie);
 
   const [keberangkatan, setKeberangkatan] = React.useState(depa);
   const [tujuan, setTujuan] = React.useState(arri);
 
-  const disabledDateRule = combine(
-    allowedMaxDays(30), // Disable dates more than 30 days in the future
-    beforeToday(), // Disable dates before today
-    
-  );
   const i = 0;
 
   const useStyles = makeStyles((theme) => ({
@@ -324,26 +309,24 @@ function Pelni() {
     setpelniStasiun(response.data);
   }
 
-  function formatDate(date) {
-    return (
-      date.getFullYear() +
-      "-" +
-      addLeadingZero(date.getMonth() + 1) +
-      "-" +
-      addLeadingZero(date.getDate())
-    );
-  }
-
   function handleSubmitPelni(e) {
     e.preventDefault();
     setLoading(true);
 
-    let startDate = new Date((tanggal && tanggal[0]) || new Date());
-    let endDate = new Date((tanggal && tanggal[1]) || new Date());
-
-    startDate = formatDate(startDate);
-    endDate = formatDate(endDate);
-
+    const givenDate = dayjs(tanggal, 'YYYY-MM');
+    const daynow = dayjs();
+  
+    let startDate = givenDate.startOf('month').format('YYYY-MM-DD');
+    let endDate = givenDate.endOf('month').format('YYYY-MM-DD');
+  
+    if (dayjs(startDate).isBefore(daynow)) {
+      startDate = daynow.format('YYYY-MM-DD');
+    }
+  
+    if (dayjs(endDate).isBefore(daynow)) {
+      endDate = daynow.format('YYYY-MM-DD');
+    }
+  
     setTimeout(() => {
       e.preventDefault();
       setLoading(false);
@@ -381,7 +364,7 @@ function Pelni() {
         Cookies.set('d-arri', JSON.stringify(tujuan), cookieOptions);
         Cookies.set('d-laki', laki, cookieOptions);
         Cookies.set('d-wanita', wanita, cookieOptions);
-        Cookies.set('d-tanggal', JSON.stringify(tanggal), cookieOptions);
+        Cookies.set('d-tanggal', tanggal, cookieOptions);
 
         navigate({
           pathname: "/pelni/search",
@@ -400,6 +383,10 @@ function Pelni() {
     setTujuan(keberangkatan);
 
   }
+
+  const disabledDate = (current) => {
+    return current && current < dayjs().endOf('day');
+  };
 
   return (
     <>
@@ -558,21 +545,19 @@ function Pelni() {
                   </FormControl>
                     </div>
                   </div>
-                  <FormControl sx={{ m: 1, minWidth: 120 }}>
+                  <FormControl sx={{ m: 1, minWidth: 145 }}>
                     <small className="mb-2 text-gray-500">Range Tanggal</small>
-                    <div className="w-full">
-                    <DateRangePicker
-                        block
-                        onChange={(e) => setTanggal(e)}
-                        size="lg"
-                        sx={{ width: "100%", color:"black !important" }}
-                        placeholder="Select Date"
-                        className="cursor-pointer text-black"
-                        disabledDate={disabledDateRule}
-                        value={tanggal}
-                        format="dd/MM/yyyy"
-                        style={{ color: "black !important" }}
-                      />
+                    <div className="w-full cursor-pointer">
+                    <DatePicker
+                    value={tanggal}
+                    className="w-full cursor-pointer text-black py-[8px] text-md border-gray-200"
+                    size="large"
+                    onChange={(e) => setTanggal(e)}
+                    picker="month" 
+                    disabledDate={disabledDate}
+                    inputReadOnly={true}
+                    style={{ width: '100%' }}
+                    />
                     </div>
                   </FormControl>
                   <FormControl sx={{ m: 1, minWidth: 120 }}>
@@ -597,7 +582,7 @@ function Pelni() {
                       id="basic-menu"
                       className={`${anchorEl} absolute top-20 z-10 grid w-full md:w-auto px-8 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}
                     >
-                      <div className="w-full md:w-48 ml-4 block md:mx-0">
+                      <div className="w-full md:w-48 block md:mx-0">
                         <div className="mt-4 w-full items-center text-gray-600">
                           <div className="text-sm text-center header-number mb-4">
                             <p>Laki-laki ({"≥"} 2 thn)</p>

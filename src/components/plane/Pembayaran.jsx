@@ -233,7 +233,7 @@ export default function Pembayaran() {
             </>
           ) : (
             <>
-              <div className="block xl:flex xl:justify-around mb-24 xl:space-x-12 xl:mx-12">
+              <div className="block xl:flex xl:justify-around mb-24 ">
               {/* mobile sidebar */}
                 <div className="block xl:hidden sidebar w-full xl:w-1/2">
                   <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">

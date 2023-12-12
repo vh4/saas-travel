@@ -61,7 +61,7 @@ export default function MainPage() {
           const urlParams = new URLSearchParams(queryString);
           const urlEncode = encodeURIComponent(urlParams.get('auth')).split('%20').join('+');
           const decodedParam = decodeURIComponent(urlEncode);
-          handlerLogin(decodedParam);
+          handlerLogin(decodedParam, searchParams.get("merchant"));
         }
       } catch (error) {
         console.error("Error fetching data:", error.message);
@@ -71,13 +71,14 @@ export default function MainPage() {
     fetchData();
   }, []);
 
-  const handlerLogin = async (auth) => {
+  const handlerLogin = async (auth, merchant) => {
     try {
       setLoading(true);
 
       await axios
         .post(`${process.env.REACT_APP_HOST_API}/travel/app/redirect`, {
           auth: auth,
+          merchant:merchant
         })
         .then((data) => {
           if (data.data.rc === "00") {

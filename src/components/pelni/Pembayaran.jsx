@@ -24,6 +24,11 @@ export default function Pembayaran() {
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+
   const [api, contextHolder] = notification.useNotification();
 
   //loading hanlde submit pembayaran.
@@ -155,31 +160,16 @@ export default function Pembayaran() {
           {/* header kai flow */}
           <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="flex space-x-2 items-center">
-              <AiOutlineCheckCircle className="text-slate-500" size={20} />
-              <div className="hidden xl:flex text-slate-500">
+              <AiOutlineCheckCircle className="text-gray-800" size={20} />
+              <div className="hidden xl:flex text-gray-800">
                 Detail pesanan
               </div>
-              <div className="block xl:hidden text-slate-500">Detail</div>
+              <div className="block xl:hidden text-gray-800">Detail</div>
             </div>
             <div>
               <MdHorizontalRule
                 size={20}
-                className="hidden xl:flex text-gray-500"
-              />
-            </div>
-            <div className="flex space-x-2 items-center">
-              <AiOutlineCheckCircle className="text-slate-500" size={20} />
-              <div className="hidden xl:flex text-slate-500">
-                Konfirmasi pesanan
-              </div>
-              <div className="block xl:hidden text-slate-500 font-bold">
-                Konfirmasi
-              </div>
-            </div>
-            <div>
-              <MdHorizontalRule
-                size={20}
-                className="text-gray-500 hidden xl:flex"
+                className="text-gray-800 hidden xl:flex"
               />
             </div>
             <div className="flex space-x-2 items-center">
@@ -207,37 +197,73 @@ export default function Pembayaran() {
               </>
             ) : (
               <>
-                <div className="block xl:flex xl:justify-around mb-24 xl:mx-16 xl:space-x-4">
+                <div className="block xl:flex xl:justify-around mb-24 xl:space-x-4">
+                {/* mobile sidebar */}
+                  <div className="block xl:hidden sidebar w-full xl:w-1/2">
+                    <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                      <div className="px-4 py-2 mb-4">
+                        {/* <div className="text-gray-500 text-xs">Status Booking</div> */}
+                        <div className="text-gray-800 text-sm font-bold">Transaksi ID</div>
+                        <div className="mt-2 font-bold text-blue-500 text-[18px]">
+                        <Paragraph copyable>{book && book.transactionId}</Paragraph>
+                        </div>
+                        <div className="text-grapy-500 text-xs">
+                        Gunakan transaksi id diatas untuk melakukan inq ulang dan pembayaran.
+                      </div>
+                      </div>
+                      <div className="p-4 border-t">
+                        <div className="mt-3 text-xs text-gray-900">
+                          {book.SHIP_NAME}
+                        </div>
+                        <div className="flex space-x-4">
+                          <div className="mt-1 text-xs text-gray-900 font-bold">
+                            {passengers.pelabuhan_asal}
+                          </div>
+                          <IoArrowForwardOutline className="text-gray-900" size={18} />
+                          <div className="mt-1 text-xs text-gray-900 font-bold">
+                            {passengers.pelabuhan_tujuan}
+                          </div>
+                        </div>
+                        <div className="mt-3 text-xs text-gray-900">
+                          {parseTanggal(passengers.departureDate)} -{" "}
+                          {parseTanggal(book.arrivalDate)}
+                        </div>
+                        <div className="mt-1 text-xs text-gray-900">
+                          {book.departureTime} - {book.arrivalTime}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <div className="mt-4 w-full mx-0 2xl:mx-4">
                     {/* adult and infant */}
                     {bookInfo.PAX_LIST.length > 0
                       ? bookInfo.PAX_LIST.map((e, i) => (
                           <>
                             <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
-                              <div className="p-2">
-                                <div className="px-2 xl:px-4 py-2 text-gray-600 border-b border-gray-200 text-sm font-bold">
+                              <div className="">
+                                <div className="px-2 py-2 text-gray-800 border-b border-gray-200 text-xs font-bold">
                                   {bookInfo.PAX_LIST[i][0]} (
                                   {bookInfo.PAX_LIST[i][6] == "N/A"
                                     ? "INFANT"
                                     : "ADULT"}
                                   )
                                 </div>
-                                <div className="mt-2 block md:flex md:space-x-8">
+                                <div className="mt-2 grid grid-cols-2">
                                   {/* <div className="px-2 md:px-4 py-2 text-sm">
                                           <div className="text-gray-500">NIK</div>
                                           <div className="font-bold text-xs text-gray-600">{bookInfo.PAX_LIST[i][1]}</div>
                                       </div> */}
-                                  <div className="px-2 md:px-4 py-2">
-                                    <div className="text-gray-500 text-sm">
+                                  <div className="px-2 py-2">
+                                    <div className="text-gray-800 font-bold text-xs">
                                       Nomor HP
                                     </div>
-                                    <div className="font-bold text-xs text-gray-900">
+                                    <div className="mt-2 text-xs text-gray-800">
                                       {bookInfo.CALLER}
                                     </div>
                                   </div>
-                                  <div className="px-2 md:px-4 py-2">
-                                    <div className="text-gray-500 text-sm">Kursi</div>
-                                    <div className="font-bold text-xs text-gray-900">
+                                  <div className="px-2 py-2">
+                                    <div className="text-gray-800 text-xs font-bold">Kursi</div>
+                                    <div className="mt-2 text-xs text-gray-800">
                                       {bookInfo.PAX_LIST[i][6] == "N/A"
                                         ? " Non Seats"
                                         : `${
@@ -249,9 +275,9 @@ export default function Pembayaran() {
                                           }`}
                                     </div>
                                   </div>
-                                  <div className="px-2 md:px-4 py-2">
-                                    <div className="text-sm text-gray-500">Kelas</div>
-                                    <div className="font-bold text-xs text-gray-900">
+                                  <div className="px-2 py-2">
+                                    <div className="text-xs text-gray-800 font-bold">Kelas</div>
+                                    <div className="mt-2 text-xs text-gray-800">
                                       {bookInfo.CLASS} / Subclass ({bookInfo.SUBCLASS}
                                       )
                                     </div>
@@ -263,7 +289,7 @@ export default function Pembayaran() {
                         ))
                       : ""}
                     <div className="p-2 mt-2 w-full rounded-md border border-gray-200 shadow-sm">
-                      <div className="p-4">
+                      <div className="p-2">
                         <div className="text-xs text-gray-900 font-bold flex justify-between">
                           <div>
                             {bookInfo && bookInfo.SHIP_NAME}{" "}
@@ -272,7 +298,7 @@ export default function Pembayaran() {
                           </div>
                           <div>Rp. {book && toRupiah(book.normalSales)}</div>
                         </div>
-                        <div className="mt-2 text-xs text-gray-900 font-bold flex justify-between">
+                        <div className="mt-4 text-xs text-gray-900 font-bold flex justify-between">
                           <div>Biaya Admin (Fee) x{TotalAdult + TotalInfant}</div>
                           <div>
                             Rp.{" "}
@@ -282,11 +308,11 @@ export default function Pembayaran() {
                               )}
                           </div>
                         </div>
-                        <div className="mt-2 text-xs text-gray-900 font-bold flex justify-between">
+                        <div className="mt-4 text-xs text-gray-900 font-bold flex justify-between">
                           <div>Diskon (Rp.)</div>
                           <div>Rp. {book && book.discount}</div>
                         </div>
-                        <div className="mt-4 pt-2 border-t border-gray-200 text-sm text-gray-900 font-bold flex justify-between">
+                        <div className="mt-8 pt-2 border-t border-gray-200 text-sm text-gray-900 font-bold flex justify-between">
                           <div>Total Harga</div>
                           <div>
                             Rp.{" "}
@@ -304,7 +330,7 @@ export default function Pembayaran() {
                     </div>
                   </div>
                   {/* desktop sidebar */}
-                  <div className="sidebar w-full xl:w-1/2">
+                  <div className="hidden xl:block sidebar w-full xl:w-1/2">
                     <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
                       <div className="px-4 py-2">
                         {/* <div className="text-gray-500 text-xs">Status Booking</div> */}
@@ -358,7 +384,7 @@ export default function Pembayaran() {
                           : ""}
                       </div>
                     </div>
-                    <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                    <div className="hidden xl:block mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
                       {/* <div className="px-8 py-4 text-sm text-gray-500">
                               Tekan tombol <span className="text-blue-500">bayar langsung</span> untuk melakukan pembayaran secara tunai.
                           </div> */}
@@ -382,6 +408,29 @@ export default function Pembayaran() {
                       </div>
                     </div>
                   </div>
+                  <div className="block xl:hidden mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                      {/* <div className="px-8 py-4 text-sm text-gray-500">
+                              Tekan tombol <span className="text-blue-500">bayar langsung</span> untuk melakukan pembayaran secara tunai.
+                          </div> */}
+
+                      <div className="px-8 py-4 text-sm text-gray-500">
+                      Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
+                      </div>
+
+                      <div className="flex justify-center">
+                        <ButtonAnt
+                          onClick={handlerPembayaran}
+                          size="large"
+                          key="submit"
+                          type="primary"
+                          className="bg-blue-500 mx-2 font-semibold mt-4"
+                          loading={isLoading}
+                          disabled
+                        >
+                          Langsung Bayar
+                        </ButtonAnt>
+                      </div>
+                    </div>
                 </div>
               </>
             )
