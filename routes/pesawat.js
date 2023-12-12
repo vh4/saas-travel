@@ -130,6 +130,11 @@ Router.get('/travel/pesawat/search/flight/:id', AuthLogin, async (req, res) => {
 Router.post('/travel/flight/book', apiLimiterKhususBooking, async function (req, res) {
   const data = req.body;
   data['username'] = req.session['v_uname'] || ''
+  const merchart = req.session['v_merchant'] || ''
+
+  if(merchart !== undefined && merchart !== null && merchart !== ''  && merchart?.length > 0) {
+    data['username'] =  data['username'] + '#' + merchart
+  }
   
   logger.info(`Request /travel/flight/book: ${JSON.stringify(data)}`);
   try {

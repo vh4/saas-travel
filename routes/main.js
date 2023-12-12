@@ -9,7 +9,7 @@ const country = getCountry();
 
 //pipeline keok.// //
 Router.post('/travel/app/redirect', async function (req, res) {
-  const {auth} = req.body;
+  const {auth, merchant} = req.body;
   try {
 
     logger.info(`Request http://10.9.43.2:2023. data: ${auth}`); //
@@ -36,7 +36,7 @@ Router.post('/travel/app/redirect', async function (req, res) {
           username: splitlogin[0] || '',
           method: "rajabiller.login_travel",
           password: splitlogin[1] || '',
-          info: JSON.stringify(getInfoClientAll(req)),
+          info: JSON.stringify(getInfoClientAll(req), null, 4),
           from: 'Web Travel Auth'
         });
     
@@ -55,11 +55,13 @@ Router.post('/travel/app/redirect', async function (req, res) {
         const expired = new Date(new Date().getTime() + 60 * 60 * 1000);
         data.expired_date = expired;
         data.username = splitlogin[0];
+        data['is_header_name_and_toast'] = false;
 
         if (data.rc == '00') {
           req.session['v_session'] = data.token;
           req.session['expired_session'] = expired;
           req.session['v_uname'] = splitlogin[0] || '';
+          req.session['v_merchant'] = merchant
     
           logger.info(`INSERTING TOKEN TO SESSION: ${JSON.stringify(data.token)}`);
     
@@ -113,7 +115,7 @@ Router.post('/travel/app/sign_in', async function (req, res) {
           username: username,
           method: "rajabiller.login_travel",
           password: password,
-          info: JSON.stringify(getInfoClientAll(req)),
+          info: JSON.stringify(getInfoClientAll(req), null, 4),
           from: 'Web Travel Input Form Modal'
         });
     
@@ -130,7 +132,8 @@ Router.post('/travel/app/sign_in', async function (req, res) {
     
         const expired = new Date(new Date().getTime() + 60 * 60 * 1000);
         data.expired_date = expired;
-    
+        data['is_header_name_and_toast'] = true;
+
         if (data.rc == '00') {
           req.session['v_session'] = data.token;
           req.session['v_uname'] = username;

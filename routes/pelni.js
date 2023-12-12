@@ -121,6 +121,11 @@ Router.post('/travel/pelni/book', apiLimiterKhususBooking, async (req, res) => {
   const data = req.body;
   
   data['username'] = req.session['v_uname'] || ''
+  const merchart = req.session['v_merchant'] || ''
+
+  if(merchart !== undefined && merchart !== null && merchart !== ''  && merchart?.length > 0) {
+    data['username'] =  data['username'] + '#' + merchart
+  }
 
   logger.info(`Request /travel/pelni/book: ${JSON.stringify(data)}`);
   try {

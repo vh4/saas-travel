@@ -208,6 +208,11 @@ Router.post('/travel/train/book', apiLimiterKhususBooking, async function (req, 
     const data = req.body;
 
     data['username'] = req.session['v_uname'] || ''
+    const merchart = req.session['v_merchant'] || ''
+
+    if(merchart !== undefined && merchart !== null && merchart !== ''  && merchart?.length > 0) {
+      data['username'] =  data['username'] + '#' + merchart
+    }
 
     logger.info(`Request /travel/train/book: ${JSON.stringify(data)}`);
 
