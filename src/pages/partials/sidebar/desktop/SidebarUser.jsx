@@ -52,14 +52,6 @@ export default function SidebarUser({pathSidebar}) {
                               : 'Rb Travell'}</span>
                         </div>
                     </li> 
-                    {/* <Link to='/profile/view'>
-                    <li className='ml-4'>
-                        <div  className={`flex cursor-pointer ${ pathSidebar === '/profile/view' ? 'bg-cyan-100' : ''} items-center p-2 text-base font-normal text-gray-500 rounded-lg  hover:bg-cyan-100 `}>
-                            <FaUserCircle className='text-orange-500' size={20} />
-                            <span className="flex-1 ml-3 whitespace-nowrap">Profile</span>
-                        </div>
-                    </li>
-                    </Link> */}
                     <li className='ml-4'>
                         <div onClick={(e) => dropdownTransaksi === true ? setDropdownTransaksi(false) : setDropdownTransaksi(true)}  className={`flex justify-between cursor-pointer items-center p-2 text-base font-normal text-gray-500 rounded-lg  hover:bg-cyan-100 `}>
                             <div className='flex items-center'>

@@ -1,4 +1,3 @@
-
 import { Link, useLocation } from "react-router-dom";
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { CiSettings } from "react-icons/ci";
@@ -18,7 +17,6 @@ import { IoLogOut, IoLogOutOutline, IoLogOutSharp } from "react-icons/io5";
 import { LoginContent, LogoutContent } from "../../App";
 
 export default function Header() {
-
   const customStyle = {
     color: "white", // Warna teks
     padding: "20px",
@@ -99,11 +97,9 @@ export default function Header() {
         ),
       })
       .then(() => {
-        
         localStorage.clear();
         suksesLogout();
-        navigate('/');
-
+        navigate("/");
       });
   };
 
@@ -148,7 +144,6 @@ export default function Header() {
   if (user === null || user === undefined) {
     userProfile();
   }
-
 
   const expiredDateTime = async () => {
     const response = await axios.post(
@@ -237,7 +232,6 @@ export default function Header() {
           token: captcha,
         })
         .then((data) => {
-
           captchaRef.current.reset();
 
           if (data.data.rc === "00") {
@@ -255,15 +249,22 @@ export default function Header() {
             localStorage.setItem("c_name", uid);
             localStorage.setItem("hdrs_c", data.data.is_header_name_and_toast);
 
-            if(search.trim().length > 1){
+            if (
+              search.trim().length > 1 ||
+              pathname == "/transaksi/pesawat" ||
+              pathname == "/booking/pesawat" ||
+              pathname == "/transaksi/kai" ||
+              pathname == "/booking/kai" ||
+              pathname == "/transaksi/pelni" ||
+              pathname == "/booking/pelni"
+            ) {
               setTimeout(() => {
                 window.location.reload();
               }, 3000);
-            }else{
+            } else {
               navigate(newURL);
             }
-
-           } else {
+          } else {
             gagalLogin(data.data.rd);
             setLoading(false);
           }
@@ -311,33 +312,37 @@ export default function Header() {
               {!localStorage.getItem(
                 process.env.REACT_APP_SECTRET_LOGIN_API
               ) ? (
-                <div
-                  className="hidden md:flex text-slate-700 space-x-4 items-center"
-                >
-                  <div className="flex space-x-2 items-center cursor-pointer hover:text-blue-500"  onClick={handleOpen}>
-                      <UserOutlined size={22} />
-                      <div>Masuk</div>
-                  </div>
-                  <a href="https://www.rajabiller.com/register" className="text-[15px] text-slate-800">
-                  <Button
-                    key="submit"
-                    type="default"
-                    className="px-8 text-gray-700"
+                <div className="hidden md:flex text-slate-700 space-x-4 items-center">
+                  <div
+                    className="flex space-x-2 items-center cursor-pointer hover:text-blue-500"
+                    onClick={handleOpen}
                   >
-                    Registrasi
-                  </Button>
+                    <UserOutlined size={22} />
+                    <div>Masuk</div>
+                  </div>
+                  <a
+                    href="https://www.rajabiller.com/register"
+                    className="text-[15px] text-slate-800"
+                  >
+                    <Button
+                      key="submit"
+                      type="default"
+                      className="px-8 text-gray-700"
+                    >
+                      Registrasi
+                    </Button>
                   </a>
                 </div>
               ) : (
                 <div className="hidden relative group space-x-2 text-gray-500 md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 md:inline-flex group-hover:block items-end ml-2 mb-2">
-                  {localStorage.getItem('hdrs_c') != 'false'  && (
+                  {localStorage.getItem("hdrs_c") != "false" && (
                     <>
                       {user !== null && user !== undefined ? (
                         <>
                           {user.namaPemilik !== undefined ? (
                             <>
                               <div className="flex space-x-2 items-center mt-2">
-                              <div className="">
+                                <div className="">
                                   <div className="text-slate-600 font-bold">
                                     {localStorage.getItem("c_name")
                                       ? localStorage
@@ -350,20 +355,23 @@ export default function Header() {
                                   <small>
                                     {localStorage.getItem("c_at")
                                       ? "Logged at " +
-                                        dayjs(localStorage.getItem("c_at")).format(
-                                          "ddd, DD MMM YYYY HH:mm:ss"
-                                        )
+                                        dayjs(
+                                          localStorage.getItem("c_at")
+                                        ).format("ddd, DD MMM YYYY HH:mm:ss")
                                       : "Logged at -"}
                                   </small>
                                 </div>
-                              <div>
-                              <div
-                                  onClick={LogoutHandler}
-                                  class="ml-4 flex justify-center bg-blue-500 py-2 rounded-full space-x-4 items-center w-full pl-1"
-                                >
-                                  <IoLogOutOutline size={18} className="text-white" />
+                                <div>
+                                  <div
+                                    onClick={LogoutHandler}
+                                    class="ml-4 flex justify-center bg-blue-500 py-2 rounded-full space-x-4 items-center w-full pl-1"
+                                  >
+                                    <IoLogOutOutline
+                                      size={18}
+                                      className="text-white"
+                                    />
+                                  </div>
                                 </div>
-                              </div>
                               </div>
                             </>
                           ) : (
@@ -414,18 +422,17 @@ export default function Header() {
                 </button>
               </button>
             ) : (
-                <>
-                <div className="pr-4 py-3">       
-                    <Button className="flex md:hidden  items-center px-8 py-4" 
-                     onClick={handleOpen}
-                    >
-                        Login
-                    </Button>
+              <>
+                <div className="pr-4 py-3">
+                  <Button
+                    className="flex md:hidden  items-center px-8 py-4"
+                    onClick={handleOpen}
+                  >
+                    Login
+                  </Button>
                 </div>
-                </>
-            )
-            
-            }
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -474,74 +481,75 @@ export default function Header() {
         ]}
       >
         <p>Masukkan Username & Password untuk Login</p>
-        <Form 
-        labelCol={{
-          span: 5,
-        }}
-        
-        textAlign="left"
-        wrapperCol={{
-          span: 18,
-        }}
-        style={{
-          maxWidth: 1000,
-        }}
-        
-        className="mt-8" form={form} onFinish={handlerLogin}>
-          <Form.Item 
-          rules={[
-            {
-              required: true,
-              message:
-                "Username harus diisi.",
-            },
-            {
-              max: 15,
-              message:
-                "Username maksimal 15 karakter.",
-            },
-            {      
-              pattern: /^[a-zA-Z0-9]*$/, 
-              message: "Username hanya boleh berisi huruf dan angka.",
-            },
-          ]}
-            className="mt-4" label="Username" name="uid">
-            <Input
-                 onChange={(e) => {
-                  const value = e.target.value;
-                  setuid(value);
-                }}
-                value={uid}
-            />
-          </Form.Item>
-          <Form.Item 
+        <Form
+          labelCol={{
+            span: 5,
+          }}
+          textAlign="left"
+          wrapperCol={{
+            span: 18,
+          }}
+          style={{
+            maxWidth: 1000,
+          }}
+          className="mt-8"
+          form={form}
+          onFinish={handlerLogin}
+        >
+          <Form.Item
             rules={[
               {
                 required: true,
-                message:
-                  "Password harus diisi.",
+                message: "Username harus diisi.",
               },
               {
                 max: 15,
-                message:
-                  "Password maksimal 15 karakter.",
+                message: "Username maksimal 15 karakter.",
               },
-              
+              {
+                pattern: /^[a-zA-Z0-9]*$/,
+                message: "Username hanya boleh berisi huruf dan angka.",
+              },
             ]}
-          
-          label="Password" name="pin">
+            className="mt-4"
+            label="Username"
+            name="uid"
+          >
+            <Input
+              onChange={(e) => {
+                const value = e.target.value;
+                setuid(value);
+              }}
+              value={uid}
+            />
+          </Form.Item>
+          <Form.Item
+            rules={[
+              {
+                required: true,
+                message: "Password harus diisi.",
+              },
+              {
+                max: 15,
+                message: "Password maksimal 15 karakter.",
+              },
+            ]}
+            label="Password"
+            name="pin"
+          >
             <Input.Password
               onChange={(e) => setpin(e.target.value)}
               value={pin} // Pastikan value sesuai dengan nilai state pin
               required
             />
           </Form.Item>
-          <Form.Item label="Recaptcha" name="recaptcha"
+          <Form.Item
+            label="Recaptcha"
+            name="recaptcha"
             rules={[
               {
                 required: true,
-                message:
-                  "Recaptcha harus diisi.",
+                message: "Recaptcha harus diisi.",
               },
             ]}
           >

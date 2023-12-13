@@ -1373,10 +1373,6 @@ export default function Search() {
                                     Detail Harga
                                   </div>
                                 </div>
-                              </div>
-
-                              {/* mobile detail tiket */}
-
                               {detailTiket == `open-${index}` ? (
                                 <>
                                   {e.isTransit === true ? (
@@ -1628,6 +1624,10 @@ export default function Search() {
                                   )}
                                 </>
                               ) : null}
+                              </div>
+
+                              {/* mobile detail tiket */}
+
                               {/* end detail desltop tiket */}
 
                               {/* mobile detail harga */}

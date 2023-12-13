@@ -6,7 +6,7 @@ import axios from "axios";
 import { toRupiah } from "../../helpers/rupiah";
 import Page500 from "../components/500";
 import { message, Modal } from "antd";
-import {  Placeholder } from "rsuite";
+import { Placeholder } from "rsuite";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 
 export default function ViewTransaksi({ path }) {
@@ -316,22 +316,22 @@ export default function ViewTransaksi({ path }) {
                   {data.map((e, i) => (
                     <div className="w-full mb-6 mt-8">
                       <div className="w-full rounded-lg shadow-sm border profile-header">
-                        <div className="p-8">
+                        <div className="px-8 py-4 xl:py-8">
                           <div className="flex justify-between items-end">
                             <div className="flex space-x-2  items-end">
-                              <div className="text-xs text-gray-500">
+                              <div className="text-xs text-gray-800">
                                 Id Transaksi
                               </div>
                               <div className="text-sm text-blue-500 font-bold">
                                 {e.id_transaksi}
                               </div>
                             </div>
-                            <div className="text-sm text-slate-500 font-bold ">
+                            <div className="text-sm text-gray-800 font-bold ">
                               Rp. {toRupiah(e.nominal)}
                             </div>
                           </div>
                           <div className="border-t mt-8">
-                            <div className="flex space-x-2 mt-6 text-sm font-bold text-gray-500">
+                            <div className="flex space-x-2 mt-6 text-sm text-gray-800">
                               <MdOutlineTrain
                                 className="text-blue-500"
                                 size={16}
@@ -343,10 +343,10 @@ export default function ViewTransaksi({ path }) {
                               </div>
                             </div>
                             <div className="pl-1">
-                              <div className="mt-4 text-xs  text-gray-500">
+                              <div className="mt-4 text-xs text-gray-800">
                                 Tanggal Transaksi
                               </div>
-                              <div className="mt-1 text-sm font-bold text-gray-500">
+                              <div className="mt-2 text-xs text-gray-800">
                                 {e.tanggal_transaksi}
                               </div>
                             </div>
@@ -360,7 +360,7 @@ export default function ViewTransaksi({ path }) {
                                            - 
                                         </div>
                                       </div> */}
-                            <div className="flex space-x-2  items-center pt-4">
+                            <div className="flex justify-between xl:justify-start space-x-0 xl:space-x-4 items-center pt-4 xl:pt-8">
                               <div className="text-xs py-1 px-3 rounded-full bg-green-500 text-white">
                                 Transaksi Sukses
                               </div>

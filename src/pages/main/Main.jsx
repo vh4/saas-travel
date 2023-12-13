@@ -30,23 +30,6 @@ export default function MainPage() {
 
   const { loginComponent, setLoginComponent } = useContext(LoginContent);
 
-  // const suksesLogin = () => {
-  //   api["success"]({
-  //     message: "Successfully!",
-  //     description: "Successfully, anda berhasil login.",
-  //   });
-  // };
-
-  // const gagalLogin = (rd) => {
-  //   api["error"]({
-  //     message: "Error!",
-  //     description:
-  //       rd.toLowerCase().charAt(0).toUpperCase() +
-  //       rd.slice(1).toLowerCase() +
-  //       "",
-  //   });
-  // };
-
   useEffect(() => {
     //
     const fetchData = async () => {

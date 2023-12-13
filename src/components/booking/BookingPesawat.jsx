@@ -384,14 +384,6 @@ export default function ViewBooking({ path }) {
             </>
           )}
         </Modal>
-        <div className="w-full mt-2 md:mt-8">
-          <div className="w-full rounded-md shadow-sm border profile-header">
-            <div className="text-gray-500 p-4 flex space-x-2 items-center">
-              <AiOutlineHome size={20} /> <span>Home</span> <span>/</span>{" "}
-              <span>{path}</span>
-            </div>
-          </div>
-        </div>
         {err === true ? (
           <>
             <Page500 />
@@ -402,30 +394,38 @@ export default function ViewBooking({ path }) {
           </>
         ) : (
           <>
+            <div className="w-full mt-2 md:mt-8">
+              <div className="w-full rounded-md shadow-sm border profile-header">
+                <div className="text-gray-500 p-4 flex space-x-2 items-center">
+                  <AiOutlineHome size={20} /> <span>Home</span> <span>/</span>{" "}
+                  <span>{path}</span>
+                </div>
+              </div>
+            </div>
             {isLoading === false ? (
               <>
                 {data !== null && data !== undefined && data.length !== 0 ? (
                   <div className="mt-6">
                     {data &&
                       data.map((e, i) => (
-                        <div className="w-full mb-6">
+                        <div className="w-full mb-2 xl:mb-6">
                           <div className="w-full rounded-md shadow-sm border profile-header">
-                            <div className="p-8">
+                            <div className="py-4 px-8 xl:py-8">
                               <div className="flex justify-between items-end">
                                 <div className="flex space-x-2  items-end">
-                                  <div className="text-xs text-gray-500">
+                                  <div className="text-xs text-gray-800">
                                     ID Transaksi
                                   </div>
                                   <div className="text-sm text-blue-500 font-bold">
                                     {e.id_transaksi}
                                   </div>
                                 </div>
-                                <div className="text-sm text-slate-500 font-bold ">
+                                <div className="text-sm text-gray-800 font-bold">
                                   Rp. {toRupiah(e.nominal)}
                                 </div>
                               </div>
-                              <div className="border-t mt-8">
-                                <div className="flex space-x-2 mt-4 text-sm font-bold text-gray-500">
+                              <div className="border-t mt-6 xl:mt-8">
+                                <div className="flex space-x-2 mt-4 text-sm text-gray-800">
                                   <ImAirplane
                                     className="text-blue-500"
                                     size={16}
@@ -437,15 +437,15 @@ export default function ViewBooking({ path }) {
                                   </div>
                                 </div>
                                 <div className="pl-1">
-                                  <div className="mt-8 text-xs  text-gray-500">
+                                  <div className="mt-8 text-xs  text-gray-800">
                                     Tanggal Transaksi
                                   </div>
-                                  <div className="mt-2 text-sm font-bold text-gray-500">
+                                  <div className="mt-2 text-xs text-gray-800">
                                     {e.tanggal_transaksi}
                                   </div>
                                 </div>
                               </div>
-                              <div className="mt-8 border-t block lg:flex md:justify-between  lg:items-center">
+                              <div className="mt-6 xl:mt-8 border-t block lg:flex md:justify-between  lg:items-center">
                                 {/* <div className="mt-2 flex space-x-2 items-end">
                                 <div className="mt-1 text-xs  text-gray-500">
                                   Kode Booking
@@ -454,9 +454,9 @@ export default function ViewBooking({ path }) {
                                   - 
                                 </div>
                               </div> */}
-                                <div className="block md:flex space-x-2 items-center pt-8">
+                                <div className="block md:flex space-x-2 items-center pt-4 xl:pt-8">
                                   <div className="text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white inline-block">
-                                    sisa waktu{" "}
+                                    Sisa waktu{" "}
                                     {remainingTimes[i] &&
                                     new Date(e.expiredDate).getTime() >
                                       new Date().getTime()
@@ -466,7 +466,7 @@ export default function ViewBooking({ path }) {
                                   <div
                                     onClick={(e) => openModalBayar(e, i)}
                                     type="button"
-                                    className="mt-4 md:mt-0 cursor-pointer text-blue-500 font-bold text-xs"
+                                    className="mt-4 md:mt-0 cursor-pointer font-bold text-blue-600 text-xs"
                                   >
                                     Lihat Detail
                                   </div>

@@ -306,24 +306,24 @@ export default function ViewTransaksi({ path }) {
                 <div className="mt-6">
                   {data &&
                     data.map((e, i) => (
-                      <div className="w-full mb-6">
+                      <div className="w-full mb-2 xl:mb-6">
                         <div className="w-full rounded-md shadow-sm border profile-header">
-                          <div className="p-8">
+                          <div className="py-4 px-8 xl:py-8">
                             <div className="flex justify-between items-end">
                               <div className="flex space-x-2  items-end">
-                                <div className="text-xs text-gray-500">
+                                <div className="text-xs text-gray-800">
                                   ID Transaksi
                                 </div>
                                 <div className="text-sm text-blue-500 font-bold">
                                   {e.id_transaksi}
                                 </div>
                               </div>
-                              <div className="text-sm text-slate-500 font-bold ">
+                              <div className="text-sm text-gray-800 font-bold">
                                 Rp. {toRupiah(e.nominal)}
                               </div>
                             </div>
-                            <div className="border-t mt-8">
-                              <div className="flex space-x-2 mt-4 text-sm font-bold text-gray-500">
+                            <div className="border-t mt-6 xl:mt-8">
+                              <div className="flex space-x-2 mt-4 text-sm text-gray-800">
                                 <ImAirplane
                                   className="text-blue-500"
                                   size={16}
@@ -335,15 +335,15 @@ export default function ViewTransaksi({ path }) {
                                 </div>
                               </div>
                               <div className="pl-1">
-                                <div className="mt-8 text-xs  text-gray-500">
+                                <div className="mt-8 text-xs  text-gray-800">
                                   Tanggal Transaksi
                                 </div>
-                                <div className="mt-2 text-sm font-bold text-gray-500">
+                                <div className="mt-2 text-xs text-gray-800">
                                   {e.tanggal_transaksi}
                                 </div>
                               </div>
                             </div>
-                            <div className="mt-8 border-t block lg:flex md:justify-between  lg:items-center">
+                            <div className="mt-6 xl:mt-8 border-t block lg:flex md:justify-between  lg:items-center">
                               {/* <div className="mt-2 flex space-x-2 items-end">
                                 <div className="mt-1 text-xs  text-gray-500">
                                   Kode Booking
@@ -352,13 +352,13 @@ export default function ViewTransaksi({ path }) {
                                   - 
                                 </div>
                               </div> */}
-                              <div className="block md:flex space-x-2 items-center pt-8">
-                                <div className="text-xs py-1 px-3 rounded-full bg-green-500 text-white">
+                              <div className="block md:flex space-x-2 items-center pt-4 xl:pt-8">
+                                <div className="text-xs font-bold py-1 px-3 rounded-full bg-green-500 text-white inline-block">
                                   Transaksi sukses
                                 </div>
                                 <div
                                   onClick={(e) => openModalBayar(e, i)}
-                                  className="cursor-pointer text-blue-500 font-bold text-xs"
+                                  className="mt-4 md:mt-0 cursor-pointer font-bold text-blue-600 text-xs"
                                 >
                                   Lihat Detail
                                 </div>

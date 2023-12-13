@@ -53,17 +53,6 @@ export default function SidebarMobileUser({ pathSidebar }) {
       <div className="mt-4">
         <ul className="mt-0 space-y-2 relative">
           <>
-            {/* <Link to="/profile/view">
-              <div
-                className={`flex cursor-pointer items-center p-2 text-base font-normal text-gray-500 rounded-lg `}
-              >
-                <div className="flex">
-                  <FaUserCircle className="text-orange-500" size={20} />
-                  <span className="flex-1 ml-3 whitespace-nowrap">Users</span>
-                </div>
-              </div>
-            </Link> */}
-
             <div
               onClick={(e) =>
                 dropdownTransaksi === true
