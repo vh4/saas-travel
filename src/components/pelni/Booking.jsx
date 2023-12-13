@@ -43,6 +43,10 @@ export default function BookingPelni() {
     });
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [isLoading, setIsLoading] = useState(false);
   const [dataDetailPelni, setdataDetailPelni] = useState(null);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
