@@ -39,7 +39,8 @@ function KAI() {
       },
       "&&& $input": {
         padding: 1,
-        color:"black"
+        color:"black",
+        width: "50%",
       },
     },
     root: {
@@ -433,21 +434,21 @@ function KAI() {
   return (
     <>
     {contextHolder}
-      <div className="row bg-white border-t border-gray-200 w-full p-2 md:p-0 pr-0">
-        <div class="w-full p-4 py-4 xl:px-8 rounded-lg shadow-xs ">
+    <div className="flex justify-center row bg-white border-t border-gray-200 w-full pr-0">
+        <div class="w-full px-4 py-4 rounded-lg shadow-xs">
           <form className="w-full">
             <>
-              <div className="block xl:flex justify-between">
-                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 md:mx-12 xl:mx-6 gap-4 md:gap-0">
-                <div className="w-full col col-span-1 md:col-span-2">
+              <div className="block xl:flex justify-between mx-0 xl:mx-6">
+                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 gap-6 xl:gap-0">
+                <div className="mt-2 w-full col col-span-1 md:col-span-2">
                     <div className="w-full flex items-center">
-                        <FormControl
-                            className=""
-                            sx={{ m: 1, minWidth: 145, outline: "none" }}
+                        <div
+                            className="w-full m-2 xl:m-0 xl:pr-0"
                         >
-                            <small className="mb-2 text-gray-500">Kota Asal</small>
+                            <small className="block mb-2 text-gray-500">Kota Asal</small>
                             <Autocomplete
                             classes={classes}
+                            className="mt-1.5"
                             id="asynchronous-demo"
                             disableClearable
                             PopperComponent={PopperMy}
@@ -460,7 +461,7 @@ function KAI() {
                                 SetopenBerangka(false);
                             }}
                             renderTags={(value, getTagProps) => (
-                                <div style={{ width: "100%" }}>
+                                <div style={{ width: "90%" }}>
                                 {value.map((option, index) => (
                                     <Chip
                                     variant="outlined"
@@ -512,17 +513,17 @@ function KAI() {
                                 />
                             )}
                             />
-                        </FormControl>
-                        <div onClick={changeStatiun} className="cursor-pointer mt-4 flex justify-center items-center bg-blue-500 rounded-full p-1">
+                        </div>
+                        <div onClick={changeStatiun} className="cursor-pointer mt-6 flex justify-center items-center bg-blue-500 rounded-full p-1">
                             <AiOutlineSwap className="text-white" size={24} />
                         </div>
-                        <FormControl
-                            className=""
-                            sx={{ m: 1, minWidth: 145, outline: "none" }}
+                        <div
+                          className="w-full m-2 xl:m-0 xl:pr-0"
                         >
                             <small className="mb-2 text-gray-500">Kota Tujuan</small>
                             <Autocomplete
                             classes={classes}
+                            className="mt-1.5"
                             id="asynchronous-demo"
                             disableClearable
                             PopperComponent={PopperMy}
@@ -535,7 +536,7 @@ function KAI() {
                                 setOpenTujuan(false);
                             }}
                             renderTags={(value, getTagProps) => (
-                                <div style={{ width: "100%" }}>
+                                <div style={{ width: "90%" }}>
                                 {value.map((option, index) => (
                                     <Chip
                                     variant="outlined"
@@ -587,7 +588,7 @@ function KAI() {
                                 />
                             )}
                             />
-                        </FormControl>
+                        </div>
                     </div>
                   </div>
                   <FormControl sx={{ m: 1, minWidth: 160 }}>
@@ -619,10 +620,10 @@ function KAI() {
                   </FormControl>
 
                   <FormControl sx={{ m: 1, minWidth: 120 }}>
-                    <small className="mb-2 text-gray-500">
+                    <small className="mb-2 text-gray-800">
                       Total Penumpang
                     </small>
-                    <div className="hidden md:block">
+                    <div className="hidden md:block w-full">
                       <TextField
                         readOnly
                         onClick={handleClick}
@@ -634,7 +635,7 @@ function KAI() {
                         variant="outlined"
                       />
                     </div>
-                      <Button className="w-full block md:hidden text-gray-500" size="large" onClick={handleClick}>
+                      <Button className="w-full block md:hidden text-gray-800" size="large" onClick={handleClick}>
                       {`${parseInt(adult) + parseInt(infant)} Penumpang`}
                       </Button>
                     <div

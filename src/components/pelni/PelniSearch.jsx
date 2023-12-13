@@ -34,14 +34,16 @@ function PELNI() {
       },
       "&&& $input": {
         padding: 1,
-        color:"black"
+        color: "black",
+        width: "50%",
       },
     },
     root: {
       "& .MuiInputBase-root": {
         "& .MuiInputBase-input": {
-          padding: 9,
+          padding: 10,
           borderRadius: 10,
+          cursor: "pointer",
         },
         color: "black",
         "& .MuiOutlinedInput-notchedOutline": {
@@ -397,236 +399,268 @@ function PELNI() {
 
   return (
     <>
-    {contextHolder}
-      <div className="row bg-white border-t border-gray-200 w-full p-2 ">
-        <div class="w-full rounded-lg shadow-xs">
+      {contextHolder}
+      <div className="flex justify-center row bg-white border-t border-gray-200 w-full pr-0">
+        <div class="w-full px-4 py-4 rounded-lg shadow-xs">
           <form className="w-full">
-            {/* <div className="space-x-2 items-center flex">
-                    < BiTrain className="text-gray-600" size={24} />
-                    <div className="text-sm md:text-md font-bold text-slate-700">TRAINS</div>
-                </div> */}
-          <form className="w-full">
-            {/* <div className="space-x-2 items-center flex">
-                  < BiTrain className="text-gray-600" size={24} />
-                  <div className="text-sm md:text-md font-bold text-slate-700">TRAINS</div>
-               </div> */}
             <>
-              <div className="block xl:flex justify-between">
-                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 gap-4 md:gap-6">
-                <div className="w-full col col-span-1 md:col-span-2">
+              <div className="block xl:flex justify-between mx-0 xl:mx-6">
+                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 gap-6 xl:gap-0">
+                  <div className="mt-2 w-full col col-span-1 md:col-span-2">
                     <div className="w-full flex items-center">
-                  <FormControl
-                    className=""
-                    sx={{ m: 1, minWidth: 145, outline: "none" }}
-                  >
-                    <small className="mb-2 text-gray-500">Pelabuhan Asal</small>
-                    <Autocomplete
-                      classes={classes}
-                      id="asynchronous-demo"
-                      disableClearable
-                      PopperComponent={PopperMy}
-                      open={openBerangka}
-                      hiddenLabel={true}
-                      onOpen={() => {
-                        SetopenBerangka(true);
-                      }}
-                      onClose={() => {
-                        SetopenBerangka(false);
-                      }}
-                      renderTags={(value, getTagProps) => (
-                        <div style={{ width: "100%" }}>
-                          {value.map((option, index) => (
-                            <Chip
-                              variant="outlined"
-                              label={option}
-                              {...getTagProps({ index })}
-                            />
-                          ))}
-                        </div>
-                      )}
-                      isOptionEqualToValue={(option, value) =>
-                        option.title === value.title
-                      }
-                      getOptionLabel={(option) => option.NAME}
-                      options={pelniData}
-                      value={keberangkatan}
-                      onChange={(event, newValue) => {
-                        if((newValue == tujuan) || (newValue?.CODE == tujuan?.CODE)){
-                          errorBerangkat();
-                          setKeberangkatan(keberangkatan);
-                        }else{
-                          setKeberangkatan(newValue);
-                        }
-                      }}
-                      loading={loadingBerangkat}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          InputProps={{
-                            ...params.InputProps,
-                            startAdornment: (
-                              <IoBoatSharp className="text-gray-400" />
-                            ),
-                            placeholder: "Asal",
-                            endAdornment: (
-                              <React.Fragment>
-                                {loadingBerangkat ? (
-                                  <CircularProgress color="inherit" size={20} />
-                                ) : null}
-                                {params.InputProps.endAdornment}
-                              </React.Fragment>
-                            ),
+                      <div className="w-full m-2 xl:m-0 xl:pr-0">
+                        <small className="block mb-2 text-gray-500">
+                          Kota Asal
+                        </small>
+                        <Autocomplete
+                          classes={classes}
+                          id="asynchronous-demo"
+                          disableClearable
+                          className="mt-1.5"
+                          PopperComponent={PopperMy}
+                          open={openBerangka}
+                          hiddenLabel={true}
+                          onOpen={() => {
+                            SetopenBerangka(true);
                           }}
+                          onClose={() => {
+                            SetopenBerangka(false);
+                          }}
+                          renderTags={(value, getTagProps) => (
+                            <div style={{ width: "90%" }}>
+                              {value.map((option, index) => (
+                                <Chip
+                                  variant="outlined"
+                                  label={option}
+                                  {...getTagProps({ index })}
+                                />
+                              ))}
+                            </div>
+                          )}
+                          isOptionEqualToValue={(option, value) =>
+                            option.title === value.title
+                          }
+                          getOptionLabel={(option) => option.NAME}
+                          options={pelniData}
+                          value={keberangkatan}
+                          onChange={(event, newValue) => {
+                            if (
+                              newValue == tujuan ||
+                              newValue?.CODE == tujuan?.CODE
+                            ) {
+                              errorBerangkat();
+                              setKeberangkatan(keberangkatan);
+                            } else {
+                              setKeberangkatan(newValue);
+                            }
+                          }}
+                          loading={loadingBerangkat}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              InputProps={{
+                                ...params.InputProps,
+                                startAdornment: (
+                                  <IoBoatSharp className="text-gray-400" />
+                                ),
+                                placeholder: "Asal",
+                                endAdornment: (
+                                  <React.Fragment>
+                                    {loadingBerangkat ? (
+                                      <CircularProgress
+                                        color="inherit"
+                                        size={20}
+                                      />
+                                    ) : null}
+                                    {params.InputProps.endAdornment}
+                                  </React.Fragment>
+                                ),
+                              }}
+                            />
+                          )}
                         />
-                      )}
-                    />
-                  </FormControl>
-                  <div
+                      </div>
+                      <div
                         onClick={changeStatiun}
-                        className="cursor-pointer mt-4 flex justify-center items-center bg-blue-500 rounded-full p-1"
+                        className="cursor-pointer mt-6 flex justify-center items-center bg-blue-500 rounded-full p-1"
                       >
                         <AiOutlineSwap className="text-white" size={24} />
-                  </div>
-                  <FormControl
-                    className=""
-                    sx={{ m: 1, minWidth: 145, outline: "none" }}
-                  >
-                    <small className="mb-2 text-gray-500">
-                      Pelabuhan Tujuan
-                    </small>
-                    <Autocomplete
-                      classes={classes}
-                      id="asynchronous-demo"
-                      disableClearable
-                      PopperComponent={PopperMy}
-                      open={openTujuan}
-                      hiddenLabel={true}
-                      onOpen={() => {
-                        setOpenTujuan(true);
-                      }}
-                      onClose={() => {
-                        setOpenTujuan(false);
-                      }}
-                      renderTags={(value, getTagProps) => (
-                        <div style={{ width: "100%" }}>
-                          {value.map((option, index) => (
-                            <Chip
-                              variant="outlined"
-                              label={option}
-                              {...getTagProps({ index })}
-                            />
-                          ))}
-                        </div>
-                      )}
-                      isOptionEqualToValue={(option, value) =>
-                        option.title === value.title
-                      }
-                      getOptionLabel={(option) => option.NAME}
-                      options={pelniData}
-                      value={tujuan}
-                      onChange={(event, newValue) => {
-                        if((newValue == keberangkatan) || (newValue?.CODE == keberangkatan?.CODE)){
-                          errorTujuan();
-                          setTujuan(tujuan);
-                        }else{
-                          setTujuan(newValue);
-                        }
-                      }}
-                      loading={loadingTujuan}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          InputProps={{
-                            ...params.InputProps,
-                            startAdornment: (
-                              <IoBoatSharp className="text-gray-400" />
-                            ),
-                            placeholder: "Tujuan",
-                            endAdornment: (
-                              <React.Fragment>
-                                {loadingTujuan ? (
-                                  <CircularProgress color="inherit" size={20} />
-                                ) : null}
-                                {params.InputProps.endAdornment}
-                              </React.Fragment>
-                            ),
+                      </div>
+                      <div className="w-full m-2 xl:m-0 xl:pr-0">
+                        <small className="mb-2 text-gray-500">
+                          Pelabuhan Tujuan
+                        </small>
+                        <Autocomplete
+                          classes={classes}
+                          id="asynchronous-demo"
+                          className="mt-1.5"
+                          disableClearable
+                          PopperComponent={PopperMy}
+                          open={openTujuan}
+                          hiddenLabel={true}
+                          onOpen={() => {
+                            setOpenTujuan(true);
                           }}
+                          onClose={() => {
+                            setOpenTujuan(false);
+                          }}
+                          renderTags={(value, getTagProps) => (
+                            <div style={{ width: "90%" }}>
+                              {value.map((option, index) => (
+                                <Chip
+                                  variant="outlined"
+                                  label={option}
+                                  {...getTagProps({ index })}
+                                />
+                              ))}
+                            </div>
+                          )}
+                          isOptionEqualToValue={(option, value) =>
+                            option.title === value.title
+                          }
+                          getOptionLabel={(option) => option.NAME}
+                          options={pelniData}
+                          value={tujuan}
+                          onChange={(event, newValue) => {
+                            if (
+                              newValue == keberangkatan ||
+                              newValue?.CODE == keberangkatan?.CODE
+                            ) {
+                              errorTujuan();
+                              setTujuan(tujuan);
+                            } else {
+                              setTujuan(newValue);
+                            }
+                          }}
+                          loading={loadingTujuan}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              InputProps={{
+                                ...params.InputProps,
+                                startAdornment: (
+                                  <IoBoatSharp className="text-gray-400" />
+                                ),
+                                placeholder: "Tujuan",
+                                endAdornment: (
+                                  <React.Fragment>
+                                    {loadingTujuan ? (
+                                      <CircularProgress
+                                        color="inherit"
+                                        size={20}
+                                      />
+                                    ) : null}
+                                    {params.InputProps.endAdornment}
+                                  </React.Fragment>
+                                ),
+                              }}
+                            />
+                          )}
                         />
-                      )}
-                    />
-                  </FormControl>
+                      </div>
                     </div>
                   </div>
-                  <FormControl sx={{ m: 1, minWidth: 120 }}>
+                  <FormControl sx={{ m: 1, minWidth: 145 }}>
                     <small className="mb-2 text-gray-500">Range Tanggal</small>
-                    <div className="w-full">
-                    <DatePicker
-                    value={tanggal}
-                    className="w-full cursor-pointer text-black py-[8px] text-md border-gray-200"
-                    size="large"
-                    onChange={(e) => setTanggal(e)}
-                    picker="month" 
-                    disabledDate={disabledDate}
-                    inputReadOnly={true}
-                    style={{ width: '100%' }}
-                    />
-
+                    <div className="w-full cursor-pointer">
+                      <DatePicker
+                        value={tanggal}
+                        className="w-full cursor-pointer text-black py-[8px] text-md border-gray-200"
+                        size="large"
+                        onChange={(e) => setTanggal(e)}
+                        picker="month"
+                        disabledDate={disabledDate}
+                        inputReadOnly={true}
+                        style={{ width: "100%" }}
+                      />
                     </div>
                   </FormControl>
                   <FormControl sx={{ m: 1, minWidth: 120 }}>
-                    <small className="mb-2 text-gray-500">
+                    <small className="mb-2 text-gray-800">
                       Total Penumpang
                     </small>
-                    <div className="hidden md:block">  
-                    <TextField
-                      onClick={handleClick}
-                      sx={{ input: { cursor: "pointer" } }}
-                      variant="outlined"
-                      size="small"
-                      classes={classes}
-                      id="outlined-basic"
-                      value={`${parseInt(laki) + parseInt(wanita)} Penumpang`}
-                    />
+                    <div className="hidden md:block w-full">
+                      <TextField
+                        onClick={handleClick}
+                        sx={{ input: { cursor: "pointer" } }}
+                        variant="outlined"
+                        size="small"
+                        classes={classes}
+                        id="outlined-basic"
+                        value={`${parseInt(laki) + parseInt(wanita)} Penumpang`}
+                      />
                     </div>
-                    <Button className="w-full block md:hidden text-gray-500" size="large" onClick={handleClick}>
+                    <Button
+                      className="w-full block md:hidden text-gray-800"
+                      size="large"
+                      onClick={handleClick}
+                    >
                       {`${parseInt(laki) + parseInt(wanita)} Penumpang`}
                     </Button>
                     <div
                       id="basic-menu"
                       className={`${anchorEl} absolute top-20 z-10 grid w-full md:w-auto px-8 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}
                     >
-                     <div className="w-full md:w-48 block md:mx-0">
+                      <div className="w-full md:w-48 block md:mx-0">
                         <div className="mt-4 w-full items-center text-gray-600">
                           <div className="text-sm text-center header-number mb-4">
-                            <p>laki (Laki-laki {">"} 12 thn)</p>
+                            <p>Laki-laki ({"≥"} 2 thn)</p>
                           </div>
                           <InputGroup>
-                            <InputGroup.Button onClick={minusLaki}>-</InputGroup.Button>
-                              <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={laki} onChange={setLaki} min={0} max={4} readOnly/>
-                            <InputGroup.Button onClick={plusLaki}>+</InputGroup.Button>
+                            <InputGroup.Button onClick={minusLaki}>
+                              -
+                            </InputGroup.Button>
+                            <input
+                              type={"number"}
+                              className={
+                                "block text-center w-full focus:outline-0 selection:border-blue-500"
+                              }
+                              value={laki}
+                              onChange={setLaki}
+                              min={0}
+                              max={4}
+                              readOnly
+                            />
+                            <InputGroup.Button onClick={plusLaki}>
+                              +
+                            </InputGroup.Button>
                           </InputGroup>
                         </div>
                         <div className="mt-4 mb-8 w-full items-center text-gray-600">
                           <div className="text-sm text-center header-number mb-4">
-                            <p>Wanita (Wanita {">"} 12 thn)</p>
+                            <p>Perempuan ({"≥"} 2 thn)</p>
                           </div>
                           <InputGroup>
-                            <InputGroup.Button onClick={minusWanita}>-</InputGroup.Button>
-                              <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={wanita} onChange={setWanita} min={0} max={4} readOnly/>
-                            <InputGroup.Button onClick={plusWanita}>+</InputGroup.Button>
+                            <InputGroup.Button onClick={minusWanita}>
+                              -
+                            </InputGroup.Button>
+                            <input
+                              type={"number"}
+                              className={
+                                "block text-center w-full focus:outline-0 selection:border-blue-500"
+                              }
+                              value={wanita}
+                              onChange={setWanita}
+                              min={0}
+                              max={4}
+                              readOnly
+                            />
+                            <InputGroup.Button onClick={plusWanita}>
+                              +
+                            </InputGroup.Button>
                           </InputGroup>
                         </div>
                       </div>
                     </div>
                   </FormControl>
                 </div>
-                <div className="w-full pr-4 xl:mr-0 xl:pl-4 xl:w-1/4 flex justify-end xl:justify-start mt-8 py-0.5">
+                <div className="w-full xl:w-1/4 flex justify-end xl:justify-start mt-8 py-0.5">
                   <Button
                     block
                     size="large"
                     key="submit"
                     type="primary"
-                    className="bg-blue-500 mx-2 font-semibold"
+                    className="bg-blue-500 mx-2 md:mx-0 font-semibold"
                     loading={isLoading}
                     onClick={handlerCariPelni}
                   >
@@ -635,7 +669,6 @@ function PELNI() {
                 </div>
               </div>
             </>
-          </form>
           </form>
         </div>
       </div>

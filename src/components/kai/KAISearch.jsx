@@ -418,23 +418,23 @@ function KAI(){
       }
 
     return (
-        <>
-          {contextHolder}
-          <div className="row bg-white border-t border-gray-200 w-full pr-0">
-          <div class="w-full py-4 rounded-lg shadow-xs ">
+      <>
+      {contextHolder}
+      <div className="flex justify-center row bg-white border-t border-gray-200 w-full pr-0">
+          <div class="w-full px-4 py-4 rounded-lg shadow-xs">
             <form className="w-full">
               <>
-                <div className="block xl:flex justify-between">
-                  <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 gap-4 md:gap-8">
-                  <div className="w-full col col-span-1 md:col-span-2">
+                <div className="block xl:flex justify-between mx-0 xl:mx-6">
+                  <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 gap-6 xl:gap-0">
+                  <div className="mt-2 w-full col col-span-1 md:col-span-2">
                       <div className="w-full flex items-center">
-                          <FormControl
-                              className=""
-                              sx={{ m: 1, minWidth: 150, outline: "none" }}
+                          <div
+                              className="w-full m-2 xl:m-0 xl:pr-0"
                           >
-                              <small className="mb-2 text-gray-500">Kota Asal</small>
+                              <small className="block mb-2 text-gray-500">Kota Asal</small>
                               <Autocomplete
                               classes={classes}
+                              className="mt-1.5"
                               id="asynchronous-demo"
                               disableClearable
                               PopperComponent={PopperMy}
@@ -447,7 +447,7 @@ function KAI(){
                                   SetopenBerangka(false);
                               }}
                               renderTags={(value, getTagProps) => (
-                                  <div style={{ width: "100%" }}>
+                                  <div style={{ width: "90%" }}>
                                   {value.map((option, index) => (
                                       <Chip
                                       variant="outlined"
@@ -471,8 +471,8 @@ function KAI(){
                               value={keberangkatan}
                               onChange={(event, newValue) => {
                                 if((newValue == tujuan) || (newValue?.id_stasiun == tujuan?.id_stasiun)){
-                                  errorBerangkat()
-                                  setKeberangkatan(keberangkatan);
+                                  errorBerangkat();
+                                  setKeberangkatan(keberangkatan)
                                 }else{
                                   setKeberangkatan(newValue);
                                 }
@@ -499,17 +499,17 @@ function KAI(){
                                   />
                               )}
                               />
-                          </FormControl>
-                          <div onClick={changeStatiun} className="cursor-pointer mt-4 flex justify-center items-center bg-blue-500 rounded-full p-1">
+                          </div>
+                          <div onClick={changeStatiun} className="cursor-pointer mt-6 flex justify-center items-center bg-blue-500 rounded-full p-1">
                               <AiOutlineSwap className="text-white" size={24} />
                           </div>
-                          <FormControl
-                              className=""
-                              sx={{ m: 1, minWidth: 145, outline: "none" }}
+                          <div
+                            className="w-full m-2 xl:m-0 xl:pr-0"
                           >
                               <small className="mb-2 text-gray-500">Kota Tujuan</small>
                               <Autocomplete
                               classes={classes}
+                              className="mt-1.5"
                               id="asynchronous-demo"
                               disableClearable
                               PopperComponent={PopperMy}
@@ -522,7 +522,7 @@ function KAI(){
                                   setOpenTujuan(false);
                               }}
                               renderTags={(value, getTagProps) => (
-                                  <div style={{ width: "100%" }}>
+                                  <div style={{ width: "90%" }}>
                                   {value.map((option, index) => (
                                       <Chip
                                       variant="outlined"
@@ -546,12 +546,11 @@ function KAI(){
                               value={tujuan}
                               onChange={(event, newValue) => {
                                   if((newValue == keberangkatan) || (newValue?.id_stasiun == keberangkatan?.id_stasiun)){
-                                    errorTujuan()
+                                    errorTujuan();
                                     setTujuan(tujuan);
                                   }else{
                                     setTujuan(newValue);
                                   }
-
                               }}
                               loading={loadingTujuan}
                               renderInput={(params) => (
@@ -575,7 +574,7 @@ function KAI(){
                                   />
                               )}
                               />
-                          </FormControl>
+                          </div>
                       </div>
                     </div>
                     <FormControl sx={{ m: 1, minWidth: 160 }}>
@@ -586,31 +585,31 @@ function KAI(){
                         dateAdapter={AdapterDayjs}
                         style={{ cursor: "pointer" }}
                       >
-                  <DatePicker
-                      style={{ cursor: 'pointer' }}
-                      className="border-gray-240 py-2"
-                      appearance="subtle"
-                      value={tanggal}
-                      inputStyle={{ color: 'red' }}
-                      format="DD/MM/YYYY"
-                      onChange={(value) => {
-                        setTanggal(value);
-                      }}
-                      size="large"
-                      disabledDate={(current) => {
-                        const currentDate = dayjs();
-                        const aheadDate = dayjs().add(3, 'months')
-                        return current && (current < currentDate.startOf('day') || current > aheadDate);
-                      }}
-                    />
+                       <DatePicker
+                        style={{ cursor: 'pointer' }}
+                        className="border-gray-240 py-2"
+                        appearance="subtle"
+                        value={tanggal}
+                        inputStyle={{ color: 'red' }}
+                        format="DD/MM/YYYY"
+                        onChange={(value) => {
+                          setTanggal(value);
+                        }}
+                        size="large"
+                        disabledDate={(current) => {
+                          const currentDate = dayjs();
+                          const aheadDate = dayjs().add(3, 'months')
+                          return current && (current < currentDate.startOf('day') || current > aheadDate);
+                        }}
+                      />
                       </LocalizationProvider>
                     </FormControl>
-
+  
                     <FormControl sx={{ m: 1, minWidth: 120 }}>
-                      <small className="mb-2 text-gray-500">
+                      <small className="mb-2 text-gray-800">
                         Total Penumpang
                       </small>
-                      <div className="hidden md:block">
+                      <div className="hidden md:block w-full">
                         <TextField
                           readOnly
                           onClick={handleClick}
@@ -622,7 +621,7 @@ function KAI(){
                           variant="outlined"
                         />
                       </div>
-                        <Button className="w-full block md:hidden text-gray-500" size="large" onClick={handleClick}>
+                        <Button className="w-full block md:hidden text-gray-800" size="large" onClick={handleClick}>
                         {`${parseInt(adult) + parseInt(infant)} Penumpang`}
                         </Button>
                       <div
@@ -637,7 +636,7 @@ function KAI(){
                             </div>
                             <InputGroup>
                               <InputGroup.Button onClick={minusAdult}>-</InputGroup.Button>
-                                <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={adult} onChange={setadult} min={1} max={4} readOnly/>
+                              <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={adult} onChange={setadult} min={1} max={4} readOnly/>
                               <InputGroup.Button onClick={plusAdult}>+</InputGroup.Button>
                             </InputGroup>
                           </div>
@@ -645,26 +644,26 @@ function KAI(){
                           <div className="mt-4 w-full items-center text-gray-600">
                             <div className="mt-4 w-full items-center text-gray-600">
                             <div className="text-sm text-center header-number mb-4">
-                                <p>Infant ({`<`} 3 thn) </p>
+                              <p>Infant ({`<`} 3 thn) </p>
                             </div>
                             <InputGroup>
                               <InputGroup.Button onClick={minusInfant}>-</InputGroup.Button>
-                                <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={infant} onChange={setinfant} min={0} max={4} readOnly/>
+                              <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={infant} onChange={setinfant} min={0} max={4} readOnly/>
                               <InputGroup.Button onClick={plusInfant}>+</InputGroup.Button>
-                          </InputGroup>
+                            </InputGroup>
                           </div>
                           </div>
                         </div>
                       </div>
                     </FormControl>
                   </div>
-                  <div className="w-full xl:mr-0 xl:pl-4 xl:w-2/5 flex justify-end xl:justify-start mt-8 py-0.5">
+                  <div className="w-full xl:w-1/4 flex justify-end xl:justify-start mt-8 py-0.5">
                     <Button
                       block
                       size="large"
                       key="submit"
                       type="primary"
-                      className="bg-blue-500 font-semibold"
+                      className="bg-blue-500 mx-2 md:mx-0 font-semibold"
                       loading={isLoading}
                       onClick={handlerCariKai}
                     >
@@ -675,8 +674,8 @@ function KAI(){
               </>
             </form>
           </div>
-          </div>
-        </>
+        </div>
+      </>
     )
 }
 

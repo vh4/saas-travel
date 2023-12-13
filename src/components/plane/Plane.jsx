@@ -206,6 +206,7 @@ function Plane() {
       },
       "&&& $input": {
         padding: 1,
+        width: "50%",
         color: "black", // Ubah warna teks
       },
     },
@@ -537,14 +538,14 @@ function Plane() {
             </div>
         </Modal.Footer>
       </Modal>
-      <div className="pl-4 flex justify-center row bg-white border-t border-gray-200 w-full pr-0">
-        <div class="w-full p-4 py-4 rounded-lg shadow-xs">
+      <div className="flex justify-center row bg-white border-t border-gray-200 w-full pr-0">
+        <div class="w-full px-4 py-4 rounded-lg shadow-xs">
           <form className="w-full">
             <>
               <div className="w-64 xl:w-48 mx-0"></div>
               <div className="block xl:flex justify-between">
                 <div
-                  className={`grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-4 md:gap-6`}
+                  className={`grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-2`}
                 >
                   <div class="w-full mt-1.5 pl-2 md:pl-0 mx-0">
                     <small className="mb-2 text-gray-500">Pilih Maskapai</small>
@@ -561,18 +562,18 @@ function Plane() {
                         </Button>
                     </Tooltip>
                   </div>
-                  <div className="w-full col col-span-1 md:col-span-2">
+                  <div className="mt-2 w-full col col-span-1 md:col-span-2">
                     <div className="w-full flex items-center">
                       <div>
-                      <FormControl
-                        className=""
-                        sx={{ m: 1, minWidth: 135, outline: "none" }}
+                      <div
+                        className="w-full m-2 xl:m-0 pr-4 xl:pr-0"
                       >
-                        <small className="mb-2 text-gray-500">
+                        <small className="block mb-2 text-gray-500">
                           Kota Asal
                         </small>
                         <Autocomplete
                           classes={classes}
+                          className="mt-1.5"
                           id="asynchronous-demo"
                           disableClearable
                           PopperComponent={PopperMy}
@@ -585,7 +586,7 @@ function Plane() {
                             SetopenBerangka(false);
                           }}
                           renderTags={(value, getTagProps) => (
-                            <div style={{ width: "100%" }}>
+                            <div style={{ width: "90%" }}>
                               {value.map((option, index) => (
                                 <Chip
                                   variant="outlined"
@@ -640,21 +641,21 @@ function Plane() {
                             />
                           )}
                         />
-                      </FormControl>
                       </div>
-                      <div onClick={changeStatiun} className="cursor-pointer mt-4 flex justify-center items-center bg-blue-500 rounded-full p-1">
+                      </div>
+                      <div onClick={changeStatiun} className="cursor-pointer mt-6 flex justify-center items-center bg-blue-500 rounded-full p-1">
                         <AiOutlineSwap className="text-white" size={24} />
                       </div>
                       <div>
-                        <FormControl
-                          className=""
-                          sx={{ m: 1, minWidth: 145}}
+                        <div
+                          className="w-full m-2 xl:m-0 pr-4 xl:pr-0"
                         >
-                          <small className="mb-2 text-gray-500">
+                          <small className="block mb-2 text-gray-500">
                             Kota Tujuan
                           </small>
                           <Autocomplete
                             classes={classes}
+                            className="mt-1.5"
                             PopperComponent={PopperMy}
                             id="asynchronous-demo"
                             open={openTujuan}
@@ -666,7 +667,7 @@ function Plane() {
                               setOpenTujuan(false);
                             }}
                             renderTags={(value, getTagProps) => (
-                              <div style={{ width: "100%" }}>
+                              <div style={{ width: "90%" }}>
                                 {value.map((option, index) => (
                                   <Chip
                                     variant="outlined"
@@ -722,7 +723,7 @@ function Plane() {
                               />
                             )}
                           />
-                        </FormControl>
+                        </div>
                       </div>
                     </div>
                   </div>

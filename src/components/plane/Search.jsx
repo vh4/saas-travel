@@ -1288,25 +1288,25 @@ export default function Search() {
                                     </div>
                                   </div>
                                 </div>
-                                <div className="flex justify-center">
-                                  <div className="flex space-x-2.5 items-center">
+                                <div className="flex justify-between">
+                                  <div className="flex space-x-2 items-center">
                                     <div>
                                       <h1 className="mt-4 xl:mt-0 text-sm font-medium">
-                                        <div className="flex space-x-2 items-center justify-start">
+                                        <div className="">
                                           <span>{e.detailTitle[0].depart}</span>
-                                          <span className="font-semibold text-xs text-blue-500">
+                                          <div className="font-semibold text-xs text-blue-500">
                                             (
                                             {
                                               e.classes[0][0]
                                                 .departureTimeZoneText
                                             }
                                             )
-                                          </span>
+                                          </div>
                                         </div>
                                       </h1>
                                       <small>{e.detailTitle[0].origin}</small>
                                     </div>
-                                    <div className="flex space-x-4 items-center">
+                                    <div className="flex space-x-2 items-center">
                                       <div className="w-full mt-12 px-4 border-b-2"></div>
                                       <div className="text-xs">
                                         <div className="mt-10 xl:mt-0 text-gray-400">
@@ -1317,22 +1317,22 @@ export default function Search() {
                                     </div>
                                     <div>
                                       <h1 className="mt-4 xl:mt-0 text-sm font-medium">
-                                        <div className="flex space-x-2 items-center justify-end">
-                                          <span>
+                                        <div className="">
+                                          <div>
                                             {
                                               e.detailTitle[
                                                 e.detailTitle.length - 1
                                               ].arrival
                                             }{" "}
-                                          </span>
-                                          <span className="font-semibold text-xs text-blue-500">
+                                          </div>
+                                          <div className="font-semibold text-xs text-blue-500">
                                             (
                                             {
                                               e.classes[e.classes.length - 1][0]
                                                 .arrivalTimeZoneText
                                             }
                                             )
-                                          </span>
+                                          </div>
                                         </div>
                                       </h1>
                                       <small>
@@ -1345,7 +1345,7 @@ export default function Search() {
                                     </div>
                                   </div>
                                 </div>
-                                <div className="flex space-x-8 justify-start items-center mt-8 mb-4">
+                                <div className="flex justify-between items-center mt-8 mb-4">
                                   <div
                                     onClick={(event)  => {
                                       event.stopPropagation();

@@ -194,43 +194,38 @@ function Plane() {
 
   const useStyles = makeStyles((theme) => ({
     inputRoot: {
-      color: "black",
+      color: "black", // Ubah warna teks
       "& .MuiOutlinedInput-notchedOutline": {
-        borderColor: "#e5e7eb",
+        borderColor: "#e5e7eb", // Ubah warna border
       },
       "&:hover .MuiOutlinedInput-notchedOutline": {
-        borderColor: "#e5e7eb",
-      },
-      "&:Mui-actived .MuiOutlinedInput-notchedOutline": {
-        borderColor: "#d1d5db",
+        borderColor: "#e5e7eb", // Ubah warna border
       },
       "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-        borderColor: "#d1d5db",
+        borderColor: "#e5e7eb", // Ubah warna border
       },
       "&&& $input": {
         padding: 1,
-        color:"black"
+        width: "50%",
+        color: "black", // Ubah warna teks
       },
     },
     root: {
       "& .MuiInputBase-root": {
         "& .MuiInputBase-input": {
           padding: 10,
-          borderRadius: 10,
+          borderRadius: 16,
+          color: "black", // Ubah warna teks
           cursor: "pointer"
         },
-        color: "black",
         "& .MuiOutlinedInput-notchedOutline": {
-          borderColor: "#e5e7eb",
+          borderColor: "#e5e7eb", // Ubah warna border
         },
         "&:hover .MuiOutlinedInput-notchedOutline": {
-          borderColor: "#e5e7eb",
-        },
-        "&:Mui-actived .MuiOutlinedInput-notchedOutline": {
-          borderColor: "#e5e7eb",
+          borderColor: "#e5e7eb", // Ubah warna border
         },
         "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-          borderColor: "#e5e7eb",
+          borderColor: "#e5e7eb", // Ubah warna border
         },
       },
     },
@@ -496,7 +491,7 @@ function Plane() {
 
   return (
     <>
-    {contextHolder}
+      {contextHolder}
       <Modal size={size} open={open} onClose={handleClose}>
         <Modal.Header>
           <Modal.Title>Pilih Maskapai</Modal.Title>
@@ -509,16 +504,15 @@ function Plane() {
           ) : (
             <>
               <div className="container">
-                <div className="cookierow">
-                  <div className="col-4">
-                    <Checkbox className="block -ml-2.5 md:-ml-0" checked={isSelectAll} onChange={toggleSelectAll}>
-                      Select All
-                    </Checkbox>
+                <div className="grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-0 md:gap-6">
+                  <div className="">
+                      <Checkbox className="block -ml-2.5 md:-ml-0" checked={isSelectAll} onChange={toggleSelectAll}>
+                        Select All
+                      </Checkbox>
                   </div>
                   {Object.keys(djremix).map((key) => (
                     <div className="col-2" key={key}>
                       <CheckboxGroup
-                        inline
                         value={selectedOptions}
                         onChange={handleCheckboxChange}
                       >
@@ -543,12 +537,13 @@ function Plane() {
         </Modal.Footer>
       </Modal>
       <div className="flex justify-center row bg-white border-t border-gray-200 w-full pr-0">
-        <div class="w-full py-4 rounded-lg shadow-xs">
+        <div class="w-full px-4 py-4 rounded-lg shadow-xs">
           <form className="w-full">
             <>
+              <div className="w-64 xl:w-48 mx-0"></div>
               <div className="block xl:flex justify-between">
                 <div
-                  className={`grid grid-cols-1 xl:grid-cols-5 mx-0 gap-4 md:gap-8`}
+                  className={`grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-2`}
                 >
                   <div class="w-full mt-1.5 pl-2 md:pl-0 mx-0">
                     <small className="mb-2 text-gray-500">Pilih Maskapai</small>
@@ -565,17 +560,18 @@ function Plane() {
                         </Button>
                     </Tooltip>
                   </div>
-                  <div className="w-full col col-span-1 md:col-span-2">
+                  <div className="mt-2 w-full col col-span-1 md:col-span-2">
                     <div className="w-full flex items-center">
-                      <FormControl
-                        className=""
-                        sx={{ m: 1, minWidth: 150, outline: "none" }}
+                      <div>
+                      <div
+                        className="w-full m-2 xl:m-0 pr-4 xl:pr-0"
                       >
-                        <small className="mb-2 text-gray-500">
+                        <small className="block mb-2 text-gray-500">
                           Kota Asal
                         </small>
                         <Autocomplete
                           classes={classes}
+                          className="mt-1.5"
                           id="asynchronous-demo"
                           disableClearable
                           PopperComponent={PopperMy}
@@ -588,7 +584,7 @@ function Plane() {
                             SetopenBerangka(false);
                           }}
                           renderTags={(value, getTagProps) => (
-                            <div style={{ width: "100%" }}>
+                            <div style={{ width: "90%" }}>
                               {value.map((option, index) => (
                                 <Chip
                                   variant="outlined"
@@ -612,7 +608,7 @@ function Plane() {
                           value={keberangkatan}
                           onChange={(event, newValue) => {
                             if((newValue == tujuan) || (newValue?.code == tujuan?.code)){
-                              errorBerangkat()
+                              errorBerangkat();
                               setKeberangkatan(keberangkatan);
                             }else{
                               setKeberangkatan(newValue);
@@ -643,96 +639,96 @@ function Plane() {
                             />
                           )}
                         />
-                      </FormControl>
-                      <div
-                        onClick={changeStatiun}
-                        className="cursor-pointer mt-4 flex justify-center items-center bg-blue-500 rounded-full p-1"
-                      >
+                      </div>
+                      </div>
+                      <div onClick={changeStatiun} className="cursor-pointer mt-6 flex justify-center items-center bg-blue-500 rounded-full p-1">
                         <AiOutlineSwap className="text-white" size={24} />
                       </div>
-                      <FormControl className="" sx={{ m: 1, minWidth: 140 }}>
-                        <small className="mb-2 text-gray-500">
-                          Kota Tujuan
-                        </small>
-                        <Autocomplete
-                          classes={classes}
-                          PopperComponent={PopperMy}
-                          id="asynchronous-demo"
-                          open={openTujuan}
-                          hiddenLabel={true}
-                          onOpen={() => {
-                            setOpenTujuan(true);
-                          }}
-                          onClose={() => {
-                            setOpenTujuan(false);
-                          }}
-                          renderTags={(value, getTagProps) => (
-                            <div style={{ width: "100%" }}>
-                              {value.map((option, index) => (
-                                <Chip
-                                  variant="outlined"
-                                  label={option}
-                                  {...getTagProps({ index })}
-                                />
-                              ))}
-                            </div>
-                          )}
-                          isOptionEqualToValue={(option, value) =>
-                            option.title === value.title
-                          }
-                          getOptionLabel={(option) =>
-                            option.bandara +
-                            " - " +
-                            option.name +
-                            " - " +
-                            option.code
-                          }
-                          options={pesawatData}
-                          value={tujuan}
-                          onChange={(event, newValue) => {
-                            if((newValue == keberangkatan) || (newValue?.code == keberangkatan?.code)){
-                              errorTujuan()
-                              setTujuan(tujuan);
-                            }else{
-                              setTujuan(newValue);
+                      <div>
+                        <div
+                          className="w-full m-2 xl:m-0 pr-4 xl:pr-0"
+                        >
+                          <small className="block mb-2 text-gray-500">
+                            Kota Tujuan
+                          </small>
+                          <Autocomplete
+                            classes={classes}
+                            className="mt-1.5"
+                            PopperComponent={PopperMy}
+                            id="asynchronous-demo"
+                            open={openTujuan}
+                            hiddenLabel={true}
+                            onOpen={() => {
+                              setOpenTujuan(true);
+                            }}
+                            onClose={() => {
+                              setOpenTujuan(false);
+                            }}
+                            renderTags={(value, getTagProps) => (
+                              <div style={{ width: "90%" }}>
+                                {value.map((option, index) => (
+                                  <Chip
+                                    variant="outlined"
+                                    label={option}
+                                    {...getTagProps({ index })}
+                                  />
+                                ))}
+                              </div>
+                            )}
+                            isOptionEqualToValue={(option, value) =>
+                              option.title === value.title
                             }
-                          }}
-                          loading={loadingTujuan}
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              InputProps={{
-                                ...params.InputProps,
-                                startAdornment: (
-                                  <FaPlaneArrival className="text-gray-400" />
-                                ),
-                                placeholder: "Tujuan",
-                                endAdornment: (
-                                  <React.Fragment>
-                                    {loadingTujuan ? (
-                                      <CircularProgress
-                                        color="inherit"
-                                        size={20}
-                                      />
-                                    ) : null}
-                                    {params.InputProps.endAdornment}
-                                  </React.Fragment>
-                                ),
-                              }}
-                            />
-                          )}
-                        />
-                      </FormControl>
+                            getOptionLabel={(option) =>
+                              option.bandara +
+                              " - " +
+                              option.name +
+                              " - " +
+                              option.code
+                            }
+                            options={pesawatData}
+                            value={tujuan}
+                            onChange={(event, newValue) => {
+                              if((keberangkatan == newValue) || (keberangkatan?.code == newValue?.code)){
+                                errorTujuan()
+                                setTujuan(tujuan);
+                              }else{
+
+                                setTujuan(newValue);
+                              }
+                            }}
+                            loading={loadingTujuan}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                InputProps={{
+                                  ...params.InputProps,
+                                  startAdornment: (
+                                    <FaPlaneArrival className="text-gray-400" />
+                                  ),
+                                  placeholder: "Tujuan",
+                                  endAdornment: (
+                                    <React.Fragment>
+                                      {loadingTujuan ? (
+                                        <CircularProgress
+                                          color="inherit"
+                                          size={20}
+                                        />
+                                      ) : null}
+                                      {params.InputProps.endAdornment}
+                                    </React.Fragment>
+                                  ),
+                                }}
+                              />
+                            )}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <FormControl sx={{ m: 1, minWidth: 150 }}>
+                  <FormControl sx={{ m: 1, minWidth: 160 }}>
                     <small className="mb-2 text-gray-500">
                       Tanggal Berangkat
                     </small>
-                    <LocalizationProvider
-                      dateAdapter={AdapterDayjs}
-                      style={{ cursor: "pointer" }}
-                    >
                     <DatePicker
                       style={{ cursor: 'pointer' }}
                       className="border-gray-240 py-2"
@@ -752,7 +748,6 @@ function Plane() {
                         return current && (current < currentDate.startOf('day') || current > aheadDate);
                       }}
                     />
-                    </LocalizationProvider>
                   </FormControl>
                   <FormControl sx={{ m: 1, minWidth: 130 }}>
                     <small className="mb-2 text-gray-500">
@@ -818,13 +813,13 @@ function Plane() {
                     </div>
                   </FormControl>
                 </div>
-                <div className="w-full pr-4 xl:mr-0 xl:w-1/4 flex justify-end xl:justify-start mt-8 py-0.5">
+                <div className="w-full xl:w-1/4 flex justify-end xl:justify-start mt-8 py-0.5">
                   <Button
                     block
                     size="large"
                     key="submit"
                     type="primary"
-                    className="bg-blue-500 mx-2 font-semibold"
+                    className="bg-blue-500 mx-2 md:mx-0 font-semibold"
                     loading={isLoading}
                     onClick={handlerCariPesawat}
                   >

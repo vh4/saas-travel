@@ -13,7 +13,7 @@ export default function SideBarMobile({nameMenu, setNameMenu}) {
                             <div className='bg-gray-100 mx-4 py-3 flex justify-center rounded-xl'>
                                 <GiCommercialAirplane className='text-red-500' size={24} />
                             </div>
-                            <span className="block text-center font-normal mt-2 flex-1 whitespace-nowrap text-[15px] text-gray-500 ">Pesawat</span>
+                            <span className="block text-center font-normal mt-2 flex-1 whitespace-nowrap text-[15px] text-gray-800 ">Pesawat</span>
                         </div>
                     </li>    
                     <li>                
@@ -21,7 +21,7 @@ export default function SideBarMobile({nameMenu, setNameMenu}) {
                             <div className='bg-gray-100 mx-4 py-3 flex justify-center rounded-xl'>
                                 <IoBoatOutline className='text-fuchsia-500' size={24} />
                             </div>
-                            <span className="block text-center font-normal mt-2 flex-1 whitespace-nowrap text-[15px] text-gray-500">Pelni</span>
+                            <span className="block text-center font-normal mt-2 flex-1 whitespace-nowrap text-[15px] text-gray-800">Pelni</span>
                         </div>
                     </li> 
                     <li>                
@@ -29,7 +29,7 @@ export default function SideBarMobile({nameMenu, setNameMenu}) {
                             <div className='bg-gray-100 mx-4 py-3 flex justify-center rounded-xl'>
                                 <MdOutlineTrain className='text-orange-500' size={24} />
                             </div>
-                            <span className="block text-center font-normal mt-2 flex-1 whitespace-nowrap text-[15px] text-gray-500">Kereta Api</span>
+                            <span className="block text-center font-normal mt-2 flex-1 whitespace-nowrap text-[15px] text-gray-800">Kereta Api</span>
                         </div>
                     </li>
                 </ul>
