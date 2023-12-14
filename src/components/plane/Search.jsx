@@ -556,13 +556,13 @@ export default function Search() {
         </>
       ) : (
         <>
-          <div className="judul-search font-bold text-gray-800">
+          <div className="judul-search font-semibold xl:font-bold text-gray-800">
             PILIH JADWAL
           </div>
           <div className="mt-8">
             <div className="block md:flex justify-between">
               <div className="flex items-center justify-center space-x-3 xl:space-x-4 text-center md:text-left">
-                <small className="text-xs font-bold text-gray-800">
+                <small className="text-xs font-medium xl:font-bold text-gray-800">
                   {departureName} ({departure})
                 </small>
                 <div className="bg-blue-500 p-1 rounded-full">
@@ -571,7 +571,7 @@ export default function Search() {
                     size={16}
                   />
                 </div>
-                <small className="text-xs font-bold text-gray-800">
+                <small className="text-xs font-medium xl:font-bold text-gray-800">
                   {arrivalName} ({arrival})
                 </small>
                 <div className="hidden md:block font-normal text-gray-800">
@@ -649,7 +649,7 @@ export default function Search() {
               </Whisper>
             </div>
             <div>
-              {/* <div className="flex space-x-2 items-center p-4 px-4 md:px-4 mr-0 xl:mr-16 text-gray-500 rounded-md text-xs font-bold">
+              {/* <div className="flex space-x-2 items-center p-4 px-4 md:px-4 mr-0 xl:mr-16 text-gray-800 rounded-md text-xs font-bold">
                   <div>URUTKAN</div>
                   <MdOutlineKeyboardArrowDown />
                 </div> */}
@@ -690,10 +690,10 @@ export default function Search() {
                           }  border border-gray-200 rounded-md shadow-sm hover:border hover:border-gray-100 transition-transform transform hover:scale-105`}
                         >
                           {/* desktop cari */}
-                          <div className="hidden xl:block w-full text-gray-700 ">
+                          <div className="hidden xl:block w-full text-gray-800 ">
                             <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-10 gap-4">
                               <div className="col-span-1 md:col-span-2">
-                                <h1 className="text-sm font-bold">
+                                <h1 className="text-sm font-medium xl:font-bold">
                                   {e.airlineName}{" "}
                                 </h1>
                                 <div className="text-sm">
@@ -710,10 +710,10 @@ export default function Search() {
                               <div className="flex">
                                 <div className="">
                                   <MdOutlineLuggage size={32} />
-                                  <div className="text-xs text-gray-500">
+                                  <div className="text-xs text-gray-800">
                                     Bagasi
                                   </div>
-                                  <div className="text-xs text-gray-500">
+                                  <div className="text-xs text-gray-800">
                                     20 Kg
                                   </div>
                                 </div>
@@ -758,7 +758,7 @@ export default function Search() {
                                 </small>
                               </div>
                               <div className="">
-                                <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">
+                                <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold text-blue-500">
                                   Rp.{toRupiah(e.classes[0][0].price)}
                                 </h1>
                                 <small className="text-red-500">
@@ -821,7 +821,7 @@ export default function Search() {
                                     ? setDetailTiket(`close-${index}`)
                                     : setDetailTiket(`open-${index}`)
                                 }
-                                className="text-sm text-blue-500 cursor-pointer font-bold"
+                                className="text-sm text-blue-500 cursor-pointer font-medium xl:font-bold"
                               >
                                 Detail Penerbangan
                               </div>
@@ -831,7 +831,7 @@ export default function Search() {
                                     ? setDetailHarga(`harga-close-${index}`)
                                     : setDetailHarga(`harga-open-${index}`)
                                 }
-                                className="text-sm text-blue-500 cursor-pointer font-bold"
+                                className="text-sm text-blue-500 cursor-pointer font-medium xl:font-bold"
                               >
                                 Detail Harga
                               </div>
@@ -839,14 +839,13 @@ export default function Search() {
                           </div>
 
                           {/* desktop detail tiket */}
-
                           {detailTiket == `open-${index}` ? (
                             <>
                               {e.isTransit === true ? (
                                 e.classes.map((x, i) => (
                                   <div className="hidden xl:flex xl:items-center xl:space-x-16 xl:mt-6 border-t">
                                     <div className="mt-8">
-                                      <h1 className="text-sm font-bold">
+                                      <h1 className="text-sm font-medium xl:font-bold">
                                         {e.detailTitle[i].flightName}{" "}
                                       </h1>
                                       <div className="text-sm">
@@ -860,9 +859,9 @@ export default function Search() {
                                         />
                                       </div>
                                     </div>
-                                    <div className="flex flex-col space-y-28 text-gray-500">
+                                    <div className="flex flex-col space-y-28 text-gray-800">
                                       <div className="">
-                                        <div className="text-sm font-bold">
+                                        <div className="text-sm font-medium xl:font-bold">
                                           {x[0].departureTime}
                                         </div>
                                         <div className="text-xs">
@@ -870,7 +869,7 @@ export default function Search() {
                                         </div>
                                       </div>
                                       <div className="">
-                                        <div className="text-sm font-bold">
+                                        <div className="text-sm font-medium xl:font-bold">
                                           {x[0].arrivalTime}
                                         </div>
                                         <div className="text-xs">
@@ -885,6 +884,7 @@ export default function Search() {
                                             {
                                               flex: 0,
                                               padding: 0,
+                                              borderColor:"black"
                                             },
                                         }}
                                       >
@@ -894,7 +894,7 @@ export default function Search() {
                                             <TimelineConnector />
                                           </TimelineSeparator>
                                           <TimelineContent
-                                            sx={{ py: "16px", px: 2 }}
+                                            sx={{ py: "16px", px: 2, color: "black", }}
                                           >
                                             <Typography
                                               sx={{ fontSize: 12 }}
@@ -905,7 +905,7 @@ export default function Search() {
                                             <Typography
                                               sx={{
                                                 fontSize: 12,
-                                                color: "#6b7280",
+                                                color: "black",
                                               }}
                                             >
                                               {x[0].departureName}
@@ -924,7 +924,7 @@ export default function Search() {
                                             <Typography
                                               sx={{
                                                 fontSize: 12,
-                                                color: "#6b7280",
+                                                color: "black",
                                               }}
                                               component="span"
                                             >
@@ -947,7 +947,7 @@ export default function Search() {
                                             <Typography
                                               sx={{
                                                 fontSize: 12,
-                                                color: "#6b7280",
+                                                color: "black",
                                               }}
                                             >
                                               {x[0].arrivalName}
@@ -956,7 +956,7 @@ export default function Search() {
                                         </TimelineItem>
                                       </Timeline>
                                     </div>
-                                    <div className="mt-4 text-gray-500">
+                                    <div className="mt-4 text-gray-800">
                                       <div className="items-center">
                                         <div>
                                           <MdOutlineLuggage size={46} />
@@ -964,7 +964,7 @@ export default function Search() {
                                         <div className="text-xs">
                                           <div>
                                             Berat Bagasi maks.{" "}
-                                            <span className="font-bold">
+                                            <span className="font-medium xl:font-bold">
                                               20 kg
                                             </span>
                                           </div>
@@ -980,7 +980,7 @@ export default function Search() {
                               ) : (
                                 <div className="hidden xl:flex xl:items-center xl:space-x-16 xl:mt-6 border-t">
                                   <div className="mt-8">
-                                    <h1 className="text-sm font-bold">
+                                    <h1 className="text-sm font-medium xl:font-bold">
                                       {e.airlineName}{" "}
                                     </h1>
                                     <div className="text-sm">
@@ -994,9 +994,9 @@ export default function Search() {
                                       />
                                     </div>
                                   </div>
-                                  <div className="flex flex-col space-y-32 text-gray-500">
+                                  <div className="flex flex-col space-y-32 text-gray-800">
                                     <div className="">
-                                      <div className="text-sm font-bold">
+                                      <div className="text-sm font-medium xl:font-bold">
                                         {e.classes[0][0].departureTime}
                                       </div>
                                       <div className="text-xs">
@@ -1004,7 +1004,7 @@ export default function Search() {
                                       </div>
                                     </div>
                                     <div className="">
-                                      <div className="text-sm font-bold">
+                                      <div className="text-sm font-medium xl:font-bold">
                                         {e.classes[0][0].arrivalTime}
                                       </div>
                                       <div className="text-xs">
@@ -1019,6 +1019,8 @@ export default function Search() {
                                           {
                                             flex: 0,
                                             padding: 0,
+                                            color:"black",
+                                            borderColor:"black"
                                           },
                                       }}
                                     >
@@ -1028,7 +1030,7 @@ export default function Search() {
                                           <TimelineConnector />
                                         </TimelineSeparator>
                                         <TimelineContent
-                                          sx={{ py: "16px", px: 2 }}
+                                          sx={{ py: "16px", px: 2, color: "black", }}
                                         >
                                           <Typography
                                             sx={{ fontSize: 12 }}
@@ -1039,7 +1041,7 @@ export default function Search() {
                                           <Typography
                                             sx={{
                                               fontSize: 12,
-                                              color: "#6b7280",
+                                              color: "black",
                                             }}
                                           >
                                             {e.classes[0][0].departureName}
@@ -1053,12 +1055,12 @@ export default function Search() {
                                           <IoMdTimer />
                                         </TimelineDot>
                                         <TimelineContent
-                                          sx={{ py: "12px", px: 2 }}
+                                          sx={{ py: "12px", px: 2, color: "black", }}
                                         >
                                           <Typography
                                             sx={{
                                               fontSize: 12,
-                                              color: "#6b7280",
+                                              color: "black",
                                             }}
                                             component="span"
                                           >
@@ -1071,9 +1073,9 @@ export default function Search() {
                                           <TimelineConnector />
                                           <TimelineDot />
                                         </TimelineSeparator>
-                                        <TimelineContent sx={{ px: 2 }}>
+                                        <TimelineContent sx={{ px: 2, color: "black", }}>
                                           <Typography
-                                            sx={{ fontSize: 12 }}
+                                            sx={{ fontSize: 12, color: "black", }}
                                             component="span"
                                           >
                                             {e.classes[0][0].arrival}
@@ -1081,7 +1083,7 @@ export default function Search() {
                                           <Typography
                                             sx={{
                                               fontSize: 12,
-                                              color: "#6b7280",
+                                              color: "black",
                                             }}
                                           >
                                             {e.classes[0][0].arrivalName}
@@ -1090,7 +1092,7 @@ export default function Search() {
                                       </TimelineItem>
                                     </Timeline>
                                   </div>
-                                  <div className="mt-4 text-gray-500">
+                                  <div className="mt-4 text-gray-800">
                                     <div className="items-center">
                                       <div>
                                         <MdOutlineLuggage size={46} />
@@ -1098,7 +1100,7 @@ export default function Search() {
                                       <div className="text-xs">
                                         <div>
                                           Berat Bagasi maks.{" "}
-                                          <span className="font-bold">
+                                          <span className="font-medium xl:font-bold">
                                             20 kg
                                           </span>
                                         </div>
@@ -1123,7 +1125,7 @@ export default function Search() {
                                     <>
                                       <div className="hidden xl:flex xl:items-center xl:space-x-16 xl:mt-6 border-t">
                                         <div className="mt-8">
-                                          <h1 className="text-sm font-bold">
+                                          <h1 className="text-sm font-medium xl:font-bold">
                                             {e.detailTitle[w].flightName}{" "}
                                           </h1>
                                           <div className="text-sm">
@@ -1138,7 +1140,7 @@ export default function Search() {
                                           </div>
                                         </div>
                                         <div className="mt-8">
-                                          <div className="text-xs text-gray-500">
+                                          <div className="text-xs text-gray-800">
                                             <div className="mt-1 flex space-x-16">
                                               <div>
                                                 {" "}
@@ -1187,7 +1189,7 @@ export default function Search() {
                               ) : (
                                 <div className="hidden xl:flex xl:items-center xl:space-x-16 xl:mt-6 border-t">
                                   <div className="mt-8">
-                                    <h1 className="text-sm font-bold">
+                                    <h1 className="text-sm font-medium xl:font-bold">
                                       {e.airlineName}{" "}
                                     </h1>
                                     <div className="text-sm">
@@ -1202,7 +1204,7 @@ export default function Search() {
                                     </div>
                                   </div>
                                   <div className="mt-8">
-                                    <div className="text-xs text-gray-500">
+                                    <div className="text-xs text-gray-800">
                                       <div className="mt-1 flex space-x-16">
                                         <div>
                                           {" "}
@@ -1252,7 +1254,7 @@ export default function Search() {
                           {/* mobile cari */}
                           <div className="">
                             <div
-                              className="cursor-pointer block xl:hidden w-full text-gray-700"
+                              className="cursor-pointer block xl:hidden w-full text-gray-800"
                             >
                               <div 
                                   type="button"
@@ -1263,7 +1265,7 @@ export default function Search() {
                                 > 
                                 <div className="flex justify-between">
                                   <div className="col-span-1 xl:col-span-2">
-                                    <h1 className="text-xs font-bold">
+                                    <h1 className="text-xs font-medium xl:font-bold">
                                       {e.airlineName}
                                     </h1>
                                     <img
@@ -1273,7 +1275,7 @@ export default function Search() {
                                     />
                                   </div>
                                   <div className="text-right">
-                                    <h1 className="text-xs font-bold text-blue-500">
+                                    <h1 className="text-xs font-medium xl:font-bold text-blue-500">
                                       Rp.{toRupiah(e.classes[0][0].price)}
                                     </h1>
                                     <small className="text-red-500">
@@ -1309,7 +1311,7 @@ export default function Search() {
                                     <div className="flex space-x-2 items-center">
                                       <div className="w-full mt-12 px-4 border-b-2"></div>
                                       <div className="text-xs">
-                                        <div className="mt-10 xl:mt-0 text-gray-400">
+                                        <div className="mt-10 xl:mt-0 text-gray-800">
                                           {e.duration}
                                         </div>
                                       </div>
@@ -1355,7 +1357,7 @@ export default function Search() {
                                         : setDetailTiket(`open-${index}`)
                                     }
                                   }
-                                    className="text-sm text-blue-500 cursor-pointer font-bold"
+                                    className="text-sm text-blue-500 cursor-pointer font-medium xl:font-bold"
                                   >
                                     Detail Penerbangan
                                   </div>
@@ -1368,7 +1370,7 @@ export default function Search() {
                                         : setDetailHarga(`harga-open-${index}`)
                                     }
                                   }
-                                    className="text-sm text-blue-500 cursor-pointer font-bold"
+                                    className="text-sm text-blue-500 cursor-pointer font-medium xl:font-bold"
                                   >
                                     Detail Harga
                                   </div>
@@ -1380,7 +1382,7 @@ export default function Search() {
                                       <div className="p-4 flex justify-between items-center mt-6 border-t xl:hidden">
                                         <div className="">
                                           <div className="">
-                                            <div className="text-sm font-bold">
+                                            <div className="text-sm font-medium xl:font-bold">
                                               {x[0].departureTime}
                                             </div>
                                             <div className="text-xs">
@@ -1394,6 +1396,7 @@ export default function Search() {
                                                   {
                                                     flex: 0,
                                                     padding: 0,
+                                                    borderColor:"black"
                                                   },
                                               }}
                                             >
@@ -1403,10 +1406,10 @@ export default function Search() {
                                                   <TimelineConnector />
                                                 </TimelineSeparator>
                                                 <TimelineContent
-                                                  sx={{ py: "16px", px: 2 }}
+                                                  sx={{ py: "16px", px: 2, color: "black", }}
                                                 >
                                                   <Typography
-                                                    sx={{ fontSize: 12 }}
+                                                    sx={{ fontSize: 12, color: "black", }}
                                                     component="span"
                                                   >
                                                     {x[0].departure}
@@ -1414,7 +1417,7 @@ export default function Search() {
                                                   <Typography
                                                     sx={{
                                                       fontSize: 12,
-                                                      color: "#6b7280",
+                                                      color: "black",
                                                     }}
                                                   >
                                                     {x[0].departureName}
@@ -1430,12 +1433,12 @@ export default function Search() {
                                                   <IoMdTimer />
                                                 </TimelineDot>
                                                 <TimelineContent
-                                                  sx={{ py: "12px", px: 2 }}
+                                                  sx={{ py: "12px", px: 2, color: "black", }}
                                                 >
                                                   <Typography
                                                     sx={{
                                                       fontSize: 12,
-                                                      color: "#6b7280",
+                                                      color: "black",
                                                     }}
                                                     component="span"
                                                   >
@@ -1448,9 +1451,9 @@ export default function Search() {
                                                   <TimelineConnector />
                                                   <TimelineDot />
                                                 </TimelineSeparator>
-                                                <TimelineContent sx={{ px: 2 }}>
+                                                <TimelineContent sx={{ px: 2, color: "black", }}>
                                                   <Typography
-                                                    sx={{ fontSize: 12 }}
+                                                    sx={{ fontSize: 12, color: "black", }}
                                                     component="span"
                                                   >
                                                     {x[0].arrival}
@@ -1458,7 +1461,7 @@ export default function Search() {
                                                   <Typography
                                                     sx={{
                                                       fontSize: 12,
-                                                      color: "#6b7280",
+                                                      color: "black",
                                                     }}
                                                   >
                                                     {x[0].arrivalName}
@@ -1468,7 +1471,7 @@ export default function Search() {
                                             </Timeline>
                                           </div>
                                           <div className="">
-                                            <div className="text-sm font-bold">
+                                            <div className="text-sm font-medium xl:font-bold">
                                               {x[0].arrivalTime}
                                             </div>
                                             <div className="text-xs">
@@ -1476,7 +1479,7 @@ export default function Search() {
                                             </div>
                                           </div>
                                         </div>
-                                        <div className="mt-4 text-gray-500">
+                                        <div className="mt-4 text-gray-800">
                                           <div className="items-center">
                                             <div>
                                               <MdOutlineLuggage size={46} />
@@ -1484,7 +1487,7 @@ export default function Search() {
                                             <div className="text-xs">
                                               <div>
                                                 Berat Bagasi maks.{" "}
-                                                <span className="font-bold">
+                                                <span className="font-medium xl:font-bold">
                                                   20 kg
                                                 </span>
                                               </div>
@@ -1501,7 +1504,7 @@ export default function Search() {
                                     <div className="flex justify-between items-center p-4 mt-6 border-t xl:hidden">
                                       <div>
                                         <div className="">
-                                          <div className="text-sm font-bold">
+                                          <div className="text-sm font-medium xl:font-bold">
                                             {e.classes[0][0].departureTime}
                                           </div>
                                           <div className="text-xs">
@@ -1515,6 +1518,7 @@ export default function Search() {
                                                 {
                                                   flex: 0,
                                                   padding: 0,
+                                                  borderColor:"black"
                                                 },
                                             }}
                                           >
@@ -1524,10 +1528,10 @@ export default function Search() {
                                                 <TimelineConnector />
                                               </TimelineSeparator>
                                               <TimelineContent
-                                                sx={{ py: "16px", px: 2 }}
+                                                sx={{ py: "16px", px: 2, color: "black", }}
                                               >
                                                 <Typography
-                                                  sx={{ fontSize: 12 }}
+                                                  sx={{ fontSize: 12, color: "black", }}
                                                   component="span"
                                                 >
                                                   {e.classes[0][0].departure}
@@ -1535,7 +1539,7 @@ export default function Search() {
                                                 <Typography
                                                   sx={{
                                                     fontSize: 12,
-                                                    color: "#6b7280",
+                                                    color: "black",
                                                   }}
                                                 >
                                                   {
@@ -1554,12 +1558,12 @@ export default function Search() {
                                                 <IoMdTimer />
                                               </TimelineDot>
                                               <TimelineContent
-                                                sx={{ py: "12px", px: 2 }}
+                                                sx={{ py: "12px", px: 2, color: "black", }}
                                               >
                                                 <Typography
                                                   sx={{
                                                     fontSize: 12,
-                                                    color: "#6b7280",
+                                                    color: "black",
                                                   }}
                                                   component="span"
                                                 >
@@ -1572,9 +1576,9 @@ export default function Search() {
                                                 <TimelineConnector />
                                                 <TimelineDot />
                                               </TimelineSeparator>
-                                              <TimelineContent sx={{ px: 2 }}>
+                                              <TimelineContent sx={{ px: 2, color: "black", }}>
                                                 <Typography
-                                                  sx={{ fontSize: 12 }}
+                                                  sx={{ fontSize: 12, color: "black", }}
                                                   component="span"
                                                 >
                                                   {e.classes[0][0].arrival}
@@ -1582,7 +1586,7 @@ export default function Search() {
                                                 <Typography
                                                   sx={{
                                                     fontSize: 12,
-                                                    color: "#6b7280",
+                                                    color: "black",
                                                   }}
                                                 >
                                                   {e.classes[0][0].arrivalName}
@@ -1591,7 +1595,7 @@ export default function Search() {
                                             </TimelineItem>
                                           </Timeline>
                                           <div className="block mt-4">
-                                            <div className="text-sm font-bold">
+                                            <div className="text-sm font-medium xl:font-bold">
                                               {e.classes[0][0].arrivalTime}
                                             </div>
                                             <div className="text-xs">
@@ -1601,7 +1605,7 @@ export default function Search() {
                                         </div>
                                       </div>
 
-                                      <div className="mt-4 text-gray-500">
+                                      <div className="mt-4 text-gray-800">
                                         <div className="items-center">
                                           <div>
                                             <MdOutlineLuggage size={46} />
@@ -1609,7 +1613,7 @@ export default function Search() {
                                           <div className="text-xs">
                                             <div>
                                               Berat Bagasi maks.{" "}
-                                              <span className="font-bold">
+                                              <span className="font-medium xl:font-bold">
                                                 20 kg
                                               </span>
                                             </div>
@@ -1624,11 +1628,6 @@ export default function Search() {
                                   )}
                                 </>
                               ) : null}
-                              </div>
-
-                              {/* mobile detail tiket */}
-
-                              {/* end detail desltop tiket */}
 
                               {/* mobile detail harga */}
                               {detailHarga == `harga-open-${index}` ? (
@@ -1639,7 +1638,7 @@ export default function Search() {
                                         <>
                                           <div className="p-4 flex justify-between items-start mt-6 border-t xl:hidden">
                                             <div className="mt-8">
-                                              <h1 className="text-sm font-bold">
+                                              <h1 className="text-sm font-medium xl:font-bold">
                                                 {e.detailTitle[w].flightName}{" "}
                                               </h1>
                                               <div className="text-sm">
@@ -1656,7 +1655,7 @@ export default function Search() {
                                               </div>
                                             </div>
                                             <div className="mt-8">
-                                              <div className="text-xs text-gray-500">
+                                              <div className="text-xs text-gray-800">
                                                 <div className="">
                                                   <div>
                                                     {" "}
@@ -1707,7 +1706,7 @@ export default function Search() {
                                   ) : (
                                     <div className="p-4 flex justify-between items-start mt-6 border-t xl:hidden">
                                       <div className="mt-4">
-                                        <h1 className="text-sm font-bold">
+                                        <h1 className="text-sm font-medium xl:font-bold">
                                           {e.airlineName}{" "}
                                         </h1>
                                         <div className="text-sm">
@@ -1722,7 +1721,7 @@ export default function Search() {
                                         </div>
                                       </div>
                                       <div className="mt-4">
-                                        <div className="text-xs text-gray-500">
+                                        <div className="text-xs text-gray-800">
                                           <div className="">
                                             <div>
                                               {" "}
@@ -1768,6 +1767,8 @@ export default function Search() {
                                   )}
                                 </>
                               ) : null}
+
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -1781,10 +1782,10 @@ export default function Search() {
                 <div className="flex justify-center">
                   <img src={"/nodata.jpg"} width={350} alt="nodata" />
                 </div>
-                <div className="flex justify-center w-full text-gray-700">
-                  <div className="text-gray-500 text-center">
+                <div className="flex justify-center w-full text-gray-800">
+                  <div className="text-gray-800 text-center">
                     <div>
-                      <div className="text-lg font-bold">
+                      <div className="text-lg font-medium xl:font-bold">
                         Maaf, sepertinya rute ini belum dibuka kembali
                       </div>
                       <small>

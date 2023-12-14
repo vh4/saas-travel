@@ -64,26 +64,26 @@ export default function BookingPesawat() {
   const data = [
     {
       label: "Tuan.",
-      value: "Tuan",
+      value: "MR",
     },
     {
       label: "Nyonya.",
-      value: "Nyonya",
+      value: "MRS",
     },
     {
       label: "Nona.",
-      value: "Nona",
+      value: "MS",
     },
   ];
 
   const dataInfChld = [
     {
       label: "Tuan.",
-      value: "Tuan",
+      value: "MR",
     },
     {
       label: "Nona.",
-      value: "Nona",
+      value: "MS",
     },
   ];
 
@@ -144,7 +144,7 @@ export default function BookingPesawat() {
           setTotalInfant(TotalInfant);
 
           const AdultArr = Array.from({ length: TotalAdult }, () => ({
-            gender: "Tuan",
+            gender: "MR",
             nama_depan: "",
             nama_belakang: "",
             birthdate: getCurrentDate(),
@@ -152,14 +152,14 @@ export default function BookingPesawat() {
           }));
 
           const InfantArr = Array.from({ length: TotalInfant }, () => ({
-            gender: "Tuan",
+            gender: "MR",
             nama_depan: "",
             nama_belakang: "",
             birthdate: getCurrentDate(),
           }));
 
           const ChildArr = Array.from({ length: TotalChild }, () => ({
-            gender: "Tuan",
+            gender: "MR",
             nama_depan: "",
             nama_belakang: "",
             birthdate: getCurrentDate(),
@@ -554,10 +554,10 @@ export default function BookingPesawat() {
             {/* header kai flow */}
             <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-4 items-center">
               <div className="flex space-x-2 items-center">
-                <div className="hidden xl:flex text-blue-500 font-bold">
+                <div className="hidden xl:flex text-blue-500 font-medium xl:font-bold">
                   Detail pesanan
                 </div>
-                <div className="block xl:hidden text-blue-500 font-bold">
+                <div className="block xl:hidden text-blue-500 font-medium xl:font-bold">
                   Detail
                 </div>
               </div>
@@ -597,7 +597,7 @@ export default function BookingPesawat() {
                   dataDetail.map((dataDetail) => (
                     <div className="mt-8 xl:mt-0 block xl:hidden rounded-md border border-gray-200 shadow-sm">
                       <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-                        <div className="text-gray-800 text-sm font-bold">
+                        <div className="text-gray-800 text-sm font-medium xl:font-bold">
                           Keberangkatan Pesawat
                         </div>
                         <small className="text-xs text-gray-800">
@@ -625,7 +625,7 @@ export default function BookingPesawat() {
                             width={50}
                             alt="icon.png"
                           />
-                          <div className="text-gray-800 text-xs font-bold">
+                          <div className="text-gray-800 text-xs font-medium xl:font-bold">
                             {dataDetail.airlineName} ({dataDetail.airline})
                           </div>
                         </div>
@@ -1801,7 +1801,7 @@ export default function BookingPesawat() {
                         size="large"
                         key="submit"
                         type="primary"
-                        className="bg-blue-500 mx-2 font-semibold"
+                        className="bg-blue-500 mx-2 font-medium"
                       >
                         Lanjut ke Pembayaran
                       </Button>
@@ -1815,7 +1815,7 @@ export default function BookingPesawat() {
                         <>
                           <div className="hidden xl:block rounded-md border border-gray-200 shadow-sm mb-4">
                             <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-                              <div className="text-gray-800 text-sm font-bold">
+                              <div className="text-gray-800 text-sm font-medium xl:font-bold">
                                 Keberangkatan Pesawat
                               </div>
                               <small className="text-xs text-gray-800">
@@ -1823,7 +1823,7 @@ export default function BookingPesawat() {
                               </small>
                             </div>
                             <div className="px-4 p-8 flex justify-between space-x-8 mx-4 items-center">
-                              <div className="text-xs font-bold text-gray-800">
+                              <div className="text-xs font-medium xl:font-bold text-gray-800">
                                 <div>{dataDetail.departureName}</div>
                                 <div>({dataDetail.departure})</div>
                               </div>
@@ -1833,7 +1833,7 @@ export default function BookingPesawat() {
                                   size={18}
                                 />
                               </div>
-                              <div className="text-xs font-bold text-gray-800">
+                              <div className="text-xs font-medium xl:font-bold text-gray-800">
                                 <div>{dataDetail.arrivalName}</div>
                                 <div>({dataDetail.arrival})</div>
                               </div>
@@ -1846,7 +1846,7 @@ export default function BookingPesawat() {
                                   width={50}
                                   alt="icon.png"
                                 />
-                                <div className="text-gray-800 text-xs font-bold">
+                                <div className="text-gray-800 text-xs font-medium xl:font-bold">
                                   {dataDetail.airlineName} ({dataDetail.airline}
                                   )
                                 </div>
@@ -1857,14 +1857,14 @@ export default function BookingPesawat() {
                                 <li class="mb-10 ml-4 text-sm">
                                   <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800  "></div>
                                   <div className="flex space-x-12">
-                                    <time class="mb-1 text-xs font-bold leading-none text-gray-800 ">
+                                    <time class="mb-1 text-xs font-medium xl:font-bold leading-none text-gray-800 ">
                                       {dataDetail.departureTime}
                                     </time>
                                     <div className="-mt-2">
-                                      <h3 class="text-left text-xs font-bold text-gray-800 ">
+                                      <h3 class="text-left text-xs font-medium xl:font-bold text-gray-800 ">
                                         {dataDetail.departureName}
                                       </h3>
-                                      <p class="text-left text-xs font-bold text-gray-800 ">
+                                      <p class="text-left text-xs font-medium xl:font-bold text-gray-800 ">
                                         ({dataDetail.departure})
                                       </p>
                                     </div>
@@ -1873,14 +1873,14 @@ export default function BookingPesawat() {
                                 <li class="ml-4 text-sm mt-10">
                                   <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white  "></div>
                                   <div className="flex space-x-12">
-                                    <time class="mb-1 text-xs font-bold leading-none text-gray-800 ">
+                                    <time class="mb-1 text-xs font-medium xl:font-bold leading-none text-gray-800 ">
                                       {dataDetail.arrivalTime}
                                     </time>
                                     <div className="-mt-2">
-                                      <h3 class="text-left text-xs font-bold text-gray-800 ">
+                                      <h3 class="text-left text-xs font-medium xl:font-bold text-gray-800 ">
                                         {dataDetail.arrivalName}
                                       </h3>
-                                      <p class="text-left text-xs font-bold text-gray-800 ">
+                                      <p class="text-left text-xs font-medium xl:font-bold text-gray-800 ">
                                         ({dataDetail.arrival})
                                       </p>
                                     </div>
