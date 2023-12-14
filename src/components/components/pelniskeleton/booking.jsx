@@ -159,7 +159,7 @@ const SidebarMobile = () => {
 		<div className="px-4 xl:px-8 p-4 flex justify-between space-x-12 items-center">
 		<div className="text-xs  text-slate-600">
 			<div>
-			<Skeleton width={100} />
+			<Skeleton width={50} />
 			</div>
 			<div>
 			<Skeleton width={50} />
@@ -170,7 +170,7 @@ const SidebarMobile = () => {
 		</div>
 		<div className="text-xs  text-slate-600">
 			<div>
-			<Skeleton width={100} />
+			<Skeleton width={50} />
 			</div>
 			<div>
 			<Skeleton width={50} />

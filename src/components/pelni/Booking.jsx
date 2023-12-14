@@ -467,10 +467,10 @@ export default function BookingPelni() {
             </Modal>
         <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
           <div className="flex space-x-2 items-center">
-            <div className="hidden xl:flex text-blue-500 font-bold">
+            <div className="hidden xl:flex text-blue-500 font-medium xl:font-bold">
               Detail pesanan
             </div>
-            <div className="block xl:hidden text-blue-500 font-bold">
+            <div className="block xl:hidden text-blue-500 font-medium xl:font-bold">
               Detail
             </div>
           </div>
@@ -508,7 +508,7 @@ export default function BookingPelni() {
           {/* sidebar mobile kai*/}
           <div className="mt-8 block xl:hidden w-full rounded-md border border-gray-200 shadow-sm">
             <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-              <div className="text-gray-800 font-bold">Keberangkatan Kapal</div>
+              <div className="text-gray-800 font-medium xl:font-bold">Keberangkatan Kapal</div>
               <small className="text-xs text-gray-700 ">{duration}</small>
             </div>
             <div className="p-4 px-4 flex justify-between space-x-12 items-center">
@@ -525,7 +525,7 @@ export default function BookingPelni() {
               </div>
             </div>
             <div className="p-4 pl-8  text-gray-800">
-              <div className="text-xs font-bold">
+              <div className="text-xs font-medium xl:font-bold">
                 {dataDetailPelni.shipName}
               </div>
               <small>
@@ -657,7 +657,7 @@ export default function BookingPelni() {
                   <>
                     <div>
                       <div className="Booking  mt-8 mb-4 xl:mt-12 ml-2 xl:ml-0">
-                        <h1 className="text-sm font-bold text-gray-800">
+                        <h1 className="text-sm font-medium xl:font-bold text-gray-800">
                           PRIA PASSENGER
                         </h1>
                         <small className="text-gray-500">
@@ -875,7 +875,7 @@ export default function BookingPelni() {
                   <>
                     <div>
                       <div className="Booking  mt-8 mb-4 xl:mt-12 ml-2 xl:ml-0">
-                        <h1 className="text-sm font-bold text-gray-800">
+                        <h1 className="text-sm font-medium xl:font-bold text-gray-800">
                           WANITA PASSENGER
                         </h1>
                         <small className="text-gray-500">
@@ -1103,14 +1103,14 @@ export default function BookingPelni() {
             <div className="w-2/3 xl:mt-12">
               <div className="hidden xl:block rounded-md border border-gray-200 shadow-sm">
                 <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-                  <div className="text-gray-800 text-sm font-bold">
+                  <div className="text-gray-800 text-sm font-medium xl:font-bold">
                     Keberangkatan Kapal
                   </div>
                   <small className="text-xs text-gray-800">{duration}</small>
                 </div>
                 <div className="px-4 xl:px-8 p-4 flex justify-between space-x-12 items-center">
                   <div className="text-xs">
-                    <div className="font-bold text-gray-800">
+                    <div className="font-medium xl:font-bold text-gray-800">
                       {dataDetailPelni && dataDetailPelni.pelabuhan_asal}
                     </div>
                     <small className="text-xs text-gray-800">
@@ -1121,7 +1121,7 @@ export default function BookingPelni() {
                     <IoArrowForwardOutline className="text-white" size={18} />
                   </div>
                   <div className="text-xs">
-                    <div className=" font-bold text-gray-800">
+                    <div className="font-medium xl:font-bold text-gray-800">
                       {dataDetailPelni && dataDetailPelni.pelabuhan_tujuan}
                     </div>
                     <small className="text-xs text-gray-800">
@@ -1131,7 +1131,7 @@ export default function BookingPelni() {
                 </div>
 
                 <div className="p-4 pl-8 text-gray-800">
-                  <div className=" text-xs font-bold">
+                  <div className="text-xs font-medium xl:font-bold">
                     {dataDetailPelni && dataDetailPelni.shipName}
                   </div>
                   <small>
@@ -1144,11 +1144,11 @@ export default function BookingPelni() {
                     <li class="mb-10 ml-4 text-sm">
                       <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800 "></div>
                       <div className="flex space-x-12">
-                        <time class="mb-1 text-xs font-bold leading-none text-gray-800 ">
+                        <time class="mb-1 text-xs font-medium xl:font-bold leading-none text-gray-800 ">
                           {dataDetailPelni && dataDetailPelni.departureTime}
                         </time>
                         <div className="">
-                          <h3 class="text-left text-xs font-bold text-gray-800 ">
+                          <h3 class="text-left text-xs font-medium xl:font-bold text-gray-800 ">
                             {dataDetailPelni && dataDetailPelni.pelabuhan_asal}
                           </h3>
                         </div>
@@ -1157,11 +1157,11 @@ export default function BookingPelni() {
                     <li class="ml-4 text-sm mt-10">
                       <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white "></div>
                       <div className="flex space-x-12">
-                        <time class="mb-1 text-xs font-bold leading-none text-gray-800 ">
+                        <time class="mb-1 text-xs font-medium xl:font-bold leading-none text-gray-800 ">
                           {dataDetailPelni && dataDetailPelni.arrivalTime}
                         </time>
                         <div className="">
-                          <h3 class="text-left text-xs font-bold text-gray-800 ">
+                          <h3 class="text-left text-xs font-medium xl:font-bold text-gray-800 ">
                             {dataDetailPelni &&
                               dataDetailPelni.pelabuhan_tujuan}
                           </h3>

@@ -394,7 +394,7 @@ function Pelni() {
                   <div className="mt-2 w-full col col-span-1 md:col-span-2">
                     <div className="w-full flex items-center">
                       <div className="w-full m-2 xl:m-0 xl:pr-0">
-                        <small className="block mb-2 text-gray-500">
+                        <small className="block mb-2 text-gray-800">
                           Kota Asal
                         </small>
                         <Autocomplete
@@ -472,7 +472,7 @@ function Pelni() {
                         <AiOutlineSwap className="text-white" size={24} />
                       </div>
                       <div className="w-full m-2 xl:m-0 xl:pr-0">
-                        <small className="mb-2 text-gray-500">
+                        <small className="mb-2 text-gray-800">
                           Pelabuhan Tujuan
                         </small>
                         <Autocomplete
@@ -546,7 +546,7 @@ function Pelni() {
                     </div>
                   </div>
                   <FormControl sx={{ m: 1, minWidth: 145 }}>
-                    <small className="mb-2 text-gray-500">Range Tanggal</small>
+                    <small className="mb-2 text-gray-800">Range Tanggal</small>
                     <div className="w-full cursor-pointer">
                       <DatePicker
                         value={tanggal}
@@ -587,7 +587,7 @@ function Pelni() {
                       className={`${anchorEl} absolute top-20 z-10 grid w-full md:w-auto px-8 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}
                     >
                       <div className="w-full md:w-48 block md:mx-0">
-                        <div className="mt-4 w-full items-center text-gray-600">
+                        <div className="mt-4 w-full items-center text-gray-800">
                           <div className="text-sm text-center header-number mb-4">
                             <p>Laki-laki ({"≥"} 2 thn)</p>
                           </div>
@@ -611,7 +611,7 @@ function Pelni() {
                             </InputGroup.Button>
                           </InputGroup>
                         </div>
-                        <div className="mt-4 mb-8 w-full items-center text-gray-600">
+                        <div className="mt-4 mb-8 w-full items-center text-gray-800">
                           <div className="text-sm text-center header-number mb-4">
                             <p>Perempuan ({"≥"} 2 thn)</p>
                           </div>

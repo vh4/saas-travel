@@ -94,7 +94,7 @@ export default function Konfirmasi(){
                                         </div>
                                     </div>
                                 </div>
-                                <a href={data.url_etiket} target="_blank" class="py-2.5 px-5 mr-8 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 ">
+                                <a href={data.url_etiket} target="_blank" class="py-2.5 px-5 mr-8 mb-2 text-sm font-medium text-gray-800 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 ">
                                     <div className="flex space-x-2">
                                         <AiOutlineDownload className="text-gray-500" size={20} />
                                         <div className="text-gray-500 font-bold">Download tiket</div>
@@ -113,7 +113,7 @@ export default function Konfirmasi(){
                                     </div>
                                 </div>
                                 <div className="flex justify-end">
-                                <button href={data.url_etiket} target="_blank" class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 ">
+                                <button href={data.url_etiket} target="_blank" class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-800 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 ">
                                     <div className="flex space-x-2">
                                         <AiOutlineDownload className="text-gray-500" size={20} />
                                         <div className="text-gray-500 font-bold">Download tiket</div>

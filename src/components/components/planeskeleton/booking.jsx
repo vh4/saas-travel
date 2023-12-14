@@ -229,7 +229,7 @@ const BookingLoading = ({ TotalAdult, TotalChild, TotalInfant }) => {
           <div className="text-xs  text-slate-600">
             <div>
               {/* Skeleton Placeholder for Keberangkatan Kota */}
-              <Skeleton width={80} height={12} />
+              <Skeleton width={50} height={12} />
             </div>
             <div>
               {/* Skeleton Placeholder for Keberangkatan Kode Kota */}
@@ -242,7 +242,7 @@ const BookingLoading = ({ TotalAdult, TotalChild, TotalInfant }) => {
           <div className="text-xs  text-slate-600">
             <div>
               {/* Skeleton Placeholder for Kedatangan Kota */}
-              <Skeleton width={80} height={12} />
+              <Skeleton width={50} height={12} />
             </div>
             <div>
               {/* Skeleton Placeholder for Kedatangan Kode Kota */}

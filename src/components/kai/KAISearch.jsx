@@ -431,7 +431,7 @@ function KAI(){
                           <div
                               className="w-full m-2 xl:m-0 xl:pr-0"
                           >
-                              <small className="block mb-2 text-gray-500">Kota Asal</small>
+                              <small className="block mb-2 text-gray-800">Kota Asal</small>
                               <Autocomplete
                               classes={classes}
                               className="mt-1.5"
@@ -506,7 +506,7 @@ function KAI(){
                           <div
                             className="w-full m-2 xl:m-0 xl:pr-0"
                           >
-                              <small className="mb-2 text-gray-500">Kota Tujuan</small>
+                              <small className="mb-2 text-gray-800">Kota Tujuan</small>
                               <Autocomplete
                               classes={classes}
                               className="mt-1.5"
@@ -578,7 +578,7 @@ function KAI(){
                       </div>
                     </div>
                     <FormControl sx={{ m: 1, minWidth: 160 }}>
-                      <small className="mb-2 text-gray-500">
+                      <small className="mb-2 text-gray-800">
                         Tanggal Berangkat
                       </small>
                       <LocalizationProvider
@@ -629,8 +629,8 @@ function KAI(){
                         className={`${anchorEl} absolute top-20 z-10 grid w-full md:w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}
                       >
                         <div className="w-full md:w-48 block md:mx-0">
-                          <div className="mt-4 w-full items-center text-gray-600">
-                            <div className="w-full items-center text-gray-600">
+                          <div className="mt-4 w-full items-center text-gray-800">
+                            <div className="w-full items-center text-gray-800">
                             <div className="text-sm text-center header-number mb-4">
                               <p>Adult (≥ 3 thn)</p>
                             </div>
@@ -641,8 +641,8 @@ function KAI(){
                             </InputGroup>
                           </div>
                           </div>
-                          <div className="mt-4 w-full items-center text-gray-600">
-                            <div className="mt-4 w-full items-center text-gray-600">
+                          <div className="mt-4 w-full items-center text-gray-800">
+                            <div className="mt-4 w-full items-center text-gray-800">
                             <div className="text-sm text-center header-number mb-4">
                               <p>Infant ({`<`} 3 thn) </p>
                             </div>

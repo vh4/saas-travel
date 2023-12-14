@@ -364,10 +364,10 @@ export default function BookingKai() {
             </Modal>
           <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
               <div className="flex space-x-2 items-center">
-                <div className="hidden xl:flex text-blue-500 font-bold">
+                <div className="hidden xl:flex text-blue-500 font-medium xl:font-bold">
                   Detail pesanan
                 </div>
-                <div className="block xl:hidden text-blue-500 font-bold">
+                <div className="block xl:hidden text-blue-500 font-medium xl:font-bold">
                   Detail
                 </div>
               </div>
@@ -415,7 +415,7 @@ export default function BookingKai() {
             {/* sidebar mobile kai*/}
             <div className="mt-8 block xl:hidden w-full rounded-md border border-gray-200 shadow-sm">
               <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-                <div className="text-gray-800 font-bold">Keberangkatan kereta</div>
+                <div className="text-gray-800 font-medium xl:font-bold">Keberangkatan kereta</div>
                 <small className="text-gray-800">
                   {tanggal_keberangkatan_kereta}
                 </small>
@@ -522,7 +522,7 @@ export default function BookingKai() {
                     <>
                       <div>
                         <div className="Booking ml-2 md:ml-0 mt-8 mb-4 xl:mt-12">
-                          <h1 className="text-sm font-bold text-gray-800">
+                          <h1 className="text-sm font-medium xl:font-bold text-gray-800">
                             ADULT PASSENGER
                           </h1>
                           <small className="text-gray-800">
@@ -698,7 +698,7 @@ export default function BookingKai() {
                     <>
                       <div>
                         <div className="Booking ml-2  md:ml-0 mt-8 mb-4 xl:mt-12">
-                          <h1 className="xl:text-sm font-bold text-gray-800 text-sm">
+                          <h1 className="xl:text-sm font-medium xl:font-bold text-gray-800 text-sm">
                             INFANT PASSENGER
                           </h1>
                           <small className="text-gray-500">
@@ -869,7 +869,7 @@ export default function BookingKai() {
             <div className="w-1/2 xl:mt-16">
                 <div className="hidden xl:block rounded-md border border-gray-200 shadow-sm">
                   <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-                    <div className="text-gray-800 text-sm font-bold">
+                    <div className="text-gray-800 text-sm font-medium xl:font-bold">
                       Keberangkatan kereta
                     </div>
                     <small className="text-xs text-gray-800">
@@ -877,7 +877,7 @@ export default function BookingKai() {
                     </small>
                   </div>
                   <div className="px-4 xl:px-8 p-4 flex justify-between space-x-12 items-center">
-                    <div className="text-xs font-bold text-gray-800">
+                    <div className="text-xs font-medium xl:font-bold text-gray-800">
                       <div>
                         {dataDetailTrain &&
                           dataDetailTrain[0].berangkat_nama_kota}
@@ -892,7 +892,7 @@ export default function BookingKai() {
                     <div className="rounded-full p-1 bg-blue-500 ">
                       <IoArrowForwardOutline className="text-white" size={18} />
                     </div>
-                    <div className="text-xs font-bold text-gray-800">
+                    <div className="text-xs font-medium xl:font-bold text-gray-800">
                       <div>
                         {dataDetailTrain && dataDetailTrain[0].tujuan_nama_kota}
                       </div>
@@ -906,7 +906,7 @@ export default function BookingKai() {
                   </div>
 
                   <div className="p-4 pl-8 text-gray-800">
-                    <div className=" text-xs font-bold">
+                    <div className=" text-xs font-medium xl:font-bold">
                       {dataBookingTrain && dataBookingTrain[0].trainName}
                     </div>
                     <small>
@@ -919,16 +919,16 @@ export default function BookingKai() {
                       <li class="mb-10 ml-4 text-sm">
                         <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800 "></div>
                         <div className="flex space-x-12">
-                          <time class="mb-1 text-xs font-bold leading-none text-gray-800 ">
+                          <time class="mb-1 text-xs font-medium xl:font-bold leading-none text-gray-800 ">
                             {dataBookingTrain &&
                               dataBookingTrain[0].departureTime}
                           </time>
                           <div className="-mt-2">
-                            <h3 class="text-left text-xs font-bold text-gray-800 ">
+                            <h3 class="text-left text-xs font-medium xl:font-bold text-gray-800 ">
                               {dataDetailTrain &&
                                 dataDetailTrain[0].berangkat_nama_kota}
                             </h3>
-                            <p class="text-left text-xs font-bold text-gray-800 ">
+                            <p class="text-left text-xs font-medium xl:font-bold text-gray-800 ">
                               (
                               {dataDetailTrain &&
                                 dataDetailTrain[0].berangkat_id_station}
@@ -940,16 +940,16 @@ export default function BookingKai() {
                       <li class="ml-4 text-sm mt-10">
                         <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white "></div>
                         <div className="flex space-x-12">
-                          <time class="mb-1 text-xs font-bold leading-none text-gray-800 ">
+                          <time class="mb-1 text-xs font-medium xl:font-bold leading-none text-gray-800 ">
                             {dataBookingTrain &&
                               dataBookingTrain[0].arrivalTime}
                           </time>
                           <div className="-mt-2">
-                            <h3 class="text-left text-xs font-bold text-gray-800">
+                            <h3 class="text-left text-xs font-medium xl:font-bold text-gray-800">
                               {dataDetailTrain &&
                                 dataDetailTrain[0].tujuan_nama_kota}
                             </h3>
-                            <p class="text-left text-xs font-bold text-gray-800">
+                            <p class="text-left text-xs font-medium xl:font-bold text-gray-800">
                               (
                               {dataDetailTrain &&
                                 dataDetailTrain[0].tujuan_id_station}

@@ -623,7 +623,7 @@ export default function Search() {
             </div>
           ) : null}
           <div className="flex justify-between mt-6">
-            <div className="relative flex items-center space-x-2 text-gray-800 text-xs font-bold">
+            <div className="relative flex items-center space-x-2 text-gray-800 text-xs font-medium xl:font-bold">
               <div className="hidden md:block">FILTER : </div>
               <Whisper
                 placement="top"
@@ -632,7 +632,7 @@ export default function Search() {
                 speaker={hargaPopoOver}
                 placement="bottomStart"
               >
-                <button className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300">
+                <button className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium xl:font-bold">
                   HARGA
                 </button>
               </Whisper>
@@ -643,7 +643,7 @@ export default function Search() {
                 speaker={waktuPopoOver}
                 placement="bottomStart"
               >
-                <button className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300">
+                <button className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium xl:font-bold">
                   WAKTU
                 </button>
               </Whisper>

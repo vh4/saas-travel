@@ -26,10 +26,6 @@ const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCou
 const groupColumnCounts = {};
 const rowCount = Math.max(...seats.map((seat) => seat.row));
 
-useEffect(() => {
-  window.scrollTo(0, 0);
-}, []);
-
 seats.forEach((seat) => {
   const groupKey = `${seat.groupColumn}-${seat.row}`;
   if (!groupColumnCounts[groupKey]) {
@@ -39,6 +35,10 @@ seats.forEach((seat) => {
     groupColumnCounts[groupKey]++;
   }
 });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   function limitFunction() {
     var x = 0;
@@ -148,7 +148,7 @@ seats.forEach((seat) => {
       <div className="">
       {Array.from({ length: rowCount }, (_, index) => (
         <div className="block py-2 pl-0 md:pl-4">
-          <div class="select-none w-4 h-10 font-bold rounded-lg">
+          <div class="select-none w-4 h-10 font-medium xl:font-bold rounded-lg">
           <div key={index} class="py-2 text-center text-black">
             {index + 1}.
           </div>
@@ -180,7 +180,7 @@ seats.forEach((seat) => {
                         }
                         class="sr-only peer"
                       />
-                      <div class="select-none  w-10 text-blue-700 h-10 bg-blue-700 peer-checked:text-black font-bold peer-checked:border peer-checked:bg-white rounded-lg">
+                      <div class="select-none  w-10 text-blue-700 h-10 bg-blue-700 peer-checked:text-black font-medium xl:font-bold peer-checked:border peer-checked:bg-white rounded-lg">
                         <div class="py-2 text-center">
                           {seat.row}
                           {seat.column}
@@ -218,7 +218,7 @@ seats.forEach((seat) => {
                         }
                         class="sr-only peer"
                       />
-                      <div class="select-none  w-10 text-blue-700 h-10 bg-blue-700 peer-checked:text-black font-bold peer-checked:border peer-checked:bg-white rounded-lg">
+                      <div class="select-none  w-10 text-blue-700 h-10 bg-blue-700 peer-checked:text-black font-medium xl:font-bold peer-checked:border peer-checked:bg-white rounded-lg">
                         <div class="py-2 text-center">
                           {seat.row}
                           {seat.column}
@@ -248,6 +248,10 @@ export default function Konfirmasi() {
   const [api, contextHolder] = notification.useNotification();
   const { Paragraph } = Typography;
   const [selectedCount, setSelectedCount] = useState(0);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const failedNotification = (rd) => {
     api["error"]({
@@ -583,7 +587,7 @@ export default function Konfirmasi() {
           <Modal size="md" backdrop={backdrop} keyboard={false} open={open} onClose={handleClose}>
             <Modal.Header>
               <Modal.Title>
-                <div className="text-gray-500 font-bold mt-2 mb-2">Pindah Kursi</div>
+                <div className="text-gray-800 font-medium xl:font-bold mt-2 mb-2">Pindah Kursi</div>
                 <small>
                   tekan tombol warna biru untuk ganti kursi.
                 </small>
@@ -614,14 +618,14 @@ export default function Konfirmasi() {
                               {changeState[0].map((e, i) => (
                                 <>
                                   {e.type === "adult" && (
-                                    <div className="border m-2 rounded-md mt-2 text-xs font-bold">
+                                    <div className="border m-2 rounded-md mt-2 text-xs font-medium xl:font-bold">
                                       <div className="flex space-x-4 items-center py-2 px-4 text-gray-700">
-                                        <div className="text-2xl font-bold">
+                                        <div className="text-2xl font-medium xl:font-bold">
                                           {i + 1}
                                         </div>
                                         <div>
                                           
-                                          <div className="font-bold mt-2">
+                                          <div className="font-medium xl:font-bold mt-2">
                                             {e.name}
                                           </div>
                                           <div className="mt-2">
@@ -652,7 +656,7 @@ export default function Konfirmasi() {
                                       <div class="flex justify-center py-1.5">X</div>
                                     </div>
                                   </label>
-                                  <div className="text-md text-black font-bold">
+                                  <div className="text-md text-black font-medium xl:font-bold">
                                     Seats not available.
                                   </div>
                                 </div>
@@ -663,7 +667,7 @@ export default function Konfirmasi() {
                                     <div class="w-8 text-white-500 h-8 bg-blue-500 rounded-lg">
                                     </div>
                                   </label>
-                                  <div className="text-md text-black font-bold">
+                                  <div className="text-md text-black font-medium xl:font-bold">
                                     Seats available.
                                   </div>
                                 </div>
@@ -767,38 +771,38 @@ export default function Konfirmasi() {
           {/* header kai flow */}
           <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="flex space-x-2 items-center">
-              <AiOutlineCheckCircle className="text-slate-500" size={20} />
-              <div className="hidden xl:flex text-slate-500">
+              <AiOutlineCheckCircle className="text-gray-800" size={20} />
+              <div className="hidden xl:flex text-gray-800">
                 Detail pesanan
               </div>
-              <div className="block xl:hidden text-slate-500">Detail</div>
+              <div className="block xl:hidden text-gray-800">Detail</div>
             </div>
             <div>
               <MdHorizontalRule
                 size={20}
-                className="hidden xl:flex text-gray-500"
+                className="hidden xl:flex text-gray-800"
               />
             </div>
             <div className="flex space-x-2 items-center">
-              <div className="hidden xl:flex text-blue-500 font-bold">
+              <div className="hidden xl:flex text-blue-500 font-medium xl:font-bold">
                 Konfirmasi pesanan
               </div>
-              <div className="block xl:hidden text-blue-500  font-bold">
+              <div className="block xl:hidden text-blue-500  font-medium xl:font-bold">
                 Konfirmasi
               </div>
             </div>
             <div>
               <MdHorizontalRule
                 size={20}
-                className="text-gray-500 hidden xl:flex"
+                className="text-gray-800 hidden xl:flex"
               />
             </div>
             <div className="flex space-x-2 items-center">
-              <RxCrossCircled size={20} className="text-slate-500" />
-              <div className="hidden xl:block text-slate-500">
+              <RxCrossCircled size={20} className="text-gray-800" />
+              <div className="hidden xl:block text-gray-800">
                 Pembayaran tiket
               </div>
-              <div className="block xl:hidden text-slate-500">Payment</div>
+              <div className="block xl:hidden text-gray-800">Payment</div>
             </div>
           </div>
 
@@ -815,7 +819,7 @@ export default function Konfirmasi() {
                 <div className="w-full mx-0 2xl:mx-4">
                   <div className="mt-8 w-full rounded-md border border-gray-200 shadow-sm">
                     <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-                      <div className="text-slate-800 font-bold ">
+                      <div className="text-gray-800 font-medium xl:font-bold ">
                         Keberangkatan kereta
                       </div>
                       <small className="text-gray-800">
@@ -823,7 +827,7 @@ export default function Konfirmasi() {
                       </small>
                     </div>
                     <div className="p-4 pl-8  text-gray-800">
-                      <div className="text-xs font-bold">
+                      <div className="text-xs font-medium xl:font-bold">
                         {dataBookingTrain && dataBookingTrain[0].trainName}
                       </div>
                       <small>
@@ -892,22 +896,22 @@ export default function Konfirmasi() {
                         <>
                           <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                             <div className="p-2">
-                              <div className="px-2 xl:px-4 py-2 text-gray-800 border-b border-gray-200 text-sm font-bold">
+                              <div className="px-2 xl:px-4 py-2 text-gray-800 border-b border-gray-200 text-sm font-medium xl:font-bold">
                                 {e.name}
                               </div>
                               <div className="mt-2 block md:flex md:space-x-8">
                                 <div className="px-2 md:px-4 py-2 text-sm">
-                                  <div className="text-gray-800 font-bold">NIK</div>
+                                  <div className="text-gray-800 font-medium xl:font-bold">NIK</div>
                                   <div className="mt-2 text-gray-800 text-xs">
                                     {e.idNumber}
                                   </div>
                                 </div>
                                 <div className="px-2 md:px-4 py-2 text-sm">
-                                  <div className="text-gray-800  font-bold">Nomor HP</div>
+                                  <div className="text-gray-800  font-medium xl:font-bold">Nomor HP</div>
                                   <div className="mt-2 text-gray-800 text-xs">{e.phone}</div>
                                 </div>
                                 <div className="px-2 md:px-4 py-2 text-sm">
-                                  <div className="text-gray-800  font-bold">Kursi</div>
+                                  <div className="text-gray-800  font-medium xl:font-bold">Kursi</div>
                                   <div className="mt-2 text-gray-800 text-xs">
                                     {hasilBooking !== null
                                       ? hasilBooking.seats[i][0] === "EKO"
@@ -937,7 +941,7 @@ export default function Konfirmasi() {
                   {/* infants */}
 
                   {passengers.infants && passengers.infants.length > 0 ? (
-                    <div className="text-sm xl:text-sm font-bold text-gray-900 mt-12">
+                    <div className="text-sm xl:text-sm font-bold text-gray-800 mt-12">
                       <p>INFANTS PASSENGERS</p>
                     </div>
                   ) : (
@@ -948,18 +952,18 @@ export default function Konfirmasi() {
                         <>
                           <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                             <div className="mt-2">
-                              <div className="px-4 py-2 text-gray-900 border-b border-gray-200 text-sm font-bold">
+                              <div className="px-4 py-2 text-gray-800 border-b border-gray-200 text-sm font-medium xl:font-bold">
                                 {e.name}
                               </div>
                               <div className="mt-2 block md:flex md:space-x-8">
                                 <div className="px-4 py-2 text-sm">
-                                  <div className="text-gray-800 font-bold">NIK</div>
+                                  <div className="text-gray-800 font-medium xl:font-bold">NIK</div>
                                   <div className="mt-2 text-gray-800 text-xs">
                                     {e.idNumber}
                                   </div>
                                 </div>
                                 <div className="px-4 py-2 text-sm">
-                                  <div className="text-gray-800 font-bold">
+                                  <div className="text-gray-800 font-medium xl:font-bold">
                                     Tanggal Lahir
                                   </div>
                                   <div className="mt-2 text-gray-800 text-xs">
@@ -967,7 +971,7 @@ export default function Konfirmasi() {
                                   </div>
                                 </div>
                                 <div className="px-4 py-2 text-sm">
-                                  <div className="text-gray-800 font-bold">Kursi</div>
+                                  <div className="text-gray-800 font-medium xl:font-bold">Kursi</div>
                                   <div className="mt-2 text-gray-800 text-xs">
                                     {hasilBooking !== null
                                       ? hasilBooking.seats[i][0] === "EKO"
@@ -1001,7 +1005,7 @@ export default function Konfirmasi() {
                   </div>
                   <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                     <div className="p-4">
-                      <div className="text-xs text-gray-900 font-bold flex justify-between">
+                      <div className="text-xs text-gray-800 font-medium xl:font-bold flex justify-between">
                         <div>
                           {dataBookingTrain && dataBookingTrain[0].trainName}{" "}
                           {TotalAdult > 0 ? `(Adults) x${TotalAdult}` : ""}{" "}
@@ -1013,18 +1017,18 @@ export default function Konfirmasi() {
                           {hasilBooking && toRupiah(hasilBooking.normalSales)}
                         </div>
                       </div>
-                      <div className="mt-4 text-xs text-gray-900 font-bold flex justify-between">
+                      <div className="mt-4 text-xs text-gray-800 font-medium xl:font-bold flex justify-between">
                         <div>Biaya Admin (Fee)</div>
                         <div>
                           Rp.{" "}
                           {hasilBooking && toRupiah(hasilBooking.nominalAdmin)}
                         </div>
                       </div>
-                      <div className="mt-4 text-xs text-gray-900 font-bold flex justify-between">
+                      <div className="mt-4 text-xs text-gray-800 font-medium xl:font-bold flex justify-between">
                         <div>Diskon (Rp.)</div>
                         <div>Rp. {hasilBooking && hasilBooking.discount}</div>
                       </div>
-                      <div className="mt-8 pt-2 border-t border-gray-200 text-sm text-gray-900 font-bold flex justify-between">
+                      <div className="mt-8 pt-2 border-t border-gray-200 text-sm text-gray-800 font-medium xl:font-bold flex justify-between">
                         <div>Total Harga</div>
                         <div>
                           Rp.{" "}
@@ -1055,9 +1059,9 @@ export default function Konfirmasi() {
                 <div className="sidebar w-full xl:w-1/2">
                   <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
                     <div className="flex items-center justify-between py-2 px-4">
-                      {/* <div className="text-gray-500 text-sm">Booking ID</div> */}
-                      <div className="-mt-4  text-gray-500 text-sm">Transaksi ID</div>
-                      <div className="font-bold text-blue-500 text-[18px]">
+                      {/* <div className="text-gray-800 text-sm">Booking ID</div> */}
+                      <div className="-mt-4  text-gray-800 text-sm">Transaksi ID</div>
+                      <div className="font-medium xl:font-bold text-blue-500 text-[18px]">
                         {/* {hasilBooking && hasilBooking.bookingCode} */}
                         <Paragraph copyable>{hasilBooking && hasilBooking.transactionId}</Paragraph>
                       </div>
@@ -1076,8 +1080,8 @@ export default function Konfirmasi() {
                               className="text-blue-500"
                             />
                           </div>
-                          <div className="block text-gray-900 text-sm">
-                            <div className="text-sm font-bold">
+                          <div className="block text-gray-800 text-sm">
+                            <div className="text-sm font-medium xl:font-bold">
                               Pindah Kursi
                             </div>
                             <small>available seats</small>

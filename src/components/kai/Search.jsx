@@ -451,7 +451,7 @@ export default function Search() {
           <div className="mt-8">
             <div className="block lg:flex justify-between">
               <div className="flex items-center space-x-3 xl:space-x-4 text-center md:text-left">
-                <small className="text-xs font-bold text-gray-800">
+                <small className="text-xs font-medium xl:font-bold text-gray-800">
                   {stasiunBerangkat}, {kotaBerangkat}
                 </small>
                 <div className="bg-blue-500 p-1 rounded-full">
@@ -460,19 +460,19 @@ export default function Search() {
                     size={16}
                   />
                 </div>
-                <small className="text-xs font-bold text-gray-800">
+                <small className="text-xs font-medium xl:font-bold text-gray-800">
                   {stasiunTujuan}, {kotaTujuan}
                 </small>
                 <div className="hidden md:block font-normal text-gray-800">
                   |
                 </div>
-                <small className="hidden md:block text-xs font-bold text-gray-800">
+                <small className="hidden md:block text-xs font-medium xl:font-bold text-gray-800">
                   {tanggal_keberangkatan_kereta}
                 </small>
                 <div className="hidden md:block font-normal text-gray-800">
                   |
                 </div>
-                <small className="hidden md:block text-xs font-bold text-gray-800">
+                <small className="hidden md:block text-xs font-medium xl:font-bold text-gray-800">
                   {parseInt(adult) + parseInt(infant)} Penumpang
                 </small>
               </div>
@@ -495,7 +495,7 @@ export default function Search() {
               </div>
             ) : null}
             <div className="flex justify-between mt-6">
-              <div className="relative flex items-center space-x-2 text-gray-800 text-xs font-bold">
+              <div className="relative flex items-center space-x-2 text-gray-800 text-xs font-medium xl:font-bold">
               <Whisper
                 placement="top"
                 trigger="active"
@@ -533,7 +533,7 @@ export default function Search() {
               </Whisper>
               </div>
               <div>
-                {/* <div className="flex space-x-2 items-center p-4 px-4 md:px-4 mr-0 xl:mr-16 text-gray-500 rounded-md text-xs font-bold">
+                {/* <div className="flex space-x-2 items-center p-4 px-4 md:px-4 mr-0 xl:mr-16 text-gray-800 rounded-md text-xs font-medium xl:font-bold">
                   <div>URUTKAN</div>
                   <MdOutlineKeyboardArrowDown />
                 </div> */}
@@ -570,7 +570,7 @@ export default function Search() {
                       <div className="hidden xl:block w-full text-gray-700 ">
                         <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                           <div className="col-span-1 xl:col-span-2">
-                            <h1 className="text-sm font-bold">
+                            <h1 className="text-sm font-medium xl:font-bold">
                               {e.trainName}{" "}
                             </h1>
                             <small>
@@ -584,7 +584,7 @@ export default function Search() {
                           </div>
                           <div className="flex">
                             <div className="">
-                              <h1 className="mt-4 xl:mt-0 text-sm font-bold">
+                              <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold">
                                 {e.departureTime}
                               </h1>
                               <small>
@@ -594,7 +594,7 @@ export default function Search() {
                             <HiOutlineArrowNarrowRight size={24} />
                           </div>
                           <div>
-                            <h1 className="text-sm font-bold">
+                            <h1 className="text-sm font-medium xl:font-bold">
                               {e.arrivalTime}
                             </h1>
                             <small>
@@ -602,13 +602,13 @@ export default function Search() {
                             </small>
                           </div>
                           <div>
-                            <h1 className="mt-4 xl:mt-0 text-sm font-bold">
+                            <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold">
                               {e.duration}
                             </h1>
                             <small>Langsung</small>
                           </div>
                           <div className="">
-                            <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">
+                            <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold text-blue-500">
                               Rp.{toRupiah(e.seats[0].priceAdult)}
                             </h1>
                             <small className="text-red-500">
@@ -646,7 +646,7 @@ export default function Search() {
                           <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                             <div className="flex justify-between">
                               <div className="col-span-1 xl:col-span-2">
-                                <h1 className="text-xs font-bold">
+                                <h1 className="text-xs font-medium xl:font-bold">
                                   {e.trainName}
                                 </h1>
                                 <small>
@@ -659,7 +659,7 @@ export default function Search() {
                                 </small>
                               </div>
                               <div className="text-right">
-                                <h1 className="text-xs font-bold text-blue-500">
+                                <h1 className="text-xs font-medium xl:font-bold text-blue-500">
                                   Rp. {toRupiah(e.seats[0].priceAdult)}
                                 </h1>
                                 <small className="text-red-500">
@@ -673,28 +673,28 @@ export default function Search() {
                             <div className="flex justify-start">
                               <div className="flex space-x-2 items-start">
                                 <div>
-                                  <h1 className="mt-10 xl:mt-0 text-xs font-bold">
+                                  <h1 className="mt-10 xl:mt-0 text-xs font-medium xl:font-bold">
                                     {e.departureTime}
                                   </h1>
-                                  <small className="text-gray-400">
+                                  <small className="text-gray-800">
                                     {origin}
                                   </small>
                                 </div>
                                 <div className="w-full mt-12 px-4 border-b-2"></div>
                                 <div className="text-xs">
-                                  <h1 className="text-xs mt-10 xl:mt-0 text-gray-400">
+                                  <div className="text-xs mt-10 xl:mt-0 text-gray-800">
                                     {e.duration}
-                                  </h1>
-                                  <small className="text-gray-400">
+                                  </div>
+                                  <small className="text-gray-800">
                                     Langsung
                                   </small>
                                 </div>
                                 <div className="w-full mt-12 px-4 border-b-2"></div>
                                 <div>
-                                  <h1 className="mt-10 xl:mt-0 text-xs font-bold">
+                                  <h1 className="mt-10 xl:mt-0 text-xs font-medium xl:font-bold">
                                     {e.arrivalTime}
                                   </h1>
-                                  <small className="text-gray-400">
+                                  <small className="text-gray-800">
                                     {destination}
                                   </small>
                                 </div>
@@ -713,9 +713,9 @@ export default function Search() {
                   <img src={"/nodata.jpg"} width={350} alt="nodata" />
                 </div>
                 <div className="flex justify-center w-full text-gray-700">
-                  <div className="text-gray-500 text-center">
+                  <div className="text-gray-800 text-center">
                     <div>
-                      <div className="text-lg font-bold">
+                      <div className="text-lg font-medium xl:font-bold">
                         Maaf, sepertinya rute ini belum dibuka kembali
                       </div>
                       <small>

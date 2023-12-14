@@ -289,7 +289,7 @@ export default function Pembayaran() {
                         <>
                           <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                             <div className="mt-4">
-                              <div className="px-2 py-2 text-gray-900 border-b border-gray-200 text-sm font-medium xl:font-bold">
+                              <div className="px-2 py-2 text-gray-800 border-b border-gray-200 text-sm font-medium xl:font-bold">
                                 {e.nama_depan} {e.nama_belakang}
                               </div>
                               <div className="grid grid-cols-2 mt-2">
@@ -335,7 +335,7 @@ export default function Pembayaran() {
                         <>
                           <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                             <div className="mt-4">
-                              <div className="px-2 py-2 text-gray-900 border-b border-gray-200 text-sm font-medium xl:font-bold">
+                              <div className="px-2 py-2 text-gray-800 border-b border-gray-200 text-sm font-medium xl:font-bold">
                                 {e.nama_depan} {e.nama_belakang}
                               </div>
                               <div className="flex space-x-8 mt-2 items-center">
@@ -368,7 +368,7 @@ export default function Pembayaran() {
                         <>
                           <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                             <div className="mt-4">
-                              <div className="px-2 py-2 text-gray-900 border-b border-gray-200 text-sm font-medium xl:font-bold">
+                              <div className="px-2 py-2 text-gray-800 border-b border-gray-200 text-sm font-medium xl:font-bold">
                                 {e.nama_depan} {e.nama_belakang}
                               </div>
                               <div className="mt-2 flex space-x-8">
@@ -396,7 +396,7 @@ export default function Pembayaran() {
                     : ""}
                   <div className="p-4 mt-2 w-full rounded-md border border-gray-200 shadow-sm">
                     <div className="mt-4">
-                      <div className="text-xs text-gray-900 font-medium xl:font-bold flex justify-between">
+                      <div className="text-xs text-gray-800 font-medium xl:font-bold flex justify-between">
                         <div>
                           {dataDetail && dataDetail.airlineName}{" "}
                           {TotalAdult > 0 ? `(Adults) x${TotalAdult}` : ""}{" "}
@@ -407,14 +407,14 @@ export default function Pembayaran() {
                           Rp. {toRupiah(hasilBooking && hasilBooking.nominal)}
                         </div>
                       </div>
-                      <div className="mt-4 text-xs text-gray-900 font-medium xl:font-bold flex justify-between">
+                      <div className="mt-4 text-xs text-gray-800 font-medium xl:font-bold flex justify-between">
                         <div>Biaya Admin (Fee)</div>
                         <div>
                           Rp.{" "}
                           {toRupiah(hasilBooking && hasilBooking.nominalAdmin)}
                         </div>
                       </div>
-                      <div className="mt-8 pt-2 border-t border-gray-200 text-sm text-gray-900 font-medium xl:font-bold flex justify-between">
+                      <div className="mt-8 pt-2 border-t border-gray-200 text-sm text-gray-800 font-medium xl:font-bold flex justify-between">
                         <div>Total Harga</div>
                         <div>
                           Rp.{" "}

@@ -304,13 +304,13 @@ export default function Search() {
         <>
           <>
             {contextHolder}
-            <div className="judul-search font-medium xl:font-bold text-gray-800">
+            <div className="judul-search font-bold text-gray-800">
               PILIH JADWAL
             </div>
             <div className="mt-8">
               <div className="flex flex-col md:flex-row md:justify-between items-center md:space-x-4">
                 <div className="flex items-center space-x-3 text-center md:text-left">
-                  <small className="text-xs font-bold text-slate-600">
+                  <small className="text-xs font-medium xl:font-bold text-slate-600">
                     {originName}
                   </small>
                   <div className="bg-blue-500 p-1 rounded-full">
@@ -319,7 +319,7 @@ export default function Search() {
                       size={16}
                     />
                   </div>
-                  <small className="text-xs font-bold text-slate-600">
+                  <small className="text-xs font-medium xl:font-bold text-slate-600">
                     {destinationName}
                   </small>
                   <div className="hidden md:block font-normal text-slate-600">
@@ -401,7 +401,7 @@ export default function Search() {
                                 <div className="hidden xl:block w-full text-gray-700 ">
                                   <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-8 gap-0 md:gap-4">
                                     <div className="col-span-1 xl:col-span-2">
-                                      <h1 className="text-sm font-bold">
+                                      <h1 className="text-sm font-medium xl:font-bold">
                                         {e.SHIP_NAME}{" "}
                                       </h1>
                                       <div>
@@ -418,7 +418,7 @@ export default function Search() {
                                     </div>
                                     <div className="flex">
                                       <div className="">
-                                        <h1 className="mt-4 xl:mt-0 text-sm font-bold">{`${e.DEP_TIME.slice(
+                                        <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold">{`${e.DEP_TIME.slice(
                                           0,
                                           2
                                         )}:${e.DEP_TIME.slice(2)}`}</h1>
@@ -427,14 +427,14 @@ export default function Search() {
                                     </div>
                                     <HiOutlineArrowNarrowRight size={24} />
                                     <div>
-                                      <h1 className="text-sm font-bold">{`${e.ARV_TIME.slice(
+                                      <h1 className="text-sm font-medium xl:font-bold">{`${e.ARV_TIME.slice(
                                         0,
                                         2
                                       )}:${e.ARV_TIME.slice(2)}`}</h1>
                                       <small>{destinationName}</small>
                                     </div>
                                     <div>
-                                      <h1 className="mt-4 xl:mt-0 text-sm font-bold">
+                                      <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold">
                                         {duration(
                                           e.DEP_DATE,
                                           e.ARV_DATE,
@@ -445,7 +445,7 @@ export default function Search() {
                                       <small>Langsung</small>
                                     </div>
                                     <div className="">
-                                      <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">
+                                      <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold text-blue-500">
                                       Adult Rp.
                                         {toRupiah(e.fares[i].FARE_DETAIL.A.TOTAL)}
                                       </h1>
@@ -467,7 +467,7 @@ export default function Search() {
                                             type="button"
                                             class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2"
                                           >
-                                            <div className="text-white font-bold">
+                                            <div className="text-white font-medium xl:font-bold">
                                               PILIH
                                             </div>
                                           </button>
@@ -488,7 +488,7 @@ export default function Search() {
                                   {openButton === `open-${k + i}${e.SHIP_NO}` ? (
                                     <div className={`hidden xl:block transition-all ease-in-out duration-500 ${openButton === `open-${k + i}${e.SHIP_NO}` ? 'max-h-96' : 'max-h-0'} overflow-hidden`}>
                                       <div className="px-4 mt-4">
-                                        <div className="mb-2 text-sm font-bold">
+                                        <div className="mb-2 text-sm font-medium xl:font-bold">
                                           Tanggal Keberangkatan
                                         </div>
                                         <div className="block mb-16">
@@ -501,7 +501,7 @@ export default function Search() {
                                               ))}
                                             </Timeline>
                                           </div>
-                                        <div className="mb-2 text-sm font-bold">
+                                        <div className="mb-2 text-sm font-medium xl:font-bold">
                                           Tanggal Tujuan
                                         </div>
                                         <div className="flex justify-start items-end">
@@ -521,7 +521,7 @@ export default function Search() {
                                     <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                                       <div className="flex justify-between">
                                         <div className="col-span-1 xl:col-span-2">
-                                          <h1 className="text-xs font-bold">
+                                          <h1 className="text-xs font-medium xl:font-bold">
                                             {e.SHIP_NAME}
                                           </h1>
                                           <div>
@@ -537,7 +537,7 @@ export default function Search() {
                                           </div>
                                         </div>
                                         <div className="text-right">
-                                          <h1 className="text-xs font-bold text-blue-500">
+                                          <h1 className="text-xs font-medium xl:font-bold text-blue-500">
                                             Adult Rp.
                                             {toRupiah(
                                               e.fares[0].FARE_DETAIL.A.TOTAL
@@ -554,17 +554,17 @@ export default function Search() {
                                       <div className="flex justify-start">
                                         <div className="flex space-x-2 items-start">
                                           <div>
-                                            <h1 className="mt-10 xl:mt-0 text-xs font-bold">{`${e.DEP_TIME.slice(
+                                            <h1 className="mt-10 xl:mt-0 text-xs font-medium xl:font-bold">{`${e.DEP_TIME.slice(
                                               0,
                                               2
                                             )}:${e.DEP_TIME.slice(2)}`}</h1>
-                                            <small className="text-gray-400">
+                                            <small className="text-gray-800">
                                               {originName}
                                             </small>
                                           </div>
                                           <div className="w-full mt-12 px-4 border-b-2"></div>
                                           <div className="text-xs">
-                                            <h1 className="text-xs mt-10 xl:mt-0 text-gray-400">
+                                            <h1 className="text-xs mt-10 xl:mt-0 text-gray-800">
                                               {duration(
                                                 e.DEP_DATE,
                                                 e.ARV_DATE,
@@ -572,24 +572,24 @@ export default function Search() {
                                                 e.ARV_TIME
                                               )}
                                             </h1>
-                                            <small className="text-gray-400">
+                                            <small className="text-gray-800">
                                               Langsung
                                             </small>
                                           </div>
                                           <div className="w-full mt-12 px-4 border-b-2"></div>
                                           <div>
-                                            <h1 className="mt-10 xl:mt-0 text-xs font-bold">{`${e.ARV_TIME.slice(
+                                            <h1 className="mt-10 xl:mt-0 text-xs font-medium xl:font-bold">{`${e.ARV_TIME.slice(
                                               0,
                                               2
                                             )}:${e.ARV_TIME.slice(2)}`}</h1>
-                                            <small className="text-gray-400">
+                                            <small className="text-gray-800">
                                               {destinationName}
                                             </small>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
-                                    <div className="flex justify-center text-xs mt-2 text-blue-500 cursor-pointer text-center items-center mb-2" 
+                                    <div className="flex justify-center text-xs mt-2 text-blue-500 cursor-pointer text-center items-center mb-2 font-bold"  
                                       onClick={(event) =>{
                                         event.stopPropagation();
                                         openButton == `open-${k + i}${e.SHIP_NO}`
@@ -603,7 +603,7 @@ export default function Search() {
                                   {openButton === `open-${k + i}${e.SHIP_NO}` ? (
                                     <div className={`block xl:hidden transition-all ease-in-out duration-500 ${openButton === `open-${k + i}${e.SHIP_NO}` ? 'max-h-96' : 'max-h-0'} overflow-hidden`}>
                                       <div className="px-4 mt-4">
-                                        <div className="mb-2 text-xs font-bold">
+                                        <div className="mb-2 text-xs font-medium xl:font-bold">
                                           Tanggal Keberangkatan
                                         </div>
                                         <div className="block mb-8">
@@ -616,7 +616,7 @@ export default function Search() {
                                               ))}
                                             </Timeline>
                                           </div>
-                                        <div className="-mt-8 text-xs font-bold">
+                                        <div className="-mt-8 text-xs font-medium xl:font-bold">
                                           Tanggal Tujuan
                                         </div>
                                         <div className="flex justify-start items-end">
@@ -664,7 +664,7 @@ export default function Search() {
                                 <div className="hidden xl:block w-full text-gray-700 ">
                                   <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-8 gap-0 md:gap-4">
                                     <div className="col-span-1 xl:col-span-2">
-                                      <h1 className="text-sm font-bold">
+                                      <h1 className="text-sm font-medium xl:font-bold">
                                         {e.SHIP_NAME}{" "}
                                       </h1>
                                       <div>
@@ -681,7 +681,7 @@ export default function Search() {
                                     </div>
                                     <div className="flex">
                                       <div className="">
-                                        <h1 className="mt-4 xl:mt-0 text-sm font-bold">{`${e.DEP_TIME.slice(
+                                        <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold">{`${e.DEP_TIME.slice(
                                           0,
                                           2
                                         )}:${e.DEP_TIME.slice(2)}`}</h1>
@@ -690,14 +690,14 @@ export default function Search() {
                                     </div>
                                     <HiOutlineArrowNarrowRight size={24} />
                                     <div>
-                                      <h1 className="text-sm font-bold">{`${e.ARV_TIME.slice(
+                                      <h1 className="text-sm font-medium xl:font-bold">{`${e.ARV_TIME.slice(
                                         0,
                                         2
                                       )}:${e.ARV_TIME.slice(2)}`}</h1>
                                       <small>{destinationName}</small>
                                     </div>
                                     <div>
-                                      <h1 className="mt-4 xl:mt-0 text-sm font-bold">
+                                      <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold">
                                         {duration(
                                           e.DEP_DATE,
                                           e.ARV_DATE,
@@ -708,7 +708,7 @@ export default function Search() {
                                       <small>Langsung</small>
                                     </div>
                                     <div className="">
-                                      <h1 className="mt-4 xl:mt-0 text-sm font-bold text-blue-500">
+                                      <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold text-blue-500">
                                         Adult Rp.
                                         {toRupiah(e.fares[i].FARE_DETAIL.A.TOTAL)}
                                       </h1>
@@ -750,7 +750,7 @@ export default function Search() {
                                     <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                                       <div className="flex justify-between">
                                         <div className="col-span-1 xl:col-span-2">
-                                          <h1 className="text-xs font-bold">
+                                          <h1 className="text-xs font-medium xl:font-bold">
                                             {e.SHIP_NAME}
                                           </h1>
                                           <small>
@@ -759,7 +759,7 @@ export default function Search() {
                                           </small>
                                         </div>
                                         <div className="text-right">
-                                          <h1 className="text-xs font-bold text-blue-500">
+                                          <h1 className="text-xs font-medium xl:font-bold text-blue-500">
                                             Adult Rp.
                                             {toRupiah(
                                               e.fares[0].FARE_DETAIL.A.TOTAL
@@ -776,17 +776,17 @@ export default function Search() {
                                       <div className="flex justify-start">
                                         <div className="flex space-x-2 items-start">
                                           <div>
-                                            <h1 className="mt-10 xl:mt-0 text-xs font-bold">{`${e.DEP_TIME.slice(
+                                            <h1 className="mt-10 xl:mt-0 text-xs font-medium xl:font-bold">{`${e.DEP_TIME.slice(
                                               0,
                                               2
                                             )}:${e.DEP_TIME.slice(2)}`}</h1>
-                                            <small className="text-gray-400">
+                                            <small className="text-gray-800">
                                               {originName}
                                             </small>
                                           </div>
                                           <div className="w-full mt-12 px-4 border-b-2"></div>
                                           <div className="text-xs">
-                                            <h1 className="text-xs mt-10 xl:mt-0 text-gray-400">
+                                            <h1 className="text-xs mt-10 xl:mt-0 text-gray-800">
                                               {duration(
                                                 e.DEP_DATE,
                                                 e.ARV_DATE,
@@ -794,24 +794,24 @@ export default function Search() {
                                                 e.ARV_TIME
                                               )}
                                             </h1>
-                                            <small className="text-gray-400">
+                                            <small className="text-gray-800">
                                               Langsung
                                             </small>
                                           </div>
                                           <div className="w-full mt-12 px-4 border-b-2"></div>
                                           <div>
-                                            <h1 className="mt-10 xl:mt-0 text-xs font-bold">{`${e.ARV_TIME.slice(
+                                            <h1 className="mt-10 xl:mt-0 text-xs font-medium xl:font-bold">{`${e.ARV_TIME.slice(
                                               0,
                                               2
                                             )}:${e.ARV_TIME.slice(2)}`}</h1>
-                                            <small className="text-gray-400">
+                                            <small className="text-gray-800">
                                               {destinationName}
                                             </small>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
-                                    <div className="flex justify-center text-xs mt-2 text-blue-500 cursor-pointer text-center items-center mb-2" 
+                                    <div className="flex justify-center text-xs mt-2 text-blue-500 cursor-pointer text-center items-center mb-2 font-bold" 
                                       onClick={(event) =>{
                                         event.stopPropagation();
                                         openButton == `open-${k + i}${e.SHIP_NO}`
@@ -825,7 +825,7 @@ export default function Search() {
                                       {openButton === `open-${k + i}${e.SHIP_NO}` ? (
                                     <div className={`block xl:hidden transition-all ease-in-out duration-500 ${openButton === `open-${k + i}${e.SHIP_NO}` ? 'max-h-96' : 'max-h-0'} overflow-hidden`}>
                                       <div className="px-4 mt-4">
-                                        <div className="mb-2 text-xs font-bold">
+                                        <div className="mb-2 text-xs font-medium xl:font-bold">
                                           Tanggal Keberangkatan
                                         </div>
                                         <div className="block mb-8">
@@ -838,7 +838,7 @@ export default function Search() {
                                               ))}
                                             </Timeline>
                                           </div>
-                                        <div className="-mt-8 text-xs font-bold">
+                                        <div className="-mt-8 text-xs font-medium xl:font-bold">
                                           Tanggal Tujuan
                                         </div>
                                         <div className="flex justify-start items-end">
@@ -867,7 +867,7 @@ export default function Search() {
                     <img src={"/nodata.jpg"} width={350} alt="nodata" />
                   </div>
                   <div className="flex justify-center w-full text-gray-700">
-                    <div className="text-gray-500 text-center">
+                    <div className="text-gray-800 text-center">
                       <div>
                         <div className="text-xl font-semibold">
                           Maaf, sepertinya rute ini belum dibuka kembali
