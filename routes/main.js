@@ -164,6 +164,7 @@ Router.post('/travel/app/sign_in', async function (req, res) {
   }
 });
 
+
 Router.post('/travel/app/account', async function (req, res) {
   const { token } = req.body;
   logger.info(`Request /travel/app/account: ${JSON.stringify(req.body)}`);
@@ -183,6 +184,7 @@ Router.post('/travel/app/account', async function (req, res) {
     });
   }
 });
+
 
 Router.post('/travel/refresh-date', async function (req, res) {
   const { token } = req.body;
@@ -243,6 +245,7 @@ Router.post('/travel/refresh-date', async function (req, res) {
   }
 });
 
+
 Router.post('/travel/app/sign_out', async function (req, res) {
   const { token } = req.body;
   const data = req.body;
@@ -266,12 +269,13 @@ Router.post('/travel/app/sign_out', async function (req, res) {
   }
 });
 
-//get country
+
 Router.get('/travel/country', (req, res) => {
 
   return res.status(200).json(country);
 
-})
+});
+
 
 Router.post('/travel/app/transaction_list', async function (req, res) {
   const { token, product } = req.body;
@@ -293,6 +297,7 @@ Router.post('/travel/app/transaction_list', async function (req, res) {
     });
   }
 });
+
 
 Router.post('/travel/app/transaction_book_list', async function (req, res) {
   const { token, product } = req.body;

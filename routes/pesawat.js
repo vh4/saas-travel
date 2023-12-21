@@ -79,53 +79,53 @@ Router.post('/travel/flight/fare', async function (req, res) {
 });
 
 //insert data search to session storage.
-Router.post('/travel/pesawat/search/flight', AuthLogin, apiLimiter, async (req, res) => {
-	const data = req.body;
+// Router.post('/travel/pesawat/search/flight', AuthLogin, apiLimiter, async (req, res) => {
+// 	const data = req.body;
 	
-	if(typeof data == 'object'){
-		logger.info(`INSERT SESSION /travel/pesawat/search/_flight: ${JSON.stringify(data)}`);
+// 	if(typeof data == 'object'){
+// 		logger.info(`INSERT SESSION /travel/pesawat/search/_flight: ${JSON.stringify(data)}`);
 
-    const uuid = uuidv4();
-		req.session[uuid] = data;
+//     const uuid = uuidv4();
+// 		req.session[uuid] = data;
 
-		return res.send({
-			uuid:uuid,
-			rc:'00',
-			rd:'success'
-		})
+// 		return res.send({
+// 			uuid:uuid,
+// 			rc:'00',
+// 			rd:'success'
+// 		})
 
-	}else{
-		return res.send({
-			rc:'03',
-			rd:'Data yang anda berikan salah.'
-		})
-	}
+// 	}else{
+// 		return res.send({
+// 			rc:'03',
+// 			rd:'Data yang anda berikan salah.'
+// 		})
+// 	}
 
-});
+// });
 
 
 //select data search for booking to session storage.
-Router.get('/travel/pesawat/search/flight/:id', AuthLogin, async (req, res) => {
-  const uuid = req.params.id;
-  logger.info(`PARAMS /travel/pesawat/search/flight/:id: ${uuid}`);
+// Router.get('/travel/pesawat/search/flight/:id', AuthLogin, async (req, res) => {
+//   const uuid = req.params.id;
+//   logger.info(`PARAMS /travel/pesawat/search/flight/:id: ${uuid}`);
 
-  const data = req.session[uuid];
+//   const data = req.session[uuid];
 
-  if (data) {
-    logger.info(`GETTING DATA SESSION /travel/pesawat/search/flight/:id: ${JSON.stringify(data)}`);
-    return res.send({
-      rc: '00',
-      rd: 'success',
-      ...data
-    });
+//   if (data) {
+//     logger.info(`GETTING DATA SESSION /travel/pesawat/search/flight/:id: ${JSON.stringify(data)}`);
+//     return res.send({
+//       rc: '00',
+//       rd: 'success',
+//       ...data
+//     });
 
-  } else {
-    return res.send({
-      rc: '03',
-      rd: 'ID tidak ditemukan.'
-    })
-  }
-});
+//   } else {
+//     return res.send({
+//       rc: '03',
+//       rd: 'ID tidak ditemukan.'
+//     })
+//   }
+// });
 
 Router.post('/travel/flight/book', apiLimiterKhususBooking, async function (req, res) {
   const data = req.body;
@@ -154,52 +154,52 @@ Router.post('/travel/flight/book', apiLimiterKhususBooking, async function (req,
 });
 
 //insert data book to session storage.
-Router.post('/travel/pesawat/book/flight', AuthLogin, apiLimiter, async (req, res) => {
-	const data = req.body;
+// Router.post('/travel/pesawat/book/flight', AuthLogin, apiLimiter, async (req, res) => {
+// 	const data = req.body;
 	
-	if(typeof data == 'object'){
-		logger.info(`INSERT SESSION /travel/pesawat/book/flight: ${JSON.stringify(data)}`);
+// 	if(typeof data == 'object'){
+// 		logger.info(`INSERT SESSION /travel/pesawat/book/flight: ${JSON.stringify(data)}`);
 
-    const uuid = uuidv4();
-		req.session[uuid] = data;
+//     const uuid = uuidv4();
+// 		req.session[uuid] = data;
 
-		return res.send({
-			uuid:uuid,
-			rc:'00',
-			rd:'success'
-		})
+// 		return res.send({
+// 			uuid:uuid,
+// 			rc:'00',
+// 			rd:'success'
+// 		})
 
-	}else{
-		return res.send({
-			rc:'03',
-			rd:'Data yang anda berikan salah.'
-		})
-	}
+// 	}else{
+// 		return res.send({
+// 			rc:'03',
+// 			rd:'Data yang anda berikan salah.'
+// 		})
+// 	}
 
-});
+// });
 
 //select data booking for booking to session storage.
-Router.get('/travel/pesawat/book/flight/:id', AuthLogin, async (req, res) => {
-  const uuid = req.params.id;
-  logger.info(`PARAMS /travel/pesawat/book/flight/:id: ${uuid}`);
+// Router.get('/travel/pesawat/book/flight/:id', AuthLogin, async (req, res) => {
+//   const uuid = req.params.id;
+//   logger.info(`PARAMS /travel/pesawat/book/flight/:id: ${uuid}`);
 
-  const data = req.session[uuid];
+//   const data = req.session[uuid];
 
-  if (data) {
-    logger.info(`GETTING DATA SESSION /travel/pesawat/book/flight/:id: ${JSON.stringify(data)}`);
-    return res.send({
-      rc: '00',
-      rd: 'success',
-      ...data
-    });
+//   if (data) {
+//     logger.info(`GETTING DATA SESSION /travel/pesawat/book/flight/:id: ${JSON.stringify(data)}`);
+//     return res.send({
+//       rc: '00',
+//       rd: 'success',
+//       ...data
+//     });
 
-  } else {
-    return res.send({
-      rc: '03',
-      rd: 'ID tidak ditemukan.'
-    })
-  }
-});
+//   } else {
+//     return res.send({
+//       rc: '03',
+//       rd: 'ID tidak ditemukan.'
+//     })
+//   }
+// });
 
 
 Router.post('/travel/flight/payment', async function (req, res) {
