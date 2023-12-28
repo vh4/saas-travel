@@ -100,9 +100,9 @@ export default function BookingPesawat() {
     });
   };
 
-  const SuccessNotification = (rd) => {
-    api["success"]({
-      message: "Success!",
+  const WarningNotification = (rd) => {
+    api["warning"]({
+      message: "Warning!",
       description:
         rd.toLowerCase().charAt(0).toUpperCase() +
         rd.slice(1).toLowerCase() +
@@ -501,9 +501,11 @@ useEffect(() => {
         
       }else{
 
-        SuccessNotification(
-          `Response callback is : ${typeof bookingResponse.data.callback === 'object' ? JSON.stringify(bookingResponse.data.callback) : bookingResponse.data.callback}`
-        );
+        // SuccessNotification(
+        //   `Response callback is : ${typeof bookingResponse.data.callback === 'object' ? JSON.stringify(bookingResponse.data.callback) : bookingResponse.data.callback}`
+        // );
+
+        navigate('/');
         
       }
 

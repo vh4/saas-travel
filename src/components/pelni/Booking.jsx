@@ -457,9 +457,11 @@ export default function BookingPelni() {
             
           }else{
     
-            SuccessNotification(
-              `Response callback is : ${typeof response.data.callback === 'object' ? JSON.stringify(response.data.callback) : response.data.callback}`
-            );
+            // SuccessNotification(
+            //   `Response callback is : ${typeof response.data.callback === 'object' ? JSON.stringify(response.data.callback) : response.data.callback}`
+            // );
+
+            navigate(`/`);
             
           }
 

@@ -300,20 +300,35 @@ export default function BookingKai() {
       ));
       ///
 
+      navigate({
+        pathname: `/train/konfirmasi`,
+        search: `?k_train=${id}&k_book=${uuid}`,
+      });
+
       if(response.data.callback === null) {
-          
-        navigate({
-            pathname: `/train/konfirmasi`,
-            search: `?k_train=${id}&k_book=${uuid}`,
-          });
-        
+
+        localStorage.setItem('callback_train', false);
+
       }else{
 
-        SuccessNotification(
-          `Response callback is : ${typeof response.data.callback === 'object' ? JSON.stringify(response.data.callback) : response.data.callback}`
-        );
-        
+        localStorage.setItem('callback_train', true);
+
       }
+
+      // if(response.data.callback === null) {
+          
+      //   navigate({
+      //       pathname: `/train/konfirmasi`,
+      //       search: `?k_train=${id}&k_book=${uuid}`,
+      //     });
+        
+      // }else{
+
+      //   SuccessNotification(
+      //     `Response callback is : ${typeof response.data.callback === 'object' ? JSON.stringify(response.data.callback) : response.data.callback}`
+      //   );
+        
+      // }
 
 
       // if (uuid_hasilBooking.data.rc == "00") {

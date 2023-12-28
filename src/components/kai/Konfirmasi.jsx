@@ -307,6 +307,8 @@ export default function Konfirmasi() {
 
   const uuid_book = searchParams.get("k_book");
   const uuid_train_data = searchParams.get("k_train");
+  const callback_train = localStorage.getItem('callback_train') || null;
+  
   // const uuid_auth = searchParams.get("k_auth");
 
   const [dataBookingTrain, setdataBookingTrain] = useState(null);
@@ -503,16 +505,46 @@ export default function Konfirmasi() {
     
   }
 
-  const handlerKonfirmasi = (e) => {
+  const handlerKonfirmasi = async (e) => {
+
     setIsLoading(true);
-    e.preventDefault();
-    setTimeout(() => {
+
+    if(callback_train){
+
+      setTimeout(async () => {
+        
+        const dataParse = JSON.parse(localStorage.getItem(`data:k-book/${uuid_book}`))
+
+        const response = await axios.post(
+          `${process.env.REACT_APP_HOST_API}/travel/train/callback`,
+          {
+            id_transaksi:dataParse.hasil_book.transactionId
+          }
+        );
+
+      if(response.data.rc == '00'){
+        navigate('/')
+      }else{
+        failedNotification(response.data.rd)
+      }
+
       setIsLoading(false);
-      navigate({
-        pathname: `/train/bayar`,
-        search: `?k_train=${uuid_train_data}&k_book=${uuid_book}`,
-      });
-    }, 100);
+
+      }, 100);
+
+      
+    }else{
+      e.preventDefault();
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate({
+          pathname: `/train/bayar`,
+          search: `?k_train=${uuid_train_data}&k_book=${uuid_book}`,
+        });
+      }, 100);
+
+    }
+    
   };  
 
   console.log(changeState);
