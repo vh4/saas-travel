@@ -81,67 +81,94 @@ seats.forEach((seat) => {
 
           setSelectedCheckboxes(handlersetSelectedCheckboxes(selectedCheckboxes));
           console.log(handlersetSelectedCheckboxes(selectedCheckboxes))
+
+          const changeStateData = changeState[0];
+          const tolong = handlersetSelectedCheckboxes(selectedCheckboxes);
+
+          const splittingSeat = tolong[selectedCount].split("-");
+          changeStateData[selectedCount].row = parseInt(splittingSeat[0]);
+          changeStateData[selectedCount].type = "adult";
+          changeStateData[selectedCount].column = splittingSeat[1];
+          changeStateData[selectedCount].wagonNumber = parseInt(splittingSeat[2]);
+
+          setChangeSet([changeStateData]);
+
         }
     else {
           alert('Melebihi jumlah penumpang.')
           e.target.checked = false;
-    }
+        }
       } else {
         setSelectedCount(selectedCount - 1);
         setgerbongsamawajib(gerbongsamawajib - 1);
 
-        setSelectedCheckboxes((prevSelectedCheckboxes) => {
+        const updateSelectedCheckboxes = (prevSelectedCheckboxes, row, cols, clickSeatsData) => {
           if (
             prevSelectedCheckboxes.includes(
               `${row}-${cols}-${parseInt(clickSeatsData) + 1}`
             )
           ) {
-            // return prevSelectedCheckboxes.filter(
-            //   (checkbox) =>
-            //     checkbox !== `${row}-${cols}-${parseInt(clickSeatsData) + 1}`
-            // );
-
             return prevSelectedCheckboxes.filter(
               (checkbox) =>
                 checkbox !== `${row}-${cols}-${parseInt(clickSeatsData) + 1}`
             );
-            
           } else {
             return [
               ...prevSelectedCheckboxes,
               `${row}-${cols}-${parseInt(clickSeatsData) + 1}`,
             ];
           }
-        });
+        };
+        
+        const tolong = updateSelectedCheckboxes(
+          selectedCheckboxes,
+          row,
+          cols,
+          clickSeatsData
+        );
+        
+        setSelectedCheckboxes(tolong);
+
+        const changeStateData = changeState[0];
+
+        const splittingSeat = tolong[selectedCount].split("-");
+        changeStateData[selectedCount].row = parseInt(splittingSeat[0]);
+        changeStateData[selectedCount].type = "adult";
+        changeStateData[selectedCount].column = splittingSeat[1];
+        changeStateData[selectedCount].wagonNumber = parseInt(splittingSeat[2]);
+
+        setChangeSet([changeStateData]);
+        
+
       }
   };
 
 
-  useEffect(() => {
-    let changeStateData = changeState[0];
-    if (limit === selectedCount) {
-      for (let i = 0; i < limit; i++) {
-        if (
-          selectedCheckboxes[i] !== null &&
-          selectedCheckboxes[i] !== undefined
-        ) {
-          let splittingSeat = selectedCheckboxes[i].split("-");
+  // useEffect(() => {
+  //   let changeStateData = changeState[0];
+  //   if (limit === selectedCount) {
+  //     for (let i = 0; i < limit; i++) {
+  //       if (
+  //         selectedCheckboxes[i] !== null &&
+  //         selectedCheckboxes[i] !== undefined
+  //       ) {
+  //         let splittingSeat = selectedCheckboxes[i].split("-");
 
-          changeStateData[i].row = parseInt(splittingSeat[0]);
-          changeStateData[i].type = "adult";
-          changeStateData[i].column = splittingSeat[1];
-          changeStateData[i].wagonNumber = parseInt(splittingSeat[2]);
-        } else {
-          setSelectedCount(0);
-          setgerbongsamawajib(gerbongsamawajib - 1);
-          alert("Mohon maaf, pilih gerbong yang sama !");
-        } 
-      }
+  //         changeStateData[i].row = parseInt(splittingSeat[0]);
+  //         changeStateData[i].type = "adult";
+  //         changeStateData[i].column = splittingSeat[1];
+  //         changeStateData[i].wagonNumber = parseInt(splittingSeat[2]);
+  //       } else {
+  //         setSelectedCount(0);
+  //         setgerbongsamawajib(gerbongsamawajib - 1);
+  //         alert("Mohon maaf, pilih gerbong yang sama !");
+  //       } 
+  //     }
 
-      setChangeSet([changeStateData]);
-    }
+  //     setChangeSet([changeStateData]);
+  //   }
 
-  }, [limit, selectedCount, selectedCheckboxes]);
+  // }, [limit, selectedCount, selectedCheckboxes]);
 
   return (
     <div className="flex space-x-0 md:space-x-2 justify-center">
