@@ -63,7 +63,7 @@ Router.post('/travel/pelni/search', async (req, res) => {
   logger.info(`Request /travel/pelni/search: ${JSON.stringify(data)}`);
   try {
     const response = await makeAxiosPost(`${process.env.URL_HIT}/travel/pelni/search`, data);
-    logger.info(`Response /travel/pelni/search: ${response.data.rd}`);
+    logger.info(`Response /travel/pelni/search: ${response.data?.rd}`);
     return res.send(response);
   } catch (error) {
     logger.error(`Error /travel/pelni/search: ${error.message}`);
@@ -117,7 +117,7 @@ Router.post('/travel/pelni/search', async (req, res) => {
 // });
 
 //insert data booking to session storage.
-Router.post('/travel/pelni/book', apiLimiterKhususBooking, async (req, res) => {
+Router.post('/travel/pelni/book', AuthLogin, apiLimiterKhususBooking, async (req, res) => {
 
   try {
   

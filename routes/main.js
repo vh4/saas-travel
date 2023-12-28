@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const logger = require('../utils/logger.js');
 const { getCountry, getInfoClientAll } = require('../utils/utils.js');
+const jwt = require('jwt-decode')
 require('dotenv').config()
 
 const Router = express.Router();
@@ -80,12 +81,21 @@ Router.post('/travel/app/redirect', async function (req, res) {
             req.session['v_merchant'] = merchant;
             logger.info(`INSERTING v_merchant TO SESSION: ${merchant}`);
 
+            const dekript_token = jwt.jwtDecode(data.token);
+            logger.info(`Token dekript : ${JSON.stringify(dekript_token)}`);
+  
+            const tokenUidPin = await axios.post(`http://10.9.43.2:2023/index.php?dekrip=null`, {
+              dekrip:dekript_token.data
+            });
+  
+            logger.info(`Response [TOKEN] http://10.9.43.2:2023. data: ${tokenUidPin.data !== null && tokenUidPin.data !== '' ? '------' : 'Not Found!'}`);
+            req.session['v_session_uid_pin'] = tokenUidPin.data;
+
           }
           
           req.session['v_session'] = data.token;
           req.session['expired_session'] = expired;
           req.session['v_uname'] = splitlogin[0] || '';
-    
           logger.info(`INSERTING TOKEN TO SESSION: ${JSON.stringify(data.token)}`);
     
         }        

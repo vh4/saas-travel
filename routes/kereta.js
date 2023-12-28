@@ -177,7 +177,7 @@ Router.post('/travel/train/search', async function (req, res) { // Menambahkan a
 // });
 
 
-Router.post('/travel/train/get_seat_layout', async function (req, res) { // Menambahkan async
+Router.post('/travel/train/get_seat_layout', AuthLogin, async function (req, res) { // Menambahkan async
   try {
     const { productCode, origin, destination, date, token, trainNumber } = req.body;
 
@@ -203,7 +203,7 @@ Router.post('/travel/train/get_seat_layout', async function (req, res) { // Mena
   }
 });
 
-Router.post('/travel/train/book', apiLimiterKhususBooking, async function (req, res) { // Menambahkan async
+Router.post('/travel/train/book', AuthLogin, apiLimiterKhususBooking, async function (req, res) { // Menambahkan async
   try {
     const data = req.body;
 
@@ -242,20 +242,24 @@ Router.post('/travel/train/book', apiLimiterKhususBooking, async function (req, 
 
       logger.info(`Request URL ${url} [CALLBACK]: ${JSON.stringify(response.data.data.callbackData)}`);
 
-      
-      const sendCallbackTomerchant = await axios.post(
-        url,
-        response.data?.data?.callbackData || null // callback data for mitra.
-      );
+      // session['callback_data_booking_khusus_train'] = JSON.stringify(response.data?.data?.callbackData) || null;
 
-      if(typeof sendCallbackTomerchant.data === "object"){
-        logger.info(`Response URL ${url} [CALLBACK]: ${JSON.stringify(sendCallbackTomerchant.data)}`);
-      }else{
-        logger.info(`Response URL ${url} [CALLBACK]: ${sendCallbackTomerchant.data}`);
-      }
+      // const sendCallbackTomerchant = await axios.post(
+      //   url,
+      //   response.data?.data?.callbackData || null // callback data for mitra.
+      // );
 
-      //response untuk mitra
-      response.data['callback'] = sendCallbackTomerchant.data;
+      // if(typeof sendCallbackTomerchant.data === "object"){
+      //   logger.info(`Response URL ${url} [CALLBACK]: ${JSON.stringify(sendCallbackTomerchant.data)}`);
+      // }else{
+      //   logger.info(`Response URL ${url} [CALLBACK]: ${sendCallbackTomerchant.data}`);
+      // }
+
+      // //response untuk mitra
+      // response.data['callback'] = sendCallbackTomerchant.data;
+      // return res.send(response.data);
+
+      response.data['callback'] = JSON.stringify(response.data?.data?.callbackData) || null;
       return res.send(response.data);
 
     }else{
@@ -273,7 +277,88 @@ Router.post('/travel/train/book', apiLimiterKhususBooking, async function (req, 
   }
 });
 
-Router.post('/travel/train/payment', async function (req, res) { // Menambahkan async
+//callback khusus train.
+Router.post('/travel/train/callback', AuthLogin, apiLimiterKhususBooking, async function (req, res) { // Menambahkan async
+  
+  try {
+
+    const uidpin = req.session['v_session_uid_pin'].split('|') || [];
+    const uid = uidpin[0] || null;
+    const pin = uidpin[1] || null;
+    const method = 'cekkereta'
+    const { id_transaksi } = req.body;
+
+    //data merchant
+    const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
+    const urlCallback = parseDataKhususMerchant.url
+    const send_format = parseDataKhususMerchant.data1; //format json / text.
+
+    let getResponseGlobal = null;
+
+    if(send_format?.toUpperCase() == 'JSON'){
+
+      logger.info(`REQUEST https://rajabiller.fastpay.co.id/transaksi/api_json.php [JSON]: ${JSON.stringify({
+        method: method,
+        uid:uid,
+        pin:pin,
+        trxid:id_transaksi
+      })}`);
+
+      const url = 'https://rajabiller.fastpay.co.id/transaksi/api_json.php';
+      getResponseGlobal = await axios.get(url, {
+        method: method,
+        uid:uid,
+        pin:pin,
+        trxid:id_transaksi
+      });
+
+      logger.info(`Response /travel/train/callback : ${JSON.stringify(getResponseGlobal.data)}`);
+
+    }else{
+
+      const url = `https://rajabiller.fastpay.co.id/transaksi/api_otomax.php?method=${method}&uid=${uid}&pin=${pin}&trxid=${id_transaksi}`;
+      
+      logger.info(`REQUEST https://rajabiller.fastpay.co.id/transaksi/api_json.php [OTOMAX]: ${url}`);
+
+      getResponseGlobal = await axios.get(url);
+
+      logger.info(`Response /travel/train/callback : ${JSON.stringify(getResponseGlobal.data)}`);
+
+    }
+
+
+      logger.info(`REQUEST URL ${urlCallback} [sendCallbackTomerchant]: ${JSON.stringify(getResponseGlobal.data)}`);
+     
+      const sendCallbackTomerchant = await axios.post(
+        urlCallback,
+        getResponseGlobal.data || null
+      );
+
+      if(typeof sendCallbackTomerchant.data === "object"){
+        logger.info(`Response URL ${urlCallback} [CALLBACK]: ${JSON.stringify(sendCallbackTomerchant.data)}`);
+      }else{
+        logger.info(`Response URL ${urlCallback} [CALLBACK]: ${sendCallbackTomerchant.data}`);
+      }
+
+      const response = {
+        rc:'00',
+        rd:'success',
+        callback:sendCallbackTomerchant.data
+      }
+      return res.send(response);
+
+
+  } catch (error) {
+    
+    logger.error(`Error /travel/train/callback: ${error.message}`);
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
+
+  }
+
+
+})
+
+Router.post('/travel/train/payment', AuthLogin, async function (req, res) { // Menambahkan async
   try {
     const data = req.body;
 
@@ -308,7 +393,7 @@ Router.post('/travel/train/change_seat', async function (req, res) { // Menambah
   }
 });
 
-Router.post('/travel/train/fare', async function (req, res) { // Menambahkan async
+Router.post('/travel/train/fare', AuthLogin, async function (req, res) { // Menambahkan async
   try {
     const data = req.body;
 

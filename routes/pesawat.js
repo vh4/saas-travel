@@ -127,7 +127,7 @@ Router.post('/travel/flight/fare', async function (req, res) {
 //   }
 // });
 
-Router.post('/travel/flight/book', apiLimiterKhususBooking, async function (req, res) {
+Router.post('/travel/flight/book', AuthLogin, apiLimiterKhususBooking, async function (req, res) {
 
   try {
   
@@ -251,7 +251,7 @@ Router.post('/travel/flight/book', apiLimiterKhususBooking, async function (req,
 // });
 
 
-Router.post('/travel/flight/payment', async function (req, res) {
+Router.post('/travel/flight/payment', AuthLogin, async function (req, res) {
   const data = req.body;
   logger.info(`Request /travel/flight/payment: ${JSON.stringify(data)}`);
 
