@@ -12,7 +12,7 @@ const ExpiredLogin = () => {
           <div className="container flex flex-col md:flex-row items-center justify-center px-5 text-gray-700">
             <div className="max-w-md text-center">
               <p className="text-2xl md:text-3xl font-light leading-normal">
-                Maaf, session sudah habis.
+                Session Expired.
               </p>
               <p className="mb-8">
                 Session anda sudah expired, silahkan login kembali.

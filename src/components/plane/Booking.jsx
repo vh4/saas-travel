@@ -25,6 +25,7 @@ import ManyRequest from '../components/Manyrequest'
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { IoArrowForwardOutline } from "react-icons/io5";
 import Select from "react-select"
+import { v4 as uuidv4 } from 'uuid';
 
 export default function BookingPesawat() {
   useEffect(() => {
@@ -41,6 +42,7 @@ export default function BookingPesawat() {
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
+
   const [dataDetail, setdataDetail] = React.useState(null);
   const [dataDetailForBooking, setdataDetailForBooking] = React.useState(null);
   const [isInternational, setIsInternational] = React.useState(0);
@@ -98,6 +100,16 @@ export default function BookingPesawat() {
     });
   };
 
+  const SuccessNotification = (rd) => {
+    api["success"]({
+      message: "Success!",
+      description:
+        rd.toLowerCase().charAt(0).toUpperCase() +
+        rd.slice(1).toLowerCase() +
+        "",
+    });
+  };
+
   useEffect(() => {
     if (token === null || token === undefined) {
       setErr(true);
@@ -123,13 +135,77 @@ export default function BookingPesawat() {
     fetchData();
   }, []);
 
-  useEffect(() => {
+  // don't delete this.
+
+  // useEffect(() => {
+  //   Promise.all([getDataPesawatSearch()])
+  //     .then(([bookResponse]) => {
+
+  //       if (bookResponse.data.rc === "00") {
+  //         const dataDetailForBooking = bookResponse.data._flight_forBooking;
+  //         const dataDetail = bookResponse.data._flight;
+        
+  //         setdataDetailForBooking(dataDetailForBooking);
+  //         setIsInternational(dataDetailForBooking.isInternational)
+  //         setdataDetail(dataDetail);
+
+  //         const TotalAdult = parseInt(dataDetailForBooking.adult) || 0;
+  //         const TotalChild = parseInt(dataDetailForBooking.child) || 0;
+  //         const TotalInfant = parseInt(dataDetailForBooking.infant) || 0; //
+
+  //         SetTotalAdult(TotalAdult);
+  //         setTotalChild(TotalChild);
+  //         setTotalInfant(TotalInfant);
+
+  //         const AdultArr = Array.from({ length: TotalAdult }, () => ({
+  //           gender: "MR",
+  //           nama_depan: "",
+  //           nama_belakang: "",
+  //           birthdate: getCurrentDate(),
+  //           idNumber: "",
+  //         }));
+
+  //         const InfantArr = Array.from({ length: TotalInfant }, () => ({
+  //           gender: "MR",
+  //           nama_depan: "",
+  //           nama_belakang: "",
+  //           birthdate: getCurrentDate(),
+  //         }));
+
+  //         const ChildArr = Array.from({ length: TotalChild }, () => ({
+  //           gender: "MR",
+  //           nama_depan: "",
+  //           nama_belakang: "",
+  //           birthdate: getCurrentDate(),
+  //           idNumber: "",
+  //         }));
+
+  //         setInfant([InfantArr]);
+  //         setChild([ChildArr]);
+  //         setAdult([AdultArr]);
+  //       } else {
+  //         setErrPage(true);
+  //       }
+
+  //       setTimeout(() => {
+  //         setIsLoadingPage(false);
+        
+  //       }, 2000);
+  //     })
+  //     .catch(() => {
+  //       setIsLoadingPage(false);
+  //       setErrPage(true);
+  //     });
+  // }, [id]);
+
+
+useEffect(() => {
     Promise.all([getDataPesawatSearch()])
       .then(([bookResponse]) => {
 
-        if (bookResponse.data.rc === "00") {
-          const dataDetailForBooking = bookResponse.data._flight_forBooking;
-          const dataDetail = bookResponse.data._flight;
+        if (bookResponse) {
+          const dataDetailForBooking = bookResponse._flight_forBooking;
+          const dataDetail = bookResponse._flight;
         
           setdataDetailForBooking(dataDetailForBooking);
           setIsInternational(dataDetailForBooking.isInternational)
@@ -176,7 +252,7 @@ export default function BookingPesawat() {
         setTimeout(() => {
           setIsLoadingPage(false);
         
-        }, 2000);
+        }, 100);
       })
       .catch(() => {
         setIsLoadingPage(false);
@@ -186,17 +262,27 @@ export default function BookingPesawat() {
 
   async function getDataPesawatSearch() {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_HOST_API}/travel/pesawat/search/flight/${id}`
-      );
-
-      return response;
+  
+      const response = localStorage.getItem(`data:flight/${id}`);
+      console.log(JSON.parse(response));
+      return JSON.parse(response);
+  
     } catch (error) {
-      throw error;
+      return null;
     }
   }
 
-  
+  // async function getDataPesawatSearch() {
+  //   try {
+  //     const response = await axios.get(
+  //       `${process.env.REACT_APP_HOST_API}/travel/pesawat/search/flight/${id}`
+  //     );
+
+  //     return response;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 
   const handleAdultsubCatagoryChange = (i, category) => (e) => {
     let adultCategory = adult[0];
@@ -369,28 +455,57 @@ export default function BookingPesawat() {
 
     if (bookingResponse.data.rc === "00") {
 
-        const uuid = await axios.post(
-            `${process.env.REACT_APP_HOST_API}/travel/pesawat/book/flight`,
-            {
-                _DetailPassenger:{
-                    adults: data_adult,
-                    children: child[0],
-                    infants: infant[0],
-                },
-                _Bookingflight: bookingResponse.data.data,
-                uuid:bookingResponse.data.uuid
-            }
-          );
+        // const uuid = await axios.post(
+        //     `${process.env.REACT_APP_HOST_API}/travel/pesawat/book/flight`,
+        //     {
+        //         _DetailPassenger:{
+        //             adults: data_adult,
+        //             children: child[0],
+        //             infants: infant[0],
+        //         },
+        //         _Bookingflight: bookingResponse.data.data,
+        //         uuid:bookingResponse.data.uuid
+        //     }
+        //   );
 
-        if(uuid.data.rc === '00'){
-            navigate({
-                pathname: `/flight/payment`,
-                search: `?v_flight=${id}&v_book=${uuid.data.uuid}`,
-            });
+        // if(uuid.data.rc === '00'){
+        //     navigate({
+        //         pathname: `/flight/payment`,
+        //         search: `?v_flight=${id}&v_book=${uuid.data.uuid}`,
+        //     });
 
-        }else{
-            failedNotification(uuid.data.rd);
-        }
+        // }else{
+        //     failedNotification(uuid.data.rd);
+        // }
+
+      const uuid = uuidv4();
+      localStorage.setItem(`data:f-book/${uuid}`, JSON.stringify(
+          {
+          _DetailPassenger:{
+          adults: data_adult,
+          children: child[0],
+          infants: infant[0],
+          },
+          _Bookingflight: bookingResponse.data.data,
+          uuid:bookingResponse.data.uuid
+          }
+      ))
+
+
+      if(bookingResponse.data.callback === null) {
+          
+        navigate({
+          pathname: `/flight/payment`,
+          search: `?v_flight=${id}&v_book=${uuid}`,
+      });
+        
+      }else{
+
+        SuccessNotification(
+          `Response callback is : ${typeof bookingResponse.data.callback === 'object' ? JSON.stringify(bookingResponse.data.callback) : bookingResponse.data.callback}`
+        );
+        
+      }
 
       setIsLoading(false);
 

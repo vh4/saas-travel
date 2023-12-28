@@ -20,6 +20,7 @@ import Page500 from "../components/500";
 import Page400 from "../components/400";
 import { notification } from "antd";
 import { Popover, Whisper } from "rsuite";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Search() {
   const theme = createTheme({
@@ -258,16 +259,24 @@ export default function Search() {
       uuid:uuids
     };
 
-    const uuid = await axios.post(
-      `${process.env.REACT_APP_HOST_API}/travel/train/search/k_search`,
-      dataLengkap,
-    );
+    // const uuid = await axios.post(
+    //   `${process.env.REACT_APP_HOST_API}/travel/train/search/k_search`,
+    //   dataLengkap,
+    // );
 
-    if (uuid.data.rc == "00") {
-      navigate("/train/booking/" + uuid.data.uuid);
-    } else {
-      failedNotification(uuid.data.rd);
-    }
+    // if (uuid.data.rc == "00") {
+    //   navigate("/train/booking/" + uuid.data.uuid);
+    // } else {
+    //   failedNotification(uuid.data.rd);
+    // }
+
+    const uuid = uuidv4();
+    localStorage.setItem(`data:k-train/${uuid}`, JSON.stringify(
+      dataLengkap
+    ));
+
+    navigate("/train/booking/" + uuid);
+
   }
 
   useEffect(() => {

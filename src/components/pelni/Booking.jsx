@@ -22,6 +22,7 @@ import BookingLoading from "../components/pelniskeleton/booking";
 import ManyRequest from "../components/Manyrequest";
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { IoArrowForwardOutline } from "react-icons/io5";
+import { v4 as uuidv4 } from 'uuid';
 
 
 export default function BookingPelni() {
@@ -36,6 +37,16 @@ export default function BookingPelni() {
   const failedNotification = (rd) => {
     api["error"]({
       message: "Error!",
+      description:
+        rd.toLowerCase().charAt(0).toUpperCase() +
+        rd.slice(1).toLowerCase() +
+        "",
+    });
+  };
+
+  const SuccessNotification = (rd) => {
+    api["success"]({
+      message: "Success!",
       description:
         rd.toLowerCase().charAt(0).toUpperCase() +
         rd.slice(1).toLowerCase() +
@@ -76,15 +87,86 @@ export default function BookingPelni() {
     token,
   ]);
 
+  // useEffect(() => {
+
+  //   Promise.all([getDataPelniSearch()])
+  //     .then(([bookResponse]) => {
+  //       if (bookResponse.data.rc === "00") {
+  //         setdataDetailPelni(bookResponse.data);
+
+  //         const TotalWanita = parseInt(bookResponse.data.female) || 0;
+  //         const TotalPria = parseInt(bookResponse.data.male) || 0;
+
+  //         setTotalPria(TotalPria)
+  //         setTotalWanita(TotalWanita);
+         
+  //         const WanitaArr = Array.from({ length: TotalWanita }, () => ({
+  //           name: "",
+  //           birthdate: getCurrentDate(),
+  //           identityNumber: "",
+  //           gender: "F",
+  //           usia: "adult",
+  //         }));
+
+  //         const PriaArr = Array.from({ length: TotalPria }, () => ({
+  //           name: "",
+  //           birthdate: getCurrentDate(),
+  //           identityNumber: "",
+  //           gender: "M",
+  //           usia: "adult",
+  //         }));
+
+  //         setWanita([WanitaArr]);
+  //         setPria([PriaArr]);
+
+  //         const date_Keberangkatan = new Date(bookResponse.data.departureDate);
+          
+  //         const date_tujuan = new Date(bookResponse.data.arrivalDate);
+        
+  //         const duration = bookResponse.data.duration
+        
+  //         const tanggal_keberangkatan_pelni = parseDate(date_Keberangkatan);
+  //         const tanggal_tujuan_pelni = parseDate(date_tujuan);
+
+  //         Settanggal_keberangkatan_pelni(tanggal_keberangkatan_pelni);
+  //         Settanggal_tujuan_pelni(tanggal_tujuan_pelni)
+  //         setDuration(duration);
+
+  //       }else{
+  //           setErrPage(true);
+  //       }
+
+  //       setTimeout(() => {
+  //         setIsLoadingPage(false);
+  //       }, 2000);
+  //     })
+  //     .catch(() => {
+  //       setIsLoadingPage(false);
+  //       setErrPage(true);
+  //     });
+  // }, [id]);
+
+  // async function getDataPelniSearch() {
+  //   try {
+  //     const response = await axios.get(
+  //       `${process.env.REACT_APP_HOST_API}/travel/pelni/search/p_search/${id}`
+  //     );
+
+  //     return response;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+
   useEffect(() => {
 
     Promise.all([getDataPelniSearch()])
       .then(([bookResponse]) => {
-        if (bookResponse.data.rc === "00") {
-          setdataDetailPelni(bookResponse.data);
+        if (bookResponse) {
+          setdataDetailPelni(bookResponse);
 
-          const TotalWanita = parseInt(bookResponse.data.female) || 0;
-          const TotalPria = parseInt(bookResponse.data.male) || 0;
+          const TotalWanita = parseInt(bookResponse.female) || 0;
+          const TotalPria = parseInt(bookResponse.male) || 0;
 
           setTotalPria(TotalPria)
           setTotalWanita(TotalWanita);
@@ -108,11 +190,11 @@ export default function BookingPelni() {
           setWanita([WanitaArr]);
           setPria([PriaArr]);
 
-          const date_Keberangkatan = new Date(bookResponse.data.departureDate);
+          const date_Keberangkatan = new Date(bookResponse.departureDate);
           
-          const date_tujuan = new Date(bookResponse.data.arrivalDate);
+          const date_tujuan = new Date(bookResponse.arrivalDate);
         
-          const duration = bookResponse.data.duration
+          const duration = bookResponse.duration
         
           const tanggal_keberangkatan_pelni = parseDate(date_Keberangkatan);
           const tanggal_tujuan_pelni = parseDate(date_tujuan);
@@ -127,7 +209,7 @@ export default function BookingPelni() {
 
         setTimeout(() => {
           setIsLoadingPage(false);
-        }, 2000);
+        }, 100);
       })
       .catch(() => {
         setIsLoadingPage(false);
@@ -137,13 +219,10 @@ export default function BookingPelni() {
 
   async function getDataPelniSearch() {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_HOST_API}/travel/pelni/search/p_search/${id}`
-      );
-
-      return response;
+      const response = localStorage.getItem(`data:pelni/${id}`);
+      return JSON.parse(response);
     } catch (error) {
-      throw error;
+      return null;
     }
   }
   
@@ -325,6 +404,7 @@ export default function BookingPelni() {
 
       failedNotification(response.data.rd);
     } else {
+      
       const data = response.data.data;
       const infobooking = await axios.post(
         `${process.env.REACT_APP_HOST_API}/travel/pelni/book_info`,
@@ -339,23 +419,52 @@ export default function BookingPelni() {
         setIsLoading(false);
       } else {
 
-        const transactionId = await axios.post(
-            `${process.env.REACT_APP_HOST_API}/travel/pelni/booking/passengers`,
-            {
-                ...params,
-                arrivalDate: dataDetailPelni.arrivalTime,
-                departureTime: dataDetailPelni.departureTime,
-                transactionId: data.transactionId
-              }
-          );
+        // const transactionId = await axios.post(
+        //     `${process.env.REACT_APP_HOST_API}/travel/pelni/booking/passengers`,
+        //     {
+        //         ...params,
+        //         arrivalDate: dataDetailPelni.arrivalTime,
+        //         departureTime: dataDetailPelni.departureTime,
+        //         transactionId: data.transactionId
+        //       }
+        //   );
       
-          if (transactionId.data.rc == "00") {
-            navigate(`/pelni/payment/${data.transactionId}`);
+        //   if (transactionId.data.rc == "00") {
+        //     navigate(`/pelni/payment/${data.transactionId}`);
 
-          } else {
-            failedNotification(transactionId.data.rd);
-            setIsLoading(false);
+        //   } else {
+        //     failedNotification(transactionId.data.rd);
+        //     setIsLoading(false);
+        //   }
+
+          const uuid = uuidv4();
+          localStorage.setItem(`data:pl-passenger/${uuid}`, JSON.stringify(
+            
+            {
+              ...params,
+              arrivalDate: dataDetailPelni.arrivalTime,
+              departureTime: dataDetailPelni.departureTime,
+              transactionId: data.transactionId,
+              book:response,
+              infobooking:infobooking
+            }
+
+          ));
+
+          if(response.data.callback === null) {
+          
+            navigate(`/pelni/payment/${uuid}`);
+            
+          }else{
+    
+            SuccessNotification(
+              `Response callback is : ${typeof response.data.callback === 'object' ? JSON.stringify(response.data.callback) : response.data.callback}`
+            );
+            
           }
+
+          setIsLoading(false);
+          
       }
     }
 

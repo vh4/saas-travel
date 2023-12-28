@@ -21,6 +21,7 @@ import ManyRequest from "../components/Manyrequest";
 import BookingLoading from "../components/trainskeleton/booking";
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { IoArrowForwardOutline } from "react-icons/io5";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function BookingKai() {
   const [api, contextHolder] = notification.useNotification();
@@ -39,6 +40,16 @@ export default function BookingKai() {
   const failedNotification = (rd) => {
     api["error"]({
       message: "Error!",
+      description:
+        rd.toLowerCase().charAt(0).toUpperCase() +
+        rd.slice(1).toLowerCase() +
+        "",
+    });
+  };
+
+  const SuccessNotification = (rd) => {
+    api["success"]({
+      message: "Success!",
       description:
         rd.toLowerCase().charAt(0).toUpperCase() +
         rd.slice(1).toLowerCase() +
@@ -76,10 +87,10 @@ export default function BookingKai() {
   
     getDataTrain()
       .then((trainDataResponse) => {
-        if (trainDataResponse.data.rc === "00") {
+        if (trainDataResponse) {
 
-          const dataTrain = trainDataResponse.data.train[0];
-          const dataTrainDetail = trainDataResponse.data.train_detail[0];
+          const dataTrain = trainDataResponse.train[0];
+          const dataTrainDetail = trainDataResponse.train_detail[0];
 
           const classTrain =
                 dataTrain.seats.grade === "E"
@@ -131,7 +142,7 @@ export default function BookingKai() {
   
         setTimeout(() => {
           setIsLoadingPage(false);
-        }, 2000);
+        }, 100);
 
       })
       .catch(() => {
@@ -140,17 +151,29 @@ export default function BookingKai() {
       });
   }, [id, token]);
   
+  // async function getDataTrain() {
+  //   try {
+  //     const response = await axios.get(
+  //       `${process.env.REACT_APP_HOST_API}/travel/train/search/k_search/${id}`
+  //     );
+  
+  //     return response;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+
   async function getDataTrain() {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_HOST_API}/travel/train/search/k_search/${id}`
-      );
-  
-      return response;
+      const response = localStorage.getItem(`data:k-train/${id}`);
+      return JSON.parse(response);
     } catch (error) {
-      throw error;
+
+      return null;
+
     }
   }
+  
   
   function addLeadingZero(num) {
     return num < 10 ? `0${num}` : num;
@@ -237,42 +260,75 @@ export default function BookingKai() {
 
     if (response.data.rc !== "00") {
 
-      if(response.data.rc === "11"){
+      if(response.data.rc == "11"){
         setIsLoading(false);
         setmanyRequestBook(true);
+      }else{
+        setIsLoading(false);
+        failedNotification(response.data.rd);
       }
 
-      failedNotification(response.data.rd);
+
     } else {
 
       const hasilDataBooking = response.data.data;
 
-      const uuid_hasilBooking = await axios.post(
+      // const uuid_hasilBooking = await axios.post(
 
-        `${process.env.REACT_APP_HOST_API}/travel/train/book/k_book`,
-        {
-            passengers:{
-                adults: adult[0],
-                infants: TotalInfant > 0 ? infant[0] : []
-            },
-            hasil_book:hasilDataBooking,
-            uuid:response.data.uuid,
-        }
-      );
+      //   `${process.env.REACT_APP_HOST_API}/travel/train/book/k_book`,
+      //   {
+      //       passengers:{
+      //           adults: adult[0],
+      //           infants: TotalInfant > 0 ? infant[0] : []
+      //       },
+      //       hasil_book:hasilDataBooking,
+      //       uuid:response.data.uuid,
+      //   }
+      // );
 
-      if (uuid_hasilBooking.data.rc == "00") {
-        
-        // localStorage.setItem(dataBookingTrain[0].trainNumber + '_fareAdmin', JSON.stringify(Fare.data.data));
+      const uuid = uuidv4();
+      localStorage.setItem(`data:k-book/${uuid}`, JSON.stringify(
+      {
+          passengers:{
+              adults: adult[0],
+              infants: TotalInfant > 0 ? infant[0] : []
+          },
+          hasil_book:hasilDataBooking,
+          // uuid:response.data.uuid,
+      }
+      
+      ));
+
+
+      if(response.data.callback === null) {
+          
         navigate({
             pathname: `/train/konfirmasi`,
-            search: `?k_train=${id}&k_book=${uuid_hasilBooking.data.uuid}`,
+            search: `?k_train=${id}&k_book=${uuid}`,
           });
+        
+      }else{
 
-      } else {
-
-        failedNotification(uuid_hasilBooking.data.rd);
-
+        SuccessNotification(
+          `Response callback is : ${typeof response.data.callback === 'object' ? JSON.stringify(response.data.callback) : response.data.callback}`
+        );
+        
       }
+
+
+      // if (uuid_hasilBooking.data.rc == "00") {
+        
+      //   // localStorage.setItem(dataBookingTrain[0].trainNumber + '_fareAdmin', JSON.stringify(Fare.data.data));
+      //   navigate({
+      //       pathname: `/train/konfirmasi`,
+      //       search: `?k_train=${id}&k_book=${uuid_hasilBooking.data.uuid}`,
+      //     });
+
+      // } else {
+
+      //   failedNotification(uuid_hasilBooking.data.rd);
+
+      // }
 
     }
 

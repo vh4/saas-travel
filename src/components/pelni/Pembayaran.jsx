@@ -35,7 +35,7 @@ export default function Pembayaran() {
   const [isLoading, setLoading] = React.useState(false);
   const [passengers, setPassengers] = useState({});
 
-  const { id } = useParams();
+  let { id } = useParams();  
   const [book, setBook] = useState(null);
 
   const [bookInfo, setBookInfo] = useState(null);
@@ -47,13 +47,58 @@ export default function Pembayaran() {
 
   const [err, setErr] = useState(false);
 
+  // useEffect(() => {
+  //   if (token === null || token === undefined) {
+  //     setErr(true);
+  //   }
+
+  //   Promise.all([getInfoBooking(), getInfoBookingInfo(), getDataPassengers()])
+  //     .then(([bookResponse, bookInfoResponse, passenggerResponse]) => {
+  //       if (bookResponse.data.rc === "00") {
+  //         setBook(bookResponse.data.data);
+  //       }else{
+  //         setErrPage(true);
+  //       }
+
+  //       if (bookInfoResponse.data.rc === "00") {
+  //         setBookInfo(bookInfoResponse.data.data);
+  //       }else{
+  //         setErrPage(true);
+  //       }
+
+  //       if (passenggerResponse.data.rc === "00") {
+  //         setPassengers(passenggerResponse.data);
+  //         setTotalAdult(passenggerResponse.data.adult);
+  //         setTotalInfant(passenggerResponse.data.infant);
+
+  //       }else{
+  //         setErrPage(true);
+  //       }
+
+  //       setTimeout(() => {
+  //         setIsLoadingPage(false);
+  //       }, 2000);
+        
+  //     })
+  //     .catch(() => {
+  //       setIsLoadingPage(false);
+  //       setErrPage(true);
+  //     });
+  // }, [id, token]);
+
+
   useEffect(() => {
     if (token === null || token === undefined) {
       setErr(true);
     }
 
-    Promise.all([getInfoBooking(), getInfoBookingInfo(), getDataPassengers()])
-      .then(([bookResponse, bookInfoResponse, passenggerResponse]) => {
+    Promise.all([getDataAllBook()])
+      .then(([getDataAllBook]) => {
+
+        const bookResponse = getDataAllBook.book;
+        const passenggerResponse = getDataAllBook;
+        const bookInfoResponse = getDataAllBook.infobooking;
+        
         if (bookResponse.data.rc === "00") {
           setBook(bookResponse.data.data);
         }else{
@@ -66,10 +111,10 @@ export default function Pembayaran() {
           setErrPage(true);
         }
 
-        if (passenggerResponse.data.rc === "00") {
-          setPassengers(passenggerResponse.data);
-          setTotalAdult(passenggerResponse.data.adult);
-          setTotalInfant(passenggerResponse.data.infant);
+        if (passenggerResponse) {
+          setPassengers(passenggerResponse);
+          setTotalAdult(passenggerResponse.adult);
+          setTotalInfant(passenggerResponse.infant);
 
         }else{
           setErrPage(true);
@@ -77,7 +122,7 @@ export default function Pembayaran() {
 
         setTimeout(() => {
           setIsLoadingPage(false);
-        }, 2000);
+        }, 100);
         
       })
       .catch(() => {
@@ -86,38 +131,48 @@ export default function Pembayaran() {
       });
   }, [id, token]);
 
-  async function getInfoBooking() {
+  // async function getInfoBooking() {
+  //   try {
+  //     const response = await axios.get(
+  //       `${process.env.REACT_APP_HOST_API}/travel/pelni/book/${id[1]}`
+  //     );
+  //     return response;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+
+  // async function getInfoBookingInfo() {
+  //   try {
+  //     const response = await axios.get(
+  //       `${process.env.REACT_APP_HOST_API}/travel/pelni/book_info/${id[1]}`
+  //     );
+  //     return response;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+
+    async function getDataAllBook() {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_HOST_API}/travel/pelni/book/${id}`
-      );
-      return response;
+      const response = localStorage.getItem(`data:pl-passenger/${id}`);
+      return JSON.parse(response);
     } catch (error) {
-      throw error;
+      return null;
     }
   }
 
-  async function getInfoBookingInfo() {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_HOST_API}/travel/pelni/book_info/${id}`
-      );
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  }
+  // async function getDataPassengers() {
+  //   try {
+  //     const response = await axios.get(
+  //       `${process.env.REACT_APP_HOST_API}/travel/pelni/booking/passengers/${id}`
+  //     );
+  //     return response;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 
-    async function getDataPassengers() {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_HOST_API}/travel/pelni/booking/passengers/${id}`
-      );
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  }
 
   const failedNotification = (rd) => {
     api["error"]({

@@ -69,11 +69,11 @@ export default function Pembayaran() {
 
     Promise.all([getDataTrain(), getHasilBooking()])
       .then(([ResponsegetDataTrain, ResponsegetHasilBooking]) => {
-        if (ResponsegetDataTrain.data.rc == "00") {
-          setdataDetailTrain(ResponsegetDataTrain.data.train_detail);
-          setdataBookingTrain(ResponsegetDataTrain.data.train);
+        if (ResponsegetDataTrain) {
+          setdataDetailTrain(ResponsegetDataTrain.train_detail);
+          setdataBookingTrain(ResponsegetDataTrain.train);
 
-          const dataBookingTrain = ResponsegetDataTrain.data.train;
+          const dataBookingTrain = ResponsegetDataTrain.train;
           const classTrain =
             dataBookingTrain[0].seats[0].grade === "E"
               ? "Eksekutif"
@@ -88,12 +88,12 @@ export default function Pembayaran() {
           setErrPage(true);
         }
 
-        if (ResponsegetHasilBooking.data.rc == "00") {
-          setHasilBooking(ResponsegetHasilBooking.data.hasil_book);
-          setPassengers(ResponsegetHasilBooking.data.passengers);
+        if (ResponsegetHasilBooking) {
+          setHasilBooking(ResponsegetHasilBooking.hasil_book);
+          setPassengers(ResponsegetHasilBooking.passengers);
 
-          const passengers = ResponsegetHasilBooking.data.passengers;
-          const hasilBooking = ResponsegetHasilBooking.data.hasil_book;
+          const passengers = ResponsegetHasilBooking.passengers;
+          const hasilBooking = ResponsegetHasilBooking.hasil_book;
           const initialChanges = Array();
 
           hasilBooking.passengers.map((e, i) => {
@@ -120,7 +120,7 @@ export default function Pembayaran() {
 
         setTimeout(() => {
           setIsLoadingPage(false);
-        }, 2000);
+        }, 100);
 
       })
       .catch((error) => {
@@ -139,26 +139,44 @@ export default function Pembayaran() {
     }
   }, [uuid_book, uuid_train_data, token]);
 
+  // async function getDataTrain() {
+  //   try {
+  //     const response = await axios.get(
+  //       `${process.env.REACT_APP_HOST_API}/travel/train/search/k_search/${uuid_train_data}`
+  //     );
+
+  //     return response;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+
   async function getDataTrain() {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_HOST_API}/travel/train/search/k_search/${uuid_train_data}`
-      );
-
-      return response;
+      const response = localStorage.getItem(`data:k-train/${uuid_train_data}`);
+      return JSON.parse(response);
     } catch (error) {
-      throw error;
+      return null;
     }
   }
 
+  // async function getHasilBooking() {
+  //   try {
+  //     const response = await axios.get(
+  //       `${process.env.REACT_APP_HOST_API}/travel/train/book/k_book/${uuid_book}`
+  //     );
+  //     return response;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+
   async function getHasilBooking() {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_HOST_API}/travel/train/book/k_book/${uuid_book}`
-      );
-      return response;
+      const response = localStorage.getItem(`data:k-book/${uuid_book}`);
+      return JSON.parse(response);
     } catch (error) {
-      throw error;
+      return null;
     }
   }
 
@@ -212,12 +230,12 @@ export default function Pembayaran() {
           pathname: "/train/tiket-kai",
           search: `?${createSearchParams(params)}`,
         });
-      }, 1500);
+      }, 100);
     } else {
       setTimeout(() => {
         failedNotification(response.data.rd);
         setIsLoading(false);
-      }, 1000);
+      }, 100);
     }
   }
 

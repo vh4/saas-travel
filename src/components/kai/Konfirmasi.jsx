@@ -80,7 +80,7 @@ seats.forEach((seat) => {
         }
 
           setSelectedCheckboxes(handlersetSelectedCheckboxes(selectedCheckboxes));
-
+          console.log(handlersetSelectedCheckboxes(selectedCheckboxes))
         }
     else {
           alert('Melebihi jumlah penumpang.')
@@ -280,11 +280,14 @@ export default function Konfirmasi() {
 
   const uuid_book = searchParams.get("k_book");
   const uuid_train_data = searchParams.get("k_train");
-  const uuid_auth = searchParams.get("k_auth");
+  // const uuid_auth = searchParams.get("k_auth");
 
   const [dataBookingTrain, setdataBookingTrain] = useState(null);
   const [dataDetailTrain, setdataDetailTrain] = useState(null);
+
   const [hasilBooking, setHasilBooking] = useState(null);
+  const [hasilBookingTriggerResetGagal, sethasilBookingTriggerResetGagal] = useState(null);
+
   const [passengers, setPassengers] = useState(null);
   const [tanggal_keberangkatan_kereta, settanggal_keberangkatan_kereta] =
     useState(null);
@@ -322,11 +325,11 @@ export default function Konfirmasi() {
 
     Promise.all([getDataTrain(), getHasilBooking()])
       .then(([ResponsegetDataTrain, ResponsegetHasilBooking]) => {
-        if (ResponsegetDataTrain.data.rc == "00") {
-          setdataDetailTrain(ResponsegetDataTrain.data.train_detail);
-          setdataBookingTrain(ResponsegetDataTrain.data.train);
+        if (ResponsegetDataTrain) {
+          setdataDetailTrain(ResponsegetDataTrain.train_detail);
+          setdataBookingTrain(ResponsegetDataTrain.train);
 
-          const dataBookingTrain = ResponsegetDataTrain.data.train;
+          const dataBookingTrain = ResponsegetDataTrain.train;
           const classTrain =
             dataBookingTrain[0].seats[0].grade === "E"
               ? "Eksekutif"
@@ -343,12 +346,16 @@ export default function Konfirmasi() {
           setErrPage(true);
         }
 
-        if (ResponsegetHasilBooking.data.rc == "00") {
-          setHasilBooking(ResponsegetHasilBooking.data.hasil_book);
-          setPassengers(ResponsegetHasilBooking.data.passengers);
+        if (ResponsegetHasilBooking) {
 
-          const passengers = ResponsegetHasilBooking.data.passengers;
-          const hasilBooking = ResponsegetHasilBooking.data.hasil_book;
+          setHasilBooking(ResponsegetHasilBooking.hasil_book);
+          //mengatasi ketika mencopy variable hasilBooking, state nya ikut update.
+          sethasilBookingTriggerResetGagal(JSON.stringify(ResponsegetHasilBooking.hasil_book))
+
+          setPassengers(ResponsegetHasilBooking.passengers);
+
+          const passengers = ResponsegetHasilBooking.passengers;
+          const hasilBooking = ResponsegetHasilBooking.hasil_book;
           const initialChanges = Array();
 
           hasilBooking.passengers.map((e, i) => {
@@ -367,6 +374,7 @@ export default function Konfirmasi() {
           });
 
           setChangeSet([initialChanges]);
+          //mengatasi ketika mencopy variable setChangeSet, state nya ikut update.
           setchangeStateKetikaGagalTidakUpdate(JSON.stringify([initialChanges]))
           setTotalAdult(passengers.adults.length);
           //   setTotalChild(passengers.children ? passengers.children.length : 0);
@@ -377,7 +385,7 @@ export default function Konfirmasi() {
 
         setTimeout(() => {
           setIsLoadingPage(false);
-        }, 2000);
+        }, 100);
       })
       .catch((error) => {
         setIsLoadingPage(false);
@@ -395,32 +403,54 @@ export default function Konfirmasi() {
     }
   }, [uuid_book, uuid_train_data, token]);
 
+  // async function getDataTrain() {
+  //   try {
+  //     const response = await axios.get(
+  //       `${process.env.REACT_APP_HOST_API}/travel/train/search/k_search/${uuid_train_data}`
+  //     );
+
+  //     return response;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+
   async function getDataTrain() {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_HOST_API}/travel/train/search/k_search/${uuid_train_data}`
-      );
+      const response = localStorage.getItem(`data:k-train/${uuid_train_data}`);
+      return JSON.parse(response);
 
-      return response;
     } catch (error) {
-      throw error;
+      return null;
     }
   }
 
+  // async function getHasilBooking() {
+  //   try {
+  //     const response = await axios.get(
+  //       `${process.env.REACT_APP_HOST_API}/travel/train/book/k_book/${uuid_book}`
+  //     );
+  //     return response;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+
   async function getHasilBooking() {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_HOST_API}/travel/train/book/k_book/${uuid_book}`
-      );
-      return response;
+      const response = localStorage.getItem(`data:k-book/${uuid_book}`);
+      return JSON.parse(response);
     } catch (error) {
-      throw error;
+      return null;
     }
   }
 
   async function handlerPilihKursi(e) {
     e.preventDefault();
     setDataSeats([]); //untuk reset data.
+    gantigerbong(0) // untuk reset data pindah gerbong.
+    setChangeSet(JSON.parse(changeStateKetikaGagalTidakUpdate));  // untuk reset data ketika sudah di pilih kursinya, tapi keluar lagi..
+
     
     setOpen(true);
     const response = await axios.post(
@@ -455,14 +485,16 @@ export default function Konfirmasi() {
         pathname: `/train/bayar`,
         search: `?k_train=${uuid_train_data}&k_book=${uuid_book}`,
       });
-    }, 1000);
+    }, 100);
   };  
+
+  console.log(changeState);
 
   const handlerPindahKursi = async (e) => {
     e.preventDefault();
   
     const changeStateFix = JSON.parse(JSON.stringify(changeState)); // Create a deep copy
-  
+    
     let wagonNumber = changeStateFix[0][0]["wagonNumber"];
     let className = changeStateFix[0][0]["class"];
 
@@ -492,7 +524,7 @@ export default function Konfirmasi() {
       delete item.type;
     });
   
-    let hasilBookingData = {...hasilBooking};
+    const hasilBookingData = {...hasilBooking};
     setSelectedCount(0);
   
     for (var i = 0; i < changeStateFix[0].length; i++) {
@@ -511,35 +543,51 @@ export default function Konfirmasi() {
 
     const idtrx = response.data.transactionId;
 
-    if (response.data.rc === "00") {
+    if (response.data.rc == "00") {
       
       hasilBookingData['transactionId'] = idtrx;
 
       //passenger nya harusmya di update yang baru change seats.
-      const response = await axios.put(
-        `${process.env.REACT_APP_HOST_API}/travel/train/book/k_book`,
+      // const response = await axios.put(
+      //   `${process.env.REACT_APP_HOST_API}/travel/train/book/k_book`,
+      //   {
+      //     // uuid: uuid_book,
+      //     passengers: passengers,
+      //     hasil_book: hasilBookingData,
+      //     // uuid_permission: uuid_auth,
+      //   }
+      // );
+
+      localStorage.setItem(`data:k-book/${uuid_book}`, JSON.stringify(
         {
-          uuid: uuid_book,
           passengers: passengers,
           hasil_book: hasilBookingData,
-          uuid_permission: uuid_auth,
         }
-      );
-  
-      if (response.data.rc === "00") {
-        setHasilBooking(hasilBookingData);
-        setisLoadingPindahKursi(false);
-        successNotification();
-      } else {
-        setisLoadingPindahKursi(false);
-        failedNotification(response.data.rd);
-      }
+      ));
+
+      setisLoadingPindahKursi(false);
+      successNotification();
+      setHasilBooking(hasilBookingData);
+
+      // if (response.data.rc === "00") {
+      //   setHasilBooking(hasilBookingData);
+      //   setisLoadingPindahKursi(false);
+      //   successNotification();
+      // } else {
+      //   setisLoadingPindahKursi(false);
+      //   failedNotification(response.data.rd);
+      // }
+
+      setchangeStateKetikaGagalTidakUpdate(JSON.stringify(changeState))
+
     } else if (response.data.rc === "55") {
       setChangeSet(JSON.parse(changeStateKetikaGagalTidakUpdate));
+      setHasilBooking(JSON.parse(hasilBookingTriggerResetGagal));
       setisLoadingPindahKursi(false);
       failedNotification(response.data.rd);
     } else {
       setChangeSet(JSON.parse(changeStateKetikaGagalTidakUpdate));
+      setHasilBooking(JSON.parse(hasilBookingTriggerResetGagal));
       setisLoadingPindahKursi(false);
       failedNotification(response.data.rd);
     }

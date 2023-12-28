@@ -15,6 +15,7 @@ import { parseTanggal, parseTanggalPelni } from "../../helpers/date";
 import { toRupiah } from "../../helpers/rupiah";
 import moment from "moment";
 import dayjs from "dayjs";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Search() {
 
@@ -257,16 +258,22 @@ export default function Search() {
       rd: "success",
     };
 
-    const uuid = await axios.post(
-      `${process.env.REACT_APP_HOST_API}/travel/pelni/search/p_search`,
-      params
-    );
+    // const uuid = await axios.post(
+    //   `${process.env.REACT_APP_HOST_API}/travel/pelni/search/p_search`,
+    //   params
+    // );
 
-    if (uuid.data.rc == "00") {
-      navigate(`/pelni/booking/${uuid.data.uuid}`);
-    } else {
-      failedNotification(uuid.data.rd);
-    }
+    // if (uuid.data.rc == "00") {
+    //   navigate(`/pelni/booking/${uuid.data.uuid}`);
+    // } else {
+    //   failedNotification(uuid.data.rd);
+    // }
+
+    const uuid = uuidv4();
+    localStorage.setItem(`data:pelni/${uuid}`, JSON.stringify(params));
+
+    navigate(`/pelni/booking/${uuid}`);
+
   }
 
   const [pelniStatiun, setPelniStatiun] = useState();

@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import { AiOutlineCheckCircle } from "react-icons/ai";
-import { RxCrossCircled } from "react-icons/rx";
+// import { RxCrossCircled } from "react-icons/rx";
 import { MdHorizontalRule } from "react-icons/md";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import { TiketContext } from "../../App";
@@ -60,6 +60,62 @@ export default function Pembayaran() {
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
 
+  // useEffect(() => {
+  //   if (token === null || token === undefined) {
+  //     setErr(true);
+  //   }
+
+  //   Promise.all([getInfoBooking(), getSearchFlightInfo()])
+  //     .then(([getInfoBooking, getSearchFlightInfo]) => {
+  //       const dataDetail = getSearchFlightInfo.data._flight;
+  //       const dataDetailPassenger = getInfoBooking.data._DetailPassenger;
+  //       const hasilBooking = getInfoBooking.data._Bookingflight;
+  //       const dataDetailForBooking =
+  //         getSearchFlightInfo.data._flight_forBooking;
+
+  //       if (getInfoBooking.data.rc === "00") {
+  //         setdataDetailPassenger(dataDetailPassenger);
+  //         sethasilBooking(hasilBooking);
+  //       } else {
+  //         setErrPage(true);
+  //       }
+
+  //       if (getSearchFlightInfo.data.rc === "00") {
+  //         setdataDetail(dataDetail);
+  //         setdataDetailForBooking(dataDetailForBooking);
+
+  //         setTotalAdult(dataDetail[0].adult);
+  //         setTotalChild(dataDetail[0].child);
+  //         setTotalInfant(dataDetail[0].infant);
+  //       } else {
+  //         setErrPage(true);
+  //       }
+
+  //       setTimeout(() => {
+
+  //         setIsLoadingPage(false);
+          
+  //       }, 2000);
+
+        
+  //     })
+  //     .catch(() => {
+  //       setIsLoadingPage(false);
+  //       setErrPage(true);
+  //     });
+  // }, [v_book, v_flight, token]);
+
+  // async function getInfoBooking() {
+  //   try {
+  //     const response = await axios.get(
+  //       `${process.env.REACT_APP_HOST_API}/travel/pesawat/book/flight/${v_book}`
+  //     );
+  //     return response;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+
   useEffect(() => {
     if (token === null || token === undefined) {
       setErr(true);
@@ -67,20 +123,20 @@ export default function Pembayaran() {
 
     Promise.all([getInfoBooking(), getSearchFlightInfo()])
       .then(([getInfoBooking, getSearchFlightInfo]) => {
-        const dataDetail = getSearchFlightInfo.data._flight;
-        const dataDetailPassenger = getInfoBooking.data._DetailPassenger;
-        const hasilBooking = getInfoBooking.data._Bookingflight;
+        const dataDetail = getSearchFlightInfo._flight;
+        const dataDetailPassenger = getInfoBooking._DetailPassenger;
+        const hasilBooking = getInfoBooking._Bookingflight;
         const dataDetailForBooking =
-          getSearchFlightInfo.data._flight_forBooking;
+          getSearchFlightInfo._flight_forBooking;
 
-        if (getInfoBooking.data.rc === "00") {
+        if (getInfoBooking) {
           setdataDetailPassenger(dataDetailPassenger);
           sethasilBooking(hasilBooking);
         } else {
           setErrPage(true);
         }
 
-        if (getSearchFlightInfo.data.rc === "00") {
+        if (getSearchFlightInfo) {
           setdataDetail(dataDetail);
           setdataDetailForBooking(dataDetailForBooking);
 
@@ -95,8 +151,7 @@ export default function Pembayaran() {
 
           setIsLoadingPage(false);
           
-        }, 2000);
-
+        }, 100);
         
       })
       .catch(() => {
@@ -107,23 +162,21 @@ export default function Pembayaran() {
 
   async function getInfoBooking() {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_HOST_API}/travel/pesawat/book/flight/${v_book}`
-      );
-      return response;
+      const response = localStorage.getItem(`data:f-book/${v_book}`)
+      console.log(JSON.parse(response))
+      return JSON.parse(response);
+
     } catch (error) {
-      throw error;
+      return null;
     }
   }
 
   async function getSearchFlightInfo() {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_HOST_API}/travel/pesawat/search/flight/${v_flight}`
-      );
-      return response;
+      const response = localStorage.getItem(`data:flight/${v_flight}`);
+      return JSON.parse(response);
     } catch (error) {
-      throw error;
+      return null;
     }
   }
 

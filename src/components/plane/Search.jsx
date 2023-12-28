@@ -30,6 +30,7 @@ import Checkbox from "@mui/material/Checkbox";
 import { createTheme } from "@mui/material";
 import moment from "moment";
 import { Popover, Whisper } from "rsuite";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function Search() {
   const theme = createTheme({
@@ -409,21 +410,32 @@ export default function Search() {
       }
 
       setisLoadingPilihTiket(`false-${i}`);
-
-      const uuid = await axios.post(
-        `${process.env.REACT_APP_HOST_API}/travel/pesawat/search/flight`,
+      const uuid = uuidv4();
+      localStorage.setItem(`data:flight/${uuid}`, JSON.stringify(
         {
           _flight: next,
           _flight_forBooking: forBooking,
           uuid: uuids,
         }
-      );
+      ));
 
-      if (uuid.data.rc == "00") {
-        navigate(`/flight/booking/${uuid.data.uuid}`);
-      } else {
-        failedNotification(uuid.data.rd);
-      }
+      navigate(`/flight/booking/${uuid}`);
+      
+      //don't erase!
+      // const uuid = await axios.post(
+      //   `${process.env.REACT_APP_HOST_API}/travel/pesawat/search/flight`,
+      //   {
+      //     _flight: next,
+      //     _flight_forBooking: forBooking,
+      //     uuid: uuids,
+      //   }
+      // );
+      // if (uuid.data.rc == "00") {
+      //   navigate(`/flight/booking/${uuid.data.uuid}`);
+      // } else {
+      //   failedNotification(uuid.data.rd);
+      // }
+
     } else {
       const next = Array();
       const lenghtArr = filterDataSearching[0].classes.length;
@@ -451,20 +463,32 @@ export default function Search() {
       }
 
       setisLoadingPilihTiket(`false-${i}`);
-      const uuid = await axios.post(
-        `${process.env.REACT_APP_HOST_API}/travel/pesawat/search/flight`,
+      const uuid = uuidv4();
+      localStorage.setItem(`data:flight/${uuid}`, JSON.stringify(
         {
           _flight: next,
           _flight_forBooking: forBooking,
           uuid: uuids,
         }
-      );
+      ));
 
-      if (uuid.data.rc == "00") {
-        navigate(`/flight/booking/${uuid.data.uuid}`);
-      } else {
-        failedNotification(uuid.data.rd);
-      }
+      navigate(`/flight/booking/${uuid}`);
+
+      //don't erase!
+      // const uuid = await axios.post(
+      //   `${process.env.REACT_APP_HOST_API}/travel/pesawat/search/flight`,
+      //   {
+      //     _flight: next,
+      //     _flight_forBooking: forBooking,
+      //     uuid: uuids,
+      //   }
+      // );
+
+      // if (uuid.data.rc == "00") {
+      //   navigate(`/flight/booking/${uuid.data.uuid}`);
+      // } else {
+      //   failedNotification(uuid.data.rd);
+      // }
     }
   }
 
