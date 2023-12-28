@@ -22,7 +22,7 @@ Router.post('/travel/train/station', async function (req, res) { // Menambahkan 
     return res.send(response.data);
   } catch (error) {
     logger.error(`Error /travel/train/station: ${error.message}`);
-    return res.status(500).send(error.message);
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
@@ -43,138 +43,138 @@ Router.post('/travel/train/search', async function (req, res) { // Menambahkan a
       }
     );
 
-    logger.info(`Response /travel/train/search: ${JSON.stringify(response.data)}`);
+    logger.info(`Response /travel/train/search: ${response.data.rd}`);
     return res.send(response.data);
   } catch (error) {
     logger.error(`Error /travel/train/search: ${error.message}`);
-    return res.status(500).send(error.message);
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
 //insert data train to session storage.
-Router.post('/travel/train/search/k_search', AuthLogin, apiLimiter, async (req, res) => {
-  const data = req.body;
+// Router.post('/travel/train/search/k_search', AuthLogin, apiLimiter, async (req, res) => {
+//   const data = req.body;
 
-  if (typeof data == 'object') {
-    logger.info(`INSERT SESSION /travel/train/search/k_search: ${JSON.stringify(data)}`);
+//   if (typeof data == 'object') {
+//     logger.info(`INSERT SESSION /travel/train/search/k_search: ${JSON.stringify(data)}`);
 
-    const uuid = uuidv4();
-    req.session[uuid] = data;
+//     const uuid = uuidv4();
+//     req.session[uuid] = data;
 
-    return res.send({
-      uuid: uuid,
-      rc: '00',
-      rd: 'success'
-    });
+//     return res.send({
+//       uuid: uuid,
+//       rc: '00',
+//       rd: 'success'
+//     });
 
-  } else {
-    return res.send({
-      rc: '03',
-      rd: 'Data yang anda berikan salah.'
-    });
-  }
-});
+//   } else {
+//     return res.send({
+//       rc: '03',
+//       rd: 'Data yang anda berikan salah.'
+//     });
+//   }
+// });
 
 //retrieve data train from session storage.
-Router.get('/travel/train/search/k_search/:id', AuthLogin, async (req, res) => {
-  const uuid = req.params.id;
-  logger.info(`PARAMS /travel/train/search/k_search/:id: ${uuid}`);
+// Router.get('/travel/train/search/k_search/:id', AuthLogin, async (req, res) => {
+//   const uuid = req.params.id;
+//   logger.info(`PARAMS /travel/train/search/k_search/:id: ${uuid}`);
 
-  const data = req.session[uuid];
+//   const data = req.session[uuid];
 
-  if (data) {
-    logger.info(`GETTING DATA SESSION /travel/train/search/k_search/:id: ${JSON.stringify(data)}`);
-    return res.send({
-      rc: '00',
-      rd: 'success',
-      ...data
-    });
+//   if (data) {
+//     logger.info(`GETTING DATA SESSION /travel/train/search/k_search/:id: ${JSON.stringify(data)}`);
+//     return res.send({
+//       rc: '00',
+//       rd: 'success',
+//       ...data
+//     });
 
-  } else {
-    return res.send({
-      rc: '03',
-      rd: 'ID tidak ditemukan.'
-    })
-  }
-});
+//   } else {
+//     return res.send({
+//       rc: '03',
+//       rd: 'ID tidak ditemukan.'
+//     })
+//   }
+// });
 
 //insert data hasil booking to session storage.
-Router.post('/travel/train/book/k_book', AuthLogin, apiLimiter, async (req, res) => {
-	const data = req.body;
+// Router.post('/travel/train/book/k_book', AuthLogin, apiLimiter, async (req, res) => {
+// 	const data = req.body;
   
-	if (typeof data == 'object') {
-	  logger.info(`INSERT SESSION /travel/train/book/k_book: ${JSON.stringify(data)}`);
+// 	if (typeof data == 'object') {
+// 	  logger.info(`INSERT SESSION /travel/train/book/k_book: ${JSON.stringify(data)}`);
   
-	  const uuid = uuidv4();
-	  req.session[uuid] = data;
+// 	  const uuid = uuidv4();
+// 	  req.session[uuid] = data;
   
-	  return res.send({
-		uuid: uuid,
-		rc: '00',
-		rd: 'success'
-	  });
+// 	  return res.send({
+// 		uuid: uuid,
+// 		rc: '00',
+// 		rd: 'success'
+// 	  });
   
-	} else {
-	  return res.send({
-		rc: '03',
-		rd: 'Data yang anda berikan salah.'
-	  });
-	}
-});
+// 	} else {
+// 	  return res.send({
+// 		rc: '03',
+// 		rd: 'Data yang anda berikan salah.'
+// 	  });
+// 	}
+// });
 
 //retrieve data booking from session storage.
-Router.get('/travel/train/book/k_book/:id', AuthLogin, async (req, res) => {
-  const uuid = req.params.id;
-  logger.info(`PARAMS /travel/train/book/k_book/:id: ${uuid}`);
+// Router.get('/travel/train/book/k_book/:id', AuthLogin, async (req, res) => {
+//   const uuid = req.params.id;
+//   logger.info(`PARAMS /travel/train/book/k_book/:id: ${uuid}`);
 
-  const data = req.session[uuid];
+//   const data = req.session[uuid];
 
-  if (data) {
-    logger.info(`GETTING DATA SESSION /travel/train/book/k_book/:id: ${JSON.stringify(data)}`);
-    return res.send({
-      rc: '00',
-      rd: 'success',
-      ...data
-    });
+//   if (data) {
+//     logger.info(`GETTING DATA SESSION /travel/train/book/k_book/:id: ${JSON.stringify(data)}`);
+//     return res.send({
+//       rc: '00',
+//       rd: 'success',
+//       ...data
+//     });
 
-  } else {
-    return res.send({
-      rc: '03',
-      rd: 'ID tidak ditemukan.'
-    })
-  }
-});
+//   } else {
+//     return res.send({
+//       rc: '03',
+//       rd: 'ID tidak ditemukan.'
+//     })
+//   }
+// });
 
 //update seats data hasil booking :
-Router.put('/travel/train/book/k_book', AuthLogin, apiLimiter, async (req, res) => {
-	const data = req.body;
-	const uuid = req.body.uuid;
+// Router.put('/travel/train/book/k_book', AuthLogin, apiLimiter, async (req, res) => {
+// 	const data = req.body;
+// 	const uuid = req.body.uuid;
   
-	if (typeof data == 'object') {
-	  logger.info(`PUT SESSION /travel/train/book/k_book: ${JSON.stringify(data)}`);
+// 	if (typeof data == 'object') {
+// 	  logger.info(`PUT SESSION /travel/train/book/k_book: ${JSON.stringify(data)}`);
   
-	  req.session[uuid] = data;
+// 	  req.session[uuid] = data;
   
-	  return res.send({
-		uuid: uuid,
-		rc: '00',
-		rd: 'updated'
-	  });
+// 	  return res.send({
+// 		uuid: uuid,
+// 		rc: '00',
+// 		rd: 'updated'
+// 	  });
   
-	}else if(uuid == undefined || uuid == ''){
+// 	}else if(uuid == undefined || uuid == ''){
 
-		return res.send({
-			rc: '03',
-			rd: 'ID tidak ditemukan.'
-		})
+// 		return res.send({
+// 			rc: '03',
+// 			rd: 'ID tidak ditemukan.'
+// 		})
 		
-	} else {
-	  return res.send({
-		rc: '03',
-		rd: 'Data yang anda berikan salah.'
-	  });
-	}
-});
+// 	} else {
+// 	  return res.send({
+// 		rc: '03',
+// 		rd: 'Data yang anda berikan salah.'
+// 	  });
+// 	}
+// });
 
 
 Router.post('/travel/train/get_seat_layout', async function (req, res) { // Menambahkan async
@@ -199,7 +199,7 @@ Router.post('/travel/train/get_seat_layout', async function (req, res) { // Mena
     return res.send(response.data);
   } catch (error) {
     logger.error(`Error /travel/train/get_seat_layout: ${error.message}`);
-    return res.status(500).send(error.message);
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
@@ -207,24 +207,69 @@ Router.post('/travel/train/book', apiLimiterKhususBooking, async function (req, 
   try {
     const data = req.body;
 
-    data['username'] = req.session['v_uname'] || ''
-    const merchart = req.session['v_merchant'] || ''
+    data['username'] = req.session['v_uname'];
+    const merchart = req.session['v_merchant'];
+    const username = req.session['v_uname'];
 
-    if(merchart !== undefined && merchart !== null && merchart !== ''  && merchart?.length > 0) {
-      data['username'] =  data['username'] + '#' + merchart
+    logger.info(`Request /travel/train/book [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}`);
+
+    if(merchart !== undefined && merchart !== null) {
+      
+        data['username'] =  data['username'] + '#' + merchart;
+
+      if(req.session['khusus_merchant'] !== undefined && req.session['khusus_merchant'] !== null){
+
+        const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
+        data['send_format'] = parseDataKhususMerchant.data1; //format json / text.
+
+      }
     }
 
-    logger.info(`Request /travel/train/book: ${JSON.stringify(data)}`);
+    logger.info(`Request /travel/train/book ${JSON.stringify(data)}`);
 
     const response = await axios.post(
       `${process.env.URL_HIT}/travel/train/book`,data
     );
 
     logger.info(`Response /travel/train/book: ${JSON.stringify(response.data)}`);
-    return res.send(response.data);
+
+    if(merchart !== undefined && merchart !== null 
+    && merchart !== ''  && merchart?.length > 0 
+    && response.data.rc === '00') {
+
+      const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
+      const url = parseDataKhususMerchant.url
+
+      logger.info(`Request URL ${url} [CALLBACK]: ${JSON.stringify(response.data.data.callbackData)}`);
+
+      
+      const sendCallbackTomerchant = await axios.post(
+        url,
+        response.data?.data?.callbackData || null // callback data for mitra.
+      );
+
+      if(typeof sendCallbackTomerchant.data === "object"){
+        logger.info(`Response URL ${url} [CALLBACK]: ${JSON.stringify(sendCallbackTomerchant.data)}`);
+      }else{
+        logger.info(`Response URL ${url} [CALLBACK]: ${sendCallbackTomerchant.data}`);
+      }
+
+      //response untuk mitra
+      response.data['callback'] = sendCallbackTomerchant.data;
+      return res.send(response.data);
+
+    }else{
+
+      //response global.
+      response.data['callback'] = null;
+      return res.send(response.data);
+    
+    }
+
+
   } catch (error) {
     logger.error(`Error /travel/train/book: ${error.message}`);
-    return res.status(500).send(error.message);
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
@@ -241,7 +286,7 @@ Router.post('/travel/train/payment', async function (req, res) { // Menambahkan 
     return res.send(response.data);
   } catch (error) {
     logger.error(`Error /travel/train/payment: ${error.message}`);
-    return res.status(500).send(error.message);
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
@@ -259,7 +304,7 @@ Router.post('/travel/train/change_seat', async function (req, res) { // Menambah
     return res.send(response.data);
   } catch (error) {
     logger.error(`Error /travel/train/change_seat: ${error.message}`);
-    return res.status(500).send(error.message);
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
@@ -277,7 +322,7 @@ Router.post('/travel/train/fare', async function (req, res) { // Menambahkan asy
     return res.send(response.data);
   } catch (error) {
     logger.error(`Error /travel/train/fare: ${error.message}`);
-    return res.status(500).send(error.message);
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 

@@ -25,7 +25,7 @@ Router.post('/travel/pelni/get_origin', async (req, res) => {
     return res.send(response);
   } catch (error) {
     logger.error(`Error /travel/pelni/get_origin: ${error.message}`);
-    return res.status(500).send({ rc: '68', rd: 'Internal Server Error.' });
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
@@ -39,7 +39,7 @@ Router.post('/travel/pelni/check_availability', async (req, res) => {
     return res.send(response);
   } catch (error) {
     logger.error(`Error /travel/pelni/check_availability: ${error.message}`);
-    return res.status(500).send({ rc: '68', rd: 'Internal Server Error.' });
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
@@ -53,7 +53,7 @@ Router.post('/travel/pelni/fare', async (req, res) => {
     return res.send(response);
   } catch (error) {
     logger.error(`Error /travel/pelni/fare: ${error.message}`);
-    return res.status(500).send({ rc: '68', rd: 'Internal Server Error.' });
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
@@ -63,11 +63,11 @@ Router.post('/travel/pelni/search', async (req, res) => {
   logger.info(`Request /travel/pelni/search: ${JSON.stringify(data)}`);
   try {
     const response = await makeAxiosPost(`${process.env.URL_HIT}/travel/pelni/search`, data);
-    logger.info(`Response /travel/pelni/search: ${JSON.stringify(response)}`);
+    logger.info(`Response /travel/pelni/search: ${response.data.rd}`);
     return res.send(response);
   } catch (error) {
     logger.error(`Error /travel/pelni/search: ${error.message}`);
-    return res.status(500).send({ rc: '68', rd: 'Internal Server Error.' });
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
@@ -118,33 +118,71 @@ Router.post('/travel/pelni/search', async (req, res) => {
 
 //insert data booking to session storage.
 Router.post('/travel/pelni/book', apiLimiterKhususBooking, async (req, res) => {
-  const data = req.body;
-  
-  data['username'] = req.session['v_uname'] || ''
-  const merchart = req.session['v_merchant'] || ''
 
-  if(merchart !== undefined && merchart !== null && merchart !== ''  && merchart?.length > 0) {
-    data['username'] =  data['username'] + '#' + merchart
-  }
-
-  logger.info(`Request /travel/pelni/book: ${JSON.stringify(data)}`);
   try {
-    const response = await makeAxiosPost(`${process.env.URL_HIT}/travel/pelni/book`, data);
-    logger.info(`Response /travel/pelni/book: ${JSON.stringify(response)}`);
-    logger.info(`RC /travel/pelni/book: ${response.rc}`);
+  
+      const data = req.body;
+      
+      data['username'] = req.session['v_uname'];
+      const merchart = req.session['v_merchant'];
+      const username = req.session['v_uname'];
 
-    // if (response.rc == '00') { //insert session
-    //   logger.info(`INSERT SESSION /travel/pelni/book: ${response.rc}`);
-    //   // req.session.pelni = response;
-    // }
+      logger.info(`Request /travel/pelni/book [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}`);
 
-    // logger.info(`Response SESSION /travel/pelni/book: ${JSON.stringify(req.session['pelni'])}`);
-    return res.send(response);
+      if(merchart !== undefined && merchart !== null) {
+              
+        data['username'] =  data['username'] + '#' + merchart;
 
-  } catch (error) {
-    logger.error(`Timeout Error /travel/pelni/book: ${error.message}`);
-    return res.status(500).send({ rc: '68', rd: 'Server Error, Gateway Timeout.' });
-  }
+      if(req.session['khusus_merchant'] !== undefined && req.session['khusus_merchant'] !== null){
+
+        const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
+        data['send_format'] = parseDataKhususMerchant.data1; //format json / text.
+
+        }
+      }
+
+      logger.info(`Request /travel/pelni/book: ${JSON.stringify(data)}`);
+
+      const response = await makeAxiosPost(`${process.env.URL_HIT}/travel/pelni/book`, data);
+      
+      logger.info(`Response /travel/pelni/book: ${JSON.stringify(response)}`);
+
+      if(merchart !== undefined && merchart !== null 
+        && response.rc === '00') {
+    
+          const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
+          const url = parseDataKhususMerchant.url
+    
+          logger.info(`Request URL ${url} [CALLBACK]: ${JSON.stringify(response.data?.callbackData)}`);
+    
+          
+          const sendCallbackTomerchant = await axios.post(
+            url,
+            response.data?.callbackData || null // callback data for mitra.
+          );
+    
+          if(typeof sendCallbackTomerchant.data === "object"){
+            logger.info(`Response URL ${url} [CALLBACK]: ${JSON.stringify(sendCallbackTomerchant.data)}`);
+          }else{
+            logger.info(`Response URL ${url} [CALLBACK]: ${sendCallbackTomerchant.data}`);
+          }
+    
+          //response untuk mitra
+          response['callback'] = sendCallbackTomerchant.data;
+          return res.send(response);
+    
+        }else{
+    
+          //response global.
+          response['callback'] = null;
+          return res.send(response);
+        
+        }
+
+      } catch (error) {
+        logger.error(`Timeout Error /travel/pelni/book: ${error.message}`);
+        return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
+      }
   
 });
 
@@ -174,7 +212,7 @@ Router.post('/travel/pelni/book', apiLimiterKhususBooking, async (req, res) => {
 //     }
 //   } catch (error) {
 //     logger.error(`Error: ${JSON.stringify(error.message)}`);
-//     return res.status(500).send({ rc: '68', rd: `Internal Server Error.` });
+//     return res.status(200).send({ rc: '68', rd: `Internal Server Error.` });
 //   }
 // });
 
@@ -194,7 +232,7 @@ Router.post('/travel/pelni/book_info', AuthLogin, apiLimiter, async (req, res) =
     return res.send(response);
   } catch (error) {
     logger.error(`Timeout Error /travel/pelni/book_info: ${error.message}`);
-    return res.status(500).send({ rc: '68', rd: 'Server Error, Gateway Timeout.' });
+    return res.status(200).send({ rc: '68', rd: 'Server Error, Gateway Timeout.' });
   }
 });
 
@@ -221,7 +259,7 @@ Router.post('/travel/pelni/book_info', AuthLogin, apiLimiter, async (req, res) =
 //           }
 //         } catch (error) {
 //           logger.error(`Error parsing JSON: ${error.message}`);
-//           return res.status(500).send({ rc: '68', rd: 'Internal Server Error.' });
+//           return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
 //         }
 //       } else {
 //         return res.status(400).send({ rc: '03', rd: 'Booking info not found.' });
@@ -231,7 +269,7 @@ Router.post('/travel/pelni/book_info', AuthLogin, apiLimiter, async (req, res) =
 //     }
 //   } catch (error) {
 //     logger.error(`Error: ${JSON.stringify(error.message)}`);
-//     return res.status(500).send({ rc: '68', rd: `Internal Server Error.` });
+//     return res.status(200).send({ rc: '68', rd: `Internal Server Error.` });
 //   }
 // });
 

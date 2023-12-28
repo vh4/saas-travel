@@ -29,7 +29,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: {
-    maxAge: 3600000,
+    maxAge: parseInt(process.env.EXPIRED_SESSION) || 86400000,
     secure:false
   },
 }));

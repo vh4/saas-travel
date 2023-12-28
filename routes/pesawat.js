@@ -18,11 +18,11 @@ Router.post('/travel/flight/search', async function (req, res) {
       data
     );
 
-    logger.info(`Response /travel/flight/search: ${JSON.stringify(response.data)}`);
+    logger.info(`Response /travel/flight/search: ${response.data.rd}`);
     return res.send(response.data);
   } catch (error) {
     logger.error(`Error /travel/flight/search: ${error.message}`);
-    return res.send({ rc:'68', rd: 'Internal Server Error' });
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
@@ -40,7 +40,7 @@ Router.post('/travel/flight/airline', async function (req, res) {
     return res.send(response.data);
   } catch (error) {
     logger.error(`Error /travel/flight/airline: ${error.message}`);
-    return res.send({ rc:'68', rd: 'Internal Server Error' });
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
@@ -56,7 +56,7 @@ Router.post('/travel/flight/airport', async function (req, res) {
     return res.send(response.data);
   } catch (error) {
     logger.error(`Error /travel/flight/airport: ${error.message}`);
-    return res.send({ rc:'68', rd: 'Internal Server Error' });
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
@@ -74,7 +74,7 @@ Router.post('/travel/flight/fare', async function (req, res) {
     res.send(response.data);
   } catch (error) {
     logger.error(`Error /travel/flight/fare: ${error.message}`);
-    return res.send({ rc:'68', rd: 'Internal Server Error' });
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
@@ -128,29 +128,78 @@ Router.post('/travel/flight/fare', async function (req, res) {
 // });
 
 Router.post('/travel/flight/book', apiLimiterKhususBooking, async function (req, res) {
-  const data = req.body;
-  data['username'] = req.session['v_uname'] || ''
-  const merchart = req.session['v_merchant'] || ''
 
-  if(merchart !== undefined && merchart !== null && merchart !== ''  && merchart?.length > 0) {
-    data['username'] =  data['username'] + '#' + merchart
-  }
-  
-  logger.info(`Request /travel/flight/book: ${JSON.stringify(data)}`);
   try {
+  
+    const data = req.body;
 
-    const response = await axios.post(
-      `${process.env.URL_HIT}/travel/flight/book`,
-      data
-    );
+      data['username'] = req.session['v_uname'];
+      const merchart = req.session['v_merchant'];
+      const username = req.session['v_uname'];
 
-    logger.info(`Response /travel/flight/book: ${JSON.stringify(response.data)}`);
-    return res.send(response.data);
+      logger.info(`Request /travel/flight/book [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}`);
+      
+      if(merchart !== undefined && merchart !== null) {
+          
+        data['username'] =  data['username'] + '#' + merchart;
+
+      if(req.session['khusus_merchant'] !== undefined && req.session['khusus_merchant'] !== null){
+
+        const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
+        data['send_format'] = parseDataKhususMerchant.data1; //format json / text.
+
+        }
+      }
+  
+      logger.info(`Request /travel/flight/book ${JSON.stringify(data)}`);
+
+
+      const response = await axios.post(
+        `${process.env.URL_HIT}/travel/flight/book`,
+        data
+      );
+
+      logger.info(`Response /travel/flight/book: ${JSON.stringify(response.data)}`);
+      
+      if(merchart !== undefined && merchart !== null 
+        && merchart !== ''  && merchart?.length > 0 
+        && response.data.rc === '00') {
+    
+          const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
+          const url = parseDataKhususMerchant.url
+    
+          logger.info(`Request URL ${url} [CALLBACK]: ${JSON.stringify(response.data.data.callbackData)}`);
+    
+          
+          const sendCallbackTomerchant = await axios.post(
+            url,
+            response.data?.data?.callbackData || null // callback data for mitra.
+          );
+    
+          if(typeof sendCallbackTomerchant.data === "object"){
+            logger.info(`Response URL ${url} [CALLBACK]: ${JSON.stringify(sendCallbackTomerchant.data)}`);
+          }else{
+            logger.info(`Response URL ${url} [CALLBACK]: ${sendCallbackTomerchant.data}`);
+          }
+    
+          //response untuk mitra
+          response.data['callback'] = sendCallbackTomerchant.data;
+          return res.send(response.data);
+    
+        }else{
+    
+          //response global.
+          response.data['callback'] = null;
+          return res.send(response.data);
+        
+        }
+      
 
   } catch (error) {
     logger.error(`Error /travel/flight/book: ${error.message}`);
-    return res.send({ rc:'68', rd: 'Internal Server Error' });
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
+
 });
 
 //insert data book to session storage.
@@ -216,7 +265,7 @@ Router.post('/travel/flight/payment', async function (req, res) {
     return res.send(response.data);
   } catch (error) {
     logger.error(`Error /travel/flight/payment: ${error.message}`);
-    return res.send({ error: 'Internal Server Error' });
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 

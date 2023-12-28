@@ -12,7 +12,7 @@ Router.post('/travel/app/redirect', async function (req, res) {
   const {auth, merchant} = req.body;
   try {
 
-    logger.info(`Request http://10.9.43.2:2023. data: ${auth}`); //
+    logger.info(`Request http://10.9.43.2:2023. data: ${auth} merchant: ${merchant}`); //
 
     const dekript = await axios.post(`http://10.9.43.2:2023/index.php?dekrip=null`, {
       dekrip:auth
@@ -39,7 +39,6 @@ Router.post('/travel/app/redirect', async function (req, res) {
           info: JSON.stringify(getInfoClientAll(req), null, 4),
           from: 'Web Travel Auth'
         });
-    
 
         logger.info(`Response HIT RAJABILLER JSON: ${JSON.stringify(response?.data)}`);
     
@@ -51,17 +50,41 @@ Router.post('/travel/app/redirect', async function (req, res) {
         }
     
         const data = response.data;
-    
-        const expired = new Date(new Date().getTime() + 60 * 60 * 1000);
+        const url = response.data.url;
+
+        const expired = new Date(new Date().getTime() + (parseInt(process.env.EXPIRED_SESSION) || 86400000));
         data.expired_date = expired;
         data.username = splitlogin[0];
         data['is_header_name_and_toast'] = false;
 
-        if (data.rc == '00') {
+        if (data.rc === '00') {
+
+          if(merchant !== null && merchant !== undefined){  
+
+            //update session khusus merchant.
+            req.session['khusus_merchant'] = JSON.stringify(
+              {
+                data1:response.data['data1'],
+                data2:response.data['data2'],
+                url:url
+              }
+            )
+
+            logger.info(`INSERTING khusus_merchant TO SESSION: ${JSON.stringify({
+              data1:response.data['data1'],
+              data2:response.data['data2'],
+              url:url
+            })}`);
+
+
+            req.session['v_merchant'] = merchant;
+            logger.info(`INSERTING v_merchant TO SESSION: ${merchant}`);
+
+          }
+          
           req.session['v_session'] = data.token;
           req.session['expired_session'] = expired;
           req.session['v_uname'] = splitlogin[0] || '';
-          req.session['v_merchant'] = merchant
     
           logger.info(`INSERTING TOKEN TO SESSION: ${JSON.stringify(data.token)}`);
     
@@ -69,7 +92,6 @@ Router.post('/travel/app/redirect', async function (req, res) {
     
         logger.info(`Response /travel/app/redirect: ${JSON.stringify(data)}`);
         return res.send(data);
-
     }else{
 
       return res.send({
@@ -81,11 +103,7 @@ Router.post('/travel/app/redirect', async function (req, res) {
 
   } catch (error) {
     logger.error(`Error /travel/app/redirect: ${error.message}`);
-
-    return res.send({
-      rc: '03',
-      rd: error.message
-    });
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
 
   }
 });
@@ -130,7 +148,7 @@ Router.post('/travel/app/sign_in', async function (req, res) {
     
         const data = response.data;
     
-        const expired = new Date(new Date().getTime() + 60 * 60 * 1000);
+        const expired = new Date(new Date().getTime() + (parseInt(process.env.EXPIRED_SESSION) || 86400000));
         data.expired_date = expired;
         data['is_header_name_and_toast'] = true;
 
@@ -157,10 +175,8 @@ Router.post('/travel/app/sign_in', async function (req, res) {
 
   } catch (error) {
     logger.error(`Error /travel/app/redirect: ${error.message}`);
-    return res.send({
-      rc: '68',
-      rd: error.message
-    });
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
+
   }
 });
 
@@ -178,10 +194,8 @@ Router.post('/travel/app/account', async function (req, res) {
     return res.send(data);
   } catch (error) {
     logger.error(`Error /travel/app/account: ${error.message}`);
-    return res.send({
-      rc: '68',
-      rd: error.message
-    });
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
+
   }
 });
 
@@ -238,10 +252,8 @@ Router.post('/travel/refresh-date', async function (req, res) {
 
   } catch (error) {
     logger.error(`Error /travel/app/account: ${error.message}`);
-    return res.send({
-      rc: '68',
-      rd: error.message
-    });
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
+
   }
 });
 
@@ -262,10 +274,7 @@ Router.post('/travel/app/sign_out', async function (req, res) {
     return res.send(data);
   } catch (error) {
     logger.error(`Error /travel/app/sign_out: ${error.message}`);
-    return res.send({
-      rc: '68',
-      rd: error.message
-    });
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
@@ -291,10 +300,8 @@ Router.post('/travel/app/transaction_list', async function (req, res) {
     return res.send(data);
   } catch (error) {
     logger.error(`Error /travel/app/transaction_list: ${error.message}`);
-    return res.send({
-      rc: '68',
-      rd: error.message
-    });
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
+
   }
 });
 
@@ -313,10 +320,8 @@ Router.post('/travel/app/transaction_book_list', async function (req, res) {
     return res.send(data);
   } catch (error) {
     logger.error(`Error /travel/app/transaction_book_list: ${error.message}`);
-    return res.send({
-      rc: '68',
-      rd: error.message
-    });
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
+
   }
 });
 
