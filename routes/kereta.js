@@ -380,6 +380,26 @@ Router.post('/travel/train/change_seat', async function (req, res) { // Menambah
   try {
     const data = req.body;
 
+    data['username'] = req.session['v_uname'];
+
+    const merchart = req.session['v_merchant'];
+    const username = req.session['v_uname'];
+
+    logger.info(`Request /travel/train/change_seat [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}`);
+
+    if(merchart !== undefined && merchart !== null) {
+      
+        data['username'] =  data['username'] + '#' + merchart;
+
+      if(req.session['khusus_merchant'] !== undefined && req.session['khusus_merchant'] !== null){
+
+        const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
+        data['send_format'] = parseDataKhususMerchant.data1; //format json / text.
+
+      }
+    }
+
+
     logger.info(`Request /travel/train/change_seat: ${JSON.stringify(data)}`);
 
     const response = await axios.post(
