@@ -290,8 +290,10 @@ Router.post('/travel/train/callback', AuthLogin, apiLimiterKhususBooking, async 
 
     //data merchant
     const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
-    const urlCallback = parseDataKhususMerchant.url
-    const send_format = parseDataKhususMerchant.data1; //format json / text.
+    const urlCallback = parseDataKhususMerchant?.url;
+    const send_format = parseDataKhususMerchant?.data1; //format json / text.
+
+    logger.info(`Request /travel/train/callback [id_transaksi] : ${id_transaksi} [MERCHANT IF EXISTS]: ${JSON.stringify(parseDataKhususMerchant || '')} [uid] : ${uid}`);
 
     let getResponseGlobal = null;
 
@@ -325,7 +327,6 @@ Router.post('/travel/train/callback', AuthLogin, apiLimiterKhususBooking, async 
       logger.info(`Response /travel/train/callback : ${JSON.stringify(getResponseGlobal.data)}`);
 
     }
-
 
       logger.info(`REQUEST URL ${urlCallback} [sendCallbackTomerchant]: ${JSON.stringify(getResponseGlobal.data)}`);
      
