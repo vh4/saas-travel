@@ -4,6 +4,7 @@ const logger = require('../utils/logger.js');
 const { v4:uuidv4} = require('uuid');
 const { AuthLogin } = require('../middleware/auth.js');
 const { apiLimiter, apiLimiterKhususBooking } = require('../middleware/limit.js');
+const { axiosSendCallback } = require('../utils/utils.js');
 
 require('dotenv').config()
 const Router = express.Router();
@@ -143,34 +144,37 @@ Router.post('/travel/pelni/book', AuthLogin, apiLimiterKhususBooking, async (req
 
       logger.info(`Request /travel/pelni/book: ${JSON.stringify(data)}`);
 
+      //booking pelni!
       const response = await makeAxiosPost(`${process.env.URL_HIT}/travel/pelni/book`, data);
-      
+
       logger.info(`Response /travel/pelni/book: ${JSON.stringify(response)}`);
 
+      //check if merchant data.
       if(merchart !== undefined && merchart !== null 
-        && response.rc === '00') {
-    
+        && response.rc === '00' && response.data?.callbackData !== undefined && response.data?.callbackData !== null) {
+
           const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
           const url = parseDataKhususMerchant.url
-    
-          logger.info(`Request URL ${url} [CALLBACK]: ${JSON.stringify(response.data?.callbackData)}`);
-    
+
+          logger.info(`Request URL ${url} [CALLBACK]: ${JSON.stringify(response.data?.callbackData)}`);          
           
-          const sendCallbackTomerchant = await axios.post(
-            url,
-            response.data?.callbackData || null // callback data for mitra.
-          );
+          // const sendCallbackTomerchant = await axios.post(
+          //   url,
+          //   response.data?.callbackData || null // callback data for mitra.
+          // );
     
-          if(typeof sendCallbackTomerchant.data === "object"){
-            logger.info(`Response URL ${url} [CALLBACK]: ${JSON.stringify(sendCallbackTomerchant.data)}`);
-          }else{
-            logger.info(`Response URL ${url} [CALLBACK]: ${sendCallbackTomerchant.data}`);
-          }
+          // if(typeof sendCallbackTomerchant.data === "object"){
+          //   logger.info(`Response URL ${url} [CALLBACK]: ${JSON.stringify(sendCallbackTomerchant.data)}`);
+          // }else{
+          //   logger.info(`Response URL ${url} [CALLBACK]: ${sendCallbackTomerchant.data}`);
+          // }
     
           //response untuk mitra
-          response['callback'] = sendCallbackTomerchant.data;
+          // response['callback'] = sendCallbackTomerchant.data;
+
+          response.data['callback'] = JSON.stringify(response.data?.data?.callbackData) || null;
           return res.send(response);
-    
+      
         }else{
     
           //response global.
@@ -184,6 +188,28 @@ Router.post('/travel/pelni/book', AuthLogin, apiLimiterKhususBooking, async (req
         return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
       }
   
+});
+
+
+//callback khusus pelni.
+Router.post('/travel/pelni/callback', AuthLogin, apiLimiterKhususBooking, async function (req, res) { // Menambahkan async
+  
+  try {
+
+    const method = 'cekkapal'
+    const { id_transaksi } = req.body;
+    const type = 'pelni';
+    
+    const response = await axiosSendCallback(req, method, id_transaksi, type);
+    return res.send(response);
+
+  } catch (error) {
+    
+    logger.error(`Error /travel/pelni/callback: ${error.message}`);
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
+
+  }
+
 });
 
 //retrieve data bookign from session storage.

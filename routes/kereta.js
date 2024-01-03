@@ -4,6 +4,7 @@ const logger = require('../utils/logger.js');
 const { v4: uuidv4 } = require('uuid');
 const { AuthLogin } = require('../middleware/auth.js');
 const { apiLimiter, apiLimiterKhususBooking } = require('../middleware/limit.js');
+const { axiosSendCallback } = require('../utils/utils.js');
 const Router = express.Router();
 require('dotenv').config()
 
@@ -282,72 +283,12 @@ Router.post('/travel/train/callback', AuthLogin, apiLimiterKhususBooking, async 
   
   try {
 
-    const uidpin = req.session['v_session_uid_pin'].split('|') || [];
-    const uid = uidpin[0] || null;
-    const pin = uidpin[1] || null;
     const method = 'cekkereta'
     const { id_transaksi } = req.body;
-
-    //data merchant
-    const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
-    const urlCallback = parseDataKhususMerchant?.url;
-    const send_format = parseDataKhususMerchant?.data1; //format json / text.
-
-    logger.info(`Request /travel/train/callback [id_transaksi] : ${id_transaksi} [MERCHANT IF EXISTS]: ${JSON.stringify(parseDataKhususMerchant || '')} [uid] : ${uid}`);
-
-    let getResponseGlobal = null;
-
-    if(send_format?.toUpperCase() == 'JSON'){
-
-      logger.info(`REQUEST https://rajabiller.fastpay.co.id/transaksi/api_json.php [JSON]: ${JSON.stringify({
-        method: method,
-        uid:uid,
-        pin:pin,
-        trxid:id_transaksi
-      })}`);
-
-      const url = 'https://rajabiller.fastpay.co.id/transaksi/api_json.php';
-      getResponseGlobal = await axios.post(url, {
-        method: method,
-        uid:uid,
-        pin:pin,
-        trxid:id_transaksi
-      });
-
-      logger.info(`Response /travel/train/callback : ${JSON.stringify(getResponseGlobal.data)}`);
-
-    }else{
-
-      const url = `https://rajabiller.fastpay.co.id/transaksi/api_otomax.php?method=${method}&uid=${uid}&pin=${pin}&trxid=${id_transaksi}`;
-      
-      logger.info(`REQUEST https://rajabiller.fastpay.co.id/transaksi/api_json.php [OTOMAX]: ${url}`);
-
-      getResponseGlobal = await axios.get(url);
-
-      logger.info(`Response /travel/train/callback : ${JSON.stringify(getResponseGlobal.data)}`);
-
-    }
-
-      logger.info(`REQUEST URL ${urlCallback} [sendCallbackTomerchant]: ${JSON.stringify(getResponseGlobal.data)}`);
-     
-      const sendCallbackTomerchant = await axios.post(
-        urlCallback,
-        getResponseGlobal.data || null
-      );
-
-      if(typeof sendCallbackTomerchant.data === "object"){
-        logger.info(`Response URL ${urlCallback} [CALLBACK]: ${JSON.stringify(sendCallbackTomerchant.data)}`);
-      }else{
-        logger.info(`Response URL ${urlCallback} [CALLBACK]: ${sendCallbackTomerchant.data}`);
-      }
-
-      const response = {
-        rc:'00',
-        rd:'success',
-        callback:sendCallbackTomerchant.data
-      }
-      return res.send(response);
-
+    const type = 'train';
+    
+    const response = await axiosSendCallback(req, method, id_transaksi, type);
+    return res.send(response);
 
   } catch (error) {
     
@@ -356,8 +297,7 @@ Router.post('/travel/train/callback', AuthLogin, apiLimiterKhususBooking, async 
 
   }
 
-
-})
+});
 
 Router.post('/travel/train/payment', AuthLogin, async function (req, res) { // Menambahkan async
   try {

@@ -191,6 +191,37 @@ Router.post('/travel/app/sign_in', async function (req, res) {
 });
 
 
+Router.post('/travel/is_merchant', async function (req, res) {
+  const { token } = req.body;
+
+  try {
+
+    const session = req.session['v_session'];
+
+    //
+    if(token != session){
+       return res.send({rc:"03", rd:"You must be login!."});
+    }
+
+    //
+    if( req.session['v_merchant'] === undefined || req.session['v_merchant']  === null){
+
+      return res.send({rc:"03", rd:"Merchant isn't found, Please Input yurr merchant!."});
+
+    }
+
+    return res.send({
+      rc:'00',
+      rd:"success",
+    });
+
+  } catch (error) {
+    logger.error(`Error /travel/app/account: ${error.message}`);
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
+
+  }
+});
+
 Router.post('/travel/app/account', async function (req, res) {
   const { token } = req.body;
   logger.info(`Request /travel/app/account: ${JSON.stringify(req.body)}`);

@@ -4,6 +4,7 @@ const logger = require('../utils/logger.js');
 const { v4:uuidv4} = require('uuid');
 const { AuthLogin } = require('../middleware/auth.js');
 const { apiLimiter, apiLimiterKhususBooking } = require('../middleware/limit.js');
+const { axiosSendCallback } = require('../utils/utils.js');
 require('dotenv').config()
 
 const Router = express.Router();
@@ -168,22 +169,23 @@ Router.post('/travel/flight/book', AuthLogin, apiLimiterKhususBooking, async fun
           const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
           const url = parseDataKhususMerchant.url
     
-          logger.info(`Request URL ${url} [CALLBACK]: ${JSON.stringify(response.data.data.callbackData)}`);
-    
+          logger.info(`Request URL ${url} [CALLBACK]: ${JSON.stringify(response.data?.data?.callbackData)}`);    
           
-          const sendCallbackTomerchant = await axios.post(
-            url,
-            response.data?.data?.callbackData || null // callback data for mitra.
-          );
+          // const sendCallbackTomerchant = await axios.post(
+          //   url,
+          //   response.data?.data?.callbackData || null // callback data for mitra.
+          // );
     
-          if(typeof sendCallbackTomerchant.data === "object"){
-            logger.info(`Response URL ${url} [CALLBACK]: ${JSON.stringify(sendCallbackTomerchant.data)}`);
-          }else{
-            logger.info(`Response URL ${url} [CALLBACK]: ${sendCallbackTomerchant.data}`);
-          }
+          // if(typeof sendCallbackTomerchant.data === "object"){
+          //   logger.info(`Response URL ${url} [CALLBACK]: ${JSON.stringify(sendCallbackTomerchant.data)}`);
+          // }else{
+          //   logger.info(`Response URL ${url} [CALLBACK]: ${sendCallbackTomerchant.data}`);
+          // }
     
           //response untuk mitra
-          response.data['callback'] = sendCallbackTomerchant.data;
+          // response.data['callback'] = sendCallbackTomerchant.data;
+
+          response.data['callback'] = JSON.stringify(response.data?.data?.callbackData) || null;
           return res.send(response.data);
     
         }else{
@@ -198,6 +200,27 @@ Router.post('/travel/flight/book', AuthLogin, apiLimiterKhususBooking, async fun
   } catch (error) {
     logger.error(`Error /travel/flight/book: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
+  }
+
+});
+
+//callback khusus plane.
+Router.post('/travel/plane/callback', AuthLogin, apiLimiterKhususBooking, async function (req, res) { // Menambahkan async
+  
+  try {
+
+    const method = 'cekpesawat'
+    const { id_transaksi } = req.body;
+    const type = 'plane';
+    
+    const response = await axiosSendCallback(req, method, id_transaksi, type);
+    return res.send(response);
+
+  } catch (error) {
+    
+    logger.error(`Error /travel/plane/callback: ${error.message}`);
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
+
   }
 
 });
