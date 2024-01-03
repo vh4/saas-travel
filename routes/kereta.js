@@ -307,7 +307,7 @@ Router.post('/travel/train/callback', AuthLogin, apiLimiterKhususBooking, async 
       })}`);
 
       const url = 'https://rajabiller.fastpay.co.id/transaksi/api_json.php';
-      getResponseGlobal = await axios.get(url, {
+      getResponseGlobal = await axios.post(url, {
         method: method,
         uid:uid,
         pin:pin,
