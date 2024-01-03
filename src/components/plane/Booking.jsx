@@ -264,7 +264,6 @@ useEffect(() => {
     try {
   
       const response = localStorage.getItem(`data:flight/${id}`);
-      console.log(JSON.parse(response));
       return JSON.parse(response);
   
     } catch (error) {

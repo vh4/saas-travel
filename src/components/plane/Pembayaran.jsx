@@ -163,7 +163,6 @@ export default function Pembayaran() {
   async function getInfoBooking() {
     try {
       const response = localStorage.getItem(`data:f-book/${v_book}`)
-      console.log(JSON.parse(response))
       return JSON.parse(response);
 
     } catch (error) {

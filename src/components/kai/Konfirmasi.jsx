@@ -80,7 +80,6 @@ seats.forEach((seat) => {
         }
 
           setSelectedCheckboxes(handlersetSelectedCheckboxes(selectedCheckboxes));
-          console.log(handlersetSelectedCheckboxes(selectedCheckboxes))
 
           const changeStateData = changeState[0];
           const tolong = handlersetSelectedCheckboxes(selectedCheckboxes);
@@ -509,7 +508,7 @@ export default function Konfirmasi() {
 
     setIsLoading(true);
 
-    if(callback_train){
+    if(callback_train && callback_train == 'true'){
 
       setTimeout(async () => {
         
@@ -547,7 +546,6 @@ export default function Konfirmasi() {
     
   };  
 
-  console.log(changeState);
 
   const handlerPindahKursi = async (e) => {
     e.preventDefault();
