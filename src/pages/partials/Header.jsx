@@ -9,7 +9,7 @@ import SidebarMobileUser from "./sidebar/mobile/SidebarMobileUser";
 import { Drawer, Typography, Modal, Form, Input, Button, Avatar } from "antd";
 import { notification } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
-import { FaListAlt } from "react-icons/fa";
+import { FaHome, FaListAlt } from "react-icons/fa";
 import ReCAPTCHA from "react-google-recaptcha";
 import { UserOutlined } from "@ant-design/icons";
 import dayjs, { isDayjs } from "dayjs";
@@ -278,8 +278,10 @@ export default function Header() {
     <nav className="bg-white px-2 sm:px-4 py-3  block sticky top-0 w-full z-50 left-0 border-b border-gray-200 ">
       {contextHolder}
       <div className="container mx-auto">
-        <div className="flex justify-between items-center -mx-2 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24">
+        <div className={`flex justify-between items-cente ${localStorage.getItem("hdrs_c") == "false" && 'py-0 md:py-2'} r -mx-2 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24`}>
           <div className="">
+          {localStorage.getItem("hdrs_c") != "false" && (
+          <>
             <Link to={"/"} className="flex items-center">
               <img
                 src="/logo.png"
@@ -287,16 +289,31 @@ export default function Header() {
                 alt="Rajabiller Logo"
               />
             </Link>
+          </>)}
           </div>
           <div className="flex space-x-6 items-center xl:order-2">
-            {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
+          {localStorage.getItem("hdrs_c") == "false" && (
+              <>
               <Link
-                to="/transaksi/pesawat"
+                to="/"
                 className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-gray-800"
               >
-                <FaListAlt className="text-cyan-500" size={18} />
-                <div className="text-[15px] text-gray-800">Transaksi</div>
-              </Link>
+                <FaHome className="text-blue-500" size={18} />
+                <div className="text-[15px] text-gray-800">Home</div>
+              </Link>              
+              </>
+            )}
+
+            {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
+              <div>
+                <Link
+                  to="/transaksi/pesawat"
+                  className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-gray-800"
+                >
+                  <FaListAlt className="text-cyan-500" size={18} />
+                  <div className="text-[15px] text-gray-800">Transaksi</div>
+                </Link>
+              </div>
             ) : null}
             {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
               <Link
@@ -307,6 +324,7 @@ export default function Header() {
                 <div className="text-[15px] text-gray-800">Booking</div>
               </Link>
             ) : null}
+
             <>
               {/* Untuk Belum login */}
               {!localStorage.getItem(
