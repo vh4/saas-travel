@@ -326,15 +326,29 @@ Router.get('/travel/country', (req, res) => {
 
 });
 
-
 Router.post('/travel/app/transaction_list', async function (req, res) {
-  const { token, product } = req.body;
-  logger.info(`Request /travel/app/transaction_list: ${JSON.stringify(req.body)}`);
 
   try {
+
+    const { token, product } = req.body;
+    logger.info(`Request /travel/app/transaction_list: ${JSON.stringify(req.body)}`);
+
+    const requests = {};
+    requests['username'] = req.session['v_uname'];
+    const merchart = req.session['v_merchant'];
+    const username = req.session['v_uname'];
+
+    logger.info(`Request /travel/app/transaction_list [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}`);
+    
+    if(merchart !== undefined && merchart !== null) {
+        
+      requests['username'] =  requests['username'] + '#' + merchart;
+    }
+
     const { data } = await axios.post(`${process.env.URL_HIT}/travel/app/transaction_list`, {
       token: token,
       product: product,
+      ...requests
     });
 
     logger.info(`Response /travel/app/transaction_list: ${JSON.stringify(data)}`);
@@ -348,17 +362,32 @@ Router.post('/travel/app/transaction_list', async function (req, res) {
 
 
 Router.post('/travel/app/transaction_book_list', async function (req, res) {
-  const { token, product } = req.body;
-  logger.info(`Request /travel/app/transaction_book_list: ${JSON.stringify(req.body)}`);
-
+  
   try {
-    const { data } = await axios.post(`${process.env.URL_HIT}/travel/app/transaction_book_list`, {
-      token: token,
-      product: product,
-    });
 
-    logger.info(`Response /travel/app/transaction_book_list: ${JSON.stringify(data)}`);
-    return res.send(data);
+      const { token, product } = req.body;  
+      logger.info(`Request /travel/app/transaction_book_list: ${JSON.stringify(req.body)}`);
+      const requests = {};
+
+      requests['username'] = req.session['v_uname'];
+      const merchart = req.session['v_merchant'];
+      const username = req.session['v_uname'];
+
+      logger.info(`Request /travel/app/transaction_book_list [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}`);
+      
+      if(merchart !== undefined && merchart !== null) {
+          
+        requests['username'] =  requests['username'] + '#' + merchart;
+      }
+
+      const { data } = await axios.post(`${process.env.URL_HIT}/travel/app/transaction_book_list`, {
+        token: token,
+        product: product,
+        ...requests
+      });
+
+      logger.info(`Response /travel/app/transaction_book_list: ${JSON.stringify(data)}`);
+      return res.send(data);
   } catch (error) {
     logger.error(`Error /travel/app/transaction_book_list: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
