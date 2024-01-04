@@ -504,7 +504,11 @@ useEffect(() => {
         //   `Response callback is : ${typeof bookingResponse.data.callback === 'object' ? JSON.stringify(bookingResponse.data.callback) : bookingResponse.data.callback}`
         // );
 
-        navigate('/');
+        // navigate('/');
+        navigate({
+          pathname: `/flight/payment`,
+          search: `?v_flight=${id}&v_book=${uuid}`,
+      });
         
       }
 

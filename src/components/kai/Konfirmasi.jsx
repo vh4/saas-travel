@@ -510,27 +510,34 @@ export default function Konfirmasi() {
 
     if(callback_train && callback_train == 'true'){
 
-      setTimeout(async () => {
+      // setTimeout(async () => {
         
-        const dataParse = JSON.parse(localStorage.getItem(`data:k-book/${uuid_book}`))
+      //   const dataParse = JSON.parse(localStorage.getItem(`data:k-book/${uuid_book}`))
 
-        const response = await axios.post(
-          `${process.env.REACT_APP_HOST_API}/travel/train/callback`,
-          {
-            id_transaksi:dataParse.hasil_book.transactionId
-          }
-        );
+      //   const response = await axios.post(
+      //     `${process.env.REACT_APP_HOST_API}/travel/train/callback`,
+      //     {
+      //       id_transaksi:dataParse.hasil_book.transactionId
+      //     }
+      //   );
 
-      if(response.data.rc == '00'){
-        navigate('/')
-      }else{
-        failedNotification(response.data.rd)
-      }
+      // if(response.data.rc == '00'){
+      //   navigate('/')
+      // }else{
+      //   failedNotification(response.data.rd)
+      // }
 
-      setIsLoading(false);
+      // setIsLoading(false);
 
+      // }, 100);
+
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate({
+          pathname: `/train/bayar`,
+          search: `?k_train=${uuid_train_data}&k_book=${uuid_book}`,
+        });
       }, 100);
-
       
     }else{
       e.preventDefault();

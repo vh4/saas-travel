@@ -36,6 +36,7 @@ export default function Pembayaran() {
   const [dataDetailTrain, setdataDetailTrain] = useState(null);
   const [hasilBooking, setHasilBooking] = useState(null);
   const [passengers, setPassengers] = useState(null);
+  const [callbackBoolean, setcallbackBoolean] = useState(false);
 
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
@@ -67,8 +68,14 @@ export default function Pembayaran() {
       setErr(true);
     }
 
-    Promise.all([getDataTrain(), getHasilBooking()])
-      .then(([ResponsegetDataTrain, ResponsegetHasilBooking]) => {
+    Promise.all([getDataTrain(), getHasilBooking(), cekCallbakIsMitra()])
+      .then(([ResponsegetDataTrain, ResponsegetHasilBooking, cekCallbakIsMitra]) => {
+        
+        
+        if(cekCallbakIsMitra.data.rc == '00'){
+          setcallbackBoolean(true);
+        }
+
         if (ResponsegetDataTrain) {
           setdataDetailTrain(ResponsegetDataTrain.train_detail);
           setdataBookingTrain(ResponsegetDataTrain.train);
@@ -171,6 +178,23 @@ export default function Pembayaran() {
   //   }
   // }
 
+
+  async function cekCallbakIsMitra() {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/travel/is_merchant`,
+        {
+          token: JSON.parse(
+            localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+          ),
+        }
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async function getHasilBooking() {
     try {
       const response = localStorage.getItem(`data:k-book/${uuid_book}`);
@@ -237,6 +261,33 @@ export default function Pembayaran() {
         setIsLoading(false);
       }, 100);
     }
+  }
+
+  async function handleCallbackSubmit(e){
+      e.preventDefault();
+      setIsLoading(true);
+      
+      setTimeout(async () => {
+        
+        const dataParse = JSON.parse(localStorage.getItem(`data:k-book/${uuid_book}`))
+
+        const response = await axios.post(
+          `${process.env.REACT_APP_HOST_API}/travel/train/callback`,
+          {
+            id_transaksi:dataParse.hasil_book.transactionId
+          }
+        );
+
+      if(response.data.rc == '00'){
+        navigate('/')
+      }else{
+        failedNotification(response.data.rd)
+      }
+
+      setIsLoading(false);
+
+      }, 100);
+    
   }
 
   return (
@@ -539,44 +590,85 @@ export default function Pembayaran() {
                         ))}
                     </div>
                   </div>
-                  <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
-                    <div className="px-8 py-4 text-sm text-gray-500">
-                    Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
-                    </div>
 
-                    <div className="flex justify-center">
-                      <ButtonAnt
-                        onClick={handlerPembayaran}
-                        size="large"
-                        key="submit"
-                        type="primary"
-                        className="bg-blue-500 mx-2 font-semibold mt-4"
-                        loading={isLoading}
-                        disabled
-                      >
-                        Langsung Bayar
-                      </ButtonAnt>
-                    </div>
+                  <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                  {callbackBoolean == true ? (
+                    <>
+                      <div className="px-8 py-4 text-sm text-gray-500">
+                      Tekan tombol dibawah ini untuk melanjutkan proses transaksi.
+                      </div>                   
+                       <div className="flex justify-center">
+                        <ButtonAnt
+                          onClick={handleCallbackSubmit}
+                          size="large"
+                          key="submit"
+                          type="primary"
+                          className="bg-blue-500 px-12 font-semibold mt-4"
+                          loading={isLoading}
+                        >
+                          Selesai
+                        </ButtonAnt>
+                      </div>                   
+                    </>
+                  ):(
+                    <>
+                      <div className="px-8 py-4 text-sm text-gray-500">
+                      Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
+                      </div>
+                      <div className="flex justify-center">
+                        <ButtonAnt
+                          onClick={handlerPembayaran}
+                          size="large"
+                          key="submit"
+                          type="primary"
+                          className="bg-blue-500 mx-2 font-semibold mt-4"
+                          loading={isLoading}
+                          disabled
+                        >
+                          Langsung Bayar
+                        </ButtonAnt>
+                      </div>
+                    </>
+                    )}
                   </div>
                 </div>
-                <div className="block xl:hidden mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
-                    <div className="px-8 py-4 text-sm text-gray-500">
-                    Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
-                    </div>
+                  <div className="block xl:hidden mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                    {callbackBoolean == true ? (
+                      <>
+                         <div className="flex justify-center">
+                          <ButtonAnt
+                            onClick={handleCallbackSubmit}
+                            size="large"
+                            key="submit"
+                            type="primary"
+                            className="bg-blue-500 mx-2 font-semibold mt-4"
+                            loading={isLoading}
+                          >
+                            Selesai
+                          </ButtonAnt>
+                        </div>                      
+                      </>
+                      ) : (
+                      <>
+                        <div className="px-8 py-4 text-sm text-gray-500">
+                        Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
+                        </div>
+                        <div className="flex justify-center">
+                          <ButtonAnt
+                            onClick={handlerPembayaran}
+                            size="large"
+                            key="submit"
+                            type="primary"
+                            className="bg-blue-500 mx-2 font-semibold mt-4"
+                            loading={isLoading}
+                            disabled
+                          >
+                            Langsung Bayar
+                          </ButtonAnt>
+                        </div>                     
+                      </>
+                    )}
 
-                    <div className="flex justify-center">
-                      <ButtonAnt
-                        onClick={handlerPembayaran}
-                        size="large"
-                        key="submit"
-                        type="primary"
-                        className="bg-blue-500 mx-2 font-semibold mt-4"
-                        loading={isLoading}
-                        disabled
-                      >
-                        Langsung Bayar
-                      </ButtonAnt>
-                    </div>
                   </div>
               </div>
             </>

@@ -44,6 +44,8 @@ export default function Pembayaran() {
   const [errPage, setErrPage] = useState(false);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
 
+  const [callbackBoolean, setcallbackBoolean] = useState(false);
+
   function gagal(rd) {
     messageApi.open({
       type: "error",
@@ -121,13 +123,17 @@ export default function Pembayaran() {
       setErr(true);
     }
 
-    Promise.all([getInfoBooking(), getSearchFlightInfo()])
-      .then(([getInfoBooking, getSearchFlightInfo]) => {
+    Promise.all([getInfoBooking(), getSearchFlightInfo(), cekCallbakIsMitra()])
+      .then(([getInfoBooking, getSearchFlightInfo, cekCallbakIsMitra]) => {
         const dataDetail = getSearchFlightInfo._flight;
         const dataDetailPassenger = getInfoBooking._DetailPassenger;
         const hasilBooking = getInfoBooking._Bookingflight;
         const dataDetailForBooking =
           getSearchFlightInfo._flight_forBooking;
+
+          if(cekCallbakIsMitra.data.rc == '00'){
+            setcallbackBoolean(true);
+          }
 
         if (getInfoBooking) {
           setdataDetailPassenger(dataDetailPassenger);
@@ -176,6 +182,22 @@ export default function Pembayaran() {
       return JSON.parse(response);
     } catch (error) {
       return null;
+    }
+  }
+
+  async function cekCallbakIsMitra() {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/travel/is_merchant`,
+        {
+          token: JSON.parse(
+            localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+          ),
+        }
+      );
+      return response;
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -228,6 +250,33 @@ export default function Pembayaran() {
       }, 1000);
     }
   }
+
+  async function handleCallbackSubmit(e){
+    e.preventDefault();
+    setIsLoading(true);
+    
+    setTimeout(async () => {
+      
+      const dataParse = JSON.parse(localStorage.getItem(`data:f-book/${v_book}`))
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/travel/plane/callback`,
+        {
+          id_transaksi:dataParse._Bookingflight.transactionId
+        }
+      );
+
+    if(response.data.rc == '00'){
+      navigate('/')
+    }else{
+      gagal(response.data.rd)
+    }
+
+    setIsLoading(false);
+
+    }, 100);
+  
+}
 
   return (
     <>
@@ -564,49 +613,83 @@ export default function Pembayaran() {
 
                   {/* desktop payment button */}
                   <div className="hidden xl:block mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
-                    <div className="flex justify-center">
-                      <div className="flex justify-center px-8 py-4 text-sm text-gray-500">
-                        <div className="">
-                        Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut.
-                        </div>
+                  {callbackBoolean == true ? (
+                    <>
+                      <div className="px-8 py-4 text-sm text-gray-500">
+                      Tekan tombol dibawah ini untuk melanjutkan proses transaksi.
+                      </div>                   
+                       <div className="flex justify-center">
+                        <Button
+                          onClick={handleCallbackSubmit}
+                          size="large"
+                          key="submit"
+                          type="primary"
+                          className="bg-blue-500 px-12 font-semibold mt-4"
+                          loading={isLoading}
+                        >
+                          Selesai
+                        </Button>
+                      </div>                   
+                    </>
+                  ):(
+                    <>
+                      <div className="px-8 py-4 text-sm text-gray-500">
+                      Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
                       </div>
-                    </div>
-                    <div className="flex justify-center mb-4">
-                      <Button
-                        key="submit"
-                        size="large"
-                        type="primary"
-                        className="bg-blue-500"
-                        loading={isLoading}
-                        onClick={handlerPembayaran}
-                        disabled
-                      >
-                        Bayar Langsung
-                      </Button>
-                    </div>
+                      <div className="flex justify-center">
+                        <Button
+                          onClick={handlerPembayaran}
+                          size="large"
+                          key="submit"
+                          type="primary"
+                          className="bg-blue-500 mx-2 font-semibold mt-4"
+                          loading={isLoading}
+                          disabled
+                        >
+                          Langsung Bayar
+                        </Button>
+                      </div>
+                    </>
+                    )}
                   </div>
                 </div>
                 <div className="block xl:hidden mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
-                    <div className="flex justify-center">
-                      <div className="flex justify-center px-8 py-4 text-sm text-gray-500">
-                        <div className="">
-                        Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut.
+                    {callbackBoolean == true ? (
+                      <>
+                         <div className="flex justify-center">
+                          <Button
+                            onClick={handleCallbackSubmit}
+                            size="large"
+                            key="submit"
+                            type="primary"
+                            className="bg-blue-500 mx-2 font-semibold mt-4"
+                            loading={isLoading}
+                          >
+                            Selesai
+                          </Button>
+                        </div>                      
+                      </>
+                      ) : (
+                      <>
+                        <div className="px-8 py-4 text-sm text-gray-500">
+                        Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
                         </div>
-                      </div>
-                    </div>
-                    <div className="flex justify-center mb-4">
-                      <Button
-                        key="submit"
-                        size="large"
-                        type="primary"
-                        className="bg-blue-500"
-                        loading={isLoading}
-                        onClick={handlerPembayaran}
-                        disabled
-                      >
-                        Bayar Langsung
-                      </Button>
-                    </div>
+                        <div className="flex justify-center">
+                          <Button
+                            onClick={handlerPembayaran}
+                            size="large"
+                            key="submit"
+                            type="primary"
+                            className="bg-blue-500 mx-2 font-semibold mt-4"
+                            loading={isLoading}
+                            disabled
+                          >
+                            Langsung Bayar
+                          </Button>
+                        </div>                     
+                      </>
+                    )}
+
                   </div>
               </div>
             </>

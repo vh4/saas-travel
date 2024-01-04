@@ -44,6 +44,7 @@ export default function Pembayaran() {
 
   const [TotalAdult, setTotalAdult] = useState(0);
   const [TotalInfant, setTotalInfant] = useState(0);
+  const [callbackBoolean, setcallbackBoolean] = useState(false);
 
   const [err, setErr] = useState(false);
 
@@ -92,12 +93,16 @@ export default function Pembayaran() {
       setErr(true);
     }
 
-    Promise.all([getDataAllBook()])
-      .then(([getDataAllBook]) => {
+    Promise.all([getDataAllBook(), cekCallbakIsMitra()])
+      .then(([getDataAllBook, cekCallbakIsMitra]) => {
 
         const bookResponse = getDataAllBook.book;
         const passenggerResponse = getDataAllBook;
         const bookInfoResponse = getDataAllBook.infobooking;
+
+        if(cekCallbakIsMitra.data.rc == '00'){
+          setcallbackBoolean(true);
+        }
         
         if (bookResponse.data.rc === "00") {
           setBook(bookResponse.data.data);
@@ -173,6 +178,21 @@ export default function Pembayaran() {
   //   }
   // }
 
+  async function cekCallbakIsMitra() {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/travel/is_merchant`,
+        {
+          token: JSON.parse(
+            localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+          ),
+        }
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
 
   const failedNotification = (rd) => {
     api["error"]({
@@ -194,6 +214,34 @@ export default function Pembayaran() {
   async function handlerPembayaran(e) {
     e.preventDefault();
   }
+
+  async function handleCallbackSubmit(e){
+    e.preventDefault();
+    setLoading(true);
+    
+    setTimeout(async () => {
+      
+      const dataParse = JSON.parse(localStorage.getItem(`data:pl-passenger/${id}`))
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/travel/pelni/callback`,
+        {
+          id_transaksi:dataParse.transactionId
+        }
+      );
+
+    if(response.data.rc == '00'){
+      navigate('/')
+    }else{
+      failedNotification(response.data.rd)
+    }
+
+    setLoading(false);
+
+    }, 100);
+  
+}
+
 
   return (
     <>
@@ -439,15 +487,30 @@ export default function Pembayaran() {
                           : ""}
                       </div>
                     </div>
-                    <div className="hidden xl:block mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
-                      {/* <div className="px-8 py-4 text-sm text-gray-500">
-                              Tekan tombol <span className="text-blue-500">bayar langsung</span> untuk melakukan pembayaran secara tunai.
-                          </div> */}
-
+                    <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                  {callbackBoolean == true ? (
+                    <>
+                      <div className="px-8 py-4 text-sm text-gray-500">
+                      Tekan tombol dibawah ini untuk melanjutkan proses transaksi.
+                      </div>                   
+                       <div className="flex justify-center">
+                        <ButtonAnt
+                          onClick={handleCallbackSubmit}
+                          size="large"
+                          key="submit"
+                          type="primary"
+                          className="bg-blue-500 px-12 font-semibold mt-4"
+                          loading={isLoading}
+                        >
+                          Selesai
+                        </ButtonAnt>
+                      </div>                   
+                    </>
+                  ):(
+                    <>
                       <div className="px-8 py-4 text-sm text-gray-500">
                       Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
                       </div>
-
                       <div className="flex justify-center">
                         <ButtonAnt
                           onClick={handlerPembayaran}
@@ -461,31 +524,48 @@ export default function Pembayaran() {
                           Langsung Bayar
                         </ButtonAnt>
                       </div>
-                    </div>
+                    </>
+                    )}
+                  </div>
                   </div>
                   <div className="block xl:hidden mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
-                      {/* <div className="px-8 py-4 text-sm text-gray-500">
-                              Tekan tombol <span className="text-blue-500">bayar langsung</span> untuk melakukan pembayaran secara tunai.
-                          </div> */}
+                    {callbackBoolean == true ? (
+                      <>
+                         <div className="flex justify-center">
+                          <ButtonAnt
+                            onClick={handleCallbackSubmit}
+                            size="large"
+                            key="submit"
+                            type="primary"
+                            className="bg-blue-500 mx-2 font-semibold mt-4"
+                            loading={isLoading}
+                          >
+                            Selesai
+                          </ButtonAnt>
+                        </div>                      
+                      </>
+                      ) : (
+                      <>
+                        <div className="px-8 py-4 text-sm text-gray-500">
+                        Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
+                        </div>
+                        <div className="flex justify-center">
+                          <ButtonAnt
+                            onClick={handlerPembayaran}
+                            size="large"
+                            key="submit"
+                            type="primary"
+                            className="bg-blue-500 mx-2 font-semibold mt-4"
+                            loading={isLoading}
+                            disabled
+                          >
+                            Langsung Bayar
+                          </ButtonAnt>
+                        </div>                     
+                      </>
+                    )}
 
-                      <div className="px-8 py-4 text-sm text-gray-500">
-                      Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
-                      </div>
-
-                      <div className="flex justify-center">
-                        <ButtonAnt
-                          onClick={handlerPembayaran}
-                          size="large"
-                          key="submit"
-                          type="primary"
-                          className="bg-blue-500 mx-2 font-semibold mt-4"
-                          loading={isLoading}
-                          disabled
-                        >
-                          Langsung Bayar
-                        </ButtonAnt>
-                      </div>
-                    </div>
+                  </div>
                 </div>
               </>
             )

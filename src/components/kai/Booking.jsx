@@ -305,15 +305,15 @@ export default function BookingKai() {
         search: `?k_train=${id}&k_book=${uuid}`,
       });
 
-      if(response.data.callback === null) {
+      // if(response.data.callback === null) {
 
-        localStorage.setItem('callback_train', false);
+      //   localStorage.setItem('callback_train', false);
 
-      }else{
+      // }else{
 
-        localStorage.setItem('callback_train', true);
+      //   localStorage.setItem('callback_train', true);
 
-      }
+      // }
 
       // if(response.data.callback === null) {
           

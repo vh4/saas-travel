@@ -461,8 +461,9 @@ export default function BookingPelni() {
             //   `Response callback is : ${typeof response.data.callback === 'object' ? JSON.stringify(response.data.callback) : response.data.callback}`
             // );
 
-            navigate(`/`);
-            
+            // navigate(`/`);
+            navigate(`/pelni/payment/${uuid}`);
+
           }
 
           setIsLoading(false);
