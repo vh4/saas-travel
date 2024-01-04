@@ -274,7 +274,7 @@ export default function Pembayaran() {
 
     setIsLoading(false);
 
-    }, 100);
+    }, 100); //
   
 }
 
