@@ -1,9 +1,8 @@
 const express = require('express');
 const axios = require('axios');
 const logger = require('../utils/logger.js');
-const { v4:uuidv4} = require('uuid');
+// const { v4:uuidv4} = require('uuid');
 const { AuthLogin } = require('../middleware/auth.js');
-const { apiLimiter, apiLimiterKhususBooking } = require('../middleware/limit.js');
 const { axiosSendCallback } = require('../utils/utils.js');
 
 require('dotenv').config()
@@ -73,7 +72,7 @@ Router.post('/travel/pelni/search', async (req, res) => {
 });
 
 //get p_search => inserting data detail pelni to session
-// Router.post('/travel/pelni/search/p_search', AuthLogin, apiLimiter, async (req, res) => {
+// Router.post('/travel/pelni/search/p_search', AuthLogin, async (req, res) => {
 // 	const data = req.body;
 	
 // 	if(typeof data == 'object'){
@@ -118,7 +117,7 @@ Router.post('/travel/pelni/search', async (req, res) => {
 // });
 
 //insert data booking to session storage.
-Router.post('/travel/pelni/book', AuthLogin, apiLimiterKhususBooking, async (req, res) => {
+Router.post('/travel/pelni/book', AuthLogin, async (req, res) => {
 
   try {
   
@@ -192,7 +191,7 @@ Router.post('/travel/pelni/book', AuthLogin, apiLimiterKhususBooking, async (req
 
 
 //callback khusus pelni.
-Router.post('/travel/pelni/callback', AuthLogin, apiLimiterKhususBooking, async function (req, res) { // Menambahkan async
+Router.post('/travel/pelni/callback', AuthLogin, async function (req, res) { // Menambahkan async
   
   try {
 
@@ -243,7 +242,7 @@ Router.post('/travel/pelni/callback', AuthLogin, apiLimiterKhususBooking, async 
 // });
 
 //insert data book_info to session storage.
-Router.post('/travel/pelni/book_info', AuthLogin, apiLimiter, async (req, res) => {
+Router.post('/travel/pelni/book_info', AuthLogin, async (req, res) => {
   const data = req.body;
   logger.info(`Request /travel/pelni/book_info: ${JSON.stringify(data)}`);
   try {
@@ -300,7 +299,7 @@ Router.post('/travel/pelni/book_info', AuthLogin, apiLimiter, async (req, res) =
 // });
 
 //insert data passengers to session storage.
-// Router.post('/travel/pelni/booking/passengers', AuthLogin, apiLimiter, async (req, res) => {
+// Router.post('/travel/pelni/booking/passengers', AuthLogin, async (req, res) => {
 // 	const data = req.body;
 	
 // 	if(typeof data == 'object'){

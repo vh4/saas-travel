@@ -3,7 +3,6 @@ const axios = require('axios');
 const logger = require('../utils/logger.js');
 const { v4:uuidv4} = require('uuid');
 const { AuthLogin } = require('../middleware/auth.js');
-const { apiLimiter, apiLimiterKhususBooking } = require('../middleware/limit.js');
 const { axiosSendCallback } = require('../utils/utils.js');
 require('dotenv').config()
 
@@ -80,7 +79,7 @@ Router.post('/travel/flight/fare', async function (req, res) {
 });
 
 //insert data search to session storage.
-// Router.post('/travel/pesawat/search/flight', AuthLogin, apiLimiter, async (req, res) => {
+// Router.post('/travel/pesawat/search/flight', AuthLogin, async (req, res) => {
 // 	const data = req.body;
 	
 // 	if(typeof data == 'object'){
@@ -128,7 +127,7 @@ Router.post('/travel/flight/fare', async function (req, res) {
 //   }
 // });
 
-Router.post('/travel/flight/book', AuthLogin, apiLimiterKhususBooking, async function (req, res) {
+Router.post('/travel/flight/book', AuthLogin, async function (req, res) {
 
   try {
   
@@ -205,7 +204,7 @@ Router.post('/travel/flight/book', AuthLogin, apiLimiterKhususBooking, async fun
 });
 
 //callback khusus plane.
-Router.post('/travel/plane/callback', AuthLogin, apiLimiterKhususBooking, async function (req, res) { // Menambahkan async
+Router.post('/travel/plane/callback', AuthLogin, async function (req, res) { // Menambahkan async
   
   try {
 
@@ -226,7 +225,7 @@ Router.post('/travel/plane/callback', AuthLogin, apiLimiterKhususBooking, async 
 });
 
 //insert data book to session storage.
-// Router.post('/travel/pesawat/book/flight', AuthLogin, apiLimiter, async (req, res) => {
+// Router.post('/travel/pesawat/book/flight', AuthLogin, async (req, res) => {
 // 	const data = req.body;
 	
 // 	if(typeof data == 'object'){

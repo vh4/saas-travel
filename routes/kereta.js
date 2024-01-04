@@ -3,7 +3,6 @@ const axios = require('axios'); // Mengganti 'request' dengan 'axios'
 const logger = require('../utils/logger.js');
 const { v4: uuidv4 } = require('uuid');
 const { AuthLogin } = require('../middleware/auth.js');
-const { apiLimiter, apiLimiterKhususBooking } = require('../middleware/limit.js');
 const { axiosSendCallback } = require('../utils/utils.js');
 const Router = express.Router();
 require('dotenv').config()
@@ -53,7 +52,7 @@ Router.post('/travel/train/search', async function (req, res) { // Menambahkan a
 });
 
 //insert data train to session storage.
-// Router.post('/travel/train/search/k_search', AuthLogin, apiLimiter, async (req, res) => {
+// Router.post('/travel/train/search/k_search', AuthLogin, async (req, res) => {
 //   const data = req.body;
 
 //   if (typeof data == 'object') {
@@ -100,7 +99,7 @@ Router.post('/travel/train/search', async function (req, res) { // Menambahkan a
 // });
 
 //insert data hasil booking to session storage.
-// Router.post('/travel/train/book/k_book', AuthLogin, apiLimiter, async (req, res) => {
+// Router.post('/travel/train/book/k_book', AuthLogin, async (req, res) => {
 // 	const data = req.body;
   
 // 	if (typeof data == 'object') {
@@ -147,7 +146,7 @@ Router.post('/travel/train/search', async function (req, res) { // Menambahkan a
 // });
 
 //update seats data hasil booking :
-// Router.put('/travel/train/book/k_book', AuthLogin, apiLimiter, async (req, res) => {
+// Router.put('/travel/train/book/k_book', AuthLogin, async (req, res) => {
 // 	const data = req.body;
 // 	const uuid = req.body.uuid;
   
@@ -204,7 +203,7 @@ Router.post('/travel/train/get_seat_layout', AuthLogin, async function (req, res
   }
 });
 
-Router.post('/travel/train/book', AuthLogin, apiLimiterKhususBooking, async function (req, res) { // Menambahkan async
+Router.post('/travel/train/book', AuthLogin, async function (req, res) { // Menambahkan async
   try {
     const data = req.body;
 
@@ -279,7 +278,7 @@ Router.post('/travel/train/book', AuthLogin, apiLimiterKhususBooking, async func
 });
 
 //callback khusus train.
-Router.post('/travel/train/callback', AuthLogin, apiLimiterKhususBooking, async function (req, res) { // Menambahkan async
+Router.post('/travel/train/callback', AuthLogin, async function (req, res) { // Menambahkan async
   
   try {
 
