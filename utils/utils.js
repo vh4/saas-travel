@@ -78,7 +78,7 @@ module.exports = {
                     pin:pin,
                     trxid:id_transaksi
                 });
-                logger.info(`RESPONSE [${type}] /travel/train/callback : ${JSON.stringify(getResponseGlobal.data)}`);
+                logger.info(`RESPONSE [${type}] /travel/${type}/callback : ${JSON.stringify(getResponseGlobal.data)}`);
             
             }else{
         
@@ -88,7 +88,7 @@ module.exports = {
                 //GETTING DATA CALLBACK FROM RAJABILLER
                 getResponseGlobal = await axios.get(url);
                 
-                logger.info(`RESPONSE [${type}] /travel/train/callback : ${JSON.stringify(getResponseGlobal.data)}`);
+                logger.info(`RESPONSE [${type}] /travel/${type}/callback : ${JSON.stringify(getResponseGlobal.data)}`);
             
             }
         
