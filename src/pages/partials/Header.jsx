@@ -278,7 +278,7 @@ export default function Header() {
     <nav className="bg-white px-2 sm:px-4 py-3  block sticky top-0 w-full z-50 left-0 border-b border-gray-200 ">
       {contextHolder}
       <div className="container mx-auto">
-        <div className={`flex justify-between items-cente ${localStorage.getItem("hdrs_c") == "false" && 'py-0 md:py-2'} r -mx-2 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24`}>
+        <div className={`flex justify-between items-center ${localStorage.getItem("hdrs_c") == "false" && 'py-0 md:py-2'} -mx-2 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24`}>
           <div className="">
           {localStorage.getItem("hdrs_c") != "false" && (
           <>
