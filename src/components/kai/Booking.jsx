@@ -65,6 +65,7 @@ export default function BookingKai() {
   const [manyRequestBook, setmanyRequestBook] = useState(false);
   const [dataBookingTrain, setdataBookingTrain] = useState([]);
   const [dataDetailTrain, setdataDetailTrain] = useState([]);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   const [err, setErr] = useState(false);
   const [ErrPage, setErrPage] = useState(false);
@@ -193,6 +194,7 @@ export default function BookingKai() {
 
   const handleInfantsubCatagoryChange = (i, category) => (e) => {
     const infantCategory = infant[0];
+    setIsDatePickerOpen(false);
 
     if (category == "birthdate") {
       let tanggalParse = new Date(e);
@@ -836,17 +838,16 @@ export default function BookingKai() {
                                   <div className="text-gray-800 text-sm mb-2">
                                     Tanggal Lahir
                                   </div>
-                                  <DatePicker
-                                    size="large"
-                                    className="w-full"
-                                    value={dayjs(e.birthdate, "YYYY/MM/DD")}
-                                    format={"DD/MM/YYYY"}
-                                    onChange={handleInfantsubCatagoryChange(
-                                      i,
-                                      "birthdate"
-                                    )}
-                                    disabledDate={disabledDate}
-                                  />
+                                      <DatePicker
+                                        size="large"
+                                        className="w-full"
+                                        value={dayjs(e.birthdate, "YYYY/MM/DD")}
+                                        format="DD/MM/YYYY"
+                                        onChange={handleInfantsubCatagoryChange(i, "birthdate")}
+                                        disabledDate={disabledDate}
+                                        open={isDatePickerOpen} // Pass the state to the open prop
+                                        onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
+                                      />
                                   <small className="block mt-2 text-gray-400">
                                     Contoh: dd-mm-yyyy
                                   </small>
