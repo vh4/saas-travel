@@ -53,6 +53,7 @@ export default function BookingPesawat() {
   const [child, setChild] = useState(null);
   const [infant, setInfant] = useState(null);
   const [manyRequestBook, setmanyRequestBook] = useState(false);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   const [email, setEmail] = useState();
   const [hp, setHp] = useState();
@@ -1050,6 +1051,9 @@ useEffect(() => {
                                           "birthdate"
                                         )}
                                         disabledDate={disabledDateAdult}
+                                        open={isDatePickerOpen} // Pass the state to the open prop
+                                        inputReadOnly={true}
+                                        onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
                                       />
                                     </Form.Item>
                                     <small className="block -mt-4 text-gray-400">
@@ -1190,6 +1194,9 @@ useEffect(() => {
                                               "expireddate"
                                             )}
                                             disabledDate={disabledDateExpiredDate}
+                                            open={isDatePickerOpen} // Pass the state to the open prop
+                                            inputReadOnly={true}
+                                            onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
                                           />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
@@ -1424,6 +1431,9 @@ useEffect(() => {
                                           "birthdate"
                                         )}
                                         disabledDate={disabledDateChild}
+                                        open={isDatePickerOpen} // Pass the state to the open prop
+                                        inputReadOnly={true}
+                                        onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
                                       />
                                     </Form.Item>
                                     <small className="block -mt-4 text-gray-400">
@@ -1563,6 +1573,9 @@ useEffect(() => {
                                               "expireddate"
                                             )}
                                             disabledDate={disabledDateExpiredDate}
+                                            open={isDatePickerOpen} // Pass the state to the open prop
+                                            inputReadOnly={true}
+                                            onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
                                           />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
@@ -1755,6 +1768,9 @@ useEffect(() => {
                                           "birthdate"
                                         )}
                                         disabledDate={disabledDate}
+                                        open={isDatePickerOpen} // Pass the state to the open prop
+                                        inputReadOnly={true}
+                                        onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
                                       />
                                     </Form.Item>
                                     <small className="block -mt-4 text-gray-400">
@@ -1895,6 +1911,9 @@ useEffect(() => {
                                               "expireddate"
                                             )}
                                             disabledDate={disabledDateExpiredDate}
+                                            open={isDatePickerOpen} // Pass the state to the open prop
+                                            inputReadOnly={true}
+                                            onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
                                           />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">

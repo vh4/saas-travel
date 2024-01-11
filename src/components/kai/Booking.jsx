@@ -847,6 +847,7 @@ export default function BookingKai() {
                                         onChange={handleInfantsubCatagoryChange(i, "birthdate")}
                                         disabledDate={disabledDate}
                                         open={isDatePickerOpen} // Pass the state to the open prop
+                                        inputReadOnly={true}
                                         onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
                                       />
                                   <small className="block mt-2 text-gray-400">
