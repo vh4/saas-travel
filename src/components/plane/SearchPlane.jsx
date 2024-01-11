@@ -547,7 +547,7 @@ function Plane() {
                 >
                   <div class="w-full mt-1.5 pl-2 md:pl-0 mx-0">
                     <small className="mb-2 text-gray-800">Pilih Maskapai</small>
-                    <Tooltip title="cari maskapai">
+                    <Tooltip>
                     <Button
                         onClick={() => handleOpen("lg")}
                         size="large"
@@ -776,7 +776,7 @@ function Plane() {
                     </Button>
                     <div
                       id="basic-menu"
-                      className={`${anchorEl} absolute top-20 z-10 grid w-full md:w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg`}
+                      className={`${anchorEl} relative md:absolute top-0 md:top-20 md:z-10 grid w-full md:w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg`}
                     >
                       <div className="w-full md:w-48 block md:mx-0">
                         <div className="w-full items-center text-gray-800">

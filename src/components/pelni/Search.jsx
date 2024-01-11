@@ -314,19 +314,19 @@ export default function Search() {
             <div className="judul-search font-bold text-gray-800">
               PILIH JADWAL
             </div>
-            <div className="mt-8">
+            <div className="mt-4 md:mt-8">
               <div className="flex flex-col md:flex-row md:justify-between items-center md:space-x-4">
-                <div className="flex items-center space-x-3 text-center md:text-left">
+                <div className="hidden md:flex items-center space-x-3 text-center md:text-left">
                   <small className="text-xs font-medium xl:font-bold text-slate-600">
                     {originName}
                   </small>
-                  <div className="bg-blue-500 p-1 rounded-full">
+                  <div className="hidden md:flex bg-blue-500 p-1 rounded-full">
                     <IoArrowForwardOutline
                       className="font-bold text-xs text-white"
                       size={16}
                     />
                   </div>
-                  <small className="text-xs font-medium xl:font-bold text-slate-600">
+                  <small className="hidden md:flex text-xs font-medium xl:font-bold text-slate-600">
                     {destinationName}
                   </small>
                   <div className="hidden md:block font-normal text-slate-600">
@@ -879,11 +879,11 @@ export default function Search() {
                         <div className="text-xl font-semibold">
                           Maaf, sepertinya rute ini belum dibuka kembali
                         </div>
-                        <small>
+                        {/* <small>
                           Namun jangan khawatir, masih ada pilihan kendaraan
                           lain yang tetap bisa mengantarkan Anda ke tempat
                           tujuan.
-                        </small>
+                        </small> */}
                       </div>
                     </div>
                   </div>

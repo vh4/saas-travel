@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Layout from "../BookingLayout";
 import KonfirmasiComponent from '../../components/kai/Konfirmasi'
+import HeaderTemplateMobileKonfirmasi from './HeaderTemplateMobileKonfirmasi'
 
 export default function Konfirmasi(){
     useEffect(() => {
@@ -8,14 +9,27 @@ export default function Konfirmasi(){
     }, []);
 
     return(
-        <Layout>
-        <div className="container">
-        
-            <div className="w-full px-4"> 
-                {/* menu fitur  */}
-                < KonfirmasiComponent />
+        <>
+            <div className="block md:hidden">
+                <HeaderTemplateMobileKonfirmasi>
+                    <div className="container">
+                        <div className="w-full px-4"> 
+                            {/* menu fitur  */}
+                            <KonfirmasiComponent />
+                        </div>
+                    </div>
+                </HeaderTemplateMobileKonfirmasi>
             </div>
-        </div>
-    </Layout>
+            <div className="hidden md:block">
+                <Layout>
+                    <div className="container">
+                        <div className="w-full px-4"> 
+                            {/* menu fitur  */}
+                            <KonfirmasiComponent />
+                        </div>
+                    </div>
+                </Layout>
+            </div>
+        </>
     )
 }

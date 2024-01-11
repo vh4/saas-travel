@@ -727,10 +727,10 @@ export default function Search() {
                       <div className="text-lg font-medium xl:font-bold">
                         Maaf, sepertinya rute ini belum dibuka kembali
                       </div>
-                      <small>
+                      {/* <small>
                         Namun jangan khawatir, masih ada pilihan kendaraan lain
                         yang tetap bisa mengantarkan Anda ke tempat tujuan.
-                      </small>
+                      </small> */}
                     </div>
                   </div>
                 </div>

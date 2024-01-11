@@ -586,16 +586,16 @@ export default function Search() {
           <div className="mt-8">
             <div className="block md:flex justify-between">
               <div className="flex items-center justify-center space-x-3 xl:space-x-4 text-center md:text-left">
-                <small className="text-xs font-medium xl:font-bold text-gray-800">
+                <small className="hidden md:block text-xs font-medium xl:font-bold text-gray-800">
                   {departureName} ({departure})
                 </small>
-                <div className="bg-blue-500 p-1 rounded-full">
+                <div className="hidden md:block bg-blue-500 p-1 rounded-full">
                   <IoArrowForwardOutline
                     className="font-bold text-xs text-white"
                     size={16}
                   />
                 </div>
-                <small className="text-xs font-medium xl:font-bold text-gray-800">
+                <small className="hidden md:block text-xs font-medium xl:font-bold text-gray-800">
                   {arrivalName} ({arrival})
                 </small>
                 <div className="hidden md:block font-normal text-gray-800">
@@ -1812,10 +1812,10 @@ export default function Search() {
                       <div className="text-lg font-medium xl:font-bold">
                         Maaf, sepertinya rute ini belum dibuka kembali
                       </div>
-                      <small>
+                      {/* <small>
                         Namun jangan khawatir, masih ada pilihan kendaraan lain
                         yang tetap bisa mengantarkan Anda ke tempat tujuan.
-                      </small>
+                      </small> */}
                     </div>
                   </div>
                 </div>

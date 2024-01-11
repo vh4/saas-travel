@@ -434,12 +434,9 @@ export default function BookingKai() {
               <p>Apakah Anda yakin ingin submit data?</p>
             </Modal>
           <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
-              <div className="flex space-x-2 items-center">
+              <div className="hidden xl:flex space-x-2 items-center">
                 <div className="hidden xl:flex text-blue-500 font-medium xl:font-bold">
                   Detail pesanan
-                </div>
-                <div className="block xl:hidden text-blue-500 font-medium xl:font-bold">
-                  Detail
                 </div>
               </div>
               <div>
@@ -448,12 +445,11 @@ export default function BookingKai() {
                   className="hidden xl:flex text-gray-500"
                 />
               </div>
-              <div className="flex space-x-2 items-center">
+              <div className="hidden xl:flex space-x-2 items-center">
                 <RxCrossCircled size={20} className="text-slate-500" />
                 <div className="hidden xl:block text-slate-500">
                   Konfirmasi pesanan
                 </div>
-                <div className="block xl:hidden text-slate-500">Konfirmasi</div>
               </div>
               <div>
                 <MdHorizontalRule
@@ -461,12 +457,11 @@ export default function BookingKai() {
                   className="text-gray-500 hidden xl:flex"
                 />
               </div>
-              <div className="flex space-x-2 items-center">
+              <div className="hidden xl:flex space-x-2 items-center">
                 <RxCrossCircled size={20} className="text-slate-500" />
                 <div className="hidden xl:block text-slate-500">
                   Pembayaran tiket
                 </div>
-                <div className="block xl:hidden text-slate-500">Payment</div>
               </div>
             </div>
           <div className="xl:mt-0">

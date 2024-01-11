@@ -28,7 +28,7 @@ export default function Layout({ children }) {
         <main>{children}</main>
       </div>
       <div className="relative block md:hidden z-10 shadow-lg">
-        <Box sx={{ width: "100%", position: "fixed", bottom: 0 }} elevation={3}>
+        <Box sx={{ width: "100%", position:"fixed", bottom: 0 }} elevation={3}>
           <BottomNavigation
             sx={{ display: "flex", justifyContent: "around" }}
             showLabels

@@ -882,12 +882,11 @@ export default function Konfirmasi() {
 
           {/* header kai flow */}
           <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
-            <div className="flex space-x-2 items-center">
+            <div className="hidden xl:flex space-x-2 items-center">
               <AiOutlineCheckCircle className="text-gray-800" size={20} />
               <div className="hidden xl:flex text-gray-800">
                 Detail pesanan
               </div>
-              <div className="block xl:hidden text-gray-800">Detail</div>
             </div>
             <div>
               <MdHorizontalRule
@@ -895,12 +894,9 @@ export default function Konfirmasi() {
                 className="hidden xl:flex text-gray-800"
               />
             </div>
-            <div className="flex space-x-2 items-center">
+            <div className="hidden xl:flex space-x-2 items-center">
               <div className="hidden xl:flex text-blue-500 font-medium xl:font-bold">
                 Konfirmasi pesanan
-              </div>
-              <div className="block xl:hidden text-blue-500  font-medium xl:font-bold">
-                Konfirmasi
               </div>
             </div>
             <div>
@@ -909,12 +905,11 @@ export default function Konfirmasi() {
                 className="text-gray-800 hidden xl:flex"
               />
             </div>
-            <div className="flex space-x-2 items-center">
+            <div className="hidden xl:flex space-x-2 items-center">
               <RxCrossCircled size={20} className="text-gray-800" />
               <div className="hidden xl:block text-gray-800">
                 Pembayaran tiket
               </div>
-              <div className="block xl:hidden text-gray-800">Payment</div>
             </div>
           </div>
 

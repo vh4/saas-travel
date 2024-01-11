@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import Layout from "../BookingLayout";
 import BookingPesawatComponent from "../../components/plane/Booking";
+import HeaderTemplateMobileSearch from "./HeaderTemplateMobileBooking";
+import HeaderTemplateMobileBooking from "./HeaderTemplateMobileBooking";
 
 export default function Booking(){
     useEffect(() => {
@@ -8,13 +10,27 @@ export default function Booking(){
     }, []);
 
     return(
-        <Layout>
-        <div className="container">
-            <div className="w-full px-4"> 
-                {/* menu fitur  */}
-                <BookingPesawatComponent />
+        <>
+            <div className="block md:hidden">
+                <HeaderTemplateMobileBooking>
+                    <div className="container">
+                        <div className="w-full px-4"> 
+                            {/* menu fitur  */}
+                            <BookingPesawatComponent />
+                        </div>
+                    </div>
+                </HeaderTemplateMobileBooking>
             </div>
-        </div>
-    </Layout>
+            <div className="hidden md:block">
+                <Layout>
+                    <div className="container">
+                        <div className="w-full px-4"> 
+                            {/* menu fitur  */}
+                            <BookingPesawatComponent />
+                        </div>
+                    </div>
+                </Layout>
+            </div>
+        </>
     )
 }

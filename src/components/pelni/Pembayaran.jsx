@@ -262,7 +262,7 @@ export default function Pembayaran() {
         <>
           {/* header kai flow */}
           <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
-            <div className="flex space-x-2 items-center">
+            <div className="hidden xl:flex space-x-2 items-center">
               <AiOutlineCheckCircle className="text-gray-800" size={20} />
               <div className="hidden xl:flex text-gray-800">
                 Detail pesanan
@@ -275,11 +275,10 @@ export default function Pembayaran() {
                 className="text-gray-800 hidden xl:flex"
               />
             </div>
-            <div className="flex space-x-2 items-center">
+            <div className="hidden xl:flex space-x-2 items-center">
               <div className="hidden xl:block text-blue-500">
                 Pembayaran tiket
               </div>
-              <div className="block xl:hidden text-blue-500">Payment</div>
             </div>
             {/* <div>
               <MdHorizontalRule

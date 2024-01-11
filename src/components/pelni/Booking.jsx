@@ -578,12 +578,9 @@ export default function BookingPelni() {
               <p>Apakah Anda yakin ingin submit data?</p>
             </Modal>
         <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
-          <div className="flex space-x-2 items-center">
+          <div className="hidden xl:flex space-x-2 items-center">
             <div className="hidden xl:flex text-blue-500 font-medium xl:font-bold">
               Detail pesanan
-            </div>
-            <div className="block xl:hidden text-blue-500 font-medium xl:font-bold">
-              Detail
             </div>
           </div>
           <div>
@@ -592,12 +589,11 @@ export default function BookingPelni() {
               className="hidden xl:flex text-gray-500"
             />
           </div>
-          <div className="flex space-x-2 items-center">
+          <div className="hidden xl:flex space-x-2 items-center">
             <RxCrossCircled size={20} className="text-gray-800" />
             <div className="hidden xl:block text-gray-800">
               Pembayaran tiket
             </div>
-            <div className="block xl:hidden text-gray-800">Payment</div>
           </div>
           {/* <div>
             <MdHorizontalRule

@@ -311,12 +311,11 @@ export default function Pembayaran() {
         <>
           {/* header kai flow */}
           <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
-            <div className="flex space-x-2 items-center">
+            <div className="hidden xl:flex space-x-2 items-center">
               <AiOutlineCheckCircle className="text-slate-500" size={20} />
               <div className="hidden xl:flex text-slate-500">
                 Detail pesanan
               </div>
-              <div className="block xl:hidden text-slate-500">Detail</div>
             </div>
             <div>
               <MdHorizontalRule
@@ -324,24 +323,22 @@ export default function Pembayaran() {
                 className="hidden xl:flex text-gray-500"
               />
             </div>
-            <div className="flex space-x-2 items-center">
+            <div className="hidden xl:flex space-x-2 items-center">
               <AiOutlineCheckCircle className="text-slate-500" size={20} />
               <div className="hidden xl:flex text-slate-500">
                 Konfirmasi pesanan
               </div>
-              <div className="block xl:hidden text-slate-500">Konfirmasi</div>
             </div>
-            <div>
+            <div className="hidden xl:flex">
               <MdHorizontalRule
                 size={20}
                 className="text-gray-500 hidden xl:flex"
               />
             </div>
-            <div className="flex space-x-2 items-center">
+            <div className="hidden xl:flex space-x-2 items-center">
               <div className="font-medium xl:font-bold hidden xl:block text-blue-500">
                 Pembayaran tiket
               </div>
-              <div className="block xl:hidden text-blue-500">Payment</div>
             </div>
           </div>
           {isLoadingPage === true ? (

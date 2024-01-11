@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Layout from "../BookingLayout";
 import PembayaranComponent from '../../components/pelni/Pembayaran'
+import HeaderTemplateMobilDetailBooking from "./HeaderTemplateMobilDetailBooking";
 
 
 export default function Pembayaran(){
@@ -9,13 +10,27 @@ export default function Pembayaran(){
     }, []);
     
     return(
-        <Layout>
-        <div className="container">
-            <div className="w-full px-4"> 
-                {/* menu fitur  */}
-                <PembayaranComponent />
+        <>
+            <div className="block md:hidden">
+                <HeaderTemplateMobilDetailBooking>
+                    <div className="container">
+                        <div className="w-full px-4"> 
+                            {/* menu fitur  */}
+                            <PembayaranComponent />
+                        </div>
+                    </div>
+                </HeaderTemplateMobilDetailBooking>
             </div>
-        </div>
-    </Layout>
+            <div className="hidden md:block">
+                <Layout>
+                    <div className="container">
+                        <div className="w-full px-4"> 
+                            {/* menu fitur  */}
+                            <PembayaranComponent />
+                        </div>
+                    </div>
+                </Layout>
+            </div>
+        </>
     )
 }
