@@ -830,7 +830,8 @@ export default function BookingKai() {
                                   </div>
                                 </div>
                               </div>
-                            </div>
+                            </div> 
+                            {/*  */}
                             <div className="mb-8">
                               <div className="py-0 px-0 xl:px-8 block xl:grid xl:grid-cols-2 mt-0 xl:gap-8">
                                 {/* desktop nomor hp */}
