@@ -28,7 +28,7 @@ export default function HeaderTemplateMobileSearch({ children }) {
   const wanita = searchParams.get("wanita");
  
   const tanggal_keberangkatan = parseTanggalPelni(startDate);
-  const tanggal_tujuan = parseTanggalPelni(startDate);
+  const tanggal_tujuan = parseTanggalPelni(endDate);
 
 
   return (
