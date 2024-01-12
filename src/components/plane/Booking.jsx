@@ -805,6 +805,8 @@ useEffect(() => {
                             <div className="block xl:flex xl:space-x-6">
                               <div className="w-full">
                                 <Form.Item
+                                  required={true}
+                                  hasFeedback
                                   name={`emailAdult`}
                                   rules={[
                                     {
@@ -841,6 +843,8 @@ useEffect(() => {
                                 Nomor HP
                               </div>
                               <Form.Item
+                                required={true}     
+                                hasFeedback                        
                                 name={`nomorHPAdult`}
                                 rules={[
                                   {
@@ -942,6 +946,8 @@ useEffect(() => {
                                           Nama Depan
                                         </div>
                                         <Form.Item
+                                          required={true} 
+                                          hasFeedback                                      
                                           name={`namadepanAdult${i}`}
                                           rules={[
                                             {
@@ -984,6 +990,8 @@ useEffect(() => {
                                           Nama Belakang
                                         </div>
                                         <Form.Item
+                                          required={true} 
+                                          hasFeedback                                      
                                           name={`namabelakangAdult${i}`}
                                           rules={[
                                             {
@@ -1034,6 +1042,8 @@ useEffect(() => {
                                       Tanggal Lahir
                                     </div>
                                     <Form.Item
+                                    required={true} 
+                                    hasFeedback
                                       name={`tanggalAdult${i}`}
                                       rules={[
                                         {
@@ -1068,6 +1078,8 @@ useEffect(() => {
                                         {isInternational == 1 ? "No. Passport" : "No. Ktp"}
                                       </div>
                                       <Form.Item
+                                      required={true} 
+                                      hasFeedback
                                         name={`nikAdult${i}`}
                                         rules={[
                                           {
@@ -1124,6 +1136,8 @@ useEffect(() => {
                                           Kewarganegaraan
                                         </div>
                                         <Form.Item
+                                        required={true} 
+                                        hasFeedback
                                           name={`kewenegaraanAdult${i}`}
                                           rules={[
                                             {
@@ -1148,6 +1162,8 @@ useEffect(() => {
                                           Issuing Passport
                                         </div>
                                         <Form.Item
+                                        required={true} 
+                                        hasFeedback
                                           name={`issuingpassportAdult${i}`}
                                           rules={[
                                             {
@@ -1177,6 +1193,8 @@ useEffect(() => {
                                           Expired Date
                                         </div>
                                         <Form.Item
+                                        required={true} 
+                                        hasFeedback
                                           name={`expiredDateAdult${i}`}
                                           rules={[
                                             {
@@ -1281,6 +1299,8 @@ useEffect(() => {
                                           Nama Depan
                                         </div>
                                         <Form.Item
+                                        required={true} 
+                                          hasFeedback
                                           name={`namadepanChild${i}`}
                                           rules={[
                                             {
@@ -1344,6 +1364,8 @@ useEffect(() => {
                                           Nama Belakang
                                         </div>
                                         <Form.Item
+                                        required={true} 
+                                        hasFeedback
                                           name={`namabelakangChild${i}`}
                                           rules={[
                                             {
@@ -1414,6 +1436,8 @@ useEffect(() => {
                                       Tanggal Lahir
                                     </div>
                                     <Form.Item
+                                    required={true} 
+                                    hasFeedback
                                       name={`tanggallahirChild${i}`}
                                       rules={[
                                         {
@@ -1448,6 +1472,8 @@ useEffect(() => {
                                           {isInternational == 1 ? "No. Passport" : "No. Ktp"}
                                       </div>
                                       <Form.Item
+                                      required={true} 
+                                      hasFeedback
                                         name={`noktpChild${i}`}
                                         rules={[
                                           {
@@ -1503,6 +1529,8 @@ useEffect(() => {
                                           Kewarganegaraan
                                         </div>
                                         <Form.Item
+                                        required={true}
+                                        hasFeedback 
                                           name={`kewenegaraanChild${i}`}
                                           rules={[
                                             {
@@ -1527,6 +1555,8 @@ useEffect(() => {
                                           Issuing Passport
                                         </div>
                                         <Form.Item
+                                        required={true} 
+                                        hasFeedback
                                           name={`issuingpassportChild${i}`}
                                           rules={[
                                             {
@@ -1556,6 +1586,8 @@ useEffect(() => {
                                           Expired Date
                                         </div>
                                         <Form.Item
+                                        required={true} 
+                                        hasFeedback
                                           name={`expiredDateChild${i}`}
                                           rules={[
                                             {
@@ -1660,6 +1692,8 @@ useEffect(() => {
                                           Nama Depan
                                         </div>
                                         <Form.Item
+                                        required={true} 
+                                        hasFeedback
                                           name={`infantnamadepan${i}`}
                                           rules={[
                                             {
@@ -1702,6 +1736,8 @@ useEffect(() => {
                                           Nama Belakang
                                         </div>
                                         <Form.Item
+                                        required={true} 
+                                        hasFeedback
                                           name={`infantnamabelakang${i}`}
                                           rules={[
                                             {
@@ -1751,6 +1787,8 @@ useEffect(() => {
                                       Tanggal Lahir
                                     </div>
                                     <Form.Item
+                                    required={true} 
+                                    hasFeedback
                                       name={`infanttanggallhr${i}`}
                                       rules={[
                                         {
@@ -1785,6 +1823,8 @@ useEffect(() => {
                                         {isInternational == 1 ? "No. Passport" : "No. Ktp"}
                                       </div>
                                       <Form.Item
+                                      required={true} 
+                                      hasFeedback
                                           name={`infantktp${i}`}
                                           rules={[
                                             {
@@ -1841,6 +1881,8 @@ useEffect(() => {
                                           Kewarganegaraan
                                         </div>
                                         <Form.Item
+                                        required={true} 
+                                        hasFeedback
                                           name={`kewenegaraanInfant${i}`}
                                           rules={[
                                             {
@@ -1865,6 +1907,8 @@ useEffect(() => {
                                           Issuing Passport
                                         </div>
                                         <Form.Item
+                                        required={true} 
+                                        hasFeedback
                                           name={`issuingpassportInfant${i}`}
                                           rules={[
                                             {
@@ -1894,6 +1938,8 @@ useEffect(() => {
                                           Expired Date
                                         </div>
                                         <Form.Item
+                                        required={true}
+                                        hasFeedback 
                                           name={`expiredDateInfant${i}`}
                                           rules={[
                                             {

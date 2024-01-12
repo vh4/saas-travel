@@ -1292,7 +1292,12 @@ export default function Search() {
                               <div 
                                   type="button"
                                   onClick={(f) => {
-                                    bookingHandlerDetail(index);
+                                    e.classes[0][0].availability > 0 &&
+                                      e.classes[0][0].availability >
+                                        parseInt(child) +
+                                          parseInt(adult) +
+                                          parseInt(infant) &&
+                                          bookingHandlerDetail(index)
                                   }}
                                   className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7"
                                 > 
