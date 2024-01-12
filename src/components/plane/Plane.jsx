@@ -19,6 +19,7 @@ import { AiOutlineSwap } from "react-icons/ai";
 import { InputNumber, InputGroup } from 'rsuite';
 import { DatePicker } from 'antd';
 import dayjs from "dayjs";
+import { useState } from "react";
 
 function Plane() {
   const [anchorEl, setAnchorEl] = React.useState("hidden");
@@ -27,6 +28,7 @@ function Plane() {
   const [size, setSize] = React.useState();
   const [loadingModal, setLoadingModal] = React.useState(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   const errorBerangkat = () => {
     messageApi.open({
@@ -736,6 +738,9 @@ function Plane() {
                       className="border-gray-240 py-2"
                       appearance="subtle"
                       value={tanggalKeberangkatan}
+                      open={isDatePickerOpen} // Pass the state to the open prop
+                      inputReadOnly={true}
+                      onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
                       inputStyle={{ color: 'red' }}
                       format="DD/MM/YYYY"
                       onChange={(value) => {

@@ -16,6 +16,7 @@ import Cookies from "js-cookie";
 import { AiOutlineSwap } from "react-icons/ai";
 import { InputGroup, InputNumber } from "rsuite";
 import dayjs from "dayjs";
+import { useState } from "react";
 
 
 function KAI(){
@@ -81,7 +82,8 @@ function KAI(){
 
     const loadingBerangkat = openBerangka && kaiData.length === 0;
     const loadingTujuan = openTujuan && kaiData.length === 0;
-    
+    const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
     let coockie = Cookies.get("v-train");
 
     let depa = { id_stasiun: "PSE", nama_stasiun: "PASAR SENEN", nama_kota: "JAKARTA", is_active: 1 };
@@ -589,6 +591,9 @@ function KAI(){
                         style={{ cursor: 'pointer' }}
                         className="border-gray-240 py-2"
                         appearance="subtle"
+                        open={isDatePickerOpen} // Pass the state to the open prop
+                        inputReadOnly={true}
+                        onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
                         value={tanggal}
                         inputStyle={{ color: 'red' }}
                         format="DD/MM/YYYY"

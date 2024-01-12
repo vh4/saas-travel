@@ -459,7 +459,7 @@ export default function Search() {
           </div>
           <div className="mt-8">
             <div className="block lg:flex justify-between">
-              <div className="flex items-center space-x-3 xl:space-x-4 text-center md:text-left">
+              <div className="hidden md:flex items-center space-x-3 xl:space-x-4 text-center md:text-left">
                 <small className="text-xs font-medium xl:font-bold text-gray-800">
                   {stasiunBerangkat}, {kotaBerangkat}
                 </small>
@@ -485,7 +485,7 @@ export default function Search() {
                   {parseInt(adult) + parseInt(infant)} Penumpang
                 </small>
               </div>
-              <div className="mt-4 md:mt-0 flex space-x-4 md:mr-0 justify-center md:justify-end">
+              <div className="hidden mt-4 md:mt-0 md:flex space-x-4 md:mr-0 justify-center md:justify-end">
                 <Link to="/" className="flex space-x-2 items-center">
                   <IoArrowBackOutline className="text-blue-500" size={16} />
                   <div className="text-blue-500 text-sm font-bold">Kembali</div>
@@ -540,6 +540,14 @@ export default function Search() {
                   KELAS
                 </button>
               </Whisper>
+              <div className="mt-0 md:mt-0 flex md:hidden space-x-4 md:mr-0 justify-center md:justify-end">
+                <button
+                  onClick={() => setUbahPencarian((prev) => !prev)}
+                  className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs font-bold"
+                >
+                  Ubah Pencarian
+                </button>
+              </div>
               </div>
               <div>
                 {/* <div className="flex space-x-2 items-center p-4 px-4 md:px-4 mr-0 xl:mr-16 text-gray-800 rounded-md text-xs font-medium xl:font-bold">

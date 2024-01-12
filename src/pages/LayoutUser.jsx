@@ -48,8 +48,8 @@ export default function LayoutUser({ children }) {
           <main className="">{children}</main>
         </div>
       </div>
-      <div className="relative text-gray-500 block md:hidden z-10 bg-white shadow-lg">
-        <Box sx={{ width: "100%", position: "fixed", bottom: 0 }} elevation={3}>
+      <div className="text-black block md:hidden z-10 bg-white shadow-lg">
+        <Box sx={{ width: "100%", position: "fixed", bottom: 0 }}>
           <BottomNavigation
             sx={{ display: "flex", justifyContent: "around" }}
             showLabels
@@ -91,7 +91,7 @@ export default function LayoutUser({ children }) {
 
       {/* <Footer/> */}
 
-      <footer className="border-t text-sm text-gray-500 py-6">
+      <footer className="hidden md:block border-t text-sm text-gray-500 py-6">
         <div className="container mx-auto">
           <p className="text-center">
           © 2015-2023 rajabiller.com. All rights reserved.

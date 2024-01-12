@@ -43,17 +43,17 @@ export default function HeaderTemplateMobileSearch({ children }) {
     <div className="flex flex-col min-h-screen">
       <div>
       <div className="block md:hidden">
-        <div className="flex items-center w-full bg-blue-500 text-white p-2 fixed z-50">
+        <div className="flex items-center w-full bg-blue-500 text-white p-2.5 fixed z-50">
             <div className="ml-2" onClick={() => window.history.back()}>
                 <IoArrowBack size={24} />
             </div>
             <div className="flex flex-col items-center justify-center text-center mx-auto">
-                <div className="flex space-x-4 items-center justify-center font-bold text-md">
+                <div className="flex space-x-4 items-center justify-center font-medium text-md">
                     <div>{departureName} ({departure})</div>
-                    <IoArrowForwardCircle size={24} className="block font-bold" />
+                    <IoArrowForwardCircle size={24} className="block font-medium" />
                     <div>{arrivalName} ({arrival})</div>
                 </div>
-                <div className="text-xs font-semibold">
+                <div className="text-xs font-medium">
                     <small>{tanggal_keberangkatan} | {parseInt(adult) + parseInt(child) + parseInt(infant)}{" "} Penumpang</small>
                 </div>
             </div>

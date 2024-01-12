@@ -20,6 +20,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import { AiOutlineSwap } from "react-icons/ai";
 import dayjs from "dayjs";
 import { DatePicker } from "antd";
+import { useState } from "react";
 
 function Plane() {
   const [anchorEl, setAnchorEl] = React.useState("hidden");
@@ -27,6 +28,7 @@ function Plane() {
   const [open, setOpen] = React.useState(false);
   const [size, setSize] = React.useState();
   const [loadingModal, setLoadingModal] = React.useState(false);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   var j =
     '{"TPGA":"GARUDA INDONESIA","TPIP":"PELITA AIR","TPJQ":"JETSTAR","TPJT":"LION AIR","TPMV":"TRANS NUSA","TPQG":"CITILINK","TPQZ":"AIR ASIA","TPSJ":"SRIWIJAYA","TPTN":"TRIGANA AIR","TPTR":"TIGER AIR","TPXN":"XPRESS AIR"}';
@@ -735,6 +737,9 @@ function Plane() {
                       appearance="subtle"
                       value={tanggalKeberangkatan}
                       inputStyle={{ color: 'red' }}
+                      open={isDatePickerOpen} // Pass the state to the open prop
+                      inputReadOnly={true}
+                      onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
                       format="DD/MM/YYYY"
                       onChange={(value) => {
                         setTanggalKeberangkatan(value);

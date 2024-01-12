@@ -315,7 +315,7 @@ export default function Search() {
               PILIH JADWAL
             </div>
             <div className="mt-4 md:mt-8">
-              <div className="flex flex-col md:flex-row md:justify-between items-center md:space-x-4">
+              <div className="block md:flex flex-col md:flex-row md:justify-between items-center md:space-x-4">
                 <div className="hidden md:flex items-center space-x-3 text-center md:text-left">
                   <small className="text-xs font-medium xl:font-bold text-slate-600">
                     {originName}
@@ -344,8 +344,8 @@ export default function Search() {
                     {parseInt(laki) + parseInt(wanita)} Penumpang
                   </small>
                 </div>
-                <div className="mt-4 md:mt-0 flex space-x-4 md:mr-0 justify-center md:justify-end">
-                  <Link to="/" className="flex space-x-2 items-center">
+                <div className="mt-8 md:mt-0 block md:flex space-x-0 md:space-x-4 mr-0 md:mr-0 justify-start md:justify-end">
+                  <Link to="/" className="hidden md:flex space-x-2 items-center">
                     <IoArrowBackOutline className="text-blue-500" size={16} />
                     <div className="text-blue-500 text-sm font-bold">
                       Kembali

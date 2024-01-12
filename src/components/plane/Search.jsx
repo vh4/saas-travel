@@ -612,7 +612,7 @@ export default function Search() {
                   Penumpang
                 </small>
               </div>
-              <div className="mt-4 md:mt-0 flex space-x-4 md:mr-0 justify-center md:justify-end">
+              <div className="hidden md:flex mt-4 md:mt-0 space-x-4 md:mr-0 justify-center md:justify-end">
                 <Link to="/" className="flex space-x-2 items-center">
                   <IoArrowBackOutline className="text-blue-500" size={16} />
                   <div className="text-blue-500 text-sm font-bold">Kembali</div>
@@ -634,7 +634,7 @@ export default function Search() {
                 status="active"
                 showInfo={false}
               />
-              <div className="mt-8">
+              <div className="mt-0 md:mt-8 mb-8 md:mb-0">
                 <Spin tip="Loading">
                   <div className="content" />
                 </Spin>
@@ -646,7 +646,7 @@ export default function Search() {
               <SearchPlane />
             </div>
           ) : null}
-          <div className="flex justify-between mt-6">
+          <div className="flex justify-between mt-0 md:mt-6">
             <div className="relative flex items-center space-x-2 text-gray-800 text-xs font-medium xl:font-bold">
               <div className="hidden md:block">FILTER : </div>
               <Whisper
@@ -671,7 +671,16 @@ export default function Search() {
                   WAKTU
                 </button>
               </Whisper>
+              <div className="flex md:hidden space-x-4 md:mr-0 justify-center md:justify-end">
+                <button
+                  onClick={() => setUbahPencarian((prev) => !prev)}
+                  className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs font-bold"
+                >
+                  Ubah Pencarian
+                </button>
+              </div>
             </div>
+            
             <div>
               {/* <div className="flex space-x-2 items-center p-4 px-4 md:px-4 mr-0 xl:mr-16 text-gray-800 rounded-md text-xs font-bold">
                   <div>URUTKAN</div>

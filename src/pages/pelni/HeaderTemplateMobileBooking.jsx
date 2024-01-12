@@ -9,26 +9,26 @@ export default function HeaderTemplateMobileBooking({ children }) {
     <div className="flex flex-col min-h-screen">
       <div>
       <div className="block md:hidden mb-8">
-        <div className="flex items-center w-full bg-blue-500 text-white px-2 py-4 fixed z-50">
+        <div className="flex items-center w-full bg-blue-500 text-white px-2 py-[18px] fixed z-50">
             <div className="ml-2" onClick={() => window.history.back()}>
                 <IoArrowBack size={24} />
             </div>
             <div className="flex flex-col items-center justify-center text-center mx-auto">
-                <div className="flex space-x-2 items-center justify-center font-bold text-md">
+                <div className="flex space-x-2 items-center justify-center font-medium text-md">
                 <div className="flex justify-start jalur-payment-booking text-xs space-x-2 items-center">
               <div className="flex space-x-2 items-center">
                 <IoCheckmarkCircle size={18} className="text-white" />
-                <div className="block xl:hidden text-white font-bold">
+                <div className="block xl:hidden text-white font-medium">
                   Cari Jadwal
                 </div>
               </div>
               <div className="flex space-x-2 items-center">
                 <RxCrossCircled size={18} className="text-white" />
-                <div className="block xl:hidden text-white font-bold">
+                <div className="block xl:hidden text-white font-medium">
                   Booking
                 </div>
               </div>
-              <div className="flex space-x-2 items-center font-bold">
+              <div className="flex space-x-2 items-center font-medium">
                 <RxCrossCircled size={18} className="text-white" />
                 <div className="block xl:hidden text-white">Payment</div>
               </div>

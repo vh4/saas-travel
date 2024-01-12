@@ -17,6 +17,7 @@ import Cookies from "js-cookie";
 import { AiOutlineSwap } from "react-icons/ai";
 import { InputGroup } from "rsuite";
 import InputNumber from 'rsuite/InputNumber';
+import { useState } from "react";
 
 import dayjs from "dayjs";
 import { DatePicker } from "antd";
@@ -87,6 +88,7 @@ function KAI() {
   const loadingBerangkat = openBerangka && kaiData.length === 0;
   const loadingTujuan = openTujuan && kaiData.length === 0;
   const [messageApi, contextHolder] = message.useMessage();
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   const errorBerangkat = () => {
     messageApi.open({
@@ -604,6 +606,9 @@ function KAI() {
                       className="border-gray-240 py-2"
                       appearance="subtle"
                       value={tanggal}
+                      open={isDatePickerOpen} // Pass the state to the open prop
+                      inputReadOnly={true}
+                      onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
                       inputStyle={{ color: 'red' }}
                       format="DD/MM/YYYY"
                       onChange={(value) => {

@@ -17,6 +17,7 @@ import Cookies from "js-cookie";
 import { AiOutlineSwap } from "react-icons/ai";
 import dayjs from "dayjs";
 import { daDK } from "rsuite/esm/locales";
+import { useState } from "react";
 
 function Pelni() {
   const [anchorEl, setAnchorEl] = React.useState("hidden");
@@ -40,6 +41,7 @@ function Pelni() {
   const loadingBerangkat = openBerangka && pelniData.length === 0;
   const loadingTujuan = openTujuan && pelniData.length === 0;
   const [messageApi, contextHolder] = message.useMessage();
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   const errorBerangkat = () => {
     messageApi.open({
@@ -550,12 +552,14 @@ function Pelni() {
                     <div className="w-full cursor-pointer">
                       <DatePicker
                         value={tanggal}
+                        open={isDatePickerOpen} // Pass the state to the open prop
+                        inputReadOnly={true}
+                        onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
                         className="w-full cursor-pointer text-black py-[8px] text-md border-gray-200"
                         size="large"
                         onChange={(e) => setTanggal(e)}
                         picker="month"
                         disabledDate={disabledDate}
-                        inputReadOnly={true}
                         style={{ width: "100%" }}
                       />
                     </div>

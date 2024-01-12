@@ -15,6 +15,7 @@ import { Button, message, DatePicker } from "antd";
 import Cookies from "js-cookie";
 import { AiOutlineSwap } from "react-icons/ai";
 import dayjs from "dayjs";
+import { useState } from "react";
 
 function PELNI() {
   const useStyles = makeStyles((theme) => ({
@@ -80,6 +81,7 @@ function PELNI() {
   const loadingBerangkat = openBerangka && pelniData.length === 0;
   const loadingTujuan = openTujuan && pelniData.length === 0;
   const [messageApi, contextHolder] = message.useMessage();
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   const errorBerangkat = () => {
     messageApi.open({
@@ -565,12 +567,14 @@ function PELNI() {
                     <div className="w-full cursor-pointer">
                       <DatePicker
                         value={tanggal}
+                        open={isDatePickerOpen} // Pass the state to the open prop
+                        inputReadOnly={true}
+                        onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
                         className="w-full cursor-pointer text-black py-[8px] text-md border-gray-200"
                         size="large"
                         onChange={(e) => setTanggal(e)}
                         picker="month"
                         disabledDate={disabledDate}
-                        inputReadOnly={true}
                         style={{ width: "100%" }}
                       />
                     </div>

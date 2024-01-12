@@ -68,7 +68,8 @@ export default function BookingPelni() {
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [isDatePickerOpenPria, setisDatePickerOpenPria] = useState(false);
+  const [isDatePickerOpenWanita, setisDatePickerOpenWanita] = useState(false);
 
   const [email, setEmail] = useState();
   const [hp, setHp] = useState();
@@ -897,9 +898,9 @@ export default function BookingPelni() {
                                     className="w-full"
                                     value={dayjs(e.birthdate, "YYYY/MM/DD")}
                                     format={"DD/MM/YYYY"}
-                                    open={isDatePickerOpen} // Pass the state to the open prop
+                                    open={isDatePickerOpenPria} // Pass the state to the open prop
                                     inputReadOnly={true}
-                                    onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
+                                    onOpenChange={(status) => setisDatePickerOpenPria(status)} // Update the state when the panel opens or closes
                                     onChange={handleUsiasubCatagoryChange(
                                       e,
                                       i,
@@ -1118,6 +1119,9 @@ export default function BookingPelni() {
                                     className="w-full"
                                     value={dayjs(e.birthdate, "YYYY/MM/DD")}
                                     format={"DD/MM/YYYY"}
+                                    open={isDatePickerOpenWanita} // Pass the state to the open prop
+                                    inputReadOnly={true}
+                                    onOpenChange={(status) => setisDatePickerOpenWanita(status)} // Update the state when the panel opens or closes
                                     onChange={handleUsiasubCatagoryChange(
                                       e,
                                       i,
