@@ -260,6 +260,8 @@ function PELNI() {
     e.preventDefault();
     if(wanita > 0 && laki > 0){
       setLaki(parseInt(laki) - 1);
+    }if(wanita > 0 && laki >= 0){
+      setLaki(0);
     }else{
       setLaki(1);
     }
@@ -280,7 +282,9 @@ function PELNI() {
 
     if (wanita <= 0) {
       setWanita(0);
-    } else {
+    }else if (laki <= 0) {
+      setWanita(1);
+    }  else {
       setWanita(parseInt(wanita) - 1);
     }
   }
