@@ -290,7 +290,9 @@ function Pelni() {
 
     if (wanita <= 0) {
       setWanita(0);
-    } else {
+    }else if (laki <= 0) {
+      setWanita(1);
+    }  else {
       setWanita(parseInt(wanita) - 1);
     }
   }

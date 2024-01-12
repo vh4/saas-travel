@@ -812,13 +812,13 @@ useEffect(() => {
                                     {
                                       required: true,
                                       type: "email",
-                                      message:
-                                        "Format Email tidak sesuai.",
+                                      message: "Format Email tidak sesuai.",
+                                      validateTrigger:"onBlur"
                                     },
                                     {
                                       max: 150,
-                                      message:
-                                        "Email maksimal 150 karakter.",
+                                      message: "Email maksimal 150 karakter.",
+                                      validateTrigger:"onBlur"
                                     },
                                   ]}
                                 >
