@@ -733,7 +733,7 @@ export default function BookingPelni() {
                             },
                             {
                               min: 10,
-                              message: "Nomor HP harus min. 10 huruf.",
+                              message: "Minimal Nomor HP pemesan adalah 10 digit",
                             },
                           ]}
                         >
