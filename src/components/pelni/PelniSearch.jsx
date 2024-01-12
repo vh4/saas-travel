@@ -258,12 +258,12 @@ function PELNI() {
 
   function minusLaki(e) {
     e.preventDefault();
-
-    if (laki < 1 || laki === 1) {
-      setLaki(1);
-    } else {
+    if(wanita > 0 && laki > 0){
       setLaki(parseInt(laki) - 1);
+    }else{
+      setLaki(1);
     }
+    
   }
 
   function plusWanita(e) {
@@ -278,7 +278,7 @@ function PELNI() {
   function minusWanita(e) {
     e.preventDefault();
 
-    if (wanita < 0 || wanita === 0) {
+    if (wanita <= 0) {
       setWanita(0);
     } else {
       setWanita(parseInt(wanita) - 1);
