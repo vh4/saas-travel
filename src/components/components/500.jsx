@@ -4,17 +4,17 @@ const Page500 = () => {
   return (
     <div
       style={{
-        height: 'calc(100vh - 64px - 24px)',
+        height: 'calc(100vh - 64px - 32px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
       }}
     >
-      <div className="text-center max-w-none md:max-w-[280px]">
+      <div className="text-center max-w-[280px]">
         <img
-          src="/error.png"
+          src="/error1.png"
           alt="Session Expired"
-          className="flex justify-center w-full md:h-none"
+          className="mx-auto" // Tambahkan class mx-auto untuk memastikan gambar berada di tengah secara horizontal
         />
         <div className="mt-4">
           Maaf, terjadi kesalahan. Silakan login kembali.
