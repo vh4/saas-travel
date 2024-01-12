@@ -135,7 +135,7 @@ export default function Header() {
         "v_",
         JSON.stringify({
           namaPemilik: response.data.data.namaPemilik,
-          balance: response.data.data.balance,
+          // balance: response.data.data.balance,
         })
       );
     }

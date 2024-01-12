@@ -33,7 +33,7 @@ export default function SidebarUser({pathSidebar}) {
             setUsr(response.data.data)
             localStorage.setItem('v_', JSON.stringify({
                 namaPemilik:response.data.data.namaPemilik,
-                balance:response.data.data.balance
+                // balance:response.data.data.balance
             }))
 
         }

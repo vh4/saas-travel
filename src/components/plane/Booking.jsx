@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { MdHorizontalRule } from "react-icons/md";
 import FormControl from "@mui/material/FormControl";
 import "react-phone-number-input/style.css";
@@ -56,6 +56,7 @@ export default function BookingPesawat() {
   const [isDatePickerOpenAdult, setIsDatePickerOpenAdult] = useState(false);
   const [isDatePickerOpenChild, setIsDatePickerOpenChild] = useState(false);
   const [isDatePickerOpenInfant, setIsDatePickerOpenInfant] = useState(false);
+  const formRef = useRef();
 
   const [email, setEmail] = useState();
   const [hp, setHp] = useState();
@@ -364,7 +365,15 @@ useEffect(() => {
     setInfant([infantCategory]);
   };
 
-  const handlerBookingSubmit = async () => {
+  const onFinishFailed = (errorInfo) => {
+    const firstErrorField = Object.keys(errorInfo.errorFields[0])[0];
+
+    const inputInstance = formRef.current.getFieldInstance(firstErrorField);
+
+    inputInstance.focus();
+  };
+
+  const handlerBookingSubmit = async (errorInfo) => {
    
     let end_adult = [];
     let end_child = [];
@@ -791,7 +800,9 @@ useEffect(() => {
                   {/* detail passengger Pesawat*/}
                   <Form
                     form={form}
+                    ref={formRef}
                     onFinish={showModal}
+                    onFinishFailed={onFinishFailed}
                     className="block w-full  mt-8 mb-4 xl:mt-12"
                   >
                     <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-2 gap-12">
