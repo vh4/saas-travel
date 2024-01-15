@@ -68,8 +68,8 @@ export default function BookingPelni() {
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
-  const [isDatePickerOpenPria, setisDatePickerOpenPria] = useState(false);
-  const [isDatePickerOpenWanita, setisDatePickerOpenWanita] = useState(false);
+  const [isDatePickerOpenPria, setisDatePickerOpenPria] = useState(null);
+  const [isDatePickerOpenWanita, setisDatePickerOpenWanita] = useState(null);
 
   const [email, setEmail] = useState();
   const [hp, setHp] = useState();
@@ -169,6 +169,10 @@ export default function BookingPelni() {
 
           const TotalWanita = parseInt(bookResponse.female) || 0;
           const TotalPria = parseInt(bookResponse.male) || 0;
+
+          setisDatePickerOpenPria(Array(TotalPria.length).fill(false));
+          setisDatePickerOpenWanita(Array(TotalWanita.length).fill(false));
+
 
           setTotalPria(TotalPria)
           setTotalWanita(TotalWanita);
@@ -898,9 +902,13 @@ export default function BookingPelni() {
                                     className="w-full"
                                     value={dayjs(e.birthdate, "YYYY/MM/DD")}
                                     format={"DD/MM/YYYY"}
-                                    open={isDatePickerOpenPria} // Pass the state to the open prop
+                                    open={isDatePickerOpenPria[i]} // Pass the state to the open prop
                                     inputReadOnly={true}
-                                    onOpenChange={(status) => setisDatePickerOpenPria(status)} // Update the state when the panel opens or closes
+                                    onOpenChange={(status) => {
+                                      const newOpenState = [...isDatePickerOpenPria]; // Create a copy of the array
+                                      newOpenState[i] = status; // Update the state for the specific index
+                                      setisDatePickerOpenPria(newOpenState); // Set the updated array as the new state
+                                    }}
                                     onChange={handleUsiasubCatagoryChange(
                                       e,
                                       i,
@@ -1119,9 +1127,13 @@ export default function BookingPelni() {
                                     className="w-full"
                                     value={dayjs(e.birthdate, "YYYY/MM/DD")}
                                     format={"DD/MM/YYYY"}
-                                    open={isDatePickerOpenWanita} // Pass the state to the open prop
+                                    open={isDatePickerOpenWanita[i]} // Pass the state to the open prop
                                     inputReadOnly={true}
-                                    onOpenChange={(status) => setisDatePickerOpenWanita(status)} // Update the state when the panel opens or closes
+                                    onOpenChange={(status) => {
+                                      const newOpenState = [...isDatePickerOpenWanita]; // Create a copy of the array
+                                      newOpenState[i] = status; // Update the state for the specific index
+                                      setisDatePickerOpenWanita(newOpenState); // Set the updated array as the new state
+                                    }}
                                     onChange={handleUsiasubCatagoryChange(
                                       e,
                                       i,

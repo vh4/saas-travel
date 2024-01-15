@@ -53,10 +53,12 @@ export default function BookingPesawat() {
   const [child, setChild] = useState(null);
   const [infant, setInfant] = useState(null);
   const [manyRequestBook, setmanyRequestBook] = useState(false);
-  const [isDatePickerOpenAdult, setIsDatePickerOpenAdult] = useState(false);
-  const [isDatePickerOpenChild, setIsDatePickerOpenChild] = useState(false);
-  const [isDatePickerOpenInfant, setIsDatePickerOpenInfant] = useState(false);
   const formRef = useRef();
+
+  const [isDatePickerOpenAdult, setIsDatePickerOpenAdult] = useState(null);
+  const [isDatePickerOpenChild, setIsDatePickerOpenChild] = useState(null);
+  const [isDatePickerOpenInfant, setIsDatePickerOpenInfant] = useState(null);
+
 
   const [email, setEmail] = useState();
   const [hp, setHp] = useState();
@@ -218,6 +220,10 @@ useEffect(() => {
           const TotalAdult = parseInt(dataDetailForBooking.adult) || 0;
           const TotalChild = parseInt(dataDetailForBooking.child) || 0;
           const TotalInfant = parseInt(dataDetailForBooking.infant) || 0; //
+
+          setIsDatePickerOpenAdult(Array(TotalAdult.length).fill(false));
+          setIsDatePickerOpenChild(Array(TotalChild.length).fill(false));
+          setIsDatePickerOpenInfant(Array(TotalInfant.length).fill(false))
 
           SetTotalAdult(TotalAdult);
           setTotalChild(TotalChild);
@@ -1074,9 +1080,13 @@ useEffect(() => {
                                           "birthdate"
                                         )}
                                         disabledDate={disabledDateAdult}
-                                        open={isDatePickerOpenAdult} // Pass the state to the open prop
+                                        open={isDatePickerOpenAdult[i]} // Pass the state to the open prop
                                         inputReadOnly={true}
-                                        onOpenChange={(status) => setIsDatePickerOpenAdult(status)} // Update the state when the panel opens or closes
+                                        onOpenChange={(status) => {
+                                          const newOpenState = [...isDatePickerOpenAdult]; // Create a copy of the array
+                                          newOpenState[i] = status; // Update the state for the specific index
+                                          setIsDatePickerOpenAdult(newOpenState); // Set the updated array as the new state
+                                        }}
                                       />
                                     </Form.Item>
                                     <small className="block -mt-4 text-gray-400">
@@ -1225,10 +1235,14 @@ useEffect(() => {
                                               "expireddate"
                                             )}
                                             disabledDate={disabledDateExpiredDate}
-                                            open={isDatePickerOpenAdult} // Pass the state to the open prop
+                                            open={isDatePickerOpenAdult[i]} // Pass the state to the open prop
                                             inputReadOnly={true}
-                                            onOpenChange={(status) => setIsDatePickerOpenAdult(status)} // Update the state when the panel opens or closes
-                                          />
+                                            onOpenChange={(status) => {
+                                              const newOpenState = [...isDatePickerOpenAdult]; // Create a copy of the array
+                                              newOpenState[i] = status; // Update the state for the specific index
+                                              setIsDatePickerOpenAdult(newOpenState); // Set the updated array as the new state
+                                            }}
+                                            />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
                                           Contoh: dd-mm-yyyy
@@ -1468,10 +1482,14 @@ useEffect(() => {
                                           "birthdate"
                                         )}
                                         disabledDate={disabledDateChild}
-                                        open={isDatePickerOpenChild} // Pass the state to the open prop
+                                        open={isDatePickerOpenChild[i]} // Pass the state to the open prop
                                         inputReadOnly={true}
-                                        onOpenChange={(status) => setIsDatePickerOpenChild(status)} // Update the state when the panel opens or closes
-                                      />
+                                        onOpenChange={(status) => {
+                                          const newOpenState = [...isDatePickerOpenChild]; // Create a copy of the array
+                                          newOpenState[i] = status; // Update the state for the specific index
+                                          setIsDatePickerOpenChild(newOpenState); // Set the updated array as the new state
+                                        }}
+                                        />
                                     </Form.Item>
                                     <small className="block -mt-4 text-gray-400">
                                       Contoh: dd-mm-yyyy
@@ -1618,10 +1636,14 @@ useEffect(() => {
                                               "expireddate"
                                             )}
                                             disabledDate={disabledDateExpiredDate}
-                                            open={isDatePickerOpenChild} // Pass the state to the open prop
+                                            open={isDatePickerOpenChild[i]} // Pass the state to the open prop
                                             inputReadOnly={true}
-                                            onOpenChange={(status) => setIsDatePickerOpenChild(status)} // Update the state when the panel opens or closes
-                                          />
+                                            onOpenChange={(status) => {
+                                              const newOpenState = [...isDatePickerOpenChild]; // Create a copy of the array
+                                              newOpenState[i] = status; // Update the state for the specific index
+                                              setIsDatePickerOpenChild(newOpenState); // Set the updated array as the new state
+                                            }}
+                                            />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
                                           Contoh: dd-mm-yyyy
@@ -1819,10 +1841,14 @@ useEffect(() => {
                                           "birthdate"
                                         )}
                                         disabledDate={disabledDate}
-                                        open={isDatePickerOpenInfant} // Pass the state to the open prop
+                                        open={isDatePickerOpenInfant[i]} // Pass the state to the open prop
                                         inputReadOnly={true}
-                                        onOpenChange={(status) => setIsDatePickerOpenInfant(status)} // Update the state when the panel opens or closes
-                                      />
+                                        onOpenChange={(status) => {
+                                          const newOpenState = [...isDatePickerOpenInfant]; // Create a copy of the array
+                                          newOpenState[i] = status; // Update the state for the specific index
+                                          setIsDatePickerOpenInfant(newOpenState); // Set the updated array as the new state
+                                        }}
+                                        />
                                     </Form.Item>
                                     <small className="block -mt-4 text-gray-400">
                                       Contoh: dd-mm-yyyy
@@ -1970,10 +1996,14 @@ useEffect(() => {
                                               "expireddate"
                                             )}
                                             disabledDate={disabledDateExpiredDate}
-                                            open={isDatePickerOpenInfant} // Pass the state to the open prop
+                                            open={isDatePickerOpenInfant[i]} // Pass the state to the open prop
                                             inputReadOnly={true}
-                                            onOpenChange={(status) => setIsDatePickerOpenInfant(status)} // Update the state when the panel opens or closes
-                                          />
+                                            onOpenChange={(status) => {
+                                              const newOpenState = [...isDatePickerOpenInfant]; // Create a copy of the array
+                                              newOpenState[i] = status; // Update the state for the specific index
+                                              setIsDatePickerOpenInfant(newOpenState); // Set the updated array as the new state
+                                            }}
+                                            />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
                                           Contoh: dd-mm-yyyy

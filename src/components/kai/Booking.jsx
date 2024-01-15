@@ -65,7 +65,7 @@ export default function BookingKai() {
   const [manyRequestBook, setmanyRequestBook] = useState(false);
   const [dataBookingTrain, setdataBookingTrain] = useState([]);
   const [dataDetailTrain, setdataDetailTrain] = useState([]);
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(null);
 
   const [err, setErr] = useState(false);
   const [ErrPage, setErrPage] = useState(false);
@@ -114,6 +114,8 @@ export default function BookingKai() {
   
           setTotalAdult(TotalAdult);
           setTotalInfant(TotalInfant);
+
+          setIsDatePickerOpen(Array(TotalInfant.length).fill(false));
   
           const AdultArr = Array.from({ length: TotalAdult }, () => ({
             name: "",
@@ -846,10 +848,14 @@ export default function BookingKai() {
                                         format="DD/MM/YYYY"
                                         onChange={handleInfantsubCatagoryChange(i, "birthdate")}
                                         disabledDate={disabledDate}
-                                        open={isDatePickerOpen} // Pass the state to the open prop
+                                        open={isDatePickerOpen[i]} // Pass the state to the open prop
                                         inputReadOnly={true}
-                                        onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
-                                      />
+                                        onOpenChange={(status) => {
+                                          const newOpenState = [...isDatePickerOpen]; // Create a copy of the array
+                                          newOpenState[i] = status; // Update the state for the specific index
+                                          setIsDatePickerOpen(newOpenState); // Set the updated array as the new state
+                                        }}
+                                        />
                                   <small className="block mt-2 text-gray-400">
                                     Contoh: dd-mm-yyyy
                                   </small>
