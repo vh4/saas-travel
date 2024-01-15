@@ -196,16 +196,18 @@ export default function BookingKai() {
 
   const handleInfantsubCatagoryChange = (i, category) => (e) => {
     const infantCategory = infant[0];
-    // setIsDatePickerOpen(false);
 
-    if (category == "birthdate") {
-      let tanggalParse = new Date(e);
-      tanggalParse =
-        tanggalParse.getFullYear() +
-        "-" +
-        addLeadingZero(parseInt(tanggalParse.getMonth()) + 1).toString() +
-        "-" +
-        addLeadingZero(parseInt(tanggalParse.getDay())).toString();
+    if (category == "birthdate"  || category == 'expireddate') {
+      let tanggalParse = new Date(e)
+      .toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+      .split("/")
+      .reverse()
+      .join("-");
+
       infantCategory[i][category] = tanggalParse;
     }else {
       infantCategory[i][category] = e.target.value;
@@ -612,6 +614,7 @@ export default function BookingKai() {
                                       Nama Lengkap
                                     </div>
                                     <Form.Item
+                                    hasFeedback
                                       name={`adultNameLengkap${i}`}
                                       rules={[
                                         {
@@ -665,6 +668,7 @@ export default function BookingKai() {
                                     Nomor HP
                                   </div>
                                   <Form.Item
+                                    hasFeedback
                                     name={`nomorHPAdult${i}`}
                                     rules={[
                                       {
@@ -710,6 +714,7 @@ export default function BookingKai() {
                                     No. Ktp
                                   </div>
                                     <Form.Item
+                                      hasFeedback
                                       name={`niktpAdult${i}`}
                                       rules={[
                                         {
@@ -788,6 +793,7 @@ export default function BookingKai() {
                                       Nama Lengkap
                                     </div>
                                     <Form.Item
+                                    hasFeedback
                                       name={`infantNamaLengkap${i}`}
                                       rules={[
                                         {
@@ -866,6 +872,7 @@ export default function BookingKai() {
                                   No. Ktp
                                   </div>
                                   <Form.Item
+                                  hasFeedback
                                     name={`infantktpnik${i}`}
                                     rules={[
                                       {
