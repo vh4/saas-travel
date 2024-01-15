@@ -196,7 +196,7 @@ export default function BookingKai() {
 
   const handleInfantsubCatagoryChange = (i, category) => (e) => {
     const infantCategory = infant[0];
-    setIsDatePickerOpen(false);
+    // setIsDatePickerOpen(false);
 
     if (category == "birthdate") {
       let tanggalParse = new Date(e);
