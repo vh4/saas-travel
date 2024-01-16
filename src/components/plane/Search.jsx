@@ -714,7 +714,7 @@ export default function Search() {
                         <div
                           class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${
                             e.classes[0][0].availability > 0 &&
-                            e.classes[0][0].availability >
+                            e.classes[0][0].availability >=
                               parseInt(child) +
                                 parseInt(adult) +
                                 parseInt(infant)
@@ -797,7 +797,7 @@ export default function Search() {
                                 <small className="text-red-500">
                                   {e.classes[0][0].availability} seat(s) left
                                   {e.classes[0][0].availability > 0 &&
-                                  e.classes[0][0].availability >
+                                  e.classes[0][0].availability >=
                                     parseInt(child) +
                                       parseInt(adult) +
                                       parseInt(infant) ? (
@@ -809,7 +809,7 @@ export default function Search() {
                               </div>
                               <div className="flex justify-center col-span-1 md:col-span-2">
                                 {e.classes[0][0].availability > 0 &&
-                                e.classes[0][0].availability >
+                                e.classes[0][0].availability >=
                                   parseInt(child) +
                                     parseInt(adult) +
                                     parseInt(infant) ? (
@@ -1293,7 +1293,7 @@ export default function Search() {
                                   type="button"
                                   onClick={(f) => {
                                     e.classes[0][0].availability > 0 &&
-                                      e.classes[0][0].availability >
+                                      e.classes[0][0].availability >=
                                         parseInt(child) +
                                           parseInt(adult) +
                                           parseInt(infant) &&
