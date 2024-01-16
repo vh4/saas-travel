@@ -588,7 +588,8 @@ export default function Konfirmasi() {
       delete item.type;
     });
   
-    const hasilBookingData = {...hasilBooking};
+    const hasilBookingDataCopyDeep = JSON.parse(JSON.stringify(hasilBooking));
+    const hasilBookingData = {...hasilBookingDataCopyDeep};
     setSelectedCount(0);
   
     for (var i = 0; i < changeStateFix[0].length; i++) {
@@ -646,12 +647,12 @@ export default function Konfirmasi() {
 
     } else if (response.data.rc === "55") {
       setChangeSet(JSON.parse(changeStateKetikaGagalTidakUpdate));
-      setHasilBooking(JSON.parse(hasilBookingTriggerResetGagal));
+      setHasilBooking((prev) => prev);
       setisLoadingPindahKursi(false);
       failedNotification(response.data.rd);
     } else {
       setChangeSet(JSON.parse(changeStateKetikaGagalTidakUpdate));
-      setHasilBooking(JSON.parse(hasilBookingTriggerResetGagal));
+      setHasilBooking((prev) => prev);
       setisLoadingPindahKursi(false);
       failedNotification(response.data.rd);
     }
