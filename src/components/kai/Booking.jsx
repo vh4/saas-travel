@@ -222,6 +222,7 @@ export default function BookingKai() {
 
     onReset();
 
+    const uuid = uuidv4();
     var priceInfantChild;
     TotalInfant > 0
       ? (priceInfantChild = dataBookingTrain[0].seats[0].priceAdult)
@@ -292,7 +293,6 @@ export default function BookingKai() {
       //   }
       // );
 
-      const uuid = uuidv4();
       localStorage.setItem(`data:k-book/${uuid}`, JSON.stringify(
       {
           passengers:{

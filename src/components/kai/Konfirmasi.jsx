@@ -14,12 +14,13 @@ import { Modal, Placeholder, Button } from "rsuite";
 import { Alert, Select, notification } from "antd";
 import { Button as ButtonAnt } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
-import { parseTanggal } from "../../helpers/date";
+import { parseTanggal, remainingTime } from "../../helpers/date";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
 import PageExpired from "../components/Expired";
 import KonfirmasiLoading from "../components/trainskeleton/konfirmasi";
 import {Typography } from 'antd';
+import moment from 'moment';
 
 const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCount, setSelectedCount, setgerbongsamawajib, gerbongsamawajib,  selectedCheckboxes, setSelectedCheckboxes}) => {
   
@@ -340,11 +341,14 @@ export default function Konfirmasi() {
 
   const [changeState, setChangeSet] = useState({}); //change seats.
   const [changeStateKetikaGagalTidakUpdate, setchangeStateKetikaGagalTidakUpdate] = useState({}); //change seats.
+  const [isNavigationDone, setIsNavigationDone] = useState(false);
 
   const [gerbongsamawajib, setgerbongsamawajib] = useState(0);
 
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {setOpen(false);setSelectedCount(0); setgerbongsamawajib(0)};
+  
+  const [expiredBookTime, setExpiredBookTime] = useState(null);
 
   useEffect(() => {
     if (token === null || token === undefined) {
@@ -377,6 +381,8 @@ export default function Konfirmasi() {
         if (ResponsegetHasilBooking) {
 
           setHasilBooking(ResponsegetHasilBooking.hasil_book);
+          setExpiredBookTime(ResponsegetHasilBooking.hasil_book.timeLimit || moment().add(1, 'hours'))
+          
           //mengatasi ketika mencopy variable hasilBooking, state nya ikut update.
           sethasilBookingTriggerResetGagal(JSON.stringify(ResponsegetHasilBooking.hasil_book))
 
@@ -411,9 +417,20 @@ export default function Konfirmasi() {
           setErrPage(true);
         }
 
+        if (
+          ResponsegetHasilBooking.hasil_book &&
+          new Date(ResponsegetHasilBooking.hasil_book.timeLimit).getTime() < new Date().getTime()
+        ) {
+
+          setIsBookingExpired(true);
+
+        } else {
+          setIsBookingExpired(false);
+        }
+
         setTimeout(() => {
           setIsLoadingPage(false);
-        }, 100);
+        }, 1000);
       })
       .catch((error) => {
         setIsLoadingPage(false);
@@ -431,6 +448,30 @@ export default function Konfirmasi() {
     }
   }, [uuid_book, uuid_train_data, token]);
 
+
+  const [remainingBookTime, setremainingBookTime] = useState(remainingTime(expiredBookTime));
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setremainingBookTime(remainingTime(expiredBookTime));
+
+      if (
+        hasilBooking &&
+        new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()
+      ) {
+        
+        setIsBookingExpired(true);
+
+      } else {
+        setIsBookingExpired(false);
+      }
+
+    }, 500);
+  
+    return () => clearInterval(intervalId);
+  }, [expiredBookTime]);
+  
+
   // async function getDataTrain() {
   //   try {
   //     const response = await axios.get(
@@ -442,6 +483,8 @@ export default function Konfirmasi() {
   //     throw error;
   //   }
   // }
+
+
 
   async function getDataTrain() {
     try {
@@ -677,6 +720,7 @@ export default function Konfirmasi() {
     });
 
   }
+
 
   return (
     <>
@@ -924,8 +968,11 @@ export default function Konfirmasi() {
           ) : (
             <>
               <div className="block xl:flex xl:justify-around mb-24 xl:mx-16 xl:space-x-4">
+                <div className="block md:hidden mt-2">
+                  <Alert message={`Expired Booking : ${remainingBookTime}`} type="info" showIcon closable />
+                </div>
                 <div className="w-full mx-0 2xl:mx-4">
-                  <div className="mt-8 w-full rounded-md border border-gray-200 shadow-sm">
+                  <div className="mt-2 md:mt-8 w-full rounded-md border border-gray-200 shadow-sm">
                     <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                       <div className="text-gray-800 font-medium xl:font-bold ">
                         Keberangkatan kereta
@@ -1204,6 +1251,9 @@ export default function Konfirmasi() {
                       </div>
                     </div>
                   </button>
+                  <div className="hidden md:block mt-2">
+                    <Alert message={`Expired Booking : ${remainingBookTime}`} type="info" showIcon closable />
+                  </div>
                   <div></div>
                 </div>
               </div>

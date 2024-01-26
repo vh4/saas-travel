@@ -7,13 +7,15 @@ import { MdHorizontalRule } from "react-icons/md";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import { TiketContext } from "../../App";
 import { BsArrowRightShort } from "react-icons/bs";
-import { Button, message } from "antd";
-import { parseTanggal as tanggalParse } from "../../helpers/date";
+import { Button, message, Alert } from "antd";
+import { remainingTime, parseTanggal as tanggalParse } from "../../helpers/date";
 import { toRupiah } from "../../helpers/rupiah";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
 import BayarLoading from "../components/planeskeleton/bayar";
 import {Typography } from 'antd';
+import moment from "moment";
+import PageExpired from "../components/Expired";
 
 export default function Pembayaran() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -43,8 +45,11 @@ export default function Pembayaran() {
   const [err, setErr] = useState(false);
   const [errPage, setErrPage] = useState(false);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
+  const [isBookingExpired, setIsBookingExpired] = useState(false); // Added state for booking expiration
 
   const [callbackBoolean, setcallbackBoolean] = useState(false);
+  const [expiredBookTime, setExpiredBookTime] = useState(null);
+  const [isNavigationDone, setIsNavigationDone] = useState(false);
 
   function gagal(rd) {
     messageApi.open({
@@ -138,6 +143,8 @@ export default function Pembayaran() {
         if (getInfoBooking) {
           setdataDetailPassenger(dataDetailPassenger);
           sethasilBooking(hasilBooking);
+          setExpiredBookTime(hasilBooking.timeLimit || moment().add(1, 'hours'))
+
         } else {
           setErrPage(true);
         }
@@ -153,11 +160,22 @@ export default function Pembayaran() {
           setErrPage(true);
         }
 
+        // Set booking expiration flag
+        if (
+          hasilBooking &&
+          new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()
+        ) {
+          setIsBookingExpired(true);
+        }else {
+          setIsBookingExpired(false);
+        }
+
+
         setTimeout(() => {
 
           setIsLoadingPage(false);
           
-        }, 100);
+        }, 1000);
         
       })
       .catch(() => {
@@ -165,6 +183,28 @@ export default function Pembayaran() {
         setErrPage(true);
       });
   }, [v_book, v_flight, token]);
+
+  const [remainingBookTime, setremainingBookTime] = useState(remainingTime(expiredBookTime));
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setremainingBookTime(remainingTime(expiredBookTime));
+
+      if (
+        hasilBooking &&
+        new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()
+      ) {
+        
+        setIsBookingExpired(true);
+
+      } else {
+        setIsBookingExpired(false);
+      }
+
+    }, 500);
+  
+    return () => clearInterval(intervalId);
+  }, [expiredBookTime]);
 
   async function getInfoBooking() {
     try {
@@ -291,7 +331,13 @@ export default function Pembayaran() {
         <>
           <Page400 />
         </>
-      ) : (
+      ) : 
+      isBookingExpired === true ? (
+        <>
+          <PageExpired />
+        </>
+      ) :
+      (
         <>
           {/* header kai flow */}
           <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
@@ -330,10 +376,13 @@ export default function Pembayaran() {
             </>
           ) : (
             <>
-              <div className="block xl:flex xl:justify-around mb-24 ">
+              <div className="block xl:flex xl:justify-around mb-24 xl:mx-16 xl:space-x-4">
+                <div className="block md:hidden mt-2">
+                    <Alert message={`Expired Booking : ${remainingBookTime}`} type="info" showIcon closable />
+                </div>
               {/* mobile sidebar */}
                 <div className="block xl:hidden sidebar w-full xl:w-1/2">
-                  <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                  <div className="mt-2 py-2 rounded-md border border-gray-200 shadow-sm">
                     <div className="px-4 py-2 mb-4">
                       {/* <div className="text-gray-500 text-xs">Booking ID</div> */}
                       <div className="text-gray-800 text-sm font-semibold">Transaksi ID</div>                      
@@ -527,7 +576,7 @@ export default function Pembayaran() {
                   </div>
                 </div>
                 {/* desktop sidebar */}
-                <div className="hidden xl:block sidebar w-full xl:w-1/2">
+                <div className="sidebar hidden xl:block w-full xl:w-1/2">
                   <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
                     <div className="px-4 py-2">
                       {/* <div className="text-gray-500 text-xs">Booking ID</div> */}
@@ -608,7 +657,10 @@ export default function Pembayaran() {
                   </div>
 
                   {/* desktop payment button */}
-                  <div className="hidden xl:block mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                  <div className="hidden md:block mt-2">
+                       <Alert message={`Expired Booking : ${remainingBookTime}`} type="info" showIcon closable />
+                    </div>
+                  <div className="hidden xl:block mt-2 py-2 rounded-md border border-gray-200 shadow-sm">
                   {callbackBoolean == true ? (
                     <>
                       <div className="px-8 py-4 text-sm text-gray-500">

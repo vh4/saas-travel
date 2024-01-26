@@ -16,11 +16,11 @@ import TimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
 import { IoMdTimer } from "react-icons/io";
 import SearchPlane from "./SearchPlane";
 import { Progress } from "rsuite";
-import { Spin } from "antd";
+import { Space, Spin } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
 import { parseTanggal } from "../../helpers/date";
-import { MdOutlineLuggage } from "react-icons/md";
-import { notification } from "antd";
+import { MdOutlineLuggage, MdSort } from "react-icons/md";
+import { notification, Radio } from "antd";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
 import FormGroup from "@mui/material/FormGroup";
@@ -53,6 +53,11 @@ export default function Search() {
   const [showWaktu, setShowWaktu] = useState(false);
 
   const [waktuFilter, setWaktuFilter] = useState([false, false, false, false]);
+  
+  const [transit, setTransit] = useState(true);
+  const [langsung, setLangsung] = useState(true);
+
+
   const [selectedTime, setSelectedTime] = useState([]);
 
   const btnRefHarga = useRef(null);
@@ -248,6 +253,7 @@ export default function Search() {
   const [dataSearch, setDataSearch] = React.useState(Array());
   const [detailTiket, setDetailTiket] = React.useState(null);
   const [detailHarga, setDetailHarga] = React.useState(null);
+  const [HargaTerendahTinggiPlane, setHargaTerendahTinggiPlane] = useState(false);
 
   var j =
     '{"TPGA":"GARUDA INDONESIA","TPIP":"PELITA AIR","TPJQ":"JETSTAR","TPJT":"LION AIR","TPMV":"TRANS NUSA","TPQG":"CITILINK","TPQZ":"AIR ASIA","TPSJ":"SRIWIJAYA","TPTN":"TRIGANA AIR","TPTR":"TIGER AIR","TPXN":"XPRESS AIR"}';
@@ -318,32 +324,69 @@ export default function Search() {
     }
   };
 
-  const filteredData = dataSearch
-    .filter((d, i) => {
-      if (selectedTime.length === 0) {
-        return true;
-      }
-      const departureTime = moment(d.detailTitle[0].depart, "HH:mm").format(
-        "HH:mm"
+const filteredData = dataSearch
+  .filter((d, i) => {
+    if (selectedTime.length === 0) {
+      return true;
+    }
+    const departureTime = moment(d.detailTitle[0].depart, "HH:mm").format(
+      "HH:mm"
+    );
+    return selectedTime.some((t) => {
+      const [start, end] = t.split("-");
+      return moment(departureTime, "HH:mm").isBetween(
+        moment(start, "HH:mm"),
+        moment(end, "HH:mm")
       );
-      return selectedTime.some((t) => {
-        const [start, end] = t.split("-");
-        return moment(departureTime, "HH:mm").isBetween(
-          moment(start, "HH:mm"),
-          moment(end, "HH:mm")
-        );
-      });
-    })
-    .filter((flight, i) => {
-      return flight.classes[0].some((harga) => {
-        if (harga.price === undefined) {
-          return false; // Skip if price is undefined
-        }
-        return (
-          valHargaRange[0] <= harga.price && harga.price <= valHargaRange[1]
-        );
-      });
     });
+  })
+  .filter((flight, i) => {
+    return flight.classes[0].some((harga) => {
+      if (harga.price === undefined) {
+        return false; // Skip if price is undefined
+      }
+      return (
+        valHargaRange[0] <= harga.price && harga.price <= valHargaRange[1]
+      );
+    });
+  }).filter((flight, i) => {
+    if (!transit && !langsung) {
+      return true; // No filter, return all flights
+    } else if (!transit) {
+      return !flight.isTransit; // Only non-transit flights
+    } else if (!langsung) {
+      return flight.isTransit; // Only transit flights
+    } else {
+      return true; // Both transit and non-transit flights
+    }
+  })
+  
+  .sort((a, b) => {
+    if (HargaTerendahTinggiPlane === 1) {
+      const priceA = Math.min(...a.classes[0].map((x) => x.price));
+      const priceB = Math.min(...b.classes[0].map((x) => x.price));
+      return priceA - priceB;
+    } else if(HargaTerendahTinggiPlane === 2) {
+      const priceA = Math.max(...a.classes[0].map((x) => x.price));
+      const priceB = Math.max(...b.classes[0].map((x) => x.price));
+      return priceB - priceA;
+    }
+  });
+
+  const SortingPopoOverPlane = (
+    <Popover title="Urutkan Dengan">
+      <div className="">
+        <Box sx={{ width: 150 }}>
+        <Radio.Group className="mt-2" onChange={(e) => setHargaTerendahTinggiPlane(e.target.value)} value={HargaTerendahTinggiPlane}>
+          <Space direction="vertical">
+            <Radio value={1} className="mt-2">Harga Terendah</Radio>
+            <Radio value={2} className="mt-2">Harga Tertinggi</Radio>
+          </Space>
+        </Radio.Group>
+        </Box>
+      </div>
+    </Popover>
+  );
 
   async function bookingHandlerDetail(i) {
     setisLoadingPilihTiket(`true-${i}`);
@@ -567,6 +610,37 @@ export default function Search() {
     </Popover>
   );
 
+  const transitPopoOver = (
+    <Popover title="Filter Transit">
+      <div className="">
+        <Box sx={{ width: 120 }}>
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={langsung}
+                  onChange={() => setLangsung((prev) => !prev)}
+                  size="small"
+                />
+              }
+              label={<span style={{ fontSize: "12px" }}>Langsung</span>}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={transit}
+                  onChange={() => setTransit((prev) => !prev)}
+                  size="small"
+                />
+              }
+              label={<span style={{ fontSize: "12px" }}>Transit</span>}
+            />
+          </FormGroup>
+        </Box>
+      </div>
+    </Popover>
+  );
+  
   return (
     <>
       {contextHolder}
@@ -671,7 +745,36 @@ export default function Search() {
                   WAKTU
                 </button>
               </Whisper>
-              <div className="flex md:hidden space-x-4 md:mr-0 justify-center md:justify-end">
+              <Whisper
+                placement="top"
+                trigger="active"
+                controlId="control-id-active"
+                speaker={transitPopoOver}
+                placement="bottomStart"
+              >
+                <button className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium xl:font-bold">
+                  TRANSIT
+                </button>
+              </Whisper>
+            </div>
+            
+            <div>
+              <div className="cursor-pointer">
+                <Whisper
+                    placement="top"
+                    trigger="active"
+                    controlId="control-id-active"
+                    speaker={SortingPopoOverPlane}
+                    placement="bottomEnd"
+                  >
+                <div>
+                  <MdSort className="" size={28}/>
+                </div>
+              </Whisper>
+                </div>
+            </div>
+          </div>
+             <div className="mt-4 flex md:hidden space-x-4 md:mr-0 justify-center md:justify-end">
                 <button
                   onClick={() => setUbahPencarian((prev) => !prev)}
                   className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs font-bold"
@@ -679,20 +782,10 @@ export default function Search() {
                   Ubah Pencarian
                 </button>
               </div>
-            </div>
-            
-            <div>
-              {/* <div className="flex space-x-2 items-center p-4 px-4 md:px-4 mr-0 xl:mr-16 text-gray-800 rounded-md text-xs font-bold">
-                  <div>URUTKAN</div>
-                  <MdOutlineKeyboardArrowDown />
-                </div> */}
-            </div>
-          </div>
-
           <div>
             {isLoading ? (
               skeleton.map(() => (
-                <div className="row mt-8 w-full p-2 pr-0">
+                <div className="row mt-2 md:mt-8 w-full p-2 pr-0">
                   <Box sx={{ width: "100%" }}>
                     <Skeleton />
                     <Skeleton />
@@ -712,7 +805,7 @@ export default function Search() {
                     <>
                       {e.classes[0][0].price !== 0 ? (
                         <div
-                          class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${
+                          class={`mt-2 md:mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${
                             e.classes[0][0].availability > 0 &&
                             e.classes[0][0].availability >=
                               parseInt(child) +

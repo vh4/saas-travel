@@ -1,33 +1,38 @@
-import { Button, Result } from "antd";
 import React from "react";
-import { useNavigate } from "react-router";
-
+import { AiOutlineInsertRowLeft } from "react-icons/ai";
+import { BsArrowBarLeft } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 const PageExpired = () => {
-
-  const navigate = useNavigate();
-
-	return (
-		<>
-    <div className="mt-16">
-    <Result
-          status="500"
-          title="Booking Expired!"
-          subTitle="Booking sudah expired. Silahkan lakukan booking ulang."
-          style={{ color: "white" }} // Ini akan memastikan warna teks menjadi putih
-          extra={
-            <Button
-              style={{ color: "white" }} // Ini akan memastikan warna teks menjadi putih
-              className="bg-blue-600 text-white hover:text-gray-100 focus:text-gray-100 active:text-gray-200"
-              onClick={() => navigate('/')}
-            >
-              Back Home
-            </Button>
-          }
-        />
+  return (
+    <div
+      style={{
+        height: 'calc(100vh - 64px - 32px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <div>
+          <div className="text-center max-w-[280px]">
+            <img
+              src="/error1.png"
+              alt="Session Expired"
+              className="mx-auto" // Tambahkan class mx-auto untuk memastikan gambar berada di tengah secara horizontal
+            />
+            <div className="mt-4">
+                Booking anda telah expired. Silahkan lakukan booking ulang.
+            </div>
+          </div>
+            <Link to={'/'}>
+              <div className="flex justify-center mt-4 space-x-2 items-center text-blue-500 cursor-pointer">
+                <BsArrowBarLeft size={20} />
+                <div>Kembali</div>
+              </div>
+            </Link>
+      </div>
     </div>
-		</>
-	)
-}
+  );
+};
 
 export default PageExpired;

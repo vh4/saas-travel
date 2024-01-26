@@ -1,33 +1,37 @@
-import { Button, Result } from "antd";
 import React from "react";
-import { useNavigate } from "react-router";
-
+import { BsArrowBarLeft } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 const Page400 = () => {
-
-	const navigate = useNavigate();
-	return (
-		<>
-		<div className="mt-2 md:mt-16">
-			<Result
-			status="500"
-			title="Page Error!"
-			//error dalam masalah session nya habis, kalau ngak parameter urlnya tidak benar.
-			subTitle="Terjadi Kesalahan pada page. Silahkan lakukan booking ulang."
-			style={{ color: "white" }}
-			extra={
-			<Button
-				style={{ color: "white" }}
-				className="bg-blue-600 text-white hover:text-gray-100 focus:text-gray-100 active:text-gray-200"
-				onClick={() => navigate('/')}
-			>
-				Back Home
-			</Button>
-			}
-		/>
-		</div>
-		</>
-	)
-}
+  return (
+    <div
+      style={{
+        height: 'calc(100vh - 64px - 32px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <div>
+        <div className="text-center max-w-[280px]">
+          <img
+            src="/error1.png"
+            alt="Session Expired"
+            className="mx-auto" // Tambahkan class mx-auto untuk memastikan gambar berada di tengah secara horizontal
+          />
+          <div className="mt-4">
+              Terjadi Kesalahan pada page. Silahkan lakukan booking ulang.
+          </div>
+          <Link to={'/'}>
+            <div className="flex justify-center mt-4 space-x-2 items-center text-blue-500 cursor-pointer">
+              <BsArrowBarLeft size={20} />
+              <div>Kembali</div>
+            </div>
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default Page400;

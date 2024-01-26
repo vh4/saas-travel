@@ -6,7 +6,7 @@ import Skeleton from "@mui/material/Skeleton";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { IoArrowBackOutline, IoArrowForwardOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import Typography from "@mui/material/Typography";
+// import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
 import { createTheme } from "@mui/material/styles";
 import FormGroup from "@mui/material/FormGroup";
@@ -18,9 +18,10 @@ import { toRupiah } from "../../helpers/rupiah";
 import { parseTanggal } from "../../helpers/date";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
-import { notification } from "antd";
+import { Radio, Space, notification } from "antd";
 import { Popover, Whisper } from "rsuite";
 import { v4 as uuidv4 } from 'uuid';
+import { MdSort } from "react-icons/md";
 
 export default function Search() {
   const theme = createTheme({
@@ -75,6 +76,7 @@ export default function Search() {
 
   const [gradeFilter, setGradeFilter] = useState([false, false, false]);
   const [waktuFilter, setWaktuFilter] = useState([false, false, false, false]);
+  const [HargaTerendahTinggi, setHargaTerendahTinggi] = useState(false);
   const [selectedTime, setSelectedTime] = useState([]);
   const [ubahPencarian, setUbahPencarian] = useState(false);
   const [err, setErr] = useState(false);
@@ -84,15 +86,15 @@ export default function Search() {
 
   const [api, contextHolder] = notification.useNotification();
 
-  const failedNotification = (rd) => {
-    api["error"]({
-      message: "Error!",
-      description:
-        rd.toLowerCase().charAt(0).toUpperCase() +
-        rd.slice(1).toLowerCase() +
-        "",
-    });
-  };
+  // const failedNotification = (rd) => {
+  //   api["error"]({
+  //     message: "Error!",
+  //     description:
+  //       rd.toLowerCase().charAt(0).toUpperCase() +
+  //       rd.slice(1).toLowerCase() +
+  //       "",
+  //   });
+  // };
 
   const handleGradeFilterChange = (e) => {
     let newGradeFilter = [...gradeFilter];
@@ -313,8 +315,24 @@ export default function Search() {
           seat.priceAdult <= valHargaRange[1]
         );
       });
+    }).sort((a, b) => {
+      if (HargaTerendahTinggi == 1) {
+        const priceA = Math.min(...a.seats.map((seat) => seat.priceAdult));
+        const priceB = Math.min(...b.seats.map((seat) => seat.priceAdult));
+        return priceA - priceB;
+      }
+    }).sort((a, b) => {
+      if (HargaTerendahTinggi == 2) {
+        const priceA = Math.max(...a.seats.map((seat) => seat.priceAdult));
+        const priceB = Math.max(...b.seats.map((seat) => seat.priceAdult));
+        return priceB - priceA; // Reverse the order to sort by highest price
+      }
+    }).sort((a, b) => {
+      const availableSeatsA = a.seats.filter((seat) => seat.availability > 0).length;
+      const availableSeatsB = b.seats.filter((seat) => seat.availability > 0).length;
+  
+      return availableSeatsB - availableSeatsA;
     });
-
 
     const hargaPopoOver = (
       <Popover title="Filter Harga">
@@ -383,7 +401,22 @@ export default function Search() {
             </FormGroup>
         </div>
       </Popover>
-      );
+    );
+
+    const SortingPopoOver = (
+      <Popover title="Urutkan Dengan">
+        <div className="">
+          <Box sx={{ width: 150 }}>
+          <Radio.Group className="mt-2" onChange={(e) => setHargaTerendahTinggi(e.target.value)} value={HargaTerendahTinggi}>
+            <Space direction="vertical">
+              <Radio value={1} className="mt-2">Harga Terendah</Radio>
+              <Radio value={2} className="mt-2">Harga Tertinggi</Radio>
+            </Space>
+          </Radio.Group>
+          </Box>
+        </div>
+      </Popover>
+    );
   
     const waktuPopoOver = (
       <Popover title="Filter Waktu">
@@ -540,6 +573,24 @@ export default function Search() {
                   KELAS
                 </button>
               </Whisper>
+              </div>
+              <div>
+                <div className="cursor-pointer">
+                <Whisper
+                    placement="top"
+                    trigger="active"
+                    controlId="control-id-active"
+                    speaker={SortingPopoOver}
+                    placement="bottomEnd"
+                  >
+                <div>
+                  <MdSort className="" size={28}/>
+                </div>
+              </Whisper>
+                </div>
+              </div>
+            </div>
+            <div className="mt-4">
               <div className="mt-0 md:mt-0 flex md:hidden space-x-4 md:mr-0 justify-center md:justify-end">
                 <button
                   onClick={() => setUbahPencarian((prev) => !prev)}
@@ -548,15 +599,7 @@ export default function Search() {
                   Ubah Pencarian
                 </button>
               </div>
-              </div>
-              <div>
-                {/* <div className="flex space-x-2 items-center p-4 px-4 md:px-4 mr-0 xl:mr-16 text-gray-800 rounded-md text-xs font-medium xl:font-bold">
-                  <div>URUTKAN</div>
-                  <MdOutlineKeyboardArrowDown />
-                </div> */}
-              </div>
             </div>
-            <div></div>
           </div>
           <div>
             {isLoading ? (
@@ -578,7 +621,7 @@ export default function Search() {
                     e //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
                   ) => (
                     <div
-                      class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${
+                      class={`mt-2 md:mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${
                         (e.seats[0].availability > 0) && (parseInt(adult) + parseInt(infant) < e.seats[0].availability) ? "bg-white" : "bg-gray-200"
                       } border border-gray-200 rounded-lg shadow-sm  hover:border transition-transform transform hover:scale-105`}
                     >

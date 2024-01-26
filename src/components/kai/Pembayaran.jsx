@@ -5,15 +5,16 @@ import { AiOutlineCheckCircle } from "react-icons/ai";
 import { MdHorizontalRule } from "react-icons/md";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import { TiketContext } from "../../App";
-import { Button as ButtonAnt } from "antd";
+import { Alert, Button as ButtonAnt } from "antd";
 import { notification } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
-import { parseTanggal } from "../../helpers/date";
+import { parseTanggal, remainingTime } from "../../helpers/date";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
 import PageExpired from "../components/Expired";
 import BayarLoading from "../components/trainskeleton/bayar";
 import {Typography } from 'antd';
+import moment from "moment";
 
 export default function Pembayaran() {
   const navigate = useNavigate();
@@ -50,8 +51,10 @@ export default function Pembayaran() {
   const [errPage, setErrPage] = useState(false);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   const [isBookingExpired, setIsBookingExpired] = useState(false); // Added state for booking expiration
+  const [expiredBookTime, setExpiredBookTime] = useState(null);
 
   const [api, contextHolder] = notification.useNotification();
+  const [isNavigationDone, setIsNavigationDone] = useState(false);
 
   const failedNotification = (rd) => {
     api["error"]({
@@ -98,6 +101,7 @@ export default function Pembayaran() {
         if (ResponsegetHasilBooking) {
           setHasilBooking(ResponsegetHasilBooking.hasil_book);
           setPassengers(ResponsegetHasilBooking.passengers);
+          setExpiredBookTime(ResponsegetHasilBooking.hasil_book.timeLimit || moment().add(1, 'hours'))
 
           const passengers = ResponsegetHasilBooking.passengers;
           const hasilBooking = ResponsegetHasilBooking.hasil_book;
@@ -125,9 +129,19 @@ export default function Pembayaran() {
           setErrPage(true);
         }
 
+        if (
+          ResponsegetHasilBooking.hasil_book &&
+          new Date(ResponsegetHasilBooking.hasil_book.timeLimit).getTime() < new Date().getTime()
+        ) {          
+          setIsBookingExpired(true);
+
+        } else {
+          setIsBookingExpired(false);
+        }
+
         setTimeout(() => {
           setIsLoadingPage(false);
-        }, 100);
+        }, 1000);
 
       })
       .catch((error) => {
@@ -135,16 +149,29 @@ export default function Pembayaran() {
         setErrPage(true);
       });
 
-    // Set booking expiration flag
-    if (
-      hasilBooking &&
-      new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()
-    ) {
-      setIsBookingExpired(true);
-    } else {
-      setIsBookingExpired(false);
-    }
   }, [uuid_book, uuid_train_data, token]);
+
+  const [remainingBookTime, setremainingBookTime] = useState(remainingTime(expiredBookTime));
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setremainingBookTime(remainingTime(expiredBookTime));
+
+      if (
+        hasilBooking &&
+        new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()
+      ) {
+        
+        setIsBookingExpired(true);
+
+      } else {
+        setIsBookingExpired(false);
+      }
+
+    }, 500);
+  
+    return () => clearInterval(intervalId);
+  }, [expiredBookTime]);
 
   // async function getDataTrain() {
   //   try {
@@ -348,9 +375,12 @@ export default function Pembayaran() {
           ) : (
             <>
               <div className="block xl:flex xl:justify-around mb-24 xl:mx-16 xl:space-x-4">
+                <div className="blcok md:hidden mt-2">
+                    <Alert message={`Expired Booking : ${remainingBookTime}`} type="info" showIcon closable />
+                </div>
                 {/* mobile sidebar */}
                 <div className="sidebar block xl:hidden w-full xl:w-1/2">
-                  <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                  <div className="mt-2 py-2 rounded-md border border-gray-200 shadow-sm">
                     <div className="px-4 py-2">
                       {/* <div className="text-gray-500 text-xs">Booking ID</div> */}
                       <div className="text-gray-800 font-medium xl:font-bold text-sm">Transaksi ID</div>
@@ -587,8 +617,10 @@ export default function Pembayaran() {
                         ))}
                     </div>
                   </div>
-
-                  <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                    <div className="hidden md:block mt-2">
+                       <Alert message={`Expired Booking : ${remainingBookTime}`} type="info" showIcon closable />
+                    </div>
+                  <div className="mt-2 py-2 rounded-md border border-gray-200 shadow-sm">
                   {callbackBoolean == true ? (
                     <>
                       <div className="px-8 py-4 text-sm text-gray-500">

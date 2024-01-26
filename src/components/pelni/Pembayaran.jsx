@@ -4,15 +4,17 @@ import { AiOutlineCheckCircle } from "react-icons/ai";
 import { MdHorizontalRule } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import { TiketContext } from "../../App";
-import { Button as ButtonAnt } from "antd";
+import { Button as ButtonAnt, Alert } from "antd";
 import { notification } from "antd";
 import Page400 from "../components/400";
 import Page500 from "../components/500";
-import { parseTanggal } from "../../helpers/date";
+import { parseTanggal, remainingTime } from "../../helpers/date";
 import { toRupiah } from "../../helpers/rupiah";
 import BayarLoading from "../components/pelniskeleton/bayar";
 import {Typography } from 'antd';
 import { IoArrowForwardOutline } from "react-icons/io5";
+import moment from "moment";
+import PageExpired from "../components/Expired";
 
 export default function Pembayaran() {
   const navigate = useNavigate();
@@ -45,6 +47,9 @@ export default function Pembayaran() {
   const [TotalAdult, setTotalAdult] = useState(0);
   const [TotalInfant, setTotalInfant] = useState(0);
   const [callbackBoolean, setcallbackBoolean] = useState(false);
+  const [expiredBookTime, setExpiredBookTime] = useState(null);
+  const [isNavigationDone, setIsNavigationDone] = useState(false);
+  const [isBookingExpired, setIsBookingExpired] = useState(false); // Added state for booking expiration
 
   const [err, setErr] = useState(false);
 
@@ -99,6 +104,7 @@ export default function Pembayaran() {
         const bookResponse = getDataAllBook.book;
         const passenggerResponse = getDataAllBook;
         const bookInfoResponse = getDataAllBook.infobooking;
+        const hasilBooking = bookResponse.data.data;
 
         if(cekCallbakIsMitra.data.rc == '00'){
           setcallbackBoolean(true);
@@ -106,6 +112,7 @@ export default function Pembayaran() {
         
         if (bookResponse.data.rc === "00") {
           setBook(bookResponse.data.data);
+          setExpiredBookTime(hasilBooking.payLimit || moment().add(1, 'hours'))
         }else{
           setErrPage(true);
         }
@@ -125,9 +132,20 @@ export default function Pembayaran() {
           setErrPage(true);
         }
 
+        // Set booking expiration flag
+        if (
+          hasilBooking &&
+          new Date(hasilBooking.payLimit).getTime() < new Date().getTime()
+        ) {
+          setIsBookingExpired(true);
+        }else {
+          setIsBookingExpired(false);
+        }
+
+
         setTimeout(() => {
           setIsLoadingPage(false);
-        }, 100);
+        }, 1000);
         
       })
       .catch(() => {
@@ -135,6 +153,28 @@ export default function Pembayaran() {
         setErrPage(true);
       });
   }, [id, token]);
+
+  const [remainingBookTime, setremainingBookTime] = useState(remainingTime(expiredBookTime));
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setremainingBookTime(remainingTime(expiredBookTime));
+
+      if (
+        book &&
+        new Date(book.timeLimit).getTime() < new Date().getTime()
+      ) {
+        
+        setIsBookingExpired(true);
+
+      } else {
+        setIsBookingExpired(false);
+      }
+
+    }, 500);
+  
+    return () => clearInterval(intervalId);
+  }, [expiredBookTime]);
 
   // async function getInfoBooking() {
   //   try {
@@ -258,6 +298,11 @@ export default function Pembayaran() {
           <Page400 />
         </>
       ) : 
+      isBookingExpired === true ? (
+        <>
+          <PageExpired />
+        </>
+      ) :
       (
         <>
           {/* header kai flow */}
@@ -299,10 +344,13 @@ export default function Pembayaran() {
               </>
             ) : (
               <>
-                <div className="block xl:flex xl:justify-around mb-24 xl:space-x-4">
+                <div className="block xl:flex xl:justify-around mb-24 xl:mx-16 xl:space-x-4">
+                  <div className="blcok md:hidden mt-2">
+                      <Alert message={`Expired Booking : ${remainingBookTime}`} type="info" showIcon closable />
+                  </div>
                 {/* mobile sidebar */}
                   <div className="block xl:hidden sidebar w-full xl:w-1/2">
-                    <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                    <div className="mt-2 py-2 rounded-md border border-gray-200 shadow-sm">
                       <div className="px-4 py-2 mb-4">
                         {/* <div className="text-gray-500 text-xs">Status Booking</div> */}
                         <div className="text-gray-800 text-sm font-semibold">Transaksi ID</div>
@@ -486,7 +534,10 @@ export default function Pembayaran() {
                           : ""}
                       </div>
                     </div>
-                    <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                    <div className="hidden md:block mt-2">
+                       <Alert message={`Expired Booking : ${remainingBookTime}`} type="info" showIcon closable />
+                    </div>
+                <div className="mt-2 py-2 rounded-md border border-gray-200 shadow-sm">
                   {callbackBoolean == true ? (
                     <>
                       <div className="px-8 py-4 text-sm text-gray-500">
