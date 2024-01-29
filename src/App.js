@@ -1,5 +1,5 @@
 import React, {createContext, useEffect, useReducer} from "react";
-import { BrowserRouter, Route, Routes} from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation, useNavigate} from "react-router-dom";
 
 import TransaksiKai from "./pages/transaksi/TransaksiKai";
 import TransaksiPesawat from "./pages/transaksi/TransaksiPesawat";
@@ -33,6 +33,19 @@ export const NavContext = createContext();
 export const LogoutContent = createContext();
 export const LoginContent = createContext();
 
+const NormalizeRoute = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const path = location.pathname.replace(/\/\/+/g, '/');
+    if (location.pathname !== path) {
+      navigate(path, { replace: true });
+    }
+  }, [location, navigate]);
+
+  return null;
+};
 
 function App() {
 

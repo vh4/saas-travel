@@ -18,7 +18,7 @@ export default function TransaksiPesawat(){
     return(
         <>
         <Layout>
-            <div className="mt-4 px-4 md:px-12">
+            <div className="mt-0 md:mt-4 px-4 md:px-12">
                 {/* Profile fitur  */}
                 < BookingPesawatComponent path={path} />
             </div>

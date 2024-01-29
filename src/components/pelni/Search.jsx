@@ -7,7 +7,7 @@ import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { IoArrowBackOutline, IoArrowForwardOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Searchpelni from "./PelniSearch";
-import { notification, Timeline } from "antd";
+import { notification, Spin, Timeline } from "antd";
 import Page400 from "../components/400";
 import Page500 from "../components/500";
 import { duration, durationFull } from "../../helpers/pelni";
@@ -16,6 +16,8 @@ import { toRupiah } from "../../helpers/rupiah";
 import moment from "moment";
 import dayjs from "dayjs";
 import { v4 as uuidv4 } from 'uuid';
+import { Whisper, Popover } from "rsuite";
+import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 
 export default function Search() {
 
@@ -108,6 +110,8 @@ export default function Search() {
   const [notFound, setError] = React.useState(true);
   const skeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [dataSearch, setDataSearch] = React.useState(Array());
+  const [filterNamaKapal, setFilterNamaKapal] = React.useState(null);
+  const [filterNamaKapalList, setfilterNamaKapalList] = React.useState(null);
 
   useEffect(() => {
     handlerSearch();
@@ -142,6 +146,17 @@ export default function Search() {
         }
 
         setDataSearch(dataParsing);
+
+        const dataParsingLength = dataParsing.reduce((unique, item) => {
+          if (!unique.find(x => x.SHIP_NAME === item.SHIP_NAME)) {
+            unique.push(item);
+          }
+          return unique;
+        }, []);
+
+        setfilterNamaKapalList(dataParsingLength);
+        setFilterNamaKapal(dataParsingLength.map(item => `${item.SHIP_NAME}:true`));
+
         setLoading(false);
         setError(false);
       } else {
@@ -296,7 +311,37 @@ export default function Search() {
     getPelnitDataStasiun();
   }, []);
 
+  //filter unique kapal.
 
+  let shipNameToStatus = {};
+
+  if (Array.isArray(filterNamaKapal)) {
+    shipNameToStatus = filterNamaKapal.reduce((acc, item) => {
+      const [shipName, status] = item.split(':');
+      acc[shipName] = status === 'true';
+      return acc;
+    }, {});
+  } else {
+    console.log("filterNamaKapal is undefined or not an array");
+    // Handle the undefined case or initialize filterNamaKapal appropriately
+  }
+  
+  // Now, filter dataSearch using the created map.
+  const filteredData = dataSearch.filter(pelni => {
+    // If filterNamaKapal was undefined, this will default to not filtering anything
+    return shipNameToStatus[pelni.SHIP_NAME] !== false;
+  });
+  
+
+  const handleFilterKapalChange = (nama_ship, index) => {
+    const updatedFilterNamaKapalVariable = [...filterNamaKapal];
+    const currentStatus = updatedFilterNamaKapalVariable[index].split(':')[1] === 'true';
+  
+    // Toggle the status
+    updatedFilterNamaKapalVariable[index] = `${nama_ship}:${!currentStatus}`;
+    setFilterNamaKapal(updatedFilterNamaKapalVariable);
+  };
+  
   return (
     <>
       {err === true ? (
@@ -344,23 +389,81 @@ export default function Search() {
                     {parseInt(laki) + parseInt(wanita)} Penumpang
                   </small>
                 </div>
-                <div className="mt-8 md:mt-0 block md:flex space-x-0 md:space-x-4 mr-0 md:mr-0 justify-start md:justify-end">
-                  <Link to="/" className="hidden md:flex space-x-2 items-center">
-                    <IoArrowBackOutline className="text-blue-500" size={16} />
-                    <div className="text-blue-500 text-sm font-bold">
-                      Kembali
-                    </div>
-                  </Link>
-                  <button
-                    onClick={() => setUbahPencarian((prev) => !prev)}
-                    className="block border p-2 px-4 md:px-4  bg-blue-500 text-white rounded-md text-xs font-bold"
-                  >
-                    Ubah Pencarian
-                  </button>
-                </div>
               </div>
-
-              <div></div>
+              <div className="flex justify-between mt-8">
+                  <div className="relative flex items-center space-x-2 text-gray-800 text-xs font-medium xl:font-bold">
+                  <Whisper
+                      placement="bottomStart"
+                      trigger="active"
+                      controlId="control-id-active"
+                      speaker={
+                        <Popover title="Filter Nama Kapal">
+                        <div className="block text-xs px-2">
+                        <Box sx={{ width: 120 }}>
+                          <FormGroup>
+                            {!isLoading ? (
+                              <>
+                                {filterNamaKapalList !== null && filterNamaKapalList.length > 0 ? (
+                                  <>
+                                    {                                    
+                                      filterNamaKapalList.map((x, i) => (
+                                      <>
+                                        <FormControlLabel
+                                          control={
+                                            <Checkbox
+                                              checked={filterNamaKapal[i].split(':')[1] === 'true'}
+                                              onChange={() => handleFilterKapalChange(x.SHIP_NAME, i)}
+                                              size="small"
+                                            />
+                                          }
+                                          label={<span style={{ fontSize: "12px" }}>{x.SHIP_NAME}</span>}
+                                        />
+                                      </>
+                                    ))}
+                                  </>
+                                ) : (
+                                  <>
+                                    <div className="text center">
+                                        <small>Data tidak ada!.</small>
+                                    </div>
+                                  </>
+                                )}
+                            </>
+                            ) :
+                            (
+                            <>
+                                <div className="p-4 mt-4 mb-4">
+                                  <Spin tip="Loading...">
+                                      <div className="content" />
+                                  </Spin>
+                                </div>                           
+                            </>)}
+                          </FormGroup>
+                        </Box>
+                        </div>
+                      </Popover>
+                      }
+                    >
+                      <button className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300">
+                        NAMA KAPAL
+                      </button>
+                    </Whisper>
+                  </div>
+                  <div className="mt-0 block md:flex space-x-0 md:space-x-4 mr-0 md:mr-0 justify-start md:justify-end">
+                    <Link to="/" className="hidden md:flex space-x-2 items-center">
+                      <IoArrowBackOutline className="text-blue-500" size={16} />
+                      <div className="text-blue-500 text-sm font-bold">
+                        Kembali
+                      </div>
+                    </Link>
+                    <button
+                      onClick={() => setUbahPencarian((prev) => !prev)}
+                      className="block border p-2 px-4 md:px-4  bg-blue-500 text-white rounded-md text-xs font-bold"
+                    >
+                      Ubah Pencarian
+                    </button>
+                  </div>
+                </div>
             </div>
 
             {ubahPencarian ? (
@@ -381,11 +484,11 @@ export default function Search() {
                     </Box>
                   </div>
                 ))
-              ) : notFound !== true && dataSearch.length !== 0 ? (
+              ) : notFound !== true && filteredData.length !== 0 ? (
                 <div className="row mb-24 w-full p-2">
                   {/* untuk sorting yang  availbility nya tidak habis. */}
                   <div>
-                  {dataSearch.map(
+                  {filteredData.map(
                     (
                       e,
                       k //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
@@ -493,7 +596,7 @@ export default function Search() {
                                     </div>
                                   </div>
                                   {openButton === `open-${k + i}${e.SHIP_NO}` ? (
-                                    <div className={`hidden xl:block transition-all ease-in-out duration-500 ${openButton === `open-${k + i}${e.SHIP_NO}` ? 'max-h-96' : 'max-h-0'} overflow-hidden`}>
+                                    <div className={`hidden xl:block ${openButton === `open-${k + i}${e.SHIP_NO}` ? '' : 'max-h-0'}`}>
                                       <div className="px-4 mt-4">
                                         <div className="mb-2 text-sm font-medium xl:font-bold">
                                           Tanggal Keberangkatan
@@ -608,7 +711,7 @@ export default function Search() {
                                   Detail Route
                                       </div>
                                   {openButton === `open-${k + i}${e.SHIP_NO}` ? (
-                                    <div className={`block xl:hidden transition-all ease-in-out duration-500 ${openButton === `open-${k + i}${e.SHIP_NO}` ? 'max-h-96' : 'max-h-0'} overflow-hidden`}>
+                                    <div className={`block xl:hidden ${openButton === `open-${k + i}${e.SHIP_NO}` ? '' : 'max-h-0'}`}>
                                       <div className="px-4 mt-4">
                                         <div className="mb-2 text-xs font-medium xl:font-bold">
                                           Tanggal Keberangkatan
@@ -648,7 +751,7 @@ export default function Search() {
                   {/* untuk sorting yang tidak availbility nya habis. */}
 
                   <div>
-                  {dataSearch.map(
+                  {filteredData.map(
                     (
                       e, k //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
                     ) => (
@@ -830,7 +933,7 @@ export default function Search() {
                                         Detail Route
                                       </div>
                                       {openButton === `open-${k + i}${e.SHIP_NO}` ? (
-                                    <div className={`block xl:hidden transition-all ease-in-out duration-500 ${openButton === `open-${k + i}${e.SHIP_NO}` ? 'max-h-96' : 'max-h-0'} overflow-hidden`}>
+                                    <div className={`block xl:hidden ${openButton === `open-${k + i}${e.SHIP_NO}` ? '' : 'max-h-0'}`}>
                                       <div className="px-4 mt-4">
                                         <div className="mb-2 text-xs font-medium xl:font-bold">
                                           Tanggal Keberangkatan

@@ -373,7 +373,7 @@ export default function ViewBooking({ path }) {
           </>
         ) : (
           <>
-            <div className="w-full mt-2 md:mt-8">
+            <div className="w-full mt-0 md:mt-8">
               <div className="w-full rounded-md shadow-sm border profile-header">
                 <div className="text-gray-500 p-4 flex space-x-2 items-center">
                   <AiOutlineHome size={20} /> <span>Home</span> <span>/</span>{" "}
@@ -418,7 +418,7 @@ export default function ViewBooking({ path }) {
                                 </div>
                               </div>
                               <div className="pl-1">
-                                <div className="mt-6 xl:mt-8 text-xs text-gray-800">
+                                <div className="mt-6 xl:mt-8 text-sm text-gray-800 font-medium">
                                   Tanggal Transaksi
                                 </div>
                                 <div className="mt-2 text-xs text-gray-800">
@@ -467,7 +467,7 @@ export default function ViewBooking({ path }) {
                           src="/emptyy.png"
                           alt="empty.png"
                         />
-                        <div className="text-slate-600 font-bold text-center">
+                        <div className="text-gray-800 font-medium text-center">
                           Data Tidak Ditemukan
                         </div>
                         <div className="mt-2 text-center text-gray-500 text-sm">

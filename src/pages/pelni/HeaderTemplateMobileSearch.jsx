@@ -40,9 +40,9 @@ export default function HeaderTemplateMobileSearch({ children }) {
                 <IoArrowBack size={24} />
             </div>
             <div className="flex flex-col items-center justify-center text-center mx-auto">
-                <div className="flex space-x-4 items-center justify-center font-bold text-md">
+                <div className="flex space-x-4 items-center justify-center font-medium text-md">
                     <div>{originName.split('(')[0]}</div>
-                    <IoArrowForwardCircle size={24} className="block font-bold" />
+                    <IoArrowForwardCircle size={24} className="block font-medium" />
                     <div>{destinationName.split('(')[0]}</div>
                 </div>
                 <div className="text-xs font-semibold">
