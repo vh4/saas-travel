@@ -14,7 +14,7 @@ const PageExpired = () => {
       }}
     >
       <div>
-          <div className="text-center max-w-[280px]">
+          <div className="text-center max-w-[300px]">
             <img
               src="/error1.png"
               alt="Session Expired"

@@ -54,15 +54,15 @@ export default function CarouselsMobile(props) {
   return (
     <div className="xl:grid xl:grid-cols-2 w-full px-0 xl:px-4 xl:py-8">
       <div className="block md:hidden px-4 mb-4 text-black">
-        <div className="font-semibold text-sm">Haii traveler</div>
-        <small>Selamat datang di travel rajabiller.com.</small>
+        <div className="font-semibold text-sm">Hai traveller,</div>
+        <small>Selamat datang di travel indonesia.</small>
       </div>
       <div className="hidden xl:block pl-24">
         <div className="flex space-x-4 pl-24 pr-24 text-white">
           <img className="" src="/join.svg" width={160} alt="carousal.png" />
           <div>
             <h1 className="2xl:px-8 text-xl font-bold">
-              Hai Traveler, Welcome!
+              Hai Traveller, Welcome!
             </h1>
             <div className="mt-2 2xl:px-8">
               <div className="mt-4">

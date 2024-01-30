@@ -4,7 +4,7 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import { IoArrowBackOutline, IoArrowForwardOutline } from "react-icons/io5";
+import { IoArrowBackOutline, IoArrowForwardOutline, IoSearchCircle } from "react-icons/io5";
 import { Link } from "react-router-dom";
 // import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
@@ -531,11 +531,6 @@ export default function Search() {
                 </button>
               </div>
             </div>
-            {ubahPencarian ? (
-              <div className="mt-8">
-                <KAISearch />
-              </div>
-            ) : null}
             <div className="flex justify-between mt-6">
               <div className="relative flex items-center space-x-2 text-gray-800 text-xs font-medium xl:font-bold">
               <Whisper
@@ -574,7 +569,19 @@ export default function Search() {
                 </button>
               </Whisper>
               </div>
-              <div>
+              <div className="flex space-x-2.5 items-center">
+                <div className="flex md:hidden space-x-4 md:mr-0 justify-center md:justify-end">
+                    <div 
+                      onClick={() => setUbahPencarian((prev) => !prev)}               
+                      className="cursor-pointer">
+                      <IoSearchCircle size={28} className="text-blue-500" />
+                    </div>
+                    {/* <button
+                      className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs font-bold"
+                    >
+                      Ubah Pencarian
+                    </button> */}
+                </div>
                 <div className="cursor-pointer">
                 <Whisper
                     placement="top"
@@ -584,13 +591,18 @@ export default function Search() {
                     placement="bottomEnd"
                   >
                 <div>
-                  <MdSort className="" size={28}/>
+                  <MdSort className="text-blue-500 md:text-gray-800" size={28}/>
                 </div>
               </Whisper>
                 </div>
               </div>
             </div>
-            <div className="mt-4">
+            {ubahPencarian ? (
+              <div className="mt-8">
+                <KAISearch />
+              </div>
+            ) : null}
+            {/* <div className="mt-4">
               <div className="mt-0 md:mt-0 flex md:hidden space-x-4 md:mr-0 justify-center md:justify-end">
                 <button
                   onClick={() => setUbahPencarian((prev) => !prev)}
@@ -599,7 +611,7 @@ export default function Search() {
                   Ubah Pencarian
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
           <div>
             {isLoading ? (
@@ -769,14 +781,14 @@ export default function Search() {
               </div>
             ) : (
               <div className="row mt-12 mb-24 w-full p-2">
-                <div className="flex justify-center">
-                  <img src={"/nodata.jpg"} width={350} alt="nodata" />
+                <div className="flex justify-center items-center">
+                  <img src={"/nodata.jpg"} className="w-[200px] md:w-[300px]" alt="No data" />
                 </div>
                 <div className="flex justify-center w-full text-gray-700">
                   <div className="text-gray-800 text-center">
                     <div>
-                      <div className="text-lg font-medium xl:font-bold">
-                        Maaf, sepertinya rute ini belum dibuka kembali
+                      <div className="text-sm md:text-md font-medium">
+                        Maaf, sepertinya pada rute ini masih belum dibuka kembali.
                       </div>
                       {/* <small>
                         Namun jangan khawatir, masih ada pilihan kendaraan lain

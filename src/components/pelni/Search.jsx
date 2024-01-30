@@ -4,7 +4,7 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import { IoArrowBackOutline, IoArrowForwardOutline } from "react-icons/io5";
+import { IoArrowBackOutline, IoArrowForwardOutline, IoSearchCircle } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Searchpelni from "./PelniSearch";
 import { notification, Spin, Timeline } from "antd";
@@ -392,7 +392,7 @@ export default function Search() {
               </div>
               <div className="flex justify-between mt-8">
                   <div className="relative flex items-center space-x-2 text-gray-800 text-xs font-medium xl:font-bold">
-                  <Whisper
+                    <Whisper
                       placement="bottomStart"
                       trigger="active"
                       controlId="control-id-active"
@@ -448,6 +448,18 @@ export default function Search() {
                         NAMA KAPAL
                       </button>
                     </Whisper>
+                    <div className="flex md:hidden space-x-4 md:mr-0 justify-center md:justify-end">
+                        <div 
+                          onClick={() => setUbahPencarian((prev) => !prev)}               
+                          className="cursor-pointer">
+                          <IoSearchCircle size={28} className="text-blue-500" />
+                        </div>
+                        {/* <button
+                          className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs font-bold"
+                        >
+                          Ubah Pencarian
+                        </button> */}
+                      </div>
                   </div>
                   <div className="mt-0 block md:flex space-x-0 md:space-x-4 mr-0 md:mr-0 justify-start md:justify-end">
                     <Link to="/" className="hidden md:flex space-x-2 items-center">
@@ -458,7 +470,7 @@ export default function Search() {
                     </Link>
                     <button
                       onClick={() => setUbahPencarian((prev) => !prev)}
-                      className="block border p-2 px-4 md:px-4  bg-blue-500 text-white rounded-md text-xs font-bold"
+                      className="hidden md:block border p-2 px-4 md:px-4  bg-blue-500 text-white rounded-md text-xs font-bold"
                     >
                       Ubah Pencarian
                     </button>
@@ -973,24 +985,23 @@ export default function Search() {
                 </div>
               ) : (
                 <div className="row mt-12 mb-24 w-full p-2">
-                  <div className="flex justify-center">
-                    <img src={"/nodata.jpg"} width={350} alt="nodata" />
-                  </div>
-                  <div className="flex justify-center w-full text-gray-700">
-                    <div className="text-gray-800 text-center">
-                      <div>
-                        <div className="text-xl font-semibold">
-                          Maaf, sepertinya rute ini belum dibuka kembali
-                        </div>
-                        {/* <small>
-                          Namun jangan khawatir, masih ada pilihan kendaraan
-                          lain yang tetap bisa mengantarkan Anda ke tempat
-                          tujuan.
-                        </small> */}
+                <div className="flex justify-center items-center">
+                  <img src={"/nodata.jpg"} className="w-[200px] md:w-[300px]" alt="No data" />
+                </div>
+                <div className="flex justify-center w-full text-gray-700">
+                  <div className="text-gray-800 text-center">
+                    <div>
+                      <div className="text-sm md:text-md font-medium">
+                        Maaf, sepertinya pada rute ini masih belum dibuka kembali.
                       </div>
+                      {/* <small>
+                        Namun jangan khawatir, masih ada pilihan kendaraan lain
+                        yang tetap bisa mengantarkan Anda ke tempat tujuan.
+                      </small> */}
                     </div>
                   </div>
                 </div>
+              </div>
               )}
             </div>
           </>

@@ -4,7 +4,7 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import { IoArrowBackOutline, IoArrowForwardOutline } from "react-icons/io5";
+import { IoArrowBackOutline, IoArrowForwardOutline, IoSearchCircle } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import Timeline from "@mui/lab/Timeline";
@@ -19,7 +19,7 @@ import { Progress } from "rsuite";
 import { Space, Spin } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
 import { parseTanggal } from "../../helpers/date";
-import { MdOutlineLuggage, MdSort } from "react-icons/md";
+import { MdManageSearch, MdOutlineLuggage, MdSort } from "react-icons/md";
 import { notification, Radio } from "antd";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
@@ -701,25 +701,6 @@ const filteredData = dataSearch
             </div>
             <div></div>
           </div>
-          {percent === 0 || percent === 100 ? null : (
-            <div className="mt-4">
-              <Progress.Line
-                percent={percent}
-                status="active"
-                showInfo={false}
-              />
-              <div className="mt-0 md:mt-8 mb-8 md:mb-0">
-                <Spin tip="Loading">
-                  <div className="content" />
-                </Spin>
-              </div>
-            </div>
-          )}
-          {ubahPencarian ? (
-            <div className="mt-8">
-              <SearchPlane />
-            </div>
-          ) : null}
           <div className="flex justify-between mt-0 md:mt-6">
             <div className="relative flex items-center space-x-2 text-gray-800 text-xs font-medium xl:font-bold">
               <div className="hidden md:block">FILTER : </div>
@@ -757,8 +738,19 @@ const filteredData = dataSearch
                 </button>
               </Whisper>
             </div>
-            
-            <div>
+            <div className="flex space-x-2.5 items-center">
+              <div className="flex md:hidden space-x-4 md:mr-0 justify-center md:justify-end">
+                  <div 
+                    onClick={() => setUbahPencarian((prev) => !prev)}                
+                    className="cursor-pointer">
+                    <IoSearchCircle size={28} className="text-blue-500" />
+                  </div>
+                  {/* <button
+                    className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs font-bold"
+                  >
+                    Ubah Pencarian
+                  </button> */}
+              </div>
               <div className="cursor-pointer">
                 <Whisper
                     placement="top"
@@ -768,20 +760,44 @@ const filteredData = dataSearch
                     placement="bottomEnd"
                   >
                 <div>
-                  <MdSort className="" size={28}/>
+                  <MdSort className="text-blue-500 md:text-gray-800" size={28}/>
                 </div>
               </Whisper>
-                </div>
+              </div>
             </div>
           </div>
-             <div className="mt-4 flex md:hidden space-x-4 md:mr-0 justify-center md:justify-end">
+          {ubahPencarian ? (
+            <div className="mt-8">
+              <SearchPlane />
+            </div>
+          ) : null}
+          {percent === 0 || percent === 100 ? null : (
+            <div className="mt-4">
+              <Progress.Line
+                percent={percent}
+                status="active"
+                showInfo={false}
+              />
+              <div className="mt-4 mb-8 md:mb-0">
+                <Spin tip="Loading">
+                  <div className="content" />
+                </Spin>
+              </div>
+            </div>
+            )}
+            
+             {/* <div className="mt-4 flex md:hidden space-x-4 md:mr-0 justify-center md:justify-end">
+                <div 
+                  onClick={() => setUbahPencarian((prev) => !prev)}                
+                  className="cursor-pointer">
+                  <MdManageSearch size={32} />
+                </div>
                 <button
-                  onClick={() => setUbahPencarian((prev) => !prev)}
                   className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs font-bold"
                 >
                   Ubah Pencarian
                 </button>
-              </div>
+              </div> */}
           <div>
             {isLoading ? (
               skeleton.map(() => (
@@ -1909,15 +1925,15 @@ const filteredData = dataSearch
                 )}
               </div>
             ) : (
-              <div className="row mt-12 mb-24 w-full p-2 pr-0">
-                <div className="flex justify-center">
-                  <img src={"/nodata.jpg"} width={350} alt="nodata" />
+              <div className="row mt-12 mb-24 w-full p-2">
+                <div className="flex justify-center items-center">
+                  <img src={"/nodata.jpg"} className="w-[200px] md:w-[300px]" alt="No data" />
                 </div>
-                <div className="flex justify-center w-full text-gray-800">
+                <div className="flex justify-center w-full text-gray-700">
                   <div className="text-gray-800 text-center">
                     <div>
-                      <div className="text-lg font-medium xl:font-bold">
-                        Maaf, sepertinya rute ini belum dibuka kembali
+                      <div className="text-sm md:text-md font-medium">
+                        Maaf, sepertinya pada rute ini masih belum dibuka kembali.
                       </div>
                       {/* <small>
                         Namun jangan khawatir, masih ada pilihan kendaraan lain

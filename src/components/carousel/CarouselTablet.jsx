@@ -55,14 +55,14 @@ export default function CarouselsMobile(props) {
   return (
     <div className="xl:grid xl:grid-cols-2 w-full px-0 xl:px-4 xl:py-8">
       <div className="mt-2 block md:hidden px-4 mb-4 text-gray-500">
-        <div className="font-semibold text-md">Haii Traveler,</div>
-        <small>Selamat datang di travel rajabiller.com.</small>
+        <div className="font-semibold text-md">Haii Traveller,</div>
+        <small>Selamat datang di travel indonesia.</small>
       </div>
       <div className="hidden xl:block">
         <div className="flex space-x-4 pr-12 text-white -mt-4">
           <img className="" src="/join.svg" width={130} alt="carousal.png" />
           <div>
-            <h1 className="2xl:px-8 text-xl font-bold">Haii Traveler,</h1>
+            <h1 className="2xl:px-8 text-xl font-bold">Haii Traveller,</h1>
             <div className="mt-2 2xl:px-8">
               <div className="mt-4 text-sm">
                 Cukup login ke akun Anda dan melakukan pemesanan tiket untuk

@@ -59,14 +59,14 @@ export default function Carousels(props) {
   return (
     <div className="container mx-auto xl:grid xl:grid-cols-2 w-full px-0 xl:px-4 xl:py-8">
       <div className="block md:hidden px-4 mb-4 text-gray-500">
-        <div className="font-semibold text-sm">Hai Traveler,</div>
+        <div className="font-semibold text-sm">Hai Traveller,</div>
         <small>nikmati promo menarik lainya untuk kamu.</small>
       </div>
       <div className="hidden xl:block ">
         <div className="flex space-x-4 pl-12 text-white">
           <img className="" src="/join.svg" width={160} alt="carousal.png" />
           <div>
-            <h1 className="2xl:px-8 text-xl font-bold">Hai Traveler,</h1>
+            <h1 className="2xl:px-8 text-xl font-bold">Hai Traveller,</h1>
             <div className="mt-2 2xl:px-8">
               <div className="mt-4">
                 Cukup login ke akun Anda dan melakukan pemesanan tiket untuk

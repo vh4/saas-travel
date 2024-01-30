@@ -57,7 +57,7 @@ export default function Footer() {
             </div>
           </div>
         </>)}
-        {localStorage.getItem("hdrs_c") != "false" && (<>
+        {localStorage.getItem("hdrs_c") == "false" ? (<><div className="mt-24"></div></>) : (<>
           <div class="container mx-auto py-10 text-center md:text-left">
             <div class="mx-6 grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
               <div class="">
@@ -165,14 +165,14 @@ export default function Footer() {
               </div>
             </div>
           </div>  
-        </>)}
-        <div className="border-t text-sm text-gray-500 py-6">
-          <div className="container mx-auto">
-            <p className="text-center">
-              © 2015-2023 rajabiller.com. All rights Reserved.
-            </p>
+          <div className="border-t text-sm text-gray-500 py-6">
+            <div className="container mx-auto">
+              <p className="text-center">
+                © 2015-2023 rajabiller.com. All rights Reserved.
+              </p>
+            </div>
           </div>
-        </div>
+        </>)}
       </footer>
     </>
   );
