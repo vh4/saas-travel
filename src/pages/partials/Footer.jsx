@@ -6,7 +6,8 @@ export default function Footer() {
   return (
     <>
       <footer className={`container ${localStorage.getItem("hdrs_c") == "false" ? "" : "" } mx-auto px-0 xl:px-16 bg-white text-center text-gray-600 lg:text-left`}>
-        {localStorage.getItem("hdrs_c") != "false" && (<>
+        <div className="mt-24"></div>
+        {/* {localStorage.getItem("hdrs_c") != "false" && (<>
           <div class="container mx-auto flex items-center justify-center border-b-2 border-neutral-200 p-6 lg:justify-between">
             <div class="mr-12 hidden lg:block">
               <span>Terhubunglah dengan kami di jaringan sosial:</span>
@@ -172,7 +173,7 @@ export default function Footer() {
               </p>
             </div>
           </div>
-        </>)}
+        </>)} */}
       </footer>
     </>
   );

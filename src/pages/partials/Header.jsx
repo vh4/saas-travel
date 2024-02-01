@@ -280,7 +280,7 @@ export default function Header() {
       <div className="container mx-auto">
         <div className={`flex justify-between items-center ${localStorage.getItem("hdrs_c") == "false" && 'py-0 md:py-2'} -mx-2 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24`}>
           <div className="">
-          {localStorage.getItem("hdrs_c") != "false" && (
+          {/* {localStorage.getItem("hdrs_c") != "false" && (
           <>
             <Link to={"/"} className="flex items-center">
               <img
@@ -289,7 +289,7 @@ export default function Header() {
                 alt="Rajabiller Logo"
               />
             </Link>
-          </>)}
+          </>)} */}
           </div>
           <div className="flex space-x-6 items-center xl:order-2">
           {localStorage.getItem("hdrs_c") == "false" && (
