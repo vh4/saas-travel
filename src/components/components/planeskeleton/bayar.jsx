@@ -157,7 +157,7 @@ const BayarLoading = ({TotalAdult, TotalChild, TotalInfant}) => {
 							<Skeleton width={100} height={12} count={5} />
 							</div>
 						</div>
-						<div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+						{/* <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
 							<div className="flex justify-center">
 							<div className="flex justify-center px-8 py-4 text-sm text-gray-500">
 								<div className="">
@@ -166,7 +166,6 @@ const BayarLoading = ({TotalAdult, TotalChild, TotalInfant}) => {
 							</div>
 							</div>
 							<div className="flex justify-center mb-4">
-							{/* Skeleton Placeholder for Bayar Langsung Button */}
 							<Button
 								key="submit"
 								size="large"
@@ -177,7 +176,7 @@ const BayarLoading = ({TotalAdult, TotalChild, TotalInfant}) => {
 								Bayar Langsung
 							</Button>
 							</div>
-						</div>
+						</div> */}
 					</div>
 
 			</div>

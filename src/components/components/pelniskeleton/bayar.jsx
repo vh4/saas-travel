@@ -102,7 +102,7 @@ const BayarLoading = ({total}) => {
 						<Skeleton width={150} height={16} />
 						</div>
 					</div>
-					<div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+					{/* <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
 						<div className="px-8 py-4 text-sm text-gray-500">
 						Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
 						</div>
@@ -117,7 +117,7 @@ const BayarLoading = ({total}) => {
 							Langsung Bayar
 						</ButtonAnt>
 						</div>
-					</div>
+					</div> */}
 					</div>
 
 

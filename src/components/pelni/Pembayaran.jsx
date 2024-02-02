@@ -558,7 +558,7 @@ export default function Pembayaran() {
                     </>
                   ):(
                     <>
-                      <div className="px-8 py-4 text-sm text-gray-500">
+                      {/* <div className="px-8 py-4 text-sm text-gray-500">
                       Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
                       </div>
                       <div className="flex justify-center">
@@ -573,7 +573,7 @@ export default function Pembayaran() {
                         >
                           Langsung Bayar
                         </ButtonAnt>
-                      </div>
+                      </div> */}
                     </>
                     )}
                   </div>
@@ -596,7 +596,7 @@ export default function Pembayaran() {
                       </>
                       ) : (
                       <>
-                        <div className="px-8 py-4 text-sm text-gray-500">
+                        {/* <div className="px-8 py-4 text-sm text-gray-500">
                         Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
                         </div>
                         <div className="flex justify-center">
@@ -611,7 +611,7 @@ export default function Pembayaran() {
                           >
                             Langsung Bayar
                           </ButtonAnt>
-                        </div>                     
+                        </div>                      */}
                       </>
                     )}
 

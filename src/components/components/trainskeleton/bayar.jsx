@@ -143,12 +143,11 @@ const BayarLoading = ({TotalAdult, TotalInfant}) => {
 					</div> */}
 					</div>
 				</div>
-				<div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+				{/* <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
 					<div className="px-8 py-4 text-sm text-gray-500">
 					Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut.
 					</div>
 					<div className="flex justify-center">
-					{/* Skeleton Placeholder for Payment Button */}
 					<ButtonAnt
                         size="large"
                         key="submit"
@@ -159,7 +158,7 @@ const BayarLoading = ({TotalAdult, TotalInfant}) => {
                         Langsung Bayar
                       </ButtonAnt>
 					</div>
-				</div>
+				</div> */}
 				</div>
 
 
