@@ -80,28 +80,35 @@ export default function CarouselsMobile(props) {
         <div className="flex justify-center px-2">
           <img
             className="w-full h-full xl:rounded-xl"
-            src="/slider-1.jpg"
+            src="/slider-1.jpeg"
             alt=""
           />
         </div>
         <div className="flex justify-center px-2">
           <img
             className="w-full h-full xl:rounded-xl"
-            src="/slider-2.jpg"
+            src="/slider-2.jpeg"
             alt=""
           />
         </div>
         <div className="flex justify-center px-2">
           <img
             className="w-full h-full xl:rounded-xl"
-            src="/slider-3.jpg"
+            src="/slider-3.jpeg"
             alt=""
           />
         </div>
         <div className="flex justify-center px-2">
           <img
             className="w-full h-full xl:rounded-xl"
-            src="/slider-4.png"
+            src="/slider-4.jpeg"
+            alt=""
+          />
+        </div>
+        <div className="flex justify-center px-2">
+          <img
+            className="w-full h-full xl:rounded-xl"
+            src="/slider-5.jpeg"
             alt=""
           />
         </div>
