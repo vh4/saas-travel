@@ -499,7 +499,7 @@ export default function BookingKaiTransit() {
                           adult[0].map((e, i) => (
                             <>
                               <div>
-                                <div className="Booking ml-2 md:ml-0 mt-8 mb-4 xl:mt-12">
+                                <div className="Booking ml-2 md:ml-0 mt-8 mb-4 xl:mt-4">
                                   <h1 className="text-sm font-medium xl:font-bold text-gray-800">
                                     ADULT PASSENGER
                                   </h1>
@@ -923,7 +923,7 @@ export default function BookingKaiTransit() {
                   ) : (
                     <>
                       {/* sidebra desktop*/}
-                      <div className="w-1/2 xl:mt-16">
+                      <div className="w-1/2 xl:mt-4">
                         {dataDetailTrain.map((e, i) => (
                           <>
                             <div className="hidden xl:block rounded-md border border-gray-200 shadow-sm mt-4">

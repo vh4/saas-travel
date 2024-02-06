@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export const SeatMapTransit = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCount, setSelectedCount, setgerbongsamawajib, gerbongsamawajib,  selectedCheckboxes, setSelectedCheckboxes}) => {
+export const SeatMapTransit = ({ isNumberTrainPassenger, seats, changeState, setChangeSet, clickSeatsData, selectedCount, setSelectedCount, setgerbongsamawajib, gerbongsamawajib,  selectedCheckboxes, setSelectedCheckboxes}) => {
   
 	const groupColumnCounts = {};
 	const rowCount = Math.max(...seats.map((seat) => seat.row));
@@ -21,7 +21,7 @@ export const SeatMapTransit = ({ seats, changeState, setChangeSet, clickSeatsDat
 	
 	  function limitFunction() {
 		var x = 0;
-		changeState[0].map((e, i) => {
+		changeState[0][isNumberTrainPassenger].map((e, i) => {
 		  if (e.type == "adult") {
 			x = x + 1;
 		  } else {
@@ -64,10 +64,10 @@ export const SeatMapTransit = ({ seats, changeState, setChangeSet, clickSeatsDat
 			  const tolong = handlersetSelectedCheckboxes(selectedCheckboxes);
 	
 			  const splittingSeat = tolong[selectedCount].split("-");
-			  changeStateData[selectedCount].row = parseInt(splittingSeat[0]);
-			  changeStateData[selectedCount].type = "adult";
-			  changeStateData[selectedCount].column = splittingSeat[1];
-			  changeStateData[selectedCount].wagonNumber = parseInt(splittingSeat[2]);
+			  changeStateData[isNumberTrainPassenger][selectedCount].row = parseInt(splittingSeat[0]);
+			  changeStateData[isNumberTrainPassenger][selectedCount].type = "adult";
+			  changeStateData[isNumberTrainPassenger][selectedCount].column = splittingSeat[1];
+			  changeStateData[isNumberTrainPassenger][selectedCount].wagonNumber = parseInt(splittingSeat[2]);
 	
 			  setChangeSet([changeStateData]);
 	
@@ -110,10 +110,10 @@ export const SeatMapTransit = ({ seats, changeState, setChangeSet, clickSeatsDat
 			const changeStateData = changeState[0];
 	
 			const splittingSeat = tolong[selectedCount].split("-");
-			changeStateData[selectedCount].row = parseInt(splittingSeat[0]);
-			changeStateData[selectedCount].type = "adult";
-			changeStateData[selectedCount].column = splittingSeat[1];
-			changeStateData[selectedCount].wagonNumber = parseInt(splittingSeat[2]);
+			changeStateData[isNumberTrainPassenger][selectedCount].row = parseInt(splittingSeat[0]);
+			changeStateData[isNumberTrainPassenger][selectedCount].type = "adult";
+			changeStateData[isNumberTrainPassenger][selectedCount].column = splittingSeat[1];
+			changeStateData[isNumberTrainPassenger][selectedCount].wagonNumber = parseInt(splittingSeat[2]);
 	
 			setChangeSet([changeStateData]);
 			

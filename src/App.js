@@ -23,7 +23,7 @@ import MainPage from "./pages/main/Main"
 import TiketKai from "./pages/kai/Tiket";
 
 import BookingKaiTransit from "./pages/kai/BookingTransit";
-
+import BayarTransit from "./pages/kai/BayarTransit"
 
 import BookingPesawat from "./pages/plane/Booking";
 import PembayaranPesawat from "./pages/plane/Pembayaran";
@@ -121,6 +121,7 @@ function App() {
                   <Route path="/train/konfirmasi" element={< KonfirmasiKai/>}></Route>
                   <Route path="/train/konfirmasi/transit" element={< KonfirmasiTransit/>}></Route>
                   <Route path="/train/bayar" element={< PembayaranKai/>}></Route>
+                  <Route path="/train/bayar/transit" element={< BayarTransit/>}></Route>
                   <Route path="/train/tiket-kai" element={< TiketKai/>}></Route>
                   <Route path="/transaksi/kai" element={<TransaksiKai />}></Route>
                   <Route path="/transaksi/pesawat" element={<TransaksiPesawat />}></Route>

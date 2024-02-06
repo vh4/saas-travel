@@ -14,21 +14,21 @@ export default function HeaderTemplateMobileBooking({ children }) {
                 <IoArrowBack size={24} />
             </div>
             <div className="flex flex-col items-center justify-center text-center mx-auto">
-                <div className="flex space-x-2 items-center justify-center font-medium text-md">
+                <div className="flex space-x-2 items-center justify-center  text-md">
                 <div className="flex justify-start jalur-payment-booking text-xs space-x-2 items-center">
               <div className="flex space-x-2 items-center">
                 <RxCrossCircled size={18} className="text-white" />
-                <div className="block xl:hidden text-white font-medium">
+                <div className="block xl:hidden text-white ">
                   Booking
                 </div>
               </div>
               <div className="flex space-x-2 items-center">
                 <RxCrossCircled size={18} className="text-white" />
-                <div className="block xl:hidden text-white font-medium">
+                <div className="block xl:hidden text-white ">
                   Konfirmasi
                 </div>
               </div>
-              <div className="flex space-x-2 items-center font-medium">
+              <div className="flex space-x-2 items-center ">
                 <RxCrossCircled size={18} className="text-white" />
                 <div className="block xl:hidden text-white">Payment</div>
               </div>

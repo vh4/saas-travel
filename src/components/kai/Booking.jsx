@@ -448,24 +448,24 @@ export default function BookingKai() {
               <div>
                 <MdHorizontalRule
                   size={20}
-                  className="hidden xl:flex text-gray-500"
+                  className="hidden xl:flex text-gray-800"
                 />
               </div>
               <div className="hidden xl:flex space-x-2 items-center">
-                <RxCrossCircled size={20} className="text-slate-500" />
-                <div className="hidden xl:block text-slate-500">
+                <RxCrossCircled size={20} className="text-gray-800" />
+                <div className="hidden xl:block text-gray-800">
                   Konfirmasi pesanan
                 </div>
               </div>
               <div>
                 <MdHorizontalRule
                   size={20}
-                  className="text-gray-500 hidden xl:flex"
+                  className="text-gray-800 hidden xl:flex"
                 />
               </div>
               <div className="hidden xl:flex space-x-2 items-center">
-                <RxCrossCircled size={20} className="text-slate-500" />
-                <div className="hidden xl:block text-slate-500">
+                <RxCrossCircled size={20} className="text-gray-800" />
+                <div className="hidden xl:block text-gray-800">
                   Pembayaran tiket
                 </div>
               </div>
@@ -593,7 +593,7 @@ export default function BookingKai() {
                   adult[0].map((e, i) => (
                     <>
                       <div>
-                        <div className="Booking ml-2 md:ml-0 mt-8 mb-4 xl:mt-12">
+                        <div className="Booking ml-2 md:ml-0 mt-8 mb-4 xl:mt-4">
                           <h1 className="text-sm font-medium xl:font-bold text-gray-800">
                             ADULT PASSENGER
                           </h1>
@@ -948,7 +948,7 @@ export default function BookingKai() {
               ) :(
                 <>
                    {/* sidebra desktop*/}
-            <div className="w-1/2 xl:mt-16">
+            <div className="w-1/2 xl:mt-8">
                 <div className="hidden xl:block rounded-md border border-gray-200 shadow-sm">
                   <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                     <div className="text-gray-800 text-sm font-medium xl:font-bold">

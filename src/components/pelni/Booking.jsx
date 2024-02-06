@@ -584,7 +584,7 @@ export default function BookingPelni() {
               <p>Apakah Anda yakin ingin submit data?</p>
             </Modal>
         <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
-          <div className="hidden xl:flex space-x-2 items-center">
+          <div className="hidden xl:flex space-x-2 items-center text-gray-800">
             <div className="hidden xl:flex text-blue-500 font-medium xl:font-bold">
               Detail pesanan
             </div>
@@ -592,7 +592,7 @@ export default function BookingPelni() {
           <div>
             <MdHorizontalRule
               size={20}
-              className="hidden xl:flex text-gray-500"
+              className="hidden xl:flex text-gray-800"
             />
           </div>
           <div className="hidden xl:flex space-x-2 items-center">
@@ -1228,7 +1228,7 @@ export default function BookingPelni() {
               </div>
             </Form>
             {/* sidebar desktop*/}
-            <div className="w-2/3 xl:mt-12">
+            <div className="w-1/2 xl:mt-12">
               <div className="hidden xl:block rounded-md border border-gray-200 shadow-sm">
                 <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                   <div className="text-gray-800 text-sm font-medium xl:font-bold">

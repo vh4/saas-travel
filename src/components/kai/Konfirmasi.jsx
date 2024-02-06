@@ -707,6 +707,8 @@ export default function Konfirmasi() {
   const [backdrop, setBackdrop] = React.useState('static');
   const handleOpen = () => setOpen(true);
 
+  console.log(changeState)
+
   function gantigerbong(value){
 
     setSelectedCount(0); 
@@ -969,7 +971,7 @@ export default function Konfirmasi() {
             <>
               <div className="block xl:flex xl:justify-around mb-24 xl:mx-16 xl:space-x-4">
                 <div className="block md:hidden mt-2">
-                  <Alert message={`Expired Booking : ${remainingBookTime}`} type="info" showIcon closable />
+                  <Alert message={`Expired Booking : ${remainingBookTime}`} banner />
                 </div>
                 <div className="w-full mx-0 2xl:mx-4">
                   <div className="mt-2 md:mt-8 w-full rounded-md border border-gray-200 shadow-sm">
@@ -1094,7 +1096,6 @@ export default function Konfirmasi() {
                       ))
                     : ""}
                   {/* infants */}
-
                   {passengers.infants && passengers.infants.length > 0 ? (
                     <div className="text-sm xl:text-sm font-bold text-gray-800 mt-12">
                       <p>INFANTS PASSENGERS</p>
@@ -1222,7 +1223,7 @@ export default function Konfirmasi() {
                       </div>
                     </div>
                     <div className="px-4 text-grapy-500 text-xs">
-                        Gunakan transaksi id diatas untuk melakukan inq ulang dan pembayaran.
+                    Gunakan kode bayar ini sebagai nomor tujuan pada menu pembayaran di aplikasi.
                       </div>
                   </div>
                   <button onClick={handlerPilihKursi} className="block w-full">
@@ -1252,7 +1253,7 @@ export default function Konfirmasi() {
                     </div>
                   </button>
                   <div className="hidden md:block mt-2">
-                    <Alert message={`Expired Booking : ${remainingBookTime}`} type="info" showIcon closable />
+                    <Alert message={`Expired Booking : ${remainingBookTime}`} banner />
                   </div>
                   <div></div>
                 </div>

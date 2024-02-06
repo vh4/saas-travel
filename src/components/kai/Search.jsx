@@ -211,6 +211,7 @@ export default function Search() {
   const tanggal_keberangkatan_kereta = parseTanggal(date);
 
   const [isLoading, setLoading] = React.useState(false);
+  const [isLoadingTransit, setLoadingTransit] = React.useState(false);
   const [notFound, setError] = React.useState(true);
   const skeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [dataSearch, setDataSearch] = React.useState([]);
@@ -325,8 +326,9 @@ export default function Search() {
   }
 
   const bookingHandlerDetailTransit = (dataDetailTrainTransit, category) => {
+
     const filteredStations = listStaton.filter(
-      (e) => e.id_stasiun === category
+      (e) => e.id_stasiun == category
     );
 
     const detailKereta = [
@@ -362,6 +364,69 @@ export default function Search() {
   useEffect(() => {
     handlerSearch();
   }, []);
+
+  const filteredDataTransit = dataSearchTransit.length > 0 ? dataSearchTransit
+  .filter((x) => {
+    x.filter((train) => {
+      if (!gradeFilter.some((filter) => filter)) {
+        return true;
+      } else {
+        return train.seats.some((seat) => {
+          return gradeFilter[["K", "E", "B"].indexOf(seat.grade)];
+        });
+      }
+    })
+  })
+  .filter((x) => {
+
+    x.filter((d) => {
+      if (selectedTime.length === 0) {
+        return true;
+      }
+      const departureTime = moment(d.departureTime, "HH:mm").format("HH:mm");
+      return selectedTime.some((t) => {
+        const [start, end] = t.split("-");
+        return moment(departureTime, "HH:mm").isBetween(
+          moment(start, "HH:mm"),
+          moment(end, "HH:mm")
+        );
+      });
+    })
+  })
+  .filter((x) => {
+    x.filter((train) => {
+      return train.seats.some((seat) => {
+        return (
+          valHargaRange[0] <= seat.priceAdult &&
+          seat.priceAdult <= valHargaRange[1]
+        );
+      });
+    })
+  })
+  .sort((a, b) => {
+    if (HargaTerendahTinggi == 1) {
+      const priceA = Math.min(...a.seats.map((seat) => seat.priceAdult));
+      const priceB = Math.min(...b.seats.map((seat) => seat.priceAdult));
+      return priceA - priceB;
+    }
+  })
+  .sort((a, b) => {
+    if (HargaTerendahTinggi == 2) {
+      const priceA = Math.max(...a.seats.map((seat) => seat.priceAdult));
+      const priceB = Math.max(...b.seats.map((seat) => seat.priceAdult));
+      return priceB - priceA; // Reverse the order to sort by highest price
+    }
+  })
+  .sort((a, b) => {
+    const availableSeatsA = a.seats.filter(
+      (seat) => seat.availability > 0
+    ).length;
+    const availableSeatsB = b.seats.filter(
+      (seat) => seat.availability > 0
+    ).length;
+
+    return availableSeatsB - availableSeatsA;
+  }) : filteredDataTransit;
 
   const filteredData = dataSearch
     .filter((train) => {
@@ -505,7 +570,7 @@ export default function Search() {
   );
 
   const waktuPopoOver = (
-    <Popover title="Filter Waktu">
+    <Popover title="Filter Waktu Keberangkatan">
       <div className="">
         <Box sx={{ width: 120 }}>
           <FormGroup>
@@ -560,7 +625,7 @@ export default function Search() {
   );
 
   const handleIsTransit = async (e) => {
-    setLoading(true);
+    setLoadingTransit(true);
     setIsTransit(e.target.value);
 
     setTimeout(async () => {
@@ -580,17 +645,17 @@ export default function Search() {
 
       if (response.data.rc.length < 1) {
         setError(true);
-        setLoading(false);
+        setLoadingTransit(false);
       } else if (response.data.rc !== "00" || response.data.rc === undefined) {
         setError(true);
-        setLoading(false);
+        setLoadingTransit(false);
       } else if (response.data === undefined) {
         setError(true);
-        setLoading(false);
+        setLoadingTransit(false);
       } else {
         setDataSearchTransit(response.data.data);
         setuuid(response.data.uuid);
-        setLoading(false);
+        setLoadingTransit(false);
         setError(false);
       }
     });
@@ -979,7 +1044,7 @@ export default function Search() {
           {/* for transit. */}
           {isTransit === 2 && (
             <>
-              {isLoading ? (
+              {isLoadingTransit ? (
                 skeleton.map(() => (
                   <div className="row mt-4 w-full p-2">
                     <Box sx={{ width: "100%" }}>
@@ -991,11 +1056,11 @@ export default function Search() {
                     </Box>
                   </div>
                 ))
-              ) : notFound !== true && dataSearchTransit.length !== 0 ? (
+              ) : notFound !== true && filteredDataTransit.length !== 0 ? (
                 <div className="row mb-24 w-full p-2">
-                  {Object.keys(dataSearchTransit).map((category) => (
+                  {Object.keys(filteredDataTransit).map((category) => (
                     <div key={category}>
-                      {dataSearchTransit[category].map((trainArray, index) => (
+                      {filteredDataTransit[category].map((trainArray, index) => (
                         <div key={index}>
                           <div key={index}>
                             <div>
@@ -1144,7 +1209,8 @@ export default function Search() {
                                       parseInt(adult) + parseInt(infant) <
                                         trainArray[0].seats[0].availability
                                         ? bookingHandlerDetailTransit(
-                                            trainArray
+                                            trainArray,
+                                            category
                                           )
                                         : " "
                                     }
