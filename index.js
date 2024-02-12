@@ -17,14 +17,22 @@ const { getInfoClientAll } = require('./utils/utils');
 
 const app = express();
 
-// app.use(cors({
-//   origin:["*", "http://10.9.43.5:9004", "http://10.9.43.5:9003", "http://localhost:3000", 
-//   "http://localhost:1111", url, "http://10.9.43.5:1111", "http://10.9.43.5:3000", 
-//   "http://10.9.43.5:9004", "https://travel.rajabiller.com", "http://10.9.43.5"],
-//   methods: ['GET', 'POST', 'DELETE', 'PUT']
-// }));
+// CORS Middleware to allow all origins
+const allowAllCorsMiddleware = (req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Allows all origins
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  // Check if pre-flight request
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+};
 
-app.use(cors());
+// Apply the CORS middleware
+app.use(allowAllCorsMiddleware);
+
 
 const port = 9999;
 
