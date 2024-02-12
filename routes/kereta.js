@@ -3,16 +3,16 @@ const axios = require('axios'); // Mengganti 'request' dengan 'axios'
 const logger = require('../utils/logger.js');
 const { v4: uuidv4 } = require('uuid');
 const { AuthLogin } = require('../middleware/auth.js');
-const { axiosSendCallback } = require('../utils/utils.js');
+const { axiosSendCallback, axiosSendCallbackKhususKaiTransit } = require('../utils/utils.js');
 const Router = express.Router();
 require('dotenv').config()
 
-Router.post('/travel/train/station', async function (req, res) { // Menambahkan async
+Router.post('/train/station', async function (req, res) { // Menambahkan async
   try {
     const { product, token } = req.body;
 
     const response = await axios.post(
-      `${process.env.URL_HIT}/travel/train/station`,
+      `${process.env.URL_HIT}/train/station`,
       {
         product,
         token
@@ -21,42 +21,43 @@ Router.post('/travel/train/station', async function (req, res) { // Menambahkan 
 
     return res.send(response.data);
   } catch (error) {
-    logger.error(`Error /travel/train/station: ${error.message}`);
+    logger.error(`Error /train/station: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
-Router.post('/travel/train/search', async function (req, res) { // Menambahkan async
+Router.post('/train/search', async function (req, res) { // Menambahkan async
   try {
-    const { productCode, origin, destination, date, token } = req.body;
+    const { productCode, origin, destination, date, token, connection_train } = req.body;
 
-    logger.info(`Request /travel/train/search: ${JSON.stringify(req.body)}`);
+    logger.info(`Request /train/search: ${JSON.stringify(req.body)}`);
 
     const response = await axios.post(
-      `${process.env.URL_HIT}/travel/train/search`,
+      `${process.env.URL_HIT}/train/search`,
       {
         productCode,
         origin,
         destination,
         date,
-        token
+        token,
+        connection_train
       }
     );
 
-    logger.info(`Response /travel/train/search: ${response.data.rd}`);
+    logger.info(`Response /train/search: ${response.data.rd}`);
     return res.send(response.data);
   } catch (error) {
-    logger.error(`Error /travel/train/search: ${error.message}`);
+    logger.error(`Error /train/search: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
 //insert data train to session storage.
-// Router.post('/travel/train/search/k_search', AuthLogin, async (req, res) => {
+// Router.post('/train/search/k_search', AuthLogin, async (req, res) => {
 //   const data = req.body;
 
 //   if (typeof data == 'object') {
-//     logger.info(`INSERT SESSION /travel/train/search/k_search: ${JSON.stringify(data)}`);
+//     logger.info(`INSERT SESSION /train/search/k_search: ${JSON.stringify(data)}`);
 
 //     const uuid = uuidv4();
 //     req.session[uuid] = data;
@@ -76,14 +77,14 @@ Router.post('/travel/train/search', async function (req, res) { // Menambahkan a
 // });
 
 //retrieve data train from session storage.
-// Router.get('/travel/train/search/k_search/:id', AuthLogin, async (req, res) => {
+// Router.get('/train/search/k_search/:id', AuthLogin, async (req, res) => {
 //   const uuid = req.params.id;
-//   logger.info(`PARAMS /travel/train/search/k_search/:id: ${uuid}`);
+//   logger.info(`PARAMS /train/search/k_search/:id: ${uuid}`);
 
 //   const data = req.session[uuid];
 
 //   if (data) {
-//     logger.info(`GETTING DATA SESSION /travel/train/search/k_search/:id: ${JSON.stringify(data)}`);
+//     logger.info(`GETTING DATA SESSION /train/search/k_search/:id: ${JSON.stringify(data)}`);
 //     return res.send({
 //       rc: '00',
 //       rd: 'success',
@@ -99,11 +100,11 @@ Router.post('/travel/train/search', async function (req, res) { // Menambahkan a
 // });
 
 //insert data hasil booking to session storage.
-// Router.post('/travel/train/book/k_book', AuthLogin, async (req, res) => {
+// Router.post('/train/book/k_book', AuthLogin, async (req, res) => {
 // 	const data = req.body;
   
 // 	if (typeof data == 'object') {
-// 	  logger.info(`INSERT SESSION /travel/train/book/k_book: ${JSON.stringify(data)}`);
+// 	  logger.info(`INSERT SESSION /train/book/k_book: ${JSON.stringify(data)}`);
   
 // 	  const uuid = uuidv4();
 // 	  req.session[uuid] = data;
@@ -123,14 +124,14 @@ Router.post('/travel/train/search', async function (req, res) { // Menambahkan a
 // });
 
 //retrieve data booking from session storage.
-// Router.get('/travel/train/book/k_book/:id', AuthLogin, async (req, res) => {
+// Router.get('/train/book/k_book/:id', AuthLogin, async (req, res) => {
 //   const uuid = req.params.id;
-//   logger.info(`PARAMS /travel/train/book/k_book/:id: ${uuid}`);
+//   logger.info(`PARAMS /train/book/k_book/:id: ${uuid}`);
 
 //   const data = req.session[uuid];
 
 //   if (data) {
-//     logger.info(`GETTING DATA SESSION /travel/train/book/k_book/:id: ${JSON.stringify(data)}`);
+//     logger.info(`GETTING DATA SESSION /train/book/k_book/:id: ${JSON.stringify(data)}`);
 //     return res.send({
 //       rc: '00',
 //       rd: 'success',
@@ -146,12 +147,12 @@ Router.post('/travel/train/search', async function (req, res) { // Menambahkan a
 // });
 
 //update seats data hasil booking :
-// Router.put('/travel/train/book/k_book', AuthLogin, async (req, res) => {
+// Router.put('/train/book/k_book', AuthLogin, async (req, res) => {
 // 	const data = req.body;
 // 	const uuid = req.body.uuid;
   
 // 	if (typeof data == 'object') {
-// 	  logger.info(`PUT SESSION /travel/train/book/k_book: ${JSON.stringify(data)}`);
+// 	  logger.info(`PUT SESSION /train/book/k_book: ${JSON.stringify(data)}`);
   
 // 	  req.session[uuid] = data;
   
@@ -177,14 +178,14 @@ Router.post('/travel/train/search', async function (req, res) { // Menambahkan a
 // });
 
 
-Router.post('/travel/train/get_seat_layout', AuthLogin, async function (req, res) { // Menambahkan async
+Router.post('/train/get_seat_layout', AuthLogin, async function (req, res) { // Menambahkan async
   try {
     const { productCode, origin, destination, date, token, trainNumber } = req.body;
 
-    logger.info(`Request /travel/train/get_seat_layout: ${JSON.stringify(req.body)}`);
+    logger.info(`Request /train/get_seat_layout: ${JSON.stringify(req.body)}`);
 
     const response = await axios.post(
-      `${process.env.URL_HIT}/travel/train/get_seat_layout`,
+      `${process.env.URL_HIT}/train/get_seat_layout`,
       {
         productCode,
         origin,
@@ -195,15 +196,15 @@ Router.post('/travel/train/get_seat_layout', AuthLogin, async function (req, res
       }
     );
 
-    logger.info(`Response /travel/train/get_seat_layout: ${JSON.stringify(response.data)}`);
+    logger.info(`Response /train/get_seat_layout: ${JSON.stringify(response.data)}`);
     return res.send(response.data);
   } catch (error) {
-    logger.error(`Error /travel/train/get_seat_layout: ${error.message}`);
+    logger.error(`Error /train/get_seat_layout: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
-Router.post('/travel/train/book', AuthLogin, async function (req, res) { // Menambahkan async
+Router.post('/train/book', AuthLogin, async function (req, res) { // Menambahkan async
   try {
     const data = req.body;
 
@@ -211,7 +212,7 @@ Router.post('/travel/train/book', AuthLogin, async function (req, res) { // Mena
     const merchart = req.session['v_merchant'];
     const username = req.session['v_uname'];
 
-    logger.info(`Request /travel/train/book [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}`);
+    logger.info(`Request /train/book [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}`);
 
     if(merchart !== undefined && merchart !== null) {
       
@@ -225,13 +226,13 @@ Router.post('/travel/train/book', AuthLogin, async function (req, res) { // Mena
       }
     }
 
-    logger.info(`Request /travel/train/book ${JSON.stringify(data)}`);
+    logger.info(`Request /train/book ${JSON.stringify(data)}`);
 
     const response = await axios.post(
-      `${process.env.URL_HIT}/travel/train/book`,data
+      `${process.env.URL_HIT}/train/book`,data
     );
 
-    logger.info(`Response /travel/train/book: ${JSON.stringify(response.data)}`);
+    logger.info(`Response /train/book: ${JSON.stringify(response.data)}`);
 
     if(merchart !== undefined && merchart !== null 
     && merchart !== ''  && merchart?.length > 0 
@@ -272,13 +273,13 @@ Router.post('/travel/train/book', AuthLogin, async function (req, res) { // Mena
 
 
   } catch (error) {
-    logger.error(`Error /travel/train/book: ${error.message}`);
+    logger.error(`Error /train/book: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
 //callback khusus train.
-Router.post('/travel/train/callback', AuthLogin, async function (req, res) { // Menambahkan async
+Router.post('/train/callback', AuthLogin, async function (req, res) { // Menambahkan async
   
   try {
 
@@ -291,31 +292,52 @@ Router.post('/travel/train/callback', AuthLogin, async function (req, res) { // 
 
   } catch (error) {
     
-    logger.error(`Error /travel/train/callback: ${error.message}`);
+    logger.error(`Error /train/callback: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
 
   }
 
 });
 
-Router.post('/travel/train/payment', AuthLogin, async function (req, res) { // Menambahkan async
+Router.post('/train/transit/callback', AuthLogin, async function (req, res) { // Menambahkan async
+  
+  try {
+
+    const method = 'cekkereta'
+    const idtrxList = req.body;
+    const type = 'train';
+    
+    logger.info(`Request /train/transit/callback: ${idtrxList.id_transaksi}`);
+    const response = await axiosSendCallbackKhususKaiTransit(req, method, idtrxList.id_transaksi, type);
+    return res.send(response);
+
+  } catch (error) {
+    
+    logger.error(`Error /train/callback: ${error.message}`);
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
+
+  }
+
+});
+
+Router.post('/train/payment', AuthLogin, async function (req, res) { // Menambahkan async
   try {
     const data = req.body;
 
-    logger.info(`Request /travel/train/payment: ${JSON.stringify(data)}`);
+    logger.info(`Request /train/payment: ${JSON.stringify(data)}`);
     const response = await axios.post(
-      `${process.env.URL_HIT}/travel/train/payment`,data
+      `${process.env.URL_HIT}/train/payment`,data
     );
 
-    logger.info(`Response /travel/train/payment: ${JSON.stringify(response.data)}`);
+    logger.info(`Response /train/payment: ${JSON.stringify(response.data)}`);
     return res.send(response.data);
   } catch (error) {
-    logger.error(`Error /travel/train/payment: ${error.message}`);
+    logger.error(`Error /train/payment: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
-Router.post('/travel/train/change_seat', async function (req, res) { // Menambahkan async
+Router.post('/train/change_seat', async function (req, res) { // Menambahkan async
   try {
     const data = req.body;
 
@@ -324,7 +346,7 @@ Router.post('/travel/train/change_seat', async function (req, res) { // Menambah
     const merchart = req.session['v_merchant'];
     const username = req.session['v_uname'];
 
-    logger.info(`Request /travel/train/change_seat [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}`);
+    logger.info(`Request /train/change_seat [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}`);
 
     if(merchart !== undefined && merchart !== null) {
       
@@ -339,34 +361,34 @@ Router.post('/travel/train/change_seat', async function (req, res) { // Menambah
     }
 
 
-    logger.info(`Request /travel/train/change_seat: ${JSON.stringify(data)}`);
+    logger.info(`Request /train/change_seat: ${JSON.stringify(data)}`);
 
     const response = await axios.post(
-      `${process.env.URL_HIT}/travel/train/change_seat`, data
+      `${process.env.URL_HIT}/train/change_seat`, data
     );
 
-    logger.info(`Response /travel/train/change_seat: ${JSON.stringify(response.data)}`);
+    logger.info(`Response /train/change_seat: ${JSON.stringify(response.data)}`);
     return res.send(response.data);
   } catch (error) {
-    logger.error(`Error /travel/train/change_seat: ${error.message}`);
+    logger.error(`Error /train/change_seat: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
-Router.post('/travel/train/fare', AuthLogin, async function (req, res) { // Menambahkan async
+Router.post('/train/fare', AuthLogin, async function (req, res) { // Menambahkan async
   try {
     const data = req.body;
 
-    logger.info(`Request /travel/train/fare: ${JSON.stringify(data)}`);
+    logger.info(`Request /train/fare: ${JSON.stringify(data)}`);
 
     const response = await axios.post(
-      `${process.env.URL_HIT}/travel/train/fare`,data
+      `${process.env.URL_HIT}/train/fare`,data
     );
 
-    logger.info(`Response /travel/train/fare: ${JSON.stringify(response.data)}`);
+    logger.info(`Response /train/fare: ${JSON.stringify(response.data)}`);
     return res.send(response.data);
   } catch (error) {
-    logger.error(`Error /travel/train/fare: ${error.message}`);
+    logger.error(`Error /train/fare: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });

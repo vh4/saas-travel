@@ -9,7 +9,7 @@ const Router = express.Router();
 const country = getCountry();
 
 //pipeline keok.// //
-Router.post('/travel/app/redirect', async function (req, res) {
+Router.post('/app/redirect', async function (req, res) {
   const {auth, merchant} = req.body;
   try {
 
@@ -100,7 +100,7 @@ Router.post('/travel/app/redirect', async function (req, res) {
     
         }        
     
-        logger.info(`Response /travel/app/redirect: ${JSON.stringify(data)}`);
+        logger.info(`Response /app/redirect: ${JSON.stringify(data)}`);
         return res.send(data);
     }else{
 
@@ -112,18 +112,18 @@ Router.post('/travel/app/redirect', async function (req, res) {
     }
 
   } catch (error) {
-    logger.error(`Error /travel/app/redirect: ${error.message}`);
+    logger.error(`Error /app/redirect: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
 
   }
 });
 
 
-Router.post('/travel/app/sign_in', async function (req, res) {
+Router.post('/app/sign_in', async function (req, res) {
   const { username, password, token } = req.body;
   const captcha_keys = '6LdGRpEoAAAAAAUGROG0BOUf1vl0uXUErtLl-knf';
 
-  logger.info(`Request /travel/app/sign_in: ${JSON.stringify(req.body)}`);
+  logger.info(`Request /app/sign_in: ${JSON.stringify(req.body)}`);
   logger.info(`Request HIT API RAJABILLER JSON: ${JSON.stringify({
     username: username,
     method: "rajabiller.login_travel",
@@ -171,7 +171,7 @@ Router.post('/travel/app/sign_in', async function (req, res) {
     
         }
     
-        logger.info(`Response /travel/app/sign_in: ${JSON.stringify(data)}`);
+        logger.info(`Response /app/sign_in: ${JSON.stringify(data)}`);
         return res.send(data);
     }else{
 
@@ -184,14 +184,14 @@ Router.post('/travel/app/sign_in', async function (req, res) {
 
 
   } catch (error) {
-    logger.error(`Error /travel/app/redirect: ${error.message}`);
+    logger.error(`Error /app/redirect: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
 
   }
 });
 
 
-Router.post('/travel/is_merchant', async function (req, res) {
+Router.post('/is_merchant', async function (req, res) {
   const { token } = req.body;
 
   try {
@@ -216,34 +216,34 @@ Router.post('/travel/is_merchant', async function (req, res) {
     });
 
   } catch (error) {
-    logger.error(`Error /travel/app/account: ${error.message}`);
+    logger.error(`Error /app/account: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
 
   }
 });
 
-Router.post('/travel/app/account', async function (req, res) {
+Router.post('/app/account', async function (req, res) {
   const { token } = req.body;
-  logger.info(`Request /travel/app/account: ${JSON.stringify(req.body)}`);
+  logger.info(`Request /app/account: ${JSON.stringify(req.body)}`);
 
   try {
-    const { data } = await axios.post(`${process.env.URL_HIT}/travel/app/account`, {
+    const { data } = await axios.post(`${process.env.URL_HIT}/app/account`, {
       token: token,
     });
 
-    logger.info(`Response /travel/app/account: ${JSON.stringify(data)}`);
+    logger.info(`Response /app/account: ${JSON.stringify(data)}`);
     return res.send(data);
   } catch (error) {
-    logger.error(`Error /travel/app/account: ${error.message}`);
+    logger.error(`Error /app/account: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
 
   }
 });
 
 
-Router.post('/travel/refresh-date', async function (req, res) {
+Router.post('/refresh-date', async function (req, res) {
   const { token } = req.body;
-  logger.info(`Request /travel/refresh-date: ${JSON.stringify(req.body)}`);
+  logger.info(`Request /refresh-date: ${JSON.stringify(req.body)}`);
 
   try {
 
@@ -292,104 +292,104 @@ Router.post('/travel/refresh-date', async function (req, res) {
     }
 
   } catch (error) {
-    logger.error(`Error /travel/app/account: ${error.message}`);
+    logger.error(`Error /app/account: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
 
   }
 });
 
 
-Router.post('/travel/app/sign_out', async function (req, res) {
+Router.post('/app/sign_out', async function (req, res) {
   const { token } = req.body;
   const data = req.body;
-  logger.info(`Request /travel/app/sign_out: ${JSON.stringify(data)}`);
+  logger.info(`Request /app/sign_out: ${JSON.stringify(data)}`);
 
   try {
-    const { data } = await axios.post(`${process.env.URL_HIT}/travel/app/sign_out`, {
+    const { data } = await axios.post(`${process.env.URL_HIT}/app/sign_out`, {
       token: token,
     });
 
     req.session.destroy()
 
-    logger.info(`Response /travel/app/sign_out: ${JSON.stringify(data)}`);
+    logger.info(`Response /app/sign_out: ${JSON.stringify(data)}`);
     return res.send(data);
   } catch (error) {
-    logger.error(`Error /travel/app/sign_out: ${error.message}`);
+    logger.error(`Error /app/sign_out: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
 
-Router.get('/travel/country', (req, res) => {
+Router.get('/country', (req, res) => {
 
   return res.status(200).json(country);
 
 });
 
-Router.post('/travel/app/transaction_list', async function (req, res) {
+Router.post('/app/transaction_list', async function (req, res) {
 
   try {
 
     const { token, product } = req.body;
-    logger.info(`Request /travel/app/transaction_list: ${JSON.stringify(req.body)}`);
+    logger.info(`Request /app/transaction_list: ${JSON.stringify(req.body)}`);
 
     const requests = {};
     requests['username'] = req.session['v_uname'];
     const merchart = req.session['v_merchant'];
     const username = req.session['v_uname'];
 
-    logger.info(`Request /travel/app/transaction_list [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}`);
+    logger.info(`Request /app/transaction_list [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}`);
     
     if(merchart !== undefined && merchart !== null) {
         
       requests['username'] =  requests['username'] + '#' + merchart;
     }
 
-    const { data } = await axios.post(`${process.env.URL_HIT}/travel/app/transaction_list`, {
+    const { data } = await axios.post(`${process.env.URL_HIT}/app/transaction_list`, {
       token: token,
       product: product,
       ...requests
     });
 
-    logger.info(`Response /travel/app/transaction_list: ${JSON.stringify(data)}`);
+    logger.info(`Response /app/transaction_list: ${JSON.stringify(data)}`);
     return res.send(data);
   } catch (error) {
-    logger.error(`Error /travel/app/transaction_list: ${error.message}`);
+    logger.error(`Error /app/transaction_list: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
 
   }
 });
 
 
-Router.post('/travel/app/transaction_book_list', async function (req, res) {
+Router.post('/app/transaction_book_list', async function (req, res) {
   
   try {
 
       const { token, product } = req.body;  
-      logger.info(`Request /travel/app/transaction_book_list: ${JSON.stringify(req.body)}`);
+      logger.info(`Request /app/transaction_book_list: ${JSON.stringify(req.body)}`);
       const requests = {};
 
       requests['username'] = req.session['v_uname'];
       const merchart = req.session['v_merchant'];
       const username = req.session['v_uname'];
 
-      logger.info(`Request /travel/app/transaction_book_list [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}`);
+      logger.info(`Request /app/transaction_book_list [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}`);
       
       if(merchart !== undefined && merchart !== null) {
           
         requests['username'] =  requests['username'] + '#' + merchart;
       }
 
-      const { data } = await axios.post(`${process.env.URL_HIT}/travel/app/transaction_book_list`, {
+      const { data } = await axios.post(`${process.env.URL_HIT}/app/transaction_book_list`, {
         token: token,
         product: product,
         ...requests
       });
 
-      logger.info(`Response /travel/app/transaction_book_list: ${JSON.stringify(data)}`);
+      logger.info(`Response /app/transaction_book_list: ${JSON.stringify(data)}`);
       return res.send(data);
   } catch (error) {
-    logger.error(`Error /travel/app/transaction_book_list: ${error.message}`);
+    logger.error(`Error /app/transaction_book_list: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
 
   }

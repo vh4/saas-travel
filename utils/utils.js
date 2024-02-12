@@ -63,10 +63,10 @@ module.exports = {
         
             if(send_format?.toUpperCase() == 'JSON'){
         
-                logger.info(`REQUEST [${type}] https://rajabiller.fastpay.co.id/transaksi/api_json.php [JSON]: ${JSON.stringify({
+                logger.info(`REQUEST [${type}][JSON] /travel/${type}/callback: ${JSON.stringify({
                     method: method,
                     uid:uid,
-                    pin:pin,
+                    pin:'----',
                     trxid:id_transaksi
                 })}`);
                 const url = 'https://rajabiller.fastpay.co.id/transaksi/api_json.php';
@@ -78,30 +78,30 @@ module.exports = {
                     pin:pin,
                     trxid:id_transaksi
                 });
-                logger.info(`RESPONSE [${type}] /travel/${type}/callback : ${JSON.stringify(getResponseGlobal.data)}`);
+                logger.info(`RESPONSE [${type}][JSON] /travel/${type}/callback: ${JSON.stringify(getResponseGlobal.data)}`);
             
             }else{
         
                 const url = `https://rajabiller.fastpay.co.id/transaksi/api_otomax.php?method=${method}&uid=${uid}&pin=${pin}&trxid=${id_transaksi}`;       
-                logger.info(`REQUEST [${type}] https://rajabiller.fastpay.co.id/transaksi/api_json.php [OTOMAX]: ${url}`);  
+                logger.info(`REQUEST [${type}][OTOMAX] /travel/${type}/callback: https://rajabiller.fastpay.co.id/transaksi/api_otomax.php?method=${method}&uid=${uid}&pin=${pin}&trxid=${id_transaksi}`);  
                 
                 //GETTING DATA CALLBACK FROM RAJABILLER
                 getResponseGlobal = await axios.get(url);
                 
-                logger.info(`RESPONSE [${type}] /travel/${type}/callback : ${JSON.stringify(getResponseGlobal.data)}`);
+                logger.info(`RESPONSE [${type}][OTOMAX] /travel/${type}/callback: ${JSON.stringify(getResponseGlobal.data)}`);
             
             }
         
-            logger.info(`REQUEST [${type}] URL ${urlCallback} [sendCallbackTomerchant]: ${JSON.stringify(getResponseGlobal.data)}`);
+            logger.info(`REQUEST [${type}] URL ${urlCallback} [REQUEST SENT CALLBACK TO MERCHANT]: ${JSON.stringify(getResponseGlobal.data)}`);
             const sendCallbackTomerchant = await axios.post(
                 urlCallback,
                 getResponseGlobal.data || null
             );
         
             if(typeof sendCallbackTomerchant.data === "object"){
-                logger.info(`Response [${type}] URL ${urlCallback} [CALLBACK]: ${JSON.stringify(sendCallbackTomerchant.data)}`);
+                logger.info(`Response [${type}] URL ${urlCallback} [REQUEST SENT CALLBACK TO MERCHANT]: ${JSON.stringify(sendCallbackTomerchant.data)}`);
             }else{
-                logger.info(`Response [${type}] URL ${urlCallback} [CALLBACK]: ${sendCallbackTomerchant.data}`);
+                logger.info(`Response [${type}] URL ${urlCallback} [REQUEST SENT CALLBACK TO MERCHANT]: ${sendCallbackTomerchant.data}`);
             }
             
             return {
@@ -120,6 +120,72 @@ module.exports = {
 
             }
 
+    },
+
+    axiosSendCallbackKhususKaiTransit: async function(req, method, idtrxList, type='') {
+        try {
+            const uidpin = req.session['v_session_uid_pin'].split('|') || [];
+            const uid = uidpin[0] || null;
+            const pin = uidpin[1] || null;
+        
+            const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
+            const urlCallback = parseDataKhususMerchant?.url;
+            const send_format = parseDataKhususMerchant?.data1; //format json / text.
+        
+            logger.info(`Request /travel/${type}/callback [FUNCTION axiosSendCallbackKhususKaiTransit] [id_transaksi] : ${JSON.stringify(idtrxList)} [MERCHANT IF EXISTS]: ${JSON.stringify(parseDataKhususMerchant || '')} [uid] : ${uid}`);
+    
+            const promiseArray = idtrxList.map(id_transaksi => {
+                if(send_format?.toUpperCase() == 'JSON'){
+                    const url = 'https://rajabiller.fastpay.co.id/transaksi/api_json.php';
+                    logger.info(`REQUEST TRANSIT [${type}][JSON] /travel/${type}/transit/callback: ${JSON.stringify({
+                        method: method,
+                        uid: uid,
+                        pin: '----', // Note: masking PIN for logging
+                        trxid: id_transaksi
+                    })}`);
+                    
+                    //GETTING DATA CALLBACK FROM RAJABILLER
+                    return axios.post(url, {
+                        method: method,
+                        uid: uid,
+                        pin: pin,
+                        trxid: id_transaksi
+                    }).then(response => response.data);
+    
+                } else {
+                    const url = `https://rajabiller.fastpay.co.id/transaksi/api_otomax.php?method=${method}&uid=${uid}&pin=${pin}&trxid=${id_transaksi}`;
+                    logger.info(`REQUEST TRANSIT [${type}][OTOMAX] /travel/${type}/transit/callback: ${url}`);
+                    
+                    //GETTING DATA CALLBACK FROM RAJABILLER
+                    return axios.get(url).then(response => response.data);
+                }
+            });
+    
+            // Wait for all promises to resolve
+            const getResponseGlobal = await Promise.all(promiseArray);
+    
+            logger.info(`REQUEST [${type}] URL ${urlCallback} [REQUEST SENT CALLBACK TO MERCHANT]: ${JSON.stringify(getResponseGlobal)}`);
+            const sendCallbackTomerchant = await axios.post(urlCallback, getResponseGlobal || null);
+        
+            if(typeof sendCallbackTomerchant.data === "object"){
+                logger.info(`RESPONSE [${type}] URL ${urlCallback} [RESPONSE SENT CALLBACK TO MERCHANT]: ${JSON.stringify(sendCallbackTomerchant.data)}`);
+            }else{
+                logger.info(`RESPONSE [${type}] URL ${urlCallback} [RESPONSE SENT CALLBACK TO MERCHANT]: ${sendCallbackTomerchant.data}`);
+            }
+            
+            return {
+                rc:'00',
+                rd:'success',
+                callback:sendCallbackTomerchant.data
+            }
+        } catch (error) {
+            logger.error(`Error [${type}] [FUNCTION] axiosSendCallbackKhususKaiTransit: ${error.message}`);
+            return { 
+                rc: '68', 
+                rd: 'Internal Server Error.' 
+            };
+        }
     }
+    
 
 };

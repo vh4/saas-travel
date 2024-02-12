@@ -8,82 +8,82 @@ require('dotenv').config()
 
 const Router = express.Router();
 
-Router.post('/travel/flight/search', async function (req, res) {
+Router.post('/flight/search', async function (req, res) {
   const data = req.body;
-  logger.info(`Request /travel/flight/search: ${JSON.stringify(data)}`);
+  logger.info(`Request /flight/search: ${JSON.stringify(data)}`);
 
   try {
     const response = await axios.post(
-      `${process.env.URL_HIT}/travel/flight/search`,
+      `${process.env.URL_HIT}/flight/search`,
       data
     );
 
-    logger.info(`Response /travel/flight/search: ${response.data.rd}`);
+    logger.info(`Response /flight/search: ${response.data.rd}`);
     return res.send(response.data);
   } catch (error) {
-    logger.error(`Error /travel/flight/search: ${error.message}`);
+    logger.error(`Error /flight/search: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
-Router.post('/travel/flight/airline', async function (req, res) {
+Router.post('/flight/airline', async function (req, res) {
   const { product, token } = req.body;
-  logger.info(`Request /travel/flight/airline: ${JSON.stringify(req.body)}`);
+  logger.info(`Request /flight/airline: ${JSON.stringify(req.body)}`);
 
   try {
     const response = await axios.post(
-      `${process.env.URL_HIT}/travel/flight/airline`,
+      `${process.env.URL_HIT}/flight/airline`,
       { product, token }
     );
 
-    logger.info(`Response /travel/flight/airline: ${JSON.stringify(response.data)}`);
+    logger.info(`Response /flight/airline: ${JSON.stringify(response.data)}`);
     return res.send(response.data);
   } catch (error) {
-    logger.error(`Error /travel/flight/airline: ${error.message}`);
+    logger.error(`Error /flight/airline: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
-Router.post('/travel/flight/airport', async function (req, res) {
+Router.post('/flight/airport', async function (req, res) {
   const { product, token } = req.body;
 
   try {
     const response = await axios.post(
-      `${process.env.URL_HIT}/travel/flight/airport`,
+      `${process.env.URL_HIT}/flight/airport`,
       { product, token }
     );
 
     return res.send(response.data);
   } catch (error) {
-    logger.error(`Error /travel/flight/airport: ${error.message}`);
+    logger.error(`Error /flight/airport: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
-Router.post('/travel/flight/fare', async function (req, res) {
+Router.post('/flight/fare', async function (req, res) {
   const data = req.body;
-  logger.info(`Request /travel/flight/fare: ${JSON.stringify(data)}`);
+  logger.info(`Request /flight/fare: ${JSON.stringify(data)}`);
 
   try {
     const response = await axios.post(
-      `${process.env.URL_HIT}/travel/flight/fare`,
+      `${process.env.URL_HIT}/flight/fare`,
       data
     );
 
-    logger.info(`Response /travel/flight/fare: ${JSON.stringify(response.data)}`);
+    logger.info(`Response /flight/fare: ${JSON.stringify(response.data)}`);
     res.send(response.data);
   } catch (error) {
-    logger.error(`Error /travel/flight/fare: ${error.message}`);
+    logger.error(`Error /flight/fare: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
 
 //insert data search to session storage.
-// Router.post('/travel/pesawat/search/flight', AuthLogin, async (req, res) => {
+// Router.post('/pesawat/search/flight', AuthLogin, async (req, res) => {
 // 	const data = req.body;
 	
 // 	if(typeof data == 'object'){
-// 		logger.info(`INSERT SESSION /travel/pesawat/search/_flight: ${JSON.stringify(data)}`);
+// 		logger.info(`INSERT SESSION /pesawat/search/_flight: ${JSON.stringify(data)}`);
 
 //     const uuid = uuidv4();
 // 		req.session[uuid] = data;
@@ -105,14 +105,14 @@ Router.post('/travel/flight/fare', async function (req, res) {
 
 
 //select data search for booking to session storage.
-// Router.get('/travel/pesawat/search/flight/:id', AuthLogin, async (req, res) => {
+// Router.get('/pesawat/search/flight/:id', AuthLogin, async (req, res) => {
 //   const uuid = req.params.id;
-//   logger.info(`PARAMS /travel/pesawat/search/flight/:id: ${uuid}`);
+//   logger.info(`PARAMS /pesawat/search/flight/:id: ${uuid}`);
 
 //   const data = req.session[uuid];
 
 //   if (data) {
-//     logger.info(`GETTING DATA SESSION /travel/pesawat/search/flight/:id: ${JSON.stringify(data)}`);
+//     logger.info(`GETTING DATA SESSION /pesawat/search/flight/:id: ${JSON.stringify(data)}`);
 //     return res.send({
 //       rc: '00',
 //       rd: 'success',
@@ -127,7 +127,7 @@ Router.post('/travel/flight/fare', async function (req, res) {
 //   }
 // });
 
-Router.post('/travel/flight/book', AuthLogin, async function (req, res) {
+Router.post('/flight/book', AuthLogin, async function (req, res) {
 
   try {
   
@@ -137,7 +137,7 @@ Router.post('/travel/flight/book', AuthLogin, async function (req, res) {
       const merchart = req.session['v_merchant'];
       const username = req.session['v_uname'];
 
-      logger.info(`Request /travel/flight/book [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}`);
+      logger.info(`Request /flight/book [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}`);
       
       if(merchart !== undefined && merchart !== null) {
           
@@ -151,15 +151,15 @@ Router.post('/travel/flight/book', AuthLogin, async function (req, res) {
         }
       }
   
-      logger.info(`Request /travel/flight/book ${JSON.stringify(data)}`);
+      logger.info(`Request /flight/book ${JSON.stringify(data)}`);
 
 
       const response = await axios.post(
-        `${process.env.URL_HIT}/travel/flight/book`,
+        `${process.env.URL_HIT}/flight/book`,
         data
       );
 
-      logger.info(`Response /travel/flight/book: ${JSON.stringify(response.data)}`);
+      logger.info(`Response /flight/book: ${JSON.stringify(response.data)}`);
       
       if(merchart !== undefined && merchart !== null 
         && merchart !== ''  && merchart?.length > 0 
@@ -197,14 +197,14 @@ Router.post('/travel/flight/book', AuthLogin, async function (req, res) {
       
 
   } catch (error) {
-    logger.error(`Error /travel/flight/book: ${error.message}`);
+    logger.error(`Error /flight/book: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 
 });
 
 //callback khusus plane.
-Router.post('/travel/plane/callback', AuthLogin, async function (req, res) { // Menambahkan async
+Router.post('/plane/callback', AuthLogin, async function (req, res) { // Menambahkan async
   
   try {
 
@@ -217,7 +217,7 @@ Router.post('/travel/plane/callback', AuthLogin, async function (req, res) { // 
 
   } catch (error) {
     
-    logger.error(`Error /travel/plane/callback: ${error.message}`);
+    logger.error(`Error /plane/callback: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
 
   }
@@ -225,11 +225,11 @@ Router.post('/travel/plane/callback', AuthLogin, async function (req, res) { // 
 });
 
 //insert data book to session storage.
-// Router.post('/travel/pesawat/book/flight', AuthLogin, async (req, res) => {
+// Router.post('/pesawat/book/flight', AuthLogin, async (req, res) => {
 // 	const data = req.body;
 	
 // 	if(typeof data == 'object'){
-// 		logger.info(`INSERT SESSION /travel/pesawat/book/flight: ${JSON.stringify(data)}`);
+// 		logger.info(`INSERT SESSION /pesawat/book/flight: ${JSON.stringify(data)}`);
 
 //     const uuid = uuidv4();
 // 		req.session[uuid] = data;
@@ -250,14 +250,14 @@ Router.post('/travel/plane/callback', AuthLogin, async function (req, res) { // 
 // });
 
 //select data booking for booking to session storage.
-// Router.get('/travel/pesawat/book/flight/:id', AuthLogin, async (req, res) => {
+// Router.get('/pesawat/book/flight/:id', AuthLogin, async (req, res) => {
 //   const uuid = req.params.id;
-//   logger.info(`PARAMS /travel/pesawat/book/flight/:id: ${uuid}`);
+//   logger.info(`PARAMS /pesawat/book/flight/:id: ${uuid}`);
 
 //   const data = req.session[uuid];
 
 //   if (data) {
-//     logger.info(`GETTING DATA SESSION /travel/pesawat/book/flight/:id: ${JSON.stringify(data)}`);
+//     logger.info(`GETTING DATA SESSION /pesawat/book/flight/:id: ${JSON.stringify(data)}`);
 //     return res.send({
 //       rc: '00',
 //       rd: 'success',
@@ -273,20 +273,20 @@ Router.post('/travel/plane/callback', AuthLogin, async function (req, res) { // 
 // });
 
 
-Router.post('/travel/flight/payment', AuthLogin, async function (req, res) {
+Router.post('/flight/payment', AuthLogin, async function (req, res) {
   const data = req.body;
-  logger.info(`Request /travel/flight/payment: ${JSON.stringify(data)}`);
+  logger.info(`Request /flight/payment: ${JSON.stringify(data)}`);
 
   try {
     const response = await axios.post(
-      `${process.env.URL_HIT}/travel/flight/payment`,
+      `${process.env.URL_HIT}/flight/payment`,
       data
     );
 
-    logger.info(`Response /travel/flight/payment: ${JSON.stringify(response.data)}`);
+    logger.info(`Response /flight/payment: ${JSON.stringify(response.data)}`);
     return res.send(response.data);
   } catch (error) {
-    logger.error(`Error /travel/flight/payment: ${error.message}`);
+    logger.error(`Error /flight/payment: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
   }
 });
