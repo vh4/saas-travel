@@ -38,7 +38,7 @@ const url = process.env.FRONTEND_URL_OR_IP_ACCESS_CORS;
 logger.info(`.env production is alive. url hit frontend: ${url}`);
 
 app.use(cors({
-  origin:["http://10.9.43.5:9004", "http://10.9.43.5:9003", "http://localhost:3000", "http://localhost:1111", url, "http://10.9.43.5:1111","http://10.9.43.5:3000", "http://10.9.43.5:9004",],
+  origin:["http://10.9.43.5:9004", "http://10.9.43.5:9003", "http://localhost:3000", "http://localhost:1111", url, "http://10.9.43.5:1111", "http://10.9.43.5:3000", "http://10.9.43.5:9004"],
   methods: ['GET', 'POST', 'DELETE', 'PUT']
 }));
 app.use(express.json());
