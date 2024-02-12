@@ -16,6 +16,16 @@ const session = require('express-session');
 const { getInfoClientAll } = require('./utils/utils');
 
 const app = express();
+
+// app.use(cors({
+//   origin:["*", "http://10.9.43.5:9004", "http://10.9.43.5:9003", "http://localhost:3000", 
+//   "http://localhost:1111", url, "http://10.9.43.5:1111", "http://10.9.43.5:3000", 
+//   "http://10.9.43.5:9004", "https://travel.rajabiller.com", "http://10.9.43.5"],
+//   methods: ['GET', 'POST', 'DELETE', 'PUT']
+// }));
+
+app.use(cors());
+
 const port = 9999;
 
 // Use cookie-parser middleware
@@ -37,12 +47,7 @@ app.use(session({
 const url = process.env.FRONTEND_URL_OR_IP_ACCESS_CORS;
 logger.info(`.env production is alive. url hit frontend: ${url}`);
 
-app.use(cors({
-  origin:["*", "http://10.9.43.5:9004", "http://10.9.43.5:9003", "http://localhost:3000", 
-  "http://localhost:1111", url, "http://10.9.43.5:1111", "http://10.9.43.5:3000", 
-  "http://10.9.43.5:9004", "https://travel.rajabiller.com", "http://10.9.43.5"],
-  methods: ['GET', 'POST', 'DELETE', 'PUT']
-}));
+
 app.use(express.json());
 
 app.use('/travel', MainRoutes);
