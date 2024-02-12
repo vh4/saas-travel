@@ -84,7 +84,7 @@ export default function Search() {
     return () => document.body.removeEventListener("click", closeFilter);
   }, []);
 
-  const [gradeFilter, setGradeFilter] = useState([false, false, false]);
+  const [gradeFilter, setGradeFilter] = useState([false, false, false]); //index ke-0 ekonomi (K), index ke-1 eksekutif (E), dan index ke-2 bisnis (B) 
   const [waktuFilter, setWaktuFilter] = useState([false, false, false, false]);
   const [HargaTerendahTinggi, setHargaTerendahTinggi] = useState(false);
   const [selectedTime, setSelectedTime] = useState([]);
@@ -215,7 +215,7 @@ export default function Search() {
   const [notFound, setError] = React.useState(true);
   const skeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [dataSearch, setDataSearch] = React.useState([]);
-  const [dataSearchTransit, setDataSearchTransit] = React.useState(false);
+  const [dataSearchTransit, setDataSearchTransit] = React.useState([]);
   const [listStaton, setListStaton] = React.useState([]);
 
   async function getKAIdata() {
@@ -239,7 +239,7 @@ export default function Search() {
     try {
       setLoading(true);
 
-      const listCategory = ["false"];
+      const listCategory = ["false", "true"];
       setTimeout(() => {
         listCategory.forEach(async (category) => {
           const response = await axios.post(
@@ -271,10 +271,18 @@ export default function Search() {
             setError(true);
             setLoading(false);
           } else {
-            setDataSearch(response.data.data);
-            setuuid(response.data.uuid);
-            setLoading(false);
-            setError(false);
+            if(category == 'true'){
+              setDataSearchTransit(response.data.data);
+              setuuid(response.data.uuid);
+              setLoading(false);
+              setError(false);
+
+            }else{
+              setDataSearch(response.data.data);
+              setuuid(response.data.uuid);
+              setLoading(false);
+              setError(false);
+            }
           }
         });
       });
@@ -283,6 +291,7 @@ export default function Search() {
       setLoading(false);
     }
   }
+
 
   async function bookingHandlerDetail(trainNumber) {
     const detailBooking = dataSearch.filter(
@@ -365,68 +374,63 @@ export default function Search() {
     handlerSearch();
   }, []);
 
-  const filteredDataTransit = dataSearchTransit.length > 0 ? dataSearchTransit
-  .filter((x) => {
-    x.filter((train) => {
-      if (!gradeFilter.some((filter) => filter)) {
-        return true;
-      } else {
-        return train.seats.some((seat) => {
-          return gradeFilter[["K", "E", "B"].indexOf(seat.grade)];
-        });
-      }
-    })
-  })
-  .filter((x) => {
+  const filterDataTransit = (data, gradeFilter, valHargaRange, selectedTime) => {
+    const filteredData = {};  
+    const gradeMapping = ['K', 'E', 'B']; // Mapping untuk grade
+    const activeGrades = gradeMapping.filter((_, index) => gradeFilter[index]);
+  
+    const isGradeFilterActive = gradeFilter.some(value => value);
+    const isPriceFilterActive = valHargaRange[0] > 0 || valHargaRange[1] < 10000000;
+  
+    Object.keys(data).forEach((key) => {
+      const trains = data[key];
+  
+      const filteredTrains = trains.filter((trainPair) => {
+        let isGradeMatch = true; // Default true jika tidak ada filter grade
+        let isPriceMatch = true; // Default true jika tidak ada filter harga
+        let isWaktuMatch = true; // Default true jika tidak ada filter harga
 
-    x.filter((d) => {
-      if (selectedTime.length === 0) {
-        return true;
-      }
-      const departureTime = moment(d.departureTime, "HH:mm").format("HH:mm");
-      return selectedTime.some((t) => {
-        const [start, end] = t.split("-");
-        return moment(departureTime, "HH:mm").isBetween(
-          moment(start, "HH:mm"),
-          moment(end, "HH:mm")
-        );
-      });
-    })
-  })
-  .filter((x) => {
-    x.filter((train) => {
-      return train.seats.some((seat) => {
-        return (
-          valHargaRange[0] <= seat.priceAdult &&
-          seat.priceAdult <= valHargaRange[1]
-        );
-      });
-    })
-  })
-  .sort((a, b) => {
-    if (HargaTerendahTinggi == 1) {
-      const priceA = Math.min(...a.seats.map((seat) => seat.priceAdult));
-      const priceB = Math.min(...b.seats.map((seat) => seat.priceAdult));
-      return priceA - priceB;
-    }
-  })
-  .sort((a, b) => {
-    if (HargaTerendahTinggi == 2) {
-      const priceA = Math.max(...a.seats.map((seat) => seat.priceAdult));
-      const priceB = Math.max(...b.seats.map((seat) => seat.priceAdult));
-      return priceB - priceA; // Reverse the order to sort by highest price
-    }
-  })
-  .sort((a, b) => {
-    const availableSeatsA = a.seats.filter(
-      (seat) => seat.availability > 0
-    ).length;
-    const availableSeatsB = b.seats.filter(
-      (seat) => seat.availability > 0
-    ).length;
+        if (isGradeFilterActive) {
+          isGradeMatch = trainPair[0].seats.some(seat => activeGrades.includes(seat.grade));
+        }
+  
+        if (isPriceFilterActive) {
 
-    return availableSeatsB - availableSeatsA;
-  }) : filteredDataTransit;
+          const totalPrice = trainPair.reduce((acc, train) => {
+            return acc + train.seats.reduce((acc, seat) => acc + parseInt(seat.priceAdult), 0);
+          }, 0);
+  
+          // Cek apakah total harga dalam rentang yang diinginkan
+          isPriceMatch = totalPrice >= valHargaRange[0] && totalPrice <= valHargaRange[1];
+        }
+
+        if(isWaktuMatch){
+
+          if (selectedTime && selectedTime.length > 0) {
+            const departureTime = moment(trainPair[0].departureTime, "HH:mm");
+            isWaktuMatch = selectedTime.some((t) => {
+              const [start, end] = t.split("-");
+              return departureTime.isBetween(moment(start, "HH:mm"), moment(end, "HH:mm"), undefined, '[]'); // '[]' inklusif kedua batas
+            });
+          }
+          
+        }
+  
+        // Return true jika kedua kondisi (atau salah satu, tergantung filter yang aktif) terpenuhi
+        return isGradeMatch && isPriceMatch && isWaktuMatch;
+      });
+  
+      if (filteredTrains.length > 0) {
+        filteredData[key] = filteredTrains;
+      }
+    });
+  
+    return filteredData;
+  };
+    
+  // Contoh penggunaan:
+  const filteredDataTransit = filterDataTransit(dataSearchTransit, gradeFilter, valHargaRange, selectedTime);
+  console.log(filteredDataTransit)
 
   const filteredData = dataSearch
     .filter((train) => {
@@ -1056,7 +1060,9 @@ export default function Search() {
                     </Box>
                   </div>
                 ))
-              ) : notFound !== true && filteredDataTransit.length !== 0 ? (
+              ) : notFound !== true && filteredDataTransit.length !== 0 && 
+                  Object.keys(filteredDataTransit).length !== 0
+              ? (
                 <div className="row mb-24 w-full p-2">
                   {Object.keys(filteredDataTransit).map((category) => (
                     <div key={category}>
@@ -1202,147 +1208,6 @@ export default function Search() {
                                   </div>
                                 </div>
                                 <div>
-                                  {/* mobile cari */}
-                                  <div
-                                    onClick={() =>
-                                      trainArray[0].seats[0].availability > 0 &&
-                                      parseInt(adult) + parseInt(infant) <
-                                        trainArray[0].seats[0].availability
-                                        ? bookingHandlerDetailTransit(
-                                            trainArray,
-                                            category
-                                          )
-                                        : " "
-                                    }
-                                    className="cursor-pointer block xl:hidden w-full text-gray-700"
-                                  >
-                                    <div className="py-4 px-4 grid grid-cols-1 xl:grid-cols-7">
-                                      <div className="flex justify-between">
-                                        <div className="">
-                                          <h1 className="text-xs font-medium xl:font-bold">
-                                            {trainArray.map((data, h) => (
-                                              <span key={h}>
-                                                {" "}
-                                                {/* Added key for better performance and to avoid warning */}
-                                                {data.trainName}{" "}
-                                                {h < trainArray.length - 1
-                                                  ? " + "
-                                                  : ""}
-                                              </span>
-                                            ))}
-                                          </h1>
-                                          <small>
-                                            {trainArray.map((data, h) => (
-                                              <span key={h}>
-                                                {" "}
-                                                {/* Added key for better performance and to avoid warning */}
-                                                {data.seats[0].grade === "E"
-                                                  ? "Eks"
-                                                  : data.seats[0].grade === "B"
-                                                  ? "Bis"
-                                                  : "Eko"}{" "}
-                                                Class ({data.seats[0].class})
-                                                {h < trainArray.length - 1
-                                                  ? " + "
-                                                  : ""}
-                                              </span>
-                                            ))}
-                                          </small>
-                                        </div>
-                                        <div>
-                                          <h1 className="text-xs font-medium xl:font-bold text-blue-500">
-                                            Rp.{" "}
-                                            {toRupiah(
-                                              trainArray.reduce(
-                                                (total, item) =>
-                                                  total +
-                                                  parseInt(
-                                                    item.seats[0].priceAdult,
-                                                    10
-                                                  ),
-                                                0
-                                              )
-                                            )}
-                                          </h1>
-                                          <small className="text-red-500">
-                                            {
-                                              trainArray[0].seats[0]
-                                                .availability
-                                            }{" "}
-                                            set(s)
-                                          </small>
-                                          <small className="text-red-500">
-                                            {trainArray[0].seats[0]
-                                              .availability > 0 &&
-                                            parseInt(adult) + parseInt(infant) <
-                                              trainArray[0].seats[0]
-                                                .availability
-                                              ? ""
-                                              : ". (Tiket Habis)"}
-                                          </small>
-                                        </div>
-                                        <div></div>
-                                      </div>
-                                      <div className="flex justify-start mt-4">
-                                        <div className="flex items-center space-x-8">
-                                          {/* Departure Time and Origin */}
-                                          <div>
-                                            <h1 className="text-sm xl:text-base font-medium xl:font-bold">
-                                              {trainArray[0].departureTime}
-                                            </h1>
-                                            <small className="text-gray-600">
-                                              {origin}
-                                            </small>
-                                          </div>
-
-                                          {/* Transit Duration */}
-                                          <div className="flex-1 mt-2 w-full">
-                                            <div className="border-t-2 border-gray-300 my-4 -mx-4"></div>
-                                            <div className="text-center">
-                                              <div className="text-xs text-gray-700">
-                                                {calculateTotalDurationTransit(
-                                                  trainArray
-                                                )}
-                                              </div>
-                                              <small className="text-gray-600">
-                                                <small>
-                                                  Transit (
-                                                  {(() => {
-                                                    const filteredStations =
-                                                      listStaton.filter(
-                                                        (e) =>
-                                                          e.id_stasiun ===
-                                                          category
-                                                      );
-                                                    return filteredStations.length >
-                                                      0
-                                                      ? filteredStations[0]
-                                                          .nama_stasiun
-                                                      : "No station found";
-                                                  })()}
-                                                  )
-                                                </small>
-                                              </small>
-                                            </div>
-                                          </div>
-
-                                          {/* Arrival Time and Destination */}
-                                          <div>
-                                            <h1 className="text-sm xl:text-base font-medium xl:font-bold">
-                                              {
-                                                trainArray[
-                                                  trainArray.length - 1
-                                                ].arrivalTime
-                                              }
-                                            </h1>
-                                            <small className="text-gray-600">
-                                              {destination}
-                                            </small>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
                                 </div>
                               </div>
                             </div>
