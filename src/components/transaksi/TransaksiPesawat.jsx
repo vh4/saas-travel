@@ -342,6 +342,14 @@ export default function ViewTransaksi({ path }) {
                                   {e.tanggal_transaksi}
                                 </div>
                               </div>
+                              <div className="pl-1">
+                              <div className="mt-6 xl:mt-8 text-sm text-gray-800 font-medium">
+                                Kode Booking
+                              </div>
+                              <div className="mt-2 text-xs text-gray-800">
+                                {e.kode_booking}
+                              </div>
+                            </div>
                             </div>
                             <div className="mt-6 xl:mt-8 border-t block lg:flex md:justify-between  lg:items-center">
                               {/* <div className="mt-2 flex space-x-2 items-end">
@@ -363,6 +371,14 @@ export default function ViewTransaksi({ path }) {
                                   Lihat Detail
                                 </div>
                               </div>
+                              <a href={e.url_struk}>
+                                <div
+                                    
+                                    className="cursor-pointer text-blue-500 font-bold text-xs"
+                                  >
+                                    Cetak Struk
+                                </div>
+                              </a>                              
                             </div>
                           </div>
                         </div>

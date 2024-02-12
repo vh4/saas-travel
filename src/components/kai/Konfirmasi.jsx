@@ -1222,8 +1222,8 @@ export default function Konfirmasi() {
                       </div>
                     </div>
                     <div className="px-4 text-grapy-500 text-xs">
-                        Gunakan transaksi id diatas untuk melakukan inq ulang dan pembayaran.
-                      </div>
+                    Gunakan kode bayar ini sebagai nomor tujuan pada menu pembayaran di aplikasi" biar kesannya id transaksi itu memang digunakan untuk kode bayarnya
+                       </div>
                   </div>
                   <button onClick={handlerPilihKursi} className="block w-full">
                     <div className="mt-2 rounded-md border border-gray-200 shadow-sm  hover:bg-gray-100">

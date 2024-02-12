@@ -358,7 +358,7 @@ export default function Pembayaran() {
                         <Paragraph copyable>{book && book.transactionId}</Paragraph>
                         </div>
                         <div className="text-grapy-500 text-xs">
-                        Gunakan transaksi id diatas untuk melakukan inq ulang dan pembayaran.
+                        Gunakan kode bayar ini sebagai nomor tujuan pada menu pembayaran di aplikasi
                       </div>
                       </div>
                       <div className="p-4 border-t">
@@ -489,7 +489,7 @@ export default function Pembayaran() {
                         <Paragraph copyable>{book && book.transactionId}</Paragraph>
                         </div>
                         <div className="text-grapy-500 text-xs">
-                        Gunakan transaksi id diatas untuk melakukan inq ulang dan pembayaran.
+                        Gunakan kode bayar ini sebagai nomor tujuan pada menu pembayaran di aplikasi
                       </div>
                       </div>
                       <div className="p-4 border-t">
