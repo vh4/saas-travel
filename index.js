@@ -40,7 +40,7 @@ logger.info(`.env production is alive. url hit frontend: ${url}`);
 app.use(cors({
   origin:["*", "http://localhost:3000", "http://localhost:1111", url, "http://10.9.43.5:1111","http://10.9.43.5:3000"],
   methods: ['GET', 'POST', 'DELETE', 'PUT'],
-  credentials: true
+  credentials: false
 }));
 
 app.use(express.json());
