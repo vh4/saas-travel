@@ -156,7 +156,10 @@ Router.post('/flight/book', AuthLogin, async function (req, res) {
 
       const response = await axios.post(
         `${process.env.URL_HIT}/flight/book`,
-        data
+        data,
+        {
+          timeout: 120000 // 2 menit
+        }
       );
 
       logger.info(`Response /flight/book: ${JSON.stringify(response.data)}`);
