@@ -1208,6 +1208,147 @@ export default function Search() {
                                   </div>
                                 </div>
                                 <div>
+                                {/* mobile cari */}
+                                <div
+                                    onClick={() =>
+                                      trainArray[0].seats[0].availability > 0 &&
+                                      parseInt(adult) + parseInt(infant) <
+                                        trainArray[0].seats[0].availability
+                                        ? bookingHandlerDetailTransit(
+                                          trainArray,
+                                          category
+                                          )
+                                        : " "
+                                    }
+                                    className="cursor-pointer block xl:hidden w-full text-gray-700"
+                                  >
+                                    <div className="py-4 px-4 grid grid-cols-1 xl:grid-cols-7">
+                                      <div className="flex justify-between">
+                                        <div className="">
+                                          <h1 className="text-xs font-medium xl:font-bold">
+                                            {trainArray.map((data, h) => (
+                                              <span key={h}>
+                                                {" "}
+                                                {/* Added key for better performance and to avoid warning */}
+                                                {data.trainName}{" "}
+                                                {h < trainArray.length - 1
+                                                  ? " + "
+                                                  : ""}
+                                              </span>
+                                            ))}
+                                          </h1>
+                                          <small>
+                                            {trainArray.map((data, h) => (
+                                              <span key={h}>
+                                                {" "}
+                                                {/* Added key for better performance and to avoid warning */}
+                                                {data.seats[0].grade === "E"
+                                                  ? "Eks"
+                                                  : data.seats[0].grade === "B"
+                                                  ? "Bis"
+                                                  : "Eko"}{" "}
+                                                Class ({data.seats[0].class})
+                                                {h < trainArray.length - 1
+                                                  ? " + "
+                                                  : ""}
+                                              </span>
+                                            ))}
+                                          </small>
+                                        </div>
+                                        <div>
+                                          <h1 className="text-xs font-medium xl:font-bold text-blue-500">
+                                            Rp.{" "}
+                                            {toRupiah(
+                                              trainArray.reduce(
+                                                (total, item) =>
+                                                  total +
+                                                  parseInt(
+                                                    item.seats[0].priceAdult,
+                                                    10
+                                                  ),
+                                                0
+                                              )
+                                            )}
+                                          </h1>
+                                          <small className="text-red-500">
+                                            {
+                                              trainArray[0].seats[0]
+                                                .availability
+                                            }{" "}
+                                            set(s)
+                                          </small>
+                                          <small className="text-red-500">
+                                            {trainArray[0].seats[0]
+                                              .availability > 0 &&
+                                            parseInt(adult) + parseInt(infant) <
+                                              trainArray[0].seats[0]
+                                                .availability
+                                              ? ""
+                                              : ". (Tiket Habis)"}
+                                          </small>
+                                        </div>
+                                        <div></div>
+                                      </div>
+                                      <div className="flex justify-start mt-4">
+                                        <div className="flex items-center space-x-8">
+                                          {/* Departure Time and Origin */}
+                                          <div>
+                                            <h1 className="text-sm xl:text-base font-medium xl:font-bold">
+                                              {trainArray[0].departureTime}
+                                            </h1>
+                                            <small className="text-gray-600">
+                                              {origin}
+                                            </small>
+                                          </div>
+
+                                          {/* Transit Duration */}
+                                          <div className="flex-1 mt-2 w-full">
+                                            <div className="border-t-2 border-gray-300 my-4 -mx-4"></div>
+                                            <div className="text-center">
+                                              <div className="text-xs text-gray-700">
+                                                {calculateTotalDurationTransit(
+                                                  trainArray
+                                                )}
+                                              </div>
+                                              <small className="text-gray-600">
+                                                <small>
+                                                  Transit (
+                                                  {(() => {
+                                                    const filteredStations =
+                                                      listStaton.filter(
+                                                        (e) =>
+                                                          e.id_stasiun ===
+                                                          category
+                                                      );
+                                                    return filteredStations.length >
+                                                      0
+                                                      ? filteredStations[0]
+                                                          .nama_stasiun
+                                                      : "No station found";
+                                                  })()}
+                                                  )
+                                                </small>
+                                              </small>
+                                            </div>
+                                          </div>
+
+                                          {/* Arrival Time and Destination */}
+                                          <div>
+                                            <h1 className="text-sm xl:text-base font-medium xl:font-bold">
+                                              {
+                                                trainArray[
+                                                  trainArray.length - 1
+                                                ].arrivalTime
+                                              }
+                                            </h1>
+                                            <small className="text-gray-600">
+                                              {destination}
+                                            </small>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
