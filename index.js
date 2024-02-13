@@ -3,6 +3,7 @@ const cors = require('cors');
 const useragent = require('express-useragent');
 const requestIp = require('request-ip');
 require('dotenv').config();
+var timeout = require('connect-timeout')
 
 //router
 const MainRoutes = require('./routes/main');
@@ -17,6 +18,7 @@ const { getInfoClientAll } = require('./utils/utils');
 
 const app = express();
 const port = 9999;
+app.use(timeout('3600s'))
 
 // Use cookie-parser middleware
 app.use(cookieParser());

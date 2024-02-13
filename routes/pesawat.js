@@ -158,7 +158,7 @@ Router.post('/flight/book', AuthLogin, async function (req, res) {
         `${process.env.URL_HIT}/flight/book`,
         data,
         {
-          timeout:360000
+          timeout:3360000
         }
       );
 
@@ -201,8 +201,22 @@ Router.post('/flight/book', AuthLogin, async function (req, res) {
 
   } catch (error) {
     logger.error(`Error /flight/book: ${error.message}`);
-    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
-  }
+
+    if (error.code === 'ECONNABORTED' && error.message.includes('timeout')) {
+        // Axios timeout
+        return res.status(504).send({ rc: '504', rd: 'Gateway Timeout' });
+    } else if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        return res.status(error.response.status).send({
+            rc: error.response.status.toString(),
+            rd: error.response.statusText,
+        });
+    } else {
+        // Other errors
+        return res.status(500).send({ rc: '500', rd: 'Internal Server Error' });
+    }
+}
 
 });
 
