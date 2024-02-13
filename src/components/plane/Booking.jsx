@@ -381,6 +381,8 @@ useEffect(() => {
 
   const handlerBookingSubmit = async (errorInfo) => {
    
+    try{
+
     let end_adult = [];
     let end_child = [];
     let end_infant = [];
@@ -468,7 +470,7 @@ useEffect(() => {
 
     const bookingResponse = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/flight/book`, book, {
-        timeout:360000 
+        timeout:3600000 
       }
     );
 
@@ -549,6 +551,13 @@ useEffect(() => {
     }
 
     hideModal();
+
+  }catch(error){
+
+    failedNotification(error.message);
+    hideModal();
+
+  }
 
   };
 
