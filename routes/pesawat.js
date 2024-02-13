@@ -158,7 +158,7 @@ Router.post('/flight/book', AuthLogin, async function (req, res) {
         `${process.env.URL_HIT}/flight/book`,
         data,
         {
-          timeout: 120000 // 2 menit
+          timeout:360000
         }
       );
 
