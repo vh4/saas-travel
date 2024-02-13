@@ -508,6 +508,7 @@ useEffect(() => {
           }
       ))
 
+      setIsLoading(false);
 
       if(bookingResponse.data.callback === null) {
           
@@ -515,7 +516,7 @@ useEffect(() => {
           pathname: `/flight/payment`,
           search: `?v_flight=${id}&v_book=${uuid}`,
       });
-        
+   
       }else{
 
         // SuccessNotification(
@@ -530,10 +531,10 @@ useEffect(() => {
         
       }
 
-      setIsLoading(false);
 
     } else {
       setIsLoading(false);
+
       if (bookingResponse.data.rc === "73") {
         failedNotification(bookingResponse.data.rd);
       }
@@ -542,6 +543,7 @@ useEffect(() => {
       } else {
         failedNotification(bookingResponse.data.rd);
       }
+      
     }
 
     hideModal();
