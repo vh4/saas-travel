@@ -1,3 +1,5 @@
+import moment from "moment";
+
 //parseTanggal Pembayaran Pelni.
 export const parseTanggal = (d) => {
   var date = new Date(d);
@@ -255,3 +257,25 @@ export const getCurrentDate = () => {
 function addLeadingZero(num) {
   return num < 10 ? `0${num}` : num;
 }
+
+// Fungsi untuk menghitung total durasi dari array data kereta
+export const calculateTotalDurationTransit = (trains) => {
+  if (trains.length === 0) return '0 jam 0 menit';
+
+  // Getting the first train's departure datetime
+  const firstTrain = trains[0];
+  const firstDeparture = moment(`${firstTrain.departureDate} ${firstTrain.departureTime}`, 'YYYY-MM-DD HH:mm');
+
+  // Getting the last train's arrival datetime
+  const lastTrain = trains[trains.length - 1];
+  const lastArrival = moment(`${lastTrain.arrivalDate} ${lastTrain.arrivalTime}`, 'YYYY-MM-DD HH:mm');
+
+  // Calculating the duration
+  const duration = moment.duration(lastArrival.diff(firstDeparture));
+
+  // Extracting hours and minutes
+  const hours = duration.hours();
+  const minutes = duration.minutes();
+
+  return `${hours}j ${minutes}m`;
+};

@@ -20,7 +20,7 @@ export default function TransaksiPesawat(){
     return(
         <>
         <Layout>
-            <div className="mt-0 md:mt-4 px-4 md:px-12">
+            <div className="mt-0 mb-24 md:mb-0 md:mt-4 px-4 md:px-12">
                 {/* Profile fitur  */}
                 < TransaksiPelniComponent path={path} />
                 

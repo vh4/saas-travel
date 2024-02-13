@@ -11,7 +11,7 @@ import Page500 from "../components/500";
 import { parseTanggal, remainingTime } from "../../helpers/date";
 import { toRupiah } from "../../helpers/rupiah";
 import BayarLoading from "../components/pelniskeleton/bayar";
-import {Typography } from 'antd';
+import { Typography } from "antd";
 import { IoArrowForwardOutline } from "react-icons/io5";
 import moment from "moment";
 import PageExpired from "../components/Expired";
@@ -30,14 +30,13 @@ export default function Pembayaran() {
     window.scrollTo(0, 0);
   }, []);
 
-
   const [api, contextHolder] = notification.useNotification();
 
   //loading hanlde submit pembayaran.
   const [isLoading, setLoading] = React.useState(false);
   const [passengers, setPassengers] = useState({});
 
-  let { id } = useParams();  
+  let { id } = useParams();
   const [book, setBook] = useState(null);
 
   const [bookInfo, setBookInfo] = useState(null);
@@ -84,14 +83,13 @@ export default function Pembayaran() {
   //       setTimeout(() => {
   //         setIsLoadingPage(false);
   //       }, 2000);
-        
+
   //     })
   //     .catch(() => {
   //       setIsLoadingPage(false);
   //       setErrPage(true);
   //     });
   // }, [id, token]);
-
 
   useEffect(() => {
     if (token === null || token === undefined) {
@@ -100,26 +98,25 @@ export default function Pembayaran() {
 
     Promise.all([getDataAllBook(), cekCallbakIsMitra()])
       .then(([getDataAllBook, cekCallbakIsMitra]) => {
-
         const bookResponse = getDataAllBook.book;
         const passenggerResponse = getDataAllBook;
         const bookInfoResponse = getDataAllBook.infobooking;
         const hasilBooking = bookResponse.data.data;
 
-        if(cekCallbakIsMitra.data.rc == '00'){
+        if (cekCallbakIsMitra.data.rc == "00") {
           setcallbackBoolean(true);
         }
-        
+
         if (bookResponse.data.rc === "00") {
           setBook(bookResponse.data.data);
-          setExpiredBookTime(hasilBooking.payLimit || moment().add(1, 'hours'))
-        }else{
+          setExpiredBookTime(hasilBooking.payLimit || moment().add(1, "hours"));
+        } else {
           setErrPage(true);
         }
 
         if (bookInfoResponse.data.rc === "00") {
           setBookInfo(bookInfoResponse.data.data);
-        }else{
+        } else {
           setErrPage(true);
         }
 
@@ -127,8 +124,7 @@ export default function Pembayaran() {
           setPassengers(passenggerResponse);
           setTotalAdult(passenggerResponse.adult);
           setTotalInfant(passenggerResponse.infant);
-
-        }else{
+        } else {
           setErrPage(true);
         }
 
@@ -138,15 +134,13 @@ export default function Pembayaran() {
           new Date(hasilBooking.payLimit).getTime() < new Date().getTime()
         ) {
           setIsBookingExpired(true);
-        }else {
+        } else {
           setIsBookingExpired(false);
         }
-
 
         setTimeout(() => {
           setIsLoadingPage(false);
         }, 1000);
-        
       })
       .catch(() => {
         setIsLoadingPage(false);
@@ -154,25 +148,21 @@ export default function Pembayaran() {
       });
   }, [id, token]);
 
-  const [remainingBookTime, setremainingBookTime] = useState(remainingTime(expiredBookTime));
+  const [remainingBookTime, setremainingBookTime] = useState(
+    remainingTime(expiredBookTime)
+  );
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       setremainingBookTime(remainingTime(expiredBookTime));
 
-      if (
-        book &&
-        new Date(book.timeLimit).getTime() < new Date().getTime()
-      ) {
-        
+      if (book && new Date(book.timeLimit).getTime() < new Date().getTime()) {
         setIsBookingExpired(true);
-
       } else {
         setIsBookingExpired(false);
       }
-
     }, 500);
-  
+
     return () => clearInterval(intervalId);
   }, [expiredBookTime]);
 
@@ -198,7 +188,7 @@ export default function Pembayaran() {
   //   }
   // }
 
-    async function getDataAllBook() {
+  async function getDataAllBook() {
     try {
       const response = localStorage.getItem(`data:pl-passenger/${id}`);
       return JSON.parse(response);
@@ -255,63 +245,55 @@ export default function Pembayaran() {
     e.preventDefault();
   }
 
-  async function handleCallbackSubmit(e){
+  async function handleCallbackSubmit(e) {
     e.preventDefault();
     setLoading(true);
-    
+
     setTimeout(async () => {
-      
-      const dataParse = JSON.parse(localStorage.getItem(`data:pl-passenger/${id}`))
+      const dataParse = JSON.parse(
+        localStorage.getItem(`data:pl-passenger/${id}`)
+      );
 
       const response = await axios.post(
         `${process.env.REACT_APP_HOST_API}/travel/pelni/callback`,
         {
-          id_transaksi:dataParse.transactionId
+          id_transaksi: dataParse.transactionId,
         }
       );
 
-    if(response.data.rc == '00'){
-      navigate('/')
-    }else{
-      failedNotification(response.data.rd)
-    }
+      if (response.data.rc == "00") {
+        navigate("/");
+      } else {
+        failedNotification(response.data.rd);
+      }
 
-    setLoading(false);
-
+      setLoading(false);
     }, 100);
-  
-}
-
+  }
 
   return (
     <>
       {contextHolder}
-      
-      {err === true ? 
-      (
+
+      {err === true ? (
         <>
           <Page500 />
         </>
-      ) : errPage === true ? 
-      (
+      ) : errPage === true ? (
         <>
           <Page400 />
         </>
-      ) : 
-      isBookingExpired === true ? (
+      ) : isBookingExpired === true ? (
         <>
           <PageExpired />
         </>
-      ) :
-      (
+      ) : (
         <>
           {/* header kai flow */}
           <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
               <AiOutlineCheckCircle className="text-gray-800" size={20} />
-              <div className="hidden xl:flex text-gray-800">
-                Detail pesanan
-              </div>
+              <div className="hidden xl:flex text-gray-800">Detail pesanan</div>
               <div className="block xl:hidden text-gray-800">Detail</div>
             </div>
             <div>
@@ -321,7 +303,7 @@ export default function Pembayaran() {
               />
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
-              <div className="hidden xl:block text-blue-500">
+              <div className="hidden xl:block text-blue-500 font-bold">
                 Pembayaran tiket
               </div>
             </div>
@@ -336,294 +318,321 @@ export default function Pembayaran() {
               <div className="text-slate-500">E-Tiket</div>
             </div> */}
           </div>
-          {
-            isLoadingPage === true ? 
-            (
-              <>
-              <BayarLoading total={parseInt(TotalAdult) + parseInt(TotalInfant)} />
-              </>
-            ) : (
-              <>
-                <div className="block xl:flex xl:justify-around mb-24 xl:mx-16 xl:space-x-4">
-                  <div className="blcok md:hidden mt-2">
-                      <Alert message={`Expired Booking : ${remainingBookTime}`} type="info" showIcon closable />
-                  </div>
+          {isLoadingPage === true ? (
+            <>
+              <BayarLoading
+                total={parseInt(TotalAdult) + parseInt(TotalInfant)}
+              />
+            </>
+          ) : (
+            <>
+              <div className="block xl:flex xl:justify-around mb-24 xl:mx-16 xl:space-x-4">
+                <div className="blcok md:hidden mt-2">
+                  <Alert
+                    message={`Expired Booking : ${remainingBookTime}`}
+                    banner
+                  />
+                </div>
                 {/* mobile sidebar */}
-                  <div className="block xl:hidden sidebar w-full xl:w-1/2">
-                    <div className="mt-2 py-2 rounded-md border border-gray-200 shadow-sm">
-                      <div className="px-4 py-2 mb-4">
-                        {/* <div className="text-gray-500 text-xs">Status Booking</div> */}
-                        <div className="text-gray-800 text-sm font-semibold">Transaksi ID</div>
-                        <div className="mt-2 font-medium xl:font-bold text-blue-500 text-[18px]">
-                        <Paragraph copyable>{book && book.transactionId}</Paragraph>
-                        </div>
-                        <div className="text-grapy-500 text-xs">
-                        Gunakan kode bayar ini sebagai nomor tujuan pada menu pembayaran di aplikasi
+                <div className="block xl:hidden sidebar w-full xl:w-1/2">
+                  <div className="mt-2 py-2 rounded-md border border-gray-200 shadow-sm">
+                    <div className="px-4 py-2 mb-4">
+                      {/* <div className="text-gray-500 text-xs">Status Booking</div> */}
+                      <div className="text-gray-800 text-sm font-semibold">
+                        Transaksi ID
                       </div>
+                      <div className="mt-2 font-medium xl:font-bold text-blue-500 text-[18px]">
+                        <Paragraph copyable>
+                          {book && book.transactionId}
+                        </Paragraph>
                       </div>
-                      <div className="p-4 border-t">
-                        <div className="mt-3 text-xs text-gray-800">
-                          {book.SHIP_NAME}
+                      <div className="text-grapy-500 text-xs">
+                        Gunakan kode bayar ini sebagai nomor tujuan pada menu
+                        pembayaran di aplikasi.
+                      </div>
+                    </div>
+                    <div className="p-4 border-t">
+                      <div className="mt-3 text-xs text-gray-800">
+                        {book.SHIP_NAME}
+                      </div>
+                      <div className="flex space-x-4">
+                        <div className="mt-1 text-xs text-gray-800 font-medium xl:font-bold">
+                          {passengers.pelabuhan_asal}
                         </div>
-                        <div className="flex space-x-4">
-                          <div className="mt-1 text-xs text-gray-800 font-medium xl:font-bold">
-                            {passengers.pelabuhan_asal}
-                          </div>
-                          <IoArrowForwardOutline className="text-gray-800" size={18} />
-                          <div className="mt-1 text-xs text-gray-800 font-medium xl:font-bold">
-                            {passengers.pelabuhan_tujuan}
-                          </div>
+                        <IoArrowForwardOutline
+                          className="text-gray-800"
+                          size={18}
+                        />
+                        <div className="mt-1 text-xs text-gray-800 font-medium xl:font-bold">
+                          {passengers.pelabuhan_tujuan}
                         </div>
-                        <div className="mt-3 text-xs text-gray-800">
-                          {parseTanggal(passengers.departureDate)} -{" "}
-                          {parseTanggal(book.arrivalDate)}
-                        </div>
-                        <div className="mt-1 text-xs text-gray-800">
-                          {book.departureTime} - {book.arrivalTime}
-                        </div>
+                      </div>
+                      <div className="mt-3 text-xs text-gray-800">
+                        {parseTanggal(passengers.departureDate)} -{" "}
+                        {parseTanggal(book.arrivalDate)}
+                      </div>
+                      <div className="mt-1 text-xs text-gray-800">
+                        {book.departureTime} - {book.arrivalTime}
                       </div>
                     </div>
                   </div>
-                  <div className="mt-4 w-full mx-0 2xl:mx-4">
-                    {/* adult and infant */}
-                    {bookInfo.PAX_LIST.length > 0
-                      ? bookInfo.PAX_LIST.map((e, i) => (
-                          <>
-                            <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
-                              <div className="">
-                                <div className="px-2 py-2 text-gray-800 border-b border-gray-200 text-xs font-medium xl:font-bold">
-                                  {bookInfo.PAX_LIST[i][0]} (
-                                  {bookInfo.PAX_LIST[i][6] == "N/A"
-                                    ? "INFANT"
-                                    : "ADULT"}
-                                  )
-                                </div>
-                                <div className="mt-2 grid grid-cols-2">
-                                  {/* <div className="px-2 md:px-4 py-2 text-sm">
+                </div>
+                <div className="mt-4 w-full mx-0 2xl:mx-4">
+                  {/* adult and infant */}
+                  {bookInfo.PAX_LIST.length > 0
+                    ? bookInfo.PAX_LIST.map((e, i) => (
+                        <>
+                          <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+                            <div className="">
+                              <div className="px-2 py-2 text-gray-800 border-b border-gray-200 text-xs font-medium xl:font-bold">
+                                {bookInfo.PAX_LIST[i][0]} (
+                                {bookInfo.PAX_LIST[i][6] == "N/A"
+                                  ? "INFANT"
+                                  : "ADULT"}
+                                )
+                              </div>
+                              <div className="mt-2 grid grid-cols-2">
+                                {/* <div className="px-2 md:px-4 py-2 text-sm">
                                           <div className="text-gray-500">NIK</div>
                                           <div className="font-bold text-xs text-gray-600">{bookInfo.PAX_LIST[i][1]}</div>
                                       </div> */}
-                                  <div className="px-2 py-2">
-                                    <div className="text-gray-800 font-medium xl:font-bold text-xs">
-                                      Nomor HP
-                                    </div>
-                                    <div className="mt-2 text-xs text-gray-800">
-                                      {bookInfo.CALLER}
-                                    </div>
+                                <div className="px-2 py-2">
+                                  <div className="text-gray-800 font-medium xl:font-bold text-xs">
+                                    Nomor HP
                                   </div>
-                                  <div className="px-2 py-2">
-                                    <div className="text-gray-800 text-xs font-medium xl:font-bold">Kursi</div>
-                                    <div className="mt-2 text-xs text-gray-800">
-                                      {bookInfo.PAX_LIST[i][6] == "N/A"
-                                        ? " Non Seats"
-                                        : `${
-                                            bookInfo.PAX_LIST[i][2] +
-                                            "/" +
-                                            bookInfo.PAX_LIST[i][5] +
-                                            "-" +
-                                            bookInfo.PAX_LIST[i][4]
-                                          }`}
-                                    </div>
+                                  <div className="mt-2 text-xs text-gray-800">
+                                    {bookInfo.CALLER}
                                   </div>
-                                  <div className="px-2 py-2">
-                                    <div className="text-xs text-gray-800 font-medium xl:font-bold">Kelas</div>
-                                    <div className="mt-2 text-xs text-gray-800">
-                                      {bookInfo.CLASS} / Subclass ({bookInfo.SUBCLASS}
-                                      )
-                                    </div>
+                                </div>
+                                <div className="px-2 py-2">
+                                  <div className="text-gray-800 text-xs font-medium xl:font-bold">
+                                    Kursi
+                                  </div>
+                                  <div className="mt-2 text-xs text-gray-800">
+                                    {bookInfo.PAX_LIST[i][6] == "N/A"
+                                      ? " Non Seats"
+                                      : `${
+                                          bookInfo.PAX_LIST[i][2] +
+                                          "/" +
+                                          bookInfo.PAX_LIST[i][5] +
+                                          "-" +
+                                          bookInfo.PAX_LIST[i][4]
+                                        }`}
+                                  </div>
+                                </div>
+                                <div className="px-2 py-2">
+                                  <div className="text-xs text-gray-800 font-medium xl:font-bold">
+                                    Kelas
+                                  </div>
+                                  <div className="mt-2 text-xs text-gray-800">
+                                    {bookInfo.CLASS} / Subclass (
+                                    {bookInfo.SUBCLASS})
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </>
-                        ))
-                      : ""}
-                    <div className="p-2 mt-2 w-full rounded-md border border-gray-200 shadow-sm">
-                      <div className="p-2">
-                        <div className="text-xs text-gray-800 font-medium xl:font-bold flex justify-between">
-                          <div>
-                            {bookInfo && bookInfo.SHIP_NAME}{" "}
-                            {TotalAdult > 0 ? `(Adult) x${TotalAdult}` : ""}{" "}
-                            {TotalInfant > 0 ? `(Infant) x${TotalInfant}` : ""}
                           </div>
-                          <div>Rp. {book && toRupiah(book.normalSales)}</div>
+                        </>
+                      ))
+                    : ""}
+                  <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+                    <div className="p-2">
+                      <div className="text-xs text-gray-800 font-medium xl:font-bold flex justify-between">
+                        <div>
+                          {bookInfo && bookInfo.SHIP_NAME}{" "}
+                          {TotalAdult > 0 ? `(Adult) x${TotalAdult}` : ""}{" "}
+                          {TotalInfant > 0 ? `(Infant) x${TotalInfant}` : ""}
                         </div>
-                        <div className="mt-4 text-xs text-gray-800 font-medium xl:font-bold flex justify-between">
-                          <div>Biaya Admin (Fee) x{TotalAdult + TotalInfant}</div>
-                          <div>
-                            Rp.{" "}
-                            {book &&
-                              toRupiah(
-                                book.nominal_admin * (TotalAdult + TotalInfant)
-                              )}
-                          </div>
+                        <div>Rp. {book && toRupiah(book.normalSales)}</div>
+                      </div>
+                      <div className="mt-4 text-xs text-gray-800 font-medium xl:font-bold flex justify-between">
+                        <div>Biaya Admin (Fee) x{TotalAdult + TotalInfant}</div>
+                        <div>
+                          Rp.{" "}
+                          {book &&
+                            toRupiah(
+                              book.nominal_admin * (TotalAdult + TotalInfant)
+                            )}
                         </div>
-                        <div className="mt-4 text-xs text-gray-800 font-medium xl:font-bold flex justify-between">
-                          <div>Diskon (Rp.)</div>
-                          <div>Rp. {book && book.discount}</div>
-                        </div>
-                        <div className="mt-8 pt-2 border-t border-gray-200 text-sm text-gray-800 font-medium xl:font-bold flex justify-between">
-                          <div>Total Harga</div>
-                          <div>
-                            Rp.{" "}
-                            {book &&
-                              toRupiah(
-                                parseInt(book.normalSales) -
-                                  parseInt(book.discount) +
-                                  parseInt(
-                                    book.nominal_admin * (TotalAdult + TotalInfant)
-                                  )
-                              )}
-                          </div>
+                      </div>
+                      <div className="mt-4 text-xs text-gray-800 font-medium xl:font-bold flex justify-between">
+                        <div>Diskon (Rp.)</div>
+                        <div>Rp. {book && book.discount}</div>
+                      </div>
+                      <div className="mt-8 pt-2 border-t border-gray-200 text-sm text-gray-800 font-medium xl:font-bold flex justify-between">
+                        <div>Total Harga</div>
+                        <div>
+                          Rp.{" "}
+                          {book &&
+                            toRupiah(
+                              parseInt(book.normalSales) -
+                                parseInt(book.discount) +
+                                parseInt(
+                                  book.nominal_admin *
+                                    (TotalAdult + TotalInfant)
+                                )
+                            )}
                         </div>
                       </div>
                     </div>
                   </div>
-                  {/* desktop sidebar */}
-                  <div className="hidden xl:block sidebar w-full xl:w-1/2">
-                    <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
-                      <div className="px-4 py-2">
-                        {/* <div className="text-gray-500 text-xs">Status Booking</div> */}
-                        <div className="text-gray-500 text-xs">Transaksi ID</div>
-                        <div className="mt-1 font-medium xl:font-bold text-blue-500 text-[18px]">
-                        <Paragraph copyable>{book && book.transactionId}</Paragraph>
-                        </div>
-                        <div className="text-grapy-500 text-xs">
-                        Gunakan kode bayar ini sebagai nomor tujuan pada menu pembayaran di aplikasi
+
+                </div>
+                {/* desktop sidebar */}
+                <div className="hidden xl:block sidebar w-full xl:w-1/2">
+                  <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                    <div className="px-4 py-2">
+                      {/* <div className="text-gray-500 text-xs">Status Booking</div> */}
+                      <div className="text-gray-500 text-xs">Transaksi ID</div>
+                      <div className="mt-1 font-medium xl:font-bold text-blue-500 text-[18px]">
+                        <Paragraph copyable>
+                          {book && book.transactionId}
+                        </Paragraph>
                       </div>
-                      </div>
-                      <div className="p-4 border-t">
-                        <div className="text-xs text-gray-500">PELNI DESCRIPTION</div>
-                        <div className="mt-3 text-xs text-gray-800">
-                          {book.SHIP_NAME}
-                        </div>
-                        <div className="flex space-x-4">
-                          <div className="mt-1 text-xs text-gray-800 font-medium xl:font-bold">
-                            {passengers.pelabuhan_asal}
-                          </div>
-                          <IoArrowForwardOutline className="text-gray-800" size={18} />
-                          <div className="mt-1 text-xs text-gray-800 font-medium xl:font-bold">
-                            {passengers.pelabuhan_tujuan}
-                          </div>
-                        </div>
-                        <div className="mt-3 text-xs text-gray-800">
-                          {parseTanggal(passengers.departureDate)} -{" "}
-                          {parseTanggal(book.arrivalDate)}
-                        </div>
-                        <div className="mt-1 text-xs text-gray-800">
-                          {book.departureTime} - {book.arrivalTime}
-                        </div>
-                      </div>
-                      <div className="p-4 border-t">
-                        <div className="text-xs text-gray-500">LIST PASSENGERS</div>
-                        {passengers.passengers.adults &&
-                        passengers.passengers.adults.length > 0
-                          ? passengers.passengers.adults.map((e, i) => (
-                              <div className="mt-3 text-xs text-gray-800 font-medium xl:font-bold">
-                                {e.name} (Adult)
-                              </div>
-                            ))
-                          : ""}
-                        {passengers.passengers.infants &&
-                        passengers.passengers.infants.length > 0
-                          ? passengers.passengers.infants.map((e, i) => (
-                              <div className="mt-3 text-xs text-gray-800 font-medium xl:font-bold">
-                                {e.name} (Infants)
-                              </div>
-                            ))
-                          : ""}
+                      <div className="text-grapy-500 text-xs">
+                        Gunakan kode bayar ini sebagai nomor tujuan pada menu
+                        pembayaran di aplikasi.
                       </div>
                     </div>
-                    <div className="hidden md:block mt-2">
-                       <Alert message={`Expired Booking : ${remainingBookTime}`} type="info" showIcon closable />
-                    </div>
-                <div className="mt-2 py-2 rounded-md border border-gray-200 shadow-sm">
-                  {callbackBoolean == true ? (
-                    <>
-                      <div className="px-8 py-4 text-sm text-gray-500">
-                      Tekan tombol dibawah ini untuk melanjutkan proses transaksi.
-                      </div>                   
-                       <div className="flex justify-center">
-                        <ButtonAnt
-                          onClick={handleCallbackSubmit}
-                          size="large"
-                          key="submit"
-                          type="primary"
-                          className="bg-blue-500 px-12 font-semibold mt-4"
-                          loading={isLoading}
-                        >
-                          Selesai
-                        </ButtonAnt>
-                      </div>                   
-                    </>
-                  ):(
-                    <>
-                      {/* <div className="px-8 py-4 text-sm text-gray-500">
-                      Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
+                    <div className="p-4 border-t">
+                      <div className="text-xs text-gray-500">
+                        PELNI DESCRIPTION
                       </div>
-                      <div className="flex justify-center">
-                        <ButtonAnt
-                          onClick={handlerPembayaran}
-                          size="large"
-                          key="submit"
-                          type="primary"
-                          className="bg-blue-500 mx-2 font-semibold mt-4"
-                          loading={isLoading}
-                          disabled
-                        >
-                          Langsung Bayar
-                        </ButtonAnt>
-                      </div> */}
-                    </>
-                    )}
+                      <div className="mt-3 text-xs text-gray-800">
+                        {book.SHIP_NAME}
+                      </div>
+                      <div className="flex space-x-4">
+                        <div className="mt-1 text-xs text-gray-800 font-medium xl:font-bold">
+                          {passengers.pelabuhan_asal}
+                        </div>
+                        <IoArrowForwardOutline
+                          className="text-gray-800"
+                          size={18}
+                        />
+                        <div className="mt-1 text-xs text-gray-800 font-medium xl:font-bold">
+                          {passengers.pelabuhan_tujuan}
+                        </div>
+                      </div>
+                      <div className="mt-3 text-xs text-gray-800">
+                        {parseTanggal(passengers.departureDate)} -{" "}
+                        {parseTanggal(book.arrivalDate)}
+                      </div>
+                      <div className="mt-1 text-xs text-gray-800">
+                        {book.departureTime} - {book.arrivalTime}
+                      </div>
+                    </div>
+                    <div className="p-4 border-t">
+                      <div className="text-xs text-gray-500">
+                        LIST PASSENGERS
+                      </div>
+                      {passengers.passengers.adults &&
+                      passengers.passengers.adults.length > 0
+                        ? passengers.passengers.adults.map((e, i) => (
+                            <div className="mt-3 text-xs text-gray-800 font-medium xl:font-bold">
+                              {e.name} (Adult)
+                            </div>
+                          ))
+                        : ""}
+                      {passengers.passengers.infants &&
+                      passengers.passengers.infants.length > 0
+                        ? passengers.passengers.infants.map((e, i) => (
+                            <div className="mt-3 text-xs text-gray-800 font-medium xl:font-bold">
+                              {e.name} (Infants)
+                            </div>
+                          ))
+                        : ""}
+                    </div>
                   </div>
+                  <div className="hidden md:block mt-2">
+                    <Alert
+                      message={`Expired Booking : ${remainingBookTime}`}
+                      banner
+                    />
                   </div>
-                  <div className="block xl:hidden mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
-                    {callbackBoolean == true ? (
+                {callbackBoolean == true ? (
+                  <div className="mt-2 py-4 rounded-md border border-gray-200 shadow-sm">
                       <>
-                         <div className="flex justify-center">
+                        <div className="px-8 py-4 text-sm text-gray-500">
+                          Tekan tombol dibawah ini untuk melanjutkan proses
+                          transaksi.
+                        </div>
+                        <div className="flex justify-center">
                           <ButtonAnt
                             onClick={handleCallbackSubmit}
                             size="large"
                             key="submit"
                             type="primary"
-                            className="bg-blue-500 mx-2 font-semibold mt-4"
+                            className="bg-blue-500 px-12 font-semibold"
                             loading={isLoading}
                           >
-                            Selesai
+                            Bayar Sekarang
                           </ButtonAnt>
-                        </div>                      
-                      </>
-                      ) : (
-                      <>
-                        {/* <div className="px-8 py-4 text-sm text-gray-500">
-                        Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
                         </div>
-                        <div className="flex justify-center">
-                          <ButtonAnt
-                            onClick={handlerPembayaran}
-                            size="large"
-                            key="submit"
-                            type="primary"
-                            className="bg-blue-500 mx-2 font-semibold mt-4"
-                            loading={isLoading}
-                            disabled
-                          >
-                            Langsung Bayar
-                          </ButtonAnt>
-                        </div>                      */}
                       </>
-                    )}
-
                   </div>
+                ) : (
+                  <>
+                    {/* <div className="px-8 py-4 text-sm text-gray-500">
+                  Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
+                  </div>
+                  <div className="flex justify-center">
+                    <ButtonAnt
+                      onClick={handlerPembayaran}
+                      size="large"
+                      key="submit"
+                      type="primary"
+                      className="bg-blue-500 mx-2 font-semibold mt-4"
+                      loading={isLoading}
+                      disabled
+                    >
+                      Langsung Bayar
+                    </ButtonAnt>
+                  </div> */}
+                  </>
+                )}
                 </div>
-              </>
-            )
-          }
+              {callbackBoolean == true ? (
+                <div className="block xl:hidden mt-4 py-4 rounded-md border border-gray-200 shadow-sm">
+                    <>
+                      <div className="flex justify-center">
+                        <ButtonAnt
+                          onClick={handleCallbackSubmit}
+                          size="large"
+                          key="submit"
+                          type="primary"
+                          className="bg-blue-500 mx-2 font-semibold"
+                          loading={isLoading}
+                        >
+                          Bayar Sekarang
+                        </ButtonAnt>
+                      </div>
+                    </>
+                </div>
+              ) : (
+                <>
+                  {/* <div className="px-8 py-4 text-sm text-gray-500">
+                    Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
+                    </div>
+                    <div className="flex justify-center">
+                      <ButtonAnt
+                        onClick={handlerPembayaran}
+                        size="large"
+                        key="submit"
+                        type="primary"
+                        className="bg-blue-500 mx-2 font-semibold mt-4"
+                        loading={isLoading}
+                        disabled
+                      >
+                        Langsung Bayar
+                      </ButtonAnt>
+                    </div>                      */}
+                </>
+              )}
+              </div>
+            </>
+          )}
         </>
-      )
-
-    }
+      )}
     </>
   );
 }

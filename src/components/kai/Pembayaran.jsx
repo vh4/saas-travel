@@ -13,7 +13,7 @@ import Page500 from "../components/500";
 import Page400 from "../components/400";
 import PageExpired from "../components/Expired";
 import BayarLoading from "../components/trainskeleton/bayar";
-import {Typography } from 'antd';
+import { Typography } from "antd";
 import moment from "moment";
 
 export default function Pembayaran() {
@@ -72,86 +72,92 @@ export default function Pembayaran() {
     }
 
     Promise.all([getDataTrain(), getHasilBooking(), cekCallbakIsMitra()])
-      .then(([ResponsegetDataTrain, ResponsegetHasilBooking, cekCallbakIsMitra]) => {
-        
-        
-        if(cekCallbakIsMitra.data.rc == '00'){
-          setcallbackBoolean(true);
-        }
+      .then(
+        ([
+          ResponsegetDataTrain,
+          ResponsegetHasilBooking,
+          cekCallbakIsMitra,
+        ]) => {
+          if (cekCallbakIsMitra.data.rc == "00") {
+            setcallbackBoolean(true);
+          }
 
-        if (ResponsegetDataTrain) {
-          setdataDetailTrain(ResponsegetDataTrain.train_detail);
-          setdataBookingTrain(ResponsegetDataTrain.train);
+          if (ResponsegetDataTrain) {
+            setdataDetailTrain(ResponsegetDataTrain.train_detail);
+            setdataBookingTrain(ResponsegetDataTrain.train);
 
-          const dataBookingTrain = ResponsegetDataTrain.train;
-          const classTrain =
-            dataBookingTrain[0].seats[0].grade === "E"
-              ? "Eksekutif"
-              : dataBookingTrain[0].seats[0].grade === "B"
-              ? "Bisnis"
-              : "Ekonomi";
-          const tanggal_keberangkatan_kereta = parseTanggal(
-            dataBookingTrain[0].departureDate
-          );
+            const dataBookingTrain = ResponsegetDataTrain.train;
+            const classTrain =
+              dataBookingTrain[0].seats[0].grade === "E"
+                ? "Eksekutif"
+                : dataBookingTrain[0].seats[0].grade === "B"
+                ? "Bisnis"
+                : "Ekonomi";
+            const tanggal_keberangkatan_kereta = parseTanggal(
+              dataBookingTrain[0].departureDate
+            );
+          } else {
+            setErrPage(true);
+          }
 
-        } else {
-          setErrPage(true);
-        }
+          if (ResponsegetHasilBooking) {
+            setHasilBooking(ResponsegetHasilBooking.hasil_book);
+            setPassengers(ResponsegetHasilBooking.passengers);
+            setExpiredBookTime(
+              ResponsegetHasilBooking.hasil_book.timeLimit ||
+                moment().add(1, "hours")
+            );
 
-        if (ResponsegetHasilBooking) {
-          setHasilBooking(ResponsegetHasilBooking.hasil_book);
-          setPassengers(ResponsegetHasilBooking.passengers);
-          setExpiredBookTime(ResponsegetHasilBooking.hasil_book.timeLimit || moment().add(1, 'hours'))
+            const passengers = ResponsegetHasilBooking.passengers;
+            const hasilBooking = ResponsegetHasilBooking.hasil_book;
+            const initialChanges = Array();
 
-          const passengers = ResponsegetHasilBooking.passengers;
-          const hasilBooking = ResponsegetHasilBooking.hasil_book;
-          const initialChanges = Array();
-
-          hasilBooking.passengers.map((e, i) => {
-            initialChanges.push({
-              name: e,
-              type:
-                passengers.adults[i] !== null && passengers.adults[i]
-                  ? "adult"
-                  : "infant",
-              class: hasilBooking.seats[i][0],
-              wagonNumber: hasilBooking.seats[i][1],
-              row: hasilBooking.seats[i][2],
-              column: hasilBooking.seats[i][3],
-              checkbox: false,
+            hasilBooking.passengers.map((e, i) => {
+              initialChanges.push({
+                name: e,
+                type:
+                  passengers.adults[i] !== null && passengers.adults[i]
+                    ? "adult"
+                    : "infant",
+                class: hasilBooking.seats[i][0],
+                wagonNumber: hasilBooking.seats[i][1],
+                row: hasilBooking.seats[i][2],
+                column: hasilBooking.seats[i][3],
+                checkbox: false,
+              });
             });
-          });
 
-          setTotalAdult(passengers.adults.length);
-          //   setTotalChild(passengers.children ? passengers.children.length : 0);
-          setTotalInfant(passengers.infants.length);
-        } else {
-          setErrPage(true);
+            setTotalAdult(passengers.adults.length);
+            //   setTotalChild(passengers.children ? passengers.children.length : 0);
+            setTotalInfant(passengers.infants.length);
+          } else {
+            setErrPage(true);
+          }
+
+          if (
+            ResponsegetHasilBooking.hasil_book &&
+            new Date(ResponsegetHasilBooking.hasil_book.timeLimit).getTime() <
+              new Date().getTime()
+          ) {
+            setIsBookingExpired(true);
+          } else {
+            setIsBookingExpired(false);
+          }
+
+          setTimeout(() => {
+            setIsLoadingPage(false);
+          }, 1000);
         }
-
-        if (
-          ResponsegetHasilBooking.hasil_book &&
-          new Date(ResponsegetHasilBooking.hasil_book.timeLimit).getTime() < new Date().getTime()
-        ) {          
-          setIsBookingExpired(true);
-
-        } else {
-          setIsBookingExpired(false);
-        }
-
-        setTimeout(() => {
-          setIsLoadingPage(false);
-        }, 1000);
-
-      })
+      )
       .catch((error) => {
         setIsLoadingPage(false);
         setErrPage(true);
       });
-
   }, [uuid_book, uuid_train_data, token]);
 
-  const [remainingBookTime, setremainingBookTime] = useState(remainingTime(expiredBookTime));
+  const [remainingBookTime, setremainingBookTime] = useState(
+    remainingTime(expiredBookTime)
+  );
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -161,15 +167,12 @@ export default function Pembayaran() {
         hasilBooking &&
         new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()
       ) {
-        
         setIsBookingExpired(true);
-
       } else {
         setIsBookingExpired(false);
       }
-
     }, 500);
-  
+
     return () => clearInterval(intervalId);
   }, [expiredBookTime]);
 
@@ -204,7 +207,6 @@ export default function Pembayaran() {
   //     throw error;
   //   }
   // }
-
 
   async function cekCallbakIsMitra() {
     try {
@@ -290,31 +292,30 @@ export default function Pembayaran() {
     }
   }
 
-  async function handleCallbackSubmit(e){
-      e.preventDefault();
-      setIsLoading(true);
-      
-      setTimeout(async () => {
-        
-        const dataParse = JSON.parse(localStorage.getItem(`data:k-book/${uuid_book}`))
+  async function handleCallbackSubmit(e) {
+    e.preventDefault();
+    setIsLoading(true);
 
-        const response = await axios.post(
-          `${process.env.REACT_APP_HOST_API}/travel/train/callback`,
-          {
-            id_transaksi:dataParse.hasil_book.transactionId
-          }
-        );
+    setTimeout(async () => {
+      const dataParse = JSON.parse(
+        localStorage.getItem(`data:k-book/${uuid_book}`)
+      );
 
-      if(response.data.rc == '00'){
-        navigate('/')
-      }else{
-        failedNotification(response.data.rd)
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/travel/train/callback`,
+        {
+          id_transaksi: dataParse.hasil_book.transactionId,
+        }
+      );
+
+      if (response.data.rc == "00") {
+        navigate("/");
+      } else {
+        failedNotification(response.data.rd);
       }
 
       setIsLoading(false);
-
-      }, 100);
-    
+    }, 100);
   }
 
   return (
@@ -339,27 +340,25 @@ export default function Pembayaran() {
           {/* header kai flow */}
           <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
-              <AiOutlineCheckCircle className="text-slate-500" size={20} />
-              <div className="hidden xl:flex text-slate-500">
-                Detail pesanan
-              </div>
+              <AiOutlineCheckCircle className="text-gray-800" size={20} />
+              <div className="hidden xl:flex text-gray-800">Detail pesanan</div>
             </div>
             <div>
               <MdHorizontalRule
                 size={20}
-                className="hidden xl:flex text-gray-500"
+                className="hidden xl:flex text-gray-800"
               />
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
-              <AiOutlineCheckCircle className="text-slate-500" size={20} />
-              <div className="hidden xl:flex text-slate-500">
+              <AiOutlineCheckCircle className="text-gray-800" size={20} />
+              <div className="hidden xl:flex text-gray-800">
                 Konfirmasi pesanan
               </div>
             </div>
             <div className="hidden xl:flex">
               <MdHorizontalRule
                 size={20}
-                className="text-gray-500 hidden xl:flex"
+                className="text-gray-800 hidden xl:flex"
               />
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
@@ -375,22 +374,30 @@ export default function Pembayaran() {
           ) : (
             <>
               <div className="block xl:flex xl:justify-around mb-24 xl:mx-16 xl:space-x-4">
-                <div className="blcok md:hidden mt-2">
-                    <Alert message={`Expired Booking : ${remainingBookTime}`} type="info" showIcon closable />
+                <div className="block md:hidden mt-2">
+                  <Alert
+                    message={`Expired Booking : ${remainingBookTime}`}
+                    banner
+                  />
                 </div>
                 {/* mobile sidebar */}
                 <div className="sidebar block xl:hidden w-full xl:w-1/2">
                   <div className="mt-2 py-2 rounded-md border border-gray-200 shadow-sm">
                     <div className="px-4 py-2">
                       {/* <div className="text-gray-500 text-xs">Booking ID</div> */}
-                      <div className="text-gray-800 font-medium xl:font-bold text-sm">Transaksi ID</div>
+                      <div className="text-gray-800 font-medium xl:font-bold text-sm">
+                        Transaksi ID
+                      </div>
 
                       <div className="mt-2 font-medium xl:font-bold text-blue-500 text-[18px]">
                         {/* {hasilBooking && hasilBooking.bookingCode} */}
-                        <Paragraph copyable>{hasilBooking && hasilBooking.transactionId} </Paragraph>
+                        <Paragraph copyable>
+                          {hasilBooking && hasilBooking.transactionId}{" "}
+                        </Paragraph>
                       </div>
                       <div className="text-grapy-500 text-xs">
-                      Gunakan kode bayar ini sebagai nomor tujuan pada menu pembayaran di aplikasi
+                        Gunakan kode bayar ini sebagai nomor tujuan pada menu
+                        pembayaran di aplikasi.
                       </div>
                     </div>
                     <div className="p-4 border-t">
@@ -423,17 +430,25 @@ export default function Pembayaran() {
                               </div>
                               <div className="mt-2 grid grid-cols-2">
                                 <div className="px-2 py-2 text-sm">
-                                  <div className="text-gray-800 font-medium xl:font-bold">NIK</div>
+                                  <div className="text-gray-800 font-medium xl:font-bold">
+                                    NIK
+                                  </div>
                                   <div className="mt-2 text-gray-800 text-xs">
                                     {e.idNumber}
                                   </div>
                                 </div>
                                 <div className="px-2 py-2 text-sm">
-                                  <div className="text-gray-800 font-medium xl:font-bold">Nomor HP</div>
-                                  <div className="mt-2 text-gray-800 text-xs">{e.phone}</div>
+                                  <div className="text-gray-800 font-medium xl:font-bold">
+                                    Nomor HP
+                                  </div>
+                                  <div className="mt-2 text-gray-800 text-xs">
+                                    {e.phone}
+                                  </div>
                                 </div>
                                 <div className="px-2 py-2 text-sm">
-                                  <div className="text-gray-800 font-medium xl:font-bold">Kursi</div>
+                                  <div className="text-gray-800 font-medium xl:font-bold">
+                                    Kursi
+                                  </div>
                                   <div className="mt-2 text-gray-800 text-xs">
                                     {hasilBooking !== null
                                       ? hasilBooking.seats[i][0] === "EKO"
@@ -472,7 +487,9 @@ export default function Pembayaran() {
                               </div>
                               <div className="mt-2 grid grid-cols-2">
                                 <div className="px-2 py-2 text-sm">
-                                  <div className="text-gray-800 font-medium xl:font-bold">NIK</div>
+                                  <div className="text-gray-800 font-medium xl:font-bold">
+                                    NIK
+                                  </div>
                                   <div className="mt-2 text-gray-800 text-xs">
                                     {e.idNumber}
                                   </div>
@@ -486,7 +503,9 @@ export default function Pembayaran() {
                                   </div>
                                 </div>
                                 <div className="px-2 py-2 text-sm">
-                                <div className="text-gray-800 font-medium xl:font-bold">Kursi</div>
+                                  <div className="text-gray-800 font-medium xl:font-bold">
+                                    Kursi
+                                  </div>
                                   <div className="mt-2 text-gray-800 text-xs">
                                     {hasilBooking !== null
                                       ? hasilBooking.seats[i][0] === "EKO"
@@ -495,8 +514,8 @@ export default function Pembayaran() {
                                         ? "Bisnis"
                                         : "Eksekutif"
                                       : ""}{" "}
-                                      {"/"}
-                                      {" 0 "}
+                                    {"/"}
+                                    {" 0 "}
                                     {/* {hasilBooking !== null
                                       ? hasilBooking.seats[i][1]
                                       : ""}{" "} */}
@@ -515,7 +534,7 @@ export default function Pembayaran() {
                         </>
                       ))
                     : ""}
-                  <div className="p-2 mt-2 w-full rounded-md border border-gray-200 shadow-sm">
+                  <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                     <div className="p-2">
                       <div className="text-xs text-gray-800 font-medium xl:font-bold flex justify-between">
                         <div>
@@ -563,12 +582,13 @@ export default function Pembayaran() {
 
                       <div className="mt-1 font-medium xl:font-bold text-blue-500 text-[18px]">
                         {/* {hasilBooking && hasilBooking.bookingCode} */}
-                        <Paragraph copyable>{hasilBooking && hasilBooking.transactionId} </Paragraph>
-
-                                               
+                        <Paragraph copyable>
+                          {hasilBooking && hasilBooking.transactionId}{" "}
+                        </Paragraph>
                       </div>
                       <div className="text-grapy-500 text-xs">
-                      Gunakan kode bayar ini sebagai nomor tujuan pada menu pembayaran di aplikasi
+                        Gunakan kode bayar ini sebagai nomor tujuan pada menu
+                        pembayaran di aplikasi.
                       </div>
                     </div>
                     <div className="p-4 border-t">
@@ -617,88 +637,91 @@ export default function Pembayaran() {
                         ))}
                     </div>
                   </div>
-                    <div className="hidden md:block mt-2">
-                       <Alert message={`Expired Booking : ${remainingBookTime}`} type="info" showIcon closable />
-                    </div>
-                  <div className="mt-2 py-2 rounded-md border border-gray-200 shadow-sm">
-                  {callbackBoolean == true ? (
-                    <>
-                      <div className="px-8 py-4 text-sm text-gray-500">
-                      Tekan tombol dibawah ini untuk melanjutkan proses transaksi.
-                      </div>                   
-                       <div className="flex justify-center">
-                        <ButtonAnt
-                          onClick={handleCallbackSubmit}
-                          size="large"
-                          key="submit"
-                          type="primary"
-                          className="bg-blue-500 px-12 font-semibold mt-4"
-                          loading={isLoading}
-                        >
-                          Selesai
-                        </ButtonAnt>
-                      </div>                   
-                    </>
-                  ):(
-                    <>
-                      {/* <div className="px-8 py-4 text-sm text-gray-500">
-                      Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
-                      </div>
-                      <div className="flex justify-center">
-                        <ButtonAnt
-                          onClick={handlerPembayaran}
-                          size="large"
-                          key="submit"
-                          type="primary"
-                          className="bg-blue-500 mx-2 font-semibold mt-4"
-                          loading={isLoading}
-                          disabled
-                        >
-                          Langsung Bayar
-                        </ButtonAnt>
-                      </div> */}
-                    </>
-                    )}
+                  <div className="hidden md:block mt-2">
+                    <Alert
+                      message={`Expired Booking : ${remainingBookTime}`}
+                      banner
+                    />
                   </div>
-                </div>
-                  <div className="block xl:hidden mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
-                    {callbackBoolean == true ? (
+                  {callbackBoolean == true ? (
+                    <div className="mt-2 py-4 rounded-md border border-gray-200 shadow-sm">
                       <>
-                         <div className="flex justify-center">
+                        <div className="px-8 py-4 text-sm text-gray-500">
+                          Tekan tombol dibawah ini untuk melanjutkan proses
+                          transaksi.
+                        </div>
+                        <div className="flex justify-center">
                           <ButtonAnt
                             onClick={handleCallbackSubmit}
                             size="large"
                             key="submit"
                             type="primary"
-                            className="bg-blue-500 mx-2 font-semibold mt-4"
+                            className="bg-blue-500 px-8 font-semibold"
                             loading={isLoading}
                           >
-                            Selesai
+                            Bayar Sekarang
                           </ButtonAnt>
-                        </div>                      
-                      </>
-                      ) : (
-                      <>
-                        {/* <div className="px-8 py-4 text-sm text-gray-500">
-                        Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
                         </div>
-                        <div className="flex justify-center">
-                          <ButtonAnt
-                            onClick={handlerPembayaran}
-                            size="large"
-                            key="submit"
-                            type="primary"
-                            className="bg-blue-500 mx-2 font-semibold mt-4"
-                            loading={isLoading}
-                            disabled
-                          >
-                            Langsung Bayar
-                          </ButtonAnt>
-                        </div>                      */}
                       </>
-                    )}
-
-                  </div>
+                    </div>
+                  ) : (
+                    <>
+                      {/* <div className="px-8 py-4 text-sm text-gray-500">
+                    Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
+                    </div>
+                    <div className="flex justify-center">
+                      <ButtonAnt
+                        onClick={handlerPembayaran}
+                        size="large"
+                        key="submit"
+                        type="primary"
+                        className="bg-blue-500 mx-2 font-semibold mt-4"
+                        loading={isLoading}
+                        disabled
+                      >
+                        Langsung Bayar
+                      </ButtonAnt>
+                    </div> */}
+                    </>
+                  )}
+                </div>
+              {callbackBoolean == true ? (
+                <div className="block xl:hidden mt-8 py-4 rounded-md border border-gray-200 shadow-sm">
+                    <>
+                      <div className="flex justify-center">
+                        <ButtonAnt
+                          onClick={handleCallbackSubmit}
+                          size="large"
+                          key="submit"
+                          type="primary"
+                          className="bg-blue-500 mx-2 font-semibold"
+                          loading={isLoading}
+                        >
+                          Bayar Sekarang
+                        </ButtonAnt>
+                      </div>
+                    </>
+                </div>
+              ) : (
+                <>
+                  {/* <div className="px-8 py-4 text-sm text-gray-500">
+                    Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
+                    </div>
+                    <div className="flex justify-center">
+                      <ButtonAnt
+                        onClick={handlerPembayaran}
+                        size="large"
+                        key="submit"
+                        type="primary"
+                        className="bg-blue-500 mx-2 font-semibold mt-4"
+                        loading={isLoading}
+                        disabled
+                      >
+                        Langsung Bayar
+                      </ButtonAnt>
+                    </div>                      */}
+                </>
+              )}
               </div>
             </>
           )}

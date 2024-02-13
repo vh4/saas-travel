@@ -48,12 +48,12 @@ export default function HeaderTemplateMobileSearch({ children }) {
                 <IoArrowBack size={24} />
             </div>
             <div className="flex flex-col items-center justify-center text-center mx-auto">
-                <div className="flex space-x-4 items-center justify-center font-medium text-md">
+                <div className="flex space-x-4 items-center justify-center  text-md">
                     <div>{departureName} ({departure})</div>
-                    <IoArrowForwardCircle size={24} className="block font-medium" />
+                    <IoArrowForwardCircle size={24} className="block " />
                     <div>{arrivalName} ({arrival})</div>
                 </div>
-                <div className="text-xs font-medium">
+                <div className="text-xs">
                     <small>{tanggal_keberangkatan} | {parseInt(adult) + parseInt(child) + parseInt(infant)}{" "} Penumpang</small>
                 </div>
             </div>
