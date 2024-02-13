@@ -292,7 +292,7 @@ Router.post('/refresh-date', async function (req, res) {
     }
 
   } catch (error) {
-    logger.error(`Error /app/account: ${error.message}`);
+    logger.error(`Error /refresh-date: ${error.message}`);
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
 
   }
