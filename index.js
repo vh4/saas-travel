@@ -16,25 +16,6 @@ const session = require('express-session');
 const { getInfoClientAll } = require('./utils/utils');
 
 const app = express();
-
-// Define a custom CORS configuration
-const corsOptions = {
-  origin: function (origin, callback) {
-    const allowedIP = '10.9.43.5'; // Replace with the IP address you want to allow
-
-    // Check if the request origin matches the allowed IP
-    if (!origin || origin === allowedIP) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  }
-};
-
-// Use the custom CORS configuration
-app.use(cors(corsOptions));
-
-
 const port = 9999;
 
 // Use cookie-parser middleware
@@ -56,6 +37,11 @@ app.use(session({
 const url = process.env.FRONTEND_URL_OR_IP_ACCESS_CORS;
 logger.info(`.env production is alive. url hit frontend: ${url}`);
 
+app.use(cors({
+  origin:["http://localhost:3000", "http://10.0.9.88:3000", "http://10.0.9.88:1111", "http://localhost:1111", url],
+  methods: ['GET', 'POST', 'DELETE', 'PUT'],
+  credentials: true
+}));
 
 app.use(express.json());
 
