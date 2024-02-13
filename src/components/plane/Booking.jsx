@@ -468,7 +468,7 @@ useEffect(() => {
 
     const bookingResponse = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/flight/book`, book, {
-        timeout:180000 // 3 menit
+        timeout:360000 
       }
     );
 
