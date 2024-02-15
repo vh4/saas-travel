@@ -7,7 +7,7 @@ const ManyRequest = () => {
     <>
 		<div className="flex flex-col min-h-screen">
 		<div class="flex-grow flex items-center">
-			<div class="container flex flex-col md:flex-row items-center justify-center px-5 text-gray-700">
+			<div class="container flex flex-col md:flex-row items-center justify-center px-5 text-black">
 				<div class="max-w-md">
 					<div class="text-5xl font-dark font-bold">429</div>
 					<p

@@ -91,7 +91,7 @@ export default function LayoutUser({ children }) {
 
       {/* <Footer/> */}
 
-      {/* <footer className="hidden md:block border-t text-sm text-gray-800 py-6">
+      {/* <footer className="hidden md:block border-t text-sm text-black py-6">
         <div className="container mx-auto">
           <p className="text-center">
           © 2015-2023 rajabiller.com. All rights reserved.

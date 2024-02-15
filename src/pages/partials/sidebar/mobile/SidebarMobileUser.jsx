@@ -59,7 +59,7 @@ export default function SidebarMobileUser({ pathSidebar }) {
                   ? setDropdownTransaksi(false)
                   : setDropdownTransaksi(true)
               }
-              className={`flex justify-between cursor-pointer items-center p-2 text-base font-normal text-gray-500 rounded-lg `}
+              className={`flex justify-between cursor-pointer items-center p-2 text-base font-normal text-black rounded-lg `}
             >
               <div className="flex items-center">
                 <FaListAlt className="text-cyan-500" size={18} />
@@ -69,35 +69,35 @@ export default function SidebarMobileUser({ pathSidebar }) {
               </div>
               {dropdownTransaksi ? (
                 <MdOutlineKeyboardArrowDown
-                  className="text-gray-500"
+                  className="text-black"
                   size={18}
                 />
               ) : (
-                <MdOutlineKeyboardArrowUp className="text-gray-500" size={18} />
+                <MdOutlineKeyboardArrowUp className="text-black" size={18} />
               )}
             </div>
             <div className={`${!dropdownTransaksi ? "block" : "hidden"}`}>
               <Link
                 to="/transaksi/kai"
-                className={` block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500`}
+                className={` block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}
               >
-                <div className="text-gray-500 text-left text-base font-normal">
+                <div className="text-black text-left text-base font-normal">
                   Transaksi Kai
                 </div>
               </Link>
               <Link
                 to="/transaksi/pesawat"
-                className={`block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500`}
+                className={`block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}
               >
-                <div className="text-gray-500 text-left text-base font-normal">
+                <div className="text-black text-left text-base font-normal">
                   Transaksi Pesawat
                 </div>
               </Link>
               <Link
                 to="/transaksi/pelni"
-                className={`block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500`}
+                className={`block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}
               >
-                <div className="text-gray-500 text-left text-base font-normal">
+                <div className="text-black text-left text-base font-normal">
                   Transaksi Pelni
                 </div>
               </Link>
@@ -109,7 +109,7 @@ export default function SidebarMobileUser({ pathSidebar }) {
                   ? setDropdownBooking(false)
                   : setDropdownBooking(true)
               }
-              className={`flex justify-between cursor-pointer items-center p-2 text-base font-normal text-gray-500 rounded-lg `}
+              className={`flex justify-between cursor-pointer items-center p-2 text-base font-normal text-black rounded-lg `}
             >
               <div className="flex items-center">
                 <FaListAlt className="text-blue-500" size={18} />
@@ -119,42 +119,42 @@ export default function SidebarMobileUser({ pathSidebar }) {
               </div>
               {dropdownBooking ? (
                 <MdOutlineKeyboardArrowDown
-                  className="text-gray-500"
+                  className="text-black"
                   size={18}
                 />
               ) : (
-                <MdOutlineKeyboardArrowUp className="text-gray-500" size={18} />
+                <MdOutlineKeyboardArrowUp className="text-black" size={18} />
               )}
             </div>
             <div className={`${!dropdownBooking ? "block" : "hidden"}`}>
               <Link
                 to="/booking/kai"
-                className="block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500"
+                className="block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-black"
               >
-                <div className="text-gray-500 text-left text-base font-normal">
+                <div className="text-black text-left text-base font-normal">
                   Booking Kai
                 </div>
               </Link>
               <Link
                 to="/booking/pesawat"
-                className="block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500"
+                className="block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-black"
               >
-                <div className="text-gray-500 text-left text-base font-normal">
+                <div className="text-black text-left text-base font-normal">
                   Booking Pesawat
                 </div>
               </Link>
               <Link
                 to="/booking/pelni"
-                className="block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500"
+                className="block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-black"
               >
-                <div className="text-gray-500 text-left text-base font-normal">
+                <div className="text-black text-left text-base font-normal">
                   Booking Pelni
                 </div>
               </Link>
             </div>
             <Link onClick={LogoutHandler}>
               <div
-                className={`flex cursor-pointer items-center p-2 text-base font-normal text-gray-500 rounded-lg `}
+                className={`flex cursor-pointer items-center p-2 text-base font-normal text-black rounded-lg `}
               >
                 {localStorage.getItem('hdrs_c') != 'false' && (
                   <>

@@ -54,7 +54,7 @@ export default function CarouselsMobile(props) {
 
   return (
     <div className="xl:grid xl:grid-cols-2 w-full px-0 xl:px-4 xl:py-8">
-      <div className="mt-2 block md:hidden px-4 mb-4 text-gray-500">
+      <div className="mt-2 block md:hidden px-4 mb-4 text-black">
         <div className="font-semibold text-md">Haii Traveller,</div>
         <small>Selamat datang di travel indonesia.</small>
       </div>

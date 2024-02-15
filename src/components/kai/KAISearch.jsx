@@ -433,7 +433,7 @@ function KAI(){
                           <div
                               className="w-full m-2 xl:m-0 xl:pr-0"
                           >
-                              <small className="block mb-2 text-gray-800">Kota Asal</small>
+                              <small className="block mb-2 text-black">Kota Asal</small>
                               <Autocomplete
                               classes={classes}
                               className="mt-1.5"
@@ -508,7 +508,7 @@ function KAI(){
                           <div
                             className="w-full m-2 xl:m-0 xl:pr-0"
                           >
-                              <small className="mb-2 text-gray-800">Kota Tujuan</small>
+                              <small className="mb-2 text-black">Kota Tujuan</small>
                               <Autocomplete
                               classes={classes}
                               className="mt-1.5"
@@ -580,7 +580,7 @@ function KAI(){
                       </div>
                     </div>
                     <FormControl sx={{ m: 1, minWidth: 160 }}>
-                      <small className="mb-2 text-gray-800">
+                      <small className="mb-2 text-black">
                         Tanggal Berangkat
                       </small>
                       <LocalizationProvider
@@ -611,7 +611,7 @@ function KAI(){
                     </FormControl>
   
                     <FormControl sx={{ m: 1, minWidth: 120 }}>
-                      <small className="mb-2 text-gray-800">
+                      <small className="mb-2 text-black">
                         Total Penumpang
                       </small>
                       <div className="hidden md:block w-full">
@@ -626,7 +626,7 @@ function KAI(){
                           variant="outlined"
                         />
                       </div>
-                        <Button className="w-full block md:hidden text-gray-800" size="large" onClick={handleClick}>
+                        <Button className="w-full block md:hidden text-black" size="large" onClick={handleClick}>
                         {`${parseInt(adult) + parseInt(infant)} Penumpang`}
                         </Button>
                       <div
@@ -634,8 +634,8 @@ function KAI(){
                         className={`${anchorEl} relative md:absolute top-0 md:top-20 md:z-10 grid w-full md:w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}
                       >
                         <div className="w-full md:w-48 block md:mx-0">
-                          <div className="mt-4 w-full items-center text-gray-800">
-                            <div className="w-full items-center text-gray-800">
+                          <div className="mt-4 w-full items-center text-black">
+                            <div className="w-full items-center text-black">
                             <div className="text-sm text-center header-number mb-4">
                               <p>Adult (≥ 3 thn)</p>
                             </div>
@@ -646,8 +646,8 @@ function KAI(){
                             </InputGroup>
                           </div>
                           </div>
-                          <div className="mt-4 w-full items-center text-gray-800">
-                            <div className="mt-4 w-full items-center text-gray-800">
+                          <div className="mt-4 w-full items-center text-black">
+                            <div className="mt-4 w-full items-center text-black">
                             <div className="text-sm text-center header-number mb-4">
                               <p>Infant ({`<`} 3 thn) </p>
                             </div>

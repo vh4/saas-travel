@@ -45,35 +45,35 @@ export default function SidebarUser({pathSidebar}) {
             <div className="flex mb-8 justify-center overflow-y-auto py-4 px-3 rounded  h-full " >
                 <ul className="mt-8 md:mt-0 space-y-2 relative">
                     <li className='hidden md:block mb-4'>
-                        <div className={`flex items-center p-2 text-base font-normal text-gray-500 rounded-lg `}>
+                        <div className={`flex items-center p-2 text-base font-normal text-black rounded-lg `}>
                             <div><Avatar size={48} icon={<UserOutlined />} /></div>
-                            <span className="text-sm font-bold text-gray-500 flex-1 ml-3 whitespace-nowrap">{localStorage.getItem('c_name')
+                            <span className="text-sm font-bold text-black flex-1 ml-3 whitespace-nowrap">{localStorage.getItem('c_name')
                               ? localStorage.getItem('c_name').charAt(0).toUpperCase() + localStorage.getItem('c_name').slice(1)
                               : 'Rb Travell'}</span>
                         </div>
                     </li> 
                     <li className='ml-4'>
-                        <div onClick={(e) => dropdownTransaksi === true ? setDropdownTransaksi(false) : setDropdownTransaksi(true)}  className={`flex justify-between cursor-pointer items-center p-2 text-base font-normal text-gray-500 rounded-lg  hover:bg-cyan-100 `}>
+                        <div onClick={(e) => dropdownTransaksi === true ? setDropdownTransaksi(false) : setDropdownTransaksi(true)}  className={`flex justify-between cursor-pointer items-center p-2 text-base font-normal text-black rounded-lg  hover:bg-cyan-100 `}>
                             <div className='flex items-center'>
                                 <FaListAlt className="text-cyan-500" size={18} />
                                 <span className="flex-1 ml-3 whitespace-nowrap">List Transaksi</span>
                             </div>
-                            { dropdownTransaksi ? <MdOutlineKeyboardArrowDown className='text-gray-500' size={18} /> : <MdOutlineKeyboardArrowUp className='text-gray-500' size={18} />}
+                            { dropdownTransaksi ? <MdOutlineKeyboardArrowDown className='text-black' size={18} /> : <MdOutlineKeyboardArrowUp className='text-black' size={18} />}
                         </div>
                         <div
                         className={`${!dropdownTransaksi ? 'block' : 'hidden'}`}
                         >
-                            <Link to='/transaksi/kai' className={`${ pathSidebar === '/transaksi/kai' ? 'bg-cyan-100' : ''} block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500`}>
+                            <Link to='/transaksi/kai' className={`${ pathSidebar === '/transaksi/kai' ? 'bg-cyan-100' : ''} block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}>
                                 <div className=''>
                                     Transaksi Kai
                                 </div>
                             </Link>
-                            <Link to='/transaksi/pesawat' className={`${ pathSidebar === '/transaksi/pesawat' ? 'bg-cyan-100' : ''} block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500`}>
+                            <Link to='/transaksi/pesawat' className={`${ pathSidebar === '/transaksi/pesawat' ? 'bg-cyan-100' : ''} block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}>
                                 <div className=' '>
                                     Transaksi Pesawat
                                 </div>
                             </Link>
-                            <Link to='/transaksi/pelni' className={`${ pathSidebar === '/transaksi/pelni' ? 'bg-cyan-100' : ''} block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500`}>
+                            <Link to='/transaksi/pelni' className={`${ pathSidebar === '/transaksi/pelni' ? 'bg-cyan-100' : ''} block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}>
                                 <div className=' '>
                                     Transaksi Pelni
                                 </div>
@@ -81,28 +81,28 @@ export default function SidebarUser({pathSidebar}) {
                         </div>
                     </li>
                     <li className='ml-4'>
-                        <div onClick={(e) => dropdownBooking === true ? setDropdownBooking(false) : setDropdownBooking(true)}  className={`flex justify-between cursor-pointer ${ pathSidebar === 'booking' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-gray-500 rounded-lg  hover:bg-cyan-100 `}>
+                        <div onClick={(e) => dropdownBooking === true ? setDropdownBooking(false) : setDropdownBooking(true)}  className={`flex justify-between cursor-pointer ${ pathSidebar === 'booking' ? 'bg-gray-200' : ''} items-center p-2 text-base font-normal text-black rounded-lg  hover:bg-cyan-100 `}>
                             <div className='flex items-center'>
                                 <FaListAlt className="text-blue-500" size={18} />
                                 <span className="flex-1 ml-3 whitespace-nowrap">List Booking</span>
                             </div>
-                            { dropdownBooking ? <MdOutlineKeyboardArrowDown className='text-gray-500' size={18} /> : <MdOutlineKeyboardArrowUp className='text-gray-500' size={18} />}
+                            { dropdownBooking ? <MdOutlineKeyboardArrowDown className='text-black' size={18} /> : <MdOutlineKeyboardArrowUp className='text-black' size={18} />}
                         </div>
                         <div
                         className={`${!dropdownBooking ? 'block' : 'hidden'}`}
 
                         >
-                            <Link to='/booking/kai' className={`${ pathSidebar === '/booking/kai' ? 'bg-cyan-100' : ''} block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500`}>
+                            <Link to='/booking/kai' className={`${ pathSidebar === '/booking/kai' ? 'bg-cyan-100' : ''} block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-black`}>
                                 <div className=''>
                                 Booking Kai
                                 </div>
                             </Link>
-                            <Link to='/booking/pesawat' className={`${ pathSidebar === '/booking/pesawat' ? 'bg-cyan-100' : ''} block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500`}>
+                            <Link to='/booking/pesawat' className={`${ pathSidebar === '/booking/pesawat' ? 'bg-cyan-100' : ''} block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-black`}>
                                 <div className=' '>
                                     Booking Pesawat
                                 </div>
                             </Link>
-                            <Link to='/booking/pelni' className={`${ pathSidebar === '/booking/pelni' ? 'bg-cyan-100' : ''} block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-gray-500`}>
+                            <Link to='/booking/pelni' className={`${ pathSidebar === '/booking/pelni' ? 'bg-cyan-100' : ''} block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-black`}>
                                 <div className=' '>
                                     Booking Pelni
                                 </div>

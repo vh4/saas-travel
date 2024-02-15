@@ -356,13 +356,13 @@ export default function Search() {
         <>
           <>
             {contextHolder}
-            <div className="judul-search font-bold text-gray-800">
+            <div className="judul-search font-bold text-black">
               PILIH JADWAL
             </div>
             <div className="mt-4 md:mt-8">
               <div className="block md:flex flex-col md:flex-row md:justify-between items-center md:space-x-4">
                 <div className="hidden md:flex items-center space-x-3 text-center md:text-left">
-                  <small className="text-xs font-medium xl:font-bold text-slate-600">
+                  <small className="text-xs font-medium xl:font-bold text-black">
                     {originName}
                   </small>
                   <div className="hidden md:flex bg-blue-500 p-1 rounded-full">
@@ -371,27 +371,27 @@ export default function Search() {
                       size={16}
                     />
                   </div>
-                  <small className="hidden md:flex text-xs font-medium xl:font-bold text-slate-600">
+                  <small className="hidden md:flex text-xs font-medium xl:font-bold text-black">
                     {destinationName}
                   </small>
-                  <div className="hidden md:block font-normal text-slate-600">
+                  <div className="hidden md:block font-normal text-black">
                     |
                   </div>
-                  <div className="hidden md:flex space-x-4 text-xs font-bold text-slate-600">
+                  <div className="hidden md:flex space-x-4 text-xs font-bold text-black">
                     <div>{parseTanggalPelni(startDate)}</div>
                     <div>s.d</div>
                     <div>{parseTanggalPelni(endDate)}</div>
                   </div>
-                  <div className="hidden md:block font-normal text-slate-600">
+                  <div className="hidden md:block font-normal text-black">
                     |
                   </div>
-                  <small className="hidden md:block text-xs font-bold text-slate-600">
+                  <small className="hidden md:block text-xs font-bold text-black">
                     {parseInt(laki) + parseInt(wanita)} Penumpang
                   </small>
                 </div>
               </div>
               <div className="flex justify-between mt-8">
-                  <div className="relative flex items-center space-x-2 text-gray-800 text-xs font-medium xl:font-bold">
+                  <div className="relative flex items-center space-x-2 text-black text-xs font-medium xl:font-bold">
                     <Whisper
                       placement="bottomStart"
                       trigger="active"
@@ -520,7 +520,7 @@ export default function Search() {
                                 } border border-gray-200 rounded-lg shadow-sm  hover:border transition-transform transform hover:scale-105`}
                               >
                                 {/* desktop cari */}
-                                <div className="hidden xl:block w-full text-gray-700 ">
+                                <div className="hidden xl:block w-full text-black ">
                                   <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-8 gap-0 md:gap-4">
                                     <div className="col-span-1 xl:col-span-2">
                                       <h1 className="text-sm font-medium xl:font-bold">
@@ -638,7 +638,7 @@ export default function Search() {
                                   <div
                                     onClick={async () => e.fares[i]["M_available"] == "0" &&
                                     e.fares[i]["F_available"] == "0" ? "" : handleSubmit(e, i)}
-                                    className="cursor-pointer block xl:hidden w-full text-gray-700"
+                                    className="cursor-pointer block xl:hidden w-full text-black"
                                   >
                                     <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                                       <div className="flex justify-between">
@@ -680,13 +680,13 @@ export default function Search() {
                                               0,
                                               2
                                             )}:${e.DEP_TIME.slice(2)}`}</h1>
-                                            <small className="text-gray-800">
+                                            <small className="text-black">
                                               {originName}
                                             </small>
                                           </div>
                                           <div className="w-full mt-12 px-4 border-b-2"></div>
                                           <div className="text-xs">
-                                            <h1 className="text-xs mt-10 xl:mt-0 text-gray-800">
+                                            <h1 className="text-xs mt-10 xl:mt-0 text-black">
                                               {duration(
                                                 e.DEP_DATE,
                                                 e.ARV_DATE,
@@ -694,7 +694,7 @@ export default function Search() {
                                                 e.ARV_TIME
                                               )}
                                             </h1>
-                                            <small className="text-gray-800">
+                                            <small className="text-black">
                                               Langsung
                                             </small>
                                           </div>
@@ -704,7 +704,7 @@ export default function Search() {
                                               0,
                                               2
                                             )}:${e.ARV_TIME.slice(2)}`}</h1>
-                                            <small className="text-gray-800">
+                                            <small className="text-black">
                                               {destinationName}
                                             </small>
                                           </div>
@@ -783,7 +783,7 @@ export default function Search() {
                                 } border border-gray-200 rounded-lg shadow-sm  hover:border transition-transform transform hover:scale-105`}
                               >
                                 {/* desktop cari */}
-                                <div className="hidden xl:block w-full text-gray-700 ">
+                                <div className="hidden xl:block w-full text-black ">
                                   <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-8 gap-0 md:gap-4">
                                     <div className="col-span-1 xl:col-span-2">
                                       <h1 className="text-sm font-medium xl:font-bold">
@@ -867,7 +867,7 @@ export default function Search() {
                                   <div
                                     onClick={async () => e.fares[i]["M_available"] == "0" &&
                                     e.fares[i]["F_available"] == "0" ? "" : handleSubmit(e, i)}
-                                    className="cursor-pointer block xl:hidden w-full text-gray-700"
+                                    className="cursor-pointer block xl:hidden w-full text-black"
                                   >
                                     <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                                       <div className="flex justify-between">
@@ -902,13 +902,13 @@ export default function Search() {
                                               0,
                                               2
                                             )}:${e.DEP_TIME.slice(2)}`}</h1>
-                                            <small className="text-gray-800">
+                                            <small className="text-black">
                                               {originName}
                                             </small>
                                           </div>
                                           <div className="w-full mt-12 px-4 border-b-2"></div>
                                           <div className="text-xs">
-                                            <h1 className="text-xs mt-10 xl:mt-0 text-gray-800">
+                                            <h1 className="text-xs mt-10 xl:mt-0 text-black">
                                               {duration(
                                                 e.DEP_DATE,
                                                 e.ARV_DATE,
@@ -916,7 +916,7 @@ export default function Search() {
                                                 e.ARV_TIME
                                               )}
                                             </h1>
-                                            <small className="text-gray-800">
+                                            <small className="text-black">
                                               Langsung
                                             </small>
                                           </div>
@@ -926,7 +926,7 @@ export default function Search() {
                                               0,
                                               2
                                             )}:${e.ARV_TIME.slice(2)}`}</h1>
-                                            <small className="text-gray-800">
+                                            <small className="text-black">
                                               {destinationName}
                                             </small>
                                           </div>
@@ -988,8 +988,8 @@ export default function Search() {
                 <div className="flex justify-center items-center">
                   <img src={"/nodata.jpg"} className="w-[200px] md:w-[300px]" alt="No data" />
                 </div>
-                <div className="flex justify-center w-full text-gray-700">
-                  <div className="text-gray-800 text-center">
+                <div className="flex justify-center w-full text-black">
+                  <div className="text-black text-center">
                     <div>
                       <div className="text-sm md:text-md font-medium">
                         Maaf, sepertinya pada rute ini masih belum dibuka kembali.

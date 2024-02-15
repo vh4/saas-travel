@@ -548,7 +548,7 @@ function Plane() {
                   className={`grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-2`}
                 >
                   <div class="w-full mt-1.5 pl-2 md:pl-0 mx-0">
-                    <small className="mb-2 text-gray-800">Pilih Maskapai</small>
+                    <small className="mb-2 text-black">Pilih Maskapai</small>
                     <Tooltip>
                     <Button
                         onClick={() => handleOpen("lg")}
@@ -568,7 +568,7 @@ function Plane() {
                       <div
                         className="w-full m-2 xl:m-0 pr-4 xl:pr-0"
                       >
-                        <small className="block mb-2 text-gray-800">
+                        <small className="block mb-2 text-black">
                           Kota Asal
                         </small>
                         <Autocomplete
@@ -650,7 +650,7 @@ function Plane() {
                         <div
                           className="w-full m-2 xl:m-0 pr-4 xl:pr-0"
                         >
-                          <small className="block mb-2 text-gray-800">
+                          <small className="block mb-2 text-black">
                             Kota Tujuan
                           </small>
                           <Autocomplete
@@ -728,7 +728,7 @@ function Plane() {
                     </div>
                   </div>
                   <FormControl sx={{ m: 1, minWidth: 160 }}>
-                    <small className="mb-2 text-gray-800">
+                    <small className="mb-2 text-black">
                       Tanggal Berangkat
                     </small>
                     <DatePicker
@@ -755,7 +755,7 @@ function Plane() {
                     />
                   </FormControl>
                   <FormControl sx={{ m: 1, minWidth: 130 }}>
-                    <small className="mb-2 text-gray-800">
+                    <small className="mb-2 text-black">
                       Total Penumpang
                     </small>
                     <div className="hidden md:block">
@@ -774,7 +774,7 @@ function Plane() {
                       variant="outlined"
                     />
                     </div>
-                    <Button className="w-full block md:hidden text-gray-800" size="large" onClick={handleClick}>
+                    <Button className="w-full block md:hidden text-black" size="large" onClick={handleClick}>
                     {`${
                         parseInt(adult) + parseInt(infant) + parseInt(child)
                       } Penumpang`}
@@ -784,7 +784,7 @@ function Plane() {
                       className={`${anchorEl} relative md:absolute top-0 md:top-20 md:z-10 grid w-full md:w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg`}
                     >
                       <div className="w-full md:w-48 block md:mx-0">
-                        <div className="w-full items-center text-gray-800">
+                        <div className="w-full items-center text-black">
                           <div className="text-sm text-center header-number mb-4">
                             <p>Adult (12 thn keatas)</p>
                           </div>
@@ -794,7 +794,7 @@ function Plane() {
                             <InputGroup.Button onClick={plusAdult}>+</InputGroup.Button>
                           </InputGroup>
                         </div>
-                        <div className="mt-4 mb-4 w-full items-center text-gray-800">
+                        <div className="mt-4 mb-4 w-full items-center text-black">
                           <div className="text-sm text-center header-number mb-4">
                             <p>Child (2 - 11 thn)</p>
                           </div>
@@ -804,7 +804,7 @@ function Plane() {
                             <InputGroup.Button onClick={plusChild}>+</InputGroup.Button>
                           </InputGroup>
                         </div>
-                        <div className="mt-4 w-full items-center text-gray-800">
+                        <div className="mt-4 w-full items-center text-black">
                           <div className="text-sm text-center header-number mb-4">
                             <p>Infant (dibawah 2 thn)</p>
                           </div>

@@ -9,7 +9,7 @@ const ExpiredLogin = () => {
     <>
       <div className="flex flex-col min-h-screen items-center">
         <div className="flex-grow flex items-center">
-          <div className="container flex flex-col md:flex-row items-center justify-center px-5 text-gray-700">
+          <div className="container flex flex-col md:flex-row items-center justify-center px-5 text-black">
             <div className="max-w-md text-center">
               <p className="text-2xl md:text-3xl font-light leading-normal">
                 Session Expired.

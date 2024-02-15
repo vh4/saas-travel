@@ -64,15 +64,15 @@ const Sidebar = () => {
 		<div>
 		<div className="hidden xl:block rounded-md border border-gray-200 shadow-sm">
 		<div className="p-2 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-		<div className="text-gray-700 text-sm ">
+		<div className="text-black text-sm ">
 			<Skeleton width={150} />
 		</div>
-		<small className="text-xs text-gray-700">
+		<small className="text-xs text-black">
 			<Skeleton width={100} />
 		</small>
 		</div>
 		<div className="px-4 xl:px-8 p-4 flex justify-between space-x-12 items-center">
-		<div className="text-xs  text-slate-600">
+		<div className="text-xs  text-black">
 			<div>
 			<Skeleton width={100} />
 			</div>
@@ -83,7 +83,7 @@ const Sidebar = () => {
 		<div className="rounded-full p-2 bg-blue-500 text-white">
 			<IoArrowForwardOutline />
 		</div>
-		<div className="text-xs  text-slate-600">
+		<div className="text-xs  text-black">
 			<div>
 			<Skeleton width={100} />
 			</div>
@@ -93,7 +93,7 @@ const Sidebar = () => {
 		</div>
 		</div>
 
-		<div className="p-4 pl-8 text-gray-700">
+		<div className="p-4 pl-8 text-black">
 		<div className="text-xs ">
 			<Skeleton width={150} />
 		</div>
@@ -110,10 +110,10 @@ const Sidebar = () => {
 				<Skeleton width={100} />
 				</time>
 				<div className="-mt-2">
-				<h3 className="text-left text-xs  text-slate-600 ">
+				<h3 className="text-left text-xs  text-black ">
 					<Skeleton width={100} />
 				</h3>
-				<p className="text-left text-xs  text-gray-500 ">
+				<p className="text-left text-xs  text-black ">
 					<Skeleton width={50} />
 				</p>
 				</div>
@@ -126,10 +126,10 @@ const Sidebar = () => {
 				<Skeleton width={100} />
 				</time>
 				<div className="-mt-2">
-				<h3 className="text-left text-xs  text-slate-600 ">
+				<h3 className="text-left text-xs  text-black ">
 					<Skeleton width={100} />
 				</h3>
-				<p className="text-left text-xs  text-gray-500 ">
+				<p className="text-left text-xs  text-black ">
 					<Skeleton width={50} />
 				</p>
 				</div>
@@ -149,15 +149,15 @@ const SidebarMobile = () => {
 		<div>
 		<div className="block xl:hidden rounded-md border border-gray-200 shadow-sm">
 		<div className="p-2 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-		<div className="text-gray-700 text-sm ">
+		<div className="text-black text-sm ">
 			<Skeleton width={150} />
 		</div>
-		<small className="text-xs text-gray-700">
+		<small className="text-xs text-black">
 			<Skeleton width={100} />
 		</small>
 		</div>
 		<div className="px-4 xl:px-8 p-4 flex justify-between space-x-12 items-center">
-		<div className="text-xs  text-slate-600">
+		<div className="text-xs  text-black">
 			<div>
 			<Skeleton width={50} />
 			</div>
@@ -168,7 +168,7 @@ const SidebarMobile = () => {
 		<div className="rounded-full p-2 bg-blue-500 text-white">
 			<IoArrowForwardOutline />
 		</div>
-		<div className="text-xs  text-slate-600">
+		<div className="text-xs  text-black">
 			<div>
 			<Skeleton width={50} />
 			</div>
@@ -178,7 +178,7 @@ const SidebarMobile = () => {
 		</div>
 		</div>
 
-		<div className="p-4 pl-8 text-gray-700">
+		<div className="p-4 pl-8 text-black">
 		<div className="text-xs ">
 			<Skeleton width={150} />
 		</div>
@@ -195,10 +195,10 @@ const SidebarMobile = () => {
 				<Skeleton width={100} />
 				</time>
 				<div className="-mt-2">
-				<h3 className="text-left text-xs  text-slate-600 ">
+				<h3 className="text-left text-xs  text-black ">
 					<Skeleton width={100} />
 				</h3>
-				<p className="text-left text-xs  text-gray-500 ">
+				<p className="text-left text-xs  text-black ">
 					<Skeleton width={50} />
 				</p>
 				</div>
@@ -211,10 +211,10 @@ const SidebarMobile = () => {
 				<Skeleton width={100} />
 				</time>
 				<div className="-mt-2">
-				<h3 className="text-left text-xs  text-slate-600 ">
+				<h3 className="text-left text-xs  text-black ">
 					<Skeleton width={100} />
 				</h3>
-				<p className="text-left text-xs  text-gray-500 ">
+				<p className="text-left text-xs  text-black ">
 					<Skeleton width={50} />
 				</p>
 				</div>

@@ -584,7 +584,7 @@ export default function BookingPelni() {
               <p>Apakah Anda yakin ingin submit data?</p>
             </Modal>
         <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
-          <div className="hidden xl:flex space-x-2 items-center text-gray-800">
+          <div className="hidden xl:flex space-x-2 items-center text-black">
             <div className="hidden xl:flex text-blue-500 font-medium xl:font-bold">
               Detail pesanan
             </div>
@@ -592,24 +592,24 @@ export default function BookingPelni() {
           <div>
             <MdHorizontalRule
               size={20}
-              className="hidden xl:flex text-gray-800"
+              className="hidden xl:flex text-black"
             />
           </div>
           <div className="hidden xl:flex space-x-2 items-center">
-            <RxCrossCircled size={20} className="text-gray-800" />
-            <div className="hidden xl:block text-gray-800">
+            <RxCrossCircled size={20} className="text-black" />
+            <div className="hidden xl:block text-black">
               Pembayaran tiket
             </div>
           </div>
           {/* <div>
             <MdHorizontalRule
               size={20}
-              className="text-gray-500 hidden xl:flex"
+              className="text-black hidden xl:flex"
             />
           </div>
           <div className="flex space-x-2 items-center">
-            <RxCrossCircled size={20} className="text-gray-800" />
-            <div className="text-gray-800">E-Tiket</div>
+            <RxCrossCircled size={20} className="text-black" />
+            <div className="text-black">E-Tiket</div>
           </div> */}
         </div>
 
@@ -622,23 +622,23 @@ export default function BookingPelni() {
           {/* sidebar mobile kai*/}
           <div className="mt-8 block xl:hidden w-full rounded-md border border-gray-200 shadow-sm">
             <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-              <div className="text-gray-800 font-medium xl:font-bold">Keberangkatan Kapal</div>
-              <small className="text-xs text-gray-700 ">{duration}</small>
+              <div className="text-black font-medium xl:font-bold">Keberangkatan Kapal</div>
+              <small className="text-xs text-black ">{duration}</small>
             </div>
             <div className="p-4 px-4 flex justify-between space-x-12 items-center">
-              <div className="text-gray-800 text-xs">
+              <div className="text-black text-xs">
                 <div>{dataDetailPelni && dataDetailPelni.pelabuhan_asal}</div>
                 <div>{tanggal_keberangkatan_pelni}</div>
               </div>
               <div className="rounded-full p-2 bg-blue-500">
                 <IoArrowForwardOutline className="text-white" size={18} />
               </div>
-              <div className="text-gray-800 text-xs">
+              <div className="text-black text-xs">
                 <div>{dataDetailPelni && dataDetailPelni.pelabuhan_tujuan}</div>
                 <div>{tanggal_tujuan_pelni}</div>
               </div>
             </div>
-            <div className="p-4 pl-8  text-gray-800">
+            <div className="p-4 pl-8  text-black">
               <div className="text-xs font-medium xl:font-bold">
                 {dataDetailPelni.shipName}
               </div>
@@ -651,11 +651,11 @@ export default function BookingPelni() {
                 <li class="mb-10 ml-4">
                   <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800 "></div>
                   <div className="flex space-x-12">
-                    <time class="mb-1 text-sm font-normal leading-none text-gray-800 ">
+                    <time class="mb-1 text-sm font-normal leading-none text-black ">
                       {dataDetailPelni && dataDetailPelni.departureTime}
                     </time>
                     <div className="-mt-2">
-                      <div class="text-left text-xs text-gray-800">
+                      <div class="text-left text-xs text-black">
                         {dataDetailPelni && dataDetailPelni.pelabuhan_asal}
                       </div>
                     </div>
@@ -664,11 +664,11 @@ export default function BookingPelni() {
                 <li class="ml-4">
                   <div class="absolute w-4 h-4 bg-blue-500 rounded-full mt-0 -left-2 border border-white "></div>
                   <div className="flex space-x-12">
-                    <time class="mb-1 text-sm leading-none text-gray-800 ">
+                    <time class="mb-1 text-sm leading-none text-black ">
                       {dataDetailPelni && dataDetailPelni.arrivalTime}
                     </time>
                     <div className="-mt-2">
-                      <div class="text-left text-xs  text-gray-800 ">
+                      <div class="text-left text-xs  text-black ">
                         {dataDetailPelni && dataDetailPelni.pelabuhan_tujuan}
                       </div>
                     </div>
@@ -689,7 +689,7 @@ export default function BookingPelni() {
                   <div className="p-4 xl:p-8 form block xl:flex xl:space-x-2">
                     {/* mobile & desktop Nama*/}
                     <div className="xl:w-full mt-4 xl:mt-0">
-                      <div className="text-gray-800 text-sm">Email Address</div>
+                      <div className="text-black text-sm">Email Address</div>
                       <div className="block xl:flex xl:space-x-6">
                         <div className="w-full">
                           <Form.Item
@@ -725,7 +725,7 @@ export default function BookingPelni() {
                     <div className="w-full mt-4 xl:mt-0">
                       {/* desktop nomor hp */}
                       <div className="w-full">
-                        <div className="text-gray-800 text-sm mb-2 ml-2">
+                        <div className="text-black text-sm mb-2 ml-2">
                           Nomor HP
                         </div>
                         <Form.Item
@@ -771,10 +771,10 @@ export default function BookingPelni() {
                   <>
                     <div>
                       <div className="Booking  mt-8 mb-4 xl:mt-12 ml-2 xl:ml-0">
-                        <h1 className="text-sm font-medium xl:font-bold text-gray-800">
+                        <h1 className="text-sm font-medium xl:font-bold text-black">
                           PRIA PASSENGER
                         </h1>
-                        <small className="text-gray-500">
+                        <small className="text-black">
                           Isi sesuai dengan data anda
                         </small>
                       </div>
@@ -786,7 +786,7 @@ export default function BookingPelni() {
                             <div className="p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8">
                               {/* mobile & desktop Nama*/}
                               <div className="xl:w-full mt-4 xl:mt-0">
-                                <div className="text-gray-800 text-sm">
+                                <div className="text-black text-sm">
                                   Titel Anda
                                 </div>
                                 <div className="hidden xl:block">
@@ -833,7 +833,7 @@ export default function BookingPelni() {
                                 </div>
                                 <div className="w-full grid grid-cols-1 mt-4">
                                   <div className="w-full">
-                                    <div className="text-gray-800 text-sm">
+                                    <div className="text-black text-sm">
                                       Nama Lengkap
                                     </div>
                                     <Form.Item
@@ -884,7 +884,7 @@ export default function BookingPelni() {
                             <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
                               {/* mobile & desktop NIK*/}
                               <div className="w-full px-4 xl:px-0">
-                                <div className="xl:px-0 w-full text-gray-800 text-sm mb-2">
+                                <div className="xl:px-0 w-full text-black text-sm mb-2">
                                   Tanggal Lahir
                                 </div>
                                 <Form.Item
@@ -930,7 +930,7 @@ export default function BookingPelni() {
                               </div>
                               <div className="w-full">
                                 <div className="px-4 xl:px-0 w-full block mt-8 xl:mt-0">
-                                  <div className="text-gray-800 text-sm mb-2">
+                                  <div className="text-black text-sm mb-2">
                                     No. Ktp
                                   </div>
                                   <Form.Item
@@ -996,10 +996,10 @@ export default function BookingPelni() {
                   <>
                     <div>
                       <div className="Booking  mt-8 mb-4 xl:mt-12 ml-2 xl:ml-0">
-                        <h1 className="text-sm font-medium xl:font-bold text-gray-800">
+                        <h1 className="text-sm font-medium xl:font-bold text-black">
                           WANITA PASSENGER
                         </h1>
-                        <small className="text-gray-500">
+                        <small className="text-black">
                           Isi sesuai dengan data anda
                         </small>
                       </div>
@@ -1011,7 +1011,7 @@ export default function BookingPelni() {
                             <div className="p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8">
                               {/* mobile & desktop Nama*/}
                               <div className="xl:w-full mt-4 xl:mt-0">
-                                <div className="text-gray-800 text-sm">
+                                <div className="text-black text-sm">
                                   Titel Anda
                                 </div>
                                 <div className="hidden xl:block">
@@ -1058,7 +1058,7 @@ export default function BookingPelni() {
                                 </div>
                                 <div className="w-full grid grid-cols-1 mt-4">
                                   <div className="w-full">
-                                    <div className="text-gray-800 text-sm">
+                                    <div className="text-black text-sm">
                                       Nama Lengkap
                                     </div>
                                     <Form.Item
@@ -1109,7 +1109,7 @@ export default function BookingPelni() {
                             <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
                               {/* mobile & desktop NIK*/}
                               <div className="w-full px-4 xl:px-0">
-                                <div className="xl:px-0 w-full text-gray-800 text-sm mb-2">
+                                <div className="xl:px-0 w-full text-black text-sm mb-2">
                                   Tanggal Lahir
                                 </div>
                                 <Form.Item
@@ -1155,7 +1155,7 @@ export default function BookingPelni() {
                               </div>
                               <div className="w-full">
                                 <div className="px-4 xl:px-0 w-full block mt-8 xl:mt-0">
-                                  <div className="text-gray-800 text-sm mb-2">
+                                  <div className="text-black text-sm mb-2">
                                     No. Ktp
                                   </div>
                                   <Form.Item
@@ -1231,17 +1231,17 @@ export default function BookingPelni() {
             <div className="w-1/2 xl:mt-12">
               <div className="hidden xl:block rounded-md border border-gray-200 shadow-sm">
                 <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-                  <div className="text-gray-800 text-sm font-medium xl:font-bold">
+                  <div className="text-black text-sm font-medium xl:font-bold">
                     Keberangkatan Kapal
                   </div>
-                  <small className="text-xs text-gray-800">{duration}</small>
+                  <small className="text-xs text-black">{duration}</small>
                 </div>
                 <div className="px-4 xl:px-8 p-4 flex justify-between space-x-12 items-center">
                   <div className="text-xs">
-                    <div className="font-medium xl:font-bold text-gray-800">
+                    <div className="font-medium xl:font-bold text-black">
                       {dataDetailPelni && dataDetailPelni.pelabuhan_asal}
                     </div>
-                    <small className="text-xs text-gray-800">
+                    <small className="text-xs text-black">
                       ({tanggal_keberangkatan_pelni})
                     </small>
                   </div>
@@ -1249,16 +1249,16 @@ export default function BookingPelni() {
                     <IoArrowForwardOutline className="text-white" size={18} />
                   </div>
                   <div className="text-xs">
-                    <div className="font-medium xl:font-bold text-gray-800">
+                    <div className="font-medium xl:font-bold text-black">
                       {dataDetailPelni && dataDetailPelni.pelabuhan_tujuan}
                     </div>
-                    <small className="text-xs text-gray-800">
+                    <small className="text-xs text-black">
                       ({tanggal_tujuan_pelni})
                     </small>
                   </div>
                 </div>
 
-                <div className="p-4 pl-8 text-gray-800">
+                <div className="p-4 pl-8 text-black">
                   <div className="text-xs font-medium xl:font-bold">
                     {dataDetailPelni && dataDetailPelni.shipName}
                   </div>
@@ -1272,11 +1272,11 @@ export default function BookingPelni() {
                     <li class="mb-10 ml-4 text-sm">
                       <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800 "></div>
                       <div className="flex space-x-12">
-                        <time class="mb-1 text-xs font-medium xl:font-bold leading-none text-gray-800 ">
+                        <time class="mb-1 text-xs font-medium xl:font-bold leading-none text-black ">
                           {dataDetailPelni && dataDetailPelni.departureTime}
                         </time>
                         <div className="">
-                          <h3 class="text-left text-xs font-medium xl:font-bold text-gray-800 ">
+                          <h3 class="text-left text-xs font-medium xl:font-bold text-black ">
                             {dataDetailPelni && dataDetailPelni.pelabuhan_asal}
                           </h3>
                         </div>
@@ -1285,11 +1285,11 @@ export default function BookingPelni() {
                     <li class="ml-4 text-sm mt-10">
                       <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white "></div>
                       <div className="flex space-x-12">
-                        <time class="mb-1 text-xs font-medium xl:font-bold leading-none text-gray-800 ">
+                        <time class="mb-1 text-xs font-medium xl:font-bold leading-none text-black ">
                           {dataDetailPelni && dataDetailPelni.arrivalTime}
                         </time>
                         <div className="">
-                          <h3 class="text-left text-xs font-medium xl:font-bold text-gray-800 ">
+                          <h3 class="text-left text-xs font-medium xl:font-bold text-black ">
                             {dataDetailPelni &&
                               dataDetailPelni.pelabuhan_tujuan}
                           </h3>

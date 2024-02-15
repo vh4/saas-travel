@@ -296,10 +296,10 @@ export default function Header() {
               <>
               <Link
                 to="/"
-                className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-gray-800"
+                className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-black"
               >
                 <FaHome className="text-blue-500" size={18} />
-                <div className="text-[15px] text-gray-800">Home</div>
+                <div className="text-[15px] text-black">Home</div>
               </Link>              
               </>
             )}
@@ -308,20 +308,20 @@ export default function Header() {
               <div>
                 <Link
                   to="/transaksi/pesawat"
-                  className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-gray-800"
+                  className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-black"
                 >
                   <FaListAlt className="text-cyan-500" size={18} />
-                  <div className="text-[15px] text-gray-800">Transaksi</div>
+                  <div className="text-[15px] text-black">Transaksi</div>
                 </Link>
               </div>
             ) : null}
             {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
               <Link
                 to="/booking/pesawat"
-                className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-gray-800"
+                className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-black"
               >
                 <FaListAlt className="text-red-500" size={18} />
-                <div className="text-[15px] text-gray-800">Booking</div>
+                <div className="text-[15px] text-black">Booking</div>
               </Link>
             ) : null}
 
@@ -330,7 +330,7 @@ export default function Header() {
               {!localStorage.getItem(
                 process.env.REACT_APP_SECTRET_LOGIN_API
               ) ? (
-                <div className="hidden md:flex text-gray-800 space-x-4 items-center">
+                <div className="hidden md:flex text-black space-x-4 items-center">
                   <div
                     className="flex space-x-2 items-center cursor-pointer hover:text-blue-500"
                     onClick={handleOpen}
@@ -340,19 +340,19 @@ export default function Header() {
                   </div>
                   <a
                     href="https://www.rajabiller.com/register"
-                    className="text-[15px] text-gray-800"
+                    className="text-[15px] text-black"
                   >
                     <Button
                       key="submit"
                       type="default"
-                      className="px-8 text-gray-700"
+                      className="px-8 text-black"
                     >
                       Registrasi
                     </Button>
                   </a>
                 </div>
               ) : (
-                <div className="hidden relative group space-x-2 text-gray-800 md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 md:inline-flex group-hover:block items-end ml-2 mb-2">
+                <div className="hidden relative group space-x-2 text-black md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 md:inline-flex group-hover:block items-end ml-2 mb-2">
                   {localStorage.getItem("hdrs_c") != "false" && (
                     <>
                       {user !== null && user !== undefined ? (
@@ -361,7 +361,7 @@ export default function Header() {
                             <>
                               <div className="flex space-x-2 items-center mt-2">
                                 <div className="">
-                                  <div className="text-gray-800 font-bold">
+                                  <div className="text-black font-bold">
                                     {localStorage.getItem("c_name")
                                       ? localStorage
                                           .getItem("c_name")
@@ -418,7 +418,7 @@ export default function Header() {
               <button
                 data-collapse-toggle="navbar-sticky"
                 type="button"
-                className="md:mr-0 inline-flex items-center py-4 px-4 text-sm text-gray-800 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-gray-200 "
+                className="md:mr-0 inline-flex items-center py-4 px-4 text-sm text-black rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-gray-200 "
                 aria-controls="navbar-sticky"
                 aria-expanded="false"
               >

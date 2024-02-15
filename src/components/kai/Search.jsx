@@ -489,7 +489,7 @@ export default function Search() {
     });
 
   const hargaPopoOver = (
-    <Popover title="Filter Harga">
+    <Popover className="text-black" title="Filter Harga">
       <div className="block text-xs px-2">
         <div>
           Range antara Rp.{toRupiah(valHargaRange[0])} - Rp.
@@ -509,7 +509,7 @@ export default function Search() {
   );
 
   const KelasPopoOver = (
-    <Popover title="Filter Harga">
+    <Popover className="text-black" title="Filter Harga">
       <div className="block px-2 text-xs">
         <FormGroup>
           <FormControlLabel
@@ -551,7 +551,7 @@ export default function Search() {
   );
 
   const SortingPopoOver = (
-    <Popover title="Urutkan Dengan">
+    <Popover className="text-black" title="Urutkan Dengan">
       <div className="">
         <Box sx={{ width: 150 }}>
           <Radio.Group
@@ -574,7 +574,7 @@ export default function Search() {
   );
 
   const waktuPopoOver = (
-    <Popover title="Filter Waktu Keberangkatan">
+    <Popover className="text-black" title="Filter Waktu Keberangkatan">
       <div className="">
         <Box sx={{ width: 120 }}>
           <FormGroup>
@@ -679,13 +679,13 @@ export default function Search() {
         </>
       ) : (
         <>
-          <div className="text-sm judul-search font-bold text-gray-800">
+          <div className="hidden md:block judul-search font-semibold xl:font-bold text-black">
             PILIH JADWAL
           </div>
-          <div className="mt-8">
+          <div className="mt-4 md:mt-8">
             <div className="block lg:flex justify-between">
               <div className="hidden md:flex items-center space-x-3 xl:space-x-4 text-center md:text-left">
-                <small className="text-xs font-medium xl:font-bold text-gray-800">
+                <small className="text-xs font-medium xl:font-bold text-black">
                   {stasiunBerangkat}, {kotaBerangkat}
                 </small>
                 <div className="bg-blue-500 p-1 rounded-full">
@@ -694,26 +694,26 @@ export default function Search() {
                     size={16}
                   />
                 </div>
-                <small className="text-xs font-medium xl:font-bold text-gray-800">
+                <small className="text-xs font-medium xl:font-bold text-black">
                   {stasiunTujuan}, {kotaTujuan}
                 </small>
-                <div className="hidden md:block font-normal text-gray-800">
+                <div className="hidden md:block font-normal text-black">
                   |
                 </div>
-                <small className="hidden md:block text-xs font-medium xl:font-bold text-gray-800">
+                <small className="hidden md:block text-xs font-medium xl:font-bold text-black">
                   {tanggal_keberangkatan_kereta}
                 </small>
-                <div className="hidden md:block font-normal text-gray-800">
+                <div className="hidden md:block font-normal text-black">
                   |
                 </div>
-                <small className="hidden md:block text-xs font-medium xl:font-bold text-gray-800">
+                <small className="hidden md:block text-xs font-medium xl:font-bold text-black">
                   {parseInt(adult) + parseInt(infant)} Penumpang
                 </small>
               </div>
               <div className="hidden mt-4 md:mt-0 md:flex space-x-4 md:mr-0 justify-center md:justify-end">
                 <Link to="/" className="flex space-x-2 items-center">
-                  <IoArrowBackOutline className="text-blue-500" size={16} />
-                  <div className="text-blue-500 text-sm font-bold">Kembali</div>
+                  <IoArrowBackOutline className="text-black" size={16} />
+                  <div className="text-black text-sm font-bold">Kembali</div>
                 </Link>
                 <button
                   onClick={() => setUbahPencarian((prev) => !prev)}
@@ -723,8 +723,8 @@ export default function Search() {
                 </button>
               </div>
             </div>
-            <div className="flex justify-between mt-6">
-              <div className="relative flex items-center space-x-2 text-gray-800 text-xs font-medium xl:font-bold">
+            <div className="flex justify-between mt-0 md:mt-6">
+              <div className="relative flex items-center space-x-2 text-black text-xs font-medium xl:font-bold">
                 <Whisper
                   placement="top"
                   trigger="active"
@@ -732,7 +732,7 @@ export default function Search() {
                   speaker={hargaPopoOver}
                   placement="bottomStart"
                 >
-                  <button className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300">
+                  <button className="text-black block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium xl:font-bold">
                     HARGA
                   </button>
                 </Whisper>
@@ -743,7 +743,7 @@ export default function Search() {
                   speaker={waktuPopoOver}
                   placement="bottomStart"
                 >
-                  <button className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300">
+                  <button className="text-black block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium xl:font-bold">
                     WAKTU
                   </button>
                 </Whisper>
@@ -754,7 +754,7 @@ export default function Search() {
                   speaker={KelasPopoOver}
                   placement="bottomStart"
                 >
-                  <button className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300">
+                  <button className="text-black block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium xl:font-bold">
                     KELAS
                   </button>
                 </Whisper>
@@ -792,7 +792,7 @@ export default function Search() {
                   >
                     <div>
                       <MdSort
-                        className="text-blue-500 md:text-gray-800"
+                        className="text-blue-500 md:text-black"
                         size={28}
                       />
                     </div>
@@ -860,7 +860,7 @@ export default function Search() {
                         >
                           {/* desktop cari */}
 
-                          <div className="hidden xl:block w-full text-gray-700 ">
+                          <div className="hidden xl:block w-full text-black ">
                             <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                               <div className="col-span-1 xl:col-span-2">
                                 <h1 className="text-sm font-medium xl:font-bold">
@@ -901,7 +901,7 @@ export default function Search() {
                                 <small>Langsung</small>
                               </div>
                               <div className="">
-                                <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold text-blue-500">
+                                <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold text-black">
                                   Rp.{toRupiah(e.seats[0].priceAdult)}
                                 </h1>
                                 <small className="text-red-500">
@@ -946,7 +946,7 @@ export default function Search() {
                                   ? bookingHandlerDetail(e.trainNumber)
                                   : " "
                               }
-                              className="cursor-pointer block xl:hidden w-full text-gray-700"
+                              className="cursor-pointer block xl:hidden w-full text-black"
                             >
                               <div className="mt-4 px-4 md:px-4 xl:px-0 2xl:px-4 grid grid-cols-1 xl:grid-cols-7">
                                 <div className="flex justify-between">
@@ -964,7 +964,7 @@ export default function Search() {
                                     </small>
                                   </div>
                                   <div className="text-right">
-                                    <h1 className="text-xs font-medium xl:font-bold text-blue-500">
+                                    <h1 className="text-xs font-medium xl:font-bold text-black">
                                       Rp. {toRupiah(e.seats[0].priceAdult)}
                                     </h1>
                                     <small className="text-red-500">
@@ -985,16 +985,16 @@ export default function Search() {
                                       <h1 className="mt-10 xl:mt-0 text-xs font-medium xl:font-bold">
                                         {e.departureTime}
                                       </h1>
-                                      <small className="text-gray-800">
+                                      <small className="text-black">
                                         {origin}
                                       </small>
                                     </div>
                                     <div className="w-full mt-12 px-4 border-b-2"></div>
                                     <div className="text-xs">
-                                      <div className="text-xs mt-10 xl:mt-0 text-gray-800">
+                                      <div className="text-xs mt-10 xl:mt-0 text-black">
                                         {e.duration}
                                       </div>
-                                      <small className="text-gray-800">
+                                      <small className="text-black">
                                         Langsung
                                       </small>
                                     </div>
@@ -1003,7 +1003,7 @@ export default function Search() {
                                       <h1 className="mt-10 xl:mt-0 text-xs font-medium xl:font-bold">
                                         {e.arrivalTime}
                                       </h1>
-                                      <small className="text-gray-800">
+                                      <small className="text-black">
                                         {destination}
                                       </small>
                                     </div>
@@ -1025,8 +1025,8 @@ export default function Search() {
                         alt="No data"
                       />
                     </div>
-                    <div className="flex justify-center w-full text-gray-700">
-                      <div className="text-gray-800 text-center">
+                    <div className="flex justify-center w-full text-black">
+                      <div className="text-black text-center">
                         <div>
                           <div className="text-sm md:text-md font-medium">
                             Maaf, sepertinya pada rute ini masih belum dibuka
@@ -1079,7 +1079,7 @@ export default function Search() {
                                     : "bg-gray-200"
                                 } border border-gray-200 rounded-lg shadow-sm hover:border transition-transform transform hover:scale-105`}
                               >
-                                <div className="hidden xl:block w-full text-gray-700 ">
+                                <div className="hidden xl:block w-full text-black ">
                                   <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                                     <div className="col-span-1 xl:col-span-2">
                                       <h1 className="text-sm font-medium xl:font-bold">
@@ -1220,7 +1220,7 @@ export default function Search() {
                                           )
                                         : " "
                                     }
-                                    className="cursor-pointer block xl:hidden w-full text-gray-700"
+                                    className="cursor-pointer block xl:hidden w-full text-black"
                                   >
                                     <div className="py-4 px-4 grid grid-cols-1 xl:grid-cols-7">
                                       <div className="flex justify-between">
@@ -1256,7 +1256,7 @@ export default function Search() {
                                           </small>
                                         </div>
                                         <div>
-                                          <h1 className="text-xs font-medium xl:font-bold text-blue-500">
+                                          <h1 className="text-xs font-medium xl:font-bold text-black">
                                             Rp.{" "}
                                             {toRupiah(
                                               trainArray.reduce(
@@ -1296,7 +1296,7 @@ export default function Search() {
                                             <h1 className="text-sm xl:text-base font-medium xl:font-bold">
                                               {trainArray[0].departureTime}
                                             </h1>
-                                            <small className="text-gray-600">
+                                            <small className="text-black">
                                               {origin}
                                             </small>
                                           </div>
@@ -1305,12 +1305,12 @@ export default function Search() {
                                           <div className="flex-1 mt-2 w-full">
                                             <div className="border-t-2 border-gray-300 my-4 -mx-4"></div>
                                             <div className="text-center">
-                                              <div className="text-xs text-gray-700">
+                                              <div className="text-xs text-black">
                                                 {calculateTotalDurationTransit(
                                                   trainArray
                                                 )}
                                               </div>
-                                              <small className="text-gray-600">
+                                              <small className="text-black">
                                                 <small>
                                                   Transit (
                                                   {(() => {
@@ -1341,7 +1341,7 @@ export default function Search() {
                                                 ].arrivalTime
                                               }
                                             </h1>
-                                            <small className="text-gray-600">
+                                            <small className="text-black">
                                               {destination}
                                             </small>
                                           </div>
@@ -1367,8 +1367,8 @@ export default function Search() {
                       alt="No data"
                     />
                   </div>
-                  <div className="flex justify-center w-full text-gray-700">
-                    <div className="text-gray-800 text-center">
+                  <div className="flex justify-center w-full text-black">
+                    <div className="text-black text-center">
                       <div>
                         <div className="text-sm md:text-md font-medium">
                           Maaf, sepertinya pada rute ini masih belum dibuka

@@ -43,15 +43,15 @@ export default function HeaderTemplateMobileSearch({ children }) {
     <div className="flex flex-col min-h-screen">
       <div>
       <div className="block md:hidden">
-        <div className="flex items-center w-full bg-blue-500 text-white p-2.5 fixed z-50">
+        <div className="flex items-center w-full bg-white-500 text-black p-2.5">
             <div className="ml-2" onClick={() => window.history.back()}>
                 <IoArrowBack size={24} />
             </div>
             <div className="flex flex-col items-center justify-center text-center mx-auto">
-                <div className="flex space-x-4 items-center justify-center  text-md">
-                    <div>{departureName} ({departure})</div>
-                    <IoArrowForwardCircle size={24} className="block " />
-                    <div>{arrivalName} ({arrival})</div>
+                <div className="flex space-x-4 items-center justify-center text-xs">
+                    <div>{departureName}</div>
+                    <IoArrowForwardCircle className="block text-blue-500" size={24} />
+                    <div>{arrivalName}</div>
                 </div>
                 <div className="text-xs">
                     <small>{tanggal_keberangkatan} | {parseInt(adult) + parseInt(child) + parseInt(infant)}{" "} Penumpang</small>
@@ -60,12 +60,12 @@ export default function HeaderTemplateMobileSearch({ children }) {
         </div>
       </div>
       </div>
-      <div className="flex-grow mt-8">
+      <div className="flex-grow">
         <div className="container mx-auto px-0 xl:px-32">
           <main>{children}</main>
         </div>
       </div>
-      {/* <footer className="border-t text-sm text-gray-500 py-6">
+      {/* <footer className="border-t text-sm text-black py-6">
         <div className="container mx-auto">
           <p className="text-center">
             © 2015-2023 rajabiller.com. All rights reserved.

@@ -5,7 +5,7 @@ import React from "react";
 export default function Footer() {
   return (
     <>
-      <footer className={`container ${localStorage.getItem("hdrs_c") == "false" ? "" : "" } mx-auto px-0 xl:px-16 bg-white text-center text-gray-600 lg:text-left`}>
+      <footer className={`container ${localStorage.getItem("hdrs_c") == "false" ? "" : "" } mx-auto px-0 xl:px-16 bg-white text-center text-black lg:text-left`}>
         <div className="mt-24 md:mt-64"></div>
         {/* {localStorage.getItem("hdrs_c") != "false" && (<>
           <div class="container mx-auto flex items-center justify-center border-b-2 border-neutral-200 p-6 lg:justify-between">
@@ -166,7 +166,7 @@ export default function Footer() {
               </div>
             </div>
           </div>  
-          <div className="border-t text-sm text-gray-500 py-6">
+          <div className="border-t text-sm text-black py-6">
             <div className="container mx-auto">
               <p className="text-center">
                 © 2015-2023 rajabiller.com. All rights Reserved.

@@ -705,31 +705,31 @@ useEffect(() => {
             {/* header kai flow */}
             <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-4 items-center">
               <div className="hidden xl:flex space-x-2 items-center">
-                <div className="hidden xl:flex text-blue-500 font-medium xl:font-bold">
+                <div className="hidden xl:flex text-blue-500 font-medium ">
                   Detail pesanan
                 </div>
               </div>
               <div>
                 <MdHorizontalRule
                   size={20}
-                  className="hidden xl:flex text-gray-500"
+                  className="hidden xl:flex text-black"
                 />
               </div>
               <div className="hidden xl:flex space-x-2 items-center">
-                <RxCrossCircled size={20} className="text-gray-500" />
-                <div className="hidden xl:block text-gray-800">
+                <RxCrossCircled size={20} className="text-black" />
+                <div className="hidden xl:block text-black">
                   Pembayaran tiket
                 </div>
               </div>
               {/* <div>
                 <MdHorizontalRule
                   size={20}
-                  className="text-gray-500 hidden xl:flex"
+                  className="text-black hidden xl:flex"
                 />
               </div>
               <div className="flex space-x-2 items-center">
-                <RxCrossCircled size={20} className="text-slate-500" />
-                <div className="text-slate-500">E-Tiket</div>
+                <RxCrossCircled size={20} className="text-black" />
+                <div className="text-black">E-Tiket</div>
               </div> */}
             </div>
             {/* sidebar mobile plane*/}
@@ -742,37 +742,37 @@ useEffect(() => {
               <>
                 {dataDetail &&
                   dataDetail.map((dataDetail) => (
-                    <div className="mt-8 xl:mt-0 block xl:hidden rounded-md border border-gray-200 shadow-sm">
+                    <div className="mt-0 mb-4 md:mb-0 md:mt-8 xl:mt-0 block xl:hidden rounded-md border border-gray-200 shadow-sm">
                       <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-                        <div className="text-gray-800 text-sm font-medium xl:font-bold">
+                        <div className="text-black text-sm font-medium ">
                           Keberangkatan Pesawat
                         </div>
-                        <small className="text-xs text-gray-800">
+                        <small className="text-xs text-black">
                           {tanggalParse(dataDetail.departureDate)}
                         </small>
                       </div>
                       <div className="px-4 xl:px-8 p-4 flex justify-between space-x-12 items-center">
-                        <div className="text-xs text-gray-800">
+                        <div className="text-xs text-black">
                           <div>{dataDetail.departureName}</div>
                           <div>({dataDetail.departure})</div>
                         </div>
                         <div className="rounded-full p-1 bg-blue-500 ">
                           <IoArrowForwardOutline className="text-white" size={18} />
                         </div>
-                        <div className="text-xs text-gray-800">
+                        <div className="text-xs text-black">
                           <div>{dataDetail.arrivalName}</div>
                           <div>({dataDetail.arrival})</div>
                         </div>
                       </div>
 
-                      <div className="p-2 -mt-2 mb-2  pl-8 relative px-4 text-gray-800">
+                      <div className="p-2 -mt-2 mb-2  pl-8 relative px-4 text-black">
                         <div className="flex items-center space-x-2">
                           <img
                             src={dataDetail.airlineIcon}
                             width={50}
                             alt="icon.png"
                           />
-                          <div className="text-gray-800 text-xs font-medium xl:font-bold">
+                          <div className="text-black text-xs font-medium ">
                             {dataDetail.airlineName} ({dataDetail.airline})
                           </div>
                         </div>
@@ -782,14 +782,14 @@ useEffect(() => {
                           <li class="mb-10 ml-4 text-sm">
                             <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800  "></div>
                             <div className="flex space-x-12">
-                              <time class="mb-1 text-xs leading-none text-gray-800 ">
+                              <time class="mb-1 text-xs leading-none text-black ">
                                 {dataDetail.departureTime}
                               </time>
                               <div className="-mt-2">
-                                <div class="text-left text-sm text-gray-800 ">
+                                <div class="text-left text-sm text-black ">
                                   {dataDetail.departureName}
                                 </div>
-                                <p class="text-left text-xs text-gray-800 ">
+                                <p class="text-left text-xs text-black ">
                                   ({dataDetail.departure})
                                 </p>
                               </div>
@@ -798,14 +798,14 @@ useEffect(() => {
                           <li class="ml-4 text-sm mt-10">
                             <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white  "></div>
                             <div className="flex space-x-12">
-                              <time class="mb-1 text-xs leading-none text-gray-800 ">
+                              <time class="mb-1 text-xs leading-none text-black ">
                                 {dataDetail.arrivalTime}
                               </time>
                               <div className="-mt-2">
-                                <div class="text-left text-sm text-gray-800 ">
+                                <div class="text-left text-sm text-black ">
                                   {dataDetail.arrivalName}
                                 </div>
-                                <p class="text-left text-xs text-gray-800 ">
+                                <p class="text-left text-xs text-black ">
                                   ({dataDetail.arrival})
                                 </p>
                               </div>
@@ -829,7 +829,7 @@ useEffect(() => {
                         <div className="p-4 xl:p-8 form block xl:flex xl:space-x-2">
                           {/* mobile & desktop Nama*/}
                           <div className="xl:w-full mt-4 xl:mt-0">
-                            <div className="text-gray-800 text-sm">
+                            <div className="text-black text-sm">
                               Email Address
                             </div>
                             <div className="block xl:flex xl:space-x-6">
@@ -869,7 +869,7 @@ useEffect(() => {
                           <div className="w-full mt-4 xl:mt-0">
                             {/* desktop nomor hp */}
                             <div className="w-full">
-                              <div className="text-gray-800 text-sm mb-2">
+                              <div className="text-black text-sm mb-2">
                                 Nomor HP
                               </div>
                               <Form.Item
@@ -914,10 +914,10 @@ useEffect(() => {
                       <>
                         <div>
                           <div className="Booking  mt-8 mb-4 xl:mt-12 ml-2 xl:ml-0">
-                            <h1 className="text-sm text-gray-800">
+                            <h1 className="text-sm text-black">
                               ADULT PASSENGER
                             </h1>
-                            <small className="text-gray-500">
+                            <small className="text-black">
                               Isi sesuai dengan data anda
                             </small>
                           </div>
@@ -929,7 +929,7 @@ useEffect(() => {
                                 <div className="p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8">
                                   {/* mobile & desktop Nama*/}
                                   <div className="xl:w-full mt-4 xl:mt-0">
-                                    <div className="text-gray-800 text-sm">
+                                    <div className="text-black text-sm">
                                       Title Anda
                                     </div>
                                     <div className="hidden xl:block">
@@ -972,7 +972,7 @@ useEffect(() => {
                                     </div>
                                     <div className="w-full grid grid-cols-2 gap-2">
                                       <div className="w-full">
-                                        <div className="text-gray-800 text-sm">
+                                        <div className="text-black text-sm">
                                           Nama Depan
                                         </div>
                                         <Form.Item
@@ -1016,7 +1016,7 @@ useEffect(() => {
                                         </Form.Item>
                                       </div>
                                       <div className="w-full">
-                                        <div className="text-gray-800 text-sm">
+                                        <div className="text-black text-sm">
                                           Nama Belakang
                                         </div>
                                         <Form.Item
@@ -1068,7 +1068,7 @@ useEffect(() => {
                                 <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6 ">
                                   {/* mobile & desktop NIK*/}
                                   <div className="w-full px-4 xl:px-0">
-                                    <div className="xl:px-0 w-full text-gray-800 text-sm mb-2">
+                                    <div className="xl:px-0 w-full text-black text-sm mb-2">
                                       Tanggal Lahir
                                     </div>
                                     <Form.Item
@@ -1108,7 +1108,7 @@ useEffect(() => {
                                   </div>
                                   <div className="w-full">
                                     <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
-                                      <div className="text-gray-800 text-sm mb-2">
+                                      <div className="text-black text-sm mb-2">
                                         {isInternational == 1 ? "No. Passport" : "No. Ktp"}
                                       </div>
                                       <Form.Item
@@ -1166,7 +1166,7 @@ useEffect(() => {
                                   <div className="mt-8 mb-8 xl:mt-16">
                                     <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
                                       <div className="w-full px-4 xl:px-0">
-                                        <div className="xl:px-0 w-full text-gray-800 text-sm mb-2">
+                                        <div className="xl:px-0 w-full text-black text-sm mb-2">
                                           Kewarganegaraan
                                         </div>
                                         <Form.Item
@@ -1192,7 +1192,7 @@ useEffect(() => {
                                         </small>
                                       </div>
                                       <div className="w-full px-4 xl:px-0">
-                                        <div className="xl:px-0 w-full text-gray-800 text-sm mb-2">
+                                        <div className="xl:px-0 w-full text-black text-sm mb-2">
                                           Issuing Passport
                                         </div>
                                         <Form.Item
@@ -1223,7 +1223,7 @@ useEffect(() => {
                                   <div className="mt-8 mb-8 xl:mt-16">
                                       <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
                                       <div className="w-full px-4 xl:px-0">
-                                        <div className="xl:px-0 w-full text-gray-800 text-sm mb-2">
+                                        <div className="xl:px-0 w-full text-black text-sm mb-2">
                                           Expired Date
                                         </div>
                                         <Form.Item
@@ -1275,10 +1275,10 @@ useEffect(() => {
                       <>
                         <div>
                           <div className="Booking  mt-8 mb-4 xl:mt-12 ml-2 xl:ml-0">
-                            <h1 className="text-sm text-gray-700">
+                            <h1 className="text-sm text-black">
                               CHILD PASSENGER
                             </h1>
-                            <small className="text-gray-500">
+                            <small className="text-black">
                               Isi sesuai dengan data anda
                             </small>
                           </div>
@@ -1290,7 +1290,7 @@ useEffect(() => {
                                 <div className="p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8">
                                   {/* mobile & desktop Nama*/}
                                   <div className="xl:w-full mt-4 xl:mt-0">
-                                    <div className="text-gray-800 text-sm">
+                                    <div className="text-black text-sm">
                                       Title Anda
                                     </div>
                                     <div className="hidden xl:block">
@@ -1333,7 +1333,7 @@ useEffect(() => {
                                     </div>
                                     <div className="w-full grid grid-cols-2 gap-2">
                                       <div className="w-full">
-                                        <div className="text-gray-800 text-sm">
+                                        <div className="text-black text-sm">
                                           Nama Depan
                                         </div>
                                         <Form.Item
@@ -1398,7 +1398,7 @@ useEffect(() => {
                                         </Form.Item>
                                       </div>
                                       <div className="w-full">
-                                        <div className="text-gray-800 text-sm">
+                                        <div className="text-black text-sm">
                                           Nama Belakang
                                         </div>
                                         <Form.Item
@@ -1470,7 +1470,7 @@ useEffect(() => {
                                 <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
                                   {/* mobile & desktop NIK*/}
                                   <div className="w-full px-4 xl:px-0">
-                                    <div className="xl:px-0 w-full text-gray-800 text-sm mb-2">
+                                    <div className="xl:px-0 w-full text-black text-sm mb-2">
                                       Tanggal Lahir
                                     </div>
                                     <Form.Item
@@ -1510,7 +1510,7 @@ useEffect(() => {
                                   </div>
                                   <div className="w-full">
                                     <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
-                                      <div className="text-gray-800 text-sm mb-2">
+                                      <div className="text-black text-sm mb-2">
                                           {isInternational == 1 ? "No. Passport" : "No. Ktp"}
                                       </div>
                                       <Form.Item
@@ -1567,7 +1567,7 @@ useEffect(() => {
                                   <div className="mt-8 mb-8 xl:mt-16">
                                     <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
                                       <div className="w-full px-4 xl:px-0">
-                                        <div className="xl:px-0 w-full text-gray-800 text-sm mb-2">
+                                        <div className="xl:px-0 w-full text-black text-sm mb-2">
                                           Kewarganegaraan
                                         </div>
                                         <Form.Item
@@ -1593,7 +1593,7 @@ useEffect(() => {
                                         </small>
                                       </div>
                                       <div className="w-full px-4 xl:px-0">
-                                        <div className="xl:px-0 w-full text-gray-800 text-sm mb-2">
+                                        <div className="xl:px-0 w-full text-black text-sm mb-2">
                                           Issuing Passport
                                         </div>
                                         <Form.Item
@@ -1624,7 +1624,7 @@ useEffect(() => {
                                   <div className="mt-8 mb-8 xl:mt-16">
                                       <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
                                       <div className="w-full px-4 xl:px-0">
-                                        <div className="xl:px-0 w-full text-gray-800 text-sm mb-2">
+                                        <div className="xl:px-0 w-full text-black text-sm mb-2">
                                           Expired Date
                                         </div>
                                         <Form.Item
@@ -1676,10 +1676,10 @@ useEffect(() => {
                       <>
                         <div>
                           <div className="Booking  mt-8 mb-4 xl:mt-12 ml-2 xl:ml-0">
-                            <h1 className="text-sm text-gray-700">
+                            <h1 className="text-sm text-black">
                               INFANT PASSENGER
                             </h1>
-                            <small className="text-gray-500">
+                            <small className="text-black">
                               Isi sesuai dengan data anda
                             </small>
                           </div>
@@ -1691,7 +1691,7 @@ useEffect(() => {
                                 <div className="p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8">
                                   {/* mobile & desktop Nama*/}
                                   <div className="xl:w-full mt-4 xl:mt-0">
-                                    <div className="text-gray-800 text-sm">
+                                    <div className="text-black text-sm">
                                       Title Anda
                                     </div>
                                     <div className="hidden xl:block">
@@ -1734,7 +1734,7 @@ useEffect(() => {
                                     </div>
                                     <div className="w-full grid grid-cols-2 gap-2">
                                       <div className="w-full">
-                                        <div className="text-gray-800 text-sm">
+                                        <div className="text-black text-sm">
                                           Nama Depan
                                         </div>
                                         <Form.Item
@@ -1778,7 +1778,7 @@ useEffect(() => {
                                         </Form.Item>
                                       </div>
                                       <div className="w-full">
-                                        <div className="text-gray-800 text-sm">
+                                        <div className="text-black text-sm">
                                           Nama Belakang
                                         </div>
                                         <Form.Item
@@ -1829,7 +1829,7 @@ useEffect(() => {
                                 <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
                                   {/* mobile & desktop NIK*/}
                                   <div className="w-full px-4 xl:px-0">
-                                    <div className="xl:px-0 w-full text-gray-800 text-sm mb-2">
+                                    <div className="xl:px-0 w-full text-black text-sm mb-2">
                                       Tanggal Lahir
                                     </div>
                                     <Form.Item
@@ -1869,7 +1869,7 @@ useEffect(() => {
                                   </div>
                                   <div className="w-full">
                                     <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
-                                      <div className="text-gray-800 text-sm mb-2">
+                                      <div className="text-black text-sm mb-2">
                                         {isInternational == 1 ? "No. Passport" : "No. Ktp"}
                                       </div>
                                       <Form.Item
@@ -1927,7 +1927,7 @@ useEffect(() => {
                                   <div className="mt-8 mb-8 xl:mt-16">
                                     <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
                                       <div className="w-full px-4 xl:px-0">
-                                        <div className="xl:px-0 w-full text-gray-800 text-sm mb-2">
+                                        <div className="xl:px-0 w-full text-black text-sm mb-2">
                                           Kewarganegaraan
                                         </div>
                                         <Form.Item
@@ -1953,7 +1953,7 @@ useEffect(() => {
                                         </small>
                                       </div>
                                       <div className="w-full px-4 xl:px-0">
-                                        <div className="xl:px-0 w-full text-gray-500 text-sm mb-2">
+                                        <div className="xl:px-0 w-full text-black text-sm mb-2">
                                           Issuing Passport
                                         </div>
                                         <Form.Item
@@ -1984,7 +1984,7 @@ useEffect(() => {
                                   <div className="mt-8 mb-8 xl:mt-16">
                                       <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
                                       <div className="w-full px-4 xl:px-0">
-                                        <div className="xl:px-0 w-full text-gray-800 text-sm mb-2">
+                                        <div className="xl:px-0 w-full text-black text-sm mb-2">
                                           Expired Date
                                         </div>
                                         <Form.Item
@@ -2046,21 +2046,21 @@ useEffect(() => {
                   </Form>
 
                   {/* sidebra desktop*/}
-                  <div className="w-1/2">
+                  <div className="w-full md:w-2/3 2xl:w-1/2 md:mt-8">
                     {dataDetail &&
                       dataDetail.map((dataDetail) => (
                         <>
                           <div className="hidden xl:block rounded-md border border-gray-200 shadow-sm mb-4">
                             <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-                              <div className="text-gray-800 text-sm font-medium xl:font-bold">
+                              <div className="text-black text-sm font-medium ">
                                 Keberangkatan Pesawat
                               </div>
-                              <small className="text-xs text-gray-800">
+                              <small className="text-xs text-black">
                                 {tanggalParse(dataDetail.departureDate)}
                               </small>
                             </div>
                             <div className="px-4 p-8 flex justify-between space-x-8 mx-4 items-center">
-                              <div className="text-xs font-medium xl:font-bold text-gray-800">
+                              <div className="text-xs font-medium  text-black">
                                 <div>{dataDetail.departureName}</div>
                                 <div>({dataDetail.departure})</div>
                               </div>
@@ -2070,20 +2070,20 @@ useEffect(() => {
                                   size={18}
                                 />
                               </div>
-                              <div className="text-xs font-medium xl:font-bold text-gray-800">
+                              <div className="text-xs font-medium  text-black">
                                 <div>{dataDetail.arrivalName}</div>
                                 <div>({dataDetail.arrival})</div>
                               </div>
                             </div>
 
-                            <div className="p-2 -mt-2 mb-2  pl-8 relative px-4 text-gray-800">
+                            <div className="p-2 -mt-2 mb-2  pl-8 relative px-4 text-black">
                               <div className="flex items-center space-x-2">
                                 <img
                                   src={dataDetail.airlineIcon}
                                   width={50}
                                   alt="icon.png"
                                 />
-                                <div className="text-gray-800 text-xs font-medium xl:font-bold">
+                                <div className="text-black text-xs font-medium ">
                                   {dataDetail.airlineName} ({dataDetail.airline}
                                   )
                                 </div>
@@ -2094,14 +2094,14 @@ useEffect(() => {
                                 <li class="mb-10 ml-4 text-sm">
                                   <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800  "></div>
                                   <div className="flex space-x-12">
-                                    <time class="mb-1 text-xs font-medium xl:font-bold leading-none text-gray-800 ">
+                                    <time class="mb-1 text-xs font-medium  leading-none text-black ">
                                       {dataDetail.departureTime}
                                     </time>
                                     <div className="-mt-2">
-                                      <h3 class="text-left text-xs font-medium xl:font-bold text-gray-800 ">
+                                      <h3 class="text-left text-xs font-medium  text-black ">
                                         {dataDetail.departureName}
                                       </h3>
-                                      <p class="text-left text-xs font-medium xl:font-bold text-gray-800 ">
+                                      <p class="text-left text-xs font-medium  text-black ">
                                         ({dataDetail.departure})
                                       </p>
                                     </div>
@@ -2110,14 +2110,14 @@ useEffect(() => {
                                 <li class="ml-4 text-sm mt-10">
                                   <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white  "></div>
                                   <div className="flex space-x-12">
-                                    <time class="mb-1 text-xs font-medium xl:font-bold leading-none text-gray-800 ">
+                                    <time class="mb-1 text-xs font-medium  leading-none text-black ">
                                       {dataDetail.arrivalTime}
                                     </time>
                                     <div className="-mt-2">
-                                      <h3 class="text-left text-xs font-medium xl:font-bold text-gray-800 ">
+                                      <h3 class="text-left text-xs font-medium  text-black ">
                                         {dataDetail.arrivalName}
                                       </h3>
-                                      <p class="text-left text-xs font-medium xl:font-bold text-gray-800 ">
+                                      <p class="text-left text-xs font-medium  text-black ">
                                         ({dataDetail.arrival})
                                       </p>
                                     </div>

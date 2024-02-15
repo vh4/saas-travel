@@ -31,6 +31,7 @@ import { createTheme } from "@mui/material";
 import moment from "moment";
 import { Popover, Whisper } from "rsuite";
 import { v4 as uuidv4 } from 'uuid';
+import { CiRollingSuitcase } from "react-icons/ci";
 
 export default function Search() {
   const theme = createTheme({
@@ -374,7 +375,7 @@ const filteredData = dataSearch
   });
 
   const SortingPopoOverPlane = (
-    <Popover title="Urutkan Dengan">
+    <Popover className="text-black" title="Urutkan Dengan">
       <div className="">
         <Box sx={{ width: 150 }}>
         <Radio.Group className="mt-2" onChange={(e) => setHargaTerendahTinggiPlane(e.target.value)} value={HargaTerendahTinggiPlane}>
@@ -536,7 +537,7 @@ const filteredData = dataSearch
   }
 
   const hargaPopoOver = (
-    <Popover title="Filter Harga">
+    <Popover className="text-black" title="Filter Harga">
       <div className="block text-xs px-2">
         <div>
           Range antara Rp.{toRupiah(valHargaRange[0])} - Rp.
@@ -556,7 +557,7 @@ const filteredData = dataSearch
   );
 
   const waktuPopoOver = (
-    <Popover title="Filter Waktu Keberangkatan">
+    <Popover className="text-black" title="Filter Waktu Keberangkatan">
       <div className="">
         <Box sx={{ width: 120 }}>
           <FormGroup>
@@ -611,7 +612,7 @@ const filteredData = dataSearch
   );
 
   const transitPopoOver = (
-    <Popover title="Filter Transit">
+    <Popover className="text-black" title="Filter Transit">
       <div className="">
         <Box sx={{ width: 120 }}>
           <FormGroup>
@@ -654,13 +655,13 @@ const filteredData = dataSearch
         </>
       ) : (
         <>
-          <div className="judul-search font-semibold xl:font-bold text-gray-800">
+          <div className="hidden md:block judul-search font-semibold xl:font-bold text-black">
             PILIH JADWAL
           </div>
-          <div className="mt-8">
+          <div className="mt-4 md:mt-8">
             <div className="block md:flex justify-between">
               <div className="flex items-center justify-center space-x-3 xl:space-x-4 text-center md:text-left">
-                <small className="hidden md:block text-xs font-medium xl:font-bold text-gray-800">
+                <small className="hidden md:block text-xs font-medium xl:font-bold text-black">
                   {departureName} ({departure})
                 </small>
                 <div className="hidden md:block bg-blue-500 p-1 rounded-full">
@@ -669,27 +670,27 @@ const filteredData = dataSearch
                     size={16}
                   />
                 </div>
-                <small className="hidden md:block text-xs font-medium xl:font-bold text-gray-800">
+                <small className="hidden md:block text-xs font-medium xl:font-bold text-black">
                   {arrivalName} ({arrival})
                 </small>
-                <div className="hidden md:block font-normal text-gray-800">
+                <div className="hidden md:block font-normal text-black">
                   |
                 </div>
-                <small className="hidden md:block text-xs font-bold text-gray-800">
+                <small className="hidden md:block text-xs font-bold text-black">
                   {tanggal_keberangkatan}
                 </small>
-                <div className="hidden md:block font-normal text-gray-800">
+                <div className="hidden md:block font-normal text-black">
                   |
                 </div>
-                <small className="hidden md:block text-xs font-bold text-gray-800">
+                <small className="hidden md:block text-xs font-bold text-black">
                   {parseInt(adult) + parseInt(child) + parseInt(infant)}{" "}
                   Penumpang
                 </small>
               </div>
               <div className="hidden md:flex mt-4 md:mt-0 space-x-4 md:mr-0 justify-center md:justify-end">
                 <Link to="/" className="flex space-x-2 items-center">
-                  <IoArrowBackOutline className="text-blue-500" size={16} />
-                  <div className="text-blue-500 text-sm font-bold">Kembali</div>
+                  <IoArrowBackOutline className="text-black" size={16} />
+                  <div className="text-black text-sm font-bold">Kembali</div>
                 </Link>
                 <button
                   onClick={() => setUbahPencarian((prev) => !prev)}
@@ -702,7 +703,7 @@ const filteredData = dataSearch
             <div></div>
           </div>
           <div className="flex justify-between mt-0 md:mt-6">
-            <div className="relative flex items-center space-x-2 text-gray-800 text-xs font-medium xl:font-bold">
+            <div className="relative flex items-center space-x-2 text-black text-xs font-medium xl:font-bold">
               <div className="hidden md:block">FILTER : </div>
               <Whisper
                 placement="top"
@@ -711,7 +712,7 @@ const filteredData = dataSearch
                 speaker={hargaPopoOver}
                 placement="bottomStart"
               >
-                <button className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium xl:font-bold">
+                <button className="text-black block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium xl:font-bold">
                   HARGA
                 </button>
               </Whisper>
@@ -722,7 +723,7 @@ const filteredData = dataSearch
                 speaker={waktuPopoOver}
                 placement="bottomStart"
               >
-                <button className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium xl:font-bold">
+                <button className="text-black block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium xl:font-bold">
                   WAKTU
                 </button>
               </Whisper>
@@ -733,7 +734,7 @@ const filteredData = dataSearch
                 speaker={transitPopoOver}
                 placement="bottomStart"
               >
-                <button className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium xl:font-bold">
+                <button className="text-black block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium xl:font-bold">
                   TRANSIT
                 </button>
               </Whisper>
@@ -760,7 +761,7 @@ const filteredData = dataSearch
                     placement="bottomEnd"
                   >
                 <div>
-                  <MdSort className="text-blue-500 md:text-gray-800" size={28}/>
+                  <MdSort className="text-blue-500 md:text-black" size={28}/>
                 </div>
               </Whisper>
               </div>
@@ -832,13 +833,13 @@ const filteredData = dataSearch
                           }  border border-gray-200 rounded-md shadow-sm hover:border hover:border-gray-100 transition-transform transform hover:scale-105`}
                         >
                           {/* desktop cari */}
-                          <div className="hidden xl:block w-full text-gray-800 ">
+                          <div className="hidden xl:block w-full text-black ">
                             <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-10 gap-4">
                               <div className="col-span-1 md:col-span-2">
-                                <h1 className="text-sm font-medium xl:font-bold">
-                                  {e.airlineName}{" "}
+                                <h1 className="text-black text-sm font-medium xl:font-bold">
+                                  {e.airlineName}{" "} 
                                 </h1>
-                                <div className="text-sm">
+                                <div className="text-black text-sm">
                                   {e.classes[0][0].flightCode}
                                 </div>
                                 <div>
@@ -851,11 +852,11 @@ const filteredData = dataSearch
                               </div>
                               <div className="flex">
                                 <div className="">
-                                  <MdOutlineLuggage size={32} />
-                                  <div className="text-xs text-gray-800">
+                                  <CiRollingSuitcase className="text-black" size={32} />
+                                  <div className="text-xs text-black">
                                     Bagasi
                                   </div>
-                                  <div className="text-xs text-gray-800">
+                                  <div className="text-xs text-black">
                                     20 Kg
                                   </div>
                                 </div>
@@ -864,7 +865,7 @@ const filteredData = dataSearch
                                 <div className="">
                                   <h1 className="mt-4 xl:mt-0 text-sm font-medium">
                                     {e.detailTitle[0].depart}{" "}
-                                    <span className="font-semibold text-xs text-blue-500">
+                                    <span className="font-semibold text-xs text-black">
                                       ({e.classes[0][0].departureTimeZoneText})
                                     </span>
                                   </h1>
@@ -878,7 +879,7 @@ const filteredData = dataSearch
                                     e.detailTitle[e.detailTitle.length - 1]
                                       .arrival
                                   }{" "}
-                                  <span className="font-semibold text-xs text-blue-500">
+                                  <span className="font-semibold text-xs text-black">
                                     (
                                     {
                                       e.classes[e.classes.length - 1][0]
@@ -900,7 +901,7 @@ const filteredData = dataSearch
                                 </small>
                               </div>
                               <div className="">
-                                <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold text-blue-500">
+                                <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold text-black">
                                   Rp.{toRupiah(e.classes[0][0].price)}
                                 </h1>
                                 <small className="text-red-500">
@@ -987,7 +988,7 @@ const filteredData = dataSearch
                                 e.classes.map((x, i) => (
                                   <div className="hidden xl:flex xl:items-center xl:space-x-16 xl:mt-6 border-t">
                                     <div className="mt-8">
-                                      <h1 className="text-sm font-medium xl:font-bold">
+                                      <h1 className="text-black text-sm font-medium xl:font-bold">
                                         {e.detailTitle[i].flightName}{" "}
                                       </h1>
                                       <div className="text-sm">
@@ -1001,7 +1002,7 @@ const filteredData = dataSearch
                                         />
                                       </div>
                                     </div>
-                                    <div className="flex flex-col space-y-28 text-gray-800">
+                                    <div className="flex flex-col space-y-28 text-black">
                                       <div className="">
                                         <div className="text-sm font-medium xl:font-bold">
                                           {x[0].departureTime}
@@ -1098,10 +1099,10 @@ const filteredData = dataSearch
                                         </TimelineItem>
                                       </Timeline>
                                     </div>
-                                    <div className="mt-4 text-gray-800">
+                                    <div className="mt-4 text-black">
                                       <div className="items-center">
                                         <div>
-                                          <MdOutlineLuggage size={46} />
+                                          <CiRollingSuitcase size={32} />
                                         </div>
                                         <div className="text-xs">
                                           <div>
@@ -1122,10 +1123,10 @@ const filteredData = dataSearch
                               ) : (
                                 <div className="hidden xl:flex xl:items-center xl:space-x-16 xl:mt-6 border-t">
                                   <div className="mt-8">
-                                    <h1 className="text-sm font-medium xl:font-bold">
-                                      {e.airlineName}{" "}
+                                    <h1 className="text-black text-sm font-medium xl:font-bold">
+                                      {e.airlineName}{" "} 
                                     </h1>
-                                    <div className="text-sm">
+                                    <div className="text-black text-sm">
                                       {e.classes[0][0].flightCode}
                                     </div>
                                     <div>
@@ -1136,7 +1137,7 @@ const filteredData = dataSearch
                                       />
                                     </div>
                                   </div>
-                                  <div className="flex flex-col space-y-32 text-gray-800">
+                                  <div className="flex flex-col space-y-32 text-black">
                                     <div className="">
                                       <div className="text-sm font-medium xl:font-bold">
                                         {e.classes[0][0].departureTime}
@@ -1234,10 +1235,10 @@ const filteredData = dataSearch
                                       </TimelineItem>
                                     </Timeline>
                                   </div>
-                                  <div className="mt-4 text-gray-800">
+                                  <div className="mt-4 text-black">
                                     <div className="items-center">
                                       <div>
-                                        <MdOutlineLuggage size={46} />
+                                        <CiRollingSuitcase size={32} />
                                       </div>
                                       <div className="text-xs">
                                         <div>
@@ -1282,7 +1283,7 @@ const filteredData = dataSearch
                                           </div>
                                         </div>
                                         <div className="mt-8">
-                                          <div className="text-xs text-gray-800">
+                                          <div className="text-xs text-black">
                                             <div className="mt-1 flex space-x-16">
                                               <div>
                                                 {" "}
@@ -1331,10 +1332,10 @@ const filteredData = dataSearch
                               ) : (
                                 <div className="hidden xl:flex xl:items-center xl:space-x-16 xl:mt-6 border-t">
                                   <div className="mt-8">
-                                    <h1 className="text-sm font-medium xl:font-bold">
+                                    <h1 className="text-black text-sm font-medium xl:font-bold">
                                       {e.airlineName}{" "}
                                     </h1>
-                                    <div className="text-sm">
+                                    <div className="text-black text-sm">
                                       {e.classes[0][0].flightCode}
                                     </div>
                                     <div>
@@ -1346,7 +1347,7 @@ const filteredData = dataSearch
                                     </div>
                                   </div>
                                   <div className="mt-8">
-                                    <div className="text-xs text-gray-800">
+                                    <div className="text-xs text-black">
                                       <div className="mt-1 flex space-x-16">
                                         <div>
                                           {" "}
@@ -1396,7 +1397,7 @@ const filteredData = dataSearch
                           {/* mobile cari */}
                           <div className="">
                             <div
-                              className="cursor-pointer block xl:hidden w-full text-gray-800"
+                              className="cursor-pointer block xl:hidden w-full text-black"
                             >
                               <div 
                                   type="button"
@@ -1408,11 +1409,11 @@ const filteredData = dataSearch
                                           parseInt(infant) &&
                                           bookingHandlerDetail(index)
                                   }}
-                                  className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7"
+                                  className="text-black px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7"
                                 > 
                                 <div className="flex justify-between">
                                   <div className="col-span-1 xl:col-span-2">
-                                    <h1 className="text-xs font-medium xl:font-bold">
+                                    <h1 className="text-black text-xs font-medium xl:font-bold">
                                       {e.airlineName}
                                     </h1>
                                     <img
@@ -1422,7 +1423,7 @@ const filteredData = dataSearch
                                     />
                                   </div>
                                   <div className="text-right">
-                                    <h1 className="text-xs font-medium xl:font-bold text-blue-500">
+                                    <h1 className="text-xs font-medium xl:font-bold text-black">
                                       Rp.{toRupiah(e.classes[0][0].price)}
                                     </h1>
                                     <small className="text-red-500">
@@ -1443,7 +1444,7 @@ const filteredData = dataSearch
                                       <h1 className="mt-4 xl:mt-0 text-sm font-medium">
                                         <div className="">
                                           <span>{e.detailTitle[0].depart}</span>
-                                          <div className="font-semibold text-xs text-blue-500">
+                                          <div className="font-semibold text-xs text-black">
                                             (
                                             {
                                               e.classes[0][0]
@@ -1458,7 +1459,7 @@ const filteredData = dataSearch
                                     <div className="flex space-x-2 items-center">
                                       <div className="w-full mt-12 px-4 border-b-2"></div>
                                       <div className="text-xs">
-                                        <div className="mt-10 xl:mt-0 text-gray-800">
+                                        <div className="mt-10 xl:mt-0 text-black">
                                           {e.duration}
                                         </div>
                                       </div>
@@ -1474,7 +1475,7 @@ const filteredData = dataSearch
                                               ].arrival
                                             }{" "}
                                           </div>
-                                          <div className="font-semibold text-xs text-blue-500">
+                                          <div className="font-semibold text-xs text-black">
                                             (
                                             {
                                               e.classes[e.classes.length - 1][0]
@@ -1529,14 +1530,14 @@ const filteredData = dataSearch
                                       <div className="p-4 flex justify-between items-center mt-6 border-t xl:hidden">
                                         <div className="">
                                           <div className="">
-                                            <div className="text-sm font-medium xl:font-bold">
+                                            <div className="text-black text-sm font-medium xl:font-bold">
                                               {x[0].departureTime}
                                             </div>
-                                            <div className="text-xs">
+                                            <div className="text-black text-xs">
                                               {x[0].departureDate}
                                             </div>
                                           </div>
-                                          <div className="mt-4">
+                                          <div className="mt-4 text-black">
                                             <Timeline
                                               sx={{
                                                 [`& .${timelineItemClasses.root}:before`]:
@@ -1626,10 +1627,10 @@ const filteredData = dataSearch
                                             </div>
                                           </div>
                                         </div>
-                                        <div className="mt-4 text-gray-800">
+                                        <div className="mt-4 text-black">
                                           <div className="items-center">
                                             <div>
-                                              <MdOutlineLuggage size={46} />
+                                              <CiRollingSuitcase size={32} />
                                             </div>
                                             <div className="text-xs">
                                               <div>
@@ -1752,10 +1753,10 @@ const filteredData = dataSearch
                                         </div>
                                       </div>
 
-                                      <div className="mt-4 text-gray-800">
+                                      <div className="mt-4 text-black">
                                         <div className="items-center">
                                           <div>
-                                            <MdOutlineLuggage size={46} />
+                                            <CiRollingSuitcase size={32} />
                                           </div>
                                           <div className="text-xs">
                                             <div>
@@ -1802,7 +1803,7 @@ const filteredData = dataSearch
                                               </div>
                                             </div>
                                             <div className="mt-8">
-                                              <div className="text-xs text-gray-800">
+                                              <div className="text-xs text-black">
                                                 <div className="">
                                                   <div>
                                                     {" "}
@@ -1851,12 +1852,12 @@ const filteredData = dataSearch
                                       ))}
                                     </>
                                   ) : (
-                                    <div className="p-4 flex justify-between items-start mt-6 border-t xl:hidden">
+                                    <div className="text-black p-4 flex justify-between items-start mt-6 border-t xl:hidden">
                                       <div className="mt-4">
-                                        <h1 className="text-sm font-medium xl:font-bold">
+                                        <h1 className="text-black text-sm font-medium xl:font-bold">
                                           {e.airlineName}{" "}
                                         </h1>
-                                        <div className="text-sm">
+                                        <div className="text-black text-sm">
                                           {e.classes[0][0].flightCode}
                                         </div>
                                         <div>
@@ -1868,7 +1869,7 @@ const filteredData = dataSearch
                                         </div>
                                       </div>
                                       <div className="mt-4">
-                                        <div className="text-xs text-gray-800">
+                                        <div className="text-xs text-black">
                                           <div className="">
                                             <div>
                                               {" "}
@@ -1929,8 +1930,8 @@ const filteredData = dataSearch
                 <div className="flex justify-center items-center">
                   <img src={"/nodata.jpg"} className="w-[200px] md:w-[300px]" alt="No data" />
                 </div>
-                <div className="flex justify-center w-full text-gray-700">
-                  <div className="text-gray-800 text-center">
+                <div className="flex justify-center w-full text-black">
+                  <div className="text-black text-center">
                     <div>
                       <div className="text-sm md:text-md font-medium">
                         Maaf, sepertinya pada rute ini masih belum dibuka kembali.

@@ -258,7 +258,7 @@ export default function ViewBooking({ path }) {
                 </>
               ))}
 
-              <div className="mt-4 mb-4 text-gray-700 font-bold text-lg">
+              <div className="mt-4 mb-4 text-black font-bold text-lg">
                 <div>Description</div>
               </div>
               {/* desktop */}
@@ -285,7 +285,7 @@ export default function ViewBooking({ path }) {
                   </div>
                   <div>
                     <HiOutlineArrowNarrowRight
-                      className="flex justify-center text-gray-500"
+                      className="flex justify-center text-black"
                       size={24}
                     />
                   </div>
@@ -396,7 +396,7 @@ export default function ViewBooking({ path }) {
           <>
             <div className="w-full mt-0 md:mt-8">
               <div className="w-full rounded-md shadow-sm border profile-header">
-                <div className="text-gray-500 p-4 flex space-x-2 items-center">
+                <div className="text-black p-4 flex space-x-2 items-center">
                   <AiOutlineHome size={20} /> <span>Home</span> <span>/</span>{" "}
                   <span>{path}</span>
                 </div>
@@ -413,19 +413,19 @@ export default function ViewBooking({ path }) {
                             <div className="py-4 px-8 xl:py-8">
                               <div className="flex justify-between items-end">
                                 <div className="flex space-x-2  items-end">
-                                  <div className="text-xs text-gray-800">
+                                  <div className="text-xs text-black">
                                     ID Transaksi
                                   </div>
                                   <div className="text-sm text-blue-500 font-bold">
                                     {e.id_transaksi}
                                   </div>
                                 </div>
-                                <div className="text-sm text-gray-800 font-bold">
+                                <div className="text-sm text-black font-bold">
                                   Rp. {toRupiah(e.nominal)}
                                 </div>
                               </div>
                               <div className="border-t mt-6 xl:mt-8">
-                                <div className="flex space-x-2 mt-4 text-sm text-gray-800">
+                                <div className="flex space-x-2 mt-4 text-sm text-black">
                                   <ImAirplane
                                     className="text-blue-500"
                                     size={16}
@@ -437,20 +437,20 @@ export default function ViewBooking({ path }) {
                                   </div>
                                 </div>
                                 <div className="pl-1">
-                                  <div className="mt-6 xl:mt-8 text-sm text-gray-800 font-medium">
+                                  <div className="mt-6 xl:mt-8 text-sm text-black font-medium">
                                     Tanggal Transaksi
                                   </div>
-                                  <div className="mt-2 text-xs text-gray-800">
+                                  <div className="mt-2 text-xs text-black">
                                     {e.tanggal_transaksi}
                                   </div>
                                 </div>
                               </div>
                               <div className="mt-6 xl:mt-8 border-t block lg:flex md:justify-between  lg:items-center">
                                 {/* <div className="mt-2 flex space-x-2 items-end">
-                                <div className="mt-1 text-xs  text-gray-500">
+                                <div className="mt-1 text-xs  text-black">
                                   Kode Booking
                                 </div>
-                                <div className="mt-1 text-sm font-bold text-gray-500">
+                                <div className="mt-1 text-sm font-bold text-black">
                                   - 
                                 </div>
                               </div> */}
@@ -487,10 +487,10 @@ export default function ViewBooking({ path }) {
                           src="/emptyy.png"
                           alt="empty.png"
                         />
-                        <div className="text-gray-800 font-bold text-center">
+                        <div className="text-black font-bold text-center">
                           Data Tidak Ditemukan
                         </div>
-                        <div className="mt-2 text-center text-gray-500 text-sm">
+                        <div className="mt-2 text-center text-black text-sm">
                           Maaf, History Data Booking Tidak ditemukan. Lakukan
                           Booking terlebih dahulu.
                         </div>

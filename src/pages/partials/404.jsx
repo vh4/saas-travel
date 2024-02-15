@@ -9,7 +9,7 @@ const Page404 = () => {
     <>
       <div className="flex flex-col min-h-screen justify-center">
         <div className="flex-grow flex items-center md:items-stretch"> {/* Gunakan md:items-stretch hanya pada tampilan mobile */}
-          <div className="container flex flex-col md:flex-row items-center justify-center px-5 text-gray-700">
+          <div className="container flex flex-col md:flex-row items-center justify-center px-5 text-black">
             <div className="max-w-md text-center">
               <div className="text-4xl font-dark font-bold">404</div>
               <p className="text-2xl md:text-3xl font-light leading-normal">

@@ -358,31 +358,31 @@ export default function BookingKaiTransit() {
           </Modal>
           <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
-              <div className="hidden xl:flex text-blue-500 font-medium xl:font-bold">
+              <div className="hidden xl:flex text-blue-500 font-medium ">
                 Detail pesanan
               </div>
             </div>
             <div>
               <MdHorizontalRule
                 size={20}
-                className="hidden xl:flex text-gray-500"
+                className="hidden xl:flex text-black"
               />
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
-              <RxCrossCircled size={20} className="text-slate-500" />
-              <div className="hidden xl:block text-slate-500">
+              <RxCrossCircled size={20} className="text-black" />
+              <div className="hidden xl:block text-black">
                 Konfirmasi pesanan
               </div>
             </div>
             <div>
               <MdHorizontalRule
                 size={20}
-                className="text-gray-500 hidden xl:flex"
+                className="text-black hidden xl:flex"
               />
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
-              <RxCrossCircled size={20} className="text-slate-500" />
-              <div className="hidden xl:block text-slate-500">
+              <RxCrossCircled size={20} className="text-black" />
+              <div className="hidden xl:block text-black">
                 Pembayaran tiket
               </div>
             </div>
@@ -403,17 +403,17 @@ export default function BookingKaiTransit() {
                     {/* sidebar mobile kai*/}
                     {dataDetailTrain.map((e, i) => (
                       <>
-                        <div className="mt-8 block xl:hidden w-full rounded-md border border-gray-200 shadow-sm">
+                        <div className="mt-0 md:mt-8 mb-2 md:mb-0 block xl:hidden w-full rounded-md border border-gray-200 shadow-sm">
                           <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-                            <div className="text-gray-800 font-medium xl:font-bold">
+                            <div className="text-black font-medium ">
                               Keberangkatan kereta
                             </div>
-                            <small className="text-gray-800">
+                            <small className="text-black">
                               {parseTanggal(e.departureDate)}
                             </small>
                           </div>
                           <div className="p-4 px-4 flex justify-between space-x-12 items-center">
-                            <div className="text-gray-800 text-xs">
+                            <div className="text-black text-xs">
                               <div>{e.berangkat_nama_kota}</div>
                               <div>({e.berangkat_id_station})</div>
                             </div>
@@ -423,12 +423,12 @@ export default function BookingKaiTransit() {
                                 size={18}
                               />
                             </div>
-                            <div className="text-gray-800 text-xs">
+                            <div className="text-black text-xs">
                               <div>{e.tujuan_nama_kota}</div>
                               <div>({e.tujuan_id_station})</div>
                             </div>
                           </div>
-                          <div className="p-4 pl-8 text-gray-800">
+                          <div className="p-4 pl-8 text-black">
                             <div className="text-xs">{e.trainName}</div>
                             <small>
                               {e.seats[0].grade === "E"
@@ -444,14 +444,14 @@ export default function BookingKaiTransit() {
                               <li class="mb-10 ml-4">
                                 <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800 "></div>
                                 <div className="flex space-x-12">
-                                  <time class="mb-1 text-sm leading-none text-gray-800 ">
+                                  <time class="mb-1 text-sm leading-none text-black ">
                                     {e.departureTime}
                                   </time>
                                   <div className="-mt-2">
-                                    <div class="text-left text-xs text-gray-800 ">
+                                    <div class="text-left text-xs text-black ">
                                       {e.berangkat_nama_kota}
                                     </div>
-                                    <p class="text-left text-xs text-gray-800 ">
+                                    <p class="text-left text-xs text-black ">
                                       ({e.berangkat_id_station})
                                     </p>
                                   </div>
@@ -460,14 +460,14 @@ export default function BookingKaiTransit() {
                               <li class="ml-4">
                                 <div class="absolute w-4 h-4 bg-blue-500 rounded-full mt-0 -left-2 border border-white "></div>
                                 <div className="flex space-x-12">
-                                  <time class="mb-1 text-sm leading-none text-gray-800 ">
+                                  <time class="mb-1 text-sm leading-none text-black ">
                                     {e.arrivalTime}
                                   </time>
                                   <div className="-mt-2">
-                                    <div class="text-left text-xs  text-gray-800 ">
+                                    <div class="text-left text-xs  text-black ">
                                       {e.tujuan_nama_kota}
                                     </div>
-                                    <p class="text-left text-xs text-gray-800 ">
+                                    <p class="text-left text-xs text-black ">
                                       ({e.tujuan_id_station})
                                     </p>
                                   </div>
@@ -500,10 +500,10 @@ export default function BookingKaiTransit() {
                             <>
                               <div>
                                 <div className="Booking ml-2 md:ml-0 mt-8 mb-4 xl:mt-4">
-                                  <h1 className="text-sm font-medium xl:font-bold text-gray-800">
+                                  <h1 className="text-sm font-medium  text-black">
                                     ADULT PASSENGER
                                   </h1>
-                                  <small className="text-gray-800">
+                                  <small className="text-black">
                                     Isi sesuai dengan data anda
                                   </small>
                                 </div>
@@ -516,7 +516,7 @@ export default function BookingKaiTransit() {
                                         {/* mobile & desktop Nama*/}
                                         <div className="xl:w-full mt-4 xl:mt-0 ">
                                           <div className="w-full">
-                                            <div className="text-gray-800 text-sm">
+                                            <div className="text-black text-sm">
                                               Nama Lengkap
                                             </div>
                                             <Form.Item
@@ -572,7 +572,7 @@ export default function BookingKaiTransit() {
                                       <div className="py-0 px-0 xl:px-8 block xl:grid xl:grid-cols-2 xl:gap-8">
                                         {/* desktop nomor hp */}
                                         <div className="w-full px-4 xl:px-0 mt-2 xl:mt-0">
-                                          <div className="text-gray-800 text-sm mb-2">
+                                          <div className="text-black text-sm mb-2">
                                             Nomor HP
                                           </div>
                                           <Form.Item
@@ -622,7 +622,7 @@ export default function BookingKaiTransit() {
                                         </div>
                                         {/* mobile & desktop NIK*/}
                                         <div className="w-full p-4 xl:p-0 mt-2 xl:mt-0">
-                                          <div className="text-gray-800 text-sm mb-2">
+                                          <div className="text-black text-sm mb-2">
                                             No. Ktp
                                           </div>
                                           <Form.Item
@@ -713,10 +713,10 @@ export default function BookingKaiTransit() {
                             <>
                               <div>
                                 <div className="Booking ml-2  md:ml-0 mt-8 mb-4 xl:mt-12">
-                                  <h1 className="xl:text-sm font-medium xl:font-bold text-gray-800 text-sm">
+                                  <h1 className="xl:text-sm font-medium  text-black text-sm">
                                     INFANT PASSENGER
                                   </h1>
-                                  <small className="text-gray-500">
+                                  <small className="text-black">
                                     isi dengan detail pemesanan kereta
                                   </small>
                                 </div>
@@ -729,7 +729,7 @@ export default function BookingKaiTransit() {
                                         {/* mobile & desktop Nama*/}
                                         <div className="xl:w-full mt-4 xl:mt-0">
                                           <div className="w-full">
-                                            <div className="text-gray-800 text-sm">
+                                            <div className="text-black text-sm">
                                               Nama Lengkap
                                             </div>
                                             <Form.Item
@@ -786,7 +786,7 @@ export default function BookingKaiTransit() {
                                       <div className="py-0 px-0 xl:px-8 block xl:grid xl:grid-cols-2 mt-0 xl:gap-8">
                                         {/* desktop nomor hp */}
                                         <div className="p-4 xl:p-0 w-full">
-                                          <div className="text-gray-800 text-sm mb-2">
+                                          <div className="text-black text-sm mb-2">
                                             Tanggal Lahir
                                           </div>
                                           <DatePicker
@@ -818,7 +818,7 @@ export default function BookingKaiTransit() {
                                         </div>
                                         {/* mobile & desktop NIK*/}
                                         <div className="p-4 xl:p-0 w-full">
-                                          <div className="text-gray-800 text-sm mb-2">
+                                          <div className="text-black text-sm mb-2">
                                             No. Ktp
                                           </div>
                                           <Form.Item
@@ -928,15 +928,15 @@ export default function BookingKaiTransit() {
                           <>
                             <div className="hidden xl:block rounded-md border border-gray-200 shadow-sm mt-4">
                               <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-                                <div className="text-gray-800 text-sm font-medium xl:font-bold">
+                                <div className="text-black text-sm font-medium ">
                                   Keberangkatan kereta
                                 </div>
-                                <small className="text-xs text-gray-800">
+                                <small className="text-xs text-black">
                                   {parseTanggal(e.departureDate)}
                                 </small>
                               </div>
                               <div className="px-4 xl:px-8 p-4 flex justify-between space-x-12 items-center">
-                                <div className="text-xs font-medium xl:font-bold text-gray-800">
+                                <div className="text-xs font-medium  text-black">
                                   <div>{e.berangkat_nama_kota}</div>
                                   <div>({e.berangkat_id_station})</div>
                                 </div>
@@ -946,14 +946,14 @@ export default function BookingKaiTransit() {
                                     size={18}
                                   />
                                 </div>
-                                <div className="text-xs font-medium xl:font-bold text-gray-800">
+                                <div className="text-xs font-medium  text-black">
                                   <div>{e.tujuan_nama_kota}</div>
                                   <div>({e.tujuan_id_station})</div>
                                 </div>
                               </div>
 
-                              <div className="p-4 pl-8 text-gray-800">
-                                <div className=" text-xs font-medium xl:font-bold">
+                              <div className="p-4 pl-8 text-black">
+                                <div className=" text-xs font-medium ">
                                   {e.trainName}
                                 </div>
                                 <small>
@@ -970,14 +970,14 @@ export default function BookingKaiTransit() {
                                   <li class="mb-10 ml-4 text-sm">
                                     <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800 "></div>
                                     <div className="flex space-x-12">
-                                      <time class="mb-1 text-xs font-medium xl:font-bold leading-none text-gray-800 ">
+                                      <time class="mb-1 text-xs font-medium  leading-none text-black ">
                                         {e.departureTime}
                                       </time>
                                       <div className="-mt-2">
-                                        <h3 class="text-left text-xs font-medium xl:font-bold text-gray-800 ">
+                                        <h3 class="text-left text-xs font-medium  text-black ">
                                           {e.berangkat_nama_kota}
                                         </h3>
-                                        <p class="text-left text-xs font-medium xl:font-bold text-gray-800 ">
+                                        <p class="text-left text-xs font-medium  text-black ">
                                           ({e.berangkat_id_station})
                                         </p>
                                       </div>
@@ -986,14 +986,14 @@ export default function BookingKaiTransit() {
                                   <li class="ml-4 text-sm mt-10">
                                     <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white "></div>
                                     <div className="flex space-x-12">
-                                      <time class="mb-1 text-xs font-medium xl:font-bold leading-none text-gray-800 ">
+                                      <time class="mb-1 text-xs font-medium  leading-none text-black ">
                                         {e.arrivalTime}
                                       </time>
                                       <div className="-mt-2">
-                                        <h3 class="text-left text-xs font-medium xl:font-bold text-gray-800">
+                                        <h3 class="text-left text-xs font-medium  text-black">
                                           {e.tujuan_nama_kota}
                                         </h3>
-                                        <p class="text-left text-xs font-medium xl:font-bold text-gray-800">
+                                        <p class="text-left text-xs font-medium  text-black">
                                           ({e.tujuan_id_station})
                                         </p>
                                       </div>
