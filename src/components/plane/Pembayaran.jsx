@@ -443,7 +443,7 @@ export default function Pembayaran() {
                               <div className="px-2 py-2 text-black border-b border-gray-200 text-sm font-medium">
                                 {e.nama_depan} {e.nama_belakang}
                               </div>
-                              <div className="grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-4 mt-2 gap-2">
+                              <div className="grid grid-cols-2 md:grid-cols-4 mt-2 gap-2">
                                 <div className="px-2 py-2 text-xs">
                                   <div className="text-black font-medium">
                                     NIK
@@ -493,7 +493,7 @@ export default function Pembayaran() {
                               <div className="px-2 py-2 text-black border-b border-gray-200 text-sm font-medium ">
                                 {e.nama_depan} {e.nama_belakang}
                               </div>
-                              <div className="flex space-x-8 mt-2 items-center">
+                              <div className="grid grid-cols-2 md:grid-cols-4">
                                 <div className="px-2 py-2 text-xs">
                                   <div className="text-black font-medium ">
                                     NIK/ No.Ktp
@@ -526,7 +526,7 @@ export default function Pembayaran() {
                               <div className="px-2 py-2 text-black border-b border-gray-200 text-sm font-medium ">
                                 {e.nama_depan} {e.nama_belakang}
                               </div>
-                              <div className="mt-2 flex space-x-8">
+                              <div className="grid grid-cols-2 md:grid-cols-4">
                                 <div className="px-2 py-2 text-xs">
                                   <div className="text-black font-medium ">
                                     NIK/ No.Ktp

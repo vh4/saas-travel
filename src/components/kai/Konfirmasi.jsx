@@ -1059,7 +1059,7 @@ export default function Konfirmasi() {
                               <div className="px-2 xl:px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
                                 {e.name}
                               </div>
-                              <div className="mt-2 block grid-cols-2 md:grid-cols-4">
+                              <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
                                 <div className="px-2 md:px-4 py-2 text-xs">
                                   <div className="text-black font-medium ">NIK</div>
                                   <div className="mt-2 text-black text-xs">
@@ -1114,7 +1114,7 @@ export default function Konfirmasi() {
                               <div className="px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
                                 {e.name}
                               </div>
-                              <div className="mt-2 block md:flex md:space-x-8">
+                              <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
                                 <div className="px-4 py-2 text-xs">
                                   <div className="text-black font-medium ">NIK</div>
                                   <div className="mt-2 text-black text-xs">
