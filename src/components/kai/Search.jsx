@@ -647,7 +647,7 @@ export default function Search() {
           setLoading(false);
         }, 1000);
       }else{
-  
+          
         const response = await axios.post(
           `${process.env.REACT_APP_HOST_API}/travel/train/search`,
           {
@@ -665,17 +665,22 @@ export default function Search() {
         if (response.data.rc.length < 1) {
           setError(true);
           setLoadingTransit(false);
+          setLoading(false);
         } else if (response.data.rc !== "00" || response.data.rc === undefined) {
           setError(true);
           setLoadingTransit(false);
+          setLoading(false);
         } else if (response.data === undefined) {
           setError(true);
           setLoadingTransit(false);
+          setLoading(false);
         } else {
           setDataSearchTransit(response.data.data);
           setuuid(response.data.uuid);
           setLoadingTransit(false);
+          setLoading(false);
           setError(false);
+          
         }
   
       }
