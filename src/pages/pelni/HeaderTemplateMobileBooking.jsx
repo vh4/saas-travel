@@ -8,29 +8,29 @@ export default function HeaderTemplateMobileBooking({ children }) {
   return (
     <div className="flex flex-col min-h-screen">
       <div>
-      <div className="block md:hidden mb-8">
-        <div className="flex items-center w-full bg-blue-500 text-white px-2 py-[18px] fixed z-50">
-            <div className="ml-2" onClick={() => window.history.back()}>
-                <IoArrowBack size={24} />
-            </div>
-            <div className="flex flex-col items-center justify-center text-center mx-auto">
+      <div className="block md:hidden mb-2">
+        <div className="flex space-x-3.5 items-center w-full text-black px-2 py-[18px]">
+              <div className="ml-2" onClick={() => window.history.back()}>
+                  <IoArrowBack size={22} />
+              </div>
+            <div className="flex flex-col items-center justify-center text-center">
                 <div className="flex space-x-2 items-center justify-center  text-md">
                 <div className="flex justify-start jalur-payment-booking text-xs space-x-2 items-center">
               <div className="flex space-x-2 items-center">
-                <IoCheckmarkCircle size={18} className="text-white" />
-                <div className="block xl:hidden text-white ">
+                <IoCheckmarkCircle size={18} className="text-black" />
+                <div className="block xl:hidden text-black ">
                   Cari Jadwal
                 </div>
               </div>
               <div className="flex space-x-2 items-center">
-                <RxCrossCircled size={18} className="text-white" />
-                <div className="block xl:hidden text-white ">
+                <RxCrossCircled size={18} className="text-black" />
+                <div className="block xl:hidden text-black ">
                   Booking
                 </div>
               </div>
               <div className="flex space-x-2 items-center ">
-                <RxCrossCircled size={18} className="text-white" />
-                <div className="block xl:hidden text-white">Payment</div>
+                <RxCrossCircled size={18} className="text-black" />
+                <div className="block xl:hidden text-black">Payment</div>
               </div>
             </div>
                 </div>
@@ -38,7 +38,7 @@ export default function HeaderTemplateMobileBooking({ children }) {
         </div>
       </div>
       </div>
-      <div className="flex-grow mt-8">
+      <div className="flex-grow">
         <div className="container mx-auto px-0 xl:px-32">
           <main>{children}</main>
         </div>

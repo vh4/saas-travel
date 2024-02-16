@@ -707,8 +707,6 @@ export default function Konfirmasi() {
   const [backdrop, setBackdrop] = React.useState('static');
   const handleOpen = () => setOpen(true);
 
-  console.log(changeState)
-
   function gantigerbong(value){
 
     setSelectedCount(0); 

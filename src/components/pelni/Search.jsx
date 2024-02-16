@@ -356,10 +356,10 @@ export default function Search() {
         <>
           <>
             {contextHolder}
-            <div className="judul-search font-bold text-black">
+            <div className="hidden md:block judul-search font-bold text-black">
               PILIH JADWAL
             </div>
-            <div className="mt-4 md:mt-8">
+            <div className="mt-0 md:mt-8">
               <div className="block md:flex flex-col md:flex-row md:justify-between items-center md:space-x-4">
                 <div className="hidden md:flex items-center space-x-3 text-center md:text-left">
                   <small className="text-xs font-medium xl:font-bold text-black">
@@ -390,14 +390,15 @@ export default function Search() {
                   </small>
                 </div>
               </div>
-              <div className="flex justify-between mt-8">
+              <div className="flex justify-between mt-4 md:mt-8">
                   <div className="relative flex items-center space-x-2 text-black text-xs font-medium xl:font-bold">
                     <Whisper
+                    className="text-black"
                       placement="bottomStart"
                       trigger="active"
                       controlId="control-id-active"
                       speaker={
-                        <Popover title="Filter Nama Kapal">
+                        <Popover className="text-black" title="Filter Nama Kapal">
                         <div className="block text-xs px-2">
                         <Box sx={{ width: 120 }}>
                           <FormGroup>

@@ -9,11 +9,11 @@ export default function HeaderTemplateMobilDetailBooking({ children }) {
     <div className="flex flex-col min-h-screen">
       <div>
       <div className="block md:hidden mb-2">
-        <div className="flex items-center w-ful text-black px-2 py-[18px]">
+        <div className="flex space-x-3.5 items-center w-ful text-black px-2 py-[18px]">
             <div className="ml-2" onClick={() => window.history.back()}>
-                <IoArrowBack size={24} />
+                <IoArrowBack size={22} />
             </div>
-            <div className="flex flex-col items-center justify-center text-center mx-auto">
+            <div className="flex flex-col items-center justify-center text-center">
                 <div className="items-center justify-center  text-md">
                 <div className="flex justify-start jalur-payment-booking text-xs space-x-2 items-center">
               <div className="flex space-x-2 items-center">

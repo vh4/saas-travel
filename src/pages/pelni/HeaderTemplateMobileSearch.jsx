@@ -35,12 +35,12 @@ export default function HeaderTemplateMobileSearch({ children }) {
     <div className="flex flex-col min-h-screen">
       <div>
       <div className="block md:hidden">
-        <div className="flex items-center w-full bg-blue-500 text-white p-2.5 fixed z-50">
-            <div onClick={() => window.history.back()} className="ml-2">
-                <IoArrowBack size={24} />
+        <div className="flex  justify-center items-center w-full text-black p-2.5">
+            <div className="ml-2" onClick={() => window.history.back()}>
+                <IoArrowBack size={22} />
             </div>
             <div className="flex flex-col items-center justify-center text-center mx-auto">
-                <div className="flex space-x-4 items-center justify-center  text-md">
+                <div className="flex space-x-4 items-center justify-center text-xs">
                     <div>{originName.split('(')[0]}</div>
                     <IoArrowForwardCircle size={24} className="block " />
                     <div>{destinationName.split('(')[0]}</div>
@@ -52,7 +52,7 @@ export default function HeaderTemplateMobileSearch({ children }) {
         </div>
       </div>
       </div>
-      <div className="flex-grow mt-8">
+      <div className="flex-grow">
         <div className="container mx-auto px-0 xl:px-32">
           <main>{children}</main>
         </div>

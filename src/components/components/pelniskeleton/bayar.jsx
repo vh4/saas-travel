@@ -5,7 +5,7 @@ import { IoArrowForwardOutline } from 'react-icons/io5';
 const BayarLoading = ({total}) => {
 	return(
 		<>
-                <div className="block xl:flex xl:justify-around mb-24 xl:mx-16 xl:space-x-4">
+                <div className="block xl:flex xl:justify-around mb-24 xl:space-x-4">
                   	<div className="mt-4 w-full mx-0 2xl:mx-4">
 					  {Array.from({ length: total }, (_, i) => (
 						<div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
