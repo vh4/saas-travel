@@ -641,7 +641,7 @@ export default function Search() {
       setLoading(true);
       setIsTransit(e.target.value);
 
-      if(dataSearchTransit.length !== 0 || dataSearchTransit.length !== 0 || Object.keys(dataSearchTransit).length !== 0){
+      if(dataSearchTransit.length !== 0 || Object.keys(dataSearchTransit).length !== 0){
         setTimeout(() => {
           setLoadingTransit(false);
           setLoading(false);
