@@ -2,7 +2,7 @@ import React from "react";
 import { BsArrowBarLeft } from "react-icons/bs";
 import { Link } from "react-router-dom";
 
-const Page400 = () => {
+const Page400 = ({message = 'Terjadi Kesalahan pada page. Silahkan lakukan booking ulang.' }) => {
   return (
     <div
       style={{
@@ -20,7 +20,7 @@ const Page400 = () => {
             className="mx-auto" // Tambahkan class mx-auto untuk memastikan gambar berada di tengah secara horizontal
           />
           <div className="mt-4">
-              Terjadi Kesalahan pada page. Silahkan lakukan booking ulang.
+              {message}
           </div>
           <Link to={'/'}>
             <div className="flex justify-center mt-4 space-x-2 items-center text-blue-500 cursor-pointer">

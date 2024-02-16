@@ -276,7 +276,7 @@ export default function Search() {
               setuuid(response.data.uuid);
               setLoading(false);
               setError(false);
-
+              setLoadingTransit(false);
             }else{
               setDataSearch(response.data.data);
               setuuid(response.data.uuid);
@@ -374,6 +374,9 @@ export default function Search() {
     handlerSearch();
   }, []);
 
+
+  const [filteredDataTransit, setfilteredDataTransit] = useState({});
+
   const filterDataTransit = (data, gradeFilter, valHargaRange, selectedTime) => {
     const filteredData = {};  
     const gradeMapping = ['K', 'E', 'B']; // Mapping untuk grade
@@ -425,12 +428,14 @@ export default function Search() {
       }
     });
   
-    return filteredData;
+    setfilteredDataTransit(filteredData);
+
   };
     
-  // Contoh penggunaan:
-  const filteredDataTransit = filterDataTransit(dataSearchTransit, gradeFilter, valHargaRange, selectedTime);
-  console.log(filteredDataTransit)
+  
+  useEffect(() => {
+    filterDataTransit(dataSearchTransit, gradeFilter, valHargaRange, selectedTime);
+  }, [dataSearchTransit, gradeFilter, valHargaRange, selectedTime])
 
   const filteredData = dataSearch
     .filter((train) => {
@@ -629,40 +634,59 @@ export default function Search() {
   );
 
   const handleIsTransit = async (e) => {
-    setLoadingTransit(true);
-    setIsTransit(e.target.value);
+    
+    try {
+      
+      setLoadingTransit(true);
+      setLoading(true);
+      setIsTransit(e.target.value);
 
-    setTimeout(async () => {
-      const response = await axios.post(
-        `${process.env.REACT_APP_HOST_API}/travel/train/search`,
-        {
-          productCode: "WKAI",
-          token: JSON.parse(
-            localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-          ),
-          origin: origin,
-          destination: destination,
-          date: date,
-          connection_train: true,
+      if(dataSearchTransit.length !== 0 || dataSearchTransit.length !== 0 || Object.keys(dataSearchTransit).length !== 0){
+        setTimeout(() => {
+          setLoadingTransit(false);
+          setLoading(false);
+        }, 1000);
+      }else{
+  
+        const response = await axios.post(
+          `${process.env.REACT_APP_HOST_API}/travel/train/search`,
+          {
+            productCode: "WKAI",
+            token: JSON.parse(
+              localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+            ),
+            origin: origin,
+            destination: destination,
+            date: date,
+            connection_train: true,
+          }
+        );
+    
+        if (response.data.rc.length < 1) {
+          setError(true);
+          setLoadingTransit(false);
+        } else if (response.data.rc !== "00" || response.data.rc === undefined) {
+          setError(true);
+          setLoadingTransit(false);
+        } else if (response.data === undefined) {
+          setError(true);
+          setLoadingTransit(false);
+        } else {
+          setDataSearchTransit(response.data.data);
+          setuuid(response.data.uuid);
+          setLoadingTransit(false);
+          setError(false);
         }
-      );
-
-      if (response.data.rc.length < 1) {
-        setError(true);
-        setLoadingTransit(false);
-      } else if (response.data.rc !== "00" || response.data.rc === undefined) {
-        setError(true);
-        setLoadingTransit(false);
-      } else if (response.data === undefined) {
-        setError(true);
-        setLoadingTransit(false);
-      } else {
-        setDataSearchTransit(response.data.data);
-        setuuid(response.data.uuid);
-        setLoadingTransit(false);
-        setError(false);
+  
       }
-    });
+      
+    } catch (error) {
+        console.log(error);
+        setError(false);
+    }
+    
+
+
   };
 
   return (
@@ -675,7 +699,7 @@ export default function Search() {
         </>
       ) : errPage === true ? (
         <>
-          <Page400 />
+          <Page400 message="Maaf, Terjadi Kesalahan pada server." />
         </>
       ) : (
         <>
