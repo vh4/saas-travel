@@ -91,6 +91,7 @@ export default function Search() {
   const [ubahPencarian, setUbahPencarian] = useState(false);
   const [err, setErr] = useState(false);
   const [errPage, setErrPage] = useState(false);
+  const [messageError, setmessageError] = useState('');
 
   const [valHargaRange, setHargaRange] = useState([0, 10000000]);
 
@@ -255,21 +256,39 @@ export default function Search() {
               connection_train: category,
             }
           );
-
           setListStaton(await getKAIdata());
 
           if (response.data.rc.length < 1) {
             setError(true);
             setLoading(false);
+            if(response.data.rc == '10'){
+              setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
+            }else{
+              setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
+            }
+
           } else if (
             response.data.rc !== "00" ||
             response.data.rc === undefined
           ) {
             setError(true);
             setLoading(false);
+
+            if(response.data.rc == '10'){
+              setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
+            }else{
+              setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
+            }
+
           } else if (response.data === undefined) {
             setError(true);
             setLoading(false);
+            if(response.data.rc == '10'){
+              setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
+            }else{
+              setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
+            }
+
           } else {
             if(category == 'true'){
               setDataSearchTransit(response.data.data);
@@ -289,6 +308,7 @@ export default function Search() {
     } catch (error) {
       setError(true);
       setLoading(false);
+      setmessageError('Maaf, Terjadi kesalahan pada server.');
     }
   }
 
@@ -385,48 +405,52 @@ export default function Search() {
     const isGradeFilterActive = gradeFilter.some(value => value);
     const isPriceFilterActive = valHargaRange[0] > 0 || valHargaRange[1] < 10000000;
   
-    Object.keys(data).forEach((key) => {
-      const trains = data[key];
+    if(data){
+      Object.keys(data).forEach((key) => {
+        const trains = data[key];
+    
+        const filteredTrains = trains.filter((trainPair) => {
+          let isGradeMatch = true; // Default true jika tidak ada filter grade
+          let isPriceMatch = true; // Default true jika tidak ada filter harga
+          let isWaktuMatch = true; // Default true jika tidak ada filter harga
   
-      const filteredTrains = trains.filter((trainPair) => {
-        let isGradeMatch = true; // Default true jika tidak ada filter grade
-        let isPriceMatch = true; // Default true jika tidak ada filter harga
-        let isWaktuMatch = true; // Default true jika tidak ada filter harga
-
-        if (isGradeFilterActive) {
-          isGradeMatch = trainPair[0].seats.some(seat => activeGrades.includes(seat.grade));
-        }
-  
-        if (isPriceFilterActive) {
-
-          const totalPrice = trainPair.reduce((acc, train) => {
-            return acc + train.seats.reduce((acc, seat) => acc + parseInt(seat.priceAdult), 0);
-          }, 0);
-  
-          // Cek apakah total harga dalam rentang yang diinginkan
-          isPriceMatch = totalPrice >= valHargaRange[0] && totalPrice <= valHargaRange[1];
-        }
-
-        if(isWaktuMatch){
-
-          if (selectedTime && selectedTime.length > 0) {
-            const departureTime = moment(trainPair[0].departureTime, "HH:mm");
-            isWaktuMatch = selectedTime.some((t) => {
-              const [start, end] = t.split("-");
-              return departureTime.isBetween(moment(start, "HH:mm"), moment(end, "HH:mm"), undefined, '[]'); // '[]' inklusif kedua batas
-            });
+          if (isGradeFilterActive) {
+            isGradeMatch = trainPair[0].seats.some(seat => activeGrades.includes(seat.grade));
           }
-          
+    
+          if (isPriceFilterActive) {
+  
+            const totalPrice = trainPair.reduce((acc, train) => {
+              return acc + train.seats.reduce((acc, seat) => acc + parseInt(seat.priceAdult), 0);
+            }, 0);
+    
+            // Cek apakah total harga dalam rentang yang diinginkan
+            isPriceMatch = totalPrice >= valHargaRange[0] && totalPrice <= valHargaRange[1];
+          }
+  
+          if(isWaktuMatch){
+  
+            if (selectedTime && selectedTime.length > 0) {
+              const departureTime = moment(trainPair[0].departureTime, "HH:mm");
+              isWaktuMatch = selectedTime.some((t) => {
+                const [start, end] = t.split("-");
+                return departureTime.isBetween(moment(start, "HH:mm"), moment(end, "HH:mm"), undefined, '[]'); // '[]' inklusif kedua batas
+              });
+            }
+            
+          }
+    
+          // Return true jika kedua kondisi (atau salah satu, tergantung filter yang aktif) terpenuhi
+          return isGradeMatch && isPriceMatch && isWaktuMatch;
+        });
+    
+        if (filteredTrains.length > 0) {
+          filteredData[key] = filteredTrains;
         }
-  
-        // Return true jika kedua kondisi (atau salah satu, tergantung filter yang aktif) terpenuhi
-        return isGradeMatch && isPriceMatch && isWaktuMatch;
       });
-  
-      if (filteredTrains.length > 0) {
-        filteredData[key] = filteredTrains;
-      }
-    });
+    }else{
+      filteredData = {};
+    }
   
     setfilteredDataTransit(filteredData);
 
@@ -666,28 +690,47 @@ export default function Search() {
           setError(true);
           setLoadingTransit(false);
           setLoading(false);
+
+          if(response.data.rc == '10'){
+            setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
+          }else{
+            setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
+          }
+        
         } else if (response.data.rc !== "00" || response.data.rc === undefined) {
           setError(true);
           setLoadingTransit(false);
           setLoading(false);
+          
+          if(response.data.rc == '10'){
+            setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
+          }else{
+            setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
+          }
+          
         } else if (response.data === undefined) {
           setError(true);
           setLoadingTransit(false);
           setLoading(false);
+
+          if(response.data.rc == '10'){
+            setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
+          }else{
+            setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
+          }
+
         } else {
           setDataSearchTransit(response.data.data);
           setuuid(response.data.uuid);
           setLoadingTransit(false);
-          setLoading(false);
-          setError(false);
-          
+          setLoading(false);          
         }
   
       }
       
     } catch (error) {
-        console.log(error);
         setError(false);
+        setmessageError('Maaf, terjadi kesalahan pada server.');
     }
     
 
@@ -1058,8 +1101,7 @@ export default function Search() {
                       <div className="text-black text-center">
                         <div>
                           <div className="text-sm md:text-md font-medium">
-                            Maaf, sepertinya pada rute ini masih belum dibuka
-                            kembali.
+                            {messageError}
                           </div>
                           {/* <small>
                               Namun jangan khawatir, masih ada pilihan kendaraan lain
@@ -1400,8 +1442,7 @@ export default function Search() {
                     <div className="text-black text-center">
                       <div>
                         <div className="text-sm md:text-md font-medium">
-                          Maaf, sepertinya pada rute ini masih belum dibuka
-                          kembali.
+                          {messageError.length > 0  ? messageError : 'Maaf, sepertinya pada rute ini masih belum dibuka kembali.'}
                         </div>
                         {/* <small>
                               Namun jangan khawatir, masih ada pilihan kendaraan lain
