@@ -448,8 +448,6 @@ export default function Search() {
           filteredData[key] = filteredTrains;
         }
       });
-    }else{
-      filteredData = {};
     }
   
     setfilteredDataTransit(filteredData);
