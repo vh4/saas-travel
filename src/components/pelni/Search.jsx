@@ -712,7 +712,7 @@ export default function Search() {
                                         </div>
                                       </div>
                                     </div>
-                                    <div className="flex justify-center text-xs mt-2 text-blue-500 cursor-pointer text-center items-center mb-2 font-bold"  
+                                    <div className="flex justify-center text-xs mt-2 text-blue-500 cursor-pointer text-center items-center mb-2"  
                                       onClick={(event) =>{
                                         event.stopPropagation();
                                         openButton == `open-${k + i}${e.SHIP_NO}`
@@ -934,7 +934,7 @@ export default function Search() {
                                         </div>
                                       </div>
                                     </div>
-                                    <div className="flex justify-center text-xs mt-2 text-blue-500 cursor-pointer text-center items-center mb-2 font-bold" 
+                                    <div className="flex justify-center text-xs mt-2 text-blue-500 cursor-pointer text-center items-center mb-2" 
                                       onClick={(event) =>{
                                         event.stopPropagation();
                                         openButton == `open-${k + i}${e.SHIP_NO}`

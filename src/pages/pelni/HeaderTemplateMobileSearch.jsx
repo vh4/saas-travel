@@ -42,7 +42,7 @@ export default function HeaderTemplateMobileSearch({ children }) {
             <div className="flex flex-col items-center justify-center text-center mx-auto">
                 <div className="flex space-x-4 items-center justify-center text-xs">
                     <div>{originName.split('(')[0]}</div>
-                    <IoArrowForwardCircle size={24} className="block " />
+                    <IoArrowForwardCircle size={24} className="block text-blue-500" />
                     <div>{destinationName.split('(')[0]}</div>
                 </div>
                 <div className="text-xs">
