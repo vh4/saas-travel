@@ -214,6 +214,8 @@ export default function Search() {
   const [isLoading, setLoading] = React.useState(false);
   const [isLoadingTransit, setLoadingTransit] = React.useState(false);
   const [notFound, setError] = React.useState(true);
+  const [notFoundTransit, setErrorTransit] = React.useState(true);
+
   const skeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const [dataSearch, setDataSearch] = React.useState([]);
   const [dataSearchTransit, setDataSearchTransit] = React.useState([]);
@@ -259,19 +261,17 @@ export default function Search() {
           setListStaton(await getKAIdata());
 
           if (response.data.rc.length < 1) {
-            setError(true);
-            setLoading(false);
             if(response.data.rc == '10'){
               setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
             }else{
               setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
             }
+            setLoading(false);
 
           } else if (
             response.data.rc !== "00" ||
             response.data.rc === undefined
           ) {
-            setError(true);
             setLoading(false);
 
             if(response.data.rc == '10'){
@@ -280,13 +280,24 @@ export default function Search() {
               setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
             }
 
+            if(category == 'true'){
+              setErrorTransit(true);
+            }else{
+              setError(true);
+            }
+
           } else if (response.data === undefined) {
-            setError(true);
             setLoading(false);
             if(response.data.rc == '10'){
               setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
             }else{
               setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
+            }
+
+            if(category == 'true'){
+              setErrorTransit(true);
+            }else{
+              setError(true);
             }
 
           } else {
@@ -294,21 +305,24 @@ export default function Search() {
               setDataSearchTransit(response.data.data);
               setuuid(response.data.uuid);
               setLoading(false);
-              setError(false);
               setLoadingTransit(false);
+              setErrorTransit(false); 
+              
             }else{
               setDataSearch(response.data.data);
               setuuid(response.data.uuid);
               setLoading(false);
               setError(false);
+              
             }
           }
         });
       });
     } catch (error) {
-      setError(true);
       setLoading(false);
       setmessageError('Maaf, Terjadi kesalahan pada server.');
+      setError(true);
+      setErrorTransit(true);
     }
   }
 
@@ -685,7 +699,6 @@ export default function Search() {
         );
     
         if (response.data.rc.length < 1) {
-          setError(true);
           setLoadingTransit(false);
           setLoading(false);
 
@@ -694,9 +707,11 @@ export default function Search() {
           }else{
             setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
           }
+
+          setErrorTransit(true);
+  
         
         } else if (response.data.rc !== "00" || response.data.rc === undefined) {
-          setError(true);
           setLoadingTransit(false);
           setLoading(false);
           
@@ -705,9 +720,9 @@ export default function Search() {
           }else{
             setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
           }
-          
+          setErrorTransit(true);
+
         } else if (response.data === undefined) {
-          setError(true);
           setLoadingTransit(false);
           setLoading(false);
 
@@ -716,20 +731,23 @@ export default function Search() {
           }else{
             setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
           }
+
+          setErrorTransit(true);
 
         } else {
           setDataSearchTransit(response.data.data);
           setuuid(response.data.uuid);
           setLoadingTransit(false);
-          setLoading(false);          
+          setLoading(false);  
+          setErrorTransit(false);
         }
   
       }
       
     } catch (error) {
-        setError(false);
         setmessageError('Maaf, terjadi kesalahan pada server.');
-    }
+        setErrorTransit(false);
+      }
     
 
 
@@ -1129,7 +1147,7 @@ export default function Search() {
                     </Box>
                   </div>
                 ))
-              ) : notFound !== true && filteredDataTransit.length !== 0 && 
+              ) : notFoundTransit !== true && filteredDataTransit.length !== 0 && 
                   Object.keys(filteredDataTransit).length !== 0
               ? (
                 <div className="row mb-24 w-full p-2">

@@ -195,7 +195,9 @@ export default function Header() {
 
           navigate("/logout");
         });
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
