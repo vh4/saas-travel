@@ -23,6 +23,7 @@ import { Typography } from "antd";
 import moment from "moment";
 import { SeatMapTransit } from "./SeatMapsTransit";
 import { IoArrowForwardOutline } from "react-icons/io5";
+import { MdOutlineTrain } from "react-icons/md";
 
 export default function KonfirmasiTransit() {
   const [api, contextHolder] = notification.useNotification();
@@ -821,16 +822,19 @@ export default function KonfirmasiTransit() {
                   )}
 
                   {dataDetailTrain &&
+                    passengers.adults &&
+                    passengers.adults.length > 0 &&
                     dataDetailTrain.map((k, l) => (
                       <>
-                        {passengers.adults && passengers.adults.length > 0
-                          ? passengers.adults.map((e, i) => (
-                              <>
-                                <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
-                                  <div className="p-2">
-                                    <div className="px-2 xl:px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
-                                      {k.trainName}
-                                    </div>
+                        <div className="p-2">
+                          <div className="flex space-x-2 items-center px-2 py-2 text-black border-b border-gray-200 text-sm font-medium ">
+                            <MdOutlineTrain className="text-black" size={22} />
+                            <p>{k.trainName}</p>
+                          </div>
+                          {passengers.adults && passengers.adults.length > 0
+                            ? passengers.adults.map((e, i) => (
+                                <>
+                                  <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                                     <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
                                       <div className="px-2 md:px-4 py-2 text-xs">
                                         <div className="text-black font-medium ">
@@ -884,10 +888,10 @@ export default function KonfirmasiTransit() {
                                       </div>
                                     </div>
                                   </div>
-                                </div>
-                              </>
-                            ))
-                          : ""}
+                                </>
+                              ))
+                            : ""}
+                        </div>
                       </>
                     ))}
 
@@ -901,16 +905,22 @@ export default function KonfirmasiTransit() {
                   )}
 
                   {dataDetailTrain &&
+                    passengers.infants &&
+                    passengers.infants.length > 0 &&
                     dataDetailTrain.map((k, l) => (
                       <>
-                        {passengers.infants && passengers.infants.length > 0
-                          ? passengers.infants.map((e, i) => (
-                              <>
-                                <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
-                                  <div className="p-2">
-                                    <div className="px-2 xl:px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
-                                      {k.trainName}
-                                    </div>
+                        <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+                          <div className="p-2">
+                            <div className="flex space-x-2 items-center px-2 py-2 text-black border-b border-gray-200 text-sm font-medium ">
+                              <MdOutlineTrain
+                                className="text-black"
+                                size={22}
+                              />
+                              <p>{k.trainName}</p>
+                            </div>
+                            {passengers.infants && passengers.infants.length > 0
+                              ? passengers.infants.map((e, i) => (
+                                  <>
                                     <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
                                       <div className="px-2 md:px-4 py-2 text-xs">
                                         <div className="text-black font-medium ">
@@ -965,11 +975,11 @@ export default function KonfirmasiTransit() {
                                         </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </div>
-                              </>
-                            ))
-                          : ""}
+                                  </>
+                                ))
+                              : ""}
+                          </div>
+                        </div>
                       </>
                     ))}
 
@@ -1063,8 +1073,8 @@ export default function KonfirmasiTransit() {
                             </div>
                           </div>
                           <div className="px-4 text-grapy-500 text-xs">
-                            Gunakan transaksi id diatas untuk melakukan inq
-                            ulang dan pembayaran.
+                            Gunakan kode bayar ini sebagai nomor tujuan pada
+                            menu pembayaran di aplikasi.
                           </div>
                         </div>
                         <button
