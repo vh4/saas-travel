@@ -461,7 +461,6 @@ export default function Search() {
           return isGradeMatch && isPriceMatch && isWaktuMatch;
         });
 
-        console.log(HargaTerendahTinggi)
         if (HargaTerendahTinggi !== undefined && filteredTrains.length > 0) {
             // Fungsi untuk menghitung total priceAdult dari sebuah sub-array
             const calculateTotalPrice = (trainArray) => {
@@ -470,7 +469,7 @@ export default function Search() {
               }, 0);
             };
 
-            if(HargaTerendahTinggi === 1){
+            if(HargaTerendahTinggi === 2){
               filteredTrains.sort((a, b) => {
                 const totalPriceA = calculateTotalPrice(a);
                 const totalPriceB = calculateTotalPrice(b);
