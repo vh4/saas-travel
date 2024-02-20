@@ -411,7 +411,7 @@ export default function Search() {
 
   const [filteredDataTransit, setfilteredDataTransit] = useState({});
 
-  const filterDataTransit = (data, gradeFilter, valHargaRange, selectedTime) => {
+  const filterDataTransit = (data, gradeFilter, valHargaRange, selectedTime, HargaTerendahTinggi) => {
     const filteredData = {};  
     const gradeMapping = ['K', 'E', 'B']; // Mapping untuk grade
     const activeGrades = gradeMapping.filter((_, index) => gradeFilter[index]);
@@ -427,7 +427,9 @@ export default function Search() {
           let isGradeMatch = true; // Default true jika tidak ada filter grade
           let isPriceMatch = true; // Default true jika tidak ada filter harga
           let isWaktuMatch = true; // Default true jika tidak ada filter harga
-  
+          let isSortHargaTerendah = true; // Default true jika tidak ada filter harga
+          let isSortHargaTertinggi = true; // Default true jika tidak ada filter harga
+
           if (isGradeFilterActive) {
             isGradeMatch = trainPair[0].seats.some(seat => activeGrades.includes(seat.grade));
           }
@@ -440,6 +442,7 @@ export default function Search() {
     
             // Cek apakah total harga dalam rentang yang diinginkan
             isPriceMatch = totalPrice >= valHargaRange[0] && totalPrice <= valHargaRange[1];
+          
           }
   
           if(isWaktuMatch){
@@ -451,27 +454,52 @@ export default function Search() {
                 return departureTime.isBetween(moment(start, "HH:mm"), moment(end, "HH:mm"), undefined, '[]'); // '[]' inklusif kedua batas
               });
             }
-            
+            //
           }
     
           // Return true jika kedua kondisi (atau salah satu, tergantung filter yang aktif) terpenuhi
           return isGradeMatch && isPriceMatch && isWaktuMatch;
         });
+
+        console.log(HargaTerendahTinggi)
+        if (HargaTerendahTinggi !== undefined && filteredTrains.length > 0) {
+            // Fungsi untuk menghitung total priceAdult dari sebuah sub-array
+            const calculateTotalPrice = (trainArray) => {
+              return trainArray.reduce((total, train) => {
+                return total + train.seats.reduce((seatTotal, seat) => seatTotal + parseInt(seat.priceAdult), 0);
+              }, 0);
+            };
+
+            if(HargaTerendahTinggi === 1){
+              filteredTrains.sort((a, b) => {
+                const totalPriceA = calculateTotalPrice(a);
+                const totalPriceB = calculateTotalPrice(b);
+                return totalPriceB - totalPriceA; // Balikkan kondisi untuk mengurutkan dari tertinggi ke terendah
+              });
+            }else{
+              filteredTrains.sort((a, b) => {
+                const totalPriceA = calculateTotalPrice(a);
+                const totalPriceB = calculateTotalPrice(b);
+                return totalPriceA - totalPriceB; // Balikkan kondisi untuk mengurutkan dari tertinggi ke terendah
+              });
+            }
+
+        }
     
         if (filteredTrains.length > 0) {
           filteredData[key] = filteredTrains;
         }
       });
     }
-  
+    
     setfilteredDataTransit(filteredData);
 
   };
     
   
   useEffect(() => {
-    filterDataTransit(dataSearchTransit, gradeFilter, valHargaRange, selectedTime);
-  }, [dataSearchTransit, gradeFilter, valHargaRange, selectedTime])
+    filterDataTransit(dataSearchTransit, gradeFilter, valHargaRange, selectedTime, HargaTerendahTinggi);
+  }, [dataSearchTransit, gradeFilter, valHargaRange, selectedTime, HargaTerendahTinggi])
 
   const filteredData = dataSearch
     .filter((train) => {
@@ -677,7 +705,7 @@ export default function Search() {
       setLoading(true);
       setIsTransit(e.target.value);
 
-      if(dataSearchTransit.length !== 0 || Object.keys(dataSearchTransit).length !== 0){
+      if(Object.keys(dataSearchTransit).length !== 0){
         setTimeout(() => {
           setLoadingTransit(false);
           setLoading(false);
@@ -747,6 +775,8 @@ export default function Search() {
     } catch (error) {
         setmessageError('Maaf, terjadi kesalahan pada server.');
         setErrorTransit(false);
+        setLoading(false);  
+        setLoadingTransit(false);
       }
     
 
