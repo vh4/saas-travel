@@ -101,8 +101,11 @@ export default function KonfirmasiTransit() {
   const [gerbongsamawajib, setgerbongsamawajib] = useState(0);
 
   const [open, setOpen] = React.useState(false);
-  const handleClose = () => {setOpen(false);setSelectedCount(0); setgerbongsamawajib(0)};
-
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedCount(0);
+    setgerbongsamawajib(0);
+  };
 
   const [expiredBookTime, setExpiredBookTime] = useState(null);
 
@@ -264,7 +267,6 @@ export default function KonfirmasiTransit() {
   }
 
   async function handlerPilihKursi(dataForSeats) {
-    
     setDataSeats([]); //untuk reset data.
     gantigerbong(0); // untuk reset data pindah gerbong.
     setChangeSet(JSON.parse(changeStateKetikaGagalTidakUpdate)); // untuk reset data ketika sudah di pilih kursinya, tapi keluar lagi..
@@ -289,7 +291,6 @@ export default function KonfirmasiTransit() {
         setDataSeats(response.data);
       }
     }
-
   }
 
   const handlerKonfirmasi = async (e) => {
@@ -341,7 +342,8 @@ export default function KonfirmasiTransit() {
 
     const changeStateFix = JSON.parse(JSON.stringify(changeState)); // Create a deep copy
 
-    let wagonNumber = changeStateFix[0][isNumberTrainPassenger][0]["wagonNumber"];
+    let wagonNumber =
+      changeStateFix[0][isNumberTrainPassenger][0]["wagonNumber"];
     let className = changeStateFix[0][isNumberTrainPassenger][0]["class"];
 
     setisLoadingPindahKursi(true);
@@ -375,7 +377,9 @@ export default function KonfirmasiTransit() {
     });
 
     const hasilBookingDataCopyDeep = JSON.parse(JSON.stringify(hasilBooking));
-    const hasilBookingData = JSON.parse(JSON.stringify(hasilBookingDataCopyDeep));
+    const hasilBookingData = JSON.parse(
+      JSON.stringify(hasilBookingDataCopyDeep)
+    );
 
     setSelectedCount(0);
 
@@ -385,8 +389,10 @@ export default function KonfirmasiTransit() {
         gantiKursiFix.seats[i] !== null
       ) {
         hasilBookingData[isNumberTrainPassenger].seats[i][1] = wagonNumber;
-        hasilBookingData[isNumberTrainPassenger].seats[i][2] = gantiKursiFix.seats[i].row.toString();
-        hasilBookingData[isNumberTrainPassenger].seats[i][3] = gantiKursiFix.seats[i].column;
+        hasilBookingData[isNumberTrainPassenger].seats[i][2] =
+          gantiKursiFix.seats[i].row.toString();
+        hasilBookingData[isNumberTrainPassenger].seats[i][3] =
+          gantiKursiFix.seats[i].column;
       }
     }
 
@@ -519,36 +525,38 @@ export default function KonfirmasiTransit() {
                           <div className="grid w-full grid-cols-1 md:grid-cols-3">
                             {/* sidebar seats Kai */}
                             <div className="text-start">
-                              {changeState[0][isNumberTrainPassenger].map((e, i) => (
-                                <>
-                                  {e.type === "adult" && (
-                                    <div className="border m-2 rounded-md mt-2 text-xs font-medium ">
-                                      <div className="flex space-x-4 items-center py-2 px-4 text-black">
-                                        <div className="text-2xl font-medium ">
-                                          {i + 1}
-                                        </div>
-                                        <div>
-                                          <div className="font-medium  mt-2">
-                                            {e.name}
-                                          </div>
-                                          <div className="mt-2">
-                                            {e.class === "EKO"
-                                              ? "Ekonomi"
-                                              : e.class === "EKS"
-                                              ? "Eksekutif"
-                                              : "Bisnis"}{" "}
-                                            {e.wagonNumber}
+                              {changeState[0][isNumberTrainPassenger].map(
+                                (e, i) => (
+                                  <>
+                                    {e.type === "adult" && (
+                                      <div className="border m-2 rounded-md mt-2 text-xs font-medium ">
+                                        <div className="flex space-x-4 items-center py-2 px-4 text-black">
+                                          <div className="text-2xl font-medium ">
+                                            {i + 1}
                                           </div>
                                           <div>
-                                            {e.row}
-                                            {e.column}
+                                            <div className="font-medium  mt-2">
+                                              {e.name}
+                                            </div>
+                                            <div className="mt-2">
+                                              {e.class === "EKO"
+                                                ? "Ekonomi"
+                                                : e.class === "EKS"
+                                                ? "Eksekutif"
+                                                : "Bisnis"}{" "}
+                                              {e.wagonNumber}
+                                            </div>
+                                            <div>
+                                              {e.row}
+                                              {e.column}
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
-                                    </div>
-                                  )}
-                                </>
-                              ))}
+                                    )}
+                                  </>
+                                )
+                              )}
 
                               <div className="mt-4 md:mt-4 ml-2">
                                 <div className="flex space-x-2 items-center mt-2 ">
@@ -576,7 +584,10 @@ export default function KonfirmasiTransit() {
                                   </div>
                                 </div>
                                 <div className="flex space-x-2 items-center mt-2">
-                                  <Alert message="Only supported at the same gate." banner/>
+                                  <Alert
+                                    message="Only supported at the same gate."
+                                    banner
+                                  />
                                 </div>
                               </div>
                             </div>
@@ -625,7 +636,9 @@ export default function KonfirmasiTransit() {
                                 dataSeats !== null && (
                                   <>
                                     <SeatMapTransit
-                                      isNumberTrainPassenger={isNumberTrainPassenger}
+                                      isNumberTrainPassenger={
+                                        isNumberTrainPassenger
+                                      }
                                       changeState={changeState}
                                       gerbongsamawajib={gerbongsamawajib}
                                       setgerbongsamawajib={setgerbongsamawajib}
@@ -712,9 +725,7 @@ export default function KonfirmasiTransit() {
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
               <RxCrossCircled size={20} className="text-black" />
-              <div className="hidden xl:block text-black">
-                Pembayaran tiket
-              </div>
+              <div className="hidden xl:block text-black">Pembayaran tiket</div>
             </div>
           </div>
 
@@ -808,16 +819,17 @@ export default function KonfirmasiTransit() {
                   ) : (
                     ""
                   )}
-                  {passengers.adults && passengers.adults.length > 0
-                    ? passengers.adults.map((e, i) => (
-                        <>
-                          {hasilBooking &&
-                            hasilBooking.map((x, z) => (
+
+                  {dataDetailTrain &&
+                    dataDetailTrain.map((k, l) => (
+                      <>
+                        {passengers.adults && passengers.adults.length > 0
+                          ? passengers.adults.map((e, i) => (
                               <>
                                 <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                                   <div className="p-2">
                                     <div className="px-2 xl:px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
-                                      {dataDetailTrain[z].trainName}
+                                      {k.trainName}
                                     </div>
                                     <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
                                       <div className="px-2 md:px-4 py-2 text-xs">
@@ -849,26 +861,36 @@ export default function KonfirmasiTransit() {
                                           Kursi
                                         </div>
                                         <div className="mt-2 text-black text-xs">
-                                          {x !== null
-                                            ? x.seats[i][0] === "EKO"
+                                          {hasilBooking[l] !== null
+                                            ? hasilBooking[l].seats[i][0] ===
+                                              "EKO"
                                               ? "Ekonomi"
-                                              : x.seats[i][0] === "BIS"
+                                              : hasilBooking[l].seats[i][0] ===
+                                                "BIS"
                                               ? "Bisnis"
                                               : "Eksekutif"
                                             : ""}{" "}
-                                          {x !== null ? x.seats[i][1] : ""} -{" "}
-                                          {x ? x.seats[i][2] : ""}
-                                          {x !== null ? x.seats[i][3] : ""}
+                                          {hasilBooking[l] !== null
+                                            ? hasilBooking[l].seats[i][1]
+                                            : ""}{" "}
+                                          -{" "}
+                                          {hasilBooking[l]
+                                            ? hasilBooking[l].seats[i][2]
+                                            : ""}
+                                          {hasilBooking[l] !== null
+                                            ? hasilBooking[l].seats[i][3]
+                                            : ""}
                                         </div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               </>
-                            ))}
-                        </>
-                      ))
-                    : ""}
+                            ))
+                          : ""}
+                      </>
+                    ))}
+
                   {/* infants */}
                   {passengers.infants && passengers.infants.length > 0 ? (
                     <div className="text-sm xl:text-sm font-bold text-black mt-12">
@@ -877,150 +899,135 @@ export default function KonfirmasiTransit() {
                   ) : (
                     ""
                   )}
-                  {passengers.infants && passengers.infants.length > 0
-                    ? passengers.infants.map((e, i) => (
-                        <>
-                          {hasilBooking &&
-                            hasilBooking.map((x, z) => (
+
+                  {dataDetailTrain &&
+                    dataDetailTrain.map((k, l) => (
+                      <>
+                        {passengers.infants && passengers.infants.length > 0
+                          ? passengers.infants.map((e, i) => (
                               <>
-                              <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
-                                <div className="p-2">
-                                  <div className="px-2 xl:px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
-                                    {dataDetailTrain[z].trainName}
-                                  </div>
-                                  <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
-                                    <div className="px-2 md:px-4 py-2 text-xs">
-                                      <div className="text-black font-medium ">
-                                        Nama
-                                      </div>
-                                      <div className="mt-2 text-black text-xs">
-                                        {e.name}
-                                      </div>
+                                <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+                                  <div className="p-2">
+                                    <div className="px-2 xl:px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
+                                      {k.trainName}
                                     </div>
-                                    <div className="px-2 md:px-4 py-2 text-xs">
-                                      <div className="text-black font-medium ">
-                                        NIK
+                                    <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
+                                      <div className="px-2 md:px-4 py-2 text-xs">
+                                        <div className="text-black font-medium ">
+                                          Nama
+                                        </div>
+                                        <div className="mt-2 text-black text-xs">
+                                          {e.name}
+                                        </div>
                                       </div>
-                                      <div className="mt-2 text-black text-xs">
-                                        {e.idNumber}
+                                      <div className="px-2 md:px-4 py-2 text-xs">
+                                        <div className="text-black font-medium ">
+                                          NIK
+                                        </div>
+                                        <div className="mt-2 text-black text-xs">
+                                          {e.idNumber}
+                                        </div>
                                       </div>
-                                    </div>
-                                    <div className="px-2 md:px-4 py-2 text-xs">
-                                      <div className="text-black  font-medium ">
-                                        Tanggal Lahir
+                                      <div className="px-2 md:px-4 py-2 text-xs">
+                                        <div className="text-black  font-medium ">
+                                          Tanggal Lahir
+                                        </div>
+                                        <div className="mt-2 text-black text-xs">
+                                          {e.birthdate}
+                                        </div>
                                       </div>
-                                      <div className="mt-2 text-black text-xs">
-                                        {e.birthdate}
-                                      </div>
-                                    </div>
-                                    <div className="px-2 py-2 text-xs">
-                                      <div className="text-black font-medium ">Kursi</div>
-                                      <div className="mt-2 text-black text-xs">
-                                        {e !== null
-                                          ? x.seats[i][0] === "EKO"
-                                            ? "Ekonomi"
-                                            : x.seats[i][0] === "BIS"
-                                            ? "Bisnis"
-                                            : "Eksekutif"
-                                          : ""}{" "}
+                                      <div className="px-2 py-2 text-xs">
+                                        <div className="text-black font-medium ">
+                                          Kursi
+                                        </div>
+                                        <div className="mt-2 text-black text-xs">
+                                          {hasilBooking[l] !== null
+                                            ? hasilBooking[l].seats[i][0] ===
+                                              "EKO"
+                                              ? "Ekonomi"
+                                              : hasilBooking[l].seats[i][0] ===
+                                                "BIS"
+                                              ? "Bisnis"
+                                              : "Eksekutif"
+                                            : ""}{" "}
                                           {"/"}
                                           {" 0 "}
-                                        {/* {hasilBooking !== null
+                                          {/* {hasilBooking !== null
                                           ? hasilBooking.seats[i][1]
                                           : ""}{" "} */}
-                                        -{" "}
-                                        {/* {hasilBooking
+                                          -{" "}
+                                          {/* {hasilBooking
                                           ? hasilBooking.seats[i][2]
                                           : ""} */}
-                                        {/* {hasilBooking !== null
+                                          {/* {hasilBooking !== null
                                           ? hasilBooking.seats[i][3]
                                           : ""} */}
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                            </>
-                        ))}                      
-                        </>
-                      ))
-                    : ""}
+                              </>
+                            ))
+                          : ""}
+                      </>
+                    ))}
+
                   <div className="text-sm xl:text-sm font-bold text-black mt-12">
                     <p>PRICE DETAILT</p>
                   </div>
                   <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                     {hasilBooking.map((e, z) => (
-                    <>
-                      <div className="p-4">
-                        <div className="my-2 font-bold text-black pb-2 border-b border-gray-200 mb-2">
+                      <>
+                        <div className="p-4">
+                          <div className="my-2 font-bold text-black pb-2 border-b border-gray-200 mb-2">
                             {dataDetailTrain[z].trainName}
-                        </div>
-                        <div className="text-xs text-black font-medium  flex justify-between mt-4">
-                          <div>
-                            {e.trainName}{" "}
-                            {TotalAdult > 0 ? `(Adults) x${TotalAdult}` : ""}{" "}
-                            {/* {TotalChild > 0 ? `(Children) x${TotalChild}` : ""}{" "} */}
-                            {TotalInfant > 0 ? `(Infants) x${TotalInfant}` : ""}
                           </div>
-                          <div>
-                            Rp.{" "}
-                            {toRupiah(e.normalSales)}
+                          <div className="text-xs text-black font-medium  flex justify-between mt-4">
+                            <div>
+                              {e.trainName}{" "}
+                              {TotalAdult > 0 ? `(Adults) x${TotalAdult}` : ""}{" "}
+                              {/* {TotalChild > 0 ? `(Children) x${TotalChild}` : ""}{" "} */}
+                              {TotalInfant > 0
+                                ? `(Infants) x${TotalInfant}`
+                                : ""}
+                            </div>
+                            <div>Rp. {toRupiah(e.normalSales)}</div>
+                          </div>
+                          <div className="mt-4 text-xs text-black font-medium  flex justify-between">
+                            <div>Biaya Admin (Fee)</div>
+                            <div>Rp. {toRupiah(e.nominalAdmin)}</div>
+                          </div>
+                          <div className="mt-4 text-xs text-black font-medium  flex justify-between">
+                            <div>Diskon (Rp.)</div>
+                            <div>Rp. {e.discount}</div>
                           </div>
                         </div>
-                        <div className="mt-4 text-xs text-black font-medium  flex justify-between">
-                          <div>Biaya Admin (Fee)</div>
-                          <div>
-                            Rp.{" "}
-                            {toRupiah(e.nominalAdmin)}
-                          </div>
-                        </div>
-                        <div className="mt-4 text-xs text-black font-medium  flex justify-between">
-                          <div>Diskon (Rp.)</div>
-                          <div>Rp. {e.discount}</div>
-                        </div>
-                      </div>
-                    </>))}
+                      </>
+                    ))}
                     <div className="mt-8 p-4 border-t border-gray-200 text-sm text-black font-medium  flex justify-between">
                       <div>Total Harga</div>
                       <div>
                         Rp.{" "}
-                          {
-                            
-                            toRupiah(hasilBooking.reduce(
-                              (total, item) =>
-                                total +
-                                parseInt(
-                                  item.normalSales,
-                                  10
-                                ),
-                              0
-                            ) + 
-
+                        {toRupiah(
+                          hasilBooking.reduce(
+                            (total, item) =>
+                              total + parseInt(item.normalSales, 10),
+                            0
+                          ) +
                             hasilBooking.reduce(
                               (total, item) =>
-                                total +
-                                parseInt(
-                                  item.discount,
-                                  10
-                                ),
+                                total + parseInt(item.discount, 10),
                               0
                             ) +
-
                             hasilBooking.reduce(
                               (total, item) =>
-                                total +
-                                parseInt(
-                                  item.nominalAdmin,
-                                  10
-                                ),
+                                total + parseInt(item.nominalAdmin, 10),
                               0
                             )
-
-                            )
-                            
-                          }                    
+                        )}
                       </div>
-                    </div>                    
+                    </div>
                   </div>
                   <div className="flex justify-end">
                     <ButtonAnt
@@ -1061,12 +1068,12 @@ export default function KonfirmasiTransit() {
                           </div>
                         </div>
                         <button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              SetIsnumberTrainPassenger(i);
-                              handlerPilihKursi(dataDetailTrain[i]);
-                            }}
-                            className="block w-full"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            SetIsnumberTrainPassenger(i);
+                            handlerPilihKursi(dataDetailTrain[i]);
+                          }}
+                          className="block w-full"
                         >
                           <div className="mt-2 rounded-md border border-gray-200 shadow-sm  hover:bg-gray-100">
                             <div className="flex items-center justify-between space-x-2 p-4 pr-2 xl:pr-4">

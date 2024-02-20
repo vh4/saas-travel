@@ -316,14 +316,11 @@ export default function Pembayaran() {
         } else {
           failedNotification(response.data.rd);
         }
-        
       }, 500);
-
     } catch (error) {
       failedNotification(error.message);
       setIsLoading(false);
     }
-
   }
 
   return (
@@ -430,16 +427,16 @@ export default function Pembayaran() {
                 </div>
                 <div className="mt-4 w-full mx-0 2xl:mx-4">
                   {/* adult */}
-                  {passengers.adults && passengers.adults.length > 0
-                    ? passengers.adults.map((e, i) => (
-                        <>
-                          {hasilBooking &&
-                            hasilBooking.map((x, z) => (
+                  {dataDetailTrain &&
+                    dataDetailTrain.map((k, l) => (
+                      <>
+                        {passengers.adults && passengers.adults.length > 0
+                          ? passengers.adults.map((e, i) => (
                               <>
                                 <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                                   <div className="p-2">
                                     <div className="px-2 xl:px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
-                                      {dataDetailTrain[z].trainName}
+                                      {k.trainName}
                                     </div>
                                     <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
                                       <div className="px-2 md:px-4 py-2 text-xs">
@@ -471,38 +468,47 @@ export default function Pembayaran() {
                                           Kursi
                                         </div>
                                         <div className="mt-2 text-black text-xs">
-                                          {x !== null
-                                            ? x.seats[i][0] === "EKO"
+                                          {hasilBooking[l] !== null
+                                            ? hasilBooking[l].seats[i][0] ===
+                                              "EKO"
                                               ? "Ekonomi"
-                                              : x.seats[i][0] === "BIS"
+                                              : hasilBooking[l].seats[i][0] ===
+                                                "BIS"
                                               ? "Bisnis"
                                               : "Eksekutif"
                                             : ""}{" "}
-                                          {x !== null ? x.seats[i][1] : ""} -{" "}
-                                          {x ? x.seats[i][2] : ""}
-                                          {x !== null ? x.seats[i][3] : ""}
+                                          {hasilBooking[l] !== null
+                                            ? hasilBooking[l].seats[i][1]
+                                            : ""}{" "}
+                                          -{" "}
+                                          {hasilBooking[l]
+                                            ? hasilBooking[l].seats[i][2]
+                                            : ""}
+                                          {hasilBooking[l] !== null
+                                            ? hasilBooking[l].seats[i][3]
+                                            : ""}
                                         </div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               </>
-                            ))}
-                        </>
-                      ))
-                    : ""}
+                            ))
+                          : ""}
+                      </>
+                    ))}
 
                   {/* infants */}
-                  {passengers.infants && passengers.infants.length > 0
-                    ? passengers.infants.map((e, i) => (
-                        <>
-                          {hasilBooking &&
-                            hasilBooking.map((x, z) => (
+                  {dataDetailTrain &&
+                    dataDetailTrain.map((k, l) => (
+                      <>
+                        {passengers.infants && passengers.infants.length > 0
+                          ? passengers.infants.map((e, i) => (
                               <>
                                 <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                                   <div className="p-2">
                                     <div className="px-2 xl:px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
-                                      {dataDetailTrain[z].trainName}
+                                      {k.trainName}
                                     </div>
                                     <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
                                       <div className="px-2 md:px-4 py-2 text-xs">
@@ -534,10 +540,12 @@ export default function Pembayaran() {
                                           Kursi
                                         </div>
                                         <div className="mt-2 text-black text-xs">
-                                          {e !== null
-                                            ? x.seats[i][0] === "EKO"
+                                          {hasilBooking[l] !== null
+                                            ? hasilBooking[l].seats[i][0] ===
+                                              "EKO"
                                               ? "Ekonomi"
-                                              : x.seats[i][0] === "BIS"
+                                              : hasilBooking[l].seats[i][0] ===
+                                                "BIS"
                                               ? "Bisnis"
                                               : "Eksekutif"
                                             : ""}{" "}
@@ -559,10 +567,10 @@ export default function Pembayaran() {
                                   </div>
                                 </div>
                               </>
-                            ))}
-                        </>
-                      ))
-                    : ""}
+                            ))
+                          : ""}
+                      </>
+                    ))}
                   <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
                     {hasilBooking.map((e, z) => (
                       <>
@@ -624,9 +632,7 @@ export default function Pembayaran() {
                       <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
                         <div className="px-4 py-2">
                           {/* <div className="text-black text-xs">Booking ID</div> */}
-                          <div className="text-black text-xs">
-                            Transaksi ID
-                          </div>
+                          <div className="text-black text-xs">Transaksi ID</div>
 
                           <div className="mt-1 font-medium  text-blue-500 text-[18px]">
                             {/* {hasilBooking && hasilBooking.bookingCode} */}
