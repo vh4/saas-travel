@@ -419,7 +419,7 @@ export default function Search() {
     const isGradeFilterActive = gradeFilter.some(value => value);
     const isPriceFilterActive = valHargaRange[0] > 0 || valHargaRange[1] < 10000000;
   
-    if(data){
+    if(data && Object.keys(data).length > 0){
       Object.keys(data).forEach((key) => {
         const trains = data[key];
     
