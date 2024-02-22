@@ -25,7 +25,7 @@ app.use(cookieParser());
 app.use(useragent.express());
 app.use(requestIp.mw())
 
-// Configure express-session
+// Configure express-session dd
 app.use(session({
   secret: 'bimasakithebestforever@secret',
   resave: false,
