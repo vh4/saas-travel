@@ -3,6 +3,7 @@
 import Layout from "../Layout";
 import Plane from "../../components/plane/Plane";
 import KAI from "../../components/kai/KAI";
+import DLU from "../../components/dlu/DLU";
 import Sidebar from "../partials/sidebar/desktop/Sidebar";
 import SideBarMobile from "../partials/sidebar/mobile/SideBarMobile";
 import React, { useContext, useEffect, useState } from "react";
@@ -139,6 +140,8 @@ export default function MainPage() {
                     <KAI />
                   ) : nameMenu == "pelni" ? (
                     <Pelni />
+                  )  : nameMenu == "dlu" ? (
+                    <DLU />
                   ) : (
                     <></>
                   )}

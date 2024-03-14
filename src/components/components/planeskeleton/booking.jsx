@@ -2,7 +2,7 @@ import Skeleton from "react-loading-skeleton";
 import { Button } from "antd";
 import { IoArrowForwardOutline } from "react-icons/io5";
 
-const Body = ({ TotalAdult, TotalChild, TotalInfant }) => {
+const Body = ({ TotalAdult, TotalChild, TotalInfant, totalKendaraan }) => {
   return (
     <>
       <div className="mt-12 w-full border pl-8 pr-6 py-6">
@@ -33,7 +33,7 @@ const Body = ({ TotalAdult, TotalChild, TotalInfant }) => {
       </div>
 
       {/* form */}
-	  {Array.from({ length: (parseInt(TotalChild) + parseInt(TotalInfant) + parseInt(TotalAdult)) }, (_, i) => (
+	  {Array.from({ length: (parseInt(TotalChild) + parseInt(TotalInfant) + parseInt(TotalAdult) + (parseInt(totalKendaraan) || 0 )) }, (_, i) => (
 		<>
 		<div className="mt-8 mb-4 xl:mt-12">
 			<div className="w-48">
@@ -211,7 +211,7 @@ const Sidebar = () => {
   );
 };
 
-const BookingLoading = ({ TotalAdult, TotalChild, TotalInfant }) => {
+const BookingLoading = ({ TotalAdult, TotalChild, TotalInfant, totalKendaraan }) => {
   return (
     <>
       <div className="mt-8 xl:mt-0 block xl:hidden rounded-md border border-gray-200 shadow-sm">
@@ -308,7 +308,7 @@ const BookingLoading = ({ TotalAdult, TotalChild, TotalInfant }) => {
       </div>
       <div className=" w-full mb-24 block xl:flex xl:space-x-10">
         <div className="w-full">
-          <Body TotalAdult={TotalAdult} TotalChild={TotalChild} TotalInfant={TotalInfant} />
+          <Body TotalAdult={TotalAdult} TotalChild={TotalChild} TotalInfant={TotalInfant} totalKendaraan={totalKendaraan} />
         </div>
         <Sidebar />
       </div>

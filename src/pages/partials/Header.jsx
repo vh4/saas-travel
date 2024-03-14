@@ -196,7 +196,6 @@ export default function Header() {
           navigate("/logout");
         });
     } catch (e) {
-      console.log(e);
     }
   };
 

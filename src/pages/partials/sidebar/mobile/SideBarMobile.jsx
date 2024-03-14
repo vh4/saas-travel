@@ -1,5 +1,5 @@
 import {GiCommercialAirplane} from 'react-icons/gi'
-import {IoBoatOutline} from 'react-icons/io5'
+import {IoBoatOutline, IoBoatSharp} from 'react-icons/io5'
 import {MdOutlineTrain} from 'react-icons/md' 
 
 export default function SideBarMobile({nameMenu, setNameMenu}) {
@@ -32,6 +32,14 @@ export default function SideBarMobile({nameMenu, setNameMenu}) {
                             <span className="block text-center font-normal mt-2 flex-1 whitespace-nowrap text-[15px] text-black">Kereta Api</span>
                         </div>
                     </li>
+                    <li>                
+                        <div onClick={() => setNameMenu('dlu')} className={`mt-2 block center cursor-pointer items-center text-sm font-bold text-gray-900 ${ nameMenu === 'dlu' ? 'border-b-2 border-blue-500' : ''}`}>
+                            <div className='bg-gray-100 mx-4 py-3 flex justify-center rounded-xl'>
+                                <IoBoatSharp className='text-green-500' size={24} />
+                            </div>
+                            <span className="block text-center font-normal mt-2 flex-1 whitespace-nowrap text-[15px] text-black">DLU Ship</span>
+                        </div>
+                    </li> 
                 </ul>
             </div>
         </aside>

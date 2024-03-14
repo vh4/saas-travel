@@ -416,7 +416,7 @@ function PELNI() {
                     <div className="w-full flex items-center">
                       <div className="w-full m-2 xl:m-0 xl:pr-0">
                         <small className="block mb-2 text-black">
-                          Kota Asal
+                          Pelabuhan Asal
                         </small>
                         <Autocomplete
                           classes={classes}
