@@ -1,15 +1,17 @@
+
 const express = require('express');
 const cors = require('cors');
 const useragent = require('express-useragent');
 const requestIp = require('request-ip');
 require('dotenv').config();
-var timeout = require('connect-timeout')
+var timeout = require('connect-timeout');
 
 //router
 const MainRoutes = require('./routes/main');
 const PelniRouter = require('./routes/pelni');
 const KeretaRouter = require('./routes/kereta');
 const PesawatRouter = require('./routes/pesawat');
+const DLURouter = require('./routes/dlu');
 
 const logger = require('./utils/logger.js');
 const cookieParser = require('cookie-parser');
@@ -51,6 +53,7 @@ app.use('/travel', MainRoutes);
 app.use('/travel', PelniRouter);
 app.use('/travel', KeretaRouter);
 app.use('/travel', PesawatRouter);
+app.use('/travel', DLURouter);
 app.get('/whoareyou', (req, res) => {
 
   return res.json(getInfoClientAll(req));
