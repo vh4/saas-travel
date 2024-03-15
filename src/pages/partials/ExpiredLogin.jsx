@@ -1,32 +1,32 @@
-import React from "react";
-import { useNavigate } from "react-router";
+import React, { useEffect } from "react";
 import Footer from "./Footer";
+import { useNavigate } from "react-router";
 
-const ExpiredLogin = () => {
+const Page404 = () => {
   const navigate = useNavigate();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>
-      <div className="flex flex-col min-h-screen items-center">
-        <div className="flex-grow flex items-center">
+      <div className="flex flex-col min-h-screen justify-center">
+        <div className="flex-grow flex items-center md:items-stretch"> {/* Gunakan md:items-stretch hanya pada tampilan mobile */}
           <div className="container flex flex-col md:flex-row items-center justify-center px-5 text-black">
             <div className="max-w-md text-center">
-              <p className="text-2xl md:text-3xl font-light leading-normal">
-                Session Expired.
+              <div className="text-2xl font-dark">400</div>
+              <p className="text-md md:text-xl font-light leading-normal mb-4">
+                Maaf, Session anda sudah expired.
               </p>
-              <p className="mb-8">
-                Session anda sudah expired, silahkan login kembali.
-              </p>
-
               <button
-                onClick={() => navigate("/")}
-                className="px-4 inline py-2 text-sm font-medium leading-5 shadow text-white transition-colors duration-150 border border-transparent rounded-lg focus:outline-none focus:shadow-outline-blue bg-blue-600 active:bg-blue-600 hover:bg-blue-700"
+                onClick={() => navigate('/')}
+                className="px-4 inline py-2 text-xs leading-5 shadow text-white transition-colors duration-150 border border-transparent rounded-lg focus:outline-none focus:shadow-outline-blue bg-blue-600 active:bg-blue-600 hover:bg-blue-700"
               >
                 Back to Homepage
               </button>
             </div>
             <div className="max-w-md">
-              <img src={"/expired.jpeg"} alt="expired.jpeg" />
+              <img src={'/Expired.png'} alt="Expired.jpeg" />
             </div>
           </div>
         </div>
@@ -36,4 +36,4 @@ const ExpiredLogin = () => {
   );
 };
 
-export default ExpiredLogin;
+export default Page404;
