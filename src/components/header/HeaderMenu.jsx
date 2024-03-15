@@ -11,9 +11,9 @@ export default function HeaderMenu(){
         <li className="mt-4">
             <Link to='/transaksi' className="block py-2 pl-3 pr-4 text-black rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0  ">Transaksi List</Link>
         </li>
-        <li className="mt-4">
+        {/* <li className="mt-4">
             <Link to='/booking' className="block py-2 pl-3 pr-4 text-black rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0  ">Booking List</Link>
-        </li>
+        </li> */}
         <li className="mt-4">
             <Link className="block py-2 pl-3 pr-4 text-black rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0  ">Pesan</Link>
         </li>

@@ -1,7 +1,7 @@
 //make create function reactjs
 
 import React, {useEffect} from "react";
-import TransaksiPelniComponent from "../../components/transaksi/TransaksiPelni";
+import TransaksiPelniComponent from "../../components/transaksi_list/ListPelni";
 import Layout from "../LayoutUser";
 import { useLocation } from "react-router-dom";
 import _ from 'lodash'

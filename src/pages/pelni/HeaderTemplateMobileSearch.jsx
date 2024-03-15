@@ -1,7 +1,7 @@
 import React from "react";
 import { IoArrowBack, IoArrowForwardCircle } from "react-icons/io5";
 import { useSearchParams } from "react-router-dom";
-import { parseTanggal, parseTanggalPelni } from "../../helpers/date";
+import { parseDate, parseTanggal, parseTanggalPelni } from "../../helpers/date";
 
 export default function HeaderTemplateMobileSearch({ children }) {
 
@@ -27,8 +27,8 @@ export default function HeaderTemplateMobileSearch({ children }) {
   const laki = searchParams.get("laki");
   const wanita = searchParams.get("wanita");
  
-  const tanggal_keberangkatan = parseTanggalPelni(startDate);
-  const tanggal_tujuan = parseTanggalPelni(endDate);
+  const tanggal_keberangkatan = parseDate(startDate);
+  const tanggal_tujuan = parseDate(endDate);
 
 
   return (
@@ -46,7 +46,7 @@ export default function HeaderTemplateMobileSearch({ children }) {
                     <div>{destinationName.split('(')[0]}</div>
                 </div>
                 <div className="text-xs">
-                    <small>{tanggal_keberangkatan} s.d {tanggal_tujuan} | {parseInt(laki) + parseInt(wanita)}{" "} Penumpang</small>
+                    <small>{tanggal_keberangkatan} s.d {tanggal_tujuan} ⍟ {parseInt(laki) + parseInt(wanita)}{" "} Penumpang</small>
                 </div>
             </div>
         </div>

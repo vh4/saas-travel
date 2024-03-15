@@ -14,6 +14,7 @@ import { IoIosListBox } from "react-icons/io";
 import { BsFillBookmarkStarFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { NavContext } from "../App";
+import { AiOutlineAppstore, AiOutlineHome } from "react-icons/ai";
 
 export default function LayoutUser({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState("block");
@@ -65,19 +66,21 @@ export default function LayoutUser({ children }) {
               to="/"
               label="Home"
               component={Link}
-              icon={<ImHome2 size={20} />}
+              className="text-black"
+              icon={<AiOutlineHome className="text-black" size={20} />}
             />
-            <BottomNavigationAction
+            {/* <BottomNavigationAction
               to="/booking/pesawat"
               component={Link}
               label="Booking"
               icon={<BsFillBookmarkStarFill size={18} />}
-            />
+            /> */}
             <BottomNavigationAction
               to="/transaksi/pesawat"
+              className="text-black"
               component={Link}
               label="Transaksi"
-              icon={<IoIosListBox size={20} />}
+              icon={<AiOutlineAppstore className="text-black" size={20} />}
             />
             {/* <BottomNavigationAction
               to="/profile/view"

@@ -9,6 +9,7 @@ import axios from "axios";
 import { notification } from "antd";
 import { IoExitOutline } from "react-icons/io5";
 import { LogoutContent } from "../../../../App";
+import { AiOutlineAppstore } from "react-icons/ai";
 
 export default function SidebarMobileUser({ pathSidebar }) {
   const [dropdownTransaksi, setDropdownTransaksi] = useState(false);
@@ -62,7 +63,7 @@ export default function SidebarMobileUser({ pathSidebar }) {
               className={`flex justify-between cursor-pointer items-center p-2 text-base font-normal text-black rounded-lg `}
             >
               <div className="flex items-center">
-                <FaListAlt className="text-cyan-500" size={18} />
+                <AiOutlineAppstore className="text-black" size={18} />
                 <span className="flex-1 ml-3 whitespace-nowrap">
                   List Transaksi
                 </span>
@@ -81,8 +82,8 @@ export default function SidebarMobileUser({ pathSidebar }) {
                 to="/transaksi/kai"
                 className={` block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}
               >
-                <div className="text-black text-left text-base font-normal">
-                  Transaksi Kai
+                <div className="text-black text-base text-left font-normal">
+                  Kereta
                 </div>
               </Link>
               <Link
@@ -90,7 +91,7 @@ export default function SidebarMobileUser({ pathSidebar }) {
                 className={`block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}
               >
                 <div className="text-black text-left text-base font-normal">
-                  Transaksi Pesawat
+                  Pesawat
                 </div>
               </Link>
               <Link
@@ -98,12 +99,20 @@ export default function SidebarMobileUser({ pathSidebar }) {
                 className={`block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}
               >
                 <div className="text-black text-left text-base font-normal">
-                  Transaksi Pelni
+                  Pelni
+                </div>
+              </Link>
+              <Link
+                to="/transaksi/dlu"
+                className={`block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}
+              >
+                <div className="text-black text-left text-base font-normal">
+                  Kapal Dlu
                 </div>
               </Link>
             </div>
 
-            <div
+            {/* <div
               onClick={(e) =>
                 dropdownBooking === true
                   ? setDropdownBooking(false)
@@ -125,8 +134,8 @@ export default function SidebarMobileUser({ pathSidebar }) {
               ) : (
                 <MdOutlineKeyboardArrowUp className="text-black" size={18} />
               )}
-            </div>
-            <div className={`${!dropdownBooking ? "block" : "hidden"}`}>
+            </div> */}
+            {/* <div className={`${!dropdownBooking ? "block" : "hidden"}`}>
               <Link
                 to="/booking/kai"
                 className="block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-black"
@@ -151,7 +160,7 @@ export default function SidebarMobileUser({ pathSidebar }) {
                   Booking Pelni
                 </div>
               </Link>
-            </div>
+            </div> */}
             <Link onClick={LogoutHandler}>
               <div
                 className={`flex cursor-pointer items-center p-2 text-base font-normal text-black rounded-lg `}

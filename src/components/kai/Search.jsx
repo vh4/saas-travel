@@ -241,90 +241,74 @@ export default function Search() {
   async function handlerSearch() {
     try {
       setLoading(true);
-
       const listCategory = ["false", "true"];
-      setTimeout(() => {
-        listCategory.forEach(async (category) => {
-          const response = await axios.post(
-            `${process.env.REACT_APP_HOST_API}/travel/train/search`,
-            {
-              productCode: "WKAI",
-              token: JSON.parse(
-                localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-              ),
-              origin: origin,
-              destination: destination,
-              date: date,
-              connection_train: category,
-            }
-          );
-          setListStaton(await getKAIdata());
-
-          if (response.data.rc.length < 1) {
-            if(response.data.rc == '10'){
-              setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
-            }else{
-              setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
-            }
-            setLoading(false);
-
-          } else if (
-            response.data.rc !== "00" ||
-            response.data.rc === undefined
-          ) {
-            setLoading(false);
-
-            if(response.data.rc == '10'){
-              setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
-            }else{
-              setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
-            }
-
-            if(category == 'true'){
-              setErrorTransit(true);
-            }else{
-              setError(true);
-            }
-
-          } else if (response.data === undefined) {
-            setLoading(false);
-            if(response.data.rc == '10'){
-              setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
-            }else{
-              setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
-            }
-
-            if(category == 'true'){
-              setErrorTransit(true);
-            }else{
-              setError(true);
-            }
-
-          } else {
-            if(category == 'true'){
-              setDataSearchTransit(response.data.data);
-              setuuid(response.data.uuid);
-              setLoading(false);
-              setLoadingTransit(false);
-              setErrorTransit(false); 
-              
-            }else{
-              setDataSearch(response.data.data);
-              setuuid(response.data.uuid);
-              setLoading(false);
-              setError(false);
-              
-            }
+      
+      let rc_non = '';
+      let rc_transit = '';
+  
+      let data_non = '';
+      let data_transit = '';
+  
+      // Mendapatkan data stasiun dan mengatur state terkait
+      const stationData = await getKAIdata();
+      setListStaton(stationData);
+  
+      for (const category of listCategory) {
+        const response = await axios.post(
+          `${process.env.REACT_APP_HOST_API}/travel/train/search`,
+          {
+            productCode: "WKAI",
+            token: JSON.parse(
+              localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+            ),
+            origin: origin,
+            destination: destination,
+            date: date,
+            connection_train: category,
           }
-        });
-      });
+        );
+  
+        if (category === 'true') {
+          rc_transit = response.data.rc;
+          data_transit = response.data;
+        } else {
+          rc_non = response.data.rc;
+          data_non = response.data;
+        }
+      }
+  
+      // Handle non-transit response
+      if (rc_non === '10') {
+        setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
+      } else if (rc_non !== '00') {
+        setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
+      } else {
+        setDataSearch(data_non.data);
+        setuuid(data_non.uuid);
+      }
+  
+      // Handle transit response
+      if (rc_transit === '10') {
+        setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
+      } else if (rc_transit !== '00') {
+        setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
+      } else {
+        setDataSearchTransit(data_transit.data);
+        setuuid(data_transit.uuid);
+      }
+  
     } catch (error) {
-      setLoading(false);
+      console.error('Error during search:', error);
       setmessageError('Maaf, Terjadi kesalahan pada server.');
-      setError(true);
-      setErrorTransit(true);
+    } finally {
+      setLoading(false);
+      setLoadingTransit(false);
+      // Adjust these based on actual conditions or responses
+      setError(false);
+      setErrorTransit(false);
     }
   }
+  
 
 
   async function bookingHandlerDetail(trainNumber) {
@@ -796,52 +780,57 @@ export default function Search() {
         </>
       ) : (
         <>
-          <div className="hidden md:block judul-search font-semibold xl:font-bold text-black">
+          <div className="hidden md:block judul-search  text-black">
             PILIH JADWAL
           </div>
           <div className="mt-4 md:mt-8">
             <div className="block lg:flex justify-between">
               <div className="hidden md:flex items-center space-x-3 xl:space-x-4 text-center md:text-left">
-                <small className="text-xs font-medium xl:font-bold text-black">
+                <small className="text-xs font-medium  text-black">
                   {stasiunBerangkat}, {kotaBerangkat}
                 </small>
                 <div className="bg-blue-500 p-1 rounded-full">
                   <IoArrowForwardOutline
-                    className="font-bold text-xs text-white"
+                    className=" text-xs text-white"
                     size={16}
                   />
                 </div>
-                <small className="text-xs font-medium xl:font-bold text-black">
+                <small className="text-xs font-medium  text-black">
                   {stasiunTujuan}, {kotaTujuan}
                 </small>
                 <div className="hidden md:block font-normal text-black">
                   |
                 </div>
-                <small className="hidden md:block text-xs font-medium xl:font-bold text-black">
+                <small className="hidden md:block text-xs font-medium  text-black">
                   {tanggal_keberangkatan_kereta}
                 </small>
                 <div className="hidden md:block font-normal text-black">
                   |
                 </div>
-                <small className="hidden md:block text-xs font-medium xl:font-bold text-black">
+                <small className="hidden md:block text-xs font-medium  text-black">
                   {parseInt(adult) + parseInt(infant)} Penumpang
                 </small>
               </div>
               <div className="hidden mt-4 md:mt-0 md:flex space-x-4 md:mr-0 justify-center md:justify-end">
-                <Link to="/" className="flex space-x-2 items-center">
-                  <IoArrowBackOutline className="text-black" size={16} />
-                  <div className="text-black text-sm font-bold">Kembali</div>
-                </Link>
+                <Link
+                      to="/"
+                      className="hidden md:flex space-x-2 items-center"
+                    >
+                      <IoArrowBackOutline className="text-black" size={16} />
+                      <div className="text-black text-xs">
+                        Kembali
+                      </div>
+                    </Link>
                 <button
                   onClick={() => setUbahPencarian((prev) => !prev)}
-                  className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs font-bold"
+                  className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs "
                 >
                   Ubah Pencarian
                 </button>
               </div>
             </div>
             <div className="flex justify-between mt-0 md:mt-6">
-              <div className="relative flex items-center space-x-2 text-black text-xs font-medium xl:font-bold">
+              <div className="relative flex items-center space-x-2 text-black text-xs font-medium ">
                 <Whisper
                   placement="top"
                   trigger="active"
@@ -849,7 +838,7 @@ export default function Search() {
                   speaker={hargaPopoOver}
                   placement="bottomStart"
                 >
-                  <button className="text-black block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium xl:font-bold">
+                  <button className="text-black block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium ">
                     HARGA
                   </button>
                 </Whisper>
@@ -860,7 +849,7 @@ export default function Search() {
                   speaker={waktuPopoOver}
                   placement="bottomStart"
                 >
-                  <button className="text-black block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium xl:font-bold">
+                  <button className="text-black block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium ">
                     WAKTU
                   </button>
                 </Whisper>
@@ -871,7 +860,7 @@ export default function Search() {
                   speaker={KelasPopoOver}
                   placement="bottomStart"
                 >
-                  <button className="text-black block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium xl:font-bold">
+                  <button className="text-black block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300">
                     KELAS
                   </button>
                 </Whisper>
@@ -880,8 +869,8 @@ export default function Search() {
                   onChange={handleIsTransit}
                   value={isTransit}
                 >
-                  <Radio value={1}>Langsung</Radio>
-                  <Radio value={2}>Transit</Radio>
+                  <Radio className="font-normal" value={1}>Langsung</Radio>
+                  <Radio className="font-normal" value={2}>Transit</Radio>
                 </Radio.Group>
               </div>
 
@@ -894,7 +883,7 @@ export default function Search() {
                     <IoSearchCircle size={28} className="text-blue-500" />
                   </div>
                   {/* <button
-                      className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs font-bold"
+                      className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs "
                     >
                       Ubah Pencarian
                     </button> */}
@@ -926,7 +915,7 @@ export default function Search() {
               <div className="mt-0 md:mt-0 flex md:hidden space-x-4 md:mr-0 justify-center md:justify-end">
                 <button
                   onClick={() => setUbahPencarian((prev) => !prev)}
-                  className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs font-bold"
+                  className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs "
                 >
                   Ubah Pencarian
                 </button>
@@ -980,7 +969,7 @@ export default function Search() {
                           <div className="hidden xl:block w-full text-black ">
                             <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                               <div className="col-span-1 xl:col-span-2">
-                                <h1 className="text-sm font-medium xl:font-bold">
+                                <h1 className="text-sm font-medium ">
                                   {e.trainName}{" "}
                                 </h1>
                                 <small>
@@ -994,7 +983,7 @@ export default function Search() {
                               </div>
                               <div className="flex">
                                 <div className="">
-                                  <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold">
+                                  <h1 className="mt-4 xl:mt-0 text-sm font-medium ">
                                     {e.departureTime}
                                   </h1>
                                   <small>
@@ -1004,7 +993,7 @@ export default function Search() {
                                 <HiOutlineArrowNarrowRight size={24} />
                               </div>
                               <div>
-                                <h1 className="text-sm font-medium xl:font-bold">
+                                <h1 className="text-sm font-medium ">
                                   {e.arrivalTime}
                                 </h1>
                                 <small>
@@ -1012,13 +1001,13 @@ export default function Search() {
                                 </small>
                               </div>
                               <div>
-                                <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold">
+                                <h1 className="mt-4 xl:mt-0 text-sm font-medium ">
                                   {e.duration}
                                 </h1>
                                 <small>Langsung</small>
                               </div>
                               <div className="">
-                                <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold text-black">
+                                <h1 className="mt-4 xl:mt-0 text-sm font-medium  text-black">
                                   Rp.{toRupiah(e.seats[0].priceAdult)}
                                 </h1>
                                 <small className="text-red-500">
@@ -1041,9 +1030,9 @@ export default function Search() {
                                     onClick={() =>
                                       bookingHandlerDetail(e.trainNumber)
                                     }
-                                    class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2"
+                                    class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50  rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2"
                                   >
-                                    <div className="text-white font-bold">
+                                    <div className="text-white ">
                                       PILIH
                                     </div>
                                   </button>
@@ -1068,7 +1057,7 @@ export default function Search() {
                               <div className="mt-4 px-4 md:px-4 xl:px-0 2xl:px-4 grid grid-cols-1 xl:grid-cols-7">
                                 <div className="flex justify-between">
                                   <div className="col-span-1 xl:col-span-2">
-                                    <h1 className="text-xs font-medium xl:font-bold">
+                                    <h1 className="text-xs font-medium ">
                                       {e.trainName}
                                     </h1>
                                     <small>
@@ -1081,7 +1070,7 @@ export default function Search() {
                                     </small>
                                   </div>
                                   <div className="text-right">
-                                    <h1 className="text-xs font-medium xl:font-bold text-black">
+                                    <h1 className="text-xs font-medium  text-black">
                                       Rp. {toRupiah(e.seats[0].priceAdult)}
                                     </h1>
                                     <small className="text-red-500">
@@ -1099,7 +1088,7 @@ export default function Search() {
                                 <div className="flex justify-start">
                                   <div className="flex space-x-2 items-start">
                                     <div>
-                                      <h1 className="mt-10 xl:mt-0 text-xs font-medium xl:font-bold">
+                                      <h1 className="mt-10 xl:mt-0 text-xs font-medium ">
                                         {e.departureTime}
                                       </h1>
                                       <small className="text-black">
@@ -1117,7 +1106,7 @@ export default function Search() {
                                     </div>
                                     <div className="w-full mt-12 px-4 border-b-2"></div>
                                     <div>
-                                      <h1 className="mt-10 xl:mt-0 text-xs font-medium xl:font-bold">
+                                      <h1 className="mt-10 xl:mt-0 text-xs font-medium ">
                                         {e.arrivalTime}
                                       </h1>
                                       <small className="text-black">
@@ -1198,7 +1187,7 @@ export default function Search() {
                                 <div className="hidden xl:block w-full text-black ">
                                   <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                                     <div className="col-span-1 xl:col-span-2">
-                                      <h1 className="text-sm font-medium xl:font-bold">
+                                      <h1 className="text-sm font-medium ">
                                         {trainArray.map((data, h) => (
                                           <span key={h}>
                                             {" "}
@@ -1230,7 +1219,7 @@ export default function Search() {
                                     </div>
                                     <div className="flex">
                                       <div className="">
-                                        <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold">
+                                        <h1 className="mt-4 xl:mt-0 text-sm font-medium ">
                                           {trainArray[0].departureTime}
                                         </h1>
                                         <small>
@@ -1240,7 +1229,7 @@ export default function Search() {
                                       <HiOutlineArrowNarrowRight size={24} />
                                     </div>
                                     <div>
-                                      <h1 className="text-sm font-medium xl:font-bold">
+                                      <h1 className="text-sm font-medium ">
                                         {
                                           trainArray[trainArray.length - 1]
                                             .arrivalTime
@@ -1252,7 +1241,7 @@ export default function Search() {
                                       {/*  */}
                                     </div>
                                     <div>
-                                      <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold">
+                                      <h1 className="mt-4 xl:mt-0 text-sm font-medium ">
                                         {calculateTotalDurationTransit(
                                           trainArray
                                         )}
@@ -1272,7 +1261,7 @@ export default function Search() {
                                       </small>
                                     </div>
                                     <div className="">
-                                      <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold text-blue-500">
+                                      <h1 className="mt-4 xl:mt-0 text-sm font-medium  text-blue-500">
                                         {toRupiah(
                                           trainArray.reduce(
                                             (total, item) =>
@@ -1311,9 +1300,9 @@ export default function Search() {
                                               category
                                             )
                                           }
-                                          class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2"
+                                          class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50  rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2"
                                         >
-                                          <div className="text-white font-bold">
+                                          <div className="text-white ">
                                             PILIH
                                           </div>
                                         </button>
@@ -1341,7 +1330,7 @@ export default function Search() {
                                     <div className="py-4 px-4 grid grid-cols-1 xl:grid-cols-7">
                                       <div className="flex justify-between">
                                         <div className="">
-                                          <h1 className="text-xs font-medium xl:font-bold">
+                                          <h1 className="text-xs font-medium ">
                                             {trainArray.map((data, h) => (
                                               <span key={h}>
                                                 {" "}
@@ -1372,7 +1361,7 @@ export default function Search() {
                                           </small>
                                         </div>
                                         <div>
-                                          <h1 className="text-xs font-medium xl:font-bold text-black">
+                                          <h1 className="text-xs font-medium  text-black">
                                             Rp.{" "}
                                             {toRupiah(
                                               trainArray.reduce(
@@ -1409,7 +1398,7 @@ export default function Search() {
                                         <div className="flex items-center space-x-8">
                                           {/* Departure Time and Origin */}
                                           <div>
-                                            <h1 className="text-sm xl:text-base font-medium xl:font-bold">
+                                            <h1 className="text-sm xl:text-base font-medium ">
                                               {trainArray[0].departureTime}
                                             </h1>
                                             <small className="text-black">
@@ -1450,7 +1439,7 @@ export default function Search() {
 
                                           {/* Arrival Time and Destination */}
                                           <div>
-                                            <h1 className="text-sm xl:text-base font-medium xl:font-bold">
+                                            <h1 className="text-sm xl:text-base font-medium ">
                                               {
                                                 trainArray[
                                                   trainArray.length - 1

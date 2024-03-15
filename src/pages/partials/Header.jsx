@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import React, { useContext, useEffect, useState, useRef } from "react";
-import { CiSettings } from "react-icons/ci";
+import { CiHome, CiSettings } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Skeleton from "@mui/material/Skeleton";
@@ -15,6 +15,7 @@ import { UserOutlined } from "@ant-design/icons";
 import dayjs, { isDayjs } from "dayjs";
 import { IoLogOut, IoLogOutOutline, IoLogOutSharp } from "react-icons/io5";
 import { LoginContent, LogoutContent } from "../../App";
+import { AiOutlineAppstore, AiOutlineHome } from "react-icons/ai";
 
 export default function Header() {
   const customStyle = {
@@ -276,7 +277,7 @@ export default function Header() {
   };
 
   return (
-    <nav className="bg-white px-2 sm:px-4 py-3  block sticky top-0 w-full z-50 left-0 border-b border-gray-200 ">
+    <nav className="bg-white px-2 sm:px-4 py-2 xl:py-4 block sticky top-0 w-full z-50 left-0 border-b border-gray-200 ">
       {contextHolder}
       <div className="container mx-auto">
         <div className={`flex justify-between items-center ${localStorage.getItem("hdrs_c") == "false" && 'py-0 md:py-2'} -mx-2 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24`}>
@@ -299,7 +300,7 @@ export default function Header() {
                 to="/"
                 className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-black"
               >
-                <FaHome className="text-blue-500" size={18} />
+                <AiOutlineHome className="text-black" size={18} />
                 <div className="text-[15px] text-black">Home</div>
               </Link>              
               </>
@@ -311,12 +312,12 @@ export default function Header() {
                   to="/transaksi/pesawat"
                   className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-black"
                 >
-                  <FaListAlt className="text-cyan-500" size={18} />
+                  <AiOutlineAppstore className="text-black" size={18} />
                   <div className="text-[15px] text-black">Transaksi</div>
                 </Link>
               </div>
             ) : null}
-            {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
+            {/* {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
               <Link
                 to="/booking/pesawat"
                 className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-black"
@@ -324,7 +325,7 @@ export default function Header() {
                 <FaListAlt className="text-red-500" size={18} />
                 <div className="text-[15px] text-black">Booking</div>
               </Link>
-            ) : null}
+            ) : null} */}
 
             <>
               {/* Untuk Belum login */}

@@ -4,7 +4,7 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import { IoArrowBackOutline, IoArrowForwardOutline, IoSearchCircle } from "react-icons/io5";
+import { IoArrowBackOutline, IoArrowForwardOutline, IoSearchCircle, IoSearchCircleOutline, IoSearchOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Searchpelni from "./PelniSearch";
 import { notification, Spin, Timeline } from "antd";
@@ -18,6 +18,7 @@ import dayjs from "dayjs";
 import { v4 as uuidv4 } from 'uuid';
 import { Whisper, Popover } from "rsuite";
 import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
+import { BsArrowDownCircle } from "react-icons/bs";
 
 export default function Search() {
 
@@ -356,28 +357,28 @@ export default function Search() {
         <>
           <>
             {contextHolder}
-            <div className="hidden md:block judul-search font-bold text-black">
+            <div className="hidden md:block judul-search  text-black">
               PILIH JADWAL
             </div>
             <div className="mt-0 md:mt-8">
               <div className="block md:flex flex-col md:flex-row md:justify-between items-center md:space-x-4">
                 <div className="hidden md:flex items-center space-x-3 text-center md:text-left">
-                  <small className="text-xs font-medium xl:font-bold text-black">
+                  <small className="text-xs font-normal  text-black">
                     {originName}
                   </small>
                   <div className="hidden md:flex bg-blue-500 p-1 rounded-full">
                     <IoArrowForwardOutline
-                      className="font-bold text-xs text-white"
+                      className=" text-xs text-white"
                       size={16}
                     />
                   </div>
-                  <small className="hidden md:flex text-xs font-medium xl:font-bold text-black">
+                  <small className="hidden md:flex text-xs font-normal  text-black">
                     {destinationName}
                   </small>
                   <div className="hidden md:block font-normal text-black">
                     |
                   </div>
-                  <div className="hidden md:flex space-x-4 text-xs font-bold text-black">
+                  <div className="hidden md:flex space-x-4 text-xs  text-black">
                     <div>{parseTanggalPelni(startDate)}</div>
                     <div>s.d</div>
                     <div>{parseTanggalPelni(endDate)}</div>
@@ -385,20 +386,20 @@ export default function Search() {
                   <div className="hidden md:block font-normal text-black">
                     |
                   </div>
-                  <small className="hidden md:block text-xs font-bold text-black">
+                  <small className="hidden md:block text-xs  text-black">
                     {parseInt(laki) + parseInt(wanita)} Penumpang
                   </small>
                 </div>
               </div>
-              <div className="flex justify-between mt-4 md:mt-8">
-                  <div className="relative flex items-center space-x-2 text-black text-xs font-medium xl:font-bold">
+              <div className="flex justify-between mt-2 md:mt-8">
+                  <div className="relative flex items-center space-x-2 text-black text-xs font-normal ">
                     <Whisper
                     className="text-black"
                       placement="bottomStart"
                       trigger="active"
                       controlId="control-id-active"
                       speaker={
-                        <Popover className="text-black" title="Filter Nama Kapal">
+                        <Popover className="text-black text-xs font-normal" title="Filter Nama Kapal">
                         <div className="block text-xs px-2">
                         <Box sx={{ width: 120 }}>
                           <FormGroup>
@@ -445,33 +446,35 @@ export default function Search() {
                       </Popover>
                       }
                     >
-                      <button className="block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300">
-                        NAMA KAPAL
-                      </button>
+                    <div
+                      className="pl-2 flex  space-x-2 items-center cursor-pointer"
+                    >
+                      <div className="text-xs text-black">Nama Kapal</div>
+                      <IoSearchOutline className="text-black " size={18} />
+                    </div>
                     </Whisper>
-                    <div className="flex md:hidden space-x-4 md:mr-0 justify-center md:justify-end">
-                        <div 
-                          onClick={() => setUbahPencarian((prev) => !prev)}               
-                          className="cursor-pointer">
-                          <IoSearchCircle size={28} className="text-blue-500" />
-                        </div>
-                        {/* <button
-                          className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs font-bold"
-                        >
-                          Ubah Pencarian
-                        </button> */}
-                      </div>
+
+                    <div
+                    onClick={() => setUbahPencarian((prev) => !prev)}      
+                    className="pl-2 flex md:hidden space-x-2 items-center cursor-pointer"
+                    >
+                      <div className="text-xs text-black">Ubah Pencarian</div>
+                      <BsArrowDownCircle className="text-black " size={16} />
+                    </div>
                   </div>
                   <div className="mt-0 block md:flex space-x-0 md:space-x-4 mr-0 md:mr-0 justify-start md:justify-end">
-                    <Link to="/" className="hidden md:flex space-x-2 items-center">
-                      <IoArrowBackOutline className="text-blue-500" size={16} />
-                      <div className="text-blue-500 text-sm font-bold">
+                  <Link
+                      to="/"
+                      className="hidden md:flex space-x-2 items-center"
+                    >
+                      <IoArrowBackOutline className="text-black" size={16} />
+                      <div className="text-black text-xs">
                         Kembali
                       </div>
                     </Link>
                     <button
                       onClick={() => setUbahPencarian((prev) => !prev)}
-                      className="hidden md:block border p-2 px-4 md:px-4  bg-blue-500 text-white rounded-md text-xs font-bold"
+                      className="hidden md:block border p-2 px-4 md:px-4  bg-blue-500 text-white rounded-md text-xs "
                     >
                       Ubah Pencarian
                     </button>
@@ -524,7 +527,7 @@ export default function Search() {
                                 <div className="hidden xl:block w-full text-black ">
                                   <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-8 gap-0 md:gap-4">
                                     <div className="col-span-1 xl:col-span-2">
-                                      <h1 className="text-sm font-medium xl:font-bold">
+                                      <h1 className="text-sm font-normal ">
                                         {e.SHIP_NAME}{" "}
                                       </h1>
                                       <div>
@@ -541,7 +544,7 @@ export default function Search() {
                                     </div>
                                     <div className="flex">
                                       <div className="">
-                                        <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold">{`${e.DEP_TIME.slice(
+                                        <h1 className="mt-4 xl:mt-0 text-sm font-normal ">{`${e.DEP_TIME.slice(
                                           0,
                                           2
                                         )}:${e.DEP_TIME.slice(2)}`}</h1>
@@ -550,14 +553,14 @@ export default function Search() {
                                     </div>
                                     <HiOutlineArrowNarrowRight size={24} />
                                     <div>
-                                      <h1 className="text-sm font-medium xl:font-bold">{`${e.ARV_TIME.slice(
+                                      <h1 className="text-sm font-normal ">{`${e.ARV_TIME.slice(
                                         0,
                                         2
                                       )}:${e.ARV_TIME.slice(2)}`}</h1>
                                       <small>{destinationName}</small>
                                     </div>
                                     <div>
-                                      <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold">
+                                      <h1 className="mt-4 xl:mt-0 text-sm font-normal ">
                                         {duration(
                                           e.DEP_DATE,
                                           e.ARV_DATE,
@@ -568,7 +571,7 @@ export default function Search() {
                                       <small>Langsung</small>
                                     </div>
                                     <div className="">
-                                      <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold text-blue-500">
+                                      <h1 className="mt-4 xl:mt-0 text-sm font-normal  text-blue-500">
                                       Adult Rp.
                                         {toRupiah(e.fares[i].FARE_DETAIL.A.TOTAL)}
                                       </h1>
@@ -588,9 +591,9 @@ export default function Search() {
                                               handleSubmit(e, i)
                                             }
                                             type="button"
-                                            class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2"
+                                            class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50  rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2"
                                           >
-                                            <div className="text-white font-medium xl:font-bold">
+                                            <div className="text-white font-normal ">
                                               PILIH
                                             </div>
                                           </button>
@@ -611,7 +614,7 @@ export default function Search() {
                                   {openButton === `open-${k + i}${e.SHIP_NO}` ? (
                                     <div className={`hidden xl:block ${openButton === `open-${k + i}${e.SHIP_NO}` ? '' : 'max-h-0'}`}>
                                       <div className="px-4 mt-4">
-                                        <div className="mb-2 text-sm font-medium xl:font-bold">
+                                        <div className="mb-2 text-sm font-normal ">
                                           Tanggal Keberangkatan
                                         </div>
                                         <div className="block mb-16">
@@ -624,7 +627,7 @@ export default function Search() {
                                               ))}
                                             </Timeline>
                                           </div>
-                                        <div className="mb-2 text-sm font-medium xl:font-bold">
+                                        <div className="mb-2 text-sm font-normal ">
                                           Tanggal Tujuan
                                         </div>
                                         <div className="flex justify-start items-end">
@@ -644,7 +647,7 @@ export default function Search() {
                                     <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                                       <div className="flex justify-between">
                                         <div className="col-span-1 xl:col-span-2">
-                                          <h1 className="text-xs font-medium xl:font-bold">
+                                          <h1 className="text-xs font-normal ">
                                             {e.SHIP_NAME}
                                           </h1>
                                           <div>
@@ -660,7 +663,7 @@ export default function Search() {
                                           </div>
                                         </div>
                                         <div className="text-right">
-                                          <h1 className="text-xs font-medium xl:font-bold text-blue-500">
+                                          <h1 className="text-xs font-normal  text-blue-500">
                                             Adult Rp.
                                             {toRupiah(
                                               e.fares[0].FARE_DETAIL.A.TOTAL
@@ -677,7 +680,7 @@ export default function Search() {
                                       <div className="flex justify-start">
                                         <div className="flex space-x-2 items-start">
                                           <div>
-                                            <h1 className="mt-10 xl:mt-0 text-xs font-medium xl:font-bold">{`${e.DEP_TIME.slice(
+                                            <h1 className="mt-10 xl:mt-0 text-xs font-normal ">{`${e.DEP_TIME.slice(
                                               0,
                                               2
                                             )}:${e.DEP_TIME.slice(2)}`}</h1>
@@ -701,7 +704,7 @@ export default function Search() {
                                           </div>
                                           <div className="w-full mt-12 px-4 border-b-2"></div>
                                           <div>
-                                            <h1 className="mt-10 xl:mt-0 text-xs font-medium xl:font-bold">{`${e.ARV_TIME.slice(
+                                            <h1 className="mt-10 xl:mt-0 text-xs font-normal ">{`${e.ARV_TIME.slice(
                                               0,
                                               2
                                             )}:${e.ARV_TIME.slice(2)}`}</h1>
@@ -726,7 +729,7 @@ export default function Search() {
                                   {openButton === `open-${k + i}${e.SHIP_NO}` ? (
                                     <div className={`block xl:hidden ${openButton === `open-${k + i}${e.SHIP_NO}` ? '' : 'max-h-0'}`}>
                                       <div className="px-4 mt-4">
-                                        <div className="mb-2 text-xs font-medium xl:font-bold">
+                                        <div className="mb-2 text-xs font-normal ">
                                           Tanggal Keberangkatan
                                         </div>
                                         <div className="block mb-8">
@@ -739,7 +742,7 @@ export default function Search() {
                                               ))}
                                             </Timeline>
                                           </div>
-                                        <div className="-mt-8 text-xs font-medium xl:font-bold">
+                                        <div className="-mt-8 text-xs font-normal ">
                                           Tanggal Tujuan
                                         </div>
                                         <div className="flex justify-start items-end">
@@ -787,7 +790,7 @@ export default function Search() {
                                 <div className="hidden xl:block w-full text-black ">
                                   <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-8 gap-0 md:gap-4">
                                     <div className="col-span-1 xl:col-span-2">
-                                      <h1 className="text-sm font-medium xl:font-bold">
+                                      <h1 className="text-sm font-normal ">
                                         {e.SHIP_NAME}{" "}
                                       </h1>
                                       <div>
@@ -804,7 +807,7 @@ export default function Search() {
                                     </div>
                                     <div className="flex">
                                       <div className="">
-                                        <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold">{`${e.DEP_TIME.slice(
+                                        <h1 className="mt-4 xl:mt-0 text-sm font-normal ">{`${e.DEP_TIME.slice(
                                           0,
                                           2
                                         )}:${e.DEP_TIME.slice(2)}`}</h1>
@@ -813,14 +816,14 @@ export default function Search() {
                                     </div>
                                     <HiOutlineArrowNarrowRight size={24} />
                                     <div>
-                                      <h1 className="text-sm font-medium xl:font-bold">{`${e.ARV_TIME.slice(
+                                      <h1 className="text-sm font-normal ">{`${e.ARV_TIME.slice(
                                         0,
                                         2
                                       )}:${e.ARV_TIME.slice(2)}`}</h1>
                                       <small>{destinationName}</small>
                                     </div>
                                     <div>
-                                      <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold">
+                                      <h1 className="mt-4 xl:mt-0 text-sm font-normal ">
                                         {duration(
                                           e.DEP_DATE,
                                           e.ARV_DATE,
@@ -831,7 +834,7 @@ export default function Search() {
                                       <small>Langsung</small>
                                     </div>
                                     <div className="">
-                                      <h1 className="mt-4 xl:mt-0 text-sm font-medium xl:font-bold text-blue-500">
+                                      <h1 className="mt-4 xl:mt-0 text-sm font-normal  text-blue-500">
                                         Adult Rp.
                                         {toRupiah(e.fares[i].FARE_DETAIL.A.TOTAL)}
                                       </h1>
@@ -852,9 +855,9 @@ export default function Search() {
                                               handleSubmit(e, i)
                                             }
                                             type="button"
-                                            class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50 font-bold rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2"
+                                            class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50  rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2"
                                           >
-                                            <div className="text-white font-bold">
+                                            <div className="text-white ">
                                               PILIH
                                             </div>
                                           </button>
@@ -873,7 +876,7 @@ export default function Search() {
                                     <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                                       <div className="flex justify-between">
                                         <div className="col-span-1 xl:col-span-2">
-                                          <h1 className="text-xs font-medium xl:font-bold">
+                                          <h1 className="text-xs font-normal ">
                                             {e.SHIP_NAME}
                                           </h1>
                                           <small>
@@ -882,7 +885,7 @@ export default function Search() {
                                           </small>
                                         </div>
                                         <div className="text-right">
-                                          <h1 className="text-xs font-medium xl:font-bold text-blue-500">
+                                          <h1 className="text-xs font-normal  text-blue-500">
                                             Adult Rp.
                                             {toRupiah(
                                               e.fares[0].FARE_DETAIL.A.TOTAL
@@ -899,7 +902,7 @@ export default function Search() {
                                       <div className="flex justify-start">
                                         <div className="flex space-x-2 items-start">
                                           <div>
-                                            <h1 className="mt-10 xl:mt-0 text-xs font-medium xl:font-bold">{`${e.DEP_TIME.slice(
+                                            <h1 className="mt-10 xl:mt-0 text-xs font-normal ">{`${e.DEP_TIME.slice(
                                               0,
                                               2
                                             )}:${e.DEP_TIME.slice(2)}`}</h1>
@@ -923,7 +926,7 @@ export default function Search() {
                                           </div>
                                           <div className="w-full mt-12 px-4 border-b-2"></div>
                                           <div>
-                                            <h1 className="mt-10 xl:mt-0 text-xs font-medium xl:font-bold">{`${e.ARV_TIME.slice(
+                                            <h1 className="mt-10 xl:mt-0 text-xs font-normal ">{`${e.ARV_TIME.slice(
                                               0,
                                               2
                                             )}:${e.ARV_TIME.slice(2)}`}</h1>
@@ -948,7 +951,7 @@ export default function Search() {
                                       {openButton === `open-${k + i}${e.SHIP_NO}` ? (
                                     <div className={`block xl:hidden ${openButton === `open-${k + i}${e.SHIP_NO}` ? '' : 'max-h-0'}`}>
                                       <div className="px-4 mt-4">
-                                        <div className="mb-2 text-xs font-medium xl:font-bold">
+                                        <div className="mb-2 text-xs font-normal ">
                                           Tanggal Keberangkatan
                                         </div>
                                         <div className="block mb-8">
@@ -961,7 +964,7 @@ export default function Search() {
                                               ))}
                                             </Timeline>
                                           </div>
-                                        <div className="-mt-8 text-xs font-medium xl:font-bold">
+                                        <div className="-mt-8 text-xs font-normal ">
                                           Tanggal Tujuan
                                         </div>
                                         <div className="flex justify-start items-end">
@@ -992,7 +995,7 @@ export default function Search() {
                 <div className="flex justify-center w-full text-black">
                   <div className="text-black text-center">
                     <div>
-                      <div className="text-sm md:text-md font-medium">
+                      <div className="text-sm md:text-md font-normal">
                         Maaf, sepertinya pada rute ini masih belum dibuka kembali.
                       </div>
                       {/* <small>

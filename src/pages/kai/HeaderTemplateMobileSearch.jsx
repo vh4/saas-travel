@@ -34,7 +34,7 @@ export default function HeaderTemplateMobileSearch({ children }) {
                     <div>{stasiunTujuan}</div>
                 </div>
                 <div className="text-xs">
-                  <small>{tanggal_keberangkatan_kereta} | {parseInt(adult) + parseInt(infant)}{" "} Penumpang</small>
+                  <small>{tanggal_keberangkatan_kereta} ⍟ {parseInt(adult) + parseInt(infant)}{" "} Penumpang</small>
                 </div>
             </div>
         </div>

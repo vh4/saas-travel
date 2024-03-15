@@ -12,6 +12,7 @@ import { BsFillBookmarkStarFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { NavContext } from "../App";
 import Footer from "./partials/Footer";
+import { AiOutlineAppstore, AiOutlineHome } from "react-icons/ai";
 
 export default function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState("block");
@@ -44,19 +45,19 @@ export default function Layout({ children }) {
               to="/"
               label="Home"
               component={Link}
-              icon={<ImHome2 size={20} />}
+              icon={<AiOutlineHome size={20} />}
             />
-            <BottomNavigationAction
+            {/* <BottomNavigationAction
               to="/booking/pesawat"
               component={Link}
               label="Booking"
               icon={<BsFillBookmarkStarFill size={18} />}
-            />
+            /> */}
             <BottomNavigationAction
               to="/transaksi/pesawat"
               component={Link}
               label="Transaksi"
-              icon={<IoIosListBox size={20} />}
+              icon={<AiOutlineAppstore size={20} />}
             />
             {/* <BottomNavigationAction
               to="/profile/view"
