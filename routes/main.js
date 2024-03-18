@@ -365,8 +365,7 @@ Router.post('/app/transaction_book_list', async function (req, res) {
   
   try {
 
-      const { token, product } = req.body;  
-      logger.info(`Request /app/transaction_book_list: ${JSON.stringify(req.body)}`);
+      const { token, product, startDate, endDate } = req.body;  
       const requests = {};
 
       requests['username'] = req.session['v_uname'];
@@ -380,9 +379,19 @@ Router.post('/app/transaction_book_list', async function (req, res) {
         requests['username'] =  requests['username'] + '#' + merchart;
       }
 
+      logger.info(`Request /app/transaction_book_list: ${JSON.stringify({
+        token: token,
+        product: product,
+        startDate,
+        endDate,
+        ...requests
+      })}`);
+
       const { data } = await axios.post(`${process.env.URL_HIT}/app/transaction_book_list`, {
         token: token,
         product: product,
+        startDate,
+        endDate,
         ...requests
       });
 
