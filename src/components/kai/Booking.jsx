@@ -855,7 +855,7 @@ export default function BookingKai() {
                                         onChange={handleInfantsubCatagoryChange(i, "birthdate")}
                                         disabledDate={disabledDate}
                                         open={isDatePickerOpen[i]} // Pass the state to the open prop
-                                        inputReadOnly={true}
+                                        // inputReadOnly={true}
                                         onOpenChange={(status) => {
                                           const newOpenState = [...isDatePickerOpen]; // Create a copy of the array
                                           newOpenState[i] = status; // Update the state for the specific index
@@ -863,7 +863,7 @@ export default function BookingKai() {
                                         }}
                                         />
                                   <small className="block mt-2 text-gray-400">
-                                    Contoh: dd-mm-yyyy
+                                    Contoh: dd/mm/yyyy
                                   </small>
                                 </div>
                                 {/* mobile & desktop NIK*/}

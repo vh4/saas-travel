@@ -803,7 +803,7 @@ export default function BookingKaiTransit() {
                                             )}
                                             disabledDate={disabledDate}
                                             open={isDatePickerOpen[i]} // Pass the state to the open prop
-                                            inputReadOnly={true}
+                                            // inputReadOnly={true}
                                             onOpenChange={(status) => {
                                               const newOpenState = [
                                                 ...isDatePickerOpen,
@@ -813,7 +813,7 @@ export default function BookingKaiTransit() {
                                             }}
                                           />
                                           <small className="block mt-2 text-gray-400">
-                                            Contoh: dd-mm-yyyy
+                                            Contoh: dd/mm/yyyy
                                           </small>
                                         </div>
                                         {/* mobile & desktop NIK*/}

@@ -97,19 +97,22 @@ export default function Pembayaran() {
       setErr(true);
     }
 
-    Promise.all([getDataAllBook()])
-		.then(([getDataAllBook]) => {
+    Promise.all([getDataAllBook(), cekCallbakIsMitra()])
+		.then(([getDataAllBook, cekCallbakIsMitra]) => {
 
 		const hasilBooking = getDataAllBook.hasilBooking;
+
+    if (cekCallbakIsMitra.data.rc == "00") {
+      setcallbackBoolean(true);
+    }
 
 		//jika tidak ada timeLimit.
 
         if (getDataAllBook) {
 		  
-		  hasilBooking['timeLimit'] = hasilBooking.timeLimit || moment().add(1, "hours");
           
 		  setBook(getDataAllBook);
-          setExpiredBookTime(hasilBooking.timeLimit || moment().add(1, "hours"));
+          setExpiredBookTime(hasilBooking.timeLimit);
 
 		  setTotalAdult(getDataAllBook.adult)
 		  setTotalChild(getDataAllBook.child)
@@ -119,6 +122,7 @@ export default function Pembayaran() {
         } else {
           setErrPage(true);
         }
+
 
         // Set booking expiration flag
         if (
@@ -140,6 +144,23 @@ export default function Pembayaran() {
       });
   }, [id, token]);
 
+
+  async function cekCallbakIsMitra() {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/travel/is_merchant`,
+        {
+          token: JSON.parse(
+            localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+          ),
+        }
+      );
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   const [remainingBookTime, setremainingBookTime] = useState(
     remainingTime(expiredBookTime)
   );
@@ -148,7 +169,7 @@ export default function Pembayaran() {
     const intervalId = setInterval(() => {
       setremainingBookTime(remainingTime(expiredBookTime));
 
-      if (book && new Date(book.timeLimit).getTime() < new Date().getTime()) {
+      if (expiredBookTime && new Date(expiredBookTime).getTime() < new Date().getTime()) {
         setIsBookingExpired(true);
       } else {
         setIsBookingExpired(false);
@@ -198,9 +219,9 @@ export default function Pembayaran() {
       );
 
       const response = await axios.post(
-        `${process.env.REACT_APP_HOST_API}/travel/pelni/callback`,
+        `${process.env.REACT_APP_HOST_API}/travel/ship/callback`,
         {
-          id_transaksi: dataParse.transactionId,
+          id_transaksi: dataParse.hasilBooking.id_transaksi || 0,
         }
       );
 

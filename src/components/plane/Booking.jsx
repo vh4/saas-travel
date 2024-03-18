@@ -1094,7 +1094,7 @@ useEffect(() => {
                                         )}
                                         disabledDate={disabledDateAdult}
                                         open={isDatePickerOpenAdult[i]} // Pass the state to the open prop
-                                        inputReadOnly={true}
+                                        // inputReadOnly={true}
                                         onOpenChange={(status) => {
                                           const newOpenState = [...isDatePickerOpenAdult]; // Create a copy of the array
                                           newOpenState[i] = status; // Update the state for the specific index
@@ -1103,7 +1103,7 @@ useEffect(() => {
                                       />
                                     </Form.Item>
                                     <small className="block -mt-4 text-gray-400">
-                                      Contoh: dd-mm-yyyy
+                                      Contoh: dd/mm/yyyy
                                     </small>
                                   </div>
                                   <div className="w-full">
@@ -1249,7 +1249,7 @@ useEffect(() => {
                                             )}
                                             disabledDate={disabledDateExpiredDate}
                                             open={isDatePickerOpenAdult[i]} // Pass the state to the open prop
-                                            inputReadOnly={true}
+                                            // inputReadOnly={true}
                                             onOpenChange={(status) => {
                                               const newOpenState = [...isDatePickerOpenAdult]; // Create a copy of the array
                                               newOpenState[i] = status; // Update the state for the specific index
@@ -1258,7 +1258,7 @@ useEffect(() => {
                                             />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
-                                          Contoh: dd-mm-yyyy
+                                          Contoh: dd/mm/yyyy
                                         </small>
                                       </div>
                                       </div>
@@ -1496,7 +1496,7 @@ useEffect(() => {
                                         )}
                                         disabledDate={disabledDateChild}
                                         open={isDatePickerOpenChild[i]} // Pass the state to the open prop
-                                        inputReadOnly={true}
+                                        // inputReadOnly={true}
                                         onOpenChange={(status) => {
                                           const newOpenState = [...isDatePickerOpenChild]; // Create a copy of the array
                                           newOpenState[i] = status; // Update the state for the specific index
@@ -1505,7 +1505,7 @@ useEffect(() => {
                                         />
                                     </Form.Item>
                                     <small className="block -mt-4 text-gray-400">
-                                      Contoh: dd-mm-yyyy
+                                      Contoh: dd/mm/yyyy
                                     </small>
                                   </div>
                                   <div className="w-full">
@@ -1650,7 +1650,7 @@ useEffect(() => {
                                             )}
                                             disabledDate={disabledDateExpiredDate}
                                             open={isDatePickerOpenChild[i]} // Pass the state to the open prop
-                                            inputReadOnly={true}
+                                            // inputReadOnly={true}
                                             onOpenChange={(status) => {
                                               const newOpenState = [...isDatePickerOpenChild]; // Create a copy of the array
                                               newOpenState[i] = status; // Update the state for the specific index
@@ -1659,7 +1659,7 @@ useEffect(() => {
                                             />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
-                                          Contoh: dd-mm-yyyy
+                                          Contoh: dd/mm/yyyy
                                         </small>
                                       </div>
                                       </div>
@@ -1855,7 +1855,7 @@ useEffect(() => {
                                         )}
                                         disabledDate={disabledDate}
                                         open={isDatePickerOpenInfant[i]} // Pass the state to the open prop
-                                        inputReadOnly={true}
+                                        // inputReadOnly={true}
                                         onOpenChange={(status) => {
                                           const newOpenState = [...isDatePickerOpenInfant]; // Create a copy of the array
                                           newOpenState[i] = status; // Update the state for the specific index
@@ -1864,7 +1864,7 @@ useEffect(() => {
                                         />
                                     </Form.Item>
                                     <small className="block -mt-4 text-gray-400">
-                                      Contoh: dd-mm-yyyy
+                                      Contoh: dd/mm/yyyy
                                     </small>
                                   </div>
                                   <div className="w-full">
@@ -2010,7 +2010,7 @@ useEffect(() => {
                                             )}
                                             disabledDate={disabledDateExpiredDate}
                                             open={isDatePickerOpenInfant[i]} // Pass the state to the open prop
-                                            inputReadOnly={true}
+                                            // inputReadOnly={true}
                                             onOpenChange={(status) => {
                                               const newOpenState = [...isDatePickerOpenInfant]; // Create a copy of the array
                                               newOpenState[i] = status; // Update the state for the specific index
@@ -2019,7 +2019,7 @@ useEffect(() => {
                                             />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
-                                          Contoh: dd-mm-yyyy
+                                          Contoh: dd/mm/yyyy
                                         </small>
                                       </div>
                                       </div>

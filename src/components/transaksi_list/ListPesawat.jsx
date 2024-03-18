@@ -494,7 +494,7 @@ export default function ViewTransaksi({ path }) {
                                     </div>
                                     {e.status?.Status !== "Booking"  && (
                                       <>
-                                        <a href={`${e.url_struk}`} target="_blank">
+                                        <a href={`https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=${e.status.id_transaksi}`} target="_blank">
                                           <div className="flex space-x-2 items-center text-black">
                                             <HiOutlinePrinter size={16} />
                                             <div className="text-xs">Cetak</div>

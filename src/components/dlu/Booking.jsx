@@ -1274,7 +1274,7 @@ export default function BookingDLU() {
                                         )}
                                         disabledDate={disabledDateAdult}
                                         open={isDatePickerOpenAdult[i]} // Pass the state to the open prop
-                                        inputReadOnly={true}
+                                        // inputReadOnly={true}
                                         onOpenChange={(status) => {
                                           const newOpenState = [
                                             ...isDatePickerOpenAdult,
@@ -1287,7 +1287,7 @@ export default function BookingDLU() {
                                       />
                                     </Form.Item>
                                     <small className="block -mt-4 text-gray-400">
-                                      Contoh: dd-mm-yyyy
+                                      Contoh: dd/mm/yyyy
                                     </small>
                                   </div>
                                   <div className="w-full">
@@ -1646,7 +1646,7 @@ export default function BookingDLU() {
                                         )}
                                         disabledDate={disabledDateChild}
                                         open={isDatePickerOpenChild[i]} // Pass the state to the open prop
-                                        inputReadOnly={true}
+                                        // inputReadOnly={true}
                                         onOpenChange={(status) => {
                                           const newOpenState = [
                                             ...isDatePickerOpenChild,
@@ -1659,7 +1659,7 @@ export default function BookingDLU() {
                                       />
                                     </Form.Item>
                                     <small className="block -mt-4 text-gray-400">
-                                      Contoh: dd-mm-yyyy
+                                      Contoh: dd/mm/yyyy
                                     </small>
                                   </div>
                                   <div className="w-full px-4 xl:px-0 mt-4 xl:mt-0 md:mt-0">
@@ -1887,7 +1887,7 @@ export default function BookingDLU() {
                                         )}
                                         disabledDate={disabledDate}
                                         open={isDatePickerOpenInfant[i]} // Pass the state to the open prop
-                                        inputReadOnly={true}
+                                        // inputReadOnly={true}
                                         onOpenChange={(status) => {
                                           const newOpenState = [
                                             ...isDatePickerOpenInfant,
@@ -1900,7 +1900,7 @@ export default function BookingDLU() {
                                       />
                                     </Form.Item>
                                     <small className="block -mt-4 text-gray-400">
-                                      Contoh: dd-mm-yyyy
+                                      Contoh: dd/mm/yyyy
                                     </small>
                                   </div>
                                   <div className="w-full px-4 xl:px-0 mt-4 xl:mt-0">

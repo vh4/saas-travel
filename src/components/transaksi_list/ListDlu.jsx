@@ -1,15 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
+import { AiOutlineHome } from "react-icons/ai";
 import { BsArrowRightShort } from "react-icons/bs";
-import { MdOutlineTrain } from "react-icons/md";
 import axios from "axios";
-import { Placeholder } from "rsuite";
-import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import { Button, Modal, message } from "antd";
+import { Modal, message } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
-import { remainingTime } from "../../helpers/date";
+import { parseTanggal, remainingTime } from "../../helpers/date";
 import Page500 from "../components/500";
+import { IoBoatSharp } from "react-icons/io5";
+import { HiOutlineArrowNarrowRight } from "react-icons/hi";
+import { Placeholder } from "rsuite";
 import { CiBoxList } from "react-icons/ci";
 import { HiOutlinePrinter } from "react-icons/hi2";
+import dayjs from "dayjs";
 
 export default function ViewBooking({ path }) {
   const [data, setData] = useState([]);
@@ -17,10 +19,10 @@ export default function ViewBooking({ path }) {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [loadBayar, setLoadBayar] = useState(true);
-  const [open, setOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(false);
-
+  const handleOpen = () => setShowModal(true);
+  const handleClose = () => setShowModal(false);
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
@@ -29,13 +31,10 @@ export default function ViewBooking({ path }) {
   const [errPage, setErrPage] = useState(false);
 
   useEffect(() => {
-    if (token === undefined || token === null) {
+    if (token == null || token == undefined) {
       setErr(true);
     }
   }, [token]);
-
-  const handleOpen = () => setShowModal(true);
-  const handleClose = () => setShowModal(false);
 
   function success() {
     messageApi.open({
@@ -70,7 +69,9 @@ export default function ViewBooking({ path }) {
           token: JSON.parse(
             localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
           ),
-          product: "KERETA",
+          product: "DLUKAPAL",
+          startDate: dayjs().format('YYYY-MM-DD'),
+          endDate:dayjs().format('YYYY-MM-DD')
         }
       );
 
@@ -79,6 +80,7 @@ export default function ViewBooking({ path }) {
       }
 
       const datas = response.data;
+
       setData(datas.data);
       setIsLoading(false);
     } catch (e) {
@@ -99,34 +101,6 @@ export default function ViewBooking({ path }) {
 
   const handleBayar = async () => {
     setLoading(true);
-
-    const response = await axios.post(
-      `${process.env.REACT_APP_HOST_API}/travel/train/payment`,
-      {
-        productCode: "WKAI",
-        bookingCode: byrdata.kode_booking,
-        transactionId: byrdata.id_transaksi,
-        nominal: byrdata.nominal,
-        nominal_admin: byrdata.nominal_admin,
-        discount: 0,
-        pay_type: "TUNAI",
-        token: JSON.parse(
-          localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-        ),
-      }
-    );
-    setTimeout(() => {
-      setLoading(false);
-      setOpen(false);
-    }, 1000);
-
-    if (response.data.rc !== "00") {
-      gagal(response.data.rd);
-      handleClose();
-    } else {
-      success();
-      handleClose();
-    }
   };
 
   const intervalRef = React.useRef(null);
@@ -163,6 +137,8 @@ export default function ViewBooking({ path }) {
 
         setRemainingTimes(updatedRemainingTimes);
       }, 1000);
+    } else {
+      setRemainingTimes([]);
     }
 
     return () => {
@@ -174,194 +150,185 @@ export default function ViewBooking({ path }) {
 
   return (
     <>
-      {/* meessage bayar */}
       {contextHolder}
-
-      <Modal
-        width={1000}
-        open={showModal}
-        onOk={handleClose}
-        onCancel={handleClose}
-        footer={
-          [
-            // <Button key="back" onClick={handleClose}>
-            //   Cancel
-            // </Button>,
-            // <Button key="submit" type="primary" className='bg-blue-500' loading={loading} disabled>
-            //   Bayar Langsung
-            // </Button>,
-          ]
-        }
-      >
-        {loadBayar !== true ? (
-          <div className="mt-4 mb-12">
-            {byrdata.penumpang.map((e) => (
-              <>
+      <div className="">
+        {/* meessage bayar */}
+        <Modal
+          width={1000}
+          open={showModal}
+          onOk={handleClose}
+          onCancel={handleClose}
+          footer={
+            [
+              // <Button key="back" onClick={handleClose}>
+              //   Cancel
+              // </Button>,
+              // <Button key="submit" type="primary" className='bg-blue-500' loading={loading} disabled>
+              //   Bayar Langsung
+              // </Button>,
+            ]
+          }
+        >
+          {loadBayar !== true ? (
+            <div className="mt-4 mb-12">
+              {byrdata.penumpang.map((e) => (
+                <>
                 <div className="border-b p-4 grid grid-cols-1 md:grid-cols-5 gap-4 mt-4">
-                  <div className="text-xs">
-                    <div className="">Nama</div>
-                    <div>{e.nama}</div>
-                  </div>
-                  <div className="text-xs">
-                    <div className="">Nik</div>
-                    <div>
-                      {e.nomor_identitas !== "" ? e.nomor_identitas : "-"}
+                    <div className="text-xs">
+                      <div className="">Nama</div>
+                      <div>{e.nama || '-'}</div>
+                    </div>
+                    <div className="text-xs">
+                      <div className="">Tanggal Lahir</div>
+                      <div>{e.dob || '-'}</div>
+                    </div>
+                    <div className="text-xs">
+                      <div className="">NIK</div>
+                      <div>{e.idpass || '-'}</div>
+                    </div>
+                    <div className="text-xs">
+                      <div className="">ID Tiket</div>
+                      <div>{e.id_ticket || '-'}</div>
                     </div>
                   </div>
-                  <div className="text-xs">
-                    <div className="">No. HP</div>
-                    <div>{e.telepon !== "" ? e.telepon : "-"}</div>
-                  </div>
-                  <div className="text-xs">
-                    <div className="">No. Kursi</div>
-                    <div>{e.kursi !== "" ? e.kursi : "-"}</div>
-                  </div>
-                </div>
-              </>
-            ))}
-
+                </>
+              ))}
             <div className="p-2 flex space-x-2 items-center mt-4">
               <CiBoxList size={16}/>
               <div className="text-xs">Deskripsi</div>
             </div>
-            {/* desktop */}
-            <div className="p-4 w-full hidden xl:gap-4 lg:grid lg:grid-cols-10">
-              <div className="col-span-2">
-                <div className="text-xs">{byrdata.nama_kereta} </div>
-                <small>
-                  {byrdata.classes === "EKS"
-                    ? "Eksekutif"
-                    : byrdata.classes === "EKO"
-                    ? "Ekonomi"
-                    : "Bisnis"}{" "}
-                  {byrdata.kode_kereta.substring(4, 5)} - (
-                  {byrdata.kode_kereta.split("/")[1]})
-                </small>
-              </div>
-              <div className="col-span-2">
-                <div className="text-xs">
-                  {new Date(
-                    byrdata.tanggal_keberangkatan.slice(0, 4),
-                    parseInt(byrdata.tanggal_keberangkatan.slice(4, 6)) - 1,
-                    byrdata.tanggal_keberangkatan.slice(6, 8)
-                  ).toLocaleDateString("id-ID", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}{" "}
+              {/* desktop */}
+              {console.log(byrdata)}
+			  <div className="p-4 w-full hidden xl:gap-4 lg:grid lg:grid-cols-10">
+                <div className="col-span-2">
+                  <div className="text-xs">{byrdata.nama_kapal} </div>
+                  <small>Kelas {byrdata.tipe_class.split('|')[1] || ''}</small>
                 </div>
-                <small>Tanggal Keberangkatan</small>
-              </div>
-              <div className="flex col-span-2 justify-around">
-                <div className="">
-                  <div className="mt-4 xl:mt-0 text-xs">
-                    {byrdata.jam_keberangkatan
-                      .toString()
-                      .padStart(4, "0")
-                      .replace(/(\d{2})(\d{2})/, "$1:$2")}
+                <div className="col-span-2">
+                  <div className="text-xs">
+                    {parseTanggal(byrdata.tanggal_keberangkatan)}{" "}
                   </div>
-                  <small>{byrdata.origin}</small>
+                  <small>Tanggal Keberangkatan</small>
                 </div>
-                <HiOutlineArrowNarrowRight size={20} />
-              </div>
-              <div className="col-span-2">
-                <div className="text-xs">
-                  {byrdata.jam_kedatangan
-                    .toString()
-                    .padStart(4, "0")
-                    .replace(/(\d{2})(\d{2})/, "$1:$2")}
-                </div>
-                <small>{byrdata.destination}</small>
-              </div>
-              <div className="col-span-2">
-                <h1 className="mt-4 xl:mt-0 text-xs text-blue-500">
-                  Rp.{" "}
-                  {toRupiah(
-                    parseInt(byrdata.nominal) + parseInt(byrdata.nominal_admin)
-                  )}
-                </h1>
-                <small>
-                  Total (Admin Rp. {toRupiah(byrdata.nominal_admin)})
-                </small>
-              </div>
-            </div>
-            {/* mobile */}
-            <div className="p-4 w-full block mt-4 lg:hidden">
-              <div className="">
-                <div className="text-xs">{byrdata.nama_kereta} </div>
-                <small>
-                  {byrdata.class === "EKS"
-                    ? "Eksekutif"
-                    : byrdata.class === "EKO"
-                    ? "Ekonomi"
-                    : "Bisnis"}{" "}
-                  {byrdata.kode_kereta.substring(4, 5)} - (
-                  {byrdata.kode_kereta.split("/")[1]})
-                </small>
-              </div>
-              <div className="mt-4">
-                <div className="text-xs">
-                  {new Date(
-                    byrdata.tanggal_keberangkatan.slice(0, 4),
-                    parseInt(byrdata.tanggal_keberangkatan.slice(4, 6)) - 1,
-                    byrdata.tanggal_keberangkatan.slice(6, 8)
-                  ).toLocaleDateString("id-ID", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}{" "}
-                </div>
-                <small>Tanggal Keberangkatan</small>
-              </div>
-              <div className="flex space-x-4 items-center">
-                <div className="">
+                <div className="flex col-span-2">
                   <div className="">
                     <div className="mt-4 xl:mt-0 text-xs">
-                      {byrdata.jam_keberangkatan
-                        .toString()
-                        .padStart(4, "0")
-                        .replace(/(\d{2})(\d{2})/, "$1:$2")}
+                      {byrdata?.time_keberangkatan}
                     </div>
-                    <small>{byrdata.origin}</small>
+                    <small>{byrdata.origin[0]?.nama_pelabuhan}</small>
                   </div>
+                  <HiOutlineArrowNarrowRight size={24} />
                 </div>
-                <HiOutlineArrowNarrowRight size={16} />
+                <div className="col-span-2">
+                  <div className="text-xs">
+                  {parseTanggal(byrdata?.tanggal_kedatangan)}{" "}
+                  </div>
+                  <small>Tanggal Kedatangan</small>
+                </div>
+                <div className="col-span-2">
+                  <div className="text-xs">
+                    {byrdata.time_kedatangan}
+                  </div>
+                  <small>{byrdata.destination[0]?.nama_pelabuhan}</small>
+                </div>
+                <div className="col-span-2">
+                  <div className="mt-4 xl:mt-0 text-xs text-blue-500">
+                    Rp.{" "}
+                    {(
+                      (parseInt(byrdata.nominal) || 0) +
+                      (parseInt(byrdata.nominal_admin) || 0)
+                    ).toLocaleString("id-ID")}
+                  </div>
+                  <small>
+                    Total (Admin Rp.{" "}
+                    {toRupiah(
+                      byrdata.nominal_admin ? byrdata.nominal_admin : 0
+                    ) ?? 0}
+                    )
+                  </small>
+                </div>
+              </div>
+              {/* mobile */}
+              {/* <div className="p-4 w-full block mt-4 lg:hidden">
                 <div className="">
-                  <div>
-                    <div className="mt-4 text-xs">
-                      {byrdata.jam_kedatangan
-                        .toString()
-                        .padStart(4, "0")
-                        .replace(/(\d{2})(\d{2})/, "$1:$2")}
+                  <div className="text-xs">{byrdata.nama_kapal} </div>
+                  <small>Kelas {byrdata.tipe_class}</small>
+                </div>
+                <div className="mt-4">
+                  <div className="text-xs">
+                    {new Date(
+                      byrdata.tanggal_keberangkatan.slice(0, 4),
+                      parseInt(byrdata.tanggal_keberangkatan.slice(4, 6)) - 1,
+                      byrdata.tanggal_keberangkatan.slice(6, 8)
+                    ).toLocaleDateString("id-ID", {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}{" "}
+                  </div>
+                  <small>Tanggal Keberangkatan</small>
+                </div>
+                <div className="mt-4">
+                  <div className="text-xs">
+                    {new Date(
+                      byrdata.tanggal_kedatangan.slice(0, 4),
+                      parseInt(byrdata.tanggal_kedatangan.slice(4, 6)) - 1,
+                      byrdata.tanggal_kedatangan.slice(6, 8)
+                    ).toLocaleDateString("id-ID", {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}{" "}
+                  </div>
+                  <small>Tanggal Kedatangan</small>
+                </div>
+                <div className="flex space-x-4 items-center">
+                  <div className="">
+                    <div className="">
+                      <div className="mt-4 xl:mt-0 text-xs">
+                        {byrdata.time_keberangkatan}
+                      </div>
+                      <small>{byrdata.origin}</small>
                     </div>
-                    <small>{byrdata.destination}</small>
+                  </div>
+                  <HiOutlineArrowNarrowRight size={24} />
+                  <div className="">
+                    <div>
+                      <div className="mt-4  text-xs">
+                        {byrdata.time_kedatangan}
+                      </div>
+                      <small>{byrdata.destination}</small>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="">
-                <div className="mt-4 xl:mt-0 text-xs text-blue-500">
-                  Rp.{" "}
-                  {toRupiah(
-                    parseInt(byrdata.nominal) + parseInt(byrdata.nominal_admin)
-                  )}
+                <div className="">
+                  <div className="mt-4 xl:mt-0 text-xs text-blue-500">
+                    Rp.{" "}
+                    {(
+                      (parseInt(byrdata.nominal) || 0) +
+                      (parseInt(byrdata.nominal_admin) || 0)
+                    ).toLocaleString("id-ID")}
+                  </div>
+                  <small>
+                    Total (Admin Rp.{" "}
+                    {toRupiah(
+                      byrdata.nominal_admin ? byrdata.nominal_admin : 0
+                    ) ?? 0}
+                    )
+                  </small>
                 </div>
-                <small>
-                  Total (Admin Rp. {toRupiah(byrdata.nominal_admin)})
-                </small>
+              </div> */}
+            </div>
+          ) : (
+            <>
+              <div className="mt-2">
+                <Placeholder.Paragraph />
               </div>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className="mt-2">
-              <Placeholder.Paragraph />
-            </div>
-          </>
-        )}
-      </Modal>
-      <div className="">
+            </>
+          )}
+        </Modal>
         {err === true ? (
           <>
             <Page500 />
@@ -372,21 +339,13 @@ export default function ViewBooking({ path }) {
           </>
         ) : (
           <>
-            {/* <div className="w-full mt-0 md:mt-2">
-              <div className="w-full border-b profile-header">
-                <div className="text-black p-4 flex space-x-2 items-center">
-                  <AiOutlineHome size={20} /> <span>Home</span> <span>/</span>{" "}
-                  <span>{path}</span>
-                </div>
-              </div>
-            </div> */}
             {isLoading === false ? (
               <>
                 {data !== null &&
                 data !== undefined &&
                 data.length !== undefined &&
                 data.length !== 0 ? (
-                  <div className="mt-4 xl:mt-8">
+					<div className="mt-4 xl:mt-8">
                     {data.map((e, i) => (
                       <div className="w-full mb-4">
                         <div className="w-full profile-header">
@@ -421,14 +380,14 @@ export default function ViewBooking({ path }) {
                             </div>
                             <div className="border-t mt-4 xl:mt-4">
                               <div className="flex space-x-2 mt-6 text-xs text-black">
-                                <MdOutlineTrain
+                                <IoBoatSharp
                                   className="text-blue-500"
                                   size={16}
                                 />
                                 <div className="flex space-x-2 items-center">
-                                  <div>{e.origin.toUpperCase()}</div>
+                                  <div>{e.origin[0].nama_pelabuhan?.toUpperCase()}</div>
                                   <BsArrowRightShort />
-                                  <div>{e.destination.toUpperCase()}</div>
+                                  <div>{e.destination[0].nama_pelabuhan?.toUpperCase()}</div>
                                 </div>
                               </div>
                               <div className="pl-1">

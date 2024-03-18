@@ -903,7 +903,7 @@ export default function BookingPelni() {
                                     value={dayjs(e.birthdate, "YYYY/MM/DD")}
                                     format={"DD/MM/YYYY"}
                                     open={isDatePickerOpenPria[i]} // Pass the state to the open prop
-                                    inputReadOnly={true}
+                                    // inputReadOnly={true}
                                     onOpenChange={(status) => {
                                       const newOpenState = [...isDatePickerOpenPria]; // Create a copy of the array
                                       newOpenState[i] = status; // Update the state for the specific index
@@ -925,7 +925,7 @@ export default function BookingPelni() {
                                   />
                                 </Form.Item>
                                 <small className="block -mt-4 text-gray-400">
-                                  Contoh: dd-mm-yyyy
+                                  Contoh: dd/mm/yyyy
                                 </small>
                               </div>
                               <div className="w-full">
@@ -1128,7 +1128,7 @@ export default function BookingPelni() {
                                     value={dayjs(e.birthdate, "YYYY/MM/DD")}
                                     format={"DD/MM/YYYY"}
                                     open={isDatePickerOpenWanita[i]} // Pass the state to the open prop
-                                    inputReadOnly={true}
+                                    // inputReadOnly={true}
                                     onOpenChange={(status) => {
                                       const newOpenState = [...isDatePickerOpenWanita]; // Create a copy of the array
                                       newOpenState[i] = status; // Update the state for the specific index
@@ -1150,7 +1150,7 @@ export default function BookingPelni() {
                                   />
                                 </Form.Item>
                                 <small className="block -mt-4 text-gray-400">
-                                  Contoh: dd-mm-yyyy
+                                  Contoh: dd/mm/yyyy
                                 </small>
                               </div>
                               <div className="w-full">

@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes, useLocation, useNavigate} from "react-rou
 import TransaksiKai from "./pages/transaksi/TransaksiKai";
 import TransaksiPesawat from "./pages/transaksi/TransaksiPesawat";
 import TransaksiPelni from "./pages/transaksi/TransaksiPelni";
+import TransaksiDlu from "./pages/transaksi/TransaksiDlu";
 
 // import BookingKaiList from "./pages/booking/KaiBooking";
 // import BookingPesawatList from "./pages/booking/PesawatBooking";
@@ -133,6 +134,8 @@ function App() {
                   <Route path="/transaksi/kai" element={<TransaksiKai />}></Route>
                   <Route path="/transaksi/pesawat" element={<TransaksiPesawat />}></Route>
                   <Route path="/transaksi/pelni" element={<TransaksiPelni />}></Route>
+                  <Route path="/transaksi/dlu" element={<TransaksiDlu />}></Route>
+
                   {/* <Route path="/booking/kai" element={<BookingKaiList />}></Route> */}
                   {/* <Route path="/booking/pesawat" element={<BookingPesawatList />}></Route> */}
                   {/* <Route path="/booking/pelni" element={<BookingPelniList />}></Route> */}
