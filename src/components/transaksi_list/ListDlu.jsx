@@ -395,7 +395,7 @@ export default function ViewBooking({ path }) {
                                   Tanggal Transaksi
                                 </div>
                                 <div className="mt-2 text-xs text-black">
-                                  {e.tanggal_transaksi}
+                                  {parseTanggal(e.tanggal_transaksi)}
                                 </div>
                               </div>
                             </div>
