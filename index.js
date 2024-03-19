@@ -17,6 +17,7 @@ const logger = require('./utils/logger.js');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const { getInfoClientAll } = require('./utils/utils');
+const axios = require('axios')
 
 const app = express();
 const port = 9999;
@@ -54,6 +55,27 @@ app.use('/travel', PelniRouter);
 app.use('/travel', KeretaRouter);
 app.use('/travel', PesawatRouter);
 app.use('/travel', DLURouter);
+
+app.get('/travel/holidays', async (req, res) => {
+  try {
+    const response = await axios.get('https://www.googleapis.com/calendar/v3/calendars/en.indonesian%23holiday%40group.v.calendar.google.com/events', {
+      params: {
+        key: 'AIzaSyDvmiGaeS47xTleSsWyLX3APlDUUOF5igQ',
+      },
+    });
+
+    const holidays = response.data.items.map(item => ({
+      start: item.start.date, // atau item.start.dateTime untuk acara non-seharian
+      summary: item.summary,
+    }));
+
+    res.json(holidays);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
+
 app.get('/whoareyou', (req, res) => {
 
   return res.json(getInfoClientAll(req));
