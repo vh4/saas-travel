@@ -18,6 +18,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const { getInfoClientAll } = require('./utils/utils');
 const axios = require('axios')
+const translate = require('@iamtraction/google-translate');
 
 const app = express();
 const port = 9999;
@@ -49,7 +50,6 @@ app.use(cors({
 }));
 
 app.use(express.json());
-
 app.use('/travel', MainRoutes);
 app.use('/travel', PelniRouter);
 app.use('/travel', KeretaRouter);
@@ -64,17 +64,28 @@ app.get('/travel/holidays', async (req, res) => {
       },
     });
 
-    const holidays = response.data.items.map(item => ({
-      start: item.start.date, // atau item.start.dateTime untuk acara non-seharian
-      summary: item.summary,
+    // Concatenate all summaries into one string with a unique delimiter
+    const allSummaries = response.data.items.map(item => item.summary).join(':::');
+    
+    // Translate the concatenated string
+    const translated = await translate(allSummaries, { to: 'id' });
+    
+    // Split the translated string back into an array
+    const translatedSummaries = translated.text.split(':::');
+
+    // Map the translated summaries back to their respective events
+    const holidays = response.data.items.map((item, index) => ({
+      start: item.start.date, // or item.start.dateTime for non-all-day events
+      summary: translatedSummaries[index],
     }));
 
     res.json(holidays);
   } catch (error) {
     console.error(error);
-    res.status(500).send('Server error');
+    res.status(500).json([]);
   }
 });
+
 
 app.get('/whoareyou', (req, res) => {
 
