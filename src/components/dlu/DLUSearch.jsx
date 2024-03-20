@@ -20,34 +20,36 @@ import { useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { CiBoxList, CiCalendarDate } from "react-icons/ci";
-import { HolidaysContext, holidaysContent } from "../../App";
+import { HolidaysContext } from "../../App";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay/PickersDay";
 import { parseTanggalPelni } from "../../helpers/date";
-import Modal from '@mui/material/Modal';
-import Typography from '@mui/material/Typography';
-import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
+import ModalMui from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
+import { DateCalendar, DayCalendarSkeleton } from "@mui/x-date-pickers";
 
 function DLU() {
-
-    const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 350,
-    bgcolor: 'background.paper',
-    pb:4,
-    pr:2
+  const styleDesktop = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    width: 540,
+    bgcolor: "background.paper",
+    transform: "translate(-50%, -50%)",
+    px: 4,
+    pt: 2,
+    pb: 4,
   };
 
-  const styleDesktop = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 540,
-    bgcolor: 'background.paper',
-    p: 4,
+  const styleMobile = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    width: 350,
+    bgcolor: "background.paper",
+    transform: "translate(-50%, -50%)",
+    px: 2,
+    pt: 2,
+    pb: 4,
   };
 
   const { holidays, dispatchHolidays } = React.useContext(HolidaysContext);
@@ -79,18 +81,45 @@ function DLU() {
   const [class_passengers, setclass_passengers] = useState([]);
   const [type_passanger, settype_passanger] = useState([]);
 
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => {setOpen(false)};
+  const [openDate, setOpenDate] = React.useState(false);
+  const handleOpenDate = () => setOpenDate(true);
+  const handleCloseDate = () => {
+    setOpenDate(false);
+  };
   const [currentViewDate, setCurrentViewDate] = useState(dayjs());
 
   const findHolidayDescriptionsForMonth = (date) => {
     const month = date.month(); // Bulan dari tanggal yang sedang dilihat
     const year = date.year(); // Bulan dari tanggal yang sedang dilihat
 
-    const holidaysInMonth = holidays.filter(holiday => dayjs(holiday.start).month() === month && dayjs(holiday.start).year() === year);
-    return holidaysInMonth.map(holiday => holiday);
+    const holidaysInMonth = holidays.filter(
+      (holiday) =>
+        dayjs(holiday.start).month() === month &&
+        dayjs(holiday.start).year() === year
+    );
+    return holidaysInMonth.map((holiday) => holiday);
   };
+
+  function CustomDay(props) {
+    const { day, outsideCurrentMonth, ...other } = props;
+
+    const isSunday = day.day() === 0;
+    const holidaysStart = holidays.map((obj) => obj.start);
+    const isHoliday = holidaysStart.includes(day.format("YYYY-MM-DD"));
+
+    return (
+      <PickersDay
+        {...other}
+        disableMargin
+        day={day}
+        sx={{
+          color:
+            (isSunday || isHoliday) && !outsideCurrentMonth ? "red" : "inherit",
+          backgroundColor: isHoliday ? "#ffecb3" : "inherit", // Opsional: tambah warna latar untuk hari libur
+        }}
+      />
+    );
+  }
 
   const errorBerangkat = () => {
     messageApi.open({
@@ -124,30 +153,34 @@ function DLU() {
 
   let depa = Cookies.get("dlu-depa");
   let arri = Cookies.get("dlu-arri");
-  let adultCookie = parseInt(Cookies.get("dlu-adult") ? Cookies.get("dlu-adult") : '');
-  let childCookie = parseInt(Cookies.get("dlu-child") ? Cookies.get("dlu-child") : '');
-  let infantCookie = parseInt(Cookies.get("dlu-infant") ? Cookies.get("dlu-infant") : '');
+  let adultCookie = parseInt(
+    Cookies.get("dlu-adult") ? Cookies.get("dlu-adult") : ""
+  );
+  let childCookie = parseInt(
+    Cookies.get("dlu-child") ? Cookies.get("dlu-child") : ""
+  );
+  let infantCookie = parseInt(
+    Cookies.get("dlu-infant") ? Cookies.get("dlu-infant") : ""
+  );
 
-  let dateCookie = Cookies.get("dlu-tanggal") ? Cookies.get("dlu-tanggal") : dayjs();
+  let dateCookie = Cookies.get("dlu-tanggal")
+    ? Cookies.get("dlu-tanggal")
+    : dayjs();
 
-  
   try {
     adultCookie = !isNaN(adultCookie) ? adultCookie : null;
-
   } catch (error) {
     adultCookie = null;
   }
 
   try {
     infantCookie = !isNaN(infantCookie) ? infantCookie : null;
-
   } catch (error) {
     infantCookie = null;
   }
 
   try {
     childCookie = !isNaN(childCookie) ? childCookie : null;
-
   } catch (error) {
     childCookie = null;
   }
@@ -166,7 +199,6 @@ function DLU() {
 
   try {
     dateCookie = dayjs(dateCookie).isValid() ? dateCookie : null;
-
   } catch (error) {
     dateCookie = null;
   }
@@ -174,14 +206,24 @@ function DLU() {
   depa =
     depa?.id_pelabuhan && depa?.nama_pelabuhan
       ? depa
-      : { id_pelabuhan: "3", nama_pelabuhan: "Pel.Semayang", nama_kota:"Balikpapan" };
+      : {
+          id_pelabuhan: "3",
+          nama_pelabuhan: "Pel.Semayang",
+          nama_kota: "Balikpapan",
+        };
   arri =
-    arri?.id_pelabuhan && arri?.nama_pelabuhan ? arri : { id_pelabuhan: "2", nama_pelabuhan: "Pel.Trisakti", nama_kota: "Banjarmasin" };
-    adultCookie = adultCookie ? adultCookie : 1;
-    infantCookie = infantCookie ? infantCookie : 0;
-    childCookie = childCookie ? childCookie : 0;
-  
-    dateCookie = dateCookie ? dayjs(dateCookie) : dayjs();
+    arri?.id_pelabuhan && arri?.nama_pelabuhan
+      ? arri
+      : {
+          id_pelabuhan: "2",
+          nama_pelabuhan: "Pel.Trisakti",
+          nama_kota: "Banjarmasin",
+        };
+  adultCookie = adultCookie ? adultCookie : 1;
+  infantCookie = infantCookie ? infantCookie : 0;
+  childCookie = childCookie ? childCookie : 0;
+
+  dateCookie = dateCookie ? dayjs(dateCookie) : dayjs();
 
   // Input
   const [tanggal, setTanggal] = React.useState(dateCookie);
@@ -311,7 +353,6 @@ function DLU() {
     );
   };
 
-
   function plusAdult(e) {
     e.preventDefault();
     if (adult >= 7) {
@@ -324,9 +365,9 @@ function DLU() {
   function minusAdult(e) {
     e.preventDefault();
 
-    if((adult <= infant) || (adult <= child)){
-      setadult(parseInt(adult))
-    }else{
+    if (adult <= infant || adult <= child) {
+      setadult(parseInt(adult));
+    } else {
       if (adult < 1 || adult === 1) {
         setadult(1);
       } else {
@@ -338,16 +379,15 @@ function DLU() {
   function plusInfant(e) {
     e.preventDefault();
 
-    if(adult <= infant){
+    if (adult <= infant) {
       setinfant(parseInt(infant));
-    }else{
+    } else {
       if (infant >= 7) {
         setinfant(7);
       } else {
         setinfant(parseInt(infant) + 1);
       }
     }
-
   }
 
   function minusInfant(e) {
@@ -361,10 +401,9 @@ function DLU() {
   }
 
   function plusChild(e) {
-
-    if(adult <= child){
+    if (adult <= child) {
       setChild(infant(child));
-    }else{
+    } else {
       e.preventDefault();
       if (child >= 7) {
         setChild(7);
@@ -410,54 +449,59 @@ function DLU() {
       }
     );
 
-  const type_passangers = response.data.data.type_passanger;
-  const type_passangersParsing = type_passangers ? type_passangers.map(item => ({
-    value: parseInt(item.id, 10), // Mengubah id menjadi integer
-    label: item.name
-  })) : [];
+    const type_passangers = response.data.data.type_passanger;
+    const type_passangersParsing = type_passangers
+      ? type_passangers.map((item) => ({
+          value: parseInt(item.id, 10), // Mengubah id menjadi integer
+          label: item.name,
+        }))
+      : [];
 
-  const type_vehicles = response.data.data.type_vehicle;
-  const type_vehiclesParsingData = type_vehicles ? type_vehicles.map(item => ({
-    value: parseInt(item.id, 10), // Mengubah id menjadi integer
-    label: item.name
-  })) : [];
+    const type_vehicles = response.data.data.type_vehicle;
+    const type_vehiclesParsingData = type_vehicles
+      ? type_vehicles.map((item) => ({
+          value: parseInt(item.id, 10), // Mengubah id menjadi integer
+          label: item.name,
+        }))
+      : [];
 
-  const class_passangerses = response.data.data.class_passanger;
-  const class_passangersesParsingData = class_passangerses ? class_passangerses.map(item => ({
-    value: parseInt(item.id, 10), // Mengubah id menjadi integer
-    label: item.name
-  })) : [];
+    const class_passangerses = response.data.data.class_passanger;
+    const class_passangersesParsingData = class_passangerses
+      ? class_passangerses.map((item) => ({
+          value: parseInt(item.id, 10), // Mengubah id menjadi integer
+          label: item.name,
+        }))
+      : [];
 
-  settype_passanger(type_passangersParsing);
-  settype_vehicle(type_vehiclesParsingData);
-  setclass_passengers(class_passangersesParsingData);
+    settype_passanger(type_passangersParsing);
+    settype_vehicle(type_vehiclesParsingData);
+    setclass_passengers(class_passangersesParsingData);
 
-	let parsing = {};
-	parsing['data'] = response.data.data.data_pelabuhan || null;
+    let parsing = {};
+    parsing["data"] = response.data.data.data_pelabuhan || null;
     setDLUStasiun(parsing || null);
-
   }
 
+  const jumlahKendaraan = Array.from({ length: 6 }, (_, i) => ({
+    label: i + 1,
+    value: i + 1,
+  }));
 
-  const jumlahKendaraan = Array.from({ length: 6 }, (_, i) => ({ label: i + 1, value: i + 1 }));
-
-  const [pilih, setPilih] = useState(
-   {
-      value: 0,
-      label: "Penumpang dan Kendaraan"
-   },
-  );
+  const [pilih, setPilih] = useState({
+    value: 0,
+    label: "Penumpang dan Kendaraan",
+  });
   const [vehicles, setvehicles] = useState({
     value: 4,
-    label: "Sepeda Motor 2.A (s.d 249CC)"
+    label: "Sepeda Motor 2.A (s.d 249CC)",
   });
   const [classpassengers, setclasspassengers] = useState({
     value: 2,
-    label: "Kelas I"
+    label: "Kelas I",
   });
   const [jumlahkendaraan, setJumlahkendaraan] = useState({
     value: 1,
-    label: 1
+    label: 1,
   });
 
   function handleSubmitDLU(e) {
@@ -492,20 +536,18 @@ function DLU() {
       } else if (tujuan === null) {
         messageCustomError("Pilih Pelabuhan Tujuan.");
       } else {
-
-        let count_passangers_custom = '';
+        let count_passangers_custom = "";
         let type_class_custom = 0;
         let type_vehicle_custom = 0;
-        
-        let type_class_custom_name = '';
-        let type_vehicle_custom_name = '';
+
+        let type_class_custom_name = "";
+        let type_vehicle_custom_name = "";
         let adult_custom = 0;
         let child_custom = 0;
         let infant_custom = 0;
         let count_passangers_name = 0;
 
-        if(pilih.value === 1){
-          
+        if (pilih.value === 1) {
           type_class_custom = classpassengers.value;
           type_class_custom_name = classpassengers.label;
 
@@ -513,48 +555,46 @@ function DLU() {
           adult_custom = adult;
           infant_custom = infant;
           child_custom = child;
-
-        }else if(pilih.value === 2){
+        } else if (pilih.value === 2) {
           count_passangers_custom = `0#0#0#${jumlahkendaraan.value}`;
 
-          type_vehicle_custom = vehicles.value
-          type_vehicle_custom_name = vehicles.label
-          count_passangers_name = jumlahkendaraan.value
-        }else{
+          type_vehicle_custom = vehicles.value;
+          type_vehicle_custom_name = vehicles.label;
+          count_passangers_name = jumlahkendaraan.value;
+        } else {
           count_passangers_custom = `${adult}#${child}#${infant}#${jumlahkendaraan.value}`;
           type_class_custom = classpassengers.value;
           type_vehicle_custom = vehicles.value;
 
-          type_vehicle_custom_name = vehicles.label
+          type_vehicle_custom_name = vehicles.label;
           type_class_custom_name = classpassengers.label;
 
           adult_custom = adult;
           infant_custom = infant;
           child_custom = child;
 
-          count_passangers_name = jumlahkendaraan.value
-
+          count_passangers_name = jumlahkendaraan.value;
         }
 
         const params = {
-              "start_date": tanggalParse,
-              "end_date": tanggalParse,
-              "origin_code": keberangkatan.id_pelabuhan,
-              "origin_name": keberangkatan.nama_pelabuhan,
-              "destination_code": tujuan.id_pelabuhan,
-              "destination_name": tujuan.nama_pelabuhan,
-              "type_ticket": pilih.value,
-              "type_ticket_name": pilih.label,
-              "type_class": type_class_custom,
-              "type_class_name": type_class_custom_name,
-              "type_vehicle": type_vehicle_custom,
-              "type_vehicle_name": type_vehicle_custom_name,
-              "count_passangers": count_passangers_custom,
-              "count_passangers_name": count_passangers_name,
-              "adult": adult_custom,
-              "infant": infant_custom,
-              "child": child_custom,
-      }
+          start_date: tanggalParse,
+          end_date: tanggalParse,
+          origin_code: keberangkatan.id_pelabuhan,
+          origin_name: keberangkatan.nama_pelabuhan,
+          destination_code: tujuan.id_pelabuhan,
+          destination_name: tujuan.nama_pelabuhan,
+          type_ticket: pilih.value,
+          type_ticket_name: pilih.label,
+          type_class: type_class_custom,
+          type_class_name: type_class_custom_name,
+          type_vehicle: type_vehicle_custom,
+          type_vehicle_name: type_vehicle_custom_name,
+          count_passangers: count_passangers_custom,
+          count_passangers_name: count_passangers_name,
+          adult: adult_custom,
+          infant: infant_custom,
+          child: child_custom,
+        };
 
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + 7);
@@ -598,141 +638,196 @@ function DLU() {
     <>
       {contextHolder}
       <div className="row bg-white border-t border-gray-200 w-full pr-0">
-              {/* desktop */}
-      <Modal
-        className="hidden xl:block"
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
         {/* desktop */}
-        <Box 
-        sx={styleDesktop}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <StaticDatePicker
-              orientation="landscape" 
-              value={tanggal}
-              shouldDisableDate={(current) => {
-                const currentDate = dayjs();
-                const aheadDate = dayjs().add(3, 'months')
-                return current && (current < currentDate.startOf('day') || current > aheadDate);
-              }}
-              onChange={(newValue) => {
-                setTanggal(newValue);
-                handleClose();
-              }}
-
-              onMonthChange={(newViewDate) => {
-                setCurrentViewDate(newViewDate);
-              }}
-              renderDay={(day, selectedDates, pickersDayProps) => {
-                const formattedDate = day.format("YYYY-MM-DD");
-                const isHoliday = holidays.some(holiday => holiday.start === formattedDate);
-                const isSunday = day.day() === 0;
-            
-                // Create a custom style for holidays and Sundays
-                const dayStyle = isHoliday || isSunday ? { color: 'red' } : {};
-            
-                // Utilize the PickersDay component directly, applying custom styles
-                return (
-                  <PickersDay 
-                    {...pickersDayProps} 
-                    day={day} 
-                    sx={{ ...dayStyle }}
+        <ModalMui
+          className="hidden md:block"
+          open={openDate}
+          onClose={handleCloseDate}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          {/* desktop */}
+          <Box sx={styleDesktop}>
+            <div className="flex justify-between">
+              <div className="grid grid-rows-3 grid-flow-col mt-4">
+                <div
+                  style={{
+                    fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+                    fontWeight: 400,
+                    fontSize: "0.75rem",
+                    lineHeight: 2.66,
+                    letterSpacing: "0.08333em",
+                    color: "rgba(0, 0, 0, 0.6)",
+                  }}
+                >
+                  PILIH TANGGAL
+                </div>
+                <div className=" flex justify-center">
+                  <div className="pl-4 text-gray-400">
+                    <h3>{dayjs(tanggal).format("ddd")},</h3>
+                    <h3>
+                      {dayjs(tanggal).format("MMM")}{" "}
+                      {dayjs(tanggal).format("DD")}
+                    </h3>
+                  </div>
+                </div>
+                <div className="flex justify-center">
+                  <CiCalendarDate size={60} className="text-gray-400" />
+                </div>
+              </div>
+              <div>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateCalendar
+                    value={tanggal}
+                    shouldDisableDate={(current) => {
+                      const currentDate = dayjs();
+                      const aheadDate = dayjs().add(3, "months");
+                      return (
+                        current &&
+                        (current < currentDate.startOf("day") ||
+                          current > aheadDate)
+                      );
+                    }}
+                    onChange={(newValue) => {
+                      setTanggal(newValue);
+                      handleCloseDate();
+                    }}
+                    onMonthChange={(newViewDate) => {
+                      setCurrentViewDate(newViewDate);
+                    }}
+                    renderLoading={() => <DayCalendarSkeleton />}
+                    slots={{
+                      day: CustomDay,
+                    }}
+                    slotProps={{
+                      day: {},
+                    }}
                   />
-                );
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-              <div style={{ overflowX: 'scroll', display: 'flex', gap: '8px' }} className="hidennscroll -mt-4 z-50">
-                {findHolidayDescriptionsForMonth(currentViewDate)?.map((e, index) => (
-                  <div key={index} className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50">
-                    <Typography variant="caption" display="block" style={{ fontSize: '10px' }}>
-                      {dayjs(e.start).format('DD')}.{e.summary}
+                </LocalizationProvider>
+              </div>
+            </div>
+            <div
+              style={{ overflowX: "scroll", display: "flex", gap: "8px" }}
+              className="hidennscroll mt-2 z-50"
+            >
+              {findHolidayDescriptionsForMonth(currentViewDate)?.map(
+                (e, index) => (
+                  <div
+                    key={index}
+                    className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50"
+                  >
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      style={{ fontSize: "10px" }}
+                    >
+                      {dayjs(e.start).format("DD")}.{e.summary}
                     </Typography>
                   </div>
-                ))}
-              </div>
-          </LocalizationProvider>
-          {/* Footer with OK and Cancel buttons */}
-          {/* <Box sx={{ marginTop: 4, display: 'flex', justifyContent: 'flex-end' }} className="space-x-4">
-            <Button onClick={handleClose} sx={{ mr: 1 }}>Cancel</Button>
-            <Button variant="contained" onClick={handleClose}>OK</Button>
-          </Box> */}
-        </Box>
+                )
+              )}
+            </div>
+          </Box>
+          {/* mobile */}
+        </ModalMui>
+
         {/* mobile */}
-      </Modal>
-
-      {/* mobile */}
-      <Modal
-        className="block xl:hidden"
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box 
-        sx={style}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <StaticDatePicker
-              value={tanggal}
-              shouldDisableDate={(current) => {
-                const currentDate = dayjs();
-                const aheadDate = dayjs().add(3, 'months')
-                return current && (current < currentDate.startOf('day') || current > aheadDate);
-              }}
-              onChange={(newValue) => {
-                setTanggal(newValue);
-                handleClose();
-              }}
-
-              onMonthChange={(newViewDate) => {
-                setCurrentViewDate(newViewDate);
-              }}
-              renderDay={(day, selectedDates, pickersDayProps) => {
-                const formattedDate = day.format("YYYY-MM-DD");
-                const isHoliday = holidays.some(holiday => holiday.start === formattedDate);
-                const isSunday = day.day() === 0;
-            
-                // Create a custom style for holidays and Sundays
-                const dayStyle = isHoliday || isSunday ? { color: 'red' } : {};
-            
-                // Utilize the PickersDay component directly, applying custom styles
-                return (
-                  <PickersDay 
-                    {...pickersDayProps} 
-                    day={day} 
-                    sx={{ ...dayStyle }}
-                  />
-                );
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-              <div style={{ overflowX: 'scroll', display: 'flex', gap: '8px' }} className="hidennscroll -mt-2 z-50 mx-4">
-                {findHolidayDescriptionsForMonth(currentViewDate)?.map((e, index) => (
-                  <div key={index} className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50">
-                    <Typography variant="caption" display="block" style={{ fontSize: '10px' }}>
-                      {dayjs(e.start).format('DD')}.{e.summary}
+        <ModalMui
+          className="block md:hidden"
+          open={openDate}
+          onClose={handleCloseDate}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={styleMobile}>
+            <div className="">
+              <div className="my-4  pl-4">
+                <div
+                  style={{
+                    fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+                    fontWeight: 400,
+                    fontSize: "0.75rem",
+                    lineHeight: 2.66,
+                    letterSpacing: "0.08333em",
+                    color: "rgba(0, 0, 0, 0.6)",
+                  }}
+                >
+                  PILIH TANGGAL
+                </div>
+                <div className="flex space-x-4 items-center">
+                  <div className="flex justify-start">
+                    <div className="text-gray-400">
+                      <h5>
+                        {dayjs(tanggal).format("ddd")},{" "}
+                        {dayjs(tanggal).format("MMM")}{" "}
+                        {dayjs(tanggal).format("DD")}
+                      </h5>
+                    </div>
+                  </div>
+                  <div className="">
+                    <CiCalendarDate size={32} className="text-gray-400" />
+                  </div>
+                </div>
+              </div>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateCalendar
+                  value={tanggal}
+                  shouldDisableDate={(current) => {
+                    const currentDate = dayjs();
+                    const aheadDate = dayjs().add(3, "months");
+                    return (
+                      current &&
+                      (current < currentDate.startOf("day") ||
+                        current > aheadDate)
+                    );
+                  }}
+                  onChange={(newValue) => {
+                    setTanggal(newValue);
+                    handleCloseDate();
+                  }}
+                  onMonthChange={(newViewDate) => {
+                    setCurrentViewDate(newViewDate);
+                  }}
+                  renderLoading={() => <DayCalendarSkeleton />}
+                  slots={{
+                    day: CustomDay,
+                  }}
+                  slotProps={{
+                    day: {},
+                  }}
+                />
+              </LocalizationProvider>
+            </div>
+            <div
+              style={{ overflowX: "scroll", display: "flex", gap: "8px" }}
+              className="hidennscroll mt-2 z-50"
+            >
+              {findHolidayDescriptionsForMonth(currentViewDate)?.map(
+                (e, index) => (
+                  <div
+                    key={index}
+                    className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50"
+                  >
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      style={{ fontSize: "10px" }}
+                    >
+                      {dayjs(e.start).format("DD")}.{e.summary}
                     </Typography>
                   </div>
-                ))}
-              </div>
-          </LocalizationProvider>
-          {/* Footer with OK and Cancel buttons */}
-          {/* <Box sx={{ marginTop: 4, display: 'flex', justifyContent: 'flex-end' }} className="space-x-4">
-            <Button onClick={handleClose} sx={{ mr: 1 }}>Cancel</Button>
-            <Button variant="contained" onClick={handleClose}>OK</Button>
-          </Box> */}
-        </Box>
-        {/* mobile */}
-      </Modal>
+                )
+              )}
+            </div>
+          </Box>
+          {/* mobile */}
+        </ModalMui>
         <div class="w-full px-4 py-4 rounded-lg shadow-xs">
           <form className="w-full">
             <>
               <div className="flex items-center space-x-1.5 text-xs text-black mx-0 xl:mx-6">
-                  <CiBoxList className="text-black"/>
-                  <p>Pilih rute dan jadwal keberangkatan</p>
+                <CiBoxList className="text-black" />
+                <p>Pilih rute dan jadwal keberangkatan</p>
               </div>
               <div className="mt-2 mx-0 xl:mx-6 border-b border-gray-200"></div>
               <div className="block xl:flex justify-between mx-0 xl:mx-6 mt-2">
@@ -771,7 +866,9 @@ function DLU() {
                           isOptionEqualToValue={(option, value) =>
                             option.title === value.title
                           }
-                          getOptionLabel={(option) => `${option.nama_pelabuhan} (${option.nama_kota})`}
+                          getOptionLabel={(option) =>
+                            `${option.nama_pelabuhan} (${option.nama_kota})`
+                          }
                           options={DLUData}
                           value={keberangkatan}
                           onChange={(event, newValue) => {
@@ -849,13 +946,16 @@ function DLU() {
                           isOptionEqualToValue={(option, value) =>
                             option.title === value.title
                           }
-                          getOptionLabel={(option) => `${option.nama_pelabuhan} (${option.nama_kota})`}
+                          getOptionLabel={(option) =>
+                            `${option.nama_pelabuhan} (${option.nama_kota})`
+                          }
                           options={DLUData}
                           value={tujuan}
                           onChange={(event, newValue) => {
                             if (
                               newValue == keberangkatan ||
-                              newValue?.id_pelabuhan == keberangkatan?.id_pelabuhan
+                              newValue?.id_pelabuhan ==
+                                keberangkatan?.id_pelabuhan
                             ) {
                               errorTujuan();
                               setTujuan(tujuan);
@@ -892,16 +992,14 @@ function DLU() {
                     </div>
                   </div>
                   <FormControl sx={{ m: 1, minWidth: 160 }}>
-                    <small className="mb-2 text-black">
-                      Tanggal Berangkat
-                    </small>
-                    <button type="button" className="border py-[10px] customButtonStyle w-full block text-black" onClick={handleOpen}>
+                    <small className="mb-2 text-black">Tanggal Berangkat</small>
+                    <button
+                      type="button"
+                      className="border py-[10px] customButtonStyle w-full block text-black"
+                      onClick={handleOpenDate}
+                    >
                       <div className="flex justify-between mx-4 items-center">
-                        <div>
-                        {`${
-                            parseTanggalPelni(tanggal)
-                      } `}
-                        </div>
+                        <div>{`${parseTanggalPelni(tanggal)} `}</div>
                         <CiCalendarDate size={22} className="text-gray-400" />
                       </div>
                     </button>
@@ -911,118 +1009,123 @@ function DLU() {
                       Detail Penumpang / Kendaraan
                     </small>
                     <div className="block w-full">
-                        <Select
-                          size={'large'}
-                          value={pilih.value}
-                          onChange={(value) => {
-                            const selectedOption = type_passanger.find(option => option.value === value);
-                            setPilih(selectedOption);
-                          }}
-                          style={{
-                            width: '100%',
-                          }}
-                          options={type_passanger}
-                        />
+                      <Select
+                        size={"large"}
+                        value={pilih.value}
+                        onChange={(value) => {
+                          const selectedOption = type_passanger.find(
+                            (option) => option.value === value
+                          );
+                          setPilih(selectedOption);
+                        }}
+                        style={{
+                          width: "100%",
+                        }}
+                        options={type_passanger}
+                      />
                     </div>
                   </FormControl>
                 </div>
               </div>
-                <div className="flex items-center space-x-1.5 mt-6 text-xs text-black mx-0 xl:mx-6">
-                    <CiBoxList className="text-black"/>
-                    <p>Detail Penumpang dan Kendaraan</p>
-                </div>
-              <div className="mt-2 mx-0 xl:mx-6 border-b border-gray-200">
-
+              <div className="flex items-center space-x-1.5 mt-6 text-xs text-black mx-0 xl:mx-6">
+                <CiBoxList className="text-black" />
+                <p>Detail Penumpang dan Kendaraan</p>
               </div>
-              
+              <div className="mt-2 mx-0 xl:mx-6 border-b border-gray-200"></div>
+
               <div className="mx-0 xl:mx-6 mb-4">
                 <div className="grid grid-cols-2 xl:grid-cols-4 mx-0">
-                {(pilih.value === 1 || pilih.value === 0) && 
-                (
-                  <>
-                    <FormControl sx={{m:1, minWidth: 130 }}>
-                      <small className="mt-4 mb-2 text-black">
-                        Kelas Kapal
-                      </small>
-                      <div className="block w-full">
+                  {(pilih.value === 1 || pilih.value === 0) && (
+                    <>
+                      <FormControl sx={{ m: 1, minWidth: 130 }}>
+                        <small className="mt-4 mb-2 text-black">
+                          Kelas Kapal
+                        </small>
+                        <div className="block w-full">
                           <Select
-                            size={'large'}
+                            size={"large"}
                             value={classpassengers.value}
                             onChange={(value) => {
-                              const selectedOption = class_passengers.find(option => option.value === value);
+                              const selectedOption = class_passengers.find(
+                                (option) => option.value === value
+                              );
                               setclasspassengers(selectedOption);
                             }}
                             style={{
-                              width: '100%',
+                              width: "100%",
                             }}
                             options={class_passengers}
                           />
-                      </div>
-                    </FormControl>
-                  </>
-                )}
-                {(pilih.value === 2 || pilih.value === 0) && 
-                (
-                  <>
-                    <FormControl sx={{m:1, minWidth: 130 }}>
-                      <small className="mt-4 mb-2 text-black">
-                        Kendaraan Motor
-                      </small>
-                      <div className="block w-full">
+                        </div>
+                      </FormControl>
+                    </>
+                  )}
+                  {(pilih.value === 2 || pilih.value === 0) && (
+                    <>
+                      <FormControl sx={{ m: 1, minWidth: 130 }}>
+                        <small className="mt-4 mb-2 text-black">
+                          Kendaraan Motor
+                        </small>
+                        <div className="block w-full">
                           <Select
-                            size={'large'}
+                            size={"large"}
                             value={vehicles.value}
                             onChange={(value) => {
-                              const selectedOption = type_vehicle.find(option => option.value === value);
+                              const selectedOption = type_vehicle.find(
+                                (option) => option.value === value
+                              );
                               setvehicles(selectedOption);
                             }}
                             style={{
-                              width: '100%',
+                              width: "100%",
                             }}
                             options={type_vehicle}
                           />
-                      </div>
-                    </FormControl>
-                  </>
+                        </div>
+                      </FormControl>
+                    </>
                   )}
-               {(pilih.value === 2 || pilih.value === 0) && 
-                (
-                  <>
-                    <FormControl sx={{m:1, minWidth: 130 }}>
-                      <small className="mt-4 mb-2 text-black">
-                        Jumlah Kendaraan
-                      </small>
-                      <div className="block w-full">
+                  {(pilih.value === 2 || pilih.value === 0) && (
+                    <>
+                      <FormControl sx={{ m: 1, minWidth: 130 }}>
+                        <small className="mt-4 mb-2 text-black">
+                          Jumlah Kendaraan
+                        </small>
+                        <div className="block w-full">
                           <Select
-                            size={'large'}
+                            size={"large"}
                             value={jumlahkendaraan.value}
                             onChange={(value) => {
-                              const selectedOption = jumlahKendaraan.find(option => option.value === value);
+                              const selectedOption = jumlahKendaraan.find(
+                                (option) => option.value === value
+                              );
                               setJumlahkendaraan(selectedOption);
                             }}
                             style={{
-                              width: '100%',
+                              width: "100%",
                             }}
                             options={jumlahKendaraan}
                           />
-                      </div>
-                    </FormControl>
-                  </>
-                )}
-                  {(pilih.value === 1 || pilih.value === 0) && 
-                  (
+                        </div>
+                      </FormControl>
+                    </>
+                  )}
+                  {(pilih.value === 1 || pilih.value === 0) && (
                     <>
-                      <FormControl sx={{m:1, minWidth: 110 }}>
+                      <FormControl sx={{ m: 1, minWidth: 110 }}>
                         <small className="mt-4 mb-2 text-black">
                           Total Penumpang
                         </small>
-                        <div className="hidden md:block">
-                        </div>
-                          <button type="button" className="border py-[9px] customButtonStyle w-full block text-black -mx-1.5" onClick={handleClick}>
-                            {`${
-                                parseInt(adult) + parseInt(infant) + parseInt(child)
-                              } Penumpang`}
-                          </button>
+                        <div className="hidden md:block"></div>
+                        <button
+                          type="button"
+                          className="border py-[9px] customButtonStyle w-full block text-black -mx-1.5"
+                          onClick={handleClick}
+                        >
+                          {`${
+                            parseInt(adult) + parseInt(infant) + parseInt(child)
+                          } Penumpang`}
+                        </button>
                         <div
                           id="basic-menu"
                           className={`${anchorEl} relative md:absolute top-0 md:top-20 md:z-10 grid w-full md:w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg`}
@@ -1033,9 +1136,23 @@ function DLU() {
                                 <p>Adult (12 thn keatas)</p>
                               </div>
                               <InputGroup>
-                                <InputGroup.Button onClick={minusAdult}>-</InputGroup.Button>
-                                <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={adult} onChange={setadult} min={1} max={7} readOnly/>
-                                <InputGroup.Button onClick={plusAdult}>+</InputGroup.Button>
+                                <InputGroup.Button onClick={minusAdult}>
+                                  -
+                                </InputGroup.Button>
+                                <input
+                                  type={"number"}
+                                  className={
+                                    "block text-center w-full focus:outline-0 selection:border-blue-500"
+                                  }
+                                  value={adult}
+                                  onChange={setadult}
+                                  min={1}
+                                  max={7}
+                                  readOnly
+                                />
+                                <InputGroup.Button onClick={plusAdult}>
+                                  +
+                                </InputGroup.Button>
                               </InputGroup>
                             </div>
                             <div className="mt-4 mb-4 w-full items-center text-black">
@@ -1043,9 +1160,23 @@ function DLU() {
                                 <p>Child (2 - 11 thn)</p>
                               </div>
                               <InputGroup>
-                                <InputGroup.Button onClick={minusChild}>-</InputGroup.Button>
-                                  <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={child} onChange={setChild} min={0} max={7} readOnly/>
-                                <InputGroup.Button onClick={plusChild}>+</InputGroup.Button>
+                                <InputGroup.Button onClick={minusChild}>
+                                  -
+                                </InputGroup.Button>
+                                <input
+                                  type={"number"}
+                                  className={
+                                    "block text-center w-full focus:outline-0 selection:border-blue-500"
+                                  }
+                                  value={child}
+                                  onChange={setChild}
+                                  min={0}
+                                  max={7}
+                                  readOnly
+                                />
+                                <InputGroup.Button onClick={plusChild}>
+                                  +
+                                </InputGroup.Button>
                               </InputGroup>
                             </div>
                             <div className="mt-4 w-full items-center text-black">
@@ -1053,33 +1184,45 @@ function DLU() {
                                 <p>Infant (dibawah 2 thn)</p>
                               </div>
                               <InputGroup>
-                                <InputGroup.Button onClick={minusInfant}>-</InputGroup.Button>
-                                  <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={infant} onChange={setinfant} min={0} max={7} readOnly/>
-                                <InputGroup.Button onClick={plusInfant}>+</InputGroup.Button>
+                                <InputGroup.Button onClick={minusInfant}>
+                                  -
+                                </InputGroup.Button>
+                                <input
+                                  type={"number"}
+                                  className={
+                                    "block text-center w-full focus:outline-0 selection:border-blue-500"
+                                  }
+                                  value={infant}
+                                  onChange={setinfant}
+                                  min={0}
+                                  max={7}
+                                  readOnly
+                                />
+                                <InputGroup.Button onClick={plusInfant}>
+                                  +
+                                </InputGroup.Button>
                               </InputGroup>
                             </div>
                           </div>
                         </div>
                       </FormControl>
                     </>
-                  )
-                  }
+                  )}
                 </div>
               </div>
               <div className="mx-0 xl:mx-6 w-full xl:w-1/4 flex justify-end xl:justify-start mt-4 py-0.5 mb-4">
-                  <Button
-                    block
-                    size="large"
-                    key="submit"
-                    type="primary"
-                    className="bg-blue-500 mx-2 md:mx-0"
-                    loading={isLoading}
-                    onClick={handleSubmitDLU}
-                  >
-                    Cari Tiket
-                  </Button>
+                <Button
+                  block
+                  size="large"
+                  key="submit"
+                  type="primary"
+                  className="bg-blue-500 mx-2 md:mx-0"
+                  loading={isLoading}
+                  onClick={handleSubmitDLU}
+                >
+                  Cari Tiket
+                </Button>
               </div>
-
             </>
           </form>
         </div>

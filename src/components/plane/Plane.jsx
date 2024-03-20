@@ -16,86 +16,43 @@ import { Modal, Placeholder } from "rsuite";
 import { CheckboxGroup, Checkbox } from "rsuite";
 import { SearchOutlined } from "@ant-design/icons";
 import { AiOutlineSwap } from "react-icons/ai";
-import { InputNumber, InputGroup } from 'rsuite';
-import { DatePicker } from 'antd';
+import { InputGroup } from "rsuite";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { parseTanggalPelni } from "../../helpers/date";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay/PickersDay";
-import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
-import Typography from '@mui/material/Typography';
-import ModalMui from '@mui/material/Modal';
+import Typography from "@mui/material/Typography";
+import ModalMui from "@mui/material/Modal";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { HolidaysContext, holidaysContent } from "../../App";
+import { HolidaysContext } from "../../App";
 import { CiCalendarDate } from "react-icons/ci";
-import { GlobalStyles } from '@mui/material';
+import { DateCalendar, DayCalendarSkeleton } from "@mui/x-date-pickers";
 
 function Plane() {
-
-  const globalStyles = (
-    <GlobalStyles styles={{
-      '.css-i4bv87-MuiSvgIcon-root': {
-        display: 'none !important',
-      },
-      '.css-1e6y48t-MuiButtonBase-root-MuiButton-root': {
-        display: 'none !important',
-      },
-      '.css-3jvy96-MuiTypography-root-MuiDatePickerToolbar-title': {
-        display: 'none !important',
-      },
-      '.css-1hbyad5-MuiTypography-root': {
-        display: 'none !important',
-      },
-      // Tambahkan selektor lainnya sesuai kebutuhan
-    }} />
-  );
-
-  const useStylesDate = makeStyles({
-    hiddenElement: {
-      // Menyembunyikan elemen spesifik
-      '& .MuiTypography-root': {
-        display: 'none !important',
-      },
-      '& .MuiDatePickerToolbar-title': {
-        display: 'none !important',
-      },
-      // Tambahkan selektor lain yang ingin kamu sembunyikan
-      '& .MuiButtonBase-root-MuiButton-root': {
-        display: 'none !important',
-      },
-      '& .MuiIconButton-root-MuiPickersToolbar-penIconButton': {
-        display: 'none !important',
-      },
-      '.css-i4bv87-MuiSvgIcon-root':{
-        display: 'none !important',
-      }
-    },
-  });
-
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 350,
-    bgcolor: 'background.paper',
-    pb:4,
-    pr:2
-  };
-
   const styleDesktop = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
     width: 540,
-    bgcolor: 'background.paper',
-    p: 4,
+    bgcolor: "background.paper",
+    transform: "translate(-50%, -50%)",
+    px: 4,
+    pt: 2,
+    pb: 4,
   };
 
-  const { holidays, dispatchHolidays } = React.useContext(HolidaysContext);
-  console.log(holidays)
+  const styleMobile = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    width: 350,
+    bgcolor: "background.paper",
+    transform: "translate(-50%, -50%)",
+    px: 2,
+    pt: 2,
+    pb: 4,
+  };
 
   const [anchorEl, setAnchorEl] = React.useState("hidden");
 
@@ -106,48 +63,75 @@ function Plane() {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [openDate, setOpenDate] = React.useState(false);
   const handleOpenDate = () => setOpenDate(true);
-  const handleCloseDate = () => {setOpenDate(false)};
+  const handleCloseDate = () => {
+    setOpenDate(false);
+  };
   const [currentViewDate, setCurrentViewDate] = useState(dayjs());
-  
+
+  const { holidays, dispatchHolidays } = React.useContext(HolidaysContext);
+
   const findHolidayDescriptionsForMonth = (date) => {
     const month = date.month(); // Bulan dari tanggal yang sedang dilihat
     const year = date.year(); // Bulan dari tanggal yang sedang dilihat
 
-    const holidaysInMonth = holidays.filter(holiday => dayjs(holiday.start).month() === month && dayjs(holiday.start).year() === year);
-    return holidaysInMonth.map(holiday => holiday);
+    const holidaysInMonth = holidays.filter(
+      (holiday) =>
+        dayjs(holiday.start).month() === month &&
+        dayjs(holiday.start).year() === year
+    );
+    return holidaysInMonth.map((holiday) => holiday);
   };
+
+  function CustomDay(props) {
+    const { day, outsideCurrentMonth, ...other } = props;
+
+    const isSunday = day.day() === 0;
+    const holidaysStart = holidays.map((obj) => obj.start);
+    const isHoliday = holidaysStart.includes(day.format("YYYY-MM-DD"));
+
+    return (
+      <PickersDay
+        {...other}
+        disableMargin
+        day={day}
+        sx={{
+          color:
+            (isSunday || isHoliday) && !outsideCurrentMonth ? "red" : "inherit",
+          backgroundColor: isHoliday ? "#ffecb3" : "inherit", // Opsional: tambah warna latar untuk hari libur
+        }}
+      />
+    );
+  }
 
   const errorBerangkat = () => {
     messageApi.open({
-      type: 'error',
-      content: 'Kota Asal tidak boleh sama dengan Kota Tujuan.',
+      type: "error",
+      content: "Kota Asal tidak boleh sama dengan Kota Tujuan.",
       duration: 10, // Durasi pesan 5 detik
-      top: '50%', // Posisi pesan di tengah layar
-      className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
+      top: "50%", // Posisi pesan di tengah layar
+      className: "custom-message", // Tambahkan kelas CSS kustom jika diperlukan
     });
   };
-  
 
   const errorTujuan = () => {
     messageApi.open({
-      type: 'error',
-      content: 'Kota Tujuan tidak boleh sama dengan Kota Asal.',
+      type: "error",
+      content: "Kota Tujuan tidak boleh sama dengan Kota Asal.",
       duration: 10, // Durasi pesan 5 detik
-      top: '50%', // Posisi pesan di tengah layar
-      className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
+      top: "50%", // Posisi pesan di tengah layar
+      className: "custom-message", // Tambahkan kelas CSS kustom jika diperlukan
     });
   };
 
   const messageCustomError = (message) => {
     messageApi.open({
-      type: 'error',
+      type: "error",
       content: message,
       duration: 10, // Durasi pesan 5 detik
-      top: '50%', // Posisi pesan di tengah layar
-      className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
+      top: "50%", // Posisi pesan di tengah layar
+      className: "custom-message", // Tambahkan kelas CSS kustom jika diperlukan
     });
   };
-
 
   var j =
     '{"TPGA":"GARUDA INDONESIA","TPIP":"PELITA AIR","TPJQ":"JETSTAR","TPJT":"LION AIR","TPMV":"TRANS NUSA","TPQG":"CITILINK","TPQZ":"AIR ASIA","TPSJ":"SRIWIJAYA","TPTN":"TRIGANA AIR","TPTR":"TIGER AIR","TPXN":"XPRESS AIR"}';
@@ -159,13 +143,19 @@ function Plane() {
   let djremixArray = Object.entries(djremix);
 
   let mskplist = mskplistCookie
-    ? Object.keys(Object.fromEntries(
-        djremixArray.filter(([key, value]) => JSON.parse(mskplistCookie).includes(key))
-      ))
+    ? Object.keys(
+        Object.fromEntries(
+          djremixArray.filter(([key, value]) =>
+            JSON.parse(mskplistCookie).includes(key)
+          )
+        )
+      )
     : Object.keys(djremix);
 
   const [selectedOptions, setSelectedOptions] = React.useState(mskplist);
-  const [isSelectAll, setIsSelectAll] = React.useState(mskplistCookie ? false : true);
+  const [isSelectAll, setIsSelectAll] = React.useState(
+    mskplistCookie ? false : true
+  );
 
   const handleCheckboxChange = (value) => {
     setSelectedOptions(value);
@@ -213,47 +203,46 @@ function Plane() {
   const loadingBerangkat = openBerangka && pesawatData.length === 0;
   const loadingTujuan = openTujuan && pesawatData.length === 0;
 
-
   let depa = Cookies.get("p-depa");
   let arri = Cookies.get("p-arri");
 
-
   let dateCookie = Cookies.get("p-date") ? Cookies.get("p-date") : dayjs();
-  let adultCookie = parseInt(Cookies.get("p-adult") ? Cookies.get("p-adult") : '');
-  let childCookie = parseInt(Cookies.get("p-child") ? Cookies.get("p-child") : '');
-  let infantCookie = parseInt(Cookies.get("p-infant") ? Cookies.get("p-infant") : '');
+  let adultCookie = parseInt(
+    Cookies.get("p-adult") ? Cookies.get("p-adult") : ""
+  );
+  let childCookie = parseInt(
+    Cookies.get("p-child") ? Cookies.get("p-child") : ""
+  );
+  let infantCookie = parseInt(
+    Cookies.get("p-infant") ? Cookies.get("p-infant") : ""
+  );
 
   try {
     depa = depa ? JSON.parse(depa) : null;
-
   } catch (error) {
     depa = null;
   }
 
   try {
     dateCookie = dayjs(dateCookie).isValid() ? dateCookie : null;
-
   } catch (error) {
     dateCookie = null;
   }
 
   try {
     adultCookie = !isNaN(adultCookie) ? adultCookie : null;
-
   } catch (error) {
     adultCookie = null;
   }
 
   try {
     infantCookie = !isNaN(infantCookie) ? infantCookie : null;
-
   } catch (error) {
     infantCookie = null;
   }
 
   try {
     childCookie = !isNaN(childCookie) ? childCookie : null;
-
   } catch (error) {
     childCookie = null;
   }
@@ -264,8 +253,24 @@ function Plane() {
     arri = null;
   }
 
-  depa = depa?.bandara && depa?.code && depa?.group && depa?.name ? depa : { code: "CGK", name: "Jakarta (CGK)", bandara: "Soekarno – Hatta", group: "Domestik" };
-  arri = arri?.bandara && arri?.code && arri?.group && arri?.name ? arri : { code: "SUB", name: "Surabaya (SUB)", bandara: "Juanda", group: "Domestik" };
+  depa =
+    depa?.bandara && depa?.code && depa?.group && depa?.name
+      ? depa
+      : {
+          code: "CGK",
+          name: "Jakarta (CGK)",
+          bandara: "Soekarno – Hatta",
+          group: "Domestik",
+        };
+  arri =
+    arri?.bandara && arri?.code && arri?.group && arri?.name
+      ? arri
+      : {
+          code: "SUB",
+          name: "Surabaya (SUB)",
+          bandara: "Juanda",
+          group: "Domestik",
+        };
   dateCookie = dateCookie ? dayjs(dateCookie) : dayjs();
   adultCookie = adultCookie ? adultCookie : 1;
   infantCookie = infantCookie ? infantCookie : 0;
@@ -274,7 +279,8 @@ function Plane() {
   //input
   const [keberangkatan, setKeberangkatan] = React.useState(depa);
   const [tujuan, setTujuan] = React.useState(arri);
-  const [tanggalKeberangkatan, setTanggalKeberangkatan] = React.useState(dateCookie);
+  const [tanggalKeberangkatan, setTanggalKeberangkatan] =
+    React.useState(dateCookie);
   const [tanggalTujuan, setTanggalTujuan] = React.useState(dateCookie);
   const [adult, setadult] = React.useState(adultCookie);
   const [infant, setinfant] = React.useState(infantCookie);
@@ -306,7 +312,7 @@ function Plane() {
           padding: 10,
           borderRadius: 16,
           color: "black", // Ubah warna teks
-          cursor: "pointer"
+          cursor: "pointer",
         },
         "& .MuiOutlinedInput-notchedOutline": {
           borderColor: "#e5e7eb", // Ubah warna border
@@ -320,7 +326,6 @@ function Plane() {
       },
     },
   }));
-  
 
   const classes = useStyles();
 
@@ -406,9 +411,9 @@ function Plane() {
   function minusAdult(e) {
     e.preventDefault();
 
-    if((adult <= infant) || (adult <= child)){
-      setadult(parseInt(adult))
-    }else{
+    if (adult <= infant || adult <= child) {
+      setadult(parseInt(adult));
+    } else {
       if (adult < 1 || adult === 1) {
         setadult(1);
       } else {
@@ -420,16 +425,15 @@ function Plane() {
   function plusInfant(e) {
     e.preventDefault();
 
-    if(adult <= infant){
+    if (adult <= infant) {
       setinfant(parseInt(infant));
-    }else{
+    } else {
       if (infant >= 7) {
         setinfant(7);
       } else {
         setinfant(parseInt(infant) + 1);
       }
     }
-
   }
 
   function minusInfant(e) {
@@ -443,10 +447,9 @@ function Plane() {
   }
 
   function plusChild(e) {
-
-    if(adult <= child){
+    if (adult <= child) {
       setChild(infant(child));
-    }else{
+    } else {
       e.preventDefault();
       if (child >= 7) {
         setChild(7);
@@ -520,17 +523,13 @@ function Plane() {
       e.preventDefault();
       setLoading(false);
 
-      if(keberangkatan === null && tujuan === null){
-        messageCustomError('Pilih Kota Asal & Kota Tujuan.')
-      }
-      else if(keberangkatan === null){
-        messageCustomError('Pilih Kota Asal.')
-        
-      }else if(tujuan === null){
-        messageCustomError('Pilih Kota Tujuan.')
-
-      }else{
-
+      if (keberangkatan === null && tujuan === null) {
+        messageCustomError("Pilih Kota Asal & Kota Tujuan.");
+      } else if (keberangkatan === null) {
+        messageCustomError("Pilih Kota Asal.");
+      } else if (tujuan === null) {
+        messageCustomError("Pilih Kota Tujuan.");
+      } else {
         const params = {
           departure: keberangkatan.code,
           departureName: keberangkatan.bandara,
@@ -544,14 +543,14 @@ function Plane() {
           infant: infant,
           maskapai: selectedOptions.join("#"),
         };
-  
+
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + 7);
-  
+
         const cookieOptions = {
           expires: expirationDate,
         };
-  
+
         Cookies.set("p-depa", JSON.stringify(keberangkatan), cookieOptions);
         Cookies.set("p-arri", JSON.stringify(tujuan), cookieOptions);
         Cookies.set("p-mask", JSON.stringify(selectedOptions), cookieOptions);
@@ -564,27 +563,18 @@ function Plane() {
           pathname: "/flight/search",
           search: `?${createSearchParams(params)}`,
         });
-
       }
-
     }, 1000);
   }
 
   const changeStatiun = () => {
-
     setKeberangkatan(tujuan);
     setTujuan(keberangkatan);
-
-  }
-
-  const tanggalMinimum = new Date(); // Ganti dengan tanggal minimum yang diinginkan
-
-  const isDisabled = tanggalKeberangkatan < tanggalMinimum;
+  };
 
   return (
     <>
       {contextHolder}
-      {globalStyles}
       <Modal size={size} open={open} onClose={handleClose}>
         <Modal.Header>
           <Modal.Title>Pilih Maskapai</Modal.Title>
@@ -599,9 +589,13 @@ function Plane() {
               <div className="container">
                 <div className="grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-0 md:gap-6">
                   <div className="">
-                      <Checkbox className="block -ml-2.5 md:-ml-0" checked={isSelectAll} onChange={toggleSelectAll}>
-                        Select All
-                      </Checkbox>
+                    <Checkbox
+                      className="block -ml-2.5 md:-ml-0"
+                      checked={isSelectAll}
+                      onChange={toggleSelectAll}
+                    >
+                      Select All
+                    </Checkbox>
                   </div>
                   {Object.keys(djremix).map((key) => (
                     <div className="col-2" key={key}>
@@ -626,144 +620,191 @@ function Plane() {
             <Button onClick={handleClose} appearance="primary">
               Ok
             </Button>
-            </div>
+          </div>
         </Modal.Footer>
       </Modal>
 
-
       {/* desktop */}
       <ModalMui
-        className="hidden xl:block"
+        className="hidden md:block"
         open={openDate}
         onClose={handleCloseDate}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         {/* desktop */}
-        <Box 
-        sx={styleDesktop}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <StaticDatePicker
-              // className={classesdate.hiddenElement} // Terapkan class yang telah dibuat
-              sx={{
-                // Directly target the child classes (not recommended for deep nesting)
-                '& .css-i4bv87-MuiSvgIcon-root':{ display: 'none' },
-                '& .css-1e6y48t-MuiButtonBase-root-MuiButton-root':{ display: 'none !important' },
-
-              }}
-              orientation="landscape" 
-              value={tanggalKeberangkatan}
-              shouldDisableDate={(current) => {
-                const currentDate = dayjs();
-                const aheadDate = dayjs().add(3, 'months')
-                return current && (current < currentDate.startOf('day') || current > aheadDate);
-              }}
-              onChange={(newValue) => {
-                setTanggalKeberangkatan(newValue);
-                handleCloseDate();
-              }}
-
-              onMonthChange={(newViewDate) => {
-                setCurrentViewDate(newViewDate);
-              }}
-              renderDay={(day, selectedDates, pickersDayProps) => {
-                const formattedDate = day.format("YYYY-MM-DD");
-                const isHoliday = holidays.some(holiday => holiday.start === formattedDate);
-                const isSunday = day.day() === 0;
-            
-                // Create a custom style for holidays and Sundays
-                const dayStyle = isHoliday || isSunday ? { color: 'red' } : {};
-            
-                // Utilize the PickersDay component directly, applying custom styles
-                return (
-                  <PickersDay 
-                    {...pickersDayProps} 
-                    day={day} 
-                    sx={{ ...dayStyle }}
-                  />
-                );
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-              <div style={{ overflowX: 'scroll', display: 'flex', gap: '8px' }} className="hidennscroll -mt-4 z-50">
-                {findHolidayDescriptionsForMonth(currentViewDate)?.map((e, index) => (
-                  <div key={index} className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50">
-                    <Typography variant="caption" display="block" style={{ fontSize: '10px' }}>
-                      {dayjs(e.start).format('DD')}.{e.summary}
-                    </Typography>
-                  </div>
-                ))}
+        <Box sx={styleDesktop}>
+          <div className="flex justify-between">
+            <div className="grid grid-rows-3 grid-flow-col mt-4">
+              <div
+                style={{
+                  fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: "0.75rem",
+                  lineHeight: 2.66,
+                  letterSpacing: "0.08333em",
+                  color: "rgba(0, 0, 0, 0.6)",
+                }}
+              >
+                PILIH TANGGAL
               </div>
-          </LocalizationProvider>
-          {/* Footer with OK and Cancel buttons */}
-          {/* <Box sx={{ marginTop: 4, display: 'flex', justifyContent: 'flex-end' }} className="space-x-4">
-            <Button onClick={handleClose} sx={{ mr: 1 }}>Cancel</Button>
-            <Button variant="contained" onClick={handleClose}>OK</Button>
-          </Box> */}
+              <div className=" flex justify-center">
+                <div className="pl-4 text-gray-400">
+                  <h3>{dayjs(tanggalKeberangkatan).format("ddd")},</h3>
+                  <h3>
+                    {dayjs(tanggalKeberangkatan).format("MMM")}{" "}
+                    {dayjs(tanggalKeberangkatan).format("DD")}
+                  </h3>
+                </div>
+              </div>
+              <div className="flex justify-center">
+                <CiCalendarDate size={60} className="text-gray-400" />
+              </div>
+            </div>
+            <div>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateCalendar
+                  value={tanggalKeberangkatan}
+                  shouldDisableDate={(current) => {
+                    const currentDate = dayjs();
+                    const aheadDate = dayjs().add(3, "months");
+                    return (
+                      current &&
+                      (current < currentDate.startOf("day") ||
+                        current > aheadDate)
+                    );
+                  }}
+                  onChange={(newValue) => {
+                    setTanggalKeberangkatan(newValue);
+                    handleCloseDate();
+                  }}
+                  onMonthChange={(newViewDate) => {
+                    setCurrentViewDate(newViewDate);
+                  }}
+                  renderLoading={() => <DayCalendarSkeleton />}
+                  slots={{
+                    day: CustomDay,
+                  }}
+                  slotProps={{
+                    day: {},
+                  }}
+                />
+              </LocalizationProvider>
+            </div>
+          </div>
+          <div
+            style={{ overflowX: "scroll", display: "flex", gap: "8px" }}
+            className="hidennscroll mt-2 z-50"
+          >
+            {findHolidayDescriptionsForMonth(currentViewDate)?.map(
+              (e, index) => (
+                <div
+                  key={index}
+                  className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50"
+                >
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    style={{ fontSize: "10px" }}
+                  >
+                    {dayjs(e.start).format("DD")}.{e.summary}
+                  </Typography>
+                </div>
+              )
+            )}
+          </div>
         </Box>
         {/* mobile */}
       </ModalMui>
 
       {/* mobile */}
       <ModalMui
-        className="block xl:hidden"
+        className="block md:hidden"
         open={openDate}
         onClose={handleCloseDate}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box 
-        sx={style}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <StaticDatePicker
-              value={tanggalKeberangkatan}
-              shouldDisableDate={(current) => {
-                const currentDate = dayjs();
-                const aheadDate = dayjs().add(3, 'months')
-                return current && (current < currentDate.startOf('day') || current > aheadDate);
-              }}
-              onChange={(newValue) => {
-                setTanggalKeberangkatan(newValue);
-                handleCloseDate();
-              }}
-
-              onMonthChange={(newViewDate) => {
-                setCurrentViewDate(newViewDate);
-              }}
-              renderDay={(day, selectedDates, pickersDayProps) => {
-                const formattedDate = day.format("YYYY-MM-DD");
-                const isHoliday = holidays.some(holiday => holiday.start === formattedDate);
-                const isSunday = day.day() === 0;
-            
-                // Create a custom style for holidays and Sundays
-                const dayStyle = isHoliday || isSunday ? { color: 'red' } : {};
-            
-                // Utilize the PickersDay component directly, applying custom styles
-                return (
-                  <PickersDay 
-                    {...pickersDayProps} 
-                    day={day} 
-                    sx={{ ...dayStyle }}
-                  />
-                );
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-              <div style={{ overflowX: 'scroll', display: 'flex', gap: '8px' }} className="hidennscroll -mt-2 z-50 mx-4">
-                {findHolidayDescriptionsForMonth(currentViewDate)?.map((e, index) => (
-                  <div key={index} className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50">
-                    <Typography variant="caption" display="block" style={{ fontSize: '10px' }}>
-                      {dayjs(e.start).format('DD')}.{e.summary}
-                    </Typography>
-                  </div>
-                ))}
+        <Box sx={styleMobile}>
+          <div className="">
+            <div className="my-4  pl-4">
+              <div
+                style={{
+                  fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+                  fontWeight: 400,
+                  fontSize: "0.75rem",
+                  lineHeight: 2.66,
+                  letterSpacing: "0.08333em",
+                  color: "rgba(0, 0, 0, 0.6)",
+                }}
+              >
+                PILIH TANGGAL
               </div>
-          </LocalizationProvider>
-          {/* Footer with OK and Cancel buttons */}
-          {/* <Box sx={{ marginTop: 4, display: 'flex', justifyContent: 'flex-end' }} className="space-x-4">
-            <Button onClick={handleClose} sx={{ mr: 1 }}>Cancel</Button>
-            <Button variant="contained" onClick={handleClose}>OK</Button>
-          </Box> */}
+              <div className="flex space-x-4 items-center">
+                <div className="flex justify-start">
+                  <div className="text-gray-400">
+                    <h5>
+                      {dayjs(tanggalKeberangkatan).format("ddd")},{" "}
+                      {dayjs(tanggalKeberangkatan).format("MMM")}{" "}
+                      {dayjs(tanggalKeberangkatan).format("DD")}
+                    </h5>
+                  </div>
+                </div>
+                <div className="">
+                  <CiCalendarDate size={32} className="text-gray-400" />
+                </div>
+              </div>
+            </div>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateCalendar
+                value={tanggalKeberangkatan}
+                shouldDisableDate={(current) => {
+                  const currentDate = dayjs();
+                  const aheadDate = dayjs().add(3, "months");
+                  return (
+                    current &&
+                    (current < currentDate.startOf("day") ||
+                      current > aheadDate)
+                  );
+                }}
+                onChange={(newValue) => {
+                  setTanggalKeberangkatan(newValue);
+                  handleCloseDate();
+                }}
+                onMonthChange={(newViewDate) => {
+                  setCurrentViewDate(newViewDate);
+                }}
+                renderLoading={() => <DayCalendarSkeleton />}
+                slots={{
+                  day: CustomDay,
+                }}
+                slotProps={{
+                  day: {},
+                }}
+              />
+            </LocalizationProvider>
+          </div>
+          <div
+            style={{ overflowX: "scroll", display: "flex", gap: "8px" }}
+            className="hidennscroll mt-2 z-50"
+          >
+            {findHolidayDescriptionsForMonth(currentViewDate)?.map(
+              (e, index) => (
+                <div
+                  key={index}
+                  className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50"
+                >
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    style={{ fontSize: "10px" }}
+                  >
+                    {dayjs(e.start).format("DD")}.{e.summary}
+                  </Typography>
+                </div>
+              )
+            )}
+          </div>
         </Box>
         {/* mobile */}
       </ModalMui>
@@ -780,106 +821,108 @@ function Plane() {
                   <div class="w-full mt-1.5 pl-2 md:pl-0 mx-0">
                     <small className="mb-2 text-black">Pilih Maskapai</small>
                     <Tooltip>
-                    <Button
+                      <Button
                         onClick={() => handleOpen("lg")}
                         size="large"
                         type="default"
                         shape="default" // Use 'default' shape for no rounding
                         className="text-black block mt-2 bg-white border-gray-200"
                         icon={<SearchOutlined />}
-                        >
+                      >
                         List Maskapai
-                        </Button>
+                      </Button>
                     </Tooltip>
                   </div>
                   <div className="mt-2 w-full col col-span-1 md:col-span-2">
                     <div className="w-full flex items-center">
                       <div>
-                      <div
-                        className="w-full m-2 xl:m-0 pr-4 xl:pr-0"
-                      >
-                        <small className="block mb-2 text-black">
-                          Kota Asal
-                        </small>
-                        <Autocomplete
-                          classes={classes}
-                          className="mt-1.5"
-                          id="asynchronous-demo"
-                          disableClearable
-                          PopperComponent={PopperMy}
-                          open={openBerangka}
-                          hiddenLabel={true}
-                          onOpen={() => {
-                            SetopenBerangka(true);
-                          }}
-                          onClose={() => {
-                            SetopenBerangka(false);
-                          }}
-                          renderTags={(value, getTagProps) => (
-                            <div style={{ width: "90%" }}>
-                              {value.map((option, index) => (
-                                <Chip
-                                  variant="outlined"
-                                  label={option}
-                                  {...getTagProps({ index })}
-                                />
-                              ))}
-                            </div>
-                          )}
-                          isOptionEqualToValue={(option, value) =>
-                            option.title === value.title
-                          }
-                          getOptionLabel={(option) =>
-                            option.bandara +
-                            " - " +
-                            option.name +
-                            " - " +
-                            option.code
-                          }
-                          options={pesawatData}
-                          value={keberangkatan}
-                          onChange={(event, newValue) => {
-                            if((newValue == tujuan) || (newValue?.code == tujuan?.code)){
-                              errorBerangkat();
-                              setKeberangkatan(keberangkatan);
-                            }else{
-                              setKeberangkatan(newValue);
+                        <div className="w-full m-2 xl:m-0 pr-4 xl:pr-0">
+                          <small className="block mb-2 text-black">
+                            Kota Asal
+                          </small>
+                          <Autocomplete
+                            classes={classes}
+                            className="mt-1.5"
+                            id="asynchronous-demo"
+                            disableClearable
+                            PopperComponent={PopperMy}
+                            open={openBerangka}
+                            hiddenLabel={true}
+                            onOpen={() => {
+                              SetopenBerangka(true);
+                            }}
+                            onClose={() => {
+                              SetopenBerangka(false);
+                            }}
+                            renderTags={(value, getTagProps) => (
+                              <div style={{ width: "90%" }}>
+                                {value.map((option, index) => (
+                                  <Chip
+                                    variant="outlined"
+                                    label={option}
+                                    {...getTagProps({ index })}
+                                  />
+                                ))}
+                              </div>
+                            )}
+                            isOptionEqualToValue={(option, value) =>
+                              option.title === value.title
                             }
-                          }}
-                          loading={loadingBerangkat}
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              InputProps={{
-                                ...params.InputProps,
-                                startAdornment: (
-                                  <FaPlaneDeparture className="text-gray-400" />
-                                ),
-                                placeholder: "Asal",
-                                endAdornment: (
-                                  <React.Fragment>
-                                    {loadingBerangkat ? (
-                                      <CircularProgress
-                                        color="inherit"
-                                        size={20}
-                                      />
-                                    ) : null}
-                                    {params.InputProps.endAdornment}
-                                  </React.Fragment>
-                                ),
-                              }}
-                            />
-                          )}
-                        />
+                            getOptionLabel={(option) =>
+                              option.bandara +
+                              " - " +
+                              option.name +
+                              " - " +
+                              option.code
+                            }
+                            options={pesawatData}
+                            value={keberangkatan}
+                            onChange={(event, newValue) => {
+                              if (
+                                newValue == tujuan ||
+                                newValue?.code == tujuan?.code
+                              ) {
+                                errorBerangkat();
+                                setKeberangkatan(keberangkatan);
+                              } else {
+                                setKeberangkatan(newValue);
+                              }
+                            }}
+                            loading={loadingBerangkat}
+                            renderInput={(params) => (
+                              <TextField
+                                {...params}
+                                InputProps={{
+                                  ...params.InputProps,
+                                  startAdornment: (
+                                    <FaPlaneDeparture className="text-gray-400" />
+                                  ),
+                                  placeholder: "Asal",
+                                  endAdornment: (
+                                    <React.Fragment>
+                                      {loadingBerangkat ? (
+                                        <CircularProgress
+                                          color="inherit"
+                                          size={20}
+                                        />
+                                      ) : null}
+                                      {params.InputProps.endAdornment}
+                                    </React.Fragment>
+                                  ),
+                                }}
+                              />
+                            )}
+                          />
+                        </div>
                       </div>
-                      </div>
-                      <div onClick={changeStatiun} className="cursor-pointer mt-6 flex justify-center items-center bg-blue-500 rounded-full p-1">
+                      <div
+                        onClick={changeStatiun}
+                        className="cursor-pointer mt-6 flex justify-center items-center bg-blue-500 rounded-full p-1"
+                      >
                         <AiOutlineSwap className="text-white" size={24} />
                       </div>
                       <div>
-                        <div
-                          className="w-full m-2 xl:m-0 pr-4 xl:pr-0"
-                        >
+                        <div className="w-full m-2 xl:m-0 pr-4 xl:pr-0">
                           <small className="block mb-2 text-black">
                             Kota Tujuan
                           </small>
@@ -920,11 +963,13 @@ function Plane() {
                             options={pesawatData}
                             value={tujuan}
                             onChange={(event, newValue) => {
-                              if((keberangkatan == newValue) || (keberangkatan?.code == newValue?.code)){
-                                errorTujuan()
+                              if (
+                                keberangkatan == newValue ||
+                                keberangkatan?.code == newValue?.code
+                              ) {
+                                errorTujuan();
                                 setTujuan(tujuan);
-                              }else{
-
+                              } else {
                                 setTujuan(newValue);
                               }
                             }}
@@ -958,15 +1003,15 @@ function Plane() {
                     </div>
                   </div>
                   <FormControl sx={{ m: 1, minWidth: 160 }}>
-                    <small className="mb-2 text-black">
-                      Tanggal Berangkat
-                    </small>
-                    <button type="button" className="border py-[10px] customButtonStyle w-full block text-black" onClick={handleOpenDate}>
+                    <small className="mb-2 text-black">Tanggal Berangkat</small>
+                    <button
+                      type="button"
+                      className="border py-[10px] customButtonStyle w-full block text-black"
+                      onClick={handleOpenDate}
+                    >
                       <div className="flex justify-between px-2 items-center">
                         <div>
-                        {`${
-                            parseTanggalPelni(tanggalKeberangkatan)
-                      } `}
+                          {`${parseTanggalPelni(tanggalKeberangkatan)} `}
                         </div>
                         <CiCalendarDate size={22} className="text-gray-400" />
                       </div>
@@ -974,13 +1019,14 @@ function Plane() {
                   </FormControl>
 
                   <FormControl sx={{ m: 1, minWidth: 130 }}>
-                    <small className="mb-2 text-black">
-                      Total Penumpang
-                    </small>
-                    <div className="hidden md:block">
-                    </div>
-                    <button type="button" className="border py-[11px] customButtonStyle w-full block text-black -mx-1.5" onClick={handleClick}>
-                    {`${
+                    <small className="mb-2 text-black">Total Penumpang</small>
+                    <div className="hidden md:block"></div>
+                    <button
+                      type="button"
+                      className="border py-[11px] customButtonStyle w-full block text-black -mx-1.5"
+                      onClick={handleClick}
+                    >
+                      {`${
                         parseInt(adult) + parseInt(infant) + parseInt(child)
                       } Penumpang`}
                     </button>
@@ -994,9 +1040,23 @@ function Plane() {
                             <p>Adult (12 thn keatas)</p>
                           </div>
                           <InputGroup>
-                            <InputGroup.Button onClick={minusAdult}>-</InputGroup.Button>
-                            <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={adult} onChange={setadult} min={1} max={7} readOnly/>
-                            <InputGroup.Button onClick={plusAdult}>+</InputGroup.Button>
+                            <InputGroup.Button onClick={minusAdult}>
+                              -
+                            </InputGroup.Button>
+                            <input
+                              type={"number"}
+                              className={
+                                "block text-center w-full focus:outline-0 selection:border-blue-500"
+                              }
+                              value={adult}
+                              onChange={setadult}
+                              min={1}
+                              max={7}
+                              readOnly
+                            />
+                            <InputGroup.Button onClick={plusAdult}>
+                              +
+                            </InputGroup.Button>
                           </InputGroup>
                         </div>
                         <div className="mt-4 mb-4 w-full items-center text-black">
@@ -1004,9 +1064,23 @@ function Plane() {
                             <p>Child (2 - 11 thn)</p>
                           </div>
                           <InputGroup>
-                            <InputGroup.Button onClick={minusChild}>-</InputGroup.Button>
-                              <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={child} onChange={setChild} min={0} max={7} readOnly/>
-                            <InputGroup.Button onClick={plusChild}>+</InputGroup.Button>
+                            <InputGroup.Button onClick={minusChild}>
+                              -
+                            </InputGroup.Button>
+                            <input
+                              type={"number"}
+                              className={
+                                "block text-center w-full focus:outline-0 selection:border-blue-500"
+                              }
+                              value={child}
+                              onChange={setChild}
+                              min={0}
+                              max={7}
+                              readOnly
+                            />
+                            <InputGroup.Button onClick={plusChild}>
+                              +
+                            </InputGroup.Button>
                           </InputGroup>
                         </div>
                         <div className="mt-4 w-full items-center text-black">
@@ -1014,9 +1088,23 @@ function Plane() {
                             <p>Infant (dibawah 2 thn)</p>
                           </div>
                           <InputGroup>
-                            <InputGroup.Button onClick={minusInfant}>-</InputGroup.Button>
-                              <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={infant} onChange={setinfant} min={0} max={7} readOnly/>
-                            <InputGroup.Button onClick={plusInfant}>+</InputGroup.Button>
+                            <InputGroup.Button onClick={minusInfant}>
+                              -
+                            </InputGroup.Button>
+                            <input
+                              type={"number"}
+                              className={
+                                "block text-center w-full focus:outline-0 selection:border-blue-500"
+                              }
+                              value={infant}
+                              onChange={setinfant}
+                              min={0}
+                              max={7}
+                              readOnly
+                            />
+                            <InputGroup.Button onClick={plusInfant}>
+                              +
+                            </InputGroup.Button>
                           </InputGroup>
                         </div>
                       </div>

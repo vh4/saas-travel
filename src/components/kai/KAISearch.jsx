@@ -18,51 +18,44 @@ import { AiOutlineSwap } from "react-icons/ai";
 import { InputGroup } from "rsuite";
 import { useState } from "react";
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+import Typography from "@mui/material/Typography";
+import ModalMui from "@mui/material/Modal";
 import dayjs from "dayjs";
-import { DatePicker } from "antd";
-import { parseDate, parseTanggal, parseTanggalPelni } from "../../helpers/date";
-import { PickersDay } from "@mui/x-date-pickers/PickersDay/PickersDay";
+import { parseTanggalPelni } from "../../helpers/date";
+import { HolidaysContext } from "../../App";
 import { CiCalendarDate } from "react-icons/ci";
+import { DateCalendar, DayCalendarSkeleton } from "@mui/x-date-pickers";
+import { PickersDay } from "@mui/x-date-pickers/PickersDay/PickersDay";
 
 function KAI() {
 
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 350,
-    bgcolor: 'background.paper',
-    pb:4,
-    pr:2
-  };
-
   const styleDesktop = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
     width: 540,
-    bgcolor: 'background.paper',
-    p: 4,
+    bgcolor: "background.paper",
+    transform: "translate(-50%, -50%)",
+    px: 4,
+    pt: 2,
+    pb: 4,
   };
 
-  const [holidays, setHolidays] = useState([]);
+  const styleMobile = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    width: 350,
+    bgcolor: "background.paper",
+    transform: "translate(-50%, -50%)",
+    px: 2,
+    pt: 2,
+    pb: 4,
+  };
 
-  React.useEffect(() => {
-    const fetchHolidays = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_HOST_API}/travel/holidays`);
-        setHolidays(response.data);
-      } catch (error) {
-        console.error("Error fetching holidays:", error);
-      }
-    };
 
-    fetchHolidays();
-  }, []);
+  const { holidays, dispatchHolidays } = React.useContext(HolidaysContext);
+
 
   const useStyles = makeStyles((theme) => ({
     inputRoot: {
@@ -132,19 +125,45 @@ function KAI() {
   const [messageApi, contextHolder] = message.useMessage();
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => {setOpen(false)};
+  const [openDate, setOpenDate] = React.useState(false);
+  const handleOpenDate = () => setOpenDate(true);
+  const handleCloseDate = () => {
+    setOpenDate(false);
+  };
   const [currentViewDate, setCurrentViewDate] = useState(dayjs());
 
   const findHolidayDescriptionsForMonth = (date) => {
     const month = date.month(); // Bulan dari tanggal yang sedang dilihat
     const year = date.year(); // Bulan dari tanggal yang sedang dilihat
 
-    const holidaysInMonth = holidays.filter(holiday => dayjs(holiday.start).month() === month && dayjs(holiday.start).year() === year);
-    return holidaysInMonth.map(holiday => holiday);
+    const holidaysInMonth = holidays.filter(
+      (holiday) =>
+        dayjs(holiday.start).month() === month &&
+        dayjs(holiday.start).year() === year
+    );
+    return holidaysInMonth.map((holiday) => holiday);
   };
 
+  function CustomDay(props) {
+    const { day, outsideCurrentMonth, ...other } = props;
+
+    const isSunday = day.day() === 0;
+    const holidaysStart = holidays.map((obj) => obj.start);
+    const isHoliday = holidaysStart.includes(day.format("YYYY-MM-DD"));
+
+    return (
+      <PickersDay
+        {...other}
+        disableMargin
+        day={day}
+        sx={{
+          color:
+            (isSunday || isHoliday) && !outsideCurrentMonth ? "red" : "inherit",
+          backgroundColor: isHoliday ? "#ffecb3" : "inherit", // Opsional: tambah warna latar untuk hari libur
+        }}
+      />
+    );
+  }
   const errorBerangkat = () => {
     messageApi.open({
       type: 'error',
@@ -488,6 +507,7 @@ function KAI() {
         
         window.location = `search?${str}`;  
 
+
       }
 
     }, 1000);
@@ -498,134 +518,190 @@ function KAI() {
     {contextHolder}
     <div className="flex justify-center row bg-white border-t border-gray-200 w-full pr-0">
       {/* desktop */}
-      <Modal
-        className="hidden xl:block"
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
         {/* desktop */}
-        <Box 
-        sx={styleDesktop}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <StaticDatePicker
-              orientation="landscape" 
-              value={tanggal}
-              shouldDisableDate={(current) => {
-                const currentDate = dayjs();
-                const aheadDate = dayjs().add(3, 'months')
-                return current && (current < currentDate.startOf('day') || current > aheadDate);
-              }}
-              onChange={(newValue) => {
-                setTanggal(newValue);
-                handleClose();
-              }}
-
-              onMonthChange={(newViewDate) => {
-                setCurrentViewDate(newViewDate);
-              }}
-              renderDay={(day, selectedDates, pickersDayProps) => {
-                const formattedDate = day.format("YYYY-MM-DD");
-                const isHoliday = holidays.some(holiday => holiday.start === formattedDate);
-                const isSunday = day.day() === 0;
-            
-                // Create a custom style for holidays and Sundays
-                const dayStyle = isHoliday || isSunday ? { color: 'red' } : {};
-            
-                // Utilize the PickersDay component directly, applying custom styles
-                return (
-                  <PickersDay 
-                    {...pickersDayProps} 
-                    day={day} 
-                    sx={{ ...dayStyle }}
+        <ModalMui
+          className="hidden md:block"
+          open={openDate}
+          onClose={handleCloseDate}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          {/* desktop */}
+          <Box sx={styleDesktop}>
+            <div className="flex justify-between">
+              <div className="grid grid-rows-3 grid-flow-col mt-4">
+                <div
+                  style={{
+                    fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+                    fontWeight: 400,
+                    fontSize: "0.75rem",
+                    lineHeight: 2.66,
+                    letterSpacing: "0.08333em",
+                    color: "rgba(0, 0, 0, 0.6)",
+                  }}
+                >
+                  PILIH TANGGAL
+                </div>
+                <div className=" flex justify-center">
+                  <div className="pl-4 text-gray-400">
+                    <h3>{dayjs(tanggal).format("ddd")},</h3>
+                    <h3>
+                      {dayjs(tanggal).format("MMM")}{" "}
+                      {dayjs(tanggal).format("DD")}
+                    </h3>
+                  </div>
+                </div>
+                <div className="flex justify-center">
+                  <CiCalendarDate size={60} className="text-gray-400" />
+                </div>
+              </div>
+              <div>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateCalendar
+                    value={tanggal}
+                    shouldDisableDate={(current) => {
+                      const currentDate = dayjs();
+                      const aheadDate = dayjs().add(3, "months");
+                      return (
+                        current &&
+                        (current < currentDate.startOf("day") ||
+                          current > aheadDate)
+                      );
+                    }}
+                    onChange={(newValue) => {
+                      setTanggal(newValue);
+                      handleCloseDate();
+                    }}
+                    onMonthChange={(newViewDate) => {
+                      setCurrentViewDate(newViewDate);
+                    }}
+                    renderLoading={() => <DayCalendarSkeleton />}
+                    slots={{
+                      day: CustomDay,
+                    }}
+                    slotProps={{
+                      day: {},
+                    }}
                   />
-                );
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-              <div style={{ overflowX: 'scroll', display: 'flex', gap: '8px' }} className="hidennscroll -mt-4 z-50">
-                {findHolidayDescriptionsForMonth(currentViewDate)?.map((e, index) => (
-                  <div key={index} className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50">
-                    <Typography variant="caption" display="block" style={{ fontSize: '10px' }}>
-                      {dayjs(e.start).format('DD')}.{e.summary}
+                </LocalizationProvider>
+              </div>
+            </div>
+            <div
+              style={{ overflowX: "scroll", display: "flex", gap: "8px" }}
+              className="hidennscroll mt-2 z-50"
+            >
+              {findHolidayDescriptionsForMonth(currentViewDate)?.map(
+                (e, index) => (
+                  <div
+                    key={index}
+                    className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50"
+                  >
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      style={{ fontSize: "10px" }}
+                    >
+                      {dayjs(e.start).format("DD")}.{e.summary}
                     </Typography>
                   </div>
-                ))}
-              </div>
-          </LocalizationProvider>
-          {/* Footer with OK and Cancel buttons */}
-          {/* <Box sx={{ marginTop: 4, display: 'flex', justifyContent: 'flex-end' }} className="space-x-4">
-            <Button onClick={handleClose} sx={{ mr: 1 }}>Cancel</Button>
-            <Button variant="contained" onClick={handleClose}>OK</Button>
-          </Box> */}
-        </Box>
+                )
+              )}
+            </div>
+          </Box>
+          {/* mobile */}
+        </ModalMui>
+
         {/* mobile */}
-      </Modal>
-
-      {/* mobile */}
-      <Modal
-        className="block xl:hidden"
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box 
-        sx={style}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <StaticDatePicker
-              value={tanggal}
-              shouldDisableDate={(current) => {
-                const currentDate = dayjs();
-                const aheadDate = dayjs().add(3, 'months')
-                return current && (current < currentDate.startOf('day') || current > aheadDate);
-              }}
-              onChange={(newValue) => {
-                setTanggal(newValue);
-                handleClose();
-              }}
-
-              onMonthChange={(newViewDate) => {
-                setCurrentViewDate(newViewDate);
-              }}
-              renderDay={(day, selectedDates, pickersDayProps) => {
-                const formattedDate = day.format("YYYY-MM-DD");
-                const isHoliday = holidays.some(holiday => holiday.start === formattedDate);
-                const isSunday = day.day() === 0;
-            
-                // Create a custom style for holidays and Sundays
-                const dayStyle = isHoliday || isSunday ? { color: 'red' } : {};
-            
-                // Utilize the PickersDay component directly, applying custom styles
-                return (
-                  <PickersDay 
-                    {...pickersDayProps} 
-                    day={day} 
-                    sx={{ ...dayStyle }}
-                  />
-                );
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
-              <div style={{ overflowX: 'scroll', display: 'flex', gap: '8px' }} className="hidennscroll -mt-2 z-50 mx-4">
-                {findHolidayDescriptionsForMonth(currentViewDate)?.map((e, index) => (
-                  <div key={index} className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50">
-                    <Typography variant="caption" display="block" style={{ fontSize: '10px' }}>
-                      {dayjs(e.start).format('DD')}.{e.summary}
+        <ModalMui
+          className="block md:hidden"
+          open={openDate}
+          onClose={handleCloseDate}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={styleMobile}>
+            <div className="">
+              <div className="my-4  pl-4">
+                <div
+                  style={{
+                    fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+                    fontWeight: 400,
+                    fontSize: "0.75rem",
+                    lineHeight: 2.66,
+                    letterSpacing: "0.08333em",
+                    color: "rgba(0, 0, 0, 0.6)",
+                  }}
+                >
+                  PILIH TANGGAL
+                </div>
+                <div className="flex space-x-4 items-center">
+                  <div className="flex justify-start">
+                    <div className="text-gray-400">
+                      <h5>
+                        {dayjs(tanggal).format("ddd")},{" "}
+                        {dayjs(tanggal).format("MMM")}{" "}
+                        {dayjs(tanggal).format("DD")}
+                      </h5>
+                    </div>
+                  </div>
+                  <div className="">
+                    <CiCalendarDate size={32} className="text-gray-400" />
+                  </div>
+                </div>
+              </div>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateCalendar
+                  value={tanggal}
+                  shouldDisableDate={(current) => {
+                    const currentDate = dayjs();
+                    const aheadDate = dayjs().add(3, "months");
+                    return (
+                      current &&
+                      (current < currentDate.startOf("day") ||
+                        current > aheadDate)
+                    );
+                  }}
+                  onChange={(newValue) => {
+                    setTanggal(newValue);
+                    handleCloseDate();
+                  }}
+                  onMonthChange={(newViewDate) => {
+                    setCurrentViewDate(newViewDate);
+                  }}
+                  renderLoading={() => <DayCalendarSkeleton />}
+                  slots={{
+                    day: CustomDay,
+                  }}
+                  slotProps={{
+                    day: {},
+                  }}
+                />
+              </LocalizationProvider>
+            </div>
+            <div
+              style={{ overflowX: "scroll", display: "flex", gap: "8px" }}
+              className="hidennscroll mt-2 z-50"
+            >
+              {findHolidayDescriptionsForMonth(currentViewDate)?.map(
+                (e, index) => (
+                  <div
+                    key={index}
+                    className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50"
+                  >
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      style={{ fontSize: "10px" }}
+                    >
+                      {dayjs(e.start).format("DD")}.{e.summary}
                     </Typography>
                   </div>
-                ))}
-              </div>
-          </LocalizationProvider>
-          {/* Footer with OK and Cancel buttons */}
-          {/* <Box sx={{ marginTop: 4, display: 'flex', justifyContent: 'flex-end' }} className="space-x-4">
-            <Button onClick={handleClose} sx={{ mr: 1 }}>Cancel</Button>
-            <Button variant="contained" onClick={handleClose}>OK</Button>
-          </Box> */}
-        </Box>
-        {/* mobile */}
-      </Modal>
+                )
+              )}
+            </div>
+          </Box>
+          {/* mobile */}
+        </ModalMui>
         <div class="w-full px-4 py-4 rounded-lg shadow-xs">
           <form className="w-full">
             <>
@@ -786,7 +862,7 @@ function KAI() {
                     <small className="mb-2 text-black">
                       Tanggal Berangkat
                     </small>
-                    <button type="button" className="border py-[10px] customButtonStyle w-full block text-black" onClick={handleOpen}>
+                    <button type="button" className="border py-[10px] customButtonStyle w-full block text-black" onClick={handleOpenDate}>
                       <div className="flex justify-between mx-4 items-center">
                         <div>
                         {`${
