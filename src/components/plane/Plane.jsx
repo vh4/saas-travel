@@ -29,31 +29,47 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { HolidaysContext, holidaysContent } from "../../App";
 import { CiCalendarDate } from "react-icons/ci";
+import { GlobalStyles } from '@mui/material';
 
 function Plane() {
 
-  const theme = createTheme({
-    components: {
-      // Name of the component
-      MuiTypography: {
-        styleOverrides: {
-          root: {
-            // Your style overrides here
-            '&.css-1hbyad5-MuiTypography-root': {
-              display: 'none',
-            },
-            '&.css-3jvy96-MuiTypography-root-MuiDatePickerToolbar-title': {
-              display: 'none',
-            },
-            '&.css-z3au5x-MuiButtonBase-root-MuiIconButton-root-MuiPickersToolbar-penIconButton': {
-              display: 'none',
-            },
-            '&.css-hlj6pa-MuiDialogActions-root': {
-              display: 'none',
-            },
-          },
-        },
+  const globalStyles = (
+    <GlobalStyles styles={{
+      '.css-i4bv87-MuiSvgIcon-root': {
+        display: 'none !important',
       },
+      '.css-1e6y48t-MuiButtonBase-root-MuiButton-root': {
+        display: 'none !important',
+      },
+      '.css-3jvy96-MuiTypography-root-MuiDatePickerToolbar-title': {
+        display: 'none !important',
+      },
+      '.css-1hbyad5-MuiTypography-root': {
+        display: 'none !important',
+      },
+      // Tambahkan selektor lainnya sesuai kebutuhan
+    }} />
+  );
+
+  const useStylesDate = makeStyles({
+    hiddenElement: {
+      // Menyembunyikan elemen spesifik
+      '& .MuiTypography-root': {
+        display: 'none !important',
+      },
+      '& .MuiDatePickerToolbar-title': {
+        display: 'none !important',
+      },
+      // Tambahkan selektor lain yang ingin kamu sembunyikan
+      '& .MuiButtonBase-root-MuiButton-root': {
+        display: 'none !important',
+      },
+      '& .MuiIconButton-root-MuiPickersToolbar-penIconButton': {
+        display: 'none !important',
+      },
+      '.css-i4bv87-MuiSvgIcon-root':{
+        display: 'none !important',
+      }
     },
   });
 
@@ -568,6 +584,7 @@ function Plane() {
   return (
     <>
       {contextHolder}
+      {globalStyles}
       <Modal size={size} open={open} onClose={handleClose}>
         <Modal.Header>
           <Modal.Title>Pilih Maskapai</Modal.Title>
@@ -627,12 +644,12 @@ function Plane() {
         sx={styleDesktop}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <StaticDatePicker
+              // className={classesdate.hiddenElement} // Terapkan class yang telah dibuat
               sx={{
                 // Directly target the child classes (not recommended for deep nesting)
-                '.css-hlj6pa-MuiDialogActions-root':{ display: 'none !important' },
-                '.css-1hbyad5-MuiTypography-root':{ display: 'none !important' },
-                '.css-3jvy96-MuiTypography-root-MuiDatePickerToolbar-title':{ display: 'none !important' },
-                '.css-z3au5x-MuiButtonBase-root-MuiIconButton-root-MuiPickersToolbar-penIconButton':{ display: 'none !important' }
+                '& .css-i4bv87-MuiSvgIcon-root':{ display: 'none' },
+                '& .css-1e6y48t-MuiButtonBase-root-MuiButton-root':{ display: 'none !important' },
+
               }}
               orientation="landscape" 
               value={tanggalKeberangkatan}
