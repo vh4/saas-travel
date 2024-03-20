@@ -18,7 +18,8 @@
 -ms-overflow-style: none;  /* IE and Edge */
 scrollbar-width: none;  /* Firefox */
 }
-.css-1hbyad5-MuiTypography-root{
+
+/* .css-1hbyad5-MuiTypography-root{
   display: none !important;
 
 }
@@ -26,7 +27,7 @@ scrollbar-width: none;  /* Firefox */
 
   display: none !important;
 
-}
+} */
 
 .customButtonStyle {
   border-radius: 5px !important; /* Ensures override */
@@ -42,13 +43,13 @@ scrollbar-width: none;  /* Firefox */
   border-color: rgb(229 231 235) !important; /* Warna border saat diklik */
 }
 
-.css-z3au5x-MuiButtonBase-root-MuiIconButton-root-MuiPickersToolbar-penIconButton {
+/* .css-z3au5x-MuiButtonBase-root-MuiIconButton-root-MuiPickersToolbar-penIconButton {
   display: none !important;
 }
 
 .css-hlj6pa-MuiDialogActions-root{
   display: none !important;
-}
+} */
 
 @layer base {
     input[type="number"]::-webkit-inner-spin-button,

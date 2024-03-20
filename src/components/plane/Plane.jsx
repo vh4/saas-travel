@@ -1,4 +1,4 @@
-import { Popper } from "@mui/material";
+import { Popper, createTheme } from "@mui/material";
 import * as React from "react";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
@@ -31,6 +31,31 @@ import { HolidaysContext, holidaysContent } from "../../App";
 import { CiCalendarDate } from "react-icons/ci";
 
 function Plane() {
+
+  const theme = createTheme({
+    components: {
+      // Name of the component
+      MuiTypography: {
+        styleOverrides: {
+          root: {
+            // Your style overrides here
+            '&.css-1hbyad5-MuiTypography-root': {
+              display: 'none',
+            },
+            '&.css-3jvy96-MuiTypography-root-MuiDatePickerToolbar-title': {
+              display: 'none',
+            },
+            '&.css-z3au5x-MuiButtonBase-root-MuiIconButton-root-MuiPickersToolbar-penIconButton': {
+              display: 'none',
+            },
+            '&.css-hlj6pa-MuiDialogActions-root': {
+              display: 'none',
+            },
+          },
+        },
+      },
+    },
+  });
 
   const style = {
     position: 'absolute',
@@ -602,6 +627,13 @@ function Plane() {
         sx={styleDesktop}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <StaticDatePicker
+              sx={{
+                // Directly target the child classes (not recommended for deep nesting)
+                '.css-hlj6pa-MuiDialogActions-root':{ display: 'none !important' },
+                '.css-1hbyad5-MuiTypography-root':{ display: 'none !important' },
+                '.css-3jvy96-MuiTypography-root-MuiDatePickerToolbar-title':{ display: 'none !important' },
+                '.css-z3au5x-MuiButtonBase-root-MuiIconButton-root-MuiPickersToolbar-penIconButton':{ display: 'none !important' }
+              }}
               orientation="landscape" 
               value={tanggalKeberangkatan}
               shouldDisableDate={(current) => {
