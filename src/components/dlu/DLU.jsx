@@ -2,7 +2,7 @@ import * as React from "react";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
-import { Chip } from "@mui/material";
+import { Chip, Box } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Popper } from "@mui/material";
@@ -19,9 +19,39 @@ import dayjs from "dayjs";
 import { useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { CiBoxList } from "react-icons/ci";
+import { CiBoxList, CiCalendarDate } from "react-icons/ci";
+import { HolidaysContext, holidaysContent } from "../../App";
+import { PickersDay } from "@mui/x-date-pickers/PickersDay/PickersDay";
+import { parseTanggalPelni } from "../../helpers/date";
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
+import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 
 function DLU() {
+
+    const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 350,
+    bgcolor: 'background.paper',
+    pb:4,
+    pr:2
+  };
+
+  const styleDesktop = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 540,
+    bgcolor: 'background.paper',
+    p: 4,
+  };
+
+  const { holidays, dispatchHolidays } = React.useContext(HolidaysContext);
+
   const [anchorEl, setAnchorEl] = React.useState("hidden");
   const handleClick = () => {
     anchorEl === "hidden" ? setAnchorEl("grid") : setAnchorEl("hidden");
@@ -48,6 +78,19 @@ function DLU() {
   const [type_vehicle, settype_vehicle] = useState([]);
   const [class_passengers, setclass_passengers] = useState([]);
   const [type_passanger, settype_passanger] = useState([]);
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {setOpen(false)};
+  const [currentViewDate, setCurrentViewDate] = useState(dayjs());
+
+  const findHolidayDescriptionsForMonth = (date) => {
+    const month = date.month(); // Bulan dari tanggal yang sedang dilihat
+    const year = date.year(); // Bulan dari tanggal yang sedang dilihat
+
+    const holidaysInMonth = holidays.filter(holiday => dayjs(holiday.start).month() === month && dayjs(holiday.start).year() === year);
+    return holidaysInMonth.map(holiday => holiday);
+  };
 
   const errorBerangkat = () => {
     messageApi.open({
@@ -550,6 +593,135 @@ function DLU() {
     <>
       {contextHolder}
       <div className="row bg-white border-t border-gray-200 w-full pr-0">
+              {/* desktop */}
+      <Modal
+        className="hidden xl:block"
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        {/* desktop */}
+        <Box 
+        sx={styleDesktop}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <StaticDatePicker
+              orientation="landscape" 
+              value={tanggal}
+              shouldDisableDate={(current) => {
+                const currentDate = dayjs();
+                const aheadDate = dayjs().add(3, 'months')
+                return current && (current < currentDate.startOf('day') || current > aheadDate);
+              }}
+              onChange={(newValue) => {
+                setTanggal(newValue);
+                handleClose();
+              }}
+
+              onMonthChange={(newViewDate) => {
+                setCurrentViewDate(newViewDate);
+              }}
+              renderDay={(day, selectedDates, pickersDayProps) => {
+                const formattedDate = day.format("YYYY-MM-DD");
+                const isHoliday = holidays.some(holiday => holiday.start === formattedDate);
+                const isSunday = day.day() === 0;
+            
+                // Create a custom style for holidays and Sundays
+                const dayStyle = isHoliday || isSunday ? { color: 'red' } : {};
+            
+                // Utilize the PickersDay component directly, applying custom styles
+                return (
+                  <PickersDay 
+                    {...pickersDayProps} 
+                    day={day} 
+                    sx={{ ...dayStyle }}
+                  />
+                );
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
+              <div style={{ overflowX: 'scroll', display: 'flex', gap: '8px' }} className="hidennscroll -mt-4 z-50">
+                {findHolidayDescriptionsForMonth(currentViewDate)?.map((e, index) => (
+                  <div key={index} className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50">
+                    <Typography variant="caption" display="block" style={{ fontSize: '10px' }}>
+                      {dayjs(e.start).format('DD')}.{e.summary}
+                    </Typography>
+                  </div>
+                ))}
+              </div>
+          </LocalizationProvider>
+          {/* Footer with OK and Cancel buttons */}
+          {/* <Box sx={{ marginTop: 4, display: 'flex', justifyContent: 'flex-end' }} className="space-x-4">
+            <Button onClick={handleClose} sx={{ mr: 1 }}>Cancel</Button>
+            <Button variant="contained" onClick={handleClose}>OK</Button>
+          </Box> */}
+        </Box>
+        {/* mobile */}
+      </Modal>
+
+      {/* mobile */}
+      <Modal
+        className="block xl:hidden"
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box 
+        sx={style}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <StaticDatePicker
+              value={tanggal}
+              shouldDisableDate={(current) => {
+                const currentDate = dayjs();
+                const aheadDate = dayjs().add(3, 'months')
+                return current && (current < currentDate.startOf('day') || current > aheadDate);
+              }}
+              onChange={(newValue) => {
+                setTanggal(newValue);
+                handleClose();
+              }}
+
+              onMonthChange={(newViewDate) => {
+                setCurrentViewDate(newViewDate);
+              }}
+              renderDay={(day, selectedDates, pickersDayProps) => {
+                const formattedDate = day.format("YYYY-MM-DD");
+                const isHoliday = holidays.some(holiday => holiday.start === formattedDate);
+                const isSunday = day.day() === 0;
+            
+                // Create a custom style for holidays and Sundays
+                const dayStyle = isHoliday || isSunday ? { color: 'red' } : {};
+            
+                // Utilize the PickersDay component directly, applying custom styles
+                return (
+                  <PickersDay 
+                    {...pickersDayProps} 
+                    day={day} 
+                    sx={{ ...dayStyle }}
+                  />
+                );
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
+              <div style={{ overflowX: 'scroll', display: 'flex', gap: '8px' }} className="hidennscroll -mt-2 z-50 mx-4">
+                {findHolidayDescriptionsForMonth(currentViewDate)?.map((e, index) => (
+                  <div key={index} className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50">
+                    <Typography variant="caption" display="block" style={{ fontSize: '10px' }}>
+                      {dayjs(e.start).format('DD')}.{e.summary}
+                    </Typography>
+                  </div>
+                ))}
+              </div>
+          </LocalizationProvider>
+          {/* Footer with OK and Cancel buttons */}
+          {/* <Box sx={{ marginTop: 4, display: 'flex', justifyContent: 'flex-end' }} className="space-x-4">
+            <Button onClick={handleClose} sx={{ mr: 1 }}>Cancel</Button>
+            <Button variant="contained" onClick={handleClose}>OK</Button>
+          </Box> */}
+        </Box>
+        {/* mobile */}
+      </Modal>
         <div class="w-full px-4 py-4 rounded-lg shadow-xs">
           <form className="w-full">
             <>
@@ -718,31 +890,16 @@ function DLU() {
                     <small className="mb-2 text-black">
                       Tanggal Berangkat
                     </small>
-                    <LocalizationProvider
-                      dateAdapter={AdapterDayjs}
-                      style={{ cursor: "pointer" }}
-                    >
-                     <DatePicker
-                      style={{ cursor: 'pointer' }}
-                      className="border-gray-240 py-2"
-                      appearance="subtle"
-                      value={tanggal}
-                      open={isDatePickerOpen} // Pass the state to the open prop
-                      inputReadOnly={true}
-                      onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
-                      inputStyle={{ color: 'red' }}
-                      format="DD/MM/YYYY"
-                      onChange={(value) => {
-                        setTanggal(value);
-                      }}
-                      size="large"
-                      disabledDate={(current) => {
-                        const currentDate = dayjs();
-                        const aheadDate = dayjs().add(3, 'months')
-                        return current && (current < currentDate.startOf('day') || current > aheadDate);
-                      }}
-                    />
-                    </LocalizationProvider>
+                    <button type="button" className="border py-[10px] customButtonStyle w-full block text-black" onClick={handleOpen}>
+                      <div className="flex justify-between mx-4 items-center">
+                        <div>
+                        {`${
+                            parseTanggalPelni(tanggal)
+                      } `}
+                        </div>
+                        <CiCalendarDate size={22} className="text-gray-400" />
+                      </div>
+                    </button>
                   </FormControl>
                   <FormControl sx={{ m: 1.1, minWidth: 130 }}>
                     <small className="mb-2 text-black">
@@ -856,11 +1013,11 @@ function DLU() {
                         </small>
                         <div className="hidden md:block">
                         </div>
-                        <Button className="w-full block text-black" size="large" onClick={handleClick}>
-                        {`${
-                            parseInt(adult) + parseInt(infant) + parseInt(child)
-                          } Penumpang`}
-                        </Button>
+                          <button type="button" className="border py-[9px] customButtonStyle w-full block text-black -mx-1.5" onClick={handleClick}>
+                            {`${
+                                parseInt(adult) + parseInt(infant) + parseInt(child)
+                              } Penumpang`}
+                          </button>
                         <div
                           id="basic-menu"
                           className={`${anchorEl} relative md:absolute top-0 md:top-20 md:z-10 grid w-full md:w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg`}

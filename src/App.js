@@ -1,4 +1,4 @@
-import React, {createContext, useEffect, useReducer} from "react";
+import React, {createContext, useEffect, useReducer, useState} from "react";
 import { BrowserRouter, Route, Routes, useLocation, useNavigate} from "react-router-dom";
 
 import TransaksiKai from "./pages/transaksi/TransaksiKai";
@@ -36,17 +36,19 @@ import TiketPesawat from "./pages/plane/Tiket";
 import Page404 from "./pages/partials/404";
 import Logout from "./pages/Logout";
 import KonfirmasiTransit from "./pages/kai/KonfirmasiTransit";
+import axios from "axios";
 
 export const TiketContext = createContext();
 export const NavContext = createContext();
 export const LogoutContent = createContext();
 export const LoginContent = createContext();
+export const HolidaysContext = createContext();
 
 const NormalizeRoute = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  useEffect(() => {
+ useEffect(() => {
     const path = location.pathname.replace(/\/\/+/g, '/');
     if (location.pathname !== path) {
       navigate(path, { replace: true });
@@ -77,6 +79,21 @@ function App() {
     setShowModal: true,
 
   }
+
+  const initialStateHolidays = []; // Initial state for holidays
+
+  useEffect(() => {
+    const fetchHolidays = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_HOST_API}/travel/holidays`);
+        dispatchHolidays({ type: 'SET_HOLIDAYS', payload: response.data });
+      } catch (error) {
+        console.error("Error fetching holidays:", error);
+      }
+    };
+
+    fetchHolidays();
+  }, []);
   
   const reducer = (state, action) => {
       switch(action.type) {
@@ -99,15 +116,26 @@ function App() {
       }
   }
 
+  const holidaysReducer = (state, action) => {
+    switch (action.type) {
+      case 'SET_HOLIDAYS':
+        return action.payload;
+      default:
+        return state;
+    }
+  };
+
   const [pay, dispatch] =  useReducer(reducer, initialStatePembayaran);
   const [logout, setLogout] =  useReducer(reducer, initialStateLogout);
   const [nav, setNav] =  useReducer(reducer, initialStateNavigation);
   const [loginComponent, setLoginComponent] =  useReducer(reducer, initialStateLogin);
+  const [holidays, dispatchHolidays] = useReducer(holidaysReducer, initialStateHolidays);
 
   return (
     <div className="App">
        <BrowserRouter>
-        <LogoutContent.Provider value={{logout,setLogout}} >
+       <HolidaysContext.Provider value={{ holidays, dispatchHolidays }}>
+          <LogoutContent.Provider value={{logout,setLogout}} >
           <TiketContext.Provider value={{pay,dispatch}}>
             <NavContext.Provider value={{nav,setNav}}>
               <LoginContent.Provider value={{loginComponent, setLoginComponent}}>
@@ -146,6 +174,7 @@ function App() {
             </NavContext.Provider>  
           </TiketContext.Provider>  
           </LogoutContent.Provider>
+       </HolidaysContext.Provider>
       </BrowserRouter>     
     </div>
   );
