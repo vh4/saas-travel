@@ -5,12 +5,12 @@
 
 /* Your global styles or in the same component where the InputNumber is used */
 .hide-dropdown-icon .rs-input-number-dropdown-toggle {
-  display: none;
+  display: none !important;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .hidennscroll::-webkit-scrollbar {
-  display: none;
+  display: none !important;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
@@ -19,12 +19,12 @@
 scrollbar-width: none;  /* Firefox */
 }
 .css-1hbyad5-MuiTypography-root{
-  display: none;
+  display: none !important;
 
 }
 .css-3jvy96-MuiTypography-root-MuiDatePickerToolbar-title {
 
-  display: none;
+  display: none !important;
 
 }
 
