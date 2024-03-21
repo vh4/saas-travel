@@ -73,7 +73,7 @@ app.get('/travel/holidays', async (req, res) => {
     // Split the translated string back into an array
     const translatedSummaries = translated.text.split(':::');
 
-    // Map the translated summaries back to their respective events
+    // Map the translated summaries back to their respective events //
     const holidays = response.data.items.map((item, index) => ({
       start: item.start.date, // or item.start.dateTime for non-all-day events
       summary: translatedSummaries[index],
