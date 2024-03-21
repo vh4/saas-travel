@@ -146,9 +146,9 @@ function App() {
                   <Route path="/pelni/search" element={< SearchPelni/>}></Route>
                   <Route path="/pelni/booking/:id" element={< BookingPelni/>}></Route>
                   <Route path="/pelni/payment/:id" element={< PaymentPelni/>}></Route>
-                  <Route path="/dlu/search" element={< SearchDlu/>}></Route>
-                  <Route path="/dlu/booking/:id" element={< BookingDlu/>}></Route>
-                  <Route path="/dlu/payment/:id" element={< Pembayaran/>}></Route>
+                  {/* <Route path="/dlu/search" element={< SearchDlu/>}></Route> */}
+                  {/* <Route path="/dlu/booking/:id" element={< BookingDlu/>}></Route> */}
+                  {/* <Route path="/dlu/payment/:id" element={< Pembayaran/>}></Route> */}
                   <Route path="/flight/booking/:id" element={< BookingPesawat/>}></Route>
                   <Route path="/flight/payment/" element={< PembayaranPesawat/>}></Route>
                   <Route path="/flight/tiket-pesawat" element={< TiketPesawat/>}></Route>
@@ -162,7 +162,7 @@ function App() {
                   <Route path="/transaksi/kai" element={<TransaksiKai />}></Route>
                   <Route path="/transaksi/pesawat" element={<TransaksiPesawat />}></Route>
                   <Route path="/transaksi/pelni" element={<TransaksiPelni />}></Route>
-                  <Route path="/transaksi/dlu" element={<TransaksiDlu />}></Route>
+                  {/* <Route path="/transaksi/dlu" element={<TransaksiDlu />}></Route> */}
 
                   {/* <Route path="/booking/kai" element={<BookingKaiList />}></Route> */}
                   {/* <Route path="/booking/pesawat" element={<BookingPesawatList />}></Route> */}

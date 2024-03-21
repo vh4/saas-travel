@@ -25,12 +25,12 @@ export default function Sidebar({nameMenu, setNameMenu}) {
                             <span className="flex-1 ml-3 whitespace-nowrap text-[15px] text-black">Pelni Kapal</span>
                         </div>
                     </li>
-                    <li>
+                    {/* <li>
                         <div onClick={() => setNameMenu('dlu')} className={`flex cursor-pointer px-4 ${ nameMenu === 'dlu' ? 'border-b-2 border-blue-500' : ''} items-center p-2 text-base font-normal text-gray-900   hover:border-blue-500 hover:border-b-2 `}>
                         <GiBattleship className='text-black' size={20} />
                             <span className="flex-1 ml-3 whitespace-nowrap text-[15px] text-black">DLU Kapal</span>
                         </div>
-                    </li>
+                    </li> */}
                 </ul>
             </div>
         </aside>

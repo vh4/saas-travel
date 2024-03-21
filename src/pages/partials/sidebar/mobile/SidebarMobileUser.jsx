@@ -102,14 +102,14 @@ export default function SidebarMobileUser({ pathSidebar }) {
                   Pelni
                 </div>
               </Link>
-              <Link
+              {/* <Link
                 to="/transaksi/dlu"
                 className={`block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}
               >
                 <div className="text-black text-left text-base font-normal">
                   Kapal Dlu
                 </div>
-              </Link>
+              </Link> */}
             </div>
 
             {/* <div

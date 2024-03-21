@@ -92,17 +92,16 @@ export default function SidebarUser({pathSidebar}) {
                         </div>
                         </Link>
                     </li>
-                    <li className=''>
+                    {/* <li className=''>
                         <Link to="/transaksi/dlu">
                         <div onClick={(e) => dropdownTransaksi === true ? setDropdownTransaksi(false) : setDropdownTransaksi(true)}  className={`${ pathSidebar === '/transaksi/dlu' ? 'bg-cyan-100' : ''} flex justify-between cursor-pointer items-center p-2 text-base font-normal text-black rounded-lg  hover:bg-cyan-100 `}>
                             <div className='flex items-center'>
                                <GiBattleship className="text-black" size={20} />
                                 <span className="flex-1 ml-3 whitespace-nowrap text-sm">DLU</span>
                             </div>
-                            {/* { dropdownTransaksi ? <MdOutlineKeyboardArrowDown className='text-black' size={18} /> : <MdOutlineKeyboardArrowUp className='text-black' size={18} />} */}
                         </div>
                         </Link>
-                    </li>
+                    </li> */}
                     {/* <div
                     className={`${!dropdownTransaksi ? 'block' : 'hidden'}`}
                     >
