@@ -9,8 +9,10 @@ import Page500 from "../components/500";
 import { IoBoatSharp } from "react-icons/io5";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { Placeholder } from "rsuite";
-import { CiBoxList } from "react-icons/ci";
+import { CiBoxList, CiCircleMore, CiTimer } from "react-icons/ci";
 import { HiOutlinePrinter } from "react-icons/hi2";
+import dayjs from "dayjs";
+import { useSearchParams } from "react-router-dom";
 
 export default function ViewBooking({ path }) {
   const [data, setData] = useState([]);
@@ -28,6 +30,11 @@ export default function ViewBooking({ path }) {
 
   const [err, setErr] = useState(false);
   const [errPage, setErrPage] = useState(false);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const hardcode_inq = searchParams.get('hc_inq')
+  const hardcode_pay = searchParams.get('hc_pay')
+
 
   useEffect(() => {
     if (token == null || token == undefined) {
@@ -77,8 +84,22 @@ export default function ViewBooking({ path }) {
       }
 
       const datas = response.data;
+      let resp = datas.data || [];
 
-      setData(datas.data);
+      const harcodeDataInq = { "id_transaksi": 293892199, "tanggal_transaksi": "Jumat, 22 Maret 2024", "kode_booking": "8890583925", "nama_kapal": "KM.KELUD", "origin": "TANJUNG PRIOK (JAKARTA)", "destination": "BELAWAN (MEDAN)", "tanggal_keberangkatan": "20240322", "hari_keberangkatan": "Jumat", "jam_keberangkatan": "23:00", "tanggal_kedatangan": "20240325", "hari_kedatangan": "Senin", "subClass": "C", "jam_kedatangan": "15:00", "penumpang": [ { "nama": "Komang J" } ], "komisi": 0, "url_etiket": "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=293892199", "url_struk": "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=293892199", "expiredDate": dayjs().add(1, "hours"), "url_image": "https://rajabiller.fastpay.co.id/travel/app/generate_image_etiket?id_transaksi=293892199", "nominal": "964000", "nominal_admin": "10000", "status": { "id_transaksi": 293892199, "paymentCode": "8890583925", "Produk": "Tiket Pelni", "Status": "Booking", "status_booking": "Sukses", "status_payment": "Belum ada payment" } }
+      const harcodeDataPay =  { "id_transaksi": 293887921, "tanggal_transaksi": "Jumat, 22 Maret 2024", "kode_booking": "8830480474", "nama_kapal": "KM.KELUD", "origin": "TANJUNG PRIOK (JAKARTA)", "destination": "BELAWAN (MEDAN)", "tanggal_keberangkatan": "20240322", "hari_keberangkatan": "Jumat", "jam_keberangkatan": "23:00", "tanggal_kedatangan": "20240325", "hari_kedatangan": "Senin", "subClass": "A", "jam_kedatangan": "15:00", "penumpang": [ { "nama": "Fathoni Waseso J" } ], "komisi": 0, "url_etiket": "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=293887921", "url_struk": "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=293887921", "expiredDate": dayjs().add(1, "hours"), "url_image": "https://rajabiller.fastpay.co.id/travel/app/generate_image_etiket?id_transaksi=293887921", "nominal": "1720000", "nominal_admin": "10000", "status": { "id_transaksi": 293887921, "paymentCode": "8830480474", "Produk": "Tiket Pelni", "Status": "Payment", "status_booking": "Sukses", "status_payment": "Sukses" }}
+
+
+      if (hardcode_pay === '2') {
+        resp = [harcodeDataPay, ...resp]; // Append if not present
+      }
+  
+      if (hardcode_inq === '2') {
+        resp = [harcodeDataInq, ...resp]; // Append if not present
+      }
+
+      setData(resp);
+
       setIsLoading(false);
     } catch (e) {
       setIsLoading(false);
@@ -359,11 +380,11 @@ export default function ViewBooking({ path }) {
                 data !== undefined &&
                 data.length !== undefined &&
                 data.length !== 0 ? (
-					<div className="mt-4 xl:mt-8">
+					        <div className="mt-4 xl:mt-8">
                     {data.map((e, i) => (
-                      <div className="w-full mb-4">
+                        <div className="mt-4 xl:mt-0">
                         <div className="w-full profile-header">
-                          <div className="p-2 md:p-8 mt-12 md:mt-0">
+                          <div className="p-2 md:px-8 md:py-6 mt-4 mb-8 md:mb-0 md:mt-0">
                             <div className="flex justify-between items-end">
                               {e.status?.Status == "Booking" ? (
                               <>
@@ -422,46 +443,51 @@ export default function ViewBooking({ path }) {
                                  - 
                               </div>
                             </div> */}
-                              <div className="flex justify-between space-x-0 xl:space-x-4 items-center pt-4 xl:pt-4">
-                                <div className="flex space-x-4 items-center">
-                                {
-                                  e.status?.Status == "Booking" ? (
-                                  <>
-                                  <div className="text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white inline-block">
-                                  Sisa waktu{" "}
-                                  {remainingTimes[i] &&
-                                  new Date(e.expiredDate).getTime() >
-                                    new Date().getTime()
-                                    ? remainingTime(remainingTimes[i])
-                                    : " habis."}
-                                </div>
-                                  </>
-                                  ) : (
-                                    <>
-                                      <div className="text-xs py-1 px-3 rounded-full bg-green-500 text-white">
-                                        Transaksi Sukses
-                                      </div>                                   
-                                    </>
-                                  )
-                                }
-                                <div
-                                  onClick={(e) => openModalBayar(e, i)}
-                                  className="cursor-pointer text-blue-500 font-bold text-xs"
-                                >
-                                  Lihat Detail
-                                </div>
-                                </div>
-                                {e.status?.Status !== "Booking"  && (
-                                  <>
-                                    <a href={`https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=${e.status.id_transaksi}`} target="_blank">
-                                      <div className="flex space-x-2 items-center text-black">
-                                        <HiOutlinePrinter size={16} />
-                                        <div className="text-xs">Cetak</div>
-                                      </div>
-                                    </a>
-                                  </>
-                                )}
-                              </div>
+                                  <div className="flex justify-between space-x-0 xl:space-x-4 items-center pt-4 xl:pt-4">
+                                    <div className="flex space-x-4 items-center">
+                                    {
+                                      e.status?.Status == "Booking" ? (
+                                      <>
+                                      <div className="flex space-x-2 items-center text-xs py-1 text-black">
+                                        <CiTimer size={16} />
+                                        <div>
+                                          {remainingTimes[i] &&
+                                          new Date(e.expiredDate).getTime() >
+                                            new Date().getTime()
+                                            ? remainingTime(remainingTimes[i])
+                                            : " habis."}
+                                        </div>
+                                    </div>
+                                      </>
+                                      ) : (
+                                        <>
+                                          <div className="text-xs py-1 px-3 rounded-full bg-green-500 text-white">
+                                            Transaksi Sukses
+                                          </div>                                   
+                                        </>
+                                      )
+                                    }
+                                    {e.status?.Status !== "Booking"  && (
+                                      <>
+                                        <a href={`https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=${e.status.id_transaksi}`} target="_blank">
+                                          <div className="flex space-x-2 items-center text-black">
+                                            <HiOutlinePrinter size={16} />
+                                            <div className="text-xs">Cetak</div>
+                                          </div>
+                                        </a>
+                                      </>
+                                    )}
+                                    <div className="flex space-x-2 items-center">
+                                      <CiCircleMore size={16} />                                    
+                                      <a
+                                        onClick={(e) => openModalBayar(e, i)}
+                                        className="cursor-pointer text-black text-xs hover:text-black"
+                                      >
+                                        Lihat Detail
+                                      </a>
+                                    </div>
+                                    </div>
+                                  </div>
                             </div>
                           </div>
                         </div>
