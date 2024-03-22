@@ -18,7 +18,6 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const { getInfoClientAll } = require('./utils/utils');
 const axios = require('axios')
-const translate = require('@iamtraction/google-translate');
 
 const app = express();
 const port = 9999;
@@ -58,28 +57,21 @@ app.use('/travel', DLURouter);
 
 app.get('/travel/holidays', async (req, res) => {
   try {
-    const response = await axios.get('https://www.googleapis.com/calendar/v3/calendars/en.indonesian%23holiday%40group.v.calendar.google.com/events', {
+    //https://calendar.google.com/calendar/embed?src=en.indonesian.official%23holiday%40group.v.calendar.google.com&ctz=Asia%2FJakarta
+    const response = await axios.get('https://www.googleapis.com/calendar/v3/calendars/id.indonesian.official%23holiday%40group.v.calendar.google.com/events', {
       params: {
         key: 'AIzaSyDvmiGaeS47xTleSsWyLX3APlDUUOF5igQ',
+        ctz: 'Asia%2FJakarta'
       },
     });
 
-    // Concatenate all summaries into one string with a unique delimiter
-    const allSummaries = response.data.items.map(item => item.summary).join(':::');
-    
-    // Translate the concatenated string
-    const translated = await translate(allSummaries, { to: 'id' });
-    
-    // Split the translated string back into an array
-    const translatedSummaries = translated.text.split(':::');
-
-    // Map the translated summaries back to their respective events //
-    const holidays = response.data.items.map((item, index) => ({
+    const holidays = response.data.items.map(item => ({
       start: item.start.date, // or item.start.dateTime for non-all-day events
-      summary: translatedSummaries[index],
+      summary: item.summary,
     }));
 
     res.json(holidays);
+    
   } catch (error) {
     console.error(error);
     res.status(500).json([]);
