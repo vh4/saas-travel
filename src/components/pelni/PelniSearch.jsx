@@ -2,22 +2,190 @@ import * as React from "react";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
-import { Chip } from "@mui/material";
+import { Box, Chip } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Popper } from "@mui/material";
 import { IoBoatSharp } from "react-icons/io5";
+import { useNavigate, createSearchParams } from "react-router-dom";
 import onClickOutside from "react-onclickoutside";
-import { makeStyles } from "@mui/styles";
 import { InputGroup } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
-import { Button, message, DatePicker } from "antd";
+import { Button,  message } from "antd";
 import Cookies from "js-cookie";
 import { AiOutlineSwap } from "react-icons/ai";
 import dayjs from "dayjs";
 import { useState } from "react";
+import ModalMui from "@mui/material/Modal";
+import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
+import { parseTanggalPelniMonth } from "../../helpers/date";
+import { CiCalendarDate } from "react-icons/ci";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { makeStyles } from "@mui/styles";
 
-function PELNI() {
+
+function Pelni() {
+  const [anchorEl, setAnchorEl] = React.useState("hidden");
+  const handleClick = () => {
+    anchorEl === "hidden" ? setAnchorEl("grid") : setAnchorEl("hidden");
+  };
+  
+  Pelni.handleClickOutside = () => {
+    setAnchorEl("hidden");
+  };
+  
+  const [openDate, setOpenDate] = React.useState(false);
+  const [openMonth, setopenMonth] = React.useState(false);
+  const [openYear, setopenYear] = React.useState(true);
+  
+  const handleOpenDate = () => setOpenDate(true);
+  const handleCloseDate = () => {
+    const maxYear = dayjs().add(2, 'year').year();
+    const currentMonth = dayjs().month();
+  
+    if ((tanggal.year() === maxYear && tanggal.month() > currentMonth) || 
+        (tanggal.year() === dayjs().year() && tanggal.month() < dayjs().month())
+    ) {
+      setTanggal(dayjs().set('year', maxYear).set('month', currentMonth));
+    } 
+  
+    setOpenDate(false);
+    setopenYear(true);
+    setopenMonth(false);
+  };
+  
+  const styleDesktop = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    width: 400,
+    bgcolor: "background.paper",
+    transform: "translate(-50%, -50%)",
+    px: 2,
+    pt: 2,
+  };
+  
+  const navigate = useNavigate();
+  
+  const [isLoading, setLoading] = React.useState(false);
+  const [pelniStasiun, setpelniStasiun] = React.useState({});
+  
+  const [openBerangka, SetopenBerangka] = React.useState(false);
+  const [openTujuan, setOpenTujuan] = React.useState(false);
+
+  const [pelniData, setPelniData] = React.useState([]);
+  const loadingBerangkat = openBerangka && pelniData.length === 0;
+  const loadingTujuan = openTujuan && pelniData.length === 0;
+  const [messageApi, contextHolder] = message.useMessage();
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  
+  const useStylesDate = makeStyles({
+    hideCalendarHeader: {
+      '& .MuiPickersCalendarHeader-root': {
+        display: 'none',
+      },
+    },
+  });
+
+  const classesDate = useStylesDate();
+  
+
+  const errorBerangkat = () => {
+    messageApi.open({
+      type: "error",
+      content: "Pelabuhan Asal tidak boleh sama dengan Pelabuhan Tujuan.",
+      duration: 10, // Durasi pesan 5 detik
+      top: "50%", // Posisi pesan di tengah layar
+      className: "custom-message", // Tambahkan kelas CSS kustom jika diperlukan
+    });
+  };
+
+  const errorTujuan = () => {
+    messageApi.open({
+      type: "error",
+      content: "Pelabuhan Tujuan tidak boleh sama dengan Pelabuhan Asal.",
+      duration: 10, // Durasi pesan 5 detik
+      top: "50%", // Posisi pesan di tengah layar
+      className: "custom-message", // Tambahkan kelas CSS kustom jika diperlukan
+    });
+  };
+
+  const messageCustomError = (message) => {
+    messageApi.open({
+      type: "error",
+      content: message,
+      duration: 10, // Durasi pesan 5 detik
+      top: "50%", // Posisi pesan di tengah layar
+      className: "custom-message", // Tambahkan kelas CSS kustom jika diperlukan
+    });
+  };
+
+  let depa = Cookies.get("d-depa");
+  let arri = Cookies.get("d-arri");
+  let lakiCookie = Cookies.get("d-laki");
+  let wanitaCookie = Cookies.get("d-wanita");
+
+  const tgl = Cookies.get("d-tanggal");
+
+  let parsedTgl = null;
+
+  try {
+    lakiCookie = !isNaN(lakiCookie) ? lakiCookie : null;
+  } catch (error) {
+    lakiCookie = null;
+  }
+
+  try {
+    wanitaCookie = !isNaN(wanitaCookie) ? wanitaCookie : null;
+  } catch (error) {
+    wanitaCookie = null;
+  }
+
+  try {
+    depa = depa ? JSON.parse(depa) : null;
+  } catch (error) {
+    depa = null;
+  }
+
+  try {
+    arri = arri ? JSON.parse(arri) : null;
+  } catch (error) {
+    arri = null;
+  }
+
+  try {
+    parsedTgl = tgl ? tgl : null;
+    if (!isNaN(dayjs(parsedTgl))) {
+      parsedTgl = parsedTgl ? parsedTgl : null;
+    } else {
+      parsedTgl = null;
+    }
+  } catch (error) {
+    parsedTgl = null;
+  }
+
+  depa =
+    depa?.CODE && depa?.NAME
+      ? depa
+      : { CODE: "431", NAME: "TANJUNG PRIOK (JAKARTA)" };
+  arri =
+    arri?.CODE && arri?.NAME ? arri : { CODE: "144", NAME: "BELAWAN (MEDAN)" };
+  lakiCookie = lakiCookie ? lakiCookie : 1;
+  wanitaCookie = wanitaCookie ? wanitaCookie : 0;
+
+  const today = parsedTgl ? dayjs(parsedTgl) : dayjs().startOf("month");
+
+  // Input
+  const [tanggal, setTanggal] = React.useState(today);
+
+  const [laki, setLaki] = React.useState(lakiCookie);
+  const [wanita, setWanita] = React.useState(wanitaCookie);
+
+  const [keberangkatan, setKeberangkatan] = React.useState(depa);
+  const [tujuan, setTujuan] = React.useState(arri);
+
+  const i = 0;
+
   const useStyles = makeStyles((theme) => ({
     inputRoot: {
       color: "black",
@@ -62,130 +230,7 @@ function PELNI() {
       },
     },
   }));
-
-  const PopperMy = function (props) {
-    return (
-      <Popper {...props} style={{ width: 350 }} placement="bottom-start" />
-    );
-  };
-
   const classes = useStyles();
-
-  const [pelni, setPelni] = React.useState({});
-  const [pelniData, setPelniData] = React.useState([]);
-  const i = 0;
-
-  const [openBerangka, SetopenBerangka] = React.useState(false);
-  const [openTujuan, setOpenTujuan] = React.useState(false);
-
-  const loadingBerangkat = openBerangka && pelniData.length === 0;
-  const loadingTujuan = openTujuan && pelniData.length === 0;
-  const [messageApi, contextHolder] = message.useMessage();
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-
-  const errorBerangkat = () => {
-    messageApi.open({
-      type: 'error',
-      content: 'Pelabuhan berangkat tidak boleh sama dengan pelabuhan tujuan.',
-      duration: 10, // Durasi pesan 5 detik
-      top: '50%', // Posisi pesan di tengah layar
-      className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
-    });
-  };
-
-  const errorTujuan = () => {
-    messageApi.open({
-      type: 'error',
-      content: 'Pelabuhan tujuan tidak boleh sama dengan pelabuhan berangkat.',
-      duration: 10, // Durasi pesan 5 detik
-      top: '50%', // Posisi pesan di tengah layar
-      className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
-    });
-  };
-
-
-  const messageCustomError = (message) => {
-    messageApi.open({
-      type: 'error',
-      content: message,
-      duration: 10, // Durasi pesan 5 detik
-      top: '50%', // Posisi pesan di tengah layar
-      className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
-    });
-  };
-
-  let depa = Cookies.get('d-depa');
-  let arri = Cookies.get('d-arri');
-  let lakiCookie = Cookies.get('d-laki');
-  let wanitaCookie = Cookies.get('d-wanita');
-
-  const tgl = Cookies.get('d-tanggal');
-  
-  let parsedTgl = null;
-
-  try {
-    lakiCookie = !isNaN(lakiCookie) ? lakiCookie : null;
-
-  } catch (error) {
-    lakiCookie = null;
-  }
-
-  try {
-    wanitaCookie = !isNaN(wanitaCookie) ? wanitaCookie : null;
-
-  } catch (error) {
-    wanitaCookie = null;
-  }
-
-  try {
-    depa = depa ? JSON.parse(depa) : null;
-  } catch (error) {
-    depa = null;
-  }
-  
-  try {
-    arri = arri ? JSON.parse(arri) : null;
-  } catch (error) {
-    arri = null;
-  }
-  
-  try {
-    parsedTgl = tgl ? tgl : null;
-    if (!isNaN(dayjs(parsedTgl))) {
-      parsedTgl = parsedTgl ? parsedTgl : null;
-    } else {
-      parsedTgl = null;
-    }
-  } catch (error) {
-    parsedTgl = null;
-  }
-  
-  depa = depa?.CODE && depa?.NAME ? depa : { CODE: "431", NAME: "TANJUNG PRIOK (JAKARTA)" };
-  arri = arri?.CODE && arri?.NAME ? arri : { CODE: "144", NAME: "BELAWAN (MEDAN)" };
-  lakiCookie = lakiCookie ? lakiCookie : 1;
-  wanitaCookie = wanitaCookie ? wanitaCookie : 0;
-
-  const today = parsedTgl ? dayjs(parsedTgl) : dayjs().startOf('month');
-
-
-  // Input
-  const [tanggal, setTanggal] = React.useState(today);
-  const [laki, setLaki] = React.useState(lakiCookie);
-  const [wanita, setWanita] = React.useState(wanitaCookie);
-
-  const [keberangkatan, setKeberangkatan] = React.useState(depa);
-  const [tujuan, setTujuan] = React.useState(arri);
-
-  //input
-  const [isLoading, setLoading] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState("hidden");
-  const handleClick = () => {
-    anchorEl === "hidden" ? setAnchorEl("grid") : setAnchorEl("hidden");
-  };
-
-  PELNI.handleClickOutside = () => {
-    setAnchorEl("hidden");
-  };
 
   function sleep(delay = 0) {
     return new Promise((resolve) => {
@@ -205,7 +250,7 @@ function PELNI() {
       await sleep(1e3); // For demo purposes.
 
       if (active) {
-        setPelniData([...pelni.data]);
+        setPelniData([...pelniStasiun.data]);
       }
     })();
 
@@ -232,7 +277,7 @@ function PELNI() {
       await sleep(1e3); // For demo purposes.
 
       if (active) {
-        setPelniData([...pelni.data]);
+        setPelniData([...pelniStasiun.data]);
       }
     })();
 
@@ -246,6 +291,16 @@ function PELNI() {
       setPelniData([]);
     }
   }, [openTujuan]);
+
+  React.useEffect(() => {
+    getPelnitDataStasiun();
+  }, []);
+
+  const PopperMy = function (props) {
+    return (
+      <Popper {...props} style={{ width: 350 }} placement="bottom-start" />
+    );
+  };
 
   function plusLaki(e) {
     e.preventDefault();
@@ -289,27 +344,6 @@ function PELNI() {
     }
   }
 
-  React.useEffect(() => {
-    getPelnidata();
-  }, []);
-
-  async function getPelnidata() {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_HOST_API}/travel/pelni/get_origin`,
-        {
-          token: JSON.parse(
-            localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-          ),
-        }
-      );
-
-      setPelni(response.data);
-    } catch (error) {
-      setPelni({ message: error.message });
-    }
-  }
-
   function addLeadingZero(num) {
     if (num < 10) {
       return "0" + num;
@@ -318,40 +352,48 @@ function PELNI() {
     }
   }
 
-  async function handlerCariPelni(e) {
+  async function getPelnitDataStasiun() {
+    const response = await axios.post(
+      `${process.env.REACT_APP_HOST_API}/travel/pelni/get_origin`,
+      {
+        token: JSON.parse(
+          localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+        ),
+      }
+    );
+
+    setpelniStasiun(response.data);
+  }
+
+  function handleSubmitPelni(e) {
+    e.preventDefault();
     setLoading(true);
 
-    const givenDate = dayjs(tanggal, 'YYYY-MM');
+    const givenDate = dayjs(tanggal, "YYYY-MM");
     const daynow = dayjs();
-  
-    let startDate = givenDate.startOf('month').format('YYYY-MM-DD');
-    let endDate = givenDate.endOf('month').format('YYYY-MM-DD');
-  
+
+    let startDate = givenDate.startOf("month").format("YYYY-MM-DD");
+    let endDate = givenDate.endOf("month").format("YYYY-MM-DD");
+
     if (dayjs(startDate).isBefore(daynow)) {
-      startDate = daynow.format('YYYY-MM-DD');
+      startDate = daynow.format("YYYY-MM-DD");
     }
-  
+
     if (dayjs(endDate).isBefore(daynow)) {
-      endDate = daynow.format('YYYY-MM-DD');
+      endDate = daynow.format("YYYY-MM-DD");
     }
-  
 
     setTimeout(() => {
       e.preventDefault();
       setLoading(false);
 
-
-      if(keberangkatan === null && tujuan === null){
-        messageCustomError('Pilih Pelabuhan Asal & Pelabuhan Tujuan.')
-      }
-      else if(keberangkatan === null){
-        messageCustomError('Pilih Pelabuhan Asal.')
-        
-      }else if(tujuan === null){
-        messageCustomError('Pilih Pelabuhan Tujuan.')
-
-      }else{
-
+      if (keberangkatan === null && tujuan === null) {
+        messageCustomError("Pilih Pelabuhan Asal & Pelabuhan Tujuan.");
+      } else if (keberangkatan === null) {
+        messageCustomError("Pilih Pelabuhan Asal.");
+      } else if (tujuan === null) {
+        messageCustomError("Pilih Pelabuhan Tujuan.");
+      } else {
         const params = {
           origin: keberangkatan.CODE,
           destination: tujuan.CODE,
@@ -362,20 +404,20 @@ function PELNI() {
           laki: laki,
           wanita: wanita,
         };
-  
+
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + 7);
-  
+
         const cookieOptions = {
-        expires: expirationDate,
+          expires: expirationDate,
         };
-  
-        Cookies.set('d-depa', JSON.stringify(keberangkatan), cookieOptions);
-        Cookies.set('d-arri', JSON.stringify(tujuan), cookieOptions);
-        Cookies.set('d-laki', laki, cookieOptions);
-        Cookies.set('d-wanita', wanita, cookieOptions);
-        Cookies.set('d-tanggal', tanggal, cookieOptions);
-  
+
+        Cookies.set("d-depa", JSON.stringify(keberangkatan), cookieOptions);
+        Cookies.set("d-arri", JSON.stringify(tujuan), cookieOptions);
+        Cookies.set("d-laki", laki, cookieOptions);
+        Cookies.set("d-wanita", wanita, cookieOptions);
+        Cookies.set("d-tanggal", tanggal, cookieOptions);
+
         var str = "";
         for (var key in params) {
           if (str != "") {
@@ -385,28 +427,123 @@ function PELNI() {
         }
   
         window.location = `search?${str}`;
-
+        
       }
-
     }, 1000);
   }
 
-
   const changeStatiun = () => {
-
     setKeberangkatan(tujuan);
     setTujuan(keberangkatan);
-
-  }
+  };
 
   const disabledDate = (current) => {
-    return current && current < dayjs().endOf('day');
+    return current && current < dayjs().endOf("day");
   };
 
   return (
     <>
       {contextHolder}
       <div className="flex justify-center row bg-white border-t border-gray-200 w-full pr-0">
+      <ModalMui
+          className=""
+          open={openDate}
+          onClose={handleCloseDate}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+        <Box sx={styleDesktop}>
+            <div className="block">
+            <div className="pl-12 my-4">
+                <div
+                  style={{
+                    fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+                    fontWeight: 400,
+                    fontSize: "0.75rem",
+                    lineHeight: 2.66,
+                    letterSpacing: "0.08333em",
+                    color: "rgba(0, 0, 0, 0.6)",
+                  }}
+                >
+                  PILIH TANGGAL
+                </div>
+                <div className="flex space-x-2  items-center">
+                <div className="flex justify-start">
+                  <div className=" text-gray-400">
+                    <h4>
+                      {dayjs(tanggal).format("MMM")}{" "}
+                      {dayjs(tanggal).format("YYYY")}
+                    </h4>
+                  </div>
+                </div>
+                <div className="flex justify-center">
+                  <CiCalendarDate size={28} className="text-gray-400" />
+                </div>
+                </div>
+              </div>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <div className={openMonth ? `block mt-6` : `hidden`}>
+                  <DateCalendar
+                    className={classesDate.hideCalendarHeader}
+                    value={
+                      (tanggal.year() === dayjs().add(2, 'year').year() && tanggal.month() > dayjs().month()) ||
+                      (tanggal.year() === dayjs().year() && tanggal.month() < dayjs().month())
+                      ? dayjs().set('year', tanggal.year()).set('month', dayjs().month()) 
+                      : tanggal
+                    }
+                    onChange={(e) => {
+                      const maxYear = dayjs().add(2, 'year').year();
+                      const currentMonth = dayjs().month();
+                    
+                      if ((e.year() === maxYear && e.month() > currentMonth) || 
+                         (e.year() === dayjs().year() && e.month() < dayjs().month())
+                      ) {
+                        setTanggal(dayjs().set('year', maxYear).set('month', currentMonth));
+                      } else {
+                        setTanggal(e);
+                      }
+                    
+                      setopenYear(true);
+                      setopenMonth(false);
+                      handleCloseDate();
+                    }}
+                    disablePast={true}
+                    shouldDisableMonth={(date) => {
+                      const currentMonth = dayjs().month();
+                      const maxYear = dayjs().add(2, 'year').year();
+                  
+                        if (date.year() === maxYear) {
+
+                          return date.month() > currentMonth;
+                        }
+                      
+                    }}
+                    views={['month']}
+                    openTo="month"
+                  />
+              </div>
+              <div className={openYear ? `block mt-8 md:mt-8` : `hidden`}>
+                <DateCalendar
+                  value={tanggal}
+                  onChange={(e) => {
+                    setTanggal(e);
+                    setopenYear(false);
+                    setopenMonth(true);
+                  }}
+                  shouldDisableYear={(date) => {
+                    const currentYear = dayjs().year(); 
+                    const maxYear = dayjs().add(2, 'year').year();
+                
+                    return date.year() < currentYear || date.year() > maxYear;
+                  }}
+                  views={[ 'year']}
+                  openTo="year"
+                />
+              </div>
+              </LocalizationProvider>
+            </div>
+          </Box>
+      </ModalMui>
         <div class="w-full px-4 py-4 rounded-lg shadow-xs">
           <form className="w-full">
             <>
@@ -566,23 +703,22 @@ function PELNI() {
                       </div>
                     </div>
                   </div>
-                  <FormControl sx={{ m: 1, minWidth: 145 }}>
-                    <small className="mb-2 text-black">Range Tanggal</small>
-                    <div className="w-full cursor-pointer">
-                      <DatePicker
-                        value={tanggal}
-                        open={isDatePickerOpen} // Pass the state to the open prop
-                        inputReadOnly={true}
-                        onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
-                        className="w-full cursor-pointer text-black py-[8px] text-md border-gray-200"
-                        size="large"
-                        onChange={(e) => setTanggal(e)}
-                        picker="month"
-                        disabledDate={disabledDate}
-                        style={{ width: "100%" }}
-                      />
-                    </div>
+                  <FormControl sx={{ m: 1, minWidth: 160 }}>
+                    <small className="mb-2 text-black">
+                      Tanggal Range
+                    </small>
+                    <button type="button" className="border py-[10px] customButtonStyle w-full block text-black" onClick={handleOpenDate}>
+                      <div className="flex justify-between mx-4 items-center">
+                        <div>
+                        {`${
+                            parseTanggalPelniMonth(tanggal)
+                      } `}
+                        </div>
+                        <CiCalendarDate size={22} className="text-gray-400" />
+                      </div>
+                    </button>
                   </FormControl>
+
                   <FormControl sx={{ m: 1, minWidth: 120 }}>
                     <small className="mb-2 text-black">
                       Total Penumpang
@@ -670,7 +806,7 @@ function PELNI() {
                     type="primary"
                     className="bg-blue-500 mx-2 md:mx-0 font-semibold"
                     loading={isLoading}
-                    onClick={handlerCariPelni}
+                    onClick={handleSubmitPelni}
                   >
                     Cari Tiket
                   </Button>
@@ -685,7 +821,7 @@ function PELNI() {
 }
 
 const clickOutsideConfig = {
-  handleClickOutside: () => PELNI.handleClickOutside,
+  handleClickOutside: () => Pelni.handleClickOutside,
 };
 
-export default onClickOutside(PELNI, clickOutsideConfig);
+export default onClickOutside(Pelni, clickOutsideConfig);

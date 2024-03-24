@@ -29,6 +29,16 @@ scrollbar-width: none;  /* Firefox */
 
 } */
 
+.day-in-month {
+  cursor: pointer;
+}
+
+.disabled-day {
+  text-decoration: line-through;
+  color: #ccc;
+  cursor: not-allowed;
+}
+
 .customButtonStyle {
   border-radius: 5px !important; /* Ensures override */
   border-color: rgb(229 231 235);

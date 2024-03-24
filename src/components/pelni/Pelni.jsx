@@ -2,38 +2,74 @@ import * as React from "react";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
-import { Chip } from "@mui/material";
+import { Box, Chip } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Popper } from "@mui/material";
 import { IoBoatSharp } from "react-icons/io5";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import onClickOutside from "react-onclickoutside";
-import { makeStyles } from "@mui/styles";
 import { InputGroup } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
-import { Button, DatePicker, message } from "antd";
+import { Button,  message } from "antd";
 import Cookies from "js-cookie";
 import { AiOutlineSwap } from "react-icons/ai";
 import dayjs from "dayjs";
-import { daDK } from "rsuite/esm/locales";
 import { useState } from "react";
+import ModalMui from "@mui/material/Modal";
+import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
+import { parseTanggalPelniMonth } from "../../helpers/date";
+import { CiCalendarDate } from "react-icons/ci";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { makeStyles } from "@mui/styles";
+
 
 function Pelni() {
   const [anchorEl, setAnchorEl] = React.useState("hidden");
   const handleClick = () => {
     anchorEl === "hidden" ? setAnchorEl("grid") : setAnchorEl("hidden");
   };
-
+  
   Pelni.handleClickOutside = () => {
     setAnchorEl("hidden");
   };
-
+  
+  const [openDate, setOpenDate] = React.useState(false);
+  const [openMonth, setopenMonth] = React.useState(false);
+  const [openYear, setopenYear] = React.useState(true);
+  
+  const handleOpenDate = () => setOpenDate(true);
+  const handleCloseDate = () => {
+    const maxYear = dayjs().add(2, 'year').year();
+    const currentMonth = dayjs().month();
+  
+    if ((tanggal.year() === maxYear && tanggal.month() > currentMonth) || 
+        (tanggal.year() === dayjs().year() && tanggal.month() < dayjs().month())
+    ) {
+      setTanggal(dayjs().set('year', maxYear).set('month', currentMonth));
+    } 
+  
+    setOpenDate(false);
+    setopenYear(true);
+    setopenMonth(false);
+  };
+  
+  const styleDesktop = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    width: 400,
+    bgcolor: "background.paper",
+    transform: "translate(-50%, -50%)",
+    px: 2,
+    pt: 2,
+  };
+  
   const navigate = useNavigate();
-
+  
   const [isLoading, setLoading] = React.useState(false);
   const [pelniStasiun, setpelniStasiun] = React.useState({});
-
+  
   const [openBerangka, SetopenBerangka] = React.useState(false);
   const [openTujuan, setOpenTujuan] = React.useState(false);
 
@@ -42,6 +78,17 @@ function Pelni() {
   const loadingTujuan = openTujuan && pelniData.length === 0;
   const [messageApi, contextHolder] = message.useMessage();
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  
+  const useStylesDate = makeStyles({
+    hideCalendarHeader: {
+      '& .MuiPickersCalendarHeader-root': {
+        display: 'none',
+      },
+    },
+  });
+
+  const classesDate = useStylesDate();
+  
 
   const errorBerangkat = () => {
     messageApi.open({
@@ -392,6 +439,105 @@ function Pelni() {
     <>
       {contextHolder}
       <div className="flex justify-center row bg-white border-t border-gray-200 w-full pr-0">
+      <ModalMui
+          className=""
+          open={openDate}
+          onClose={handleCloseDate}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+        <Box sx={styleDesktop}>
+            <div className="block">
+            <div className="pl-12 my-4">
+                <div
+                  style={{
+                    fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+                    fontWeight: 400,
+                    fontSize: "0.75rem",
+                    lineHeight: 2.66,
+                    letterSpacing: "0.08333em",
+                    color: "rgba(0, 0, 0, 0.6)",
+                  }}
+                >
+                  PILIH TANGGAL
+                </div>
+                <div className="flex space-x-2  items-center">
+                <div className="flex justify-start">
+                  <div className=" text-gray-400">
+                    <h4>
+                      {dayjs(tanggal).format("MMM")}{" "}
+                      {dayjs(tanggal).format("YYYY")}
+                    </h4>
+                  </div>
+                </div>
+                <div className="flex justify-center">
+                  <CiCalendarDate size={28} className="text-gray-400" />
+                </div>
+                </div>
+              </div>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <div className={openMonth ? `block mt-6` : `hidden`}>
+                  <DateCalendar
+                    className={classesDate.hideCalendarHeader}
+                    value={
+                      (tanggal.year() === dayjs().add(2, 'year').year() && tanggal.month() > dayjs().month()) ||
+                      (tanggal.year() === dayjs().year() && tanggal.month() < dayjs().month())
+                      ? dayjs().set('year', tanggal.year()).set('month', dayjs().month()) 
+                      : tanggal
+                    }
+                    onChange={(e) => {
+                      const maxYear = dayjs().add(2, 'year').year();
+                      const currentMonth = dayjs().month();
+                    
+                      if ((e.year() === maxYear && e.month() > currentMonth) || 
+                         (e.year() === dayjs().year() && e.month() < dayjs().month())
+                      ) {
+                        setTanggal(dayjs().set('year', maxYear).set('month', currentMonth));
+                      } else {
+                        setTanggal(e);
+                      }
+                    
+                      setopenYear(true);
+                      setopenMonth(false);
+                      handleCloseDate();
+                    }}
+                    disablePast={true}
+                    shouldDisableMonth={(date) => {
+                      const currentMonth = dayjs().month();
+                      const maxYear = dayjs().add(2, 'year').year();
+                  
+                        if (date.year() === maxYear) {
+
+                          return date.month() > currentMonth;
+                        }
+                      
+                    }}
+                    views={['month']}
+                    openTo="month"
+                  />
+              </div>
+              <div className={openYear ? `block mt-8 md:mt-8` : `hidden`}>
+                <DateCalendar
+                  value={tanggal}
+                  onChange={(e) => {
+                    setTanggal(e);
+                    setopenYear(false);
+                    setopenMonth(true);
+                  }}
+                  shouldDisableYear={(date) => {
+                    const currentYear = dayjs().year(); 
+                    const maxYear = dayjs().add(2, 'year').year();
+                
+                    return date.year() < currentYear || date.year() > maxYear;
+                  }}
+                  views={[ 'year']}
+                  openTo="year"
+                />
+              </div>
+              </LocalizationProvider>
+            </div>
+          </Box>
+      </ModalMui>
         <div class="w-full px-4 py-4 rounded-lg shadow-xs">
           <form className="w-full">
             <>
@@ -551,23 +697,22 @@ function Pelni() {
                       </div>
                     </div>
                   </div>
-                  <FormControl sx={{ m: 1, minWidth: 145 }}>
-                    <small className="mb-2 text-black">Range Tanggal</small>
-                    <div className="w-full cursor-pointer">
-                      <DatePicker
-                        value={tanggal}
-                        open={isDatePickerOpen} // Pass the state to the open prop
-                        inputReadOnly={true}
-                        onOpenChange={(status) => setIsDatePickerOpen(status)} // Update the state when the panel opens or closes
-                        className="w-full cursor-pointer text-black py-[8px] text-md border-gray-200"
-                        size="large"
-                        onChange={(e) => setTanggal(e)}
-                        picker="month"
-                        disabledDate={disabledDate}
-                        style={{ width: "100%" }}
-                      />
-                    </div>
+                  <FormControl sx={{ m: 1, minWidth: 160 }}>
+                    <small className="mb-2 text-black">
+                      Tanggal Range
+                    </small>
+                    <button type="button" className="border py-[10px] customButtonStyle w-full block text-black" onClick={handleOpenDate}>
+                      <div className="flex justify-between mx-4 items-center">
+                        <div>
+                        {`${
+                            parseTanggalPelniMonth(tanggal)
+                      } `}
+                        </div>
+                        <CiCalendarDate size={22} className="text-gray-400" />
+                      </div>
+                    </button>
                   </FormControl>
+
                   <FormControl sx={{ m: 1, minWidth: 120 }}>
                     <small className="mb-2 text-black">
                       Total Penumpang

@@ -75,6 +75,80 @@ export const parseTanggal = (d) => {
   return tanggal_keberangkatan;
 };
 
+export const parseTanggalPelniMonth = (d) => {
+  var date = new Date(d);
+  var tahun = date.getFullYear();
+  var bulan = date.getMonth();
+  var hari = date.getDay();
+  var tanggal = date.getDate();
+
+  switch (hari) {
+    case 0:
+      hari = "Min";
+      break;
+    case 1:
+      hari = "Sen";
+      break;
+    case 2:
+      hari = "Sel";
+      break;
+    case 3:
+      hari = "Rab";
+      break;
+    case 4:
+      hari = "Kam";
+      break;
+    case 5:
+      hari = "Jum";
+      break;
+    case 6:
+      hari = "Sab";
+      break;
+  }
+
+  switch (bulan) {
+    case 0:
+      bulan = "Jan";
+      break;
+    case 1:
+      bulan = "Feb";
+      break;
+    case 2:
+      bulan = "Mar";
+      break;
+    case 3:
+      bulan = "Apr";
+      break;
+    case 4:
+      bulan = "Mei";
+      break;
+    case 5:
+      bulan = "Jun";
+      break;
+    case 6:
+      bulan = "Jul";
+      break;
+    case 7:
+      bulan = "Aug";
+      break;
+    case 8:
+      bulan = "Sep";
+      break;
+    case 9:
+      bulan = "Okt";
+      break;
+    case 10:
+      bulan = "Nov";
+      break;
+    case 11:
+      bulan = "Des";
+      break;
+  }
+
+  const tanggal_keberangkatan = `${bulan} ${tahun}`;
+  return tanggal_keberangkatan;
+};
+
 export const parseTanggalPelni = (d) => {
   var date = new Date(d);
   var tahun = date.getFullYear();
