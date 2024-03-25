@@ -126,7 +126,7 @@ function KAI() {
   const [messageApi, contextHolder] = message.useMessage();
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const currentDate = dayjs();
-  const aheadDate = dayjs().add(6, "months");
+  const aheadDate = dayjs().add(3, "months");
 
   const [openDate, setOpenDate] = React.useState(false);
   const handleOpenDate = () => setOpenDate(true);
