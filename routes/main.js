@@ -53,7 +53,7 @@ Router.post('/app/redirect', async function (req, res) {
         const data = response.data;
         const url = response.data.url;
 
-        const expired = new Date(new Date().getTime() + (parseInt(process.env.EXPIRED_SESSION) || 259200000));
+        const expired = new Date(new Date().getTime() + (parseInt(process.env.EXPIRED_SESSION) || 594800000));
         data.expired_date = expired;
         data.username = splitlogin[0];
         data['is_header_name_and_toast'] = false;
@@ -158,7 +158,7 @@ Router.post('/app/sign_in', async function (req, res) {
     
         const data = response.data;
     
-        const expired = new Date(new Date().getTime() + (parseInt(process.env.EXPIRED_SESSION) || 259200000));
+        const expired = new Date(new Date().getTime() + (parseInt(process.env.EXPIRED_SESSION) || 594800000));
         data.expired_date = expired;
         data['is_header_name_and_toast'] = true;
 
