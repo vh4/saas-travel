@@ -19,6 +19,15 @@
 scrollbar-width: none;  /* Firefox */
 }
 
+.specialDay {
+  /* Contoh: */
+  background-color: #ffecb3 !important; /* Warna latar untuk hari khusus */
+  color: red !important; /* Warna teks untuk hari khusus */
+  border: none !important; /* Menghilangkan border */
+  box-shadow: none !important; /* Menghilangkan shadow */
+}
+
+
 /* .css-1hbyad5-MuiTypography-root{
   display: none !important;
 
@@ -28,6 +37,12 @@ scrollbar-width: none;  /* Firefox */
   display: none !important;
 
 } */
+
+/* CustomStyles.css */
+.rmdp-shadow {
+  box-shadow: none !important;
+}
+
 
 .day-in-month {
   cursor: pointer;

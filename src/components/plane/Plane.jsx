@@ -28,13 +28,14 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { HolidaysContext } from "../../App";
 import { CiCalendarDate } from "react-icons/ci";
 import { DateCalendar, DayCalendarSkeleton } from "@mui/x-date-pickers";
+import { Calendar } from 'react-multi-date-picker';
 
 function Plane() {
   const styleDesktop = {
     position: "absolute",
     top: "50%",
     left: "50%",
-    width: 540,
+    width: 750,
     bgcolor: "background.paper",
     transform: "translate(-50%, -50%)",
     px: 4,
@@ -69,6 +70,9 @@ function Plane() {
   const [currentViewDate, setCurrentViewDate] = useState(dayjs());
 
   const { holidays, dispatchHolidays } = React.useContext(HolidaysContext);
+  const currentDate = dayjs();
+  const aheadDate = dayjs().add(6, "months");
+
 
   const findHolidayDescriptionsForMonth = (date) => {
     const month = date.month(); // Bulan dari tanggal yang sedang dilihat
@@ -663,31 +667,27 @@ function Plane() {
             </div>
             <div>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateCalendar
+                <Calendar
                   value={tanggalKeberangkatan}
-                  shouldDisableDate={(current) => {
-                    const currentDate = dayjs();
-                    const aheadDate = dayjs().add(3, "months");
-                    return (
-                      current &&
-                      (current < currentDate.startOf("day") ||
-                        current > aheadDate)
-                    );
+                  onChange={(e) => {setTanggalKeberangkatan(dayjs(e)); handleCloseDate()}}
+                  format={"YYYY/MM/DD"}
+                  numberOfMonths={2}
+                  mapDays={({ date }) => {
+                    const dayjsDate = dayjs(date);
+            
+                    const isSunday = dayjsDate.day() === 0;
+                    const isHoliday = holidays.some(holiday => dayjsDate.format("YYYY-MM-DD") === holiday.start);
+            
+                    if (isSunday || isHoliday) {
+                      return {
+                        className: "specialDay",
+                        style: { color: "red", boxShadow: "none" }, // Sesuaikan dengan kebutuhan
+                        title: isHoliday ? holidays.find(holiday => dayjsDate.format("YYYY-MM-DD") === holiday.start).summary : "Sunday",
+                      };
+                    }
                   }}
-                  onChange={(newValue) => {
-                    setTanggalKeberangkatan(newValue);
-                    handleCloseDate();
-                  }}
-                  onMonthChange={(newViewDate) => {
-                    setCurrentViewDate(newViewDate);
-                  }}
-                  renderLoading={() => <DayCalendarSkeleton />}
-                  slots={{
-                    day: CustomDay,
-                  }}
-                  slotProps={{
-                    day: {},
-                  }}
+                  minDate={currentDate.toDate()}
+                  maxDate={aheadDate.toDate()}
                 />
               </LocalizationProvider>
             </div>
@@ -727,19 +727,7 @@ function Plane() {
       >
         <Box sx={styleMobile}>
           <div className="">
-            <div className="my-4  pl-4">
-              <div
-                style={{
-                  fontFamily: "Roboto, Helvetica, Arial, sans-serif",
-                  fontWeight: 400,
-                  fontSize: "0.75rem",
-                  lineHeight: 2.66,
-                  letterSpacing: "0.08333em",
-                  color: "rgba(0, 0, 0, 0.6)",
-                }}
-              >
-                PILIH TANGGAL
-              </div>
+            <div className="mt-4 pl-6">
               <div className="flex space-x-4 items-center">
                 <div className="flex justify-start">
                   <div className="text-gray-400">
@@ -760,7 +748,7 @@ function Plane() {
                 value={tanggalKeberangkatan}
                 shouldDisableDate={(current) => {
                   const currentDate = dayjs();
-                  const aheadDate = dayjs().add(3, "months");
+                  const aheadDate = dayjs().add(6, "months");
                   return (
                     current &&
                     (current < currentDate.startOf("day") ||

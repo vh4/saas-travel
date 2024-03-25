@@ -17,7 +17,6 @@ import Cookies from "js-cookie";
 import { AiOutlineSwap } from "react-icons/ai";
 import { InputGroup } from "rsuite";
 import { useState } from "react";
-import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import Typography from "@mui/material/Typography";
 import ModalMui from "@mui/material/Modal";
 import dayjs from "dayjs";
@@ -26,6 +25,7 @@ import { HolidaysContext } from "../../App";
 import { CiCalendarDate } from "react-icons/ci";
 import { DateCalendar, DayCalendarSkeleton } from "@mui/x-date-pickers";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay/PickersDay";
+import { Calendar } from 'react-multi-date-picker';
 
 function KAI() {
 
@@ -33,13 +33,14 @@ function KAI() {
     position: "absolute",
     top: "50%",
     left: "50%",
-    width: 540,
+    width: 750,
     bgcolor: "background.paper",
     transform: "translate(-50%, -50%)",
     px: 4,
     pt: 2,
     pb: 4,
   };
+
 
   const styleMobile = {
     position: "absolute",
@@ -124,6 +125,8 @@ function KAI() {
   const loadingTujuan = openTujuan && kaiData.length === 0;
   const [messageApi, contextHolder] = message.useMessage();
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const currentDate = dayjs();
+  const aheadDate = dayjs().add(6, "months");
 
   const [openDate, setOpenDate] = React.useState(false);
   const handleOpenDate = () => setOpenDate(true);
@@ -497,6 +500,7 @@ function KAI() {
         Cookies.set("v-adult", adult, cookieOptions);
         Cookies.set("v-infant", infant, cookieOptions);
 
+
         var str = "";
         for (var key in params) {
             if (str != "") {
@@ -506,7 +510,6 @@ function KAI() {
         } 
         
         window.location = `search?${str}`;  
-
 
       }
 
@@ -557,32 +560,28 @@ function KAI() {
               </div>
               <div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DateCalendar
-                    value={tanggal}
-                    shouldDisableDate={(current) => {
-                      const currentDate = dayjs();
-                      const aheadDate = dayjs().add(3, "months");
-                      return (
-                        current &&
-                        (current < currentDate.startOf("day") ||
-                          current > aheadDate)
-                      );
-                    }}
-                    onChange={(newValue) => {
-                      setTanggal(newValue);
-                      handleCloseDate();
-                    }}
-                    onMonthChange={(newViewDate) => {
-                      setCurrentViewDate(newViewDate);
-                    }}
-                    renderLoading={() => <DayCalendarSkeleton />}
-                    slots={{
-                      day: CustomDay,
-                    }}
-                    slotProps={{
-                      day: {},
-                    }}
-                  />
+                <Calendar
+                  value={tanggal}
+                  onChange={(e) => {setTanggal(dayjs(e)); handleCloseDate()}}
+                  format={"YYYY/MM/DD"}
+                  numberOfMonths={2}
+                  mapDays={({ date }) => {
+                    const dayjsDate = dayjs(date);
+            
+                    const isSunday = dayjsDate.day() === 0;
+                    const isHoliday = holidays.some(holiday => dayjsDate.format("YYYY-MM-DD") === holiday.start);
+            
+                    if (isSunday || isHoliday) {
+                      return {
+                        className: "specialDay",
+                        style: { color: "red", boxShadow: "none" }, // Sesuaikan dengan kebutuhan
+                        title: isHoliday ? holidays.find(holiday => dayjsDate.format("YYYY-MM-DD") === holiday.start).summary : "Sunday",
+                      };
+                    }
+                  }}
+                  minDate={currentDate.toDate()}
+                  maxDate={aheadDate.toDate()}
+                />
                 </LocalizationProvider>
               </div>
             </div>
