@@ -29,6 +29,10 @@ import { HolidaysContext } from "../../App";
 import { CiCalendarDate } from "react-icons/ci";
 import { DateCalendar, DayCalendarSkeleton } from "@mui/x-date-pickers";
 import { Calendar } from 'react-multi-date-picker';
+import 'dayjs/locale/id'; // mengimpor locale Bahasa Indonesia
+
+
+dayjs.locale('id'); // mengatur locale global ke Bahasa Indonesia
 
 function Plane() {
   const styleDesktop = {
