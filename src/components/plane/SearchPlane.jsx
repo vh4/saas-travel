@@ -1,4 +1,4 @@
-import { Popper, createTheme } from "@mui/material";
+import { Popper, Slide, createTheme } from "@mui/material";
 import * as React from "react";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
@@ -45,8 +45,9 @@ function Plane() {
 
   const styleMobile = {
     position: "absolute",
-    top: "50%",
     left: "50%",
+    top: "50%",
+    borderRadius:5,
     width: 350,
     bgcolor: "background.paper",
     transform: "translate(-50%, -50%)",
@@ -68,7 +69,6 @@ function Plane() {
     setOpenDate(false);
   };
   const [currentViewDate, setCurrentViewDate] = useState(dayjs());
-
   const { holidays, dispatchHolidays } = React.useContext(HolidaysContext);
   const currentDate = dayjs();
   const aheadDate = dayjs().add(6, "months");
@@ -86,6 +86,33 @@ function Plane() {
     return holidaysInMonth.map((holiday) => holiday);
   };
 
+
+  const [currentViewDateDesktop, setCurrentViewDateDesktop] = useState(dayjs().format('YYYY-MM'));
+
+
+  const findHolidayDescriptionsForMonthDesktop = (date) => {
+    const startDate = dayjs(date);
+    const monthStart = startDate.month();
+    const year = startDate.year();
+  
+    // Tambahkan 1 bulan ke startDate untuk mendapatkan bulan kedua dalam rentang
+    const endDate = startDate.add(1, 'month');
+    const monthEnd = endDate.month();
+  
+    const holidaysInMonth = holidays.filter(
+      (holiday) => {
+        const holidayMonth = dayjs(holiday.start).month();
+        const holidayYear = dayjs(holiday.start).year();
+  
+        // Cek jika liburan berada dalam rentang dua bulan dan tahun yang sama
+        return ((holidayMonth === monthStart || holidayMonth === monthEnd) && holidayYear === year);
+      }
+    );
+  
+    return holidaysInMonth;
+    
+  };
+
   function CustomDay(props) {
     const { day, outsideCurrentMonth, ...other } = props;
 
@@ -96,7 +123,7 @@ function Plane() {
     return (
       <PickersDay
         {...other}
-        disableMargin
+        // disableMargin
         day={day}
         sx={{
           color:
@@ -573,6 +600,7 @@ function Plane() {
 
         window.location = `/flight/search?${str}`;
         
+        
       }
     }, 1000);
   }
@@ -676,6 +704,9 @@ function Plane() {
                 <Calendar
                   value={tanggalKeberangkatan}
                   onChange={(e) => {setTanggalKeberangkatan(dayjs(e)); handleCloseDate()}}
+                  onMonthChange={(newViewDate) => {
+                    setCurrentViewDateDesktop(dayjs(newViewDate).format('YYYY-MM'));
+                  }}
                   format={"YYYY/MM/DD"}
                   numberOfMonths={2}
                   mapDays={({ date }) => {
@@ -702,7 +733,7 @@ function Plane() {
             style={{ overflowX: "scroll", display: "flex", gap: "8px" }}
             className="hidennscroll mt-2 z-50"
           >
-            {findHolidayDescriptionsForMonth(currentViewDate)?.map(
+            {findHolidayDescriptionsForMonthDesktop(currentViewDateDesktop)?.map(
               (e, index) => (
                 <div
                   key={index}
@@ -713,7 +744,7 @@ function Plane() {
                     display="block"
                     style={{ fontSize: "10px" }}
                   >
-                    {dayjs(e.start).format("DD")}.{e.summary}
+                    <span className="text-red-500">{dayjs(e.start).format("DD MMM")}</span>. {e.summary}
                   </Typography>
                 </div>
               )
@@ -730,6 +761,9 @@ function Plane() {
         onClose={handleCloseDate}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        closeAfterTransition // Menutup modal setelah transisi selesai
+        TransitionComponent={Slide} // Menggunakan Slide sebagai komponen transisi
+        TransitionProps={{ direction: "up" }} // Animasi slide dari bawah ke atas
       >
         <Box sx={styleMobile}>
           <div className="">
@@ -777,27 +811,27 @@ function Plane() {
                 }}
               />
             </LocalizationProvider>
-          </div>
-          <div
-            style={{ overflowX: "scroll", display: "flex", gap: "8px" }}
-            className="hidennscroll mt-2 z-50"
-          >
-            {findHolidayDescriptionsForMonth(currentViewDate)?.map(
-              (e, index) => (
-                <div
-                  key={index}
-                  className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50"
-                >
-                  <Typography
-                    variant="caption"
-                    display="block"
-                    style={{ fontSize: "10px" }}
+            <div
+              style={{ overflowX: "scroll", display: "flex", gap: "8px" }}
+              className="hidennscroll mt-2 z-50"
+            >
+              {findHolidayDescriptionsForMonth(currentViewDate)?.map(
+                (e, index) => (
+                  <div
+                    key={index}
+                    className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50"
                   >
-                    {dayjs(e.start).format("DD")}.{e.summary}
-                  </Typography>
-                </div>
-              )
-            )}
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      style={{ fontSize: "10px" }}
+                    >
+                    <span className="text-red-500">{dayjs(e.start).format("DD MMM")}</span>. {e.summary}
+                    </Typography>
+                  </div>
+                )
+              )}
+            </div>
           </div>
         </Box>
         {/* mobile */}
@@ -1026,7 +1060,7 @@ function Plane() {
                     </button>
                     <div
                       id="basic-menu"
-                      className={`${anchorEl} relative md:absolute top-0 md:top-20 md:z-10 grid w-full md:w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg`}
+                      className={`${anchorEl} relative md:absolute top-0 md:z-10 grid w-full md:w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg`}
                     >
                       <div className="w-full md:w-48 block md:mx-0">
                         <div className="w-full items-center text-black">
