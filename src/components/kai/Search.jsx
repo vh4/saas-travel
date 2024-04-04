@@ -92,6 +92,7 @@ export default function Search() {
   const [err, setErr] = useState(false);
   const [errPage, setErrPage] = useState(false);
   const [messageError, setmessageError] = useState('');
+  const [messageErrorTransit, setmessageErrorTransit] = useState('');
 
   const [valHargaRange, setHargaRange] = useState([0, 10000000]);
 
@@ -268,7 +269,7 @@ export default function Search() {
           }
         );
   
-        if (category === 'true') {
+        if (category == 'true') {
           rc_transit = response.data.rc;
           data_transit = response.data;
         } else {
@@ -278,20 +279,20 @@ export default function Search() {
       }
   
       // Handle non-transit response
-      if (rc_non === '10') {
+      if (rc_non == '10') {
         setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
-      } else if (rc_non !== '00') {
+      } else if (rc_non != '00' && rc_transit != '10') {
         setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
       } else {
         setDataSearch(data_non.data);
         setuuid(data_non.uuid);
       }
-  
+      
       // Handle transit response
-      if (rc_transit === '10') {
-        setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
-      } else if (rc_transit !== '00') {
-        setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
+      if (rc_transit == '10') {
+        setmessageErrorTransit('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
+      } else if (rc_transit != '00' && rc_transit != '10') {
+        setmessageErrorTransit('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
       } else {
         setDataSearchTransit(data_transit.data);
         setuuid(data_transit.uuid);
@@ -714,9 +715,9 @@ export default function Search() {
           setLoading(false);
 
           if(response.data.rc == '10'){
-            setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
+            setmessageErrorTransit('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
           }else{
-            setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
+            setmessageErrorTransit('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
           }
 
           setErrorTransit(true);
@@ -727,9 +728,9 @@ export default function Search() {
           setLoading(false);
           
           if(response.data.rc == '10'){
-            setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
+            setmessageErrorTransit('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
           }else{
-            setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
+            setmessageErrorTransit('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
           }
           setErrorTransit(true);
 
@@ -738,9 +739,9 @@ export default function Search() {
           setLoading(false);
 
           if(response.data.rc == '10'){
-            setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
+            setmessageErrorTransit('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
           }else{
-            setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
+            setmessageErrorTransit('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
           }
 
           setErrorTransit(true);
@@ -756,7 +757,7 @@ export default function Search() {
       }
       
     } catch (error) {
-        setmessageError('Maaf, terjadi kesalahan pada server.');
+      setmessageErrorTransit('Maaf, terjadi kesalahan pada server.');
         setErrorTransit(false);
         setLoading(false);  
         setLoadingTransit(false);
@@ -1476,7 +1477,7 @@ export default function Search() {
                     <div className="text-black text-center">
                       <div>
                         <div className="text-sm md:text-md font-medium">
-                          {messageError.length > 0  ? messageError : 'Maaf, sepertinya pada rute ini masih belum dibuka kembali.'}
+                          {messageErrorTransit.length > 0  ? messageErrorTransit : 'Maaf, sepertinya pada rute ini masih belum dibuka kembali.'}
                         </div>
                         {/* <small>
                               Namun jangan khawatir, masih ada pilihan kendaraan lain
