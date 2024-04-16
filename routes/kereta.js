@@ -44,7 +44,7 @@ Router.post('/train/search', async function (req, res) { // Menambahkan async
       }
     );
 
-    logger.info(`Response /train/search: ${response.data.rd}`);
+    logger.info(`Response /train/search: ${response.data.rd} ${response.data.rc}`);
     return res.send(response.data);
   } catch (error) {
     logger.error(`Error /train/search: ${error.message}`);
