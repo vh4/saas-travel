@@ -412,7 +412,8 @@ export default function ViewBooking({ path }) {
                           <div className="w-full profile-header">
                             <div className="p-2 md:px-8 md:py-6 mt-4 mb-8 md:mb-0 md:mt-0">
                               <div className="flex justify-between items-end">
-                              {e.status?.Status == "Booking" ? (
+                              {
+                              e.status?.status_payment != "Sukses"  ? (
                               <>
                                 <div className="flex space-x-2  items-end">
                                   <div className="text-xs text-black">
@@ -472,8 +473,8 @@ export default function ViewBooking({ path }) {
                                   <div className="flex justify-between space-x-0 xl:space-x-4 items-center pt-4 xl:pt-4">
                                     <div className="flex space-x-4 items-center">
                                     {
-                                      e.status?.Status == "Booking" ? (
-                                      <>
+                                    e.status?.status_payment != "Sukses"  ? (
+                                    <>
                                       <div className="flex space-x-2 items-center text-xs py-1 text-black">
                                         <CiTimer size={16} />
                                         <div>
@@ -493,7 +494,7 @@ export default function ViewBooking({ path }) {
                                         </>
                                       )
                                     }
-                                    {e.status?.Status !== "Booking"  && (
+                                    {e.status?.status_payment == "Sukses"  &&  (
                                       <>
                                         <a href={`https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=${e.status.id_transaksi}`} target="_blank">
                                           <div className="flex space-x-2 items-center text-black">
