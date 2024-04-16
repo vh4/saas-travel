@@ -448,10 +448,11 @@ export default function Pembayaran() {
                       <div className="mt-4 text-xs text-black font-medium  flex justify-between">
                         <div>Biaya Admin (Fee) x{TotalAdult + TotalInfant}</div>
                         <div>
+                          {console.log(book)}
                           Rp.{" "}
                           {book &&
                             toRupiah(
-                              book.nominal_admin * (TotalAdult + TotalInfant)
+                              book.nominal_admin
                             )}
                         </div>
                       </div>
