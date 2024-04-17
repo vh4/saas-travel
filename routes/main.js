@@ -190,7 +190,6 @@ Router.post('/app/sign_in', async function (req, res) {
   }
 });
 
-
 Router.post('/is_merchant', async function (req, res) {
   const { token } = req.body;
 
@@ -402,6 +401,29 @@ Router.post('/app/transaction_book_list', async function (req, res) {
     return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
 
   }
+});
+
+Router.get('/is_whitelist', async function (req, res) {
+
+  const whitelist = ['usertravel1', 'usertravel', 'Fitra1990', 'Fitra1904'];
+  const username = req.session['v_uname'] || '';
+
+  if(whitelist.includes(username)){
+
+      return res.status(200).json({
+          rc: '00',
+          rd: 'success',
+          is_whitelist:1,
+      })
+
+  }
+      return res.status(200).json({
+          rc: '00',
+          rd: 'gagal',
+          is_whitelist:0,
+      })
+
+
 });
 
 module.exports = Router;
