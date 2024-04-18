@@ -345,4 +345,22 @@ Router.post('/pelni/book_info', AuthLogin, async (req, res) => {
 // 	}
 // });
 
+Router.post('/pelni/payment', AuthLogin, async function (req, res) {
+  const data = req.body;
+  logger.info(`Request /pelni/payment: ${JSON.stringify(data)}`);
+
+  try {
+    const response = await axios.post(
+      `${process.env.URL_HIT}/pelni/payment`,
+      data
+    );
+
+    logger.info(`Response /pelni/payment: ${JSON.stringify(response.data)}`);
+    return res.send(response.data);
+  } catch (error) {
+    logger.error(`Error /pelni/payment: ${error.message}`);
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
+  }
+});
+
 module.exports = Router;

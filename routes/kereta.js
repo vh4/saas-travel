@@ -337,6 +337,33 @@ Router.post('/train/payment', AuthLogin, async function (req, res) { // Menambah
   }
 });
 
+Router.post('/train/payment-transit', AuthLogin, async function (req, res) { // Menambahkan async
+  try {
+    const data = req.body;
+
+    logger.info(`Request /train/payment-transit: ${JSON.stringify(data)}`);
+
+    const promiseArray = data.map( d => {
+        
+        logger.info(`Request /train/payment-transit/${d.transactionId}: ${JSON.stringify(d)}`);
+
+        return axios.post(
+          `${process.env.URL_HIT}/train/payment`, d
+        ).then(response => response.data);
+
+  });
+
+    const getResponseGlobal = await Promise.all(promiseArray);
+
+    logger.info(`Response /train/payment-transit: ${JSON.stringify(getResponseGlobal)}`);
+    return res.send(getResponseGlobal);
+
+  } catch (error) {
+    logger.error(`Error /train/payment-transit: ${error.message}`);
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
+  }
+});
+
 Router.post('/train/change_seat', async function (req, res) { // Menambahkan async
   try {
     const data = req.body;
