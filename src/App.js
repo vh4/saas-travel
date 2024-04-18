@@ -32,7 +32,7 @@ import BayarTransit from "./pages/kai/BayarTransit"
 
 import BookingPesawat from "./pages/plane/Booking";
 import PembayaranPesawat from "./pages/plane/Pembayaran";
-import TiketPesawat from "./pages/plane/Tiket";
+// import TiketPesawat from "./pages/plane/Tiket";
 import Page404 from "./pages/partials/404";
 import Logout from "./pages/Logout";
 import KonfirmasiTransit from "./pages/kai/KonfirmasiTransit";
@@ -151,7 +151,7 @@ function App() {
                   {/* <Route path="/dlu/payment/:id" element={< Pembayaran/>}></Route> */}
                   <Route path="/flight/booking/:id" element={< BookingPesawat/>}></Route>
                   <Route path="/flight/payment/" element={< PembayaranPesawat/>}></Route>
-                  <Route path="/flight/tiket-pesawat" element={< TiketPesawat/>}></Route>
+                  {/* <Route path="/flight/tiket-pesawat" element={< TiketPesawat/>}></Route> */}
                   <Route path="/train/booking/:id" element={< BookingKai/>}></Route>
                   <Route path="/train/booking/transit/:id" element={< BookingKaiTransit/>}></Route>
                   <Route path="/train/konfirmasi" element={< KonfirmasiKai/>}></Route>

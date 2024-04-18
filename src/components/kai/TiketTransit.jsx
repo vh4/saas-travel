@@ -4,7 +4,7 @@ import {MdHorizontalRule} from 'react-icons/md'
 import {AiOutlineDownload} from "react-icons/ai"
 import { MdVerified } from "react-icons/md";
 
-export default function Tiket({data}){
+export default function TiketTransit({dataArr}){
 
     return(
         <>
@@ -37,36 +37,41 @@ export default function Tiket({data}){
         </div>
 
         <div className="bg-white text-black border-b rounded-lg p-4 md:p-8 lg:p-12 max-w-4xl mx-auto my-8">
-            <header className="flex justify-between items-center border-b pb-4">
-                <h1 className="font-medium text-2xl">Invoice</h1>
-                <div>
-                    <p className="text-sm">Invoice #<span className="font-medium">{data.booking_id}</span></p>
-                    <p className="text-sm">Date: <span className="font-medium">{new Date().toLocaleDateString()}</span></p>
-                </div>
-            </header>
             
-            <div className="mt-8">
-                <h2 className="font-medium text-xl mb-8">Payment Details</h2>
-                <div className="grid grid-cols-2 gap-y-6 md:gap-y-4 text-sm">
-                    <p>Type of Payment:</p>
-                    <p className="font-medium">TUNAI</p>
-                    <p>Phone Number:</p>
-                    <p className="font-medium">{data.nomor_hp_booking}</p>
-                    <p>Transaction ID:</p>
-                    <p className="font-medium">{data.id_transaksi}</p>
-                    <p className="hidden md:block pt-2 border-t border-gray-200 col-span-full"></p> {/* Divider */}
-                    <p>Total Paid:</p>
-                    <p className="font-medium">{data.total_dibayar}</p>
-                </div>
-            </div>
+			{dataArr && dataArr.map((data, i) => (
+				<>
+					<header className={`flex justify-between items-center border-b pb-4 ${i > 0 && 'my-16 border-t py-8'}`}>
+						<h1 className="font-medium text-2xl">Invoice</h1>
+						<div>
+							<p className="text-sm">Invoice #<span className="font-medium">{data.booking_id}</span></p>
+							<p className="text-sm">Date: <span className="font-medium">{new Date().toLocaleDateString()}</span></p>
+						</div>
+					</header>
+					<div className="mt-8">
+						<h2 className="font-medium text-xl mb-8">Payment Details</h2>
+						<div className="grid grid-cols-2 gap-y-6 md:gap-y-4 text-sm">
+							<p>Type of Payment:</p>
+							<p className="font-medium">TUNAI</p>
+							<p>Payment Code:</p>
+							<p className="font-medium">{data.nomor_hp_booking}</p>
+							<p>Transaction ID:</p>
+							<p className="font-medium">{data.id_transaksi}</p>
+							<p className="hidden md:block pt-2 border-t border-gray-200 col-span-full"></p> {/* Divider */}
+							<p>Total Paid:</p>
+							<p className="font-medium">{data.total_dibayar}</p>
+						</div>
+					</div>
 
 
-            <div className="mt-8 flex justify-end">
-                <a href={data.url_etiket} target="_blank" className="flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 hover:text-white focus:text-white">
-                    <AiOutlineDownload className="text-lg mr-2" />
-                    Download Ticket
-                </a>
-            </div>
+					<div className="mt-8 flex justify-end">
+						<a href={data.url_etiket} target="_blank" className="flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 hover:text-white focus:text-white">
+							<AiOutlineDownload className="text-lg mr-2" />
+							Download Ticket
+						</a>
+					</div>
+				</>
+			))}
+
         </div>
         </>
     )

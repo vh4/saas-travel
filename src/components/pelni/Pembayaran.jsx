@@ -15,6 +15,7 @@ import { Typography } from "antd";
 import { IoArrowForwardOutline } from "react-icons/io5";
 import moment from "moment";
 import PageExpired from "../components/Expired";
+import Tiket from "./Tiket";
 
 export default function Pembayaran() {
   const navigate = useNavigate();
@@ -49,6 +50,9 @@ export default function Pembayaran() {
   const [expiredBookTime, setExpiredBookTime] = useState(null);
   const [isNavigationDone, setIsNavigationDone] = useState(false);
   const [isBookingExpired, setIsBookingExpired] = useState(false); // Added state for booking expiration
+  const [whiteList, setWhiteList] = useState(0);
+  const [ispay, setispay] = useState(false);
+  const [hasilbayar, setHasilbayar] = useState(null);
 
   const [err, setErr] = useState(false);
 
@@ -96,8 +100,8 @@ export default function Pembayaran() {
       setErr(true);
     }
 
-    Promise.all([getDataAllBook(), cekCallbakIsMitra()])
-      .then(([getDataAllBook, cekCallbakIsMitra]) => {
+    Promise.all([getDataAllBook(), cekCallbakIsMitra(), cekWhiteListUsername()])
+      .then(([getDataAllBook, cekCallbakIsMitra, cekWhiteListUsername]) => {
         const bookResponse = getDataAllBook.book;
         const passenggerResponse = getDataAllBook;
         const bookInfoResponse = getDataAllBook.infobooking;
@@ -106,6 +110,10 @@ export default function Pembayaran() {
         if (cekCallbakIsMitra.data.rc == "00") {
           setcallbackBoolean(true);
         }
+
+        const isWhiteList = cekWhiteListUsername?.is_whitelist || 0;
+
+        setWhiteList(isWhiteList);
 
         if (bookResponse.data.rc === "00") {
           setBook(bookResponse.data.data);
@@ -158,6 +166,11 @@ export default function Pembayaran() {
 
       if (book && new Date(book.payLimit).getTime() < new Date().getTime()) {
         setIsBookingExpired(true);
+
+                
+        localStorage.removeItem(`data:pl-passenger/${id}`);
+        localStorage.removeItem(`data:pelni/${id}`);
+
       } else {
         setIsBookingExpired(false);
       }
@@ -224,6 +237,19 @@ export default function Pembayaran() {
     }
   }
 
+  async function cekWhiteListUsername() {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_HOST_API}/travel/is_whitelist`
+      );
+      
+      return response.data;
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
   const failedNotification = (rd) => {
     api["error"]({
       message: "Error!",
@@ -241,10 +267,61 @@ export default function Pembayaran() {
     });
   };
 
+
   async function handlerPembayaran(e) {
     e.preventDefault();
-  }
+    setLoading(true);
 
+    const response = await axios.post(
+      `${process.env.REACT_APP_HOST_API}/travel/pelni/payment`,
+      {
+        paymentCode: book?.paymentCode,
+        transactionId: book?.transactionId,
+        simulateSuccess: whiteList == 1 ? "yes" : process.env.REACT_APP_SIMUATION_PAYMENT, //
+        token: token
+      }
+      
+    );
+
+    if (response.data.rc === "00") {
+      const params = {
+        // airline: dataDetail.airline,
+        booking_id: response.data?.data?.bookCode,
+        nomor_hp_booking: book.paymentCode,
+        id_transaksi: response.data?.data?.transaction_id,
+        nominal_admin: book.nominal_admin,
+        url_etiket: response.data?.data?.url_etiket,
+        nominal_sales: book.normalSales,
+        total_dibayar: toRupiah(
+          parseInt(book.normalSales) + parseInt(book.nominal_admin)
+        ),
+      }
+      
+
+      setispay(true);
+      setHasilbayar(params);
+
+    //   // dispatch({
+    //   //   type: "PAY_FLIGHT",
+    //   // });
+
+    //   // navigate({
+    //   //   pathname: "/flight/tiket-pesawat",
+    //   //   search: `?${createSearchParams(params)}`,
+    //   // });
+
+      setLoading(false);
+
+      localStorage.removeItem(`data:pl-passenger/${id}`);
+      localStorage.removeItem(`data:pelni/${id}`);
+
+    } else {
+      setTimeout(() => {
+        setLoading(false);
+        failedNotification(response.data.rd);
+      }, 1000);
+    }
+  }
   async function handleCallbackSubmit(e) {
     e.preventDefault();
     setLoading(true);
@@ -263,6 +340,10 @@ export default function Pembayaran() {
 
       if (response.data.rc == "00") {
         navigate("/");
+
+        localStorage.removeItem(`data:pl-passenger/${id}`);
+        localStorage.removeItem(`data:pelni/${id}`);
+
       } else {
         failedNotification(response.data.rd);
       }
@@ -287,10 +368,17 @@ export default function Pembayaran() {
         <>
           <PageExpired />
         </>
-      ) : (
+      ) :
+      ispay == true ? 
+      (
+      <>
+        <Tiket data={hasilbayar} />
+      </>)
+      
+      : (
         <>
           {/* header kai flow */}
-          <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
+          <div className="px-0 md:px-12 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
               <AiOutlineCheckCircle className="text-black" size={20} />
               <div className="hidden xl:flex text-black">Detail pesanan</div>
@@ -334,8 +422,8 @@ export default function Pembayaran() {
                   />
                 </div>
                 {/* mobile sidebar */}
-                <div className="block xl:hidden sidebar  w-full xl:w-2/3 2xl:w-1/2">
-                  <div className="mt-2 py-2 rounded-md border border-gray-200 shadow-sm">
+                <div className="block xl:hidden sidebar w-full xl:w-2/3 2xl:w-1/2">
+                  <div className="mt-2 py-2 md:py-4 rounded-md border-b border-gray-200 shadow-sm">
                     <div className="px-4 py-2 mb-4">
                       {/* <div className="text-black text-xs">Status Booking</div> */}
                       <div className="text-black text-sm font-semibold">
@@ -382,16 +470,16 @@ export default function Pembayaran() {
                   {bookInfo.PAX_LIST.length > 0
                     ? bookInfo.PAX_LIST.map((e, i) => (
                         <>
-                          <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+                          <div className="p-2 md:p-8 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
                             <div className="">
-                              <div className="px-2 py-2 text-black border-b border-gray-200 text-xs font-medium ">
+                              <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-medium ">
                                 {bookInfo.PAX_LIST[i][0]} (
                                 {bookInfo.PAX_LIST[i][6] == "N/A"
                                   ? "INFANT"
                                   : "ADULT"}
                                 )
                               </div>
-                              <div className="mt-2 grid grid-cols-2 md:grid-cols-3">
+                              <div className="mt-2 md:mt-4 grid grid-cols-2 md:grid-cols-3">
                                 {/* <div className="px-2 md:px-4 py-2 text-sm">
                                           <div className="text-black">NIK</div>
                                           <div className="font-bold text-xs text-black">{bookInfo.PAX_LIST[i][1]}</div>
@@ -435,7 +523,7 @@ export default function Pembayaran() {
                         </>
                       ))
                     : ""}
-                  <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+                  <div className="p-2 md:p-8 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
                     <div className="p-2">
                       <div className="text-xs text-black font-medium  flex justify-between">
                         <div>
@@ -477,7 +565,7 @@ export default function Pembayaran() {
                 </div>
                 {/* desktop sidebar */}
                 <div className="hidden xl:block sidebar w-full xl:w-2/3 2xl:w-1/2">
-                  <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                  <div className="mt-8 py-2 rounded-md border-b border-gray-200 shadow-sm">
                     <div className="px-4 py-2">
                       {/* <div className="text-black text-xs">Status Booking</div> */}
                       <div className="text-black text-xs">Transaksi ID</div>
@@ -491,22 +579,22 @@ export default function Pembayaran() {
                         pembayaran di aplikasi.
                       </div>
                     </div>
-                    <div className="p-4 border-t">
+                    <div className="p-4 border-t md:0 mt-2">
                       <div className="text-xs text-black">
                         PELNI DESCRIPTION
                       </div>
-                      <div className="mt-3 text-xs text-black">
+                      <div className="mt-3 md:mt-4 text-xs text-black">
                         {book.SHIP_NAME}
                       </div>
                       <div className="flex space-x-4">
-                        <div className="mt-1 text-xs text-black font-medium ">
+                        <div className="mt-1 md:mt-2 text-xs text-black font-medium ">
                           {passengers.pelabuhan_asal}
                         </div>
                         <IoArrowForwardOutline
-                          className="text-black"
+                          className="text-black mt-0 md:mt-2"
                           size={18}
                         />
-                        <div className="mt-1 text-xs text-black font-medium ">
+                        <div className="mt-1 md:mt-2 text-xs text-black font-medium ">
                           {passengers.pelabuhan_tujuan}
                         </div>
                       </div>
@@ -547,16 +635,16 @@ export default function Pembayaran() {
                     />
                   </div>
                 {callbackBoolean == true ? (
-                  <div className="mt-2 py-4 rounded-md border border-gray-200 shadow-sm">
+                  <div className="mt-2 py-4 rounded-md border-t border-gray-200 shadow-sm">
                       <>
-                        <div className="px-8 py-4 text-sm text-black">
+                        <div className="px-8 md:px-4 py-4 text-sm text-black">
                           Tekan tombol dibawah ini untuk melanjutkan proses
                           transaksi.
                         </div>
                         <div className="flex justify-center">
                           <ButtonAnt
-                            onClick={handleCallbackSubmit}
-                            size="large"
+                          onClick={whiteList == 1 ? handlerPembayaran : handleCallbackSubmit}
+                          size="large"
                             key="submit"
                             type="primary"
                             className="bg-blue-500 px-12 font-semibold"
@@ -593,7 +681,7 @@ export default function Pembayaran() {
                     <>
                       <div className="flex justify-center">
                         <ButtonAnt
-                          onClick={handleCallbackSubmit}
+                           onClick={whiteList == 1 ? handlerPembayaran : handleCallbackSubmit}                         
                           size="large"
                           key="submit"
                           type="primary"

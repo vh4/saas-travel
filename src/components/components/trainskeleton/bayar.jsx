@@ -10,22 +10,22 @@ const BayarLoading = ({TotalAdult, TotalInfant}) => {
 					{Array.from({ length: TotalAdult }, (_, i) => (
 						<>
 							{/* adult */}
-							<div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+							<div className="p-2 md:p-8 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
 							<div className="p-2">
 								{/* Skeleton Placeholder for the name */}
 								<Skeleton width={100} height={16} />
 								<div className="mt-2 block md:flex md:space-x-8">
-								<div className="px-2 md:px-4 py-2 text-sm ">
+								<div className="py-2 text-sm ">
 									<div className="text-black">NIK</div>
 									{/* Skeleton Placeholder for NIK */}
 									<Skeleton width={100} height={12} />
 								</div>
-								<div className="px-2 md:px-4 py-2 text-sm ">
+								<div className="py-2 text-sm ">
 									<div className="text-black">Nomor HP</div>
 									{/* Skeleton Placeholder for Nomor HP */}
 									<Skeleton width={100} height={12} />
 								</div>
-								<div className="px-2 md:px-4 py-2 text-sm ">
+								<div className="py-2 text-sm ">
 									<div className="text-black">Kursi</div>
 									{/* Skeleton Placeholder for Kursi */}
 									<Skeleton width={100} height={12} />
@@ -39,22 +39,22 @@ const BayarLoading = ({TotalAdult, TotalInfant}) => {
 					{Array.from({ length: TotalInfant }, (_, i) => (
 						<>
 							{/* infant */}
-							<div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+							<div className="p-2 md:p-8 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
 								<div className="p-4">
 									{/* Skeleton Placeholder for the name */}
 									<Skeleton width={100} height={16} />
 									<div className="mt-2 flex space-x-8">
-									<div className="px-4 py-2 text-sm ">
+									<div className="py-2 text-sm ">
 										<div className="text-black">NIK</div>
 										{/* Skeleton Placeholder for NIK */}
 										<Skeleton width={100} height={12} />
 									</div>
-									<div className="px-4 py-2 text-sm ">
+									<div className="py-2 text-sm ">
 										<div className="text-black">Tanggal Lahir</div>
 										{/* Skeleton Placeholder for Tanggal Lahir */}
 										<Skeleton width={100} height={12} />
 									</div>
-									<div className="px-4 py-2 text-sm ">
+									<div className="py-2 text-sm ">
 										<div className="text-black">Kursi</div>
 										{/* Skeleton Placeholder for Kursi */}
 										<Skeleton width={100} height={12} />
@@ -66,7 +66,7 @@ const BayarLoading = ({TotalAdult, TotalInfant}) => {
 					))}
 
 
-					<div className="p-2 mt-2 w-full rounded-md border border-gray-200 shadow-sm">
+					<div className="p-2 md:p-8 mt-2 w-full rounded-md border-b border-gray-200 shadow-sm">
 					<div className="p-4">
 						<div className="text-xs text-black  flex justify-between">
 						<div>
@@ -107,12 +107,16 @@ const BayarLoading = ({TotalAdult, TotalInfant}) => {
 
 				{/* desktop sidebar */}
 				<div className="sidebar w-full xl:w-1/2">
-				<div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+				<div className="mt-8 py-2 rounded-md border-b border-gray-200 shadow-sm">
 					<div className="px-4 py-2">
 					{/* <div className="text-black text-xs">Booking ID</div> */}
 					<div className="text-black text-xs">Transaksi ID</div>
 					{/* Skeleton Placeholder for Booking ID */}
 					<Skeleton width={100} height={12} />
+					 <div className="text-grapy-500 text-xs">
+                        Gunakan kode bayar ini sebagai nomor tujuan pada menu
+                        pembayaran di aplikasi.
+                      </div>
 					</div>
 					<div className="p-4 border-t">
 					<div className="text-xs text-black">TRAIN DESCRIPTION</div>
@@ -141,6 +145,9 @@ const BayarLoading = ({TotalAdult, TotalInfant}) => {
 					{/* <div className="mt-3 text-xs text-black ">
 						<Skeleton width={150} height={12} />
 					</div> */}
+					<div className="hidden md:block mt-2">
+						<Skeleton width={350} height={12} />
+                  	</div>
 					</div>
 				</div>
 				{/* <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">

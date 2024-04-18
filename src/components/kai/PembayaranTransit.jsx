@@ -15,6 +15,7 @@ import PageExpired from "../components/Expired";
 import BayarLoading from "../components/trainskeleton/bayar";
 import { Typography } from "antd";
 import moment from "moment";
+import TiketTransit from "./TiketTransit";
 
 export default function Pembayaran() {
   const navigate = useNavigate();
@@ -55,6 +56,9 @@ export default function Pembayaran() {
 
   const [api, contextHolder] = notification.useNotification();
   const [isNavigationDone, setIsNavigationDone] = useState(false);
+  const [whiteList, setWhiteList] = useState(0);
+  const [ispay, setispay] = useState(false);
+  const [hasilbayar, setHasilbayar] = useState([]);
 
   const failedNotification = (rd) => {
     api["error"]({
@@ -71,18 +75,22 @@ export default function Pembayaran() {
       setErr(true);
     }
 
-    Promise.all([getDataTrain(), getHasilBooking(), cekCallbakIsMitra()])
+    Promise.all([getDataTrain(), getHasilBooking(), cekCallbakIsMitra(), cekWhiteListUsername()])
       .then(
         ([
           ResponsegetDataTrain,
           ResponsegetHasilBooking,
           cekCallbakIsMitra,
+          cekWhiteListUsername
         ]) => {
           if (cekCallbakIsMitra.data.rc == "00") {
             setcallbackBoolean(true);
           }
 
           const hasilBooking = ResponsegetHasilBooking.hasil_book;
+
+          const isWhiteList = cekWhiteListUsername?.is_whitelist || 0;
+          setWhiteList(isWhiteList);  
 
           if (ResponsegetDataTrain) {
             const dataTrainDetail = ResponsegetDataTrain.train_detail;
@@ -184,6 +192,10 @@ export default function Pembayaran() {
         new Date(hasilBooking[0].timeLimit).getTime() < new Date().getTime()
       ) {
         setIsBookingExpired(true);
+
+        localStorage.removeItem(`data:k-train-transit/${uuid_train_data}`);
+        localStorage.removeItem(`data:k-book-transit/${uuid_book}`);
+
       } else {
         setIsBookingExpired(false);
       }
@@ -228,63 +240,107 @@ export default function Pembayaran() {
     }
   }
 
+  async function cekWhiteListUsername() {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_HOST_API}/travel/is_whitelist`
+      );
+      
+      return response.data;
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async function handlerPembayaran(e) {
     e.preventDefault();
     setIsLoading(true);
-    const response = await axios.post(
-      `${process.env.REACT_APP_HOST_API}/travel/train/payment`,
-      {
-        productCode: "WKAI",
-        bookingCode: hasilBooking.bookingCode,
-        transactionId: hasilBooking.transactionId,
-        nominal: hasilBooking.normalSales,
-        nominal_admin: hasilBooking.nominalAdmin,
-        discount: hasilBooking.discount,
-        simulateSuccess: process.env.REACT_APP_SIMUATION_PAYMENT,
-        pay_type: "TUNAI",
-        token: JSON.parse(
-          localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-        ),
+
+    const data = [];
+
+    hasilBooking.map(e => {
+
+      const params = {
+          productCode: "WKAI",
+          bookingCode: e.bookingCode,
+          transactionId: e.transactionId,
+          nominal: e.normalSales,
+          nominal_admin: e.nominalAdmin,
+          discount: e.discount,
+          simulateSuccess: whiteList == 1 ? "true" : process.env.REACT_APP_SIMUATION_PAYMENT,
+          pay_type: "TUNAI",
+          token: JSON.parse(
+            localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+          ),
       }
+
+      data.push(params);
+
+    })
+
+    const response = await axios.post(
+      `${process.env.REACT_APP_HOST_API}/travel/train/payment-transit`, data
     );
 
-    if (response.data.rc === "00") {
-      const params = {
-        success: JSON.stringify({
-          booking_id: hasilBooking.bookingCode,
+    if (response?.data[0].rc == "00" && response?.data[1].rc == "00") {
+
+      const paydata = [];
+
+      response.data?.map(async (e, i) => {
+
+        const params = {
+          booking_id: hasilBooking[i].bookingCode,
           tipe_pembayaran: "TUNAI",
           nomor_hp_booking: passengers.adults[0].phone,
-          id_transaksi: hasilBooking.transactionId,
-          nominal_admin: hasilBooking.nominalAdmin,
-          discount: hasilBooking.discount,
-          url_etiket: response.data.data.url_etiket,
-          nominal_sales: hasilBooking.normalSales,
+          id_transaksi: e.data?.transaction_id,
+          nominal_admin: hasilBooking[i].nominalAdmin,
+          discount: hasilBooking[i].discount,
+          url_etiket: e.data?.url_etiket,
+          nominal_sales: hasilBooking[i].normalSales,
           total_dibayar: toRupiah(
-            parseInt(hasilBooking.normalSales) -
-              parseInt(hasilBooking.discount) +
-              parseInt(hasilBooking.nominalAdmin)
+            parseInt(hasilBooking[i].normalSales) -
+              parseInt(hasilBooking[i].discount) +
+              parseInt(hasilBooking[i].nominalAdmin)
           ),
-        }),
-      };
+        }
 
-      dispatch({
-        type: "PAY_TRAIN",
-      });
+        paydata.push(params);
+        
+      })    
 
-      setTimeout(() => {
-        setIsLoading(false);
+      // dispatch({
+      //   type: "PAY_TRAIN",
+      // });
 
-        navigate({
-          pathname: "/train/tiket-kai",
-          search: `?${createSearchParams(params)}`,
-        });
-      }, 100);
+      // setTimeout(() => {
+      //   setIsLoading(false);
+
+      //   navigate({
+      //     pathname: "/train/tiket-kai",
+      //     search: `?${createSearchParams(params)}`,
+      //   });
+      // }, 100);
+
+            
+      setispay(true);
+      setHasilbayar(paydata);
+      
+      setIsLoading(false);
+      
+      // localStorage.removeItem(`data:k-train-transit/${uuid_train_data}`);
+      // localStorage.removeItem(`data:k-book-transit/${uuid_book}`);
+      
+
     } else {
       setTimeout(() => {
         failedNotification(response.data.rd);
         setIsLoading(false);
       }, 100);
     }
+  
+    setIsLoading(false);
+
   }
 
   async function handleCallbackSubmit(e) {
@@ -313,6 +369,11 @@ export default function Pembayaran() {
 
         if (response.data.rc == "00") {
           navigate("/");
+          
+          localStorage.removeItem(`data:k-train-transit/${uuid_train_data}`);
+          localStorage.removeItem(`data:k-book-transit/${uuid_book}`);
+
+          
         } else {
           failedNotification(response.data.rd);
         }
@@ -340,10 +401,19 @@ export default function Pembayaran() {
         <>
           <PageExpired />
         </>
-      ) : (
+      ) : 
+            
+      ispay == true ? 
+      (
+      <>
+        <TiketTransit dataArr={hasilbayar} />
+      </>)
+      :
+
+      (
         <>
           {/* header kai flow */}
-          <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
+          <div className="px-0 md:px-8 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
               <AiOutlineCheckCircle className="text-black" size={20} />
               <div className="hidden xl:flex text-black">Detail pesanan</div>
@@ -389,7 +459,7 @@ export default function Pembayaran() {
                 <div className="sidebar block xl:hidden w-full xl:w-2/3 2xl:w-1/2">
                   {hasilBooking.map((e, i) => (
                     <>
-                      <div className="mt-2 py-2 rounded-md border border-gray-200 shadow-sm">
+                      <div className="mt-2 py-2 rounded-md border-b border-gray-200 shadow-sm">
                         <div className="px-4 py-2">
                           {/* <div className="text-black text-xs">Booking ID</div> */}
                           <div className="text-black font-medium  text-sm">
@@ -428,7 +498,7 @@ export default function Pembayaran() {
                 <div className="mt-4 w-full mx-0 2xl:mx-4">
                 {/* adult */}
                   {passengers.adults && passengers.adults.length > 0 ? (
-                    <div className="text-sm xl:text-sm font-bold text-black mt-8 md:mt-4 mx-2 md:mx-0">
+                    <div className="text-sm xl:text-sm font-bold text-black mt-8 md:mt-4 mx-2 md:mx-4">
                       <p>ADULT PASSENGERS</p>
                     </div>
                   ) : (
@@ -448,7 +518,7 @@ export default function Pembayaran() {
                           {passengers.adults && passengers.adults.length > 0
                             ? passengers.adults.map((e, i) => (
                                 <>
-                                  <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+                                  <div className="p-2 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
                                     <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
                                       <div className="px-2 md:px-4 py-2 text-xs">
                                         <div className="text-black font-medium ">
@@ -511,7 +581,7 @@ export default function Pembayaran() {
 
                   {/* infants */}
                   {passengers.infants && passengers.infants.length > 0 ? (
-                    <div className="text-sm xl:text-sm font-bold text-black mt-8 md:mt-4">
+                    <div className="text-sm xl:text-sm font-bold text-black mt-8 md:mt-4 mx-0 md:mx-4">
                       <p>INFANTS PASSENGERS</p>
                     </div>
                   ) : (
@@ -531,7 +601,7 @@ export default function Pembayaran() {
                             {passengers.infants && passengers.infants.length > 0
                               ? passengers.infants.map((e, i) => (
                                   <>
-                                  <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+                                  <div className="p-2 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
                                     <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
                                       <div className="px-2 md:px-4 py-2 text-xs">
                                         <div className="text-black font-medium ">
@@ -594,7 +664,7 @@ export default function Pembayaran() {
                       </>
                     ))}
 
-                  <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+                  <div className="p-2 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
                     {hasilBooking.map((e, z) => (
                       <>
                         <div className="p-4">
@@ -652,7 +722,7 @@ export default function Pembayaran() {
                 <div className="sidebar hidden xl:block w-full xl:w-2/3 2xl:w-1/2">
                   {hasilBooking.map((e, i) => (
                     <>
-                      <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                      <div className="mt-8 py-2 rounded-md border-b border-gray-200 shadow-sm">
                         <div className="px-4 py-2">
                           {/* <div className="text-black text-xs">Booking ID</div> */}
                           <div className="text-black text-xs">Transaksi ID</div>
@@ -721,16 +791,16 @@ export default function Pembayaran() {
                     />
                   </div>
                   {callbackBoolean == true ? (
-                    <div className="mt-2 py-4 rounded-md border border-gray-200 shadow-sm">
+                    <div className="mt-2 py-4 rounded-md border-t border-gray-200 shadow-sm">
                       <>
-                        <div className="px-8 py-4 text-sm text-black">
+                        <div className="px-8 md:px-4 py-4 text-sm text-black">
                           Tekan tombol dibawah ini untuk melanjutkan proses
                           transaksi.
                         </div>
                         <div className="flex justify-center">
                           <ButtonAnt
-                            onClick={handleCallbackSubmit}
-                            size="large"
+                          onClick={whiteList == 1 ? handlerPembayaran : handleCallbackSubmit}
+                          size="large"
                             key="submit"
                             type="primary"
                             className="bg-blue-500 px-8 font-semibold"
@@ -750,7 +820,7 @@ export default function Pembayaran() {
                     <>
                       <div className="flex justify-center">
                         <ButtonAnt
-                          onClick={handleCallbackSubmit}
+                          onClick={whiteList == 1 ? handlerPembayaran : handleCallbackSubmit}
                           size="large"
                           key="submit"
                           type="primary"

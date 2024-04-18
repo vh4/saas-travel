@@ -1,124 +1,73 @@
 import React, {useState, useEffect} from "react";
-import axios from "axios";
-import {useSearchParams } from "react-router-dom";
 import {AiOutlineCheckCircle} from "react-icons/ai"
-import {RxCrossCircled} from 'react-icons/rx'
-import {MdHorizontalRule, MdOutlineAirlineSeatReclineExtra} from 'react-icons/md'
-import { useNavigate } from "react-router-dom";
-import {BsFillCheckCircleFill} from "react-icons/bs"
+import {MdHorizontalRule} from 'react-icons/md'
 import {AiOutlineDownload} from "react-icons/ai"
+import { MdVerified } from "react-icons/md";
 
-export default function Konfirmasi(){
+export default function Tiket({data}){
 
-    const navigate = useNavigate();
-    const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
-    useEffect(() =>{
-        if(token === null || token === undefined){
-            navigate('/');
-        }
-    });
-
-    const [searchParams, setSearchParams] = useSearchParams();
-    const data = searchParams.get('success') ? JSON.parse(searchParams.get('success')) : [];
     return(
         <>
-        {token !== null && token !== undefined ? (
-            <>
-                        {/* header kai flow */}
-                <div className='flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center'>
-                        <div className='flex space-x-2 items-center'>
-                            <AiOutlineCheckCircle className='text-black' size={20} />
-                            <div className='hidden xl:flex text-black'>Detail pesanan</div>
-                            <div className='block xl:hidden text-black'>Detail</div>
-                        </div>
-                        <div>
-                            <MdHorizontalRule size={20} className='text-black hidden xl:flex' />
-                        </div>
-                        <div className='flex space-x-2 items-center'>
-                            <AiOutlineCheckCircle className='text-black'  size={20} />
-                            <div className='hidden xl:flex text-black'>Pembayaran tiket</div>
-                            <div className='block xl:hidden text-black'>Payment</div>
-                        </div>
-                        {/* <div>
-                            <MdHorizontalRule size={20} className='text-black hidden xl:flex' />
-                        </div>
-                        <div className='flex space-x-2 items-center'>
-                            <AiOutlineCheckCircle className='text-black'  size={20} />
-                            <div className='text-black'>E-Tiket</div>
-                        </div> */}
+        {/* header kai flow */}
+        <div className='hidden md:block bg-white border-b rounded-lg p-4 md:p-8 lg:p-6 max-w-4xl mx-auto relative'>
+            <div className='flex text-black justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center'>
+                <div className='flex space-x-2 items-center'>
+                    <AiOutlineCheckCircle className='text-black' size={20} />
+                    <div className='hidden xl:flex text-black'>Detail pesanan</div>
+                    <div className='block xl:hidden text-black'>Detail</div>
                 </div>
-                <div className="w-full mt-8 xl:px-28 mb-16">
-                    <div className="border rounded-md pb-12">
-                        <div className="text-center md:py-16 px-4 md:px-12 xl:px-24">
-                            <div className="flex justify-center">
-                                <div>
-                                    <div className="text-center flex justify-center"> <BsFillCheckCircleFill className="text-green-400" size={28} /></div>
-                                    <div className="mt-2 text-sm xl:text-xl text-green-400">Pembayaran sukses</div>
-                                </div>
-                            </div>
-                            <div className="mt-8 text-black flex justify-between">
-                                <div>Booking ID</div>
-                                <div>{data.booking_id}</div>
-                            </div>
-                            <div className="mt-2 text-black flex justify-between">
-                                <div>Tipe Pembayaran</div>
-                                <div>{data.tipe_pembayaran}</div>
-                            </div>
-                            <div className="mt-2 text-black flex justify-between">
-                                <div>Nomor HP Booking</div>
-                                <div>{data.nomor_hp_booking}</div>
-                            </div>
-                            <div className="mt-2 text-black flex justify-between">
-                                <div>Transaksi ID</div>
-                                <div className="text-[18px]">{data.id_transaksi}</div>
-                            </div>
-                            <div className="mt-8 text-black font-bold flex justify-between">
-                                <div>Total Dibayar</div>
-                                <div>Rp. {data.total_dibayar}</div>
-                            </div>
-                        </div>
-                        <div className="hidden md:flex text-black font-bold justify-between pr-4">
-                                <div className="px-4 md:px-12 xl:px-16">
-                                    <div class="flex p-2 mb-4 text-sm text-yellow-700 " role="alert">
-                                        <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
-                                        <span class="sr-only">Info</span>
-                                        <div>
-                                            <span class="font-medium">Penting! </span>Cek dimenu transaksi.
-                                        </div>
-                                    </div>
-                                </div>
-                                <a href={data.url_etiket} target="_blank" class="py-2.5 px-5 mr-8 mb-2 text-sm font-medium text-black focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 ">
-                                    <div className="flex space-x-2">
-                                        <AiOutlineDownload className="text-black" size={20} />
-                                        <div className="text-black font-bold">Download tiket</div>
-                                    </div>
-                                </a>
-                            </div>
-                            {/* mobile */}
-                            <div className="block mt-4 md:hidden text-black font-bold justify-between pr-4">
-                                <div className="px-4 md:px-12 xl:px-16">
-                                    <div class="flex p-2 mb-4 text-sm text-yellow-700 " role="alert">
-                                        <svg aria-hidden="true" class="flex-shrink-0 inline w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
-                                        <span class="sr-only">Info</span>
-                                        <div>
-                                            <span class="font-medium">Penting! </span>Cek dimenu transaksi.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex justify-end">
-                                <button href={data.url_etiket} target="_blank" class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-black focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 ">
-                                    <div className="flex space-x-2">
-                                        <AiOutlineDownload className="text-black" size={20} />
-                                        <div className="text-black font-bold">Download tiket</div>
-                                    </div>
-                                </button>
-                                </div>
-                            </div>
-                    </div>
+                <div>
+                    <MdHorizontalRule size={20} className='text-black hidden xl:flex' />
                 </div>
+                <div className='flex space-x-2 items-center'>
+                    <AiOutlineCheckCircle className='text-black' size={20} />
+                    <div className='hidden xl:flex text-black'>Pembayaran tiket</div>
+                    <div className='block xl:hidden text-black'>Payment</div>
+                </div>
+                <div>
+                    <MdHorizontalRule size={20} className='text-black hidden xl:flex' />
+                </div>
+                <div className='flex space-x-2 items-center'>
+                    <AiOutlineCheckCircle className='text-black' size={20} />
+                    <div className='hidden xl:flex text-black'>E-tiket</div>
+                    <div className='block xl:hidden text-black'>E-tiket</div>
+                </div>
+            </div>
+            <MdVerified size={32} className="text-green-400 absolute right-6 top-4" />
+        </div>
+
+        <div className="bg-white text-black border-b rounded-lg p-4 md:p-8 lg:p-12 max-w-4xl mx-auto my-8">
+            <header className="flex justify-between items-center border-b pb-4">
+                <h1 className="font-medium text-2xl">Invoice</h1>
+                <div>
+                    <p className="text-sm">Invoice #<span className="font-medium">{data.booking_id}</span></p>
+                    <p className="text-sm">Date: <span className="font-medium">{new Date().toLocaleDateString()}</span></p>
+                </div>
+            </header>
             
-            </>
-        ) : ''}
+            <div className="mt-8">
+                <h2 className="font-medium text-xl mb-8">Payment Details</h2>
+                <div className="grid grid-cols-2 gap-y-6 md:gap-y-4 text-sm">
+                    <p>Type of Payment:</p>
+                    <p className="font-medium">TUNAI</p>
+                    <p>Phone Number:</p>
+                    <p className="font-medium">{data.nomor_hp_booking}</p>
+                    <p>Transaction ID:</p>
+                    <p className="font-medium">{data.id_transaksi}</p>
+                    <p className="hidden md:block pt-2 border-t border-gray-200 col-span-full"></p> {/* Divider */}
+                    <p>Total Paid:</p>
+                    <p className="font-medium">{data.total_dibayar}</p>
+                </div>
+            </div>
+
+
+            <div className="mt-8 flex justify-end">
+                <a href={data.url_etiket} target="_blank" className="flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 hover:text-white focus:text-white">
+                    <AiOutlineDownload className="text-lg mr-2" />
+                    Download Ticket
+                </a>
+            </div>
+        </div>
         </>
     )
 }

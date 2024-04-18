@@ -15,6 +15,7 @@ import PageExpired from "../components/Expired";
 import BayarLoading from "../components/trainskeleton/bayar";
 import { Typography } from "antd";
 import moment from "moment";
+import Tiket from "./Tiket";
 
 export default function Pembayaran() {
   const navigate = useNavigate();
@@ -55,6 +56,9 @@ export default function Pembayaran() {
 
   const [api, contextHolder] = notification.useNotification();
   const [isNavigationDone, setIsNavigationDone] = useState(false);
+  const [whiteList, setWhiteList] = useState(0);
+  const [ispay, setispay] = useState(false);
+  const [hasilbayar, setHasilbayar] = useState(null);
 
   const failedNotification = (rd) => {
     api["error"]({
@@ -71,16 +75,22 @@ export default function Pembayaran() {
       setErr(true);
     }
 
-    Promise.all([getDataTrain(), getHasilBooking(), cekCallbakIsMitra()])
+    Promise.all([getDataTrain(), getHasilBooking(), cekCallbakIsMitra(), cekWhiteListUsername()])
       .then(
         ([
           ResponsegetDataTrain,
           ResponsegetHasilBooking,
           cekCallbakIsMitra,
+          cekWhiteListUsername
         ]) => {
           if (cekCallbakIsMitra.data.rc == "00") {
             setcallbackBoolean(true);
           }
+
+
+        const isWhiteList = cekWhiteListUsername?.is_whitelist || 0;
+        setWhiteList(isWhiteList);
+
 
           if (ResponsegetDataTrain) {
             setdataDetailTrain(ResponsegetDataTrain.train_detail);
@@ -168,6 +178,10 @@ export default function Pembayaran() {
         new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()
       ) {
         setIsBookingExpired(true);
+
+        localStorage.removeItem(`data:k-train/${uuid_train_data}`);
+        localStorage.removeItem(`data:k-book/${uuid_book}`);
+
       } else {
         setIsBookingExpired(false);
       }
@@ -224,6 +238,19 @@ export default function Pembayaran() {
     }
   }
 
+  async function cekWhiteListUsername() {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_HOST_API}/travel/is_whitelist`
+      );
+      
+      return response.data;
+
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async function getHasilBooking() {
     try {
       const response = localStorage.getItem(`data:k-book/${uuid_book}`);
@@ -245,7 +272,7 @@ export default function Pembayaran() {
         nominal: hasilBooking.normalSales,
         nominal_admin: hasilBooking.nominalAdmin,
         discount: hasilBooking.discount,
-        simulateSuccess: process.env.REACT_APP_SIMUATION_PAYMENT,
+        simulateSuccess: whiteList == 1 ? "true" : process.env.REACT_APP_SIMUATION_PAYMENT, //
         pay_type: "TUNAI",
         token: JSON.parse(
           localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
@@ -255,35 +282,41 @@ export default function Pembayaran() {
 
     if (response.data.rc === "00") {
       const params = {
-        success: JSON.stringify({
-          booking_id: hasilBooking.bookingCode,
-          tipe_pembayaran: "TUNAI",
-          nomor_hp_booking: passengers.adults[0].phone,
-          id_transaksi: hasilBooking.transactionId,
-          nominal_admin: hasilBooking.nominalAdmin,
-          discount: hasilBooking.discount,
-          url_etiket: response.data.data.url_etiket,
-          nominal_sales: hasilBooking.normalSales,
-          total_dibayar: toRupiah(
-            parseInt(hasilBooking.normalSales) -
-              parseInt(hasilBooking.discount) +
-              parseInt(hasilBooking.nominalAdmin)
-          ),
-        }),
-      };
+        booking_id: hasilBooking.bookingCode,
+        tipe_pembayaran: "TUNAI",
+        nomor_hp_booking: passengers.adults[0].phone,
+        id_transaksi: response.data?.data?.transaction_id,
+        nominal_admin: hasilBooking.nominalAdmin,
+        discount: hasilBooking.discount,
+        url_etiket: response.data.data.url_etiket,
+        nominal_sales: hasilBooking.normalSales,
+        total_dibayar: toRupiah(
+          parseInt(hasilBooking.normalSales) -
+            parseInt(hasilBooking.discount) +
+            parseInt(hasilBooking.nominalAdmin)
+        ),
+      }
 
-      dispatch({
-        type: "PAY_TRAIN",
-      });
+      // dispatch({
+      //   type: "PAY_TRAIN",
+      // });
 
-      setTimeout(() => {
-        setIsLoading(false);
+      // setTimeout(() => {
+      //   setIsLoading(false);
 
-        navigate({
-          pathname: "/train/tiket-kai",
-          search: `?${createSearchParams(params)}`,
-        });
-      }, 100);
+      //   navigate({
+      //     pathname: "/train/tiket-kai",
+      //     search: `?${createSearchParams(params)}`,
+      //   });
+      // }, 100);
+
+      setispay(true);
+      setHasilbayar(params);
+
+      localStorage.removeItem(`data:k-train/${uuid_train_data}`);
+      localStorage.removeItem(`data:k-book/${uuid_book}`);
+
+
     } else {
       setTimeout(() => {
         failedNotification(response.data.rd);
@@ -310,6 +343,10 @@ export default function Pembayaran() {
 
       if (response.data.rc == "00") {
         navigate("/");
+
+        localStorage.removeItem(`data:k-train/${uuid_train_data}`);
+        localStorage.removeItem(`data:k-book/${uuid_book}`);
+
       } else {
         failedNotification(response.data.rd);
       }
@@ -335,10 +372,18 @@ export default function Pembayaran() {
         <>
           <PageExpired />
         </>
-      ) : (
+      ) :
+      
+      ispay == true ? 
+      (
+      <>
+        <Tiket data={hasilbayar} />
+      </>)
+      :
+      (
         <>
           {/* header kai flow */}
-          <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
+          <div className="px-0 md:px-12 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
               <AiOutlineCheckCircle className="text-black" size={20} />
               <div className="hidden xl:flex text-black">Detail pesanan</div>
@@ -381,8 +426,8 @@ export default function Pembayaran() {
                   />
                 </div>
                 {/* mobile sidebar */}
-                <div className="sidebar block xl:hidden w-full xl:w-2/3 2xl:w-1/2">
-                  <div className="mt-2 py-2 rounded-md border border-gray-200 shadow-sm">
+                <div className="block xl:hidden sidebar w-full xl:w-2/3 2xl:w-1/2">
+                  <div className="mt-2 py-2 md:py-4 rounded-md border-b border-gray-200 shadow-sm">
                     <div className="px-4 py-2">
                       {/* <div className="text-black text-xs">Booking ID</div> */}
                       <div className="text-black font-medium  text-sm">
@@ -423,9 +468,9 @@ export default function Pembayaran() {
                   {passengers.adults.length > 0
                     ? passengers.adults.map((e, i) => (
                         <>
-                          <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
-                            <div className="mt-4">
-                              <div className="px-2 py-2 text-black border-b border-gray-200 text-sm font-medium ">
+                          <div className="p-2 md:p-8 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
+                            <div className="">
+                              <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-medium ">
                                 {e.name}
                               </div>
                               <div className="mt-2 grid w-full grid-cols-2 md:grid-cols-4">
@@ -480,9 +525,9 @@ export default function Pembayaran() {
                   {passengers.infants.length > 0
                     ? passengers.infants.map((e, i) => (
                         <>
-                          <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
-                            <div className="mt-2">
-                              <div className="px-2 py-2 text-black border-b border-gray-200 text-sm font-medium ">
+                          <div className="p-2 md:p-8 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
+                            <div className="">
+                              <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-medium ">
                                 {e.name}
                               </div>
                               <div className="mt-2 grid w-full grid-cols-2 md:grid-cols-4">
@@ -534,7 +579,7 @@ export default function Pembayaran() {
                         </>
                       ))
                     : ""}
-                  <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+                  <div className="p-2 md:p-8 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
                     <div className="p-2">
                       <div className="text-xs text-black font-medium  flex justify-between">
                         <div>
@@ -575,7 +620,7 @@ export default function Pembayaran() {
                 </div>
                 {/* desktop sidebar */}
                 <div className="sidebar hidden xl:block w-full xl:w-2/3 2xl:w-1/2">
-                  <div className="mt-0 md:mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                  <div className="mt-8 py-2 rounded-md border-b border-gray-200 shadow-sm">
                     <div className="px-4 py-2">
                       {/* <div className="text-black text-xs">Booking ID</div> */}
                       <div className="text-black text-xs">Transaksi ID</div>
@@ -591,21 +636,21 @@ export default function Pembayaran() {
                         pembayaran di aplikasi.
                       </div>
                     </div>
-                    <div className="p-4 border-t">
+                    <div className="p-4 border-t md:0 mt-2">
                       <div className="text-xs text-black">
                         TRAIN DESCRIPTION
                       </div>
-                      <div className="mt-3 text-xs text-black">
+                      <div className="mt-3 md:mt-4 text-xs text-black">
                         {dataBookingTrain[0].trainName}
                       </div>
-                      <div className="mt-1 text-xs text-black font-medium ">
+                      <div className="mt-1 md:mt-2 text-xs text-black font-medium ">
                         {dataDetailTrain[0].berangkat_nama_kota} -{" "}
                         {dataDetailTrain[0].tujuan_nama_kota}
                       </div>
-                      <div className="mt-3 text-xs text-black">
+                      <div className="mt-3 md:mt-4 text-xs text-black">
                         {parseTanggal(dataBookingTrain[0].departureDate)}
                       </div>
-                      <div className="mt-1 text-xs text-black">
+                      <div className="mt-1 md:mt-2 text-xs text-black">
                         {dataBookingTrain[0].departureTime} -{" "}
                         {dataBookingTrain[0].arrivalTime}
                       </div>
@@ -644,16 +689,16 @@ export default function Pembayaran() {
                     />
                   </div>
                   {callbackBoolean == true ? (
-                    <div className="mt-2 py-4 rounded-md border border-gray-200 shadow-sm">
+                    <div className="mt-2 py-4 rounded-md border-t border-gray-200 shadow-sm">
                       <>
-                        <div className="px-8 py-4 text-sm text-black">
+                        <div className="px-8 md:px-4 py-4 text-sm text-black">
                           Tekan tombol dibawah ini untuk melanjutkan proses
                           transaksi.
                         </div>
                         <div className="flex justify-center">
                           <ButtonAnt
-                            onClick={handleCallbackSubmit}
-                            size="large"
+                          onClick={whiteList == 1 ? handlerPembayaran : handleCallbackSubmit}
+                          size="large"
                             key="submit"
                             type="primary"
                             className="bg-blue-500 px-8 font-semibold"
@@ -690,7 +735,7 @@ export default function Pembayaran() {
                     <>
                       <div className="flex justify-center">
                         <ButtonAnt
-                          onClick={handleCallbackSubmit}
+                          onClick={whiteList == 1 ? handlerPembayaran : handleCallbackSubmit}
                           size="large"
                           key="submit"
                           type="primary"

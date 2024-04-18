@@ -50,7 +50,7 @@ export default function Tiket({data}){
                 <div className="grid grid-cols-2 gap-y-6 md:gap-y-4 text-sm">
                     <p>Type of Payment:</p>
                     <p className="font-medium">TUNAI</p>
-                    <p>Phone Number:</p>
+                    <p>Payment Code:</p>
                     <p className="font-medium">{data.nomor_hp_booking}</p>
                     <p>Transaction ID:</p>
                     <p className="font-medium">{data.id_transaksi}</p>
