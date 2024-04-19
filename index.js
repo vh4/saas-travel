@@ -18,10 +18,13 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const { getInfoClientAll } = require('./utils/utils');
 const axios = require('axios')
+const {dbCheck} =  require('./databases/db')
 
 const app = express();
 const port = 9999;
 app.use(timeout('3600s'))
+//for checked databases.
+dbCheck();
 
 // Use cookie-parser middleware
 app.use(cookieParser());

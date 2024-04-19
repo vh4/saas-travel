@@ -2,7 +2,8 @@ const express = require('express');
 const axios = require('axios');
 const logger = require('../utils/logger.js');
 const { getCountry, getInfoClientAll } = require('../utils/utils.js');
-const jwt = require('jwt-decode')
+const jwt = require('jwt-decode');
+const { WhiteListtravelFunction, IsSimulatetravelFunction } = require('../model/global.js');
 require('dotenv').config()
 
 const Router = express.Router();
@@ -57,7 +58,6 @@ Router.post('/app/redirect', async function (req, res) {
         data.expired_date = expired;
         data.username = splitlogin[0];
         data['is_header_name_and_toast'] = false;
-
         if (data.rc === '00') {
 
           if(merchant !== null && merchant !== undefined){  
@@ -79,6 +79,8 @@ Router.post('/app/redirect', async function (req, res) {
 
 
             req.session['v_merchant'] = merchant;
+            req.session['id_outlet'] = data.id_outlet;
+
             logger.info(`INSERTING v_merchant TO SESSION: ${merchant}`);
 
             const dekript_token = jwt.jwtDecode(data.token);
@@ -166,7 +168,8 @@ Router.post('/app/sign_in', async function (req, res) {
           req.session['v_session'] = data.token;
           req.session['v_uname'] = username;
           req.session['expired_session'] = expired;
-    
+          req.session['id_outlet'] = data.id_outlet;
+
           logger.info(`INSERTING TOKEN TO SESSION: ${JSON.stringify(data.token)}`);
     
         }
@@ -405,22 +408,26 @@ Router.post('/app/transaction_book_list', async function (req, res) {
 
 Router.get('/is_whitelist', async function (req, res) {
 
-  const whitelist = ['usertravel1', 'usertravel', 'Fitra1990', 'Fitra1904'];
-  const username = req.session['v_uname'] || '';
+  // const whitelist = ['usertravel1', 'usertravel', 'Fitra1990', 'Fitra1904'];
+  const idoutlet = req.session['id_outlet'] || '';
+  const isSimulate = await IsSimulatetravelFunction();
 
-  if(whitelist.includes(username)){
+  if(WhiteListtravelFunction(idoutlet)){
 
       return res.status(200).json({
           rc: '00',
           rd: 'success',
           is_whitelist:1,
+          is_simulate:isSimulate
       })
+      
+    }
 
-  }
       return res.status(200).json({
           rc: '00',
-          rd: 'gagal',
+          rd: 'success',
           is_whitelist:0,
+          is_simulate:isSimulate
       })
 
 
