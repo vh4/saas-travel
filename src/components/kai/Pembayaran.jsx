@@ -5,7 +5,7 @@ import { AiOutlineCheckCircle } from "react-icons/ai";
 import { MdHorizontalRule } from "react-icons/md";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import { TiketContext } from "../../App";
-import { Alert, Button as ButtonAnt } from "antd";
+import { Alert, Button as ButtonAnt, Modal } from "antd";
 import { notification } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
 import { parseTanggal, remainingTime } from "../../helpers/date";
@@ -16,6 +16,7 @@ import BayarLoading from "../components/trainskeleton/bayar";
 import { Typography } from "antd";
 import moment from "moment";
 import Tiket from "./Tiket";
+import { ExclamationCircleFilled } from '@ant-design/icons';
 
 export default function Pembayaran() {
   const navigate = useNavigate();
@@ -57,8 +58,19 @@ export default function Pembayaran() {
   const [api, contextHolder] = notification.useNotification();
   const [isNavigationDone, setIsNavigationDone] = useState(false);
   const [whiteList, setWhiteList] = useState(0);
+  const [isSimulated, setisSimulate] = useState(0);
+
   const [ispay, setispay] = useState(false);
   const [hasilbayar, setHasilbayar] = useState(null);
+
+  const [open, setOpen] = useState(false);
+  const showModal = () => {
+    setOpen(true);
+  };
+  const hideModal = () => {
+    setOpen(false);
+  };
+
 
   const failedNotification = (rd) => {
     api["error"]({
@@ -89,8 +101,9 @@ export default function Pembayaran() {
 
 
         const isWhiteList = cekWhiteListUsername?.is_whitelist || 0;
+        const isSimulate = cekWhiteListUsername?.is_simulate || 0;
         setWhiteList(isWhiteList);
-
+        setisSimulate(isSimulate)
 
           if (ResponsegetDataTrain) {
             setdataDetailTrain(ResponsegetDataTrain.train_detail);
@@ -272,7 +285,7 @@ export default function Pembayaran() {
         nominal: hasilBooking.normalSales,
         nominal_admin: hasilBooking.nominalAdmin,
         discount: hasilBooking.discount,
-        simulateSuccess: whiteList == 1 ? "true" : process.env.REACT_APP_SIMUATION_PAYMENT, //
+        simulateSuccess: isSimulated, //
         pay_type: "TUNAI",
         token: JSON.parse(
           localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
@@ -383,6 +396,45 @@ export default function Pembayaran() {
       (
         <>
           {/* header kai flow */}
+          <Modal
+              title={
+                (<>
+                  <div className="flex space-x-2 items-center">
+                      <ExclamationCircleFilled className="text-orange-500 text-xl" />
+                      <div className="text-bold text-xl text-orange-500">Are you sure?</div>
+                  </div>
+                </>)
+              }
+              open={open}
+              onOk={hideModal}
+              onCancel={hideModal}
+              okText="Cancel"
+              cancelText="Submit"
+              maskClosable={false}
+              footer={
+                <>
+                <div className="blok mt-8">
+                  <div className="flex justify-end space-x-2">
+                  <ButtonAnt key="back" onClick={hideModal}>
+                    Cancel
+                  </ButtonAnt>
+                  <ButtonAnt
+                      htmlType="submit"
+                      key="submit"
+                      type="primary"
+                      className="bg-blue-500"
+                      loading={isLoading}
+                      onClick={handlerPembayaran}
+                    >
+                      Bayar
+                    </ButtonAnt>
+                  </div>
+                </div>
+              </>
+              }
+            >
+              <p>Apakah Anda yakin ingin melakukan pembayaran ?</p>
+            </Modal>
           <div className="px-0 md:px-12 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
               <AiOutlineCheckCircle className="text-black" size={20} />
@@ -697,7 +749,7 @@ export default function Pembayaran() {
                         </div>
                         <div className="flex justify-center">
                           <ButtonAnt
-                          onClick={whiteList == 1 ? handlerPembayaran : handleCallbackSubmit}
+                          onClick={whiteList == 1 ? showModal : handleCallbackSubmit} 
                           size="large"
                             key="submit"
                             type="primary"
@@ -735,7 +787,7 @@ export default function Pembayaran() {
                     <>
                       <div className="flex justify-center">
                         <ButtonAnt
-                          onClick={whiteList == 1 ? handlerPembayaran : handleCallbackSubmit}
+                          onClick={whiteList == 1 ? showModal : handleCallbackSubmit} 
                           size="large"
                           key="submit"
                           type="primary"

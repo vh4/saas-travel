@@ -7,7 +7,7 @@ import { MdHorizontalRule } from "react-icons/md";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import { TiketContext } from "../../App";
 import { BsArrowRightShort } from "react-icons/bs";
-import { Button, message, Alert } from "antd";
+import { Button, message, Alert, Modal } from "antd";
 import {
   remainingTime,
   parseTanggal as tanggalParse,
@@ -20,6 +20,7 @@ import { Typography } from "antd";
 import moment from "moment";
 import PageExpired from "../components/Expired";
 import Tiket from "./Tiket";
+import { ExclamationCircleFilled } from '@ant-design/icons';
 
 export default function Pembayaran() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -57,6 +58,16 @@ export default function Pembayaran() {
   const [whiteList, setWhiteList] = useState(0);
   const [ispay, setispay] = useState(false);
   const [hasilbayar, setHasilbayar] = useState(null);
+  const [isSimulated, setisSimulate] = useState(0);
+
+  const [open, setOpen] = useState(false);
+  const showModal = () => {
+    setOpen(true);
+  };
+  const hideModal = () => {
+    setOpen(false);
+  };
+
 
   function gagal(rd) {
     messageApi.open({
@@ -141,8 +152,10 @@ export default function Pembayaran() {
         const hasilBooking = getInfoBooking._Bookingflight;
         const dataDetailForBooking = getSearchFlightInfo._flight_forBooking;
         const isWhiteList = cekWhiteListUsername?.is_whitelist || 0;
+        const isSimulate = cekWhiteListUsername?.is_simulate || 0;
 
         setWhiteList(isWhiteList);
+        setisSimulate(isSimulate)
 
         if (cekCallbakIsMitra.data.rc == "00") {
           setcallbackBoolean(true);
@@ -272,7 +285,7 @@ export default function Pembayaran() {
         airline: dataDetailForBooking.airline,
         transactionId: hasilBooking.transactionId,
         bookingCode: hasilBooking.bookingCode,
-        simulateSuccess: whiteList == 1 ? "true" : process.env.REACT_APP_SIMUATION_PAYMENT, //
+        simulateSuccess: isSimulated, //
         paymentCode: hasilBooking.paymentCode,
         token: token,
       }
@@ -376,6 +389,45 @@ export default function Pembayaran() {
       (
         <>
           {/* header kai flow */}
+          <Modal
+              title={
+                (<>
+                  <div className="flex space-x-2 items-center">
+                      <ExclamationCircleFilled className="text-orange-500 text-xl" />
+                      <div className="text-bold text-xl text-orange-500">Are you sure?</div>
+                  </div>
+                </>)
+              }
+              open={open}
+              onOk={hideModal}
+              onCancel={hideModal}
+              okText="Cancel"
+              cancelText="Submit"
+              maskClosable={false}
+              footer={
+                <>
+                <div className="blok mt-8">
+                  <div className="flex justify-end space-x-2">
+                  <Button key="back" onClick={hideModal}>
+                    Cancel
+                  </Button>
+                  <Button
+                      htmlType="submit"
+                      key="submit"
+                      type="primary"
+                      className="bg-blue-500"
+                      loading={isLoading}
+                      onClick={handlerPembayaran}
+                    >
+                      Bayar
+                    </Button>
+                  </div>
+                </div>
+              </>
+              }
+            >
+              <p>Apakah Anda yakin ingin melakukan pembayaran ?</p>
+            </Modal>
           <div className="px-0 md:px-12 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
               <AiOutlineCheckCircle className="text-black" size={20} />
@@ -728,8 +780,8 @@ export default function Pembayaran() {
                         </div>
                         <div className="flex justify-center">
                           <Button
-                            onClick={whiteList == 1 ? handlerPembayaran : handleCallbackSubmit}
-                            size="large"
+                           onClick={whiteList == 1 ? showModal : handleCallbackSubmit}                        
+                           size="large"
                             key="submit"
                             type="primary"
                             className="bg-blue-500 px-12 font-semibold"
@@ -766,7 +818,7 @@ export default function Pembayaran() {
                     <>
                       <div className="flex justify-center">
                         <Button
-                          onClick={whiteList == 1 ? handlerPembayaran : handleCallbackSubmit}
+                          onClick={whiteList == 1 ? showModal : handleCallbackSubmit}                        
                           size="large"
                           key="submit"
                           type="primary"

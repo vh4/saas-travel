@@ -4,7 +4,7 @@ import { AiOutlineCheckCircle } from "react-icons/ai";
 import { MdHorizontalRule } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import { TiketContext } from "../../App";
-import { Button as ButtonAnt, Alert } from "antd";
+import { Button as ButtonAnt, Alert, Modal } from "antd";
 import { notification } from "antd";
 import Page400 from "../components/400";
 import Page500 from "../components/500";
@@ -16,6 +16,7 @@ import { IoArrowForwardOutline } from "react-icons/io5";
 import moment from "moment";
 import PageExpired from "../components/Expired";
 import Tiket from "./Tiket";
+import { ExclamationCircleFilled } from '@ant-design/icons';
 
 export default function Pembayaran() {
   const navigate = useNavigate();
@@ -53,8 +54,18 @@ export default function Pembayaran() {
   const [whiteList, setWhiteList] = useState(0);
   const [ispay, setispay] = useState(false);
   const [hasilbayar, setHasilbayar] = useState(null);
+  const [isSimulated, setisSimulate] = useState(0);
 
   const [err, setErr] = useState(false);
+
+  const [open, setOpen] = useState(false);
+  const showModal = () => {
+    setOpen(true);
+  };
+  const hideModal = () => {
+    setOpen(false);
+  };
+
 
   // useEffect(() => {
   //   if (token === null || token === undefined) {
@@ -112,8 +123,10 @@ export default function Pembayaran() {
         }
 
         const isWhiteList = cekWhiteListUsername?.is_whitelist || 0;
+        const isSimulate = cekWhiteListUsername?.is_simulate || 0;
 
         setWhiteList(isWhiteList);
+        setisSimulate(isSimulate)
 
         if (bookResponse.data.rc === "00") {
           setBook(bookResponse.data.data);
@@ -277,7 +290,7 @@ export default function Pembayaran() {
       {
         paymentCode: book?.paymentCode,
         transactionId: book?.transactionId,
-        simulateSuccess: whiteList == 1 ? "yes" : process.env.REACT_APP_SIMUATION_PAYMENT, //
+        simulateSuccess: isSimulated == 1 ? "yes" : "no", //
         token: token
       }
       
@@ -378,6 +391,45 @@ export default function Pembayaran() {
       : (
         <>
           {/* header kai flow */}
+          <Modal
+              title={
+                (<>
+                  <div className="flex space-x-2 items-center">
+                      <ExclamationCircleFilled className="text-orange-500 text-xl" />
+                      <div className="text-bold text-xl text-orange-500">Are you sure?</div>
+                  </div>
+                </>)
+              }
+              open={open}
+              onOk={hideModal}
+              onCancel={hideModal}
+              okText="Cancel"
+              cancelText="Submit"
+              maskClosable={false}
+              footer={
+                <>
+                <div className="blok mt-8">
+                  <div className="flex justify-end space-x-2">
+                  <ButtonAnt key="back" onClick={hideModal}>
+                    Cancel
+                  </ButtonAnt>
+                  <ButtonAnt
+                      htmlType="submit"
+                      key="submit"
+                      type="primary"
+                      className="bg-blue-500"
+                      loading={isLoading}
+                      onClick={handlerPembayaran}
+                    >
+                      Bayar
+                    </ButtonAnt>
+                  </div>
+                </div>
+              </>
+              }
+            >
+              <p>Apakah Anda yakin ingin melakukan pembayaran ?</p>
+            </Modal>
           <div className="px-0 md:px-12 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
               <AiOutlineCheckCircle className="text-black" size={20} />
@@ -643,7 +695,7 @@ export default function Pembayaran() {
                         </div>
                         <div className="flex justify-center">
                           <ButtonAnt
-                          onClick={whiteList == 1 ? handlerPembayaran : handleCallbackSubmit}
+                          onClick={whiteList == 1 ? showModal : handleCallbackSubmit} 
                           size="large"
                             key="submit"
                             type="primary"
@@ -681,7 +733,7 @@ export default function Pembayaran() {
                     <>
                       <div className="flex justify-center">
                         <ButtonAnt
-                           onClick={whiteList == 1 ? handlerPembayaran : handleCallbackSubmit}                         
+                          onClick={whiteList == 1 ? showModal : handleCallbackSubmit} 
                           size="large"
                           key="submit"
                           type="primary"
