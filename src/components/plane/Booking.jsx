@@ -447,7 +447,7 @@ useEffect(() => {
       );
     });
 
-    let seats = dataDetail.map((item) => item.seats[0]);
+    let seats = dataDetail.map((item, i) => item.seats[i]);
 
     const book = {
       airline: dataDetailForBooking.airline,

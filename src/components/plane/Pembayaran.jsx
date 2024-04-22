@@ -299,9 +299,9 @@ export default function Pembayaran() {
         id_transaksi: response.data.data?.transaction_id,
         nominal_admin: hasilBooking?.nominalAdmin,
         url_etiket: response.data.data?.url_etiket,
-        nominal_sales: response.data.data?.nominal,
+        nominal_sales: dataDetailForBooking?.priceTotal,
         total_dibayar: toRupiah(
-          parseInt(hasilBooking.nominal) + parseInt(hasilBooking.nominalAdmin)
+          (parseInt(dataDetailForBooking?.priceTotal)) + parseInt(hasilBooking?.nominalAdmin)
         ),
       }
 
@@ -655,7 +655,8 @@ export default function Pembayaran() {
                           {TotalInfant > 0 ? `(Infants) x${TotalInfant}` : ""}
                         </div>
                         <div>
-                          Rp. {toRupiah(hasilBooking && hasilBooking.nominal)}
+                          {console.log(dataDetail)}
+                          Rp. {toRupiah(dataDetailForBooking && dataDetailForBooking?.priceTotal || 0)}
                         </div>
                       </div>
                       <div className="mt-4 text-xs text-black font-medium  flex justify-between">
@@ -670,7 +671,7 @@ export default function Pembayaran() {
                         <div>
                           Rp.{" "}
                           {toRupiah(
-                            parseInt(hasilBooking && hasilBooking.nominal) +
+                            parseInt(dataDetailForBooking && dataDetailForBooking?.priceTotal) +
                               parseInt(
                                 hasilBooking && hasilBooking.nominalAdmin
                               )

@@ -393,52 +393,22 @@ const filteredData = dataSearch
     setisLoadingPilihTiket(`true-${i}`);
 
     let filterDataSearching = filteredData.filter((_, index) => index === i);
+    const lenghtArr = filterDataSearching[0].classes.length;
 
-    console.log(filterDataSearching[0])
+    const seat = [];
+    let priceTotalWithoutFare = 0;
 
-    let detailFlight = {
-      airline: filterDataSearching[0].airlineCode,
-      departure: filterDataSearching[0].classes[0][0].departure,
-      arrival: filterDataSearching[0].classes[0][0].arrival,
-      departureDate: filterDataSearching[0].departureDate,
-      returnDate: "",
-      adult: adult,
-      child: child,
-      infant: infant,
-      seats: [filterDataSearching[0].classes[0][0].seat],
-      token: token,
-    };
-    
+    for (var i = 0; i < lenghtArr; i++) {
 
-    const response = await axios.post(
-      `${process.env.REACT_APP_HOST_API}/travel/flight/fare`,
-      detailFlight
-    ); //kocak broooWWW   
-    
-    
-    if (response.data.rc === "00") {
-   
-      //update price;
+      seat.push(filterDataSearching[0].classes[i][0].seat);
+      
+      priceTotalWithoutFare += parseInt(filterDataSearching[0].classes[i][0].price);
 
-      filterDataSearching[0].classes[0][0]['price'] = response.data?.data?.price;
-  
-      const forBooking = {
-        airline: filterDataSearching[0].airlineCode,
-        departure: departure,
-        arrival: arrival,
-        departureDate: filterDataSearching[0].departureDate,
-        returnDate: "",
-        adult: adult,
-        child: child,
-        infant: infant,
-        seats: [filterDataSearching[0].classes[0][0].seat],
-        isInternational:
-          filterDataSearching[0]?.classes[
-            filterDataSearching[0]?.classes.length - 1
-          ][0]?.isInternational ?? 0,
-      };
-      const next = [];
-      const lenghtArr = filterDataSearching[0].classes.length;
+    }
+
+    if(filterDataSearching[0].detailTitle[0].flightCode == 'TPGA'){
+
+      const next = Array();
 
       for (var i = 0; i < lenghtArr; i++) {
         next.push({
@@ -457,7 +427,107 @@ const filteredData = dataSearch
           adult: adult,
           child: child,
           infant: infant,
-          seats: [filterDataSearching[0].classes[i][0].seat],
+          seats: seat,
+          priceTotal: filterDataSearching[0].classes[i][0].price,
+        });
+      }
+
+      const forBooking = {
+        airline: filterDataSearching[0].airlineCode,
+        departure: departure,
+        arrival: arrival,
+        departureDate: filterDataSearching[0].departureDate,
+        returnDate: "",
+        adult: adult,
+        child: child,
+        infant: infant,
+        seats: seat,
+        priceTotal:priceTotalWithoutFare,
+        isInternational:
+          filterDataSearching[0]?.classes[
+            filterDataSearching[0]?.classes.length - 1
+          ][0]?.isInternational ?? 0,
+      };
+      
+
+      const uuid = uuidv4();
+      localStorage.setItem(`data:flight/${uuid}`, JSON.stringify(
+        {
+          _flight: next,
+          _flight_forBooking: forBooking,
+          uuid: uuids,
+        }
+      ));
+
+      setisLoadingPilihTiket(`false-${i}`);
+      navigate(`/flight/booking/${uuid}`);
+
+    }
+
+    // fare selain TPGA.
+
+    let detailFlight = {
+      airline: filterDataSearching[0].airlineCode,
+      departure: filterDataSearching[0].classes[0][0].departure,
+      arrival: filterDataSearching[0].classes[0][0].arrival,
+      departureDate: filterDataSearching[0].departureDate,
+      returnDate: "",
+      adult: adult,
+      child: child,
+      infant: infant,
+      seats: seat,
+      token: token,
+
+    };
+
+    const response = await axios.post(
+      `${process.env.REACT_APP_HOST_API}/travel/flight/fare`,
+      detailFlight
+    ); //kocak broooWWW   
+
+    if (response.data.rc === "00") {
+   
+      //update price;
+      filterDataSearching[0].classes[0][0]['price'] = response.data?.data?.price;
+      const priceTotalWithFare = response.data?.data?.price;
+  
+      const forBooking = {
+        airline: filterDataSearching[0].airlineCode,
+        departure: departure,
+        arrival: arrival,
+        departureDate: filterDataSearching[0].departureDate,
+        returnDate: "",
+        adult: adult,
+        child: child,
+        infant: infant,
+        seats: seat,
+        priceTotal:priceTotalWithFare,
+        isInternational:
+          filterDataSearching[0]?.classes[
+            filterDataSearching[0]?.classes.length - 1
+          ][0]?.isInternational ?? 0,
+      };
+      
+      const next = [];
+
+      for (var i = 0; i < lenghtArr; i++) {
+        next.push({
+          airline: filterDataSearching[0].detailTitle[i].flightCode,
+          airlineName: filterDataSearching[0].detailTitle[i].flightName,
+          airlineIcon: filterDataSearching[0].detailTitle[i].flightIcon,
+          departure: filterDataSearching[0].classes[i][0].departure,
+          arrival: filterDataSearching[0].classes[i][0].arrival,
+          departureName: filterDataSearching[0].classes[i][0].departureName,
+          arrivalName: filterDataSearching[0].classes[i][0].arrivalName,
+          departureDate: filterDataSearching[0].classes[i][0].departureDate,
+          arrivalDate: filterDataSearching[0].classes[i][0].arrivalDate,
+          departureTime: filterDataSearching[0].classes[i][0].departureTime,
+          arrivalTime: filterDataSearching[0].classes[i][0].arrivalTime,
+          returnDate: "",
+          adult: adult,
+          child: child,
+          infant: infant,
+          seats: seat,
           priceTotal: filterDataSearching[0].classes[i][0].price,
         });
       }
