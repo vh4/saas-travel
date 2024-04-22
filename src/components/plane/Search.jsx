@@ -468,8 +468,8 @@ const filteredData = dataSearch
 
     let detailFlight = {
       airline: filterDataSearching[0].airlineCode,
-      departure: filterDataSearching[0].classes[0][0].departure,
-      arrival: filterDataSearching[0].classes[0][0].arrival,
+      departure: departure,
+      arrival: arrival,
       departureDate: filterDataSearching[0].departureDate,
       returnDate: "",
       adult: adult,
