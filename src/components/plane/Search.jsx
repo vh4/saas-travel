@@ -406,7 +406,7 @@ const filteredData = dataSearch
 
     }
 
-    if(filterDataSearching[0].detailTitle[0].flightCode == 'TPGA'){
+    if(filterDataSearching[0].airlineCode === 'TPGA'){
 
       const next = Array();
 
