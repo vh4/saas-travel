@@ -165,7 +165,7 @@ export default function Pembayaran() {
           setdataDetailPassenger(dataDetailPassenger);
           sethasilBooking(hasilBooking);
           setExpiredBookTime(
-            hasilBooking.timeLimit || moment().add(1, "hours")
+            hasilBooking.timeLimitYMD || moment().add(1, "hours")
           );
         } else {
           setErrPage(true);
@@ -185,7 +185,7 @@ export default function Pembayaran() {
         // Set booking expiration flag
         if (
           hasilBooking &&
-          new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()
+          new Date(hasilBooking.timeLimitYMD).getTime() < new Date().getTime()
         ) {
           setIsBookingExpired(true);
         } else {
@@ -212,7 +212,7 @@ export default function Pembayaran() {
 
       if (
         hasilBooking &&
-        new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()
+        new Date(hasilBooking.timeLimitYMD).getTime() < new Date().getTime()
       ) {
         
         setIsBookingExpired(true);
