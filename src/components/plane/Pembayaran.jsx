@@ -508,7 +508,8 @@ export default function Pembayaran() {
                                 />
                               </div>
                               <div className="text-xs text-black">
-                                {dataDetail.airlineName}
+                                <div className="font-semibold">{dataDetail.airline}</div>
+                                <div>{dataDetail.airlineName}</div>
                               </div>
                             </div>
                             <div className="flex items-center space-x-2 mt-1 text-xs text-black font-medium ">
@@ -713,10 +714,11 @@ export default function Pembayaran() {
                                 />
                               </div>
                               <div className="mt-3 md:mt-4 text-xs text-black">
-                                {dataDetail.airlineName}
+                                <div className="font-semibold">{dataDetail.airline}</div>
+                                <div>{dataDetail.airlineName}</div>
                               </div>
                             </div>
-                            <div className="flex items-center space-x-2 mt-1 md:mt-2 text-xs text-black font-medium ">
+                            <div className="flex items-center space-x-2 mt-1 md:mt-4 text-xs text-black font-medium ">
                               <div>{dataDetail.departureName}</div>{" "}
                               <BsArrowRightShort />{" "}
                               <div>{dataDetail.arrivalName}</div>
