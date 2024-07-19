@@ -924,8 +924,8 @@ const filteredData = dataSearch
                         >
                           {/* desktop cari */}
                           <div className="hidden xl:block w-full text-black ">
-                            <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-10 gap-4">
-                              <div className="col-span-1 md:col-span-2">
+                            <div className="px-4 md:px-8 xl:px-0 2xl:px-8 mt-4 grid grid-cols-1 xl:grid-cols-7 gap-4">
+                              <div className="col-span-1">
                                 <h1 className="text-black text-sm font-medium ">
                                   {e.airlineName}{" "} 
                                 </h1>
@@ -940,7 +940,7 @@ const filteredData = dataSearch
                                   />
                                 </div>
                               </div>
-                              <div className="flex">
+                              {/* <div className="flex">
                                 <div className="">
                                   <CiRollingSuitcase className="text-black" size={32} />
                                   <div className="text-xs text-black">
@@ -950,7 +950,7 @@ const filteredData = dataSearch
                                     20 Kg
                                   </div>
                                 </div>
-                              </div>
+                              </div> */}
                               <div className="flex">
                                 <div className="">
                                   <h1 className="mt-4 xl:mt-0 text-sm font-medium">
@@ -1007,7 +1007,7 @@ const filteredData = dataSearch
                                   )}
                                 </small>
                               </div>
-                              <div className="flex justify-center col-span-1 md:col-span-2">
+                              <div className="flex justify-center col-span-1">
                                 {e.classes[0][0].availability > 0 &&
                                 e.classes[0][0].availability >=
                                   parseInt(child) +
@@ -1189,7 +1189,7 @@ const filteredData = dataSearch
                                         </TimelineItem>
                                       </Timeline>
                                     </div>
-                                    <div className="mt-4 text-black">
+                                    {/* <div className="mt-4 text-black">
                                       <div className="items-center">
                                         <div>
                                           <CiRollingSuitcase size={32} />
@@ -1207,7 +1207,7 @@ const filteredData = dataSearch
                                           </div>
                                         </div>
                                       </div>
-                                    </div>
+                                    </div> */}
                                   </div>
                                 ))
                               ) : (
@@ -1325,7 +1325,7 @@ const filteredData = dataSearch
                                       </TimelineItem>
                                     </Timeline>
                                   </div>
-                                  <div className="mt-4 text-black">
+                                  {/* <div className="mt-4 text-black">
                                     <div className="items-center">
                                       <div>
                                         <CiRollingSuitcase size={32} />
@@ -1342,7 +1342,7 @@ const filteredData = dataSearch
                                         </div>
                                       </div>
                                     </div>
-                                  </div>
+                                  </div> */}
                                 </div>
                               )}
                             </>
@@ -1717,7 +1717,7 @@ const filteredData = dataSearch
                                             </div>
                                           </div>
                                         </div>
-                                        <div className="mt-4 text-black">
+                                        {/* <div className="mt-4 text-black">
                                           <div className="items-center">
                                             <div>
                                               <CiRollingSuitcase size={32} />
@@ -1735,7 +1735,7 @@ const filteredData = dataSearch
                                               </div>
                                             </div>
                                           </div>
-                                        </div>
+                                        </div> */}
                                       </div>
                                     ))
                                   ) : (
@@ -1842,7 +1842,7 @@ const filteredData = dataSearch
                                           </div>
                                         </div>
                                       </div>
-
+{/* 
                                       <div className="mt-4 text-black">
                                         <div className="items-center">
                                           <div>
@@ -1861,7 +1861,7 @@ const filteredData = dataSearch
                                             </div>
                                           </div>
                                         </div>
-                                      </div>
+                                      </div> */}
                                     </div>
                                   )}
                                 </>
