@@ -9,7 +9,7 @@ export default function CarouselsMobile(props) {
   };
 
   var settings = {
-    dots: true,
+    dots: false,
     arrows: true,
     nextArrow: <SlickArrowRight />,
     infinite: true,

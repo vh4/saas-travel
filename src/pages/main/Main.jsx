@@ -18,6 +18,8 @@ import { useSearchParams } from "react-router-dom";
 import { notification } from "antd";
 import { LoginContent } from "../../App";
 
+const customLayout = localStorage.getItem("v-data2") ? JSON.parse(localStorage.getItem("v-data2")) : '';
+
 export default function MainPage() {
   const [nameMenu, setNameMenu] = useState("plane");
   useEffect(() => {
@@ -83,7 +85,12 @@ export default function MainPage() {
             localStorage.setItem("c_at", dayjs());
             localStorage.setItem("hdrs_c", data.data.is_header_name_and_toast);
             localStorage.setItem("c_name", data.data.username);
-
+            
+            if(data.data.data2 && data.data.data2 != ''){
+              localStorage.setItem("v-data2", data.data.data2);
+            }else{
+              localStorage.removeItem("v-data2");
+            }
           } else {
             // gagalLogin(data.data.rd);
             setLoading(false);
@@ -99,7 +106,7 @@ export default function MainPage() {
       {/* carousel fitur  */}
       {contextHolder}
       <div className="w-full">
-        <div className="xl:bg-gradient-to-r xl:from-cyan-500 xl:to-blue-500">
+      <div className={`bg-[${customLayout?.color?.secondary?.background ?? ''}] ${customLayout?.color?.secondary?.background ? `xl:bg-[${customLayout.color.secondary.background}]` : 'bg-gradient-to-r xl:from-cyan-500 xl:to-blue-500'} rounded-b-[40px] pb-12 xl:pb-20 xl:mb-0 xl:rounded-b-[120px]`}>
           <div className="hidden md:block xl:block 2xl:hidden py-4 md:py-8 relative z-10 container mx-auto">
             <div className="mx-0 lg:mx-12 xl:mx-0 2xl:mx-0">
               <CarouselsTablet />
@@ -110,20 +117,20 @@ export default function MainPage() {
               <CarouselsMobile />
             </div>
           </div>
-          <div className="hidden 2xl:block py-4 md:py-8 relative z-10 container mx-auto ">
+          <div className={`hidden 2xl:block py-4 md:py-8 relative z-10 container mx-auto `}>
             <div className="mx-0 lg:mx-12 xl:mx-0 2xl:mx-0">
               <Carousels />
             </div>
           </div>
         </div>
-        <div className="mt-0 md:mt-4 xl:-mt-8">
+        <div className="-mt-20 xl:-mt-24">
           <div className="relative container mx-auto mb-6">
-            <div className="-mt-4 md:mt-0 z-10 bg-white mx-0 lg:mx-12 xl:mx-32 2xl:mx-64 md:border md:rounded-md md:shadow-lg">
+            <div className="-mt-4 md:mt-0 z-10 xl:bg-white mx-0 lg:mx-12 xl:mx-32 2xl:mx-36 md:border md:rounded-md md:shadow-lg">
               <div className={`block md:flex xl:flex 2xl:flex justify-start`}>
                 <div className="hidden md:flex justify-start px-10">
                   <Sidebar nameMenu={nameMenu} setNameMenu={setNameMenu} />
                 </div>
-                <div className="block md:hidden">
+                <div className="block md:hidden ">
                   <SideBarMobile
                     nameMenu={nameMenu}
                     setNameMenu={setNameMenu}
@@ -131,7 +138,7 @@ export default function MainPage() {
                 </div>
               </div>
               {/* for desktop */}
-              <div className="block mt-2">
+              <div className="block mt-2 pb-12 px-4">
                 <div className="w-full">
                   {/* menu fitur  */}
                   {nameMenu == "plane" ? (
