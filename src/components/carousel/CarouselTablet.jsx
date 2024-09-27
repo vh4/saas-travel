@@ -3,6 +3,8 @@ import "slick-carousel/slick/slick-theme.css";
 import "react-multi-carousel/lib/styles.css";
 import Slider from "react-slick";
 
+const customLayout = localStorage.getItem("v-data2") ? JSON.parse(localStorage.getItem("v-data2")) : '';
+
 export default function CarouselsMobile(props) {
   const SlickArrowRight = () => {
     return <></>;
@@ -54,23 +56,23 @@ export default function CarouselsMobile(props) {
 
   return (
     <div className="xl:grid xl:grid-cols-2 w-full px-0 xl:px-4 xl:py-8">
-      <div className="mt-2 block md:hidden px-4 mb-4 text-black">
-        <div className="font-semibold text-md">Haii Traveller,</div>
-        <small>Selamat datang di travel indonesia.</small>
-      </div>
       <div className="hidden xl:block">
         <div className="flex space-x-4 pr-12 text-white -mt-4">
           <img className="" src="/join.svg" width={130} alt="carousal.png" />
           <div>
-            <h1 className="2xl:px-8 text-xl font-bold">Haii Traveller,</h1>
+            <h1 className="2xl:px-8 text-xl font-bold">{customLayout?.wording?.primary ?? 'Hai Traveller,'}</h1>
             <div className="mt-2 2xl:px-8">
-              <div className="mt-4 text-sm">
-                Cukup login ke akun Anda dan melakukan pemesanan tiket untuk
-                berbagai macam perjalanan.
+              <div className="mt-4">
+                {Array.isArray(customLayout?.wording?.secondary?.desktop) && customLayout?.wording?.secondary?.desktop[0] 
+                  ? customLayout?.wording?.secondary?.desktop[0] 
+                  : `Cukup login ke akun Anda dan melakukan pemesanan tiket untuk berbagai macam perjalanan anda.`
+                }
               </div>
-              <div className="mt-6 text-sm">
-                Nikmati perjalanan anda di beberapa menu travel kereta, kapal,
-                dan pesawat.
+              <div className="mt-6">
+                {Array.isArray(customLayout?.wording?.secondary?.desktop) && customLayout?.wording?.secondary?.desktop[1] 
+                  ? customLayout?.wording?.secondary?.desktop[1] 
+                  : `Nikmati perjalanan anda di beberapa menu travel kereta, kapal, dan pesawat anda.`
+                }
               </div>
             </div>
           </div>

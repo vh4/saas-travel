@@ -69,13 +69,13 @@ export default function Carousels(props) {
               <div className="mt-4">
                 {Array.isArray(customLayout?.wording?.secondary?.desktop) && customLayout?.wording?.secondary?.desktop[0] 
                   ? customLayout?.wording?.secondary?.desktop[0] 
-                  : `Cukup login ke akun Anda dan melakukan pemesanan tiket untuk berbagai macam perjalanan.`
+                  : `Cukup login ke akun Anda dan melakukan pemesanan tiket untuk berbagai macam perjalanan anda.`
                 }
               </div>
               <div className="mt-6">
                 {Array.isArray(customLayout?.wording?.secondary?.desktop) && customLayout?.wording?.secondary?.desktop[1] 
                   ? customLayout?.wording?.secondary?.desktop[1] 
-                  : `Cukup login ke akun Anda dan melakukan pemesanan tiket untuk berbagai macam perjalanan.`
+                  : `Nikmati perjalanan anda di beberapa menu travel kereta, kapal, dan pesawat anda.`
                 }
               </div>
             </div>
