@@ -55,45 +55,45 @@ export default function CarouselsMobile(props) {
 
   return (
     <div className="xl:grid xl:grid-cols-2 w-full px-0 xl:px-4 xl:py-8">
-      <div className={`block md:hidden px-4 mb-4 text-[${customLayout?.color?.secondary?.font_color ?? ''}]`}>
+      <div className={`block md:hidden px-4 mb-4 text-[${customLayout?.color?.secondary?.font_color ?? '#ffff'}]`}>
         <div className="font-semibold text-sm">Hai traveller,</div>
-        <small>
+        <div className="text-xs mt-6">
                 {Array.isArray(customLayout?.wording?.secondary?.desktop) && customLayout?.wording?.secondary?.mobile 
                   ? customLayout?.wording?.secondary?.mobile
                   : `Cukup login ke akun Anda dan melakukan pemesanan tiket untuk berbagai macam perjalanan anda.`
                 }
-        </small>
+        </div>
       </div>
       <Slider {...settings}>
-        <div className="flex justify-center px-4 py-4 mt-4">
+        <div className="flex justify-center px-4 py-4 mt-2">
           <img
             className="w-full h-full rounded-3xl"
             src="/slider-1.jpeg"
             alt=""
           />
         </div>
-        <div className="flex justify-center px-2  py-4 mt-4">
+        <div className="flex justify-center px-2  py-4 mt-2">
           <img
             className="w-full h-full rounded-3xl"
             src="/slider-2.jpeg"
             alt=""
           />
         </div>
-        <div className="flex justify-center px-2  py-4 mt-4">
+        <div className="flex justify-center px-2  py-4 mt-2">
           <img
             className="w-full h-full rounded-3xl"
             src="/slider-3.jpeg"
             alt=""
           />
         </div>
-        <div className="flex justify-center px-2  py-4 mt-4">
+        <div className="flex justify-center px-2  py-4 mt-2">
           <img
             className="w-full h-full rounded-3xl"
             src="/slider-4.jpeg"
             alt=""
           />
         </div>
-        <div className="flex justify-center px-2  py-4 mt-4">
+        <div className="flex justify-center px-2  py-4 mt-2">
           <img
             className="w-full h-full rounded-3xl"
             src="/slider-5.jpeg"

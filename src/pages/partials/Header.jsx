@@ -284,8 +284,14 @@ export default function Header() {
   };
 
   return (
-    <nav className={`bg-[${customLayout?.color?.primary?.background ?? '#0f172a'}] ${!customLayout?.color?.primary?.background && `border-b border-gray-200`} text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}] px-2 sm:px-4 py-2 xl:py-4 block sticky top-0 w-full z-50 left-0`}>
-      {contextHolder}
+      <nav
+        style={{
+          backgroundColor: customLayout?.color?.primary?.background || '#0f172a',
+          color: customLayout?.color?.primary?.font_color || '#ffff',
+        }}
+        className="px-2 sm:px-4 py-2 xl:py-4 block sticky top-0 w-full z-50 left-0"
+      >
+        {contextHolder}
       <div className="container mx-auto">
         <div className={`flex justify-between items-center ${localStorage.getItem("hdrs_c") == "false" && 'py-0 md:py-2'} -mx-2 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24`}>
           <div className="">
@@ -302,25 +308,55 @@ export default function Header() {
           </div>
           <div className="flex space-x-6 items-center xl:order-2">
           {localStorage.getItem("hdrs_c") == "false" && (
-              <>
+            <>
               <Link
                 to="/"
-                className={`hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}] `}
+                style={{
+                  color: customLayout?.color?.primary?.font_color || '#ffff',
+                }}
+                className="hidden md:flex cursor-pointer space-x-2 text-sm items-center"
               >
-                <AiOutlineHome className={`text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}]`} size={18} />
-                <div className={`text-[15px] text-[${customLayout?.color?.primary?.font_color || '#ffff'}]`}>Home</div>
-              </Link>              
-              </>
+                <AiOutlineHome
+                  style={{
+                    color: customLayout?.color?.primary?.font_color || '#ffff',
+                  }}
+                  size={18}
+                />
+                <div
+                  style={{
+                    color: customLayout?.color?.primary?.font_color || '#ffff',
+                    fontSize: '15px',
+                  }}
+                >
+                  Home
+                </div>
+              </Link>
+            </>
             )}
 
             {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
               <div>
                 <Link
                   to="/transaksi/pesawat"
-                  className={`hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}] `}
+                  style={{
+                    color: customLayout?.color?.primary?.font_color || '#ffff',
+                  }}
+                  className="hidden md:flex cursor-pointer space-x-2 text-sm items-center"
+                >
+                  <AiOutlineAppstore
+                    style={{
+                      color: customLayout?.color?.primary?.font_color || '#ffff',
+                    }}
+                    size={18}
+                  />
+                  <div
+                    style={{
+                      color: customLayout?.color?.primary?.font_color || '#ffff',
+                      fontSize: '15px',
+                    }}
                   >
-                  <AiOutlineAppstore className={`text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}]`} size={18} />
-                  <div className={`text-[15px] text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}]`}>Transaksi</div>
+                    Transaksi
+                  </div>
                 </Link>
               </div>
             ) : null}
@@ -339,30 +375,46 @@ export default function Header() {
               {!localStorage.getItem(
                 process.env.REACT_APP_SECTRET_LOGIN_API
               ) ? (
-                <div className={`hidden md:flex text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}] space-x-4 items-center`}>
-                  <div
-                    className="flex space-x-2 items-center cursor-pointer hover:text-blue-500"
-                    onClick={handleOpen}
-                  >
-                    <UserOutlined size={22} />
-                    <div>Masuk</div>
-                  </div>
-                  <a
-                    href="https://www.rajabiller.com/register"
-                    className={`text-[15px] text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}]`}
-                  >
-                    <Button
-                      key="submit"
-                      type="default"
-                      className={`px-8 text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}]`}
+                    <div
+                      style={{
+                        color: customLayout?.color?.primary?.font_color || '#ffff',
+                      }}
+                      className="hidden md:flex space-x-4 items-center"
                     >
-                      Registrasi
-                    </Button>
-                  </a>
-                </div>
+                      <div
+                        className="flex space-x-2 items-center cursor-pointer hover:text-blue-500"
+                        onClick={handleOpen}
+                      >
+                        <UserOutlined size={22} />
+                        <div>Masuk</div>
+                      </div>
+                      <a
+                        href="https://www.rajabiller.com/register"
+                        style={{
+                          color: customLayout?.color?.primary?.font_color || '#ffff',
+                          fontSize: '15px',
+                        }}
+                      >
+                        <Button
+                          key="submit"
+                          type="default"
+                          style={{
+                            color: customLayout?.color?.primary?.font_color || '#ffff',
+                            padding: '0 2rem', // Equivalent to px-8 in Tailwind
+                          }}
+                        >
+                          Registrasi
+                        </Button>
+                      </a>
+                    </div>
               ) : (
-                <div className={`hidden relative group space-x-2 text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}] md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 md:inline-flex group-hover:block items-end ml-2 mb-2`}>
-                  {localStorage.getItem("hdrs_c") != "false" && (
+                    <div
+                      style={{
+                        color: customLayout?.color?.primary?.font_color || '#ffff',
+                      }}
+                      className="hidden relative group space-x-2 md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 md:inline-flex group-hover:block items-end ml-2 mb-2"
+                    >
+                    {localStorage.getItem("hdrs_c") != "false" && (
                     <>
                       {user !== null && user !== undefined ? (
                         <>
@@ -370,15 +422,19 @@ export default function Header() {
                             <>
                               <div className="flex space-x-2 items-center mt-2">
                                 <div className="">
-                                  <div className={`text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}] font-bold`}>
+                                <div
+                                    style={{
+                                      color: customLayout?.color?.primary?.font_color || '#ffff',
+                                      fontWeight: 'bold',
+                                    }}
+                                  >
                                     {localStorage.getItem("c_name")
                                       ? localStorage
                                           .getItem("c_name")
                                           .charAt(0)
-                                          .toUpperCase() +
-                                        localStorage.getItem("c_name").slice(1)
+                                          .toUpperCase() + localStorage.getItem("c_name").slice(1)
                                       : "Rb Travell"}
-                                  </div>
+                                  </div>    
                                   <small>
                                     {localStorage.getItem("c_at")
                                       ? "Logged at " +
@@ -425,12 +481,30 @@ export default function Header() {
             {/* Button */}
             {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
               <button
-                data-collapse-toggle="navbar-sticky"
-                type="button"
-                className={`md:mr-0 inline-flex items-center py-4 px-4 text-sm text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}] rounded-lg md:hidden hover:text-[${customLayout?.color?.primary?.background ?? '#ffff' }]  focus:outline-none focus:ring-[${customLayout?.color?.primary?.background ?? '#ffff' }] `}
-                aria-controls="navbar-sticky"
-                aria-expanded="false"
-              >
+                  data-collapse-toggle="navbar-sticky"
+                  type="button"
+                  style={{
+                    color: customLayout?.color?.primary?.font_color || '#ffff',
+                    borderRadius: '0.5rem', // Equivalent to Tailwind's rounded-lg
+                    padding: '1rem 1rem', // Equivalent to py-4 px-4
+                    fontSize: '0.875rem', // Equivalent to text-sm
+                  }}
+                  className="md:mr-0 inline-flex items-center md:hidden focus:outline-none"
+                  aria-controls="navbar-sticky"
+                  aria-expanded="false"
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.color = customLayout?.color?.primary?.background || '#ffff';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.color = customLayout?.color?.primary?.font_color || '#ffff';
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.boxShadow = `0 0 0 3px ${customLayout?.color?.primary?.background || '#ffff'}`;
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
                 <span className="sr-only">Open main menu</span>
                 <button onClick={() => setIsDrawerOpen(true)}>
                   <svg
@@ -452,8 +526,22 @@ export default function Header() {
               <>
                 <div className="pr-4 py-3">
                   <Button
-                    className="flex md:hidden  items-center px-8 py-4"
+                    style={{
+                      color: customLayout?.color?.primary?.font_color || '#ffff',
+                      padding: '1rem 2rem', // Equivalent to py-4 px-8
+                      display: 'flex',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      transition: 'color 0.2s ease',
+                    }}
+                    className="md:hidden"
                     onClick={handleOpen}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.color = customLayout?.color?.primary?.font_color || '#ffff';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.color = customLayout?.color?.primary?.font_color || '#ffff';
+                    }}
                   >
                     Login
                   </Button>

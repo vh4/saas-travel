@@ -106,7 +106,12 @@ export default function MainPage() {
       {/* carousel fitur  */}
       {contextHolder}
       <div className="w-full">
-      <div className={`bg-[${customLayout?.color?.secondary?.background ?? ''}] ${customLayout?.color?.secondary?.background ? `xl:bg-[${customLayout.color.secondary.background}]` : 'bg-gradient-to-r xl:bg-[#0f172a]'} rounded-b-[40px] pb-12 xl:pb-20 xl:mb-0 xl:rounded-b-[120px]`}>
+        <div
+          style={{
+            backgroundColor: customLayout?.color?.secondary?.background || '#0f172a',
+          }}
+          className="rounded-b-[40px] pb-12 xl:pb-20 xl:mb-0 xl:rounded-b-[120px]"
+        >
           <div className="hidden md:block xl:block 2xl:hidden py-4 md:py-8 relative z-10 container mx-auto">
             <div className="mx-0 lg:mx-12 xl:mx-0 2xl:mx-0">
               <CarouselsTablet />
@@ -123,7 +128,7 @@ export default function MainPage() {
             </div>
           </div>
         </div>
-        <div className="-mt-20 xl:-mt-24">
+        <div className="-mt-[102px] xl:-mt-24">
           <div className="relative container mx-auto mb-6">
             <div className="-mt-4 md:mt-0 z-10 xl:bg-white mx-0 lg:mx-12 xl:mx-32 2xl:mx-36 md:border md:rounded-md md:shadow-lg">
               <div className={`block md:flex xl:flex 2xl:flex justify-start`}>
