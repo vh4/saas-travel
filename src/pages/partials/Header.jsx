@@ -30,6 +30,7 @@ export default function Header() {
   const handleOpen = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
   const { loginComponent, setLoginComponent } = useContext(LoginContent);
+  const { customComponent, setCustomComponent } = useContext(LoginContent);
 
   const [isExpired, setIsExpired] = useState(false);
   const [login, setLogin] = useState(false);

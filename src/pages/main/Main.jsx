@@ -18,7 +18,6 @@ import { useSearchParams } from "react-router-dom";
 import { notification } from "antd";
 import { LoginContent } from "../../App";
 
-const customLayout = localStorage.getItem("v-data2") ? JSON.parse(localStorage.getItem("v-data2")) : '';
 
 export default function MainPage() {
   const [nameMenu, setNameMenu] = useState("plane");
@@ -32,6 +31,18 @@ export default function MainPage() {
   const [loading, setLoading] = React.useState(false);
 
   const { loginComponent, setLoginComponent } = useContext(LoginContent);
+
+  const customLayout = localStorage.getItem("v-data2") ? JSON.parse(localStorage.getItem("v-data2")) : '';
+  // const [customLayout, setCustomLayout] = useState(null);
+
+  // useEffect(() => {
+
+  //   const custom = localStorage.getItem("v-data2") ? JSON.parse(localStorage.getItem("v-data2")) : ''
+  //   setCustomLayout(custom);
+
+  // }, []);
+
+  console.log(customLayout);
 
   useEffect(() => {
     //

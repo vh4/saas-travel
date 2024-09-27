@@ -43,6 +43,7 @@ export const NavContext = createContext();
 export const LogoutContent = createContext();
 export const LoginContent = createContext();
 export const HolidaysContext = createContext();
+export const CustomLayout = createContext();
 
 const NormalizeRoute = () => {
   const location = useLocation();
@@ -72,6 +73,10 @@ function App() {
   const initialStateLogout = {
     IsLogout: false,
 
+  }
+
+  const initialCustomLayout = {
+    layout: null,
   }
 
   const initialStateLogin = {
@@ -112,6 +117,9 @@ function App() {
         case 'LOGIN': return{
           setLogin: true,
           setShowModal:false,
+        }
+        case 'CUSTOM_LAYOUT': return{
+          data: action.layout,
         } 
       }
   }
@@ -130,10 +138,12 @@ function App() {
   const [nav, setNav] =  useReducer(reducer, initialStateNavigation);
   const [loginComponent, setLoginComponent] =  useReducer(reducer, initialStateLogin);
   const [holidays, dispatchHolidays] = useReducer(holidaysReducer, initialStateHolidays);
+  const [layout, setLayout] = useReducer(reducer, initialCustomLayout);
 
   return (
     <div className="App">
        <BrowserRouter>
+       <CustomLayout.Provider value={{layout, setLayout}}>
        <HolidaysContext.Provider value={{ holidays, dispatchHolidays }}>
           <LogoutContent.Provider value={{logout,setLogout}} >
           <TiketContext.Provider value={{pay,dispatch}}>
@@ -175,6 +185,7 @@ function App() {
           </TiketContext.Provider>  
           </LogoutContent.Provider>
        </HolidaysContext.Provider>
+       </CustomLayout.Provider>
       </BrowserRouter>     
     </div>
   );
