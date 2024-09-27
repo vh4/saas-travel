@@ -55,7 +55,11 @@ export default function CarouselsMobile(props) {
 
   return (
     <div className="xl:grid xl:grid-cols-2 w-full px-0 xl:px-4 xl:py-8">
-      <div className={`block md:hidden px-4 mb-4 text-[${customLayout?.color?.secondary?.font_color ?? '#ffff'}]`}>
+      <div className={`block md:hidden px-4 mb-4`}
+      style={{    
+               color: customLayout?.color?.secondary?.font_color || '#ffff',
+            }}
+      >
         <div className="font-semibold text-sm">Hai traveller,</div>
         <div className="text-xs mt-6">
                 {Array.isArray(customLayout?.wording?.secondary?.desktop) && customLayout?.wording?.secondary?.mobile 
