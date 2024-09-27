@@ -106,7 +106,7 @@ export default function MainPage() {
       {/* carousel fitur  */}
       {contextHolder}
       <div className="w-full">
-      <div className={`bg-[${customLayout?.color?.secondary?.background ?? ''}] ${customLayout?.color?.secondary?.background ? `xl:bg-[${customLayout.color.secondary.background}]` : 'bg-gradient-to-r xl:from-cyan-500 xl:to-blue-500'} rounded-b-[40px] pb-12 xl:pb-20 xl:mb-0 xl:rounded-b-[120px]`}>
+      <div className={`bg-[${customLayout?.color?.secondary?.background ?? ''}] ${customLayout?.color?.secondary?.background ? `xl:bg-[${customLayout.color.secondary.background}]` : 'bg-gradient-to-r xl:bg-[#0f172a]'} rounded-b-[40px] pb-12 xl:pb-20 xl:mb-0 xl:rounded-b-[120px]`}>
           <div className="hidden md:block xl:block 2xl:hidden py-4 md:py-8 relative z-10 container mx-auto">
             <div className="mx-0 lg:mx-12 xl:mx-0 2xl:mx-0">
               <CarouselsTablet />

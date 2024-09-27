@@ -3,6 +3,8 @@ import "slick-carousel/slick/slick-theme.css";
 import "react-multi-carousel/lib/styles.css";
 import Slider from "react-slick";
 
+const customLayout = localStorage.getItem("v-data2") ? JSON.parse(localStorage.getItem("v-data2")) : '';
+
 export default function Carousels(props) {
   const SlickArrowRight = () => {
     return <></>;
@@ -58,25 +60,26 @@ export default function Carousels(props) {
 
   return (
     <div className="container mx-auto xl:grid xl:grid-cols-2 w-full px-0 xl:px-4 xl:py-8">
-      <div className="block md:hidden px-4 mb-4 text-black">
-        <div className="font-semibold text-sm">Hai Traveller,</div>
-        <small>nikmati promo menarik lainya untuk kamu.</small>
-      </div>
       <div className="hidden xl:block ">
         <div className="flex space-x-4 pl-12 text-white">
           <img className="" src="/join.svg" width={160} alt="carousal.png" />
           <div>
-            <h1 className="2xl:px-8 text-xl font-bold">Hai Traveller,</h1>
+            <h1 className="2xl:px-8 text-xl font-bold">{customLayout?.wording?.primary ?? 'Hai Traveller,'}</h1>
             <div className="mt-2 2xl:px-8">
               <div className="mt-4">
-                Cukup login ke akun Anda dan melakukan pemesanan tiket untuk
-                berbagai macam perjalanan.
+                {Array.isArray(customLayout?.wording?.secondary?.desktop) && customLayout?.wording?.secondary?.desktop[0] 
+                  ? customLayout?.wording?.secondary?.desktop[0] 
+                  : `Cukup login ke akun Anda dan melakukan pemesanan tiket untuk berbagai macam perjalanan.`
+                }
               </div>
               <div className="mt-6">
-                Nikmati perjalanan anda di beberapa menu travel kereta, kapal,
-                dan pesawat.
+                {Array.isArray(customLayout?.wording?.secondary?.desktop) && customLayout?.wording?.secondary?.desktop[1] 
+                  ? customLayout?.wording?.secondary?.desktop[1] 
+                  : `Cukup login ke akun Anda dan melakukan pemesanan tiket untuk berbagai macam perjalanan.`
+                }
               </div>
             </div>
+
           </div>
         </div>
       </div>

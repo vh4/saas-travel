@@ -284,7 +284,7 @@ export default function Header() {
   };
 
   return (
-    <nav className={`bg-[${customLayout?.color?.primary?.background ?? '#ffff'}] ${!customLayout?.color?.primary?.background && `border-b border-gray-200`} text-[${customLayout?.color?.primary?.font_color ?? '#030712'}] px-2 sm:px-4 py-2 xl:py-4 block sticky top-0 w-full z-50 left-0`}>
+    <nav className={`bg-[${customLayout?.color?.primary?.background ?? '#0f172a'}] ${!customLayout?.color?.primary?.background && `border-b border-gray-200`} text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}] px-2 sm:px-4 py-2 xl:py-4 block sticky top-0 w-full z-50 left-0`}>
       {contextHolder}
       <div className="container mx-auto">
         <div className={`flex justify-between items-center ${localStorage.getItem("hdrs_c") == "false" && 'py-0 md:py-2'} -mx-2 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24`}>
@@ -305,10 +305,10 @@ export default function Header() {
               <>
               <Link
                 to="/"
-                className={`hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-[${customLayout?.color?.primary?.font_color ?? '#030712'}] `}
+                className={`hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}] `}
               >
-                <AiOutlineHome className={`text-[${customLayout?.color?.primary?.font_color ?? '#030712'}]`} size={18} />
-                <div className={`text-[15px] text-[${customLayout?.color?.primary?.font_color || '#030712'}]`}>Home</div>
+                <AiOutlineHome className={`text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}]`} size={18} />
+                <div className={`text-[15px] text-[${customLayout?.color?.primary?.font_color || '#ffff'}]`}>Home</div>
               </Link>              
               </>
             )}
@@ -317,10 +317,10 @@ export default function Header() {
               <div>
                 <Link
                   to="/transaksi/pesawat"
-                  className={`hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-[${customLayout?.color?.primary?.font_color ?? '#030712'}] `}
+                  className={`hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}] `}
                   >
-                  <AiOutlineAppstore className={`text-[${customLayout?.color?.primary?.font_color ?? '#030712'}]`} size={18} />
-                  <div className={`text-[15px] text-[${customLayout?.color?.primary?.font_color ?? '#030712'}]`}>Transaksi</div>
+                  <AiOutlineAppstore className={`text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}]`} size={18} />
+                  <div className={`text-[15px] text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}]`}>Transaksi</div>
                 </Link>
               </div>
             ) : null}
@@ -339,7 +339,7 @@ export default function Header() {
               {!localStorage.getItem(
                 process.env.REACT_APP_SECTRET_LOGIN_API
               ) ? (
-                <div className={`hidden md:flex text-[${customLayout?.color?.primary?.font_color ?? '#030712'}] space-x-4 items-center`}>
+                <div className={`hidden md:flex text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}] space-x-4 items-center`}>
                   <div
                     className="flex space-x-2 items-center cursor-pointer hover:text-blue-500"
                     onClick={handleOpen}
@@ -349,19 +349,19 @@ export default function Header() {
                   </div>
                   <a
                     href="https://www.rajabiller.com/register"
-                    className={`text-[15px] text-[${customLayout?.color?.primary?.font_color ?? '#030712'}]`}
+                    className={`text-[15px] text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}]`}
                   >
                     <Button
                       key="submit"
                       type="default"
-                      className={`px-8 text-[${customLayout?.color?.primary?.font_color ?? '#030712'}]`}
+                      className={`px-8 text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}]`}
                     >
                       Registrasi
                     </Button>
                   </a>
                 </div>
               ) : (
-                <div className={`hidden relative group space-x-2 text-[${customLayout?.color?.primary?.font_color ?? '#030712'}] md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 md:inline-flex group-hover:block items-end ml-2 mb-2`}>
+                <div className={`hidden relative group space-x-2 text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}] md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 md:inline-flex group-hover:block items-end ml-2 mb-2`}>
                   {localStorage.getItem("hdrs_c") != "false" && (
                     <>
                       {user !== null && user !== undefined ? (
@@ -370,7 +370,7 @@ export default function Header() {
                             <>
                               <div className="flex space-x-2 items-center mt-2">
                                 <div className="">
-                                  <div className={`text-[${customLayout?.color?.primary?.font_color ?? '#030712'}] font-bold`}>
+                                  <div className={`text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}] font-bold`}>
                                     {localStorage.getItem("c_name")
                                       ? localStorage
                                           .getItem("c_name")
@@ -427,7 +427,7 @@ export default function Header() {
               <button
                 data-collapse-toggle="navbar-sticky"
                 type="button"
-                className={`md:mr-0 inline-flex items-center py-4 px-4 text-sm text-[${customLayout?.color?.primary?.font_color ?? '#030712'}] rounded-lg md:hidden hover:text-[${customLayout?.color?.primary?.background ?? '#ffff' }]  focus:outline-none focus:ring-[${customLayout?.color?.primary?.background ?? '#ffff' }] `}
+                className={`md:mr-0 inline-flex items-center py-4 px-4 text-sm text-[${customLayout?.color?.primary?.font_color ?? '#ffff'}] rounded-lg md:hidden hover:text-[${customLayout?.color?.primary?.background ?? '#ffff' }]  focus:outline-none focus:ring-[${customLayout?.color?.primary?.background ?? '#ffff' }] `}
                 aria-controls="navbar-sticky"
                 aria-expanded="false"
               >
