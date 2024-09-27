@@ -16,12 +16,16 @@ import dayjs, { isDayjs } from "dayjs";
 import { IoLogOut, IoLogOutOutline, IoLogOutSharp } from "react-icons/io5";
 import { LoginContent, LogoutContent } from "../../App";
 import { AiOutlineAppstore, AiOutlineHome } from "react-icons/ai";
+import { gsap } from 'gsap';
 
 export default function Header() {
   const customStyle = {
     color: "white", // Warna teks
     padding: "20px",
   };
+
+  const navRef = useRef(null);
+  const location = useLocation();
 
   const captchaRef = useRef(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -37,7 +41,6 @@ export default function Header() {
   const [api, contextHolder] = notification.useNotification();
   const { setLogout } = useContext(LogoutContent);
 
-  const location = useLocation();
   const { pathname, search } = location;
   const newURL = pathname + search;
 
@@ -48,6 +51,32 @@ export default function Header() {
   const token = localStorage.getItem("v_loggers");
   const customLayout = localStorage.getItem("v-data2") ? JSON.parse(localStorage.getItem("v-data2")) : '';
 
+  const [custom, setCustom] = useState(false);
+
+  useEffect(() => {
+    if (location.pathname === '/') {
+      // If the current path is "/", set to original colors (background primary and font color)
+      gsap.to(navRef.current, {
+        duration: 0.001,
+        ease: 'power2.inOut',
+        backgroundColor: customLayout?.color?.primary?.background || '#0f172a',
+        color: customLayout?.color?.primary?.font_color || '#ffff',
+      });
+
+    } else {
+      // If the current path is not "/", change to opposite colors
+    gsap.to(navRef.current, {
+      duration: 0.001,
+      ease: 'power2.inOut',
+      backgroundColor: '#ffff',
+      color: '#0f172a',
+      borderBottom: "1px solid #d1d5db",  // Correctly define the border
+    });
+      setCustom(true);
+
+    }
+  }, [location.pathname, customLayout]); // Dependencies on path change and customLayout
+  
   useEffect(() => {
     if (token != null || token != undefined) {
       setLogin(true);
@@ -285,387 +314,379 @@ export default function Header() {
   };
 
   return (
-      <nav
-        style={{
-          backgroundColor: customLayout?.color?.primary?.background || '#0f172a',
-          color: customLayout?.color?.primary?.font_color || '#ffff',
-        }}
-        className="px-2 sm:px-4 py-2 xl:py-4 block sticky top-0 w-full z-50 left-0"
-      >
-        {contextHolder}
-      <div className="container mx-auto">
-        <div className={`flex justify-between items-center ${localStorage.getItem("hdrs_c") == "false" && 'py-0 md:py-2'} -mx-2 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24`}>
-          <div className="">
-          {/* {localStorage.getItem("hdrs_c") != "false" && (
-          <>
-            <Link to={"/"} className="flex items-center">
-              <img
-                src="/logo.png"
-                className="w-32 -my-2 md:my-1 md:w-32 -mr-2 md:-mr-4 pl-4 md:pl-0"
-                alt="Rajabiller Logo"
-              />
-            </Link>
-          </>)} */}
-          </div>
-          <div className="flex space-x-6 items-center xl:order-2">
-          {localStorage.getItem("hdrs_c") == "false" && (
+    <div 
+        className="">
+        <nav
+          ref={navRef}
+          style={{
+            backgroundColor: customLayout?.color?.primary?.background || '#0f172a',
+            color: customLayout?.color?.primary?.font_color || '#ffff',
+          }}
+          className="px-2 sm:px-4 py-2 xl:py-4 block sticky top-0 w-full z-50 left-0"
+        >
+          {contextHolder}
+        <div className="container mx-auto">
+          <div className={`flex justify-between items-center ${localStorage.getItem("hdrs_c") == "false" && 'py-0 md:py-2'} -mx-2 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24`}>
+            <div className="">
+            {/* {localStorage.getItem("hdrs_c") != "false" && (
             <>
-              <Link
-                to="/"
-                style={{
-                  color: customLayout?.color?.primary?.font_color || '#ffff',
-                }}
-                className="hidden md:flex cursor-pointer space-x-2 text-sm items-center"
-              >
-                <AiOutlineHome
-                  style={{
-                    color: customLayout?.color?.primary?.font_color || '#ffff',
-                  }}
-                  size={18}
+              <Link to={"/"} className="flex items-center">
+                <img
+                  src="/logo.png"
+                  className="w-32 -my-2 md:my-1 md:w-32 -mr-2 md:-mr-4 pl-4 md:pl-0"
+                  alt="Rajabiller Logo"
                 />
-                <div
-                  style={{
-                    color: customLayout?.color?.primary?.font_color || '#ffff',
-                    fontSize: '15px',
-                  }}
-                >
-                  Home
-                </div>
               </Link>
-            </>
-            )}
-
-            {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
-              <div>
+            </>)} */}
+            </div>
+            <div className="flex space-x-6 items-center xl:order-2">
+            {localStorage.getItem("hdrs_c") == "false" && (
+              <>
                 <Link
-                  to="/transaksi/pesawat"
+                  to="/"
                   style={{
-                    color: customLayout?.color?.primary?.font_color || '#ffff',
+                    color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
                   }}
                   className="hidden md:flex cursor-pointer space-x-2 text-sm items-center"
                 >
-                  <AiOutlineAppstore
+                  <AiOutlineHome
                     style={{
-                      color: customLayout?.color?.primary?.font_color || '#ffff',
+                      color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
                     }}
                     size={18}
                   />
                   <div
                     style={{
-                      color: customLayout?.color?.primary?.font_color || '#ffff',
+                      color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
                       fontSize: '15px',
                     }}
                   >
-                    Transaksi
+                    Home
                   </div>
                 </Link>
-              </div>
-            ) : null}
-            {/* {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
-              <Link
-                to="/booking/pesawat"
-                className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-black"
-              >
-                <FaListAlt className="text-red-500" size={18} />
-                <div className="text-[15px] text-black">Booking</div>
-              </Link>
-            ) : null} */}
+              </>
+              )}
 
-            <>
-              {/* Untuk Belum login */}
-              {!localStorage.getItem(
-                process.env.REACT_APP_SECTRET_LOGIN_API
-              ) ? (
+              {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
+                <div>
+                  <Link
+                    to="/transaksi/pesawat"
+                    style={{
+                      color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                    }}
+                    className="hidden md:flex cursor-pointer space-x-2 text-sm items-center"
+                  >
+                    <AiOutlineAppstore
+                      style={{
+                        color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                      }}
+                      size={18}
+                    />
                     <div
                       style={{
-                        color: customLayout?.color?.primary?.font_color || '#ffff',
+                        color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                        fontSize: '15px',
                       }}
-                      className="hidden md:flex space-x-4 items-center"
                     >
+                      Transaksi
+                    </div>
+                  </Link>
+                </div>
+              ) : null}
+              {/* {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
+                <Link
+                  to="/booking/pesawat"
+                  className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-black"
+                >
+                  <FaListAlt className="text-red-500" size={18} />
+                  <div className="text-[15px] text-black">Booking</div>
+                </Link>
+              ) : null} */}
+
+              <>
+                {/* Untuk Belum login */}
+                {!localStorage.getItem(
+                  process.env.REACT_APP_SECTRET_LOGIN_API
+                ) ? (
                       <div
-                        className="flex space-x-2 items-center cursor-pointer hover:text-blue-500"
-                        onClick={handleOpen}
-                      >
-                        <UserOutlined size={22} />
-                        <div>Masuk</div>
-                      </div>
-                      <a
-                        href="https://www.rajabiller.com/register"
                         style={{
-                          color: customLayout?.color?.primary?.font_color || '#ffff',
-                          fontSize: '15px',
+                          color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
                         }}
+                        className="hidden md:flex space-x-4 items-center"
                       >
-                        <Button
-                          key="submit"
-                          type="default"
+                        <div
+                          className="flex space-x-2 items-center cursor-pointer hover:text-blue-500"
+                          onClick={handleOpen}
+                        >
+                          <UserOutlined size={22} />
+                          <div>Masuk</div>
+                        </div>
+                        <a
+                          href="https://www.rajabiller.com/register"
                           style={{
-                            color: customLayout?.color?.primary?.font_color || '#ffff',
-                            padding: '0 2rem', // Equivalent to px-8 in Tailwind
+                            color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                            fontSize: '15px',
                           }}
                         >
-                          Registrasi
-                        </Button>
-                      </a>
-                    </div>
-              ) : (
-                    <div
-                      style={{
-                        color: customLayout?.color?.primary?.font_color || '#ffff',
-                      }}
-                      className="hidden relative group space-x-2 md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 md:inline-flex group-hover:block items-end ml-2 mb-2"
-                    >
-                    {localStorage.getItem("hdrs_c") != "false" && (
-                    <>
-                      {user !== null && user !== undefined ? (
-                        <>
-                          {user.namaPemilik !== undefined ? (
-                            <>
-                              <div className="flex space-x-2 items-center mt-2">
-                                <div className="">
-                                <div
-                                    style={{
-                                      color: customLayout?.color?.primary?.font_color || '#ffff',
-                                      fontWeight: 'bold',
-                                    }}
-                                  >
-                                    {localStorage.getItem("c_name")
-                                      ? localStorage
-                                          .getItem("c_name")
-                                          .charAt(0)
-                                          .toUpperCase() + localStorage.getItem("c_name").slice(1)
-                                      : "Rb Travell"}
-                                  </div>    
-                                  <small>
-                                    {localStorage.getItem("c_at")
-                                      ? "Logged at " +
-                                        dayjs(
-                                          localStorage.getItem("c_at")
-                                        ).format("ddd, DD MMM YYYY HH:mm:ss")
-                                      : "Logged at -"}
-                                  </small>
-                                </div>
-                                <div>
+                          <Button
+                            key="submit"
+                            type="default"
+                            style={{
+                              color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                              padding: '0 2rem', // Equivalent to px-8 in Tailwind
+                            }}
+                          >
+                            Registrasi
+                          </Button>
+                        </a>
+                      </div>
+                ) : (
+                      <div
+                        style={{
+                          color: customLayout?.color?.primary?.font_color || '#ffff',
+                        }}
+                        className="hidden relative group space-x-2 md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 md:inline-flex group-hover:block items-end ml-2 mb-2"
+                      >
+                      {localStorage.getItem("hdrs_c") != "false" && (
+                      <>
+                        {user !== null && user !== undefined ? (
+                          <>
+                            {user.namaPemilik !== undefined ? (
+                              <>
+                                <div className="flex space-x-2 items-center mt-2">
+                                  <div className="">
                                   <div
-                                    onClick={LogoutHandler}
-                                    class="ml-4 flex justify-center bg-blue-500 py-2 rounded-full space-x-4 items-center w-full pl-1"
-                                  >
-                                    <IoLogOutOutline
-                                      size={18}
-                                      className="text-white"
-                                    />
+                                      style={{
+                                        color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                                        fontWeight: 'bold',
+                                      }}
+                                    >
+                                      {localStorage.getItem("c_name")
+                                        ? localStorage
+                                            .getItem("c_name")
+                                            .charAt(0)
+                                            .toUpperCase() + localStorage.getItem("c_name").slice(1)
+                                        : "Rb Travell"}
+                                    </div>    
+                                    <small>
+                                      {localStorage.getItem("c_at")
+                                        ? "Logged at " +
+                                          dayjs(
+                                            localStorage.getItem("c_at")
+                                          ).format("ddd, DD MMM YYYY HH:mm:ss")
+                                        : "Logged at -"}
+                                    </small>
+                                  </div>
+                                  <div>
+                                    <div
+                                      onClick={LogoutHandler}
+                                      class="ml-4 flex justify-center bg-blue-500 py-2 rounded-full space-x-4 items-center w-full pl-1"
+                                    >
+                                      <IoLogOutOutline
+                                        size={18}
+                                        className="text-white"
+                                      />
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            </>
-                          ) : (
+                              </>
+                            ) : (
+                              <Box sx={{ width: 100 }}>
+                                <Skeleton animation="wave" />
+                                <Skeleton animation="wave" />
+                              </Box>
+                            )}
+                          </>
+                        ) : (
+                          <>
                             <Box sx={{ width: 100 }}>
                               <Skeleton animation="wave" />
                               <Skeleton animation="wave" />
                             </Box>
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          <Box sx={{ width: 100 }}>
-                            <Skeleton animation="wave" />
-                            <Skeleton animation="wave" />
-                          </Box>
-                        </>
-                      )}
-                    </>
-                  )}
-                </div>
-              )}
-              {/* end Untuk  login */}
-            </>
-            {/* Button */}
-            {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
-              <button
-                  data-collapse-toggle="navbar-sticky"
-                  type="button"
-                  style={{
-                    color: customLayout?.color?.primary?.font_color || '#ffff',
-                    borderRadius: '0.5rem', // Equivalent to Tailwind's rounded-lg
-                    padding: '1rem 1rem', // Equivalent to py-4 px-4
-                    fontSize: '0.875rem', // Equivalent to text-sm
-                  }}
-                  className="md:mr-0 inline-flex items-center md:hidden focus:outline-none"
-                  aria-controls="navbar-sticky"
-                  aria-expanded="false"
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.color = customLayout?.color?.primary?.background || '#ffff';
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.color = customLayout?.color?.primary?.font_color || '#ffff';
-                  }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.boxShadow = `0 0 0 3px ${customLayout?.color?.primary?.background || '#ffff'}`;
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                >
-                <span className="sr-only">Open main menu</span>
-                <button onClick={() => setIsDrawerOpen(true)}>
-                  <svg
-                    className="w-6 h-6"
-                    aria-hidden="true"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                      clip-rule="evenodd"
-                    ></path>
-                  </svg>
-                </button>
-              </button>
-            ) : (
-              <>
-                <div className="pr-4 py-3">
-                  <Button
-                    className="flex items-center px-8 py-4  md:hidden"
-                    style={{
-                      color: customLayout?.color?.primary?.font_color || '#ffff',
-                    }}
-                    onClick={handleOpen}
-                  >
-                    Login
-                  </Button>
-                </div>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
+                {/* end Untuk  login */}
               </>
-            )}
+              {/* Button */}
+              {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
+                <button
+                    data-collapse-toggle="navbar-sticky"
+                    type="button"
+                    style={{
+                      color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                      borderRadius: '0.5rem', // Equivalent to Tailwind's rounded-lg
+                      padding: '1rem 1rem', // Equivalent to py-4 px-4
+                      fontSize: '0.875rem', // Equivalent to text-sm
+                    }}
+                    className="md:mr-0 inline-flex items-center md:hidden focus:outline-none"
+                    aria-controls="navbar-sticky"
+                    aria-expanded="false"
+                  >
+                  <span className="sr-only">Open main menu</span>
+                  <button onClick={() => setIsDrawerOpen(true)}>
+                    <svg
+                      className="w-6 h-6"
+                      aria-hidden="true"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                        clip-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </button>
+                </button>
+              ) : (
+                <>
+                  <div className="pr-4 py-3">
+                    <Button
+                      className="flex items-center px-8 py-4  md:hidden"
+                      style={{
+                        color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                      }}
+                      onClick={handleOpen}
+                    >
+                      Login
+                    </Button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* mobile sidebar */}
-      {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) && (
-        <>
-          <Drawer
-            title="Navigation"
-            placement="left"
-            closable={true}
-            onClose={onCloseDrawer}
-            visible={isDrawerOpen}
-            bodyStyle={customStyle} // Terapkan gaya kustom pada isi drawer
-          >
-            <div style={{ textAlign: "center" }}>
-              <Avatar size={64} icon={<UserOutlined />} />
-              <Typography.Title level={4} style={{ marginTop: "10px" }}>
-                <SidebarMobileUser />
-              </Typography.Title>
-            </div>
-          </Drawer>
-        </>
-      )}
+        {/* mobile sidebar */}
+        {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) && (
+          <>
+            <Drawer
+              title="Navigation"
+              placement="left"
+              closable={true}
+              onClose={onCloseDrawer}
+              visible={isDrawerOpen}
+              bodyStyle={customStyle} // Terapkan gaya kustom pada isi drawer
+            >
+              <div style={{ textAlign: "center" }}>
+                <Avatar size={64} icon={<UserOutlined />} />
+                <Typography.Title level={4} style={{ marginTop: "10px" }}>
+                  <SidebarMobileUser />
+                </Typography.Title>
+              </div>
+            </Drawer>
+          </>
+        )}
 
-      {/* untuk toggle sidebar di mobile dan desktop */}
+        {/* untuk toggle sidebar di mobile dan desktop */}
 
-      <Modal
-        title="Login User"
-        visible={showModal}
-        onOk={handleClose}
-        onCancel={handleClose}
-        footer={[
-          <Button
-            key="submit"
-            type="primary"
-            className="bg-blue-500"
-            loading={isLoading}
-            onClick={handlerLogin}
-          >
-            Submit
-          </Button>,
-          <Button key="cancel" onClick={handleClose}>
-            Cancel
-          </Button>,
-        ]}
-      >
-        <p>Masukkan Username & Password untuk Login</p>
-        <Form
-          labelCol={{
-            span: 5,
-          }}
-          textAlign="left"
-          wrapperCol={{
-            span: 18,
-          }}
-          style={{
-            maxWidth: 1000,
-          }}
-          className="mt-8"
-          form={form}
-          onFinish={handlerLogin}
+        <Modal
+          title="Login User"
+          visible={showModal}
+          onOk={handleClose}
+          onCancel={handleClose}
+          footer={[
+            <Button
+              key="submit"
+              type="primary"
+              className="bg-blue-500"
+              loading={isLoading}
+              onClick={handlerLogin}
+            >
+              Submit
+            </Button>,
+            <Button key="cancel" onClick={handleClose}>
+              Cancel
+            </Button>,
+          ]}
         >
-          <Form.Item
-            rules={[
-              {
-                required: true,
-                message: "Username harus diisi.",
-              },
-              {
-                max: 15,
-                message: "Username maksimal 15 karakter.",
-              },
-              {
-                pattern: /^[a-zA-Z0-9]*$/,
-                message: "Username hanya boleh berisi huruf dan angka.",
-              },
-            ]}
-            className="mt-4"
-            label="Username"
-            name="uid"
+          <p>Masukkan Username & Password untuk Login</p>
+          <Form
+            labelCol={{
+              span: 5,
+            }}
+            textAlign="left"
+            wrapperCol={{
+              span: 18,
+            }}
+            style={{
+              maxWidth: 1000,
+            }}
+            className="mt-8"
+            form={form}
+            onFinish={handlerLogin}
           >
-            <Input
-              onChange={(e) => {
-                const value = e.target.value;
-                setuid(value);
-              }}
-              value={uid}
-            />
-          </Form.Item>
-          <Form.Item
-            rules={[
-              {
-                required: true,
-                message: "Password harus diisi.",
-              },
-              {
-                max: 15,
-                message: "Password maksimal 15 karakter.",
-              },
-            ]}
-            label="Password"
-            name="pin"
-          >
-            <Input.Password
-              onChange={(e) => setpin(e.target.value)}
-              value={pin} // Pastikan value sesuai dengan nilai state pin
-              required
-            />
-          </Form.Item>
-          <Form.Item
-            label="Recaptcha"
-            name="recaptcha"
-            rules={[
-              {
-                required: true,
-                message: "Recaptcha harus diisi.",
-              },
-            ]}
-          >
-            <ReCAPTCHA
-              ref={captchaRef} // Tambahkan ref ke reCAPTCHA
-              onChange={onChange}
-              sitekey="6LdGRpEoAAAAAOqcTSI_5GvfV0_FwqiyOAarv9KM"
-            />
-          </Form.Item>
-        </Form>
-      </Modal>
-    </nav>
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                  message: "Username harus diisi.",
+                },
+                {
+                  max: 15,
+                  message: "Username maksimal 15 karakter.",
+                },
+                {
+                  pattern: /^[a-zA-Z0-9]*$/,
+                  message: "Username hanya boleh berisi huruf dan angka.",
+                },
+              ]}
+              className="mt-4"
+              label="Username"
+              name="uid"
+            >
+              <Input
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setuid(value);
+                }}
+                value={uid}
+              />
+            </Form.Item>
+            <Form.Item
+              rules={[
+                {
+                  required: true,
+                  message: "Password harus diisi.",
+                },
+                {
+                  max: 15,
+                  message: "Password maksimal 15 karakter.",
+                },
+              ]}
+              label="Password"
+              name="pin"
+            >
+              <Input.Password
+                onChange={(e) => setpin(e.target.value)}
+                value={pin} // Pastikan value sesuai dengan nilai state pin
+                required
+              />
+            </Form.Item>
+            <Form.Item
+              label="Recaptcha"
+              name="recaptcha"
+              rules={[
+                {
+                  required: true,
+                  message: "Recaptcha harus diisi.",
+                },
+              ]}
+            >
+              <ReCAPTCHA
+                ref={captchaRef} // Tambahkan ref ke reCAPTCHA
+                onChange={onChange}
+                sitekey="6LdGRpEoAAAAAOqcTSI_5GvfV0_FwqiyOAarv9KM"
+              />
+            </Form.Item>
+          </Form>
+        </Modal>
+      </nav>
+    </div>
   );
 }
