@@ -526,22 +526,11 @@ export default function Header() {
               <>
                 <div className="pr-4 py-3">
                   <Button
+                    className="flex items-center px-8 py-4  md:hidden"
                     style={{
                       color: customLayout?.color?.primary?.font_color || '#ffff',
-                      padding: '1rem 2rem', // Equivalent to py-4 px-8
-                      display: 'flex',
-                      alignItems: 'center',
-                      cursor: 'pointer',
-                      transition: 'color 0.2s ease',
                     }}
-                    className="md:hidden"
                     onClick={handleOpen}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.color = customLayout?.color?.primary?.font_color || '#ffff';
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.color = customLayout?.color?.primary?.font_color || '#ffff';
-                    }}
                   >
                     Login
                   </Button>
