@@ -1,4 +1,6 @@
 @import "rsuite/dist/rsuite.css";
+@import url('https://fonts.googleapis.com/css2?family=Baskervville+SC&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,6 +8,11 @@
 /* Your global styles or in the same component where the InputNumber is used */
 .hide-dropdown-icon .rs-input-number-dropdown-toggle {
   display: none !important;
+}
+
+.judul {
+  font-family: "Playfair Display", serif !important;
+  font-optical-sizing: auto;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */

@@ -326,20 +326,19 @@ export default function Header() {
         >
           {contextHolder}
         <div className="container mx-auto">
-          <div className={`flex justify-between items-center ${localStorage.getItem("hdrs_c") == "false" && 'py-0 md:py-2'} -mx-2 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24`}>
+          <div className={`flex justify-between items-center ${localStorage.getItem("hdrs_c") == "false" && 'py-0 md:py-2'} -mx-2 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24 no-underline`}>
             <div className="">
-            {/* {localStorage.getItem("hdrs_c") != "false" && (
-            <>
-              <Link to={"/"} className="flex items-center">
-                <img
-                  src="/logo.png"
-                  className="w-32 -my-2 md:my-1 md:w-32 -mr-2 md:-mr-4 pl-4 md:pl-0"
-                  alt="Rajabiller Logo"
-                />
-              </Link>
-            </>)} */}
+              {/* <Link to="/" className="flex items-center cursor-pointer no-underline"> */}
+                <div onClick={() => navigate('/')} 
+                style={{
+                  color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                }}
+                className="judul ml-4 text-xl xl:text-2xl font-extrabold no-underline cursor-pointer">
+                  {customLayout?.header?.logo ?? ''}
+                </div>
+              {/* </Link> */}
             </div>
-            <div className="flex space-x-6 items-center xl:order-2">
+            <div className="flex space-x-6 items-center xl:order-2 font-extrabold">
             {localStorage.getItem("hdrs_c") == "false" && (
               <>
                 <Link
