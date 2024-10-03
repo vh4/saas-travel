@@ -1,6 +1,7 @@
 stages:
   - check
   - build staging
+  - cluster staging
   - deploy staging
   - test staging
   - build prod
