@@ -4,6 +4,7 @@ stages:
   - deploy staging
   - test staging
   - build prod
+  - cluster prod
   - deploy prod
 
 check:
@@ -71,6 +72,56 @@ test staging:
   tags:
     - h2htravel01
 
+build staging cluster:
+  stage: build staging
+  environment: staging
+  before_script:
+    - docker login -u _json_key -p "$(echo $SA_REGISTRY)" https://asia.gcr.io
+  script:
+    - cp $ENV_FE .env
+    - docker build -f k8s/Dockerfile -t asia.gcr.io/partnerlink-h2h/saas-travel-frontend:staging-latest .
+    - docker push asia.gcr.io/partnerlink-h2h/saas-travel-frontend:staging-latest
+  after_script:
+    - docker logout asia.gcr.io
+  needs: [check]
+  when: on_success
+  allow_failure: false
+  only:
+    refs:
+      - production
+  tags:
+    - gitlabrunner01
+
+cluster staging:
+  stage: cluster staging
+  environment: staging
+  script:
+    - kubectl apply -f k8s/staging/code.yml
+  needs: [check, build staging cluster]
+  when: on_success
+  allow_failure: false
+  tags:
+    - gitlabrunner01
+  only:
+    refs:
+      - production
+
+deploy staging cluster:
+  stage: deploy staging
+  environment: staging
+  needs: [check, build staging cluster, cluster staging]
+  when: on_success
+  allow_failure: false
+  script:
+    - kubectl rollout restart deployment saas-travel-frontend
+  after_script:
+    - kubectl rollout status deployment saas-travel-frontend --timeout=90s || exit 1
+  only:
+    refs:
+      - production
+  tags:
+    - gitlabrunner01
+
 build prod:
   stage: build prod
   environment: prod
@@ -108,3 +159,53 @@ deploy prod:
       - production
   tags:
     - h2htravel01
+
+build prod cluster:
+  stage: build prod
+  environment: prod
+  before_script:
+    - docker login -u _json_key -p "$(echo $SA_REGISTRY)" https://asia.gcr.io
+  script:
+    - cp $ENV_FE .env
+    - docker build -f k8s/Dockerfile -t asia.gcr.io/partnerlink-h2h/saas-travel-frontend:latest .
+    - docker push asia.gcr.io/partnerlink-h2h/saas-travel-frontend:latest
+  after_script:
+    - docker logout asia.gcr.io
+  needs: [check]
+  when: manual
+  allow_failure: false
+  only:
+    refs:
+      - production
+  tags:
+    - gitlabrunner01
+
+cluster prod:
+  stage: cluster prod
+  environment: prod
+  script:
+    - kubectl apply -f k8s/prod/code.yml
+  needs: [check, build prod cluster]
+  when: on_success
+  allow_failure: false
+  tags:
+    - gitlabrunner01
+  only:
+    refs:
+      - production
+
+deploy prod cluster:
+  stage: deploy prod
+  environment: prod
+  needs: [check, build prod cluster, cluster prod]
+  when: on_success
+  allow_failure: false
+  script:
+    - kubectl rollout restart deployment saas-travel-frontend
+  after_script:
+    - kubectl rollout status deployment saas-travel-frontend --timeout=90s || exit 1
+  only:
+    refs:
+      - production
+  tags:
+    - gitlabrunner01
