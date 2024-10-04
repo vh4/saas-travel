@@ -94,6 +94,12 @@ app.get('*', (req, res) => {
   })
 })
 
+app.get('/_health', (req, res) => {
+  return res.status(200).json({
+    rd:'00',
+    rd:'HTTP/1.1 200 OK'
+  })
+})
 
 app.listen(port, () => {
   logger.info("server listening on port " + port);
