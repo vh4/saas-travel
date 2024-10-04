@@ -14,13 +14,13 @@ Router.post('/app/redirect', async function (req, res) {
   const {auth, merchant} = req.body;
   try {
 
-    logger.info(`Request http://10.9.43.2:2023. data: ${auth} merchant: ${merchant}`); //
+    logger.info(`Request ${process.env.URL_AUTH_REDIRECT}. data: ${auth} merchant: ${merchant}`); //
 
-    const dekript = await axios.post(`http://10.9.43.2:2023/index.php?dekrip=null`, {
+    const dekript = await axios.post(`${process.env.URL_AUTH_REDIRECT}/index.php?dekrip=null`, {
       dekrip:auth
     });
 
-    logger.info(`Response http://10.9.43.2:2023. data: ${dekript.data}`);
+    logger.info(`Response ${process.env.URL_AUTH_REDIRECT}. data: ${dekript.data}`);
 
     if(dekript.data !== undefined && dekript.data !== null && dekript.data?.trim() !== '') {
 
@@ -86,11 +86,11 @@ Router.post('/app/redirect', async function (req, res) {
             const dekript_token = jwt.jwtDecode(data.token);
             logger.info(`Token dekript : ${JSON.stringify(dekript_token)}`);
   
-            const tokenUidPin = await axios.post(`http://10.9.43.2:2023/index.php?dekrip=null`, {
+            const tokenUidPin = await axios.post(`${process.env.URL_AUTH_REDIRECT}/index.php?dekrip=null`, {
               dekrip:dekript_token.data
             });
   
-            logger.info(`Response [TOKEN] http://10.9.43.2:2023. data: ${tokenUidPin.data !== null && tokenUidPin.data !== '' ? '------' : 'Not Found!'}`);
+            logger.info(`Response [TOKEN] ${process.env.URL_AUTH_REDIRECT}. data: ${tokenUidPin.data !== null && tokenUidPin.data !== '' ? '------' : 'Not Found!'}`);
             req.session['v_session_uid_pin'] = tokenUidPin.data;
 
           }
