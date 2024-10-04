@@ -96,7 +96,7 @@ app.get('*', (req, res) => {
 
 app.get('/_health', (req, res) => {
   return res.status(200).json({
-    rd:'00',
+    rc:'00',
     rd:'HTTP/1.1 200 OK'
   })
 })
