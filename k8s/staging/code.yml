@@ -23,14 +23,14 @@ spec:
           imagePullPolicy: "Always"
           ports:
             - containerPort: 9999
-          readinessProbe:
-            httpGet:
-              path: /_health
-              port: 9999
-            initialDelaySeconds: 10
-            periodSeconds: 60
-            timeoutSeconds: 30
-            successThreshold: 1
+          # readinessProbe:
+          #   httpGet:
+          #     path: /_health
+          #     port: 9999
+          #   initialDelaySeconds: 10
+          #   periodSeconds: 60
+          #   timeoutSeconds: 30
+          #   successThreshold: 1
       nodeSelector:
         node-pool: staging
 
