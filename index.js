@@ -94,7 +94,6 @@ app.get('*', (req, res) => {
   })
 })
 
-
 app.listen(port, () => {
   logger.info("server listening on port " + port);
 });
