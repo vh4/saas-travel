@@ -338,8 +338,8 @@ export default function Header() {
                 </div>
               {/* </Link> */}
             </div>
-            <div className="flex space-x-6 items-center xl:order-2 font-extrabold">
-            {localStorage.getItem("hdrs_c") == "false" && (
+            <div className="flex space-x-6 items-center xl:order-2">
+            {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) && (
               <>
                 <Link
                   to="/"
@@ -457,7 +457,6 @@ export default function Header() {
                                   <div
                                       style={{
                                         color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
-                                        fontWeight: 'bold',
                                       }}
                                     >
                                       {localStorage.getItem("c_name")
@@ -467,7 +466,11 @@ export default function Header() {
                                             .toUpperCase() + localStorage.getItem("c_name").slice(1)
                                         : "Rb Travell"}
                                     </div>    
-                                    <small>
+                                    <small
+                                    style={{
+                                      color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                                    }}
+                                    >
                                       {localStorage.getItem("c_at")
                                         ? "Logged at " +
                                           dayjs(
