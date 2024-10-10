@@ -17,8 +17,8 @@
 
 &nbsp;
 ## Endpoint
-- [x] Prod saas-travel-frontend@h2htravel01 --> [10.9.43.5:9003](https://10.9.43.5:9003)
-- [x] Staging saas-travel-frontend-staging@h2htravel01 --> [10.9.43.5:9004](https://10.9.43.5:9004)
+- [x] Prod --> [https://travel.rajabiller.com](https://travel.rajabiller.com)
+- [x] Staging --> [https://h2h-saas-travel.bmstaging.id](https://h2h-saas-travel.bmstaging.id)
 
 ## Logs
 - [x] [Dashboard saas-travel-frontend prod](https://log-h2h.rotit.art/app/r/s/calm-itchy-portugal)

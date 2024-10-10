@@ -1,0 +1,74 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: saas-travel-frontend
+  labels:
+    app: saas-travel-frontend
+    stage: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: saas-travel-frontend
+  template:
+    metadata:
+      labels:
+        app: saas-travel-frontend
+        stage: staging
+    spec:
+      containers:
+        - name: saas-travel-frontend
+          image: asia.gcr.io/partnerlink-h2h/saas-travel-frontend:staging-latest
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 60
+            timeoutSeconds: 30
+            successThreshold: 1
+      nodeSelector:
+        node-pool: staging
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-saas-travel-frontend
+spec:
+  ports:
+  - name: svc-saas-travel-frontend
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: saas-travel-frontend
+  type: NodePort
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: saas-travel-frontend
+spec:
+  tls:
+    - hosts:
+      - h2h-saas-travel.bmstaging.id
+  rules:
+    - host: h2h-saas-travel.bmstaging.id
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: svc-saas-travel-frontend
+                port:
+                  number: 80
+  ingressClassName: nginx-private-int-staging
