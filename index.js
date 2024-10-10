@@ -65,7 +65,7 @@ app.get('/travel/holidays', async (req, res) => {
       params: {
         key: 'AIzaSyDvmiGaeS47xTleSsWyLX3APlDUUOF5igQ',
         ctz: 'Asia%2FJakarta'
-      },
+      }, //
     });
 
     const holidays = response.data.items.map(item => ({
