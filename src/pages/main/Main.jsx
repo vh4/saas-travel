@@ -42,8 +42,6 @@ export default function MainPage() {
 
   // }, []);
 
-  console.log(customLayout);
-
   useEffect(() => {
     //
     const fetchData = async () => {

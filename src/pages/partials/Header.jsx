@@ -17,6 +17,7 @@ import { IoLogOut, IoLogOutOutline, IoLogOutSharp } from "react-icons/io5";
 import { LoginContent, LogoutContent } from "../../App";
 import { AiOutlineAppstore, AiOutlineHome } from "react-icons/ai";
 import { gsap } from 'gsap';
+import { BsClockHistory } from "react-icons/bs";
 
 export default function Header() {
   const customStyle = {
@@ -392,6 +393,33 @@ export default function Header() {
                   </Link>
                 </div>
               ) : null}
+
+              {/* {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
+                <div>
+                  <Link
+                    to="/transaksi/history_idpel"
+                    style={{
+                      color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                    }}
+                    className="hidden md:flex cursor-pointer space-x-2 text-sm items-center"
+                  >
+                    <BsClockHistory
+                      style={{
+                        color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                      }}
+                      size={18}
+                    />
+                    <div
+                      style={{
+                        color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                        fontSize: '15px',
+                      }}
+                    >
+                      History
+                    </div>
+                  </Link>
+                </div>
+              ) : null} */}
               {/* {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
                 <Link
                   to="/booking/pesawat"

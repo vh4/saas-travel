@@ -102,6 +102,14 @@ export default function SidebarMobileUser({ pathSidebar }) {
                   Pelni
                 </div>
               </Link>
+              <Link
+                to="/transaksi/history_idpel"
+                className={`block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}
+              >
+                <div className="text-black text-left text-base font-normal">
+                  Data Penumpang
+                </div>
+              </Link>
               {/* <Link
                 to="/transaksi/dlu"
                 className={`block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}

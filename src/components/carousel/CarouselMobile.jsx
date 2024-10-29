@@ -11,7 +11,7 @@ export default function CarouselsMobile(props) {
   const customLayout = localStorage.getItem("v-data2") ? JSON.parse(localStorage.getItem("v-data2")) : '';
 
   var settings = {
-    dots: false,
+    dots: true,
     arrows: true,
     nextArrow: <SlickArrowRight />,
     infinite: true,

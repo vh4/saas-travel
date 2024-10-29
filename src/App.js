@@ -37,6 +37,7 @@ import Page404 from "./pages/partials/404";
 import Logout from "./pages/Logout";
 import KonfirmasiTransit from "./pages/kai/KonfirmasiTransit";
 import axios from "axios";
+import HistoryIdpel from "./pages/transaksi/HistoryIdpel";
 
 export const TiketContext = createContext();
 export const NavContext = createContext();
@@ -172,6 +173,7 @@ function App() {
                   <Route path="/transaksi/kai" element={<TransaksiKai />}></Route>
                   <Route path="/transaksi/pesawat" element={<TransaksiPesawat />}></Route>
                   <Route path="/transaksi/pelni" element={<TransaksiPelni />}></Route>
+                  <Route path="/transaksi/history_idpel" element={<HistoryIdpel />}></Route>
                   {/* <Route path="/transaksi/dlu" element={<TransaksiDlu />}></Route> */}
 
                   {/* <Route path="/booking/kai" element={<BookingKaiList />}></Route> */}
