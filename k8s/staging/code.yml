@@ -71,4 +71,4 @@ spec:
                 name: svc-saas-travel-frontend
                 port:
                   number: 80
-  ingressClassName: nginx-private-int-staging
+  ingressClassName: nginx-public-ext-staging
