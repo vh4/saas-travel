@@ -5,6 +5,7 @@ const { getCountry, getInfoClientAll } = require('../utils/utils.js');
 const jwt = require('jwt-decode');
 const { WhiteListtravelFunction, IsSimulatetravelFunction } = require('../model/global.js');
 require('dotenv').config()
+const { jwtDecode } = require('jwt-decode');
 
 const Router = express.Router();
 const country = getCountry();
@@ -241,6 +242,54 @@ Router.post('/app/account', async function (req, res) {
 
   }
 });
+
+Router.post('/app/history_idpel', async function (req, res) {
+  const { token, type } = req.body;
+  try {
+
+    const jwtdecoderesp = jwtDecode(token);
+    const username = req.session['v_uname'];
+    const uidPinString = await axios.post(`${process.env.URL_AUTH_REDIRECT}/index.php?dekrip=null`, {
+      dekrip:jwtdecoderesp.data
+    });
+
+    if(uidPinString.data == undefined || uidPinString.data == null || uidPinString.data?.trim() == '') {
+      return res.send({
+        rc: '03',
+        rd: 'gagal!'
+      });
+    }
+
+    const splitUidPin = uidPinString.data.split('|');
+    const uid = splitUidPin[0];
+    const pin = splitUidPin[1];
+
+    logger.info(`Request /app/history_idpel: ${JSON.stringify({
+      method:"history_idpel",
+      uid:uid,
+      pin:'-----',
+      produk:type,
+      username:username
+    })}`);
+
+    const { data } = await axios.post(`https://rajabiller.fastpay.co.id/transaksi/api_json.php`, {
+      method:"history_idpel",
+      uid:uid,
+      pin:pin,
+      produk:type,
+      username:username
+    });
+
+    logger.info(`Response /app/history_idpel: ${JSON.stringify(data)}`);
+    return res.send(data);
+
+  } catch (error) {
+    logger.error(`Error /app/history_idpel: ${error.message}`);
+    return res.status(200).send({ rc: '68', rd: 'Internal Server Error.' });
+
+  }
+});
+
 
 
 Router.post('/refresh-date', async function (req, res) {
