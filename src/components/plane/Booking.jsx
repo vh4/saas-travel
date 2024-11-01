@@ -9,7 +9,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { RxCrossCircled } from "react-icons/rx";
 import "react-phone-input-2/lib/bootstrap.css";
-import { Button, DatePicker, Modal } from "antd";
+import { Button, DatePicker, Modal, Popover, Table } from "antd";
 import { Input, Form } from "antd";
 import { Select as SelectAnt } from "antd";
 import dayjs from "dayjs";
@@ -21,11 +21,13 @@ import {
 import BookingLoading from "../components/planeskeleton/booking";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
-import ManyRequest from '../components/Manyrequest'
-import { ExclamationCircleFilled } from '@ant-design/icons';
+import ManyRequest from "../components/Manyrequest";
+import { ExclamationCircleFilled } from "@ant-design/icons";
 import { IoArrowForwardOutline } from "react-icons/io5";
-import Select from "react-select"
-import { v4 as uuidv4 } from 'uuid';
+import { CiBoxList } from "react-icons/ci";
+import Select from "react-select";
+import { v4 as uuidv4 } from "uuid";
+import Skeleton from "react-loading-skeleton";
 
 export default function BookingPesawat() {
   useEffect(() => {
@@ -38,7 +40,6 @@ export default function BookingPesawat() {
     form.resetFields();
   };
 
-  const { PesawatNumber } = useParams();
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
@@ -58,7 +59,6 @@ export default function BookingPesawat() {
   const [isDatePickerOpenAdult, setIsDatePickerOpenAdult] = useState(null);
   const [isDatePickerOpenChild, setIsDatePickerOpenChild] = useState(null);
   const [isDatePickerOpenInfant, setIsDatePickerOpenInfant] = useState(null);
-
 
   const [email, setEmail] = useState();
   const [hp, setHp] = useState();
@@ -95,20 +95,26 @@ export default function BookingPesawat() {
     },
   ];
 
+  const columns = [
+    Table.SELECTION_COLUMN,
+    Table.EXPAND_COLUMN,
+    {
+      title: "Nama",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Type",
+      dataIndex: "tipe",
+      key: "tipe",
+    },
+
+  ];
+
   const [api, contextHolder] = notification.useNotification();
   const failedNotification = (rd) => {
     api["error"]({
       message: "Error!",
-      description:
-        rd.toLowerCase().charAt(0).toUpperCase() +
-        rd.slice(1).toLowerCase() +
-        "",
-    });
-  };
-
-  const WarningNotification = (rd) => {
-    api["warning"]({
-      message: "Warning!",
       description:
         rd.toLowerCase().charAt(0).toUpperCase() +
         rd.slice(1).toLowerCase() +
@@ -128,13 +134,15 @@ export default function BookingPesawat() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_HOST_API}/travel/country`);
+        const response = await axios.get(
+          `${process.env.REACT_APP_HOST_API}/travel/country`
+        );
         const data = response.data;
         setCountries(data.countries);
         setSelectedCountry(data.userCountryCode);
       } catch (error) {
         setErrPage(true);
-        console.log(error.message || 'An error occurred while fetching data.');
+        console.log(error.message || "An error occurred while fetching data.");
       }
     };
 
@@ -150,7 +158,7 @@ export default function BookingPesawat() {
   //       if (bookResponse.data.rc === "00") {
   //         const dataDetailForBooking = bookResponse.data._flight_forBooking;
   //         const dataDetail = bookResponse.data._flight;
-        
+
   //         setdataDetailForBooking(dataDetailForBooking);
   //         setIsInternational(dataDetailForBooking.isInternational)
   //         setdataDetail(dataDetail);
@@ -195,7 +203,7 @@ export default function BookingPesawat() {
 
   //       setTimeout(() => {
   //         setIsLoadingPage(false);
-        
+
   //       }, 2000);
   //     })
   //     .catch(() => {
@@ -204,17 +212,15 @@ export default function BookingPesawat() {
   //     });
   // }, [id]);
 
-
-useEffect(() => {
+  useEffect(() => {
     Promise.all([getDataPesawatSearch()])
       .then(([bookResponse]) => {
-
         if (bookResponse) {
           const dataDetailForBooking = bookResponse._flight_forBooking;
           const dataDetail = bookResponse._flight;
-        
+
           setdataDetailForBooking(dataDetailForBooking);
-          setIsInternational(dataDetailForBooking.isInternational)
+          setIsInternational(dataDetailForBooking.isInternational);
           setdataDetail(dataDetail);
 
           const TotalAdult = parseInt(dataDetailForBooking.adult) || 0;
@@ -223,7 +229,7 @@ useEffect(() => {
 
           setIsDatePickerOpenAdult(Array(TotalAdult.length).fill(false));
           setIsDatePickerOpenChild(Array(TotalChild.length).fill(false));
-          setIsDatePickerOpenInfant(Array(TotalInfant.length).fill(false))
+          setIsDatePickerOpenInfant(Array(TotalInfant.length).fill(false));
 
           SetTotalAdult(TotalAdult);
           setTotalChild(TotalChild);
@@ -231,7 +237,7 @@ useEffect(() => {
 
           const AdultArr = Array.from({ length: TotalAdult }, () => ({
             gender: "MR",
-            nama_depan: "",
+            nama_depan: "broowww",
             nama_belakang: "",
             birthdate: getCurrentDate(),
             idNumber: "",
@@ -261,7 +267,6 @@ useEffect(() => {
 
         setTimeout(() => {
           setIsLoadingPage(false);
-        
         }, 100);
       })
       .catch(() => {
@@ -272,10 +277,8 @@ useEffect(() => {
 
   async function getDataPesawatSearch() {
     try {
-  
       const response = localStorage.getItem(`data:flight/${id}`);
       return JSON.parse(response);
-  
     } catch (error) {
       return null;
     }
@@ -293,23 +296,212 @@ useEffect(() => {
   //   }
   // }
 
+  /* list penumpang */
+
+  const [existingPenumpang, setExistingPenumpang] = useState([]);
+  const [loadingExistingPenumpang, setLoadingExistingPenumpang] =
+    useState(false);
+  
+  const [pilihExistingPenumpang, setPilihExistingPenumpang] = useState([]);
+
+  const previousDataPenumpang = async () => {
+    try {
+      setLoadingExistingPenumpang(true);
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/travel/app/history_idpel`,
+        {
+          token,
+          type: "TP",
+        }
+      );
+
+      let parsing = response.data || [];
+      parsing.data = parsing.data.map((x, i) => ({
+        ...x,
+        key: i,
+      }));
+
+      parsing.data = parsing.data.map((x, i) => ({
+        ...x,
+        name: x.nama_depan + x.nama_belakang,
+        }))
+
+      setExistingPenumpang(parsing.data);
+      setLoadingExistingPenumpang(false);
+    } catch (error) {
+      setExistingPenumpang([]);
+      setLoadingExistingPenumpang(false);
+      throw error;
+    }
+  };
+
+  const [isModalOpenListPenumpang, setIsModalListOpenPenumpang] =
+    useState(false);
+  const [indexPreviousPenumpang, setIndexPreviousPenumpang] = useState({ index: 0, type: "adult" });
+  const [selectedPassenger, setSelectedPassenger] = useState(null); // State untuk menyimpan data yang dipilih
+  
+  const showModalListPenumpang = (i, type) => {
+    previousDataPenumpang();
+    setIndexPreviousPenumpang({ index: i, type });
+    setIsModalListOpenPenumpang(true);
+  };
+
+  const handleCancelListPenumpang = () => {
+    setIsModalListOpenPenumpang(false);
+  };
+
+  const handleOkListPenumpang = () => {
+    // Update form data saat klik submit berdasarkan `selectedPassenger`
+    if (selectedPassenger) {
+
+      if (indexPreviousPenumpang.type === 'adult') {
+
+      const adultCategory = adult[0];
+
+      const birthDate = dayjs(selectedPassenger.ttl, "YYYY/MM/DD");
+      if (!disabledDateAdult(birthDate)) {
+        // If birthDate is valid, set it in the form
+        form.setFields([
+          {
+            name: [`tanggalAdult${indexPreviousPenumpang.index}`],
+            value: birthDate,
+          },
+        ]);
+
+        adultCategory[indexPreviousPenumpang.index]['birthdate'] = birthDate
+
+      } else {
+        // If birthDate is not valid, clear the field
+        form.setFields([
+          {
+            name: [`tanggalAdult${indexPreviousPenumpang.index}`],
+            value: null,
+          },
+        ]);
+      }
+  
+      adultCategory[indexPreviousPenumpang.index]['nama_depan'] = selectedPassenger.nama_depan;
+      adultCategory[indexPreviousPenumpang.index]['nama_belakang'] = selectedPassenger.nama_belakang;
+      adultCategory[indexPreviousPenumpang.index]['idNumber'] = selectedPassenger.nik;
+  
+      setAdult([adultCategory]);
+
+      form.setFields([
+        { name: [`namadepanAdult${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_depan },
+        { name: [`namabelakangAdult${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_belakang },
+        { name: [`nikAdult${indexPreviousPenumpang.index}`], value: selectedPassenger.nik },
+      ]);
+
+      } else if (indexPreviousPenumpang.type === 'child') {
+
+
+        const childCategory = child[0];
+
+        const birthDate = dayjs(selectedPassenger.ttl, "YYYY/MM/DD");
+        if (!disabledDateChild(birthDate)) {
+          // If birthDate is valid, set it in the form
+          form.setFields([
+            {
+              name: [`tanggallahirChild${indexPreviousPenumpang.index}`],
+              value: birthDate,
+            },
+          ]);
+  
+          childCategory[indexPreviousPenumpang.index]['birthdate'] = birthDate
+  
+        } else {
+          // If birthDate is not valid, clear the field
+          form.setFields([
+            {
+              name: [`tanggallahirChild${indexPreviousPenumpang.index}`],
+              value: null,
+            },
+          ]);
+        }
+
+        childCategory[indexPreviousPenumpang.index]['nama_depan'] = selectedPassenger.nama_depan;
+        childCategory[indexPreviousPenumpang.index]['nama_belakang'] = selectedPassenger.nama_belakang;
+        childCategory[indexPreviousPenumpang.index]['idNumber'] = selectedPassenger.nik;
+
+        setChild([childCategory]);
+
+        form.setFields([
+          { name: [`namadepanChild${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_depan },
+          { name: [`namabelakangChild${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_belakang },
+          { name: [`noktpChild${indexPreviousPenumpang.index}`], value: selectedPassenger.nik },
+        ]);
+
+
+      } else if (indexPreviousPenumpang.type === 'infant') {
+
+        const infantCategory = infant[0];
+
+        const birthDate = dayjs(selectedPassenger.ttl, "YYYY/MM/DD");
+        if (!disabledDate(birthDate)) {
+          // If birthDate is valid, set it in the form
+          form.setFields([
+            {
+              name: [`infanttanggallhr${indexPreviousPenumpang.index}`],
+              value: birthDate,
+            },
+          ]);
+  
+          infantCategory[indexPreviousPenumpang.index]['birthdate'] = birthDate
+  
+        } else {
+          // If birthDate is not valid, clear the field
+          form.setFields([
+            {
+              name: [`infanttanggallhr${indexPreviousPenumpang.index}`],
+              value: null,
+            },
+          ]);
+        }
+        
+        infantCategory[indexPreviousPenumpang.index]['nama_depan'] = selectedPassenger.nama_depan;
+        infantCategory[indexPreviousPenumpang.index]['nama_belakang'] = selectedPassenger.nama_belakang;
+        infantCategory[indexPreviousPenumpang.index]['idNumber'] = selectedPassenger.nik;
+
+        setInfant([infantCategory]);
+
+        form.setFields([
+          { name: [`infantnamadepan${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_depan },
+          { name: [`infantnamabelakang${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_belakang },
+          { name: [`infantktp${indexPreviousPenumpang.index}`], value: selectedPassenger.nik },
+        ]);
+
+
+      }
+    }
+  
+    setIsModalListOpenPenumpang(false);
+  };
+  
+  const handleRowSelectionChange = (selectedRowKeys, selectedRows) => {
+    if (selectedRows.length > 0) {
+      setSelectedPassenger(selectedRows[0]); // Set data sementara tanpa mengubah form
+    }
+  };
+
+  /* end of list penumpang */
+
   const handleAdultsubCatagoryChange = (i, category) => (e) => {
     let adultCategory = adult[0];
 
     if (category == "birthdate" || category == "expireddate") {
       let tanggalParse = new Date(e)
-      .toLocaleDateString("id-ID", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
-      .split("/")
-      .reverse()
-      .join("-");
-      
+        .toLocaleDateString("id-ID", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })
+        .split("/")
+        .reverse()
+        .join("-");
+
       adultCategory[i][category] = tanggalParse;
-    }else if(category == 'kewenegaraan' || category == 'issuingpassport'){
-        adultCategory[i][category] = e.value;
+    } else if (category == "kewenegaraan" || category == "issuingpassport") {
+      adultCategory[i][category] = e.value;
     } else {
       if (category == "gender") {
         adultCategory[i][category] = e;
@@ -323,23 +515,23 @@ useEffect(() => {
   const handleChildsubCatagoryChange = (i, category) => (e) => {
     let childCategory = child[0];
 
-    if (category == "birthdate" || category == 'expireddate') {
+    if (category == "birthdate" || category == "expireddate") {
       let tanggalParse = new Date(e)
-      .toLocaleDateString("id-ID", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
-      .split("/")
-      .reverse()
-      .join("-");
+        .toLocaleDateString("id-ID", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })
+        .split("/")
+        .reverse()
+        .join("-");
 
       childCategory[i][category] = tanggalParse;
-    }else if(category == 'kewenegaraan' || category == 'issuingpassport'){
+    } else if (category == "kewenegaraan" || category == "issuingpassport") {
       childCategory[i][category] = e.value;
-    } else if(category == "gender"){
+    } else if (category == "gender") {
       childCategory[i][category] = e;
-    }else {
+    } else {
       childCategory[i][category] = e.target.value;
     }
     setChild([childCategory]);
@@ -348,21 +540,21 @@ useEffect(() => {
   const handleInfantsubCatagoryChange = (i, category) => (e) => {
     let infantCategory = infant[0];
 
-    if (category == "birthdate" || category == 'expireddate') {
+    if (category == "birthdate" || category == "expireddate") {
       let tanggalParse = new Date(e)
-      .toLocaleDateString("id-ID", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
-      .split("/")
-      .reverse()
-      .join("-");
-      
+        .toLocaleDateString("id-ID", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })
+        .split("/")
+        .reverse()
+        .join("-");
+
       infantCategory[i][category] = tanggalParse;
-    }else if(category == 'kewenegaraan' || category == 'issuingpassport'){
+    } else if (category == "kewenegaraan" || category == "issuingpassport") {
       infantCategory[i][category] = e.value;
-    } else if(category == "gender"){
+    } else if (category == "gender") {
       infantCategory[i][category] = e;
     } else {
       infantCategory[i][category] = e.target.value;
@@ -380,102 +572,114 @@ useEffect(() => {
   };
 
   const handlerBookingSubmit = async (errorInfo) => {
-   
-    try{
+    try {
+      let end_adult = [];
+      let end_child = [];
+      let end_infant = [];
 
-    let end_adult = [];
-    let end_child = [];
-    let end_infant = [];
+      onReset();
 
-    onReset();
+      setIsLoading(true);
 
-    setIsLoading(true);
+      let email_hp = {
+        email: email,
+        nomor: hp,
+      };
 
-    let email_hp = {
-      email: email,
-      nomor: hp,
-    };
-    
-    let data_adult = adult[0].map((item) => ({ ...item, ...email_hp }));
+      let data_adult = adult[0].map((item) => ({ ...item, ...email_hp }));
+      child[0].forEach((item) => {
+        let date = new Date(item.birthdate);
+        let dateString =
+          (date.getMonth() + 1).toString().padStart(2, "0") +
+          "/" +
+          date.getDate().toString().padStart(2, "0") +
+          "/" +
+          date.getFullYear();
 
-    child[0].forEach((item) => {
-      let date = new Date(item.birthdate);
-      let dateString =
-        (date.getMonth() + 1).toString().padStart(2, "0") +
-        "/" +
-        date.getDate().toString().padStart(2, "0") +
-        "/" +
-        date.getFullYear();
+        //"CHD;".$child_title.";".$child_firstname.";".$child_lastname.";".$child_birthdate.";".$child_no_passport.";".$child_nationality.";".$child_issueby.";".$child_expdate.";".$child_issuedate.";".$child_issueby.";".$child_baggage
 
-      //"CHD;".$child_title.";".$child_firstname.";".$child_lastname.";".$child_birthdate.";".$child_no_passport.";".$child_nationality.";".$child_issueby.";".$child_expdate.";".$child_issuedate.";".$child_issueby.";".$child_baggage
+        end_child.push(
+          `CHD;${
+            item.gender
+          };${item.nama_depan.toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${
+            item.idNumber
+          };${item?.kewenegaraan ? item?.kewenegaraan : "ID"};${
+            item?.issuingpassport ? item?.issuingpassport : "ID"
+          };${item?.expireddate ? item?.expireddate : ""};;ID;`
+        );
+      });
 
-      end_child.push(
-        `CHD;${item.gender};${item.nama_depan.toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${
-          item.idNumber
-        };${item?.kewenegaraan ? item?.kewenegaraan : 'ID'};${item?.issuingpassport ? item?.issuingpassport : 'ID'};${item?.expireddate ? item?.expireddate : ''};;ID;`
+      infant[0].forEach((item) => {
+        let date = new Date(item.birthdate);
+        let dateString =
+          (date.getMonth() + 1).toString().padStart(2, "0") +
+          "/" +
+          date.getDate().toString().padStart(2, "0") +
+          "/" +
+          date.getFullYear();
+        end_infant.push(
+          `INF;${
+            item.gender
+          };${item.nama_depan.toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${
+            item.idNumber
+          };${item?.kewenegaraan ? item?.kewenegaraan : "ID"};${
+            item?.issuingpassport ? item?.issuingpassport : "ID"
+          };${item?.expireddate ? item?.expireddate : ""};;ID`
+        );
+      }); //kok error jadinya
+
+      data_adult.forEach((item) => {
+        let date = new Date(item.birthdate);
+        let dateString =
+          (date.getMonth() + 1).toString().padStart(2, "0") +
+          "/" +
+          date.getDate().toString().padStart(2, "0") +
+          "/" +
+          date.getFullYear();
+        // end_adult.push(`ADT;${item.gender};${item.nama_depan.split(" ")[0].toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${item.idNumber};::${item.nomor};::${item.nomor};;;;${item.email};KTP;ID;ID;;;;`);
+        end_adult.push(
+          `ADT;${
+            item.gender
+          };${item.nama_depan.toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${
+            item.idNumber
+          };::${item.nomor};::${item.nomor};;;;${item.email};1;${
+            item?.kewenegaraan ? item?.kewenegaraan : "ID"
+          };${item?.issuingpassport ? item?.issuingpassport : "ID"};${
+            item?.expireddate ? item?.expireddate : ""
+          };${item?.issuingpassport ? item?.issuingpassport : "ID"};ID;`
+        );
+      });
+
+      let seats = dataDetail.map((item, i) => item.seats[i]);
+
+      const book = {
+        airline: dataDetailForBooking.airline,
+        departure: dataDetailForBooking.departure,
+        arrival: dataDetailForBooking.arrival,
+        departureDate: dataDetailForBooking.departureDate,
+        returnDate: dataDetailForBooking.returnDate,
+        adult: TotalAdult,
+        child: TotalChild,
+        infant: TotalInfant,
+        flights: seats,
+        buyer: "",
+        passengers: {
+          adults: end_adult,
+          children: end_child,
+          infants: end_infant,
+        },
+        token: token,
+      };
+
+      const bookingResponse = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/travel/flight/book`,
+        book,
+        {
+          timeout: 3600000,
+        }
       );
-    });
 
-    infant[0].forEach((item) => {
-      let date = new Date(item.birthdate);
-      let dateString =
-        (date.getMonth() + 1).toString().padStart(2, "0") +
-        "/" +
-        date.getDate().toString().padStart(2, "0") +
-        "/" +
-        date.getFullYear();
-      end_infant.push(
-        `INF;${item.gender};${item.nama_depan.toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${
-          item.idNumber
-        };${item?.kewenegaraan ? item?.kewenegaraan : 'ID'};${item?.issuingpassport ? item?.issuingpassport : 'ID'};${item?.expireddate ? item?.expireddate : ''};;ID`
-      );
-    }); //kok error jadinya
-
-    data_adult.forEach((item) => {
-      let date = new Date(item.birthdate);
-      let dateString =
-        (date.getMonth() + 1).toString().padStart(2, "0") +
-        "/" +
-        date.getDate().toString().padStart(2, "0") +
-        "/" +
-        date.getFullYear();
-      // end_adult.push(`ADT;${item.gender};${item.nama_depan.split(" ")[0].toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${item.idNumber};::${item.nomor};::${item.nomor};;;;${item.email};KTP;ID;ID;;;;`);
-      end_adult.push(
-        `ADT;${item.gender};${item.nama_depan.toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${
-          item.idNumber
-        };::${item.nomor};::${item.nomor};;;;${item.email};1;${item?.kewenegaraan ? item?.kewenegaraan : 'ID'};${item?.issuingpassport ? item?.issuingpassport : 'ID'};${item?.expireddate ? item?.expireddate : ''};${item?.issuingpassport ? item?.issuingpassport : 'ID'};ID;`
-      );
-    });
-
-    let seats = dataDetail.map((item, i) => item.seats[i]);
-
-    const book = {
-      airline: dataDetailForBooking.airline,
-      departure: dataDetailForBooking.departure,
-      arrival: dataDetailForBooking.arrival,
-      departureDate: dataDetailForBooking.departureDate,
-      returnDate: dataDetailForBooking.returnDate,
-      adult: TotalAdult,
-      child: TotalChild,
-      infant: TotalInfant,
-      flights: seats,
-      buyer: "",
-      passengers: {
-        adults: end_adult,
-        children: end_child,
-        infants: end_infant,
-      },
-      token: token,
-    };
-
-    const bookingResponse = await axios.post(
-      `${process.env.REACT_APP_HOST_API}/travel/flight/book`, book, {
-        timeout:3600000 
-      }
-    );
-
-    if (bookingResponse.data.rc === "00") {
-
+      if (bookingResponse.data.rc === "00") {
         // const uuid = await axios.post(
         //     `${process.env.REACT_APP_HOST_API}/travel/pesawat/book/flight`,
         //     {
@@ -499,100 +703,88 @@ useEffect(() => {
         //     failedNotification(uuid.data.rd);
         // }
 
-      const uuid = uuidv4();
-      localStorage.setItem(`data:f-book/${uuid}`, JSON.stringify(
-          {
-          _DetailPassenger:{
-          adults: data_adult,
-          children: child[0],
-          infants: infant[0],
-          },
-          _Bookingflight: bookingResponse.data.data,
-          uuid:bookingResponse.data.uuid
-          }
-      ))
+        const uuid = uuidv4();
+        localStorage.setItem(
+          `data:f-book/${uuid}`,
+          JSON.stringify({
+            _DetailPassenger: {
+              adults: data_adult,
+              children: child[0],
+              infants: infant[0],
+            },
+            _Bookingflight: bookingResponse.data.data,
+            uuid: bookingResponse.data.uuid,
+          })
+        );
 
-      setIsLoading(false);
+        setIsLoading(false);
 
-      if(bookingResponse.data.callback === null) {
-          
-        navigate({
-          pathname: `/flight/payment`,
-          search: `?v_flight=${id}&v_book=${uuid}`,
-      });
-   
-      }else{
+        if (bookingResponse.data.callback === null) {
+          navigate({
+            pathname: `/flight/payment`,
+            search: `?v_flight=${id}&v_book=${uuid}`,
+          });
+        } else {
+          // SuccessNotification(
+          //   `Response callback is : ${typeof bookingResponse.data.callback === 'object' ? JSON.stringify(bookingResponse.data.callback) : bookingResponse.data.callback}`
+          // );
 
-        // SuccessNotification(
-        //   `Response callback is : ${typeof bookingResponse.data.callback === 'object' ? JSON.stringify(bookingResponse.data.callback) : bookingResponse.data.callback}`
-        // );
-
-        // navigate('/');
-        navigate({
-          pathname: `/flight/payment`,
-          search: `?v_flight=${id}&v_book=${uuid}`,
-      });
-        
-      }
-
-
-    } else {
-      setIsLoading(false);
-
-      if (bookingResponse.data.rc === "73") {
-        failedNotification(bookingResponse.data.rd);
-      }
-      else if (bookingResponse.data.rc === "11") {
-        setmanyRequestBook(true);
+          // navigate('/');
+          navigate({
+            pathname: `/flight/payment`,
+            search: `?v_flight=${id}&v_book=${uuid}`,
+          });
+        }
       } else {
-        failedNotification(bookingResponse.data.rd);
+        setIsLoading(false);
+
+        if (bookingResponse.data.rc === "73") {
+          failedNotification(bookingResponse.data.rd);
+        } else if (bookingResponse.data.rc === "11") {
+          setmanyRequestBook(true);
+        } else {
+          failedNotification(bookingResponse.data.rd);
+        }
       }
-      
+
+      hideModal();
+    } catch (error) {
+      failedNotification(error.message);
+      hideModal();
     }
-
-    hideModal();
-
-  }catch(error){
-
-    failedNotification(error.message);
-    hideModal();
-
-  }
-
   };
 
   const disabledDate = (current, e, i) => {
+    if (isInternational == 1) {
+      const dayBook = dayjs(
+        dataDetail[dataDetail.length - 1]?.departureDate
+      ).add(1, "day");
 
-    if(isInternational == 1){
- 
-      const dayBook = dayjs(dataDetail[dataDetail.length - 1]?.departureDate).add(1, "day");
-  
       const twoYearsAgo = dayjs(dayBook).subtract(2, "year");
       const endOfDays = twoYearsAgo.subtract(1, "day");
-  
+
       const currentDate = dayjs(dayBook).subtract(10, "day");
-  
+
       return current && (current < endOfDays || current > currentDate);
-
-    }else{
-
+    } else {
       const currentDay = dayjs().add(1, "day");
-  
-      const dayBookStart = dayjs(dataDetail[dataDetail.length - 1]?.departureDate).add(1, "day");
+
+      const dayBookStart = dayjs(
+        dataDetail[dataDetail.length - 1]?.departureDate
+      ).add(1, "day");
       const twoYearsAgo = dayjs(dayBookStart).subtract(2, "year");
       const endOfDays = twoYearsAgo.subtract(1, "day");
-  
+
       const currentDate = dayjs(currentDay).subtract(1, "day");
-  
+
       return current && (current < endOfDays || current > currentDate);
-
     }
-
-
   };
 
   const disabledDateExpiredDate = (current) => {
-    const lastDepartureDate = dayjs(dataDetail[dataDetail.length - 1]?.departureDate).add(1, "day");
+    const lastDepartureDate = dayjs(
+      dataDetail[dataDetail.length - 1]?.departureDate
+    ).add(1, "day");
     const minDate = lastDepartureDate.add(6, "month");
 
     const maxDate = lastDepartureDate.add(10, "year");
@@ -603,7 +795,10 @@ useEffect(() => {
   };
 
   const disabledDateAdult = (current) => {
-    const dayBook = dayjs(dataDetail[dataDetail.length - 1]?.departureDate).add(1, "day");
+    const dayBook = dayjs(dataDetail[dataDetail.length - 1]?.departureDate).add(
+      1,
+      "day"
+    );
 
     const TenYearsAgo = dayjs(dayBook).subtract(12, "year");
 
@@ -614,7 +809,10 @@ useEffect(() => {
   };
 
   const disabledDateChild = (current) => {
-    const dayBook = dayjs(dataDetail[dataDetail.length - 1]?.departureDate).add(1, "day");
+    const dayBook = dayjs(dataDetail[dataDetail.length - 1]?.departureDate).add(
+      1,
+      "day"
+    );
     const twoYearsAgo = dayjs(dayBook).subtract(2, "year");
     const TenYearsAgo = dayjs(dayBook).subtract(12, "year");
 
@@ -640,6 +838,8 @@ useEffect(() => {
     setOpen(false);
   };
 
+  console.log(adult);
+
   return (
     <>
       {contextHolder}
@@ -652,25 +852,24 @@ useEffect(() => {
         <>
           <Page400 />
         </>
-      ) : 
-      
-      manyRequestBook === true ? (
+      ) : manyRequestBook === true ? (
         <>
           <ManyRequest />
         </>
-      ) :
-      
-      (
+      ) : (
         <>
           <div className="-mt-2 xl:mt-0">
+            {/* modal for  */}
             <Modal
               title={
-                (<>
+                <>
                   <div className="flex space-x-2 items-center">
-                      <ExclamationCircleFilled className="text-orange-500 text-xl" />
-                      <div className="text-bold text-xl text-orange-500">Are you sure?</div>
+                    <ExclamationCircleFilled className="text-orange-500 text-xl" />
+                    <div className="text-bold text-xl text-orange-500">
+                      Are you sure?
+                    </div>
                   </div>
-                </>)
+                </>
               }
               open={open}
               onOk={hideModal}
@@ -680,29 +879,113 @@ useEffect(() => {
               maskClosable={false}
               footer={
                 <>
+                  <div className="blok mt-8">
+                    <div className="flex justify-end space-x-2">
+                      <Button key="back" onClick={hideModal}>
+                        Cancel
+                      </Button>
+                      <Button
+                        htmlType="submit"
+                        key="submit"
+                        type="primary"
+                        className="bg-blue-500"
+                        loading={isLoading}
+                        onClick={handlerBookingSubmit}
+                      >
+                        Submit
+                      </Button>
+                    </div>
+                  </div>
+                </>
+              }
+            >
+              <p>Apakah Anda yakin ingin submit data?</p>
+            </Modal>
+
+            {/* modal for list penumpang */}
+            <Modal
+            open={isModalOpenListPenumpang} 
+            onOk={handleOkListPenumpang} 
+            onCancel={handleCancelListPenumpang}
+            okText="Cancel"
+            cancelText="Submit"
+            maskClosable={false}
+            footer={
+              <>
                 <div className="blok mt-8">
                   <div className="flex justify-end space-x-2">
-                  <Button key="back" onClick={hideModal}>
-                    Cancel
-                  </Button>
-                  <Button
+                    <Button key="back" onClick={handleCancelListPenumpang}>
+                      Cancel
+                    </Button>
+                    <Button
                       htmlType="submit"
                       key="submit"
                       type="primary"
                       className="bg-blue-500"
                       loading={isLoading}
-                      onClick={handlerBookingSubmit}
+                      onClick={handleOkListPenumpang}
                     >
                       Submit
                     </Button>
                   </div>
                 </div>
               </>
-              }
+            }
             >
-              <p>Apakah Anda yakin ingin submit data?</p>
+              {
+                loadingExistingPenumpang  && (
+                  <>
+                  <Skeleton width={'100%'} height={12} />
+                  <Skeleton width={'80%'} height={12} />
+                  <Skeleton width={'100%'} height={12} />
+                  <Skeleton width={'80%'} height={12} />
+                  <Skeleton width={'100%'} height={12} />
+                  </>
+                )
+              }
+              {
+                loadingExistingPenumpang == false && (
+                 <>
+                     <div>
+                     <Table
+                        rowSelection={{
+                          type: "radio",
+                          onChange: handleRowSelectionChange,
+                        }}
+                        expandable={{
+                          expandedRowRender: (record) => (
+                            <>
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-8">
+                                  <div className="my-2">
+                                    <p style={{ margin: 0 }} className="text-xs">
+                                      <strong>NIK:</strong> {record.nik}
+                                    </p>
+                                  </div>
+                                  <div className="my-2">
+                                    <p style={{ margin: 0 }} className="text-xs">
+                                      <strong>Nomor HP:</strong>
+                                      <div>{record.hp && record.hp !== '' ? record.hp : '-'}</div>
+                                    </p>
+                                  </div>
+                                  <div className="my-2">
+                                    <p style={{ margin: 0 }}  className="text-xs">
+                                      <strong>Tanggal Lahir:</strong> {dayjs(record.ttl).format("DD/MM/YYYY")}
+                                    </p>
+                                  </div>
+                                </div>
+                            </>
+                          ),
+                        }}
+                        columns={columns}
+                        dataSource={existingPenumpang}
+                        pagination={{pageSize:5}}
+                      />
+                      </div>
+                 </>
+                )
+              }
             </Modal>
-            {/* header kai flow */}
+            {/* header  flow */}
             <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-4 items-center">
               <div className="hidden xl:flex space-x-2 items-center">
                 <div className="hidden xl:flex text-blue-500 font-medium ">
@@ -736,7 +1019,11 @@ useEffect(() => {
 
             {isLoadingPage === true ? (
               <>
-                <BookingLoading TotalAdult={TotalAdult} TotalChild={TotalChild} TotalInfant={TotalInfant} />
+                <BookingLoading
+                  TotalAdult={TotalAdult}
+                  TotalChild={TotalChild}
+                  TotalInfant={TotalInfant}
+                />
               </>
             ) : (
               <>
@@ -757,7 +1044,10 @@ useEffect(() => {
                           <div>({dataDetail.departure})</div>
                         </div>
                         <div className="rounded-full p-1 bg-blue-500 ">
-                          <IoArrowForwardOutline className="text-white" size={18} />
+                          <IoArrowForwardOutline
+                            className="text-white"
+                            size={18}
+                          />
                         </div>
                         <div className="text-xs text-black">
                           <div>{dataDetail.arrivalName}</div>
@@ -843,12 +1133,12 @@ useEffect(() => {
                                       required: true,
                                       type: "email",
                                       message: "Format Email tidak sesuai.",
-                                      validateTrigger:"onBlur"
+                                      validateTrigger: "onBlur",
                                     },
                                     {
                                       max: 150,
                                       message: "Email maksimal 150 karakter.",
-                                      validateTrigger:"onBlur"
+                                      validateTrigger: "onBlur",
                                     },
                                   ]}
                                 >
@@ -873,8 +1163,8 @@ useEffect(() => {
                                 Nomor HP
                               </div>
                               <Form.Item
-                                required={true}     
-                                hasFeedback                        
+                                required={true}
+                                hasFeedback
                                 name={`nomorHPAdult`}
                                 rules={[
                                   {
@@ -883,7 +1173,8 @@ useEffect(() => {
                                   },
                                   {
                                     min: 10,
-                                    message: "Minimal Nomor HP pemesan adalah 10 digit.",
+                                    message:
+                                      "Minimal Nomor HP pemesan adalah 10 digit.",
                                   },
                                 ]}
                               >
@@ -932,27 +1223,72 @@ useEffect(() => {
                                     <div className="text-black text-sm">
                                       Title Anda
                                     </div>
-                                    <div className="hidden xl:block">
-                                      <FormControl
-                                        sx={{
-                                          marginTop: 2,
-                                          marginBottom: 2,
-                                          maxWidth: 120,
-                                        }}
-                                        fullWidth
+                                    <div className="flex items-center space-x-4">
+                                      <Popover
+                                       className="hidden xl:block"
+                                        placement="topLeft"
+                                        content={
+                                          <>
+                                            <div>
+                                              Pilih otomatis data penumpang
+                                              sebelumnya.
+                                            </div>
+                                          </>
+                                        }
                                       >
-                                        <SelectAnt
-                                          style={{ width: 120 }}
-                                          options={data}
-                                          value={e.gender}
-                                          size="large"
-                                          onChange={handleAdultsubCatagoryChange(
-                                            i,
-                                            "gender"
-                                          )}
-                                        />
-                                      </FormControl>
+                                        <div
+                                          onClick={() =>
+                                            showModalListPenumpang(i, "adult")
+                                          }
+                                          className="cursor-pointer"
+                                        >
+                                          <CiBoxList size={22} />
+                                        </div>
+                                      </Popover>
+                                      <div className="hidden xl:block">
+                                        <FormControl
+                                          sx={{
+                                            marginTop: 2,
+                                            marginBottom: 2,
+                                            maxWidth: 120,
+                                          }}
+                                          fullWidth
+                                        >
+                                          <SelectAnt
+                                            style={{ width: 120 }}
+                                            options={data}
+                                            value={e.gender}
+                                            size="large"
+                                            onChange={handleAdultsubCatagoryChange(
+                                              i,
+                                              "gender"
+                                            )}
+                                          />
+                                        </FormControl>
+                                      </div>
                                     </div>
+                                    <div className="flex items-center space-x-4 pb-4">
+                                      <Popover
+                                       className="block xl:hidden"
+                                        placement="topLeft"
+                                        content={
+                                          <>
+                                            <div>
+                                              Pilih otomatis data penumpang
+                                              sebelumnya.
+                                            </div>
+                                          </>
+                                        }
+                                      >
+                                        <div
+                                          onClick={() =>
+                                            showModalListPenumpang(i, "adult")
+                                          }
+                                          className="cursor-pointer"
+                                        >
+                                          <CiBoxList size={22} />
+                                        </div>
+                                      </Popover>
                                     <div className="block xl:hidden">
                                       <FormControl
                                         sx={{ marginTop: 2, marginBottom: 2 }}
@@ -970,14 +1306,15 @@ useEffect(() => {
                                         />
                                       </FormControl>
                                     </div>
+                                  </div>
                                     <div className="w-full grid grid-cols-2 gap-2">
                                       <div className="w-full">
                                         <div className="text-black text-sm">
                                           Nama Depan
                                         </div>
                                         <Form.Item
-                                          required={true} 
-                                          hasFeedback                                      
+                                          required={true}
+                                          hasFeedback
                                           name={`namadepanAdult${i}`}
                                           rules={[
                                             {
@@ -997,7 +1334,8 @@ useEffect(() => {
                                             },
                                             {
                                               pattern: /^[A-Za-z\s]+$/,
-                                              message: 'Nama Depan hanya boleh terdiri dari huruf alfabet.',
+                                              message:
+                                                "Nama Depan hanya boleh terdiri dari huruf alfabet.",
                                             },
                                           ]}
                                         >
@@ -1020,8 +1358,8 @@ useEffect(() => {
                                           Nama Belakang
                                         </div>
                                         <Form.Item
-                                          required={true} 
-                                          hasFeedback                                      
+                                          required={true}
+                                          hasFeedback
                                           name={`namabelakangAdult${i}`}
                                           rules={[
                                             {
@@ -1041,7 +1379,8 @@ useEffect(() => {
                                             },
                                             {
                                               pattern: /^[A-Za-z\s]+$/,
-                                              message: 'Nama Belakang hanya boleh terdiri dari huruf alfabet.',
+                                              message:
+                                                "Nama Belakang hanya boleh terdiri dari huruf alfabet.",
                                             },
                                           ]}
                                         >
@@ -1063,7 +1402,7 @@ useEffect(() => {
                                   </div>
                                 </div>
                               </div>
-                              
+
                               <div className="mb-8 mt-0 xl:mt-4">
                                 <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6 ">
                                   {/* mobile & desktop NIK*/}
@@ -1072,14 +1411,13 @@ useEffect(() => {
                                       Tanggal Lahir
                                     </div>
                                     <Form.Item
-                                    required={true} 
-                                    hasFeedback
+                                      required={true}
+                                      hasFeedback
                                       name={`tanggalAdult${i}`}
                                       rules={[
                                         {
                                           required: true,
-                                          message:
-                                            "Harap input Tanggal Lahir.",
+                                          message: "Harap input Tanggal Lahir.",
                                         },
                                       ]}
                                     >
@@ -1087,7 +1425,7 @@ useEffect(() => {
                                         size="large"
                                         className="w-full"
                                         value={dayjs(e.birthdate, "YYYY/MM/DD")}
-                                        format={"DD/MM/YYYY"}
+                                        format={"YYYY/MM/DD"}
                                         onChange={handleAdultsubCatagoryChange(
                                           i,
                                           "birthdate"
@@ -1096,9 +1434,13 @@ useEffect(() => {
                                         open={isDatePickerOpenAdult[i]} // Pass the state to the open prop
                                         // inputReadOnly={true}
                                         onOpenChange={(status) => {
-                                          const newOpenState = [...isDatePickerOpenAdult]; // Create a copy of the array
+                                          const newOpenState = [
+                                            ...isDatePickerOpenAdult,
+                                          ]; // Create a copy of the array
                                           newOpenState[i] = status; // Update the state for the specific index
-                                          setIsDatePickerOpenAdult(newOpenState); // Set the updated array as the new state
+                                          setIsDatePickerOpenAdult(
+                                            newOpenState
+                                          ); // Set the updated array as the new state
                                         }}
                                       />
                                     </Form.Item>
@@ -1109,23 +1451,36 @@ useEffect(() => {
                                   <div className="w-full">
                                     <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
                                       <div className="text-black text-sm mb-2">
-                                        {isInternational == 1 ? "No. Passport" : "No. Ktp"}
+                                        {isInternational == 1
+                                          ? "No. Passport"
+                                          : "No. Ktp"}
                                       </div>
                                       <Form.Item
-                                      required={true} 
-                                      hasFeedback
+                                        required={true}
+                                        hasFeedback
                                         name={`nikAdult${i}`}
                                         rules={[
                                           {
                                             required: true,
-                                            message: isInternational == 1 ? 'NIK tidak boleh kosong.' : 'Passport tidak boleh kosong.',
+                                            message:
+                                              isInternational == 1
+                                                ? "NIK tidak boleh kosong."
+                                                : "Passport tidak boleh kosong.",
                                           },
                                           ({ getFieldValue }) => ({
                                             validator(_, value) {
-                                              if (!isNaN(value) && value !== null && value.toString().length === 16) {
+                                              if (
+                                                !isNaN(value) &&
+                                                value !== null &&
+                                                value.toString().length === 16
+                                              ) {
                                                 return Promise.resolve();
                                               }
-                                              return Promise.reject(isInternational == 1 ? "Panjang Passport harus 16 digit." : "Panjang NIK harus 16 digit.");
+                                              return Promise.reject(
+                                                isInternational == 1
+                                                  ? "Panjang Passport harus 16 digit."
+                                                  : "Panjang NIK harus 16 digit."
+                                              );
                                             },
                                           }),
                                         ]}
@@ -1134,18 +1489,36 @@ useEffect(() => {
                                           type="text"
                                           pattern="[0-9]*"
                                           onInput={(e) => {
-                                            e.target.value = e.target.value.replace(/[^\d]/g, ''); // Replace any non-digit characters
-                                            if (e.target.value.includes('.')) {
-                                              e.target.value = e.target.value.replace('.', ''); // Remove any dots
+                                            e.target.value =
+                                              e.target.value.replace(
+                                                /[^\d]/g,
+                                                ""
+                                              ); // Replace any non-digit characters
+                                            if (e.target.value.includes(".")) {
+                                              e.target.value =
+                                                e.target.value.replace(".", ""); // Remove any dots
                                             }
                                           }}
                                           onKeyPress={(e) => {
-                                            return (e.charCode >= 48 && e.charCode <= 57) || e.key !== '.'; // Disallow the dot
+                                            return (
+                                              (e.charCode >= 48 &&
+                                                e.charCode <= 57) ||
+                                              e.key !== "."
+                                            ); // Disallow the dot
                                           }}
-                                          className={'border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0'}
+                                          className={
+                                            "border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0"
+                                          }
                                           value={e.idNumber}
-                                          placeholder={isInternational == 1 ? "No. Passport" : "No. Ktp / NIK"}
-                                          onChange={handleAdultsubCatagoryChange(i, 'idNumber')}
+                                          placeholder={
+                                            isInternational == 1
+                                              ? "No. Passport"
+                                              : "No. Ktp / NIK"
+                                          }
+                                          onChange={handleAdultsubCatagoryChange(
+                                            i,
+                                            "idNumber"
+                                          )}
                                           min={0}
                                           id="default-input"
                                         />
@@ -1170,8 +1543,8 @@ useEffect(() => {
                                           Kewarganegaraan
                                         </div>
                                         <Form.Item
-                                        required={true} 
-                                        hasFeedback
+                                          required={true}
+                                          hasFeedback
                                           name={`kewenegaraanAdult${i}`}
                                           rules={[
                                             {
@@ -1184,7 +1557,10 @@ useEffect(() => {
                                           <Select
                                             options={countries}
                                             value={e.kewenegaraan}
-                                            onChange={handleAdultsubCatagoryChange(i, 'kewenegaraan')}
+                                            onChange={handleAdultsubCatagoryChange(
+                                              i,
+                                              "kewenegaraan"
+                                            )}
                                           />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
@@ -1196,8 +1572,8 @@ useEffect(() => {
                                           Issuing Passport
                                         </div>
                                         <Form.Item
-                                        required={true} 
-                                        hasFeedback
+                                          required={true}
+                                          hasFeedback
                                           name={`issuingpassportAdult${i}`}
                                           rules={[
                                             {
@@ -1210,7 +1586,10 @@ useEffect(() => {
                                           <Select
                                             options={countries}
                                             value={e.issuingpassport}
-                                            onChange={handleAdultsubCatagoryChange(i, 'issuingpassport')}
+                                            onChange={handleAdultsubCatagoryChange(
+                                              i,
+                                              "issuingpassport"
+                                            )}
                                           />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
@@ -1221,14 +1600,14 @@ useEffect(() => {
                                   </div>
                                   {/* passport */}
                                   <div className="mt-8 mb-8 xl:mt-16">
-                                      <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
+                                    <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
                                       <div className="w-full px-4 xl:px-0">
                                         <div className="xl:px-0 w-full text-black text-sm mb-2">
                                           Expired Date
                                         </div>
                                         <Form.Item
-                                        required={true} 
-                                        hasFeedback
+                                          required={true}
+                                          hasFeedback
                                           name={`expiredDateAdult${i}`}
                                           rules={[
                                             {
@@ -1241,27 +1620,36 @@ useEffect(() => {
                                           <DatePicker
                                             size="large"
                                             className="w-full"
-                                            value={dayjs(e.expireddate, "YYYY/MM/DD")}
+                                            value={dayjs(
+                                              e.expireddate,
+                                              "YYYY/MM/DD"
+                                            )}
                                             format={"DD/MM/YYYY"}
                                             onChange={handleAdultsubCatagoryChange(
                                               i,
                                               "expireddate"
                                             )}
-                                            disabledDate={disabledDateExpiredDate}
+                                            disabledDate={
+                                              disabledDateExpiredDate
+                                            }
                                             open={isDatePickerOpenAdult[i]} // Pass the state to the open prop
                                             // inputReadOnly={true}
                                             onOpenChange={(status) => {
-                                              const newOpenState = [...isDatePickerOpenAdult]; // Create a copy of the array
+                                              const newOpenState = [
+                                                ...isDatePickerOpenAdult,
+                                              ]; // Create a copy of the array
                                               newOpenState[i] = status; // Update the state for the specific index
-                                              setIsDatePickerOpenAdult(newOpenState); // Set the updated array as the new state
+                                              setIsDatePickerOpenAdult(
+                                                newOpenState
+                                              ); // Set the updated array as the new state
                                             }}
-                                            />
+                                          />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
                                           Contoh: dd/mm/yyyy
                                         </small>
                                       </div>
-                                      </div>
+                                    </div>
                                   </div>
                                 </>
                               )}
@@ -1293,6 +1681,28 @@ useEffect(() => {
                                     <div className="text-black text-sm">
                                       Title Anda
                                     </div>
+                                    <div className="flex items-center space-x-4">
+                                      <Popover
+                                        className="hidden xl:block"                                      
+                                        placement="topLeft"
+                                        content={
+                                          <>
+                                            <div>
+                                              Pilih otomatis data penumpang
+                                              sebelumnya.
+                                            </div>
+                                          </>
+                                        }
+                                      >
+                                        <div
+                                          onClick={() =>
+                                            showModalListPenumpang(i, "child")
+                                          }
+                                          className="cursor-pointer"
+                                        >
+                                          <CiBoxList size={22} />
+                                        </div>
+                                      </Popover>
                                     <div className="hidden xl:block">
                                       <FormControl
                                         sx={{
@@ -1314,6 +1724,29 @@ useEffect(() => {
                                         />
                                       </FormControl>
                                     </div>
+                                    </div>
+                                    <div className="flex items-center space-x-4 pb-4">
+                                      <Popover
+                                       className="block xl:hidden"
+                                        placement="topLeft"
+                                        content={
+                                          <>
+                                            <div>
+                                              Pilih otomatis data penumpang
+                                              sebelumnya.
+                                            </div>
+                                          </>
+                                        }
+                                      >
+                                        <div
+                                          onClick={() =>
+                                            showModalListPenumpang(i, "child")
+                                          }
+                                          className="cursor-pointer"
+                                        >
+                                          <CiBoxList size={22} />
+                                        </div>
+                                      </Popover>
                                     <div className="block xl:hidden">
                                       <FormControl
                                         sx={{ marginTop: 2, marginBottom: 2 }}
@@ -1331,13 +1764,14 @@ useEffect(() => {
                                         />
                                       </FormControl>
                                     </div>
+                                    </div>
                                     <div className="w-full grid grid-cols-2 gap-2">
                                       <div className="w-full">
                                         <div className="text-black text-sm">
                                           Nama Depan
                                         </div>
                                         <Form.Item
-                                        required={true} 
+                                          required={true}
                                           hasFeedback
                                           name={`namadepanChild${i}`}
                                           rules={[
@@ -1358,7 +1792,8 @@ useEffect(() => {
                                             },
                                             {
                                               pattern: /^[A-Za-z\s]+$/,
-                                              message: 'Nama Depan hanya boleh terdiri dari huruf alfabet.',
+                                              message:
+                                                "Nama Depan hanya boleh terdiri dari huruf alfabet.",
                                             },
                                           ]}
                                         >
@@ -1391,7 +1826,8 @@ useEffect(() => {
                                               },
                                               {
                                                 pattern: /^[A-Za-z\s]+$/,
-                                                message: 'Nama Depan hanya boleh terdiri dari huruf alfabet.',
+                                                message:
+                                                  "Nama Depan hanya boleh terdiri dari huruf alfabet.",
                                               },
                                             ]}
                                           />
@@ -1402,8 +1838,8 @@ useEffect(() => {
                                           Nama Belakang
                                         </div>
                                         <Form.Item
-                                        required={true} 
-                                        hasFeedback
+                                          required={true}
+                                          hasFeedback
                                           name={`namabelakangChild${i}`}
                                           rules={[
                                             {
@@ -1423,7 +1859,8 @@ useEffect(() => {
                                             },
                                             {
                                               pattern: /^[A-Za-z\s]+$/,
-                                              message: 'Nama Belakang hanya boleh terdiri dari huruf alfabet.',
+                                              message:
+                                                "Nama Belakang hanya boleh terdiri dari huruf alfabet.",
                                             },
                                           ]}
                                         >
@@ -1456,7 +1893,8 @@ useEffect(() => {
                                               },
                                               {
                                                 pattern: /^[A-Za-z\s]+$/,
-                                                message: 'Nama Belakang hanya boleh terdiri dari huruf alfabet.',
+                                                message:
+                                                  "Nama Belakang hanya boleh terdiri dari huruf alfabet.",
                                               },
                                             ]}
                                           />
@@ -1474,14 +1912,13 @@ useEffect(() => {
                                       Tanggal Lahir
                                     </div>
                                     <Form.Item
-                                    required={true} 
-                                    hasFeedback
+                                      required={true}
+                                      hasFeedback
                                       name={`tanggallahirChild${i}`}
                                       rules={[
                                         {
                                           required: true,
-                                          message:
-                                            "Harap input Tanggal Lahir.",
+                                          message: "Harap input Tanggal Lahir.",
                                         },
                                       ]}
                                     >
@@ -1498,11 +1935,15 @@ useEffect(() => {
                                         open={isDatePickerOpenChild[i]} // Pass the state to the open prop
                                         // inputReadOnly={true}
                                         onOpenChange={(status) => {
-                                          const newOpenState = [...isDatePickerOpenChild]; // Create a copy of the array
+                                          const newOpenState = [
+                                            ...isDatePickerOpenChild,
+                                          ]; // Create a copy of the array
                                           newOpenState[i] = status; // Update the state for the specific index
-                                          setIsDatePickerOpenChild(newOpenState); // Set the updated array as the new state
+                                          setIsDatePickerOpenChild(
+                                            newOpenState
+                                          ); // Set the updated array as the new state
                                         }}
-                                        />
+                                      />
                                     </Form.Item>
                                     <small className="block -mt-4 text-gray-400">
                                       Contoh: dd/mm/yyyy
@@ -1511,23 +1952,36 @@ useEffect(() => {
                                   <div className="w-full">
                                     <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
                                       <div className="text-black text-sm mb-2">
-                                          {isInternational == 1 ? "No. Passport" : "No. Ktp"}
+                                        {isInternational == 1
+                                          ? "No. Passport"
+                                          : "No. Ktp"}
                                       </div>
                                       <Form.Item
-                                      required={true} 
-                                      hasFeedback
+                                        required={true}
+                                        hasFeedback
                                         name={`noktpChild${i}`}
                                         rules={[
                                           {
                                             required: true,
-                                            message: isInternational == 1 ? 'Passport tidak boleh kosong.' : 'NIK tidak boleh kosong.',
+                                            message:
+                                              isInternational == 1
+                                                ? "Passport tidak boleh kosong."
+                                                : "NIK tidak boleh kosong.",
                                           },
                                           ({ getFieldValue }) => ({
                                             validator(_, value) {
-                                              if (!isNaN(value) && value !== null && value.toString().length === 16) {
+                                              if (
+                                                !isNaN(value) &&
+                                                value !== null &&
+                                                value.toString().length === 16
+                                              ) {
                                                 return Promise.resolve();
                                               }
-                                              return Promise.reject(isInternational == 1 ? "Panjang Passport harus 16 digit." : "Panjang NIK harus 16 digit.");
+                                              return Promise.reject(
+                                                isInternational == 1
+                                                  ? "Panjang Passport harus 16 digit."
+                                                  : "Panjang NIK harus 16 digit."
+                                              );
                                             },
                                           }),
                                         ]}
@@ -1536,18 +1990,36 @@ useEffect(() => {
                                           type="text"
                                           pattern="[0-9]*"
                                           onInput={(e) => {
-                                            e.target.value = e.target.value.replace(/[^\d]/g, ''); // Replace any non-digit characters
-                                            if (e.target.value.includes('.')) {
-                                              e.target.value = e.target.value.replace('.', ''); // Remove any dots
+                                            e.target.value =
+                                              e.target.value.replace(
+                                                /[^\d]/g,
+                                                ""
+                                              ); // Replace any non-digit characters
+                                            if (e.target.value.includes(".")) {
+                                              e.target.value =
+                                                e.target.value.replace(".", ""); // Remove any dots
                                             }
                                           }}
                                           onKeyPress={(e) => {
-                                            return (e.charCode >= 48 && e.charCode <= 57) || e.key !== '.'; // Disallow the dot
+                                            return (
+                                              (e.charCode >= 48 &&
+                                                e.charCode <= 57) ||
+                                              e.key !== "."
+                                            ); // Disallow the dot
                                           }}
-                                          className={'border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0'}
+                                          className={
+                                            "border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0"
+                                          }
                                           value={e.idNumber}
-                                          placeholder={isInternational == 1 ? "No. Passport" : "No. Ktp / NIK"}
-                                          onChange={handleChildsubCatagoryChange(i, 'idNumber')}
+                                          placeholder={
+                                            isInternational == 1
+                                              ? "No. Passport"
+                                              : "No. Ktp / NIK"
+                                          }
+                                          onChange={handleChildsubCatagoryChange(
+                                            i,
+                                            "idNumber"
+                                          )}
                                           min={0}
                                           id="default-input"
                                         />
@@ -1560,8 +2032,8 @@ useEffect(() => {
                                   </div>
                                 </div>
                               </div>
-                           {/* passport */}
-                            {isInternational === 1 && (
+                              {/* passport */}
+                              {isInternational === 1 && (
                                 <>
                                   {/* passport */}
                                   <div className="mt-8 mb-8 xl:mt-16">
@@ -1571,8 +2043,8 @@ useEffect(() => {
                                           Kewarganegaraan
                                         </div>
                                         <Form.Item
-                                        required={true}
-                                        hasFeedback 
+                                          required={true}
+                                          hasFeedback
                                           name={`kewenegaraanChild${i}`}
                                           rules={[
                                             {
@@ -1585,7 +2057,10 @@ useEffect(() => {
                                           <Select
                                             options={countries}
                                             value={e.kewenegaraan}
-                                            onChange={handleChildsubCatagoryChange(i, 'kewenegaraan')}
+                                            onChange={handleChildsubCatagoryChange(
+                                              i,
+                                              "kewenegaraan"
+                                            )}
                                           />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
@@ -1597,8 +2072,8 @@ useEffect(() => {
                                           Issuing Passport
                                         </div>
                                         <Form.Item
-                                        required={true} 
-                                        hasFeedback
+                                          required={true}
+                                          hasFeedback
                                           name={`issuingpassportChild${i}`}
                                           rules={[
                                             {
@@ -1611,7 +2086,10 @@ useEffect(() => {
                                           <Select
                                             options={countries}
                                             value={e.issuingpassport}
-                                            onChange={handleChildsubCatagoryChange(i, 'issuingpassport')}
+                                            onChange={handleChildsubCatagoryChange(
+                                              i,
+                                              "issuingpassport"
+                                            )}
                                           />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
@@ -1622,14 +2100,14 @@ useEffect(() => {
                                   </div>
                                   {/* passport */}
                                   <div className="mt-8 mb-8 xl:mt-16">
-                                      <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
+                                    <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
                                       <div className="w-full px-4 xl:px-0">
                                         <div className="xl:px-0 w-full text-black text-sm mb-2">
                                           Expired Date
                                         </div>
                                         <Form.Item
-                                        required={true} 
-                                        hasFeedback
+                                          required={true}
+                                          hasFeedback
                                           name={`expiredDateChild${i}`}
                                           rules={[
                                             {
@@ -1642,31 +2120,40 @@ useEffect(() => {
                                           <DatePicker
                                             size="large"
                                             className="w-full"
-                                            value={dayjs(e.expireddate, "YYYY/MM/DD")}
+                                            value={dayjs(
+                                              e.expireddate,
+                                              "YYYY/MM/DD"
+                                            )}
                                             format={"DD/MM/YYYY"}
                                             onChange={handleChildsubCatagoryChange(
                                               i,
                                               "expireddate"
                                             )}
-                                            disabledDate={disabledDateExpiredDate}
+                                            disabledDate={
+                                              disabledDateExpiredDate
+                                            }
                                             open={isDatePickerOpenChild[i]} // Pass the state to the open prop
                                             // inputReadOnly={true}
                                             onOpenChange={(status) => {
-                                              const newOpenState = [...isDatePickerOpenChild]; // Create a copy of the array
+                                              const newOpenState = [
+                                                ...isDatePickerOpenChild,
+                                              ]; // Create a copy of the array
                                               newOpenState[i] = status; // Update the state for the specific index
-                                              setIsDatePickerOpenChild(newOpenState); // Set the updated array as the new state
+                                              setIsDatePickerOpenChild(
+                                                newOpenState
+                                              ); // Set the updated array as the new state
                                             }}
-                                            />
+                                          />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
                                           Contoh: dd/mm/yyyy
                                         </small>
                                       </div>
-                                      </div>
+                                    </div>
                                   </div>
                                 </>
                               )}
-                            </div>                           
+                            </div>
                           </div>
                         </div>
                       </>
@@ -1694,7 +2181,29 @@ useEffect(() => {
                                     <div className="text-black text-sm">
                                       Title Anda
                                     </div>
-                                    <div className="hidden xl:block">
+                                    <div className="flex items-center space-x-4">
+                                      <Popover
+                                        className="hidden xl:block"                                      
+                                        placement="topLeft"
+                                        content={
+                                          <>
+                                            <div>
+                                              Pilih otomatis data penumpang
+                                              sebelumnya.
+                                            </div>
+                                          </>
+                                        }
+                                      >
+                                        <div
+                                          onClick={() =>
+                                            showModalListPenumpang(i, "infant")
+                                          }
+                                          className="cursor-pointer"
+                                        >
+                                          <CiBoxList size={22} />
+                                        </div>
+                                      </Popover>
+                                      <div className="hidden xl:block">
                                       <FormControl
                                         sx={{
                                           marginTop: 2,
@@ -1714,7 +2223,30 @@ useEffect(() => {
                                           )}
                                         />
                                       </FormControl>
+                                      </div>
                                     </div>
+                                    <div className="flex items-center space-x-4 pb-4">
+                                      <Popover
+                                        className="block xl:hidden"                                      
+                                        placement="topLeft"
+                                        content={
+                                          <>
+                                            <div>
+                                              Pilih otomatis data penumpang
+                                              sebelumnya.
+                                            </div>
+                                          </>
+                                        }
+                                      >
+                                        <div
+                                          onClick={() =>
+                                            showModalListPenumpang(i, "infant")
+                                          }
+                                          className="cursor-pointer"
+                                        >
+                                          <CiBoxList size={22} />
+                                        </div>
+                                      </Popover>
                                     <div className="block xl:hidden">
                                       <FormControl
                                         sx={{ marginTop: 2, marginBottom: 2 }}
@@ -1732,14 +2264,15 @@ useEffect(() => {
                                         />
                                       </FormControl>
                                     </div>
+                                    </div>
                                     <div className="w-full grid grid-cols-2 gap-2">
                                       <div className="w-full">
                                         <div className="text-black text-sm">
                                           Nama Depan
                                         </div>
                                         <Form.Item
-                                        required={true} 
-                                        hasFeedback
+                                          required={true}
+                                          hasFeedback
                                           name={`infantnamadepan${i}`}
                                           rules={[
                                             {
@@ -1759,7 +2292,8 @@ useEffect(() => {
                                             },
                                             {
                                               pattern: /^[A-Za-z\s]+$/,
-                                              message: 'Nama Depan hanya boleh terdiri dari huruf alfabet.',
+                                              message:
+                                                "Nama Depan hanya boleh terdiri dari huruf alfabet.",
                                             },
                                           ]}
                                         >
@@ -1782,8 +2316,8 @@ useEffect(() => {
                                           Nama Belakang
                                         </div>
                                         <Form.Item
-                                        required={true} 
-                                        hasFeedback
+                                          required={true}
+                                          hasFeedback
                                           name={`infantnamabelakang${i}`}
                                           rules={[
                                             {
@@ -1803,7 +2337,8 @@ useEffect(() => {
                                             },
                                             {
                                               pattern: /^[A-Za-z\s]+$/,
-                                              message: 'Nama Belakang hanya boleh terdiri dari huruf alfabet.',
+                                              message:
+                                                "Nama Belakang hanya boleh terdiri dari huruf alfabet.",
                                             },
                                           ]}
                                         >
@@ -1833,14 +2368,13 @@ useEffect(() => {
                                       Tanggal Lahir
                                     </div>
                                     <Form.Item
-                                    required={true} 
-                                    hasFeedback
+                                      required={true}
+                                      hasFeedback
                                       name={`infanttanggallhr${i}`}
                                       rules={[
                                         {
                                           required: true,
-                                          message:
-                                            "Harap input Tanggal Lahir.",
+                                          message: "Harap input Tanggal Lahir.",
                                         },
                                       ]}
                                     >
@@ -1857,11 +2391,15 @@ useEffect(() => {
                                         open={isDatePickerOpenInfant[i]} // Pass the state to the open prop
                                         // inputReadOnly={true}
                                         onOpenChange={(status) => {
-                                          const newOpenState = [...isDatePickerOpenInfant]; // Create a copy of the array
+                                          const newOpenState = [
+                                            ...isDatePickerOpenInfant,
+                                          ]; // Create a copy of the array
                                           newOpenState[i] = status; // Update the state for the specific index
-                                          setIsDatePickerOpenInfant(newOpenState); // Set the updated array as the new state
+                                          setIsDatePickerOpenInfant(
+                                            newOpenState
+                                          ); // Set the updated array as the new state
                                         }}
-                                        />
+                                      />
                                     </Form.Item>
                                     <small className="block -mt-4 text-gray-400">
                                       Contoh: dd/mm/yyyy
@@ -1870,47 +2408,78 @@ useEffect(() => {
                                   <div className="w-full">
                                     <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
                                       <div className="text-black text-sm mb-2">
-                                        {isInternational == 1 ? "No. Passport" : "No. Ktp"}
+                                        {isInternational == 1
+                                          ? "No. Passport"
+                                          : "No. Ktp"}
                                       </div>
                                       <Form.Item
-                                      required={true} 
-                                      hasFeedback
-                                          name={`infantktp${i}`}
-                                          rules={[
-                                            {
-                                              required: true,
-                                              message: isInternational == 1 ? 'Passport tidak boleh kosong.' : 'NIK tidak boleh kosong.',
+                                        required={true}
+                                        hasFeedback
+                                        name={`infantktp${i}`}
+                                        rules={[
+                                          {
+                                            required: true,
+                                            message:
+                                              isInternational == 1
+                                                ? "Passport tidak boleh kosong."
+                                                : "NIK tidak boleh kosong.",
+                                          },
+                                          ({ getFieldValue }) => ({
+                                            validator(_, value) {
+                                              if (
+                                                !isNaN(value) &&
+                                                value !== null &&
+                                                value.toString().length === 16
+                                              ) {
+                                                return Promise.resolve();
+                                              }
+                                              return Promise.reject(
+                                                isInternational == 1
+                                                  ? "Panjang Passport harus 16 digit."
+                                                  : "Panjang NIK harus 16 digit."
+                                              );
                                             },
-                                            ({ getFieldValue }) => ({
-                                              validator(_, value) {
-                                                if (!isNaN(value) && value !== null && value.toString().length === 16) {
-                                                  return Promise.resolve();
-                                                }
-                                                return Promise.reject(isInternational == 1 ? "Panjang Passport harus 16 digit." : "Panjang NIK harus 16 digit.");
-                                              },
-                                            }),
-                                          ]}
-                                        >
+                                          }),
+                                        ]}
+                                      >
                                         <input
                                           type="text"
                                           pattern="[0-9]*"
                                           onInput={(e) => {
-                                            e.target.value = e.target.value.replace(/[^\d]/g, ''); // Replace any non-digit characters
-                                            if (e.target.value.includes('.')) {
-                                              e.target.value = e.target.value.replace('.', ''); // Remove any dots
+                                            e.target.value =
+                                              e.target.value.replace(
+                                                /[^\d]/g,
+                                                ""
+                                              ); // Replace any non-digit characters
+                                            if (e.target.value.includes(".")) {
+                                              e.target.value =
+                                                e.target.value.replace(".", ""); // Remove any dots
                                             }
                                           }}
                                           onKeyPress={(e) => {
-                                            return (e.charCode >= 48 && e.charCode <= 57) || e.key !== '.'; // Disallow the dot
+                                            return (
+                                              (e.charCode >= 48 &&
+                                                e.charCode <= 57) ||
+                                              e.key !== "."
+                                            ); // Disallow the dot
                                           }}
-                                          className={'border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0'}
+                                          className={
+                                            "border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0"
+                                          }
                                           value={e.idNumber}
-                                          placeholder={isInternational == 1 ? "No. Passport" : "No. Ktp / NIK"}
-                                          onChange={handleInfantsubCatagoryChange(i, 'idNumber')}
+                                          placeholder={
+                                            isInternational == 1
+                                              ? "No. Passport"
+                                              : "No. Ktp / NIK"
+                                          }
+                                          onChange={handleInfantsubCatagoryChange(
+                                            i,
+                                            "idNumber"
+                                          )}
                                           min={0}
                                           id="default-input"
                                         />
-                                        </Form.Item>
+                                      </Form.Item>
                                       <small className="block -mt-4 text-gray-400">
                                         Contoh: 16 digit nomor
                                       </small>
@@ -1919,9 +2488,9 @@ useEffect(() => {
                                   </div>
                                 </div>
                               </div>
-                            
-                            {/* passport */}
-                            {isInternational === 1 && (
+
+                              {/* passport */}
+                              {isInternational === 1 && (
                                 <>
                                   {/* passport */}
                                   <div className="mt-8 mb-8 xl:mt-16">
@@ -1931,8 +2500,8 @@ useEffect(() => {
                                           Kewarganegaraan
                                         </div>
                                         <Form.Item
-                                        required={true} 
-                                        hasFeedback
+                                          required={true}
+                                          hasFeedback
                                           name={`kewenegaraanInfant${i}`}
                                           rules={[
                                             {
@@ -1945,7 +2514,10 @@ useEffect(() => {
                                           <Select
                                             options={countries}
                                             value={e.kewenegaraan}
-                                            onChange={handleInfantsubCatagoryChange(i, 'kewenegaraan')}
+                                            onChange={handleInfantsubCatagoryChange(
+                                              i,
+                                              "kewenegaraan"
+                                            )}
                                           />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
@@ -1957,8 +2529,8 @@ useEffect(() => {
                                           Issuing Passport
                                         </div>
                                         <Form.Item
-                                        required={true} 
-                                        hasFeedback
+                                          required={true}
+                                          hasFeedback
                                           name={`issuingpassportInfant${i}`}
                                           rules={[
                                             {
@@ -1971,7 +2543,10 @@ useEffect(() => {
                                           <Select
                                             options={countries}
                                             value={e.issuingpassport}
-                                            onChange={handleInfantsubCatagoryChange(i, 'issuingpassport')}
+                                            onChange={handleInfantsubCatagoryChange(
+                                              i,
+                                              "issuingpassport"
+                                            )}
                                           />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
@@ -1982,14 +2557,14 @@ useEffect(() => {
                                   </div>
                                   {/* passport */}
                                   <div className="mt-8 mb-8 xl:mt-16">
-                                      <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
+                                    <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
                                       <div className="w-full px-4 xl:px-0">
                                         <div className="xl:px-0 w-full text-black text-sm mb-2">
                                           Expired Date
                                         </div>
                                         <Form.Item
-                                        required={true}
-                                        hasFeedback 
+                                          required={true}
+                                          hasFeedback
                                           name={`expiredDateInfant${i}`}
                                           rules={[
                                             {
@@ -2002,27 +2577,36 @@ useEffect(() => {
                                           <DatePicker
                                             size="large"
                                             className="w-full"
-                                            value={dayjs(e.expireddate, "YYYY/MM/DD")}
+                                            value={dayjs(
+                                              e.expireddate,
+                                              "YYYY/MM/DD"
+                                            )}
                                             format={"DD/MM/YYYY"}
                                             onChange={handleInfantsubCatagoryChange(
                                               i,
                                               "expireddate"
                                             )}
-                                            disabledDate={disabledDateExpiredDate}
+                                            disabledDate={
+                                              disabledDateExpiredDate
+                                            }
                                             open={isDatePickerOpenInfant[i]} // Pass the state to the open prop
                                             // inputReadOnly={true}
                                             onOpenChange={(status) => {
-                                              const newOpenState = [...isDatePickerOpenInfant]; // Create a copy of the array
+                                              const newOpenState = [
+                                                ...isDatePickerOpenInfant,
+                                              ]; // Create a copy of the array
                                               newOpenState[i] = status; // Update the state for the specific index
-                                              setIsDatePickerOpenInfant(newOpenState); // Set the updated array as the new state
+                                              setIsDatePickerOpenInfant(
+                                                newOpenState
+                                              ); // Set the updated array as the new state
                                             }}
-                                            />
+                                          />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
                                           Contoh: dd/mm/yyyy
                                         </small>
                                       </div>
-                                      </div>
+                                    </div>
                                   </div>
                                 </>
                               )}

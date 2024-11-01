@@ -8,7 +8,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { RxCrossCircled } from "react-icons/rx";
 import "react-phone-input-2/lib/bootstrap.css";
-import { Button, DatePicker, Form, Modal } from "antd";
+import { Button, DatePicker, Modal, Popover, Table, Form } from "antd";
 import dayjs from "dayjs";
 import PhoneInput from "react-phone-input-2";
 import { Input } from "antd";
@@ -22,6 +22,8 @@ import BookingLoading from "../components/trainskeleton/booking";
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { IoArrowForwardOutline } from "react-icons/io5";
 import { v4 as uuidv4 } from 'uuid';
+import { CiBoxList } from "react-icons/ci";
+import Skeleton from "react-loading-skeleton";
 
 export default function BookingKai() {
   const [api, contextHolder] = notification.useNotification();
@@ -47,19 +49,25 @@ export default function BookingKai() {
     });
   };
 
-  const SuccessNotification = (rd) => {
-    api["success"]({
-      message: "Success!",
-      description:
-        rd.toLowerCase().charAt(0).toUpperCase() +
-        rd.slice(1).toLowerCase() +
-        "",
-    });
-  };
-
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
+
+
+  const columns = [
+    Table.SELECTION_COLUMN,
+    Table.EXPAND_COLUMN,
+    {
+      title: "Nama",
+      dataIndex: "nama",
+      key: "nama",
+    },
+    {
+      title: "Type",
+      dataIndex: "tipe",
+      key: "tipe",
+    },
+  ];
 
   const [isLoading, setIsLoading] = useState(false);
   const [manyRequestBook, setmanyRequestBook] = useState(false);
@@ -176,11 +184,67 @@ export default function BookingKai() {
 
     }
   }
+
+
+  /* list penumpang */
+
+  const [existingPenumpang, setExistingPenumpang] = useState([]);
+  const [loadingExistingPenumpang, setLoadingExistingPenumpang] =
+    useState(false);
   
+  const [pilihExistingPenumpang, setPilihExistingPenumpang] = useState([]);
+
+  const previousDataPenumpang = async () => {
+    try {
+      setLoadingExistingPenumpang(true);
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/travel/app/history_idpel`,
+        {
+          token,
+          type: "WKAI",
+        }
+      );
+
+      let parsing = response.data || [];
+      parsing.data = parsing.data.map((x, i) => ({
+        ...x,
+        key: i,
+      }));
+
+      setExistingPenumpang(parsing.data);
+      setLoadingExistingPenumpang(false);
+    } catch (error) {
+      setExistingPenumpang([]);
+      setLoadingExistingPenumpang(false);
+      throw error;
+    }
+  };
+
+  const [isModalOpenListPenumpang, setIsModalListOpenPenumpang] =
+    useState(false);
+  const [indexPreviousPenumpang, setIndexPreviousPenumpang] = useState({ index: 0, type: "adult" });
+  const [selectedPassenger, setSelectedPassenger] = useState(null); // State untuk menyimpan data yang dipilih
   
-  function addLeadingZero(num) {
-    return num < 10 ? `0${num}` : num;
-  }
+  const showModalListPenumpang = (i, type) => {
+    previousDataPenumpang();
+    setIndexPreviousPenumpang({ index: i, type });
+    setIsModalListOpenPenumpang(true);
+  };
+
+  const handleCancelListPenumpang = () => {
+    setIsModalListOpenPenumpang(false);
+  };
+
+  const handleOkListPenumpang = () => {
+
+  };
+  
+  const handleRowSelectionChange = (selectedRowKeys, selectedRows) => {
+    if (selectedRows.length > 0) {
+      setSelectedPassenger(selectedRows[0]); // Set data sementara tanpa mengubah form
+    }
+  };
+  
 
   const handleAdultsubCatagoryChange = (i, category) => (e) => {
     const adultCategory = adult[0];
@@ -439,6 +503,92 @@ export default function BookingKai() {
             >
               <p>Apakah Anda yakin ingin submit data?</p>
             </Modal>
+
+          {/* modal for list penumpang */}
+          <Modal
+            open={isModalOpenListPenumpang} 
+            onOk={handleOkListPenumpang} 
+            onCancel={handleCancelListPenumpang}
+            okText="Cancel"
+            cancelText="Submit"
+            maskClosable={false}
+            footer={
+              <>
+                <div className="blok mt-8">
+                  <div className="flex justify-end space-x-2">
+                    <Button key="back" onClick={handleCancelListPenumpang}>
+                      Cancel
+                    </Button>
+                    <Button
+                      htmlType="submit"
+                      key="submit"
+                      type="primary"
+                      className="bg-blue-500"
+                      loading={isLoading}
+                      onClick={handleOkListPenumpang}
+                    >
+                      Submit
+                    </Button>
+                  </div>
+                </div>
+              </>
+            }
+            >
+              {
+                loadingExistingPenumpang  && (
+                  <>
+                  <Skeleton width={'100%'} height={12} />
+                  <Skeleton width={'80%'} height={12} />
+                  <Skeleton width={'100%'} height={12} />
+                  <Skeleton width={'80%'} height={12} />
+                  <Skeleton width={'100%'} height={12} />
+                  </>
+                )
+              }
+              {
+                loadingExistingPenumpang == false && (
+                 <>
+                     <div>
+                     <Table
+                        rowSelection={{
+                          type: "radio",
+                          onChange: handleRowSelectionChange,
+                        }}
+                        expandable={{
+                          expandedRowRender: (record) => (
+                            <>
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-8">
+                                  <div className="my-2">
+                                    <p style={{ margin: 0 }} className="text-xs">
+                                      <strong>NIK:</strong> {record.nik}
+                                    </p>
+                                  </div>
+                                  <div className="my-2">
+                                    <p style={{ margin: 0 }} className="text-xs">
+                                      <strong>Nomor HP:</strong>
+                                      <div>{record.hp && record.hp !== '' ? record.hp : '-'}</div>
+                                    </p>
+                                  </div>
+                                  <div className="my-2">
+                                    <p style={{ margin: 0 }}  className="text-xs">
+                                      <strong>Tanggal Lahir:</strong> {dayjs(record.ttl).format("DD/MM/YYYY")}
+                                    </p>
+                                  </div>
+                                </div>
+                            </>
+                          ),
+                        }}
+                        columns={columns}
+                        dataSource={existingPenumpang}
+                        pagination={{pageSize:5}}
+                      />
+                      </div>
+                 </>
+                )
+              }
+            </Modal>
+            {/* header  flow */}
+
           <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
               <div className="hidden xl:flex space-x-2 items-center">
                 <div className="hidden xl:flex text-blue-500 font-medium ">
@@ -605,6 +755,36 @@ export default function BookingKai() {
                         <div className="flex space-x-12">
                           {/* form detailt kontal */}
                           <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-2">
+                                                          <div className="">
+                                <div className="p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8">
+                                  {/* mobile & desktop Nama*/}
+                                  <div className="xl:w-full mt-4 xl:mt-0">
+                                    <div className="flex items-center space-x-4">
+                                      <Popover
+                                       className=""
+                                        placement="topLeft"
+                                        content={
+                                          <>
+                                            <div>
+                                              Pilih otomatis data penumpang
+                                              sebelumnya.
+                                            </div>
+                                          </>
+                                        }
+                                      >
+                                        <div
+                                          onClick={() =>
+                                            showModalListPenumpang(i, "adult")
+                                          }
+                                          className="cursor-pointer"
+                                        >
+                                          <CiBoxList size={22} />
+                                        </div>
+                                      </Popover>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             <div className="">
                               <div className="p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8">
                                 {/* mobile & desktop Nama*/}
