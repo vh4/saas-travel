@@ -302,8 +302,6 @@ export default function BookingPesawat() {
   const [loadingExistingPenumpang, setLoadingExistingPenumpang] =
     useState(false);
   
-  const [pilihExistingPenumpang, setPilihExistingPenumpang] = useState([]);
-
   const previousDataPenumpang = async () => {
     try {
       setLoadingExistingPenumpang(true);
@@ -368,7 +366,7 @@ export default function BookingPesawat() {
           },
         ]);
 
-        adultCategory[indexPreviousPenumpang.index]['birthdate'] = birthDate
+        adultCategory[indexPreviousPenumpang.index]['birthdate'] = selectedPassenger.ttl
 
       } else {
         // If birthDate is not valid, clear the field

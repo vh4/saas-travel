@@ -4,26 +4,25 @@ import "react-phone-number-input/style.css";
 import "../../index.css";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { useForm } from "react-hook-form";
 import { RxCrossCircled } from "react-icons/rx";
 import "react-phone-input-2/lib/bootstrap.css";
-import { Button, DatePicker, Modal } from "antd";
-import { InputNumber } from "rsuite";
+import { Button, DatePicker, Modal, Popover, Table } from "antd";
 import dayjs from "dayjs";
 import PhoneInput from "react-phone-input-2";
 import { Input, Form } from "antd";
 import { notification } from "antd";
 import FormControl from "@mui/material/FormControl";
 import { Select } from "antd";
-import {parseDate, getCurrentDate} from '../../helpers/date'
+import { parseDate, getCurrentDate } from "../../helpers/date";
 import Page400 from "../components/400";
 import Page500 from "../components/500";
 import BookingLoading from "../components/pelniskeleton/booking";
 import ManyRequest from "../components/Manyrequest";
-import { ExclamationCircleFilled } from '@ant-design/icons';
+import { ExclamationCircleFilled } from "@ant-design/icons";
 import { IoArrowForwardOutline } from "react-icons/io5";
-import { v4 as uuidv4 } from 'uuid';
-
+import { v4 as uuidv4 } from "uuid";
+import Skeleton from "react-loading-skeleton";
+import { CiBoxList } from "react-icons/ci";
 
 export default function BookingPelni() {
   const [api, contextHolder] = notification.useNotification();
@@ -37,16 +36,6 @@ export default function BookingPelni() {
   const failedNotification = (rd) => {
     api["error"]({
       message: "Error!",
-      description:
-        rd.toLowerCase().charAt(0).toUpperCase() +
-        rd.slice(1).toLowerCase() +
-        "",
-    });
-  };
-
-  const SuccessNotification = (rd) => {
-    api["success"]({
-      message: "Success!",
       description:
         rd.toLowerCase().charAt(0).toUpperCase() +
         rd.slice(1).toLowerCase() +
@@ -75,7 +64,8 @@ export default function BookingPelni() {
   const [hp, setHp] = useState();
   const [wanita, setWanita] = useState([]);
   const [pria, setPria] = useState([]);
-  const [tanggal_keberangkatan_pelni, Settanggal_keberangkatan_pelni] = useState(null);
+  const [tanggal_keberangkatan_pelni, Settanggal_keberangkatan_pelni] =
+    useState(null);
   const [tanggal_tujuan_pelni, Settanggal_tujuan_pelni] = useState(null);
   const [duration, setDuration] = useState(null);
   const [TotalPria, setTotalPria] = useState(0);
@@ -85,9 +75,22 @@ export default function BookingPelni() {
     if (token === null || token === undefined) {
       setErr(true);
     }
-  }, [
-    token,
-  ]);
+  }, [token]);
+
+  const columns = [
+    Table.SELECTION_COLUMN,
+    Table.EXPAND_COLUMN,
+    {
+      title: "Nama",
+      dataIndex: "nama",
+      key: "nama",
+    },
+    {
+      title: "Type",
+      dataIndex: "tipe",
+      key: "tipe",
+    },
+  ];
 
   // useEffect(() => {
 
@@ -101,7 +104,7 @@ export default function BookingPelni() {
 
   //         setTotalPria(TotalPria)
   //         setTotalWanita(TotalWanita);
-         
+
   //         const WanitaArr = Array.from({ length: TotalWanita }, () => ({
   //           name: "",
   //           birthdate: getCurrentDate(),
@@ -122,11 +125,11 @@ export default function BookingPelni() {
   //         setPria([PriaArr]);
 
   //         const date_Keberangkatan = new Date(bookResponse.data.departureDate);
-          
+
   //         const date_tujuan = new Date(bookResponse.data.arrivalDate);
-        
+
   //         const duration = bookResponse.data.duration
-        
+
   //         const tanggal_keberangkatan_pelni = parseDate(date_Keberangkatan);
   //         const tanggal_tujuan_pelni = parseDate(date_tujuan);
 
@@ -161,7 +164,6 @@ export default function BookingPelni() {
   // }
 
   useEffect(() => {
-
     Promise.all([getDataPelniSearch()])
       .then(([bookResponse]) => {
         if (bookResponse) {
@@ -173,10 +175,9 @@ export default function BookingPelni() {
           setisDatePickerOpenPria(Array(TotalPria.length).fill(false));
           setisDatePickerOpenWanita(Array(TotalWanita.length).fill(false));
 
-
-          setTotalPria(TotalPria)
+          setTotalPria(TotalPria);
           setTotalWanita(TotalWanita);
-         
+
           const WanitaArr = Array.from({ length: TotalWanita }, () => ({
             name: "",
             birthdate: getCurrentDate(),
@@ -197,20 +198,19 @@ export default function BookingPelni() {
           setPria([PriaArr]);
 
           const date_Keberangkatan = new Date(bookResponse.departureDate);
-          
+
           const date_tujuan = new Date(bookResponse.arrivalDate);
-        
-          const duration = bookResponse.duration
-        
+
+          const duration = bookResponse.duration;
+
           const tanggal_keberangkatan_pelni = parseDate(date_Keberangkatan);
           const tanggal_tujuan_pelni = parseDate(date_tujuan);
 
           Settanggal_keberangkatan_pelni(tanggal_keberangkatan_pelni);
-          Settanggal_tujuan_pelni(tanggal_tujuan_pelni)
+          Settanggal_tujuan_pelni(tanggal_tujuan_pelni);
           setDuration(duration);
-
-        }else{
-            setErrPage(true);
+        } else {
+          setErrPage(true);
         }
 
         setTimeout(() => {
@@ -231,57 +231,53 @@ export default function BookingPelni() {
       return null;
     }
   }
-  
-  const handleUsiasubCatagoryChange =
-    (e, i, category, type) =>
-    (e) => {
-      let data = [
-        {
-          name: "",
-          birthdate: "",
-          identityNumber: "",
-          usia: "",
-        },
-      ];
 
-      if (type == "pria") {
-        data = pria[0];
+  const handleUsiasubCatagoryChange = (e, i, category, type) => (e) => {
+    let data = [
+      {
+        name: "",
+        birthdate: "",
+        identityNumber: "",
+        usia: "",
+      },
+    ];
+
+    if (type == "pria") {
+      data = pria[0];
+    }
+
+    if (type == "wanita") {
+      data = wanita[0];
+    }
+
+    if (category == "birthdate") {
+      let tanggalParse = new Date(e)
+        .toLocaleDateString("id-ID", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })
+        .split("/")
+        .reverse()
+        .join("-");
+      data[i][category] = tanggalParse;
+    } else {
+      if (category == "usia") {
+        data[i][category] = e;
+        data[i]["birthdate"] = null;
+      } else {
+        data[i][category] = e.target.value;
       }
+    }
 
-      if (type == "wanita") {
-        data = wanita[0];
-      }
+    if (type == "pria") {
+      setPria([data]);
+    }
 
-      if (category == "birthdate") {
-        let tanggalParse = new Date(e)
-          .toLocaleDateString("id-ID", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-          })
-          .split("/")
-          .reverse()
-          .join("-");
-        data[i][category] = tanggalParse;
-      }else {
-        if (category == "usia") {
-          data[i][category] = e;
-          data[i]["birthdate"] = null;
-        } else {
-          data[i][category] = e.target.value;
-        }
-      }
-
-      if (type == "pria") {
-        setPria([data]);
-      }
-
-      if (type == "wanita") {
-        setWanita([data]);
-      }
-    };
-
-  const { handleSubmit } = useForm();
+    if (type == "wanita") {
+      setWanita([data]);
+    }
+  };
 
   const handlerBookingSubmit = async () => {
     setIsLoading(true);
@@ -337,13 +333,12 @@ export default function BookingPelni() {
       };
 
       if (x.usia == "adult") {
-        passengers["identityNumber"] = x.identityNumber; // update 
+        passengers["identityNumber"] = x.identityNumber; // update
         adults.push(passengers);
-      }else if (x.usia == "infant") {
+      } else if (x.usia == "infant") {
         passengers["identityNumber"] = x.identityNumber;
         infants.push(passengers);
       }
-      
     });
 
     wanita[0].forEach((x) => {
@@ -356,12 +351,11 @@ export default function BookingPelni() {
       if (x.usia == "adult") {
         passengers["identityNumber"] = x.identityNumber;
         adults.push(passengers);
-      }else if (x.usia == "infant") {
+      } else if (x.usia == "infant") {
         passengers["identityNumber"] = x.identityNumber;
         infants.push(passengers);
       }
-
-    });    
+    });
 
     const params = {
       harga_dewasa: dataDetailPelni.harga_dewasa,
@@ -402,15 +396,13 @@ export default function BookingPelni() {
     }, 1000);
 
     if (response.data.rc !== "00") {
-
-      if(response.data.rc === "11"){
+      if (response.data.rc === "11") {
         setIsLoading(false);
         setmanyRequestBook(true);
       }
 
       failedNotification(response.data.rd);
     } else {
-      
       const data = response.data.data;
       const infobooking = await axios.post(
         `${process.env.REACT_APP_HOST_API}/travel/pelni/book_info`,
@@ -424,7 +416,6 @@ export default function BookingPelni() {
         failedNotification(infobooking.data.rd);
         setIsLoading(false);
       } else {
-
         // const transactionId = await axios.post(
         //     `${process.env.REACT_APP_HOST_API}/travel/pelni/booking/passengers`,
         //     {
@@ -434,7 +425,7 @@ export default function BookingPelni() {
         //         transactionId: data.transactionId
         //       }
         //   );
-      
+
         //   if (transactionId.data.rc == "00") {
         //     navigate(`/pelni/payment/${data.transactionId}`);
 
@@ -443,42 +434,35 @@ export default function BookingPelni() {
         //     setIsLoading(false);
         //   }
 
-          const uuid = uuidv4();
-          localStorage.setItem(`data:pl-passenger/${uuid}`, JSON.stringify(
-            
-            {
-              ...params,
-              arrivalDate: dataDetailPelni.arrivalTime,
-              departureTime: dataDetailPelni.departureTime,
-              transactionId: data.transactionId,
-              book:response,
-              infobooking:infobooking
-            }
+        const uuid = uuidv4();
+        localStorage.setItem(
+          `data:pl-passenger/${uuid}`,
+          JSON.stringify({
+            ...params,
+            arrivalDate: dataDetailPelni.arrivalTime,
+            departureTime: dataDetailPelni.departureTime,
+            transactionId: data.transactionId,
+            book: response,
+            infobooking: infobooking,
+          })
+        );
 
-          ));
+        if (response.data.callback === null) {
+          navigate(`/pelni/payment/${uuid}`);
+        } else {
+          // SuccessNotification(
+          //   `Response callback is : ${typeof response.data.callback === 'object' ? JSON.stringify(response.data.callback) : response.data.callback}`
+          // );
 
-          if(response.data.callback === null) {
-          
-            navigate(`/pelni/payment/${uuid}`);
-            
-          }else{
-    
-            // SuccessNotification(
-            //   `Response callback is : ${typeof response.data.callback === 'object' ? JSON.stringify(response.data.callback) : response.data.callback}`
-            // );
+          // navigate(`/`);
+          navigate(`/pelni/payment/${uuid}`);
+        }
 
-            // navigate(`/`);
-            navigate(`/pelni/payment/${uuid}`);
-
-          }
-
-          setIsLoading(false);
-          
+        setIsLoading(false);
       }
     }
 
-    hideModal()
-
+    hideModal();
   };
 
   const data = [
@@ -491,6 +475,137 @@ export default function BookingPelni() {
       value: "infant",
     },
   ];
+
+  /* list penumpang */
+
+  const [existingPenumpang, setExistingPenumpang] = useState([]);
+  const [loadingExistingPenumpang, setLoadingExistingPenumpang] =
+    useState(false);
+
+  const previousDataPenumpang = async () => {
+    try {
+      setLoadingExistingPenumpang(true);
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/travel/app/history_idpel`,
+        {
+          token,
+          type: "SHPPELNI",
+        }
+      );
+
+      let parsing = response.data || [];
+      parsing.data = parsing.data.map((x, i) => ({
+        ...x,
+        key: i,
+      }));
+
+      setExistingPenumpang(parsing.data);
+      setLoadingExistingPenumpang(false);
+    } catch (error) {
+      setExistingPenumpang([]);
+      setLoadingExistingPenumpang(false);
+      throw error;
+    }
+  };
+
+  const [isModalOpenListPenumpang, setIsModalListOpenPenumpang] =
+    useState(false);
+  const [indexPreviousPenumpang, setIndexPreviousPenumpang] = useState({
+    index: 0,
+    type: "adult",
+  });
+  const [selectedPassenger, setSelectedPassenger] = useState(null); // State untuk menyimpan data yang dipilih
+
+  const showModalListPenumpang = (i, type) => {
+    previousDataPenumpang();
+    setIndexPreviousPenumpang({ index: i, type });
+    setIsModalListOpenPenumpang(true);
+  };
+
+  const handleCancelListPenumpang = () => {
+    setIsModalListOpenPenumpang(false);
+  };
+
+  const handleOkListPenumpang = () => {
+    // Update form data saat klik submit berdasarkan `selectedPassenger`
+    if (selectedPassenger) {
+      if (indexPreviousPenumpang.type === "pria") {
+        const priaCategory = pria[0];
+
+        const birthDate = dayjs(selectedPassenger.ttl, "YYYY/MM/DD");
+
+        form.setFields([
+          {
+            name: [`tanggalPria${indexPreviousPenumpang.index}`],
+            value: birthDate,
+          },
+        ]);
+
+        priaCategory[indexPreviousPenumpang.index]["birthdate"] =
+          selectedPassenger.ttl;
+
+        priaCategory[indexPreviousPenumpang.index]["nama_lengkap"] =
+          selectedPassenger.nama;
+        priaCategory[indexPreviousPenumpang.index]["usia"] =
+          selectedPassenger.tipe.toLowerCase() == "dewasa" ? "adult" : "infant";
+        priaCategory[indexPreviousPenumpang.index]["identityNumber"] =
+          selectedPassenger.nik;
+        setPria([priaCategory]);
+
+        form.setFields([
+          {
+            name: [`namalengkapPria${indexPreviousPenumpang.index}`],
+            value: selectedPassenger.nama,
+          },
+          {
+            name: [`nikPria${indexPreviousPenumpang.index}`],
+            value: selectedPassenger.nik,
+          },
+        ]);
+      } else if (indexPreviousPenumpang.type === "wanita") {
+        const wanitaCategory = wanita[0];
+
+        const birthDate = dayjs(selectedPassenger.ttl, "YYYY/MM/DD");
+
+        form.setFields([
+          {
+            name: [`tanggalWanita${indexPreviousPenumpang.index}`],
+            value: birthDate,
+          },
+        ]);
+
+        wanitaCategory[indexPreviousPenumpang.index]["birthdate"] =
+          selectedPassenger.ttl;
+
+        wanitaCategory[indexPreviousPenumpang.index]["nama_lengkap"] =
+          selectedPassenger.nama;
+        wanitaCategory[indexPreviousPenumpang.index]["usia"] =
+          selectedPassenger.tipe.toLowerCase() == "dewasa" ? "adult" : "infant";
+        wanitaCategory[indexPreviousPenumpang.index]["identityNumber"] =
+          selectedPassenger.nik;
+        setWanita([wanitaCategory]);
+
+        form.setFields([
+          {
+            name: [`namalengkapWanita${indexPreviousPenumpang.index}`],
+            value: selectedPassenger.nama,
+          },
+          {
+            name: [`nikWanita${indexPreviousPenumpang.index}`],
+            value: selectedPassenger.nik,
+          },
+        ]);
+      }
+    }
+
+    setIsModalListOpenPenumpang(false);
+  };
+
+  const handleRowSelectionChange = (selectedRowKeys, selectedRows) => {
+    if (selectedRows.length > 0) {
+      setSelectedPassenger(selectedRows[0]); // Set data sementara tanpa mengubah form
+    }
+  };
 
   const disabledDate = (current, e, i) => {
     const twoYearsAgo = dayjs().subtract(2, "year");
@@ -509,7 +624,6 @@ export default function BookingPelni() {
     return current && current > endOfDays;
   };
 
-
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
@@ -517,7 +631,6 @@ export default function BookingPelni() {
   const hideModal = () => {
     setOpen(false);
   };
-
 
   return (
     <>
@@ -532,26 +645,24 @@ export default function BookingPelni() {
         <>
           <Page400 />
         </>
-      )  : 
-
-      manyRequestBook === true ? (
+      ) : manyRequestBook === true ? (
         <>
           <ManyRequest />
         </>
-      ) :
-      
-      (
+      ) : (
         <>
-        <div className="xl:mt-0">
-        {/* header kai flow */}
-        <Modal
+          <div className="xl:mt-0">
+            {/* header kai flow */}
+            <Modal
               title={
-                (<>
+                <>
                   <div className="flex space-x-2 items-center">
-                      <ExclamationCircleFilled className="text-orange-500 text-xl" />
-                      <div className="text-bold text-xl text-orange-500">Are you sure?</div>
+                    <ExclamationCircleFilled className="text-orange-500 text-xl" />
+                    <div className="text-bold text-xl text-orange-500">
+                      Are you sure?
+                    </div>
                   </div>
-                </>)
+                </>
               }
               open={open}
               onOk={hideModal}
@@ -561,47 +672,134 @@ export default function BookingPelni() {
               maskClosable={false}
               footer={
                 <>
-                <div className="blok mt-8">
-                  <div className="flex justify-end space-x-2">
-                  <Button key="back" onClick={hideModal}>
-                    Cancel
-                  </Button>
-                  <Button
-                      htmlType="submit"
-                      key="submit"
-                      type="primary"
-                      className="bg-blue-500"
-                      loading={isLoading}
-                      onClick={handlerBookingSubmit}
-                    >
-                      Submit
-                    </Button>
+                  <div className="blok mt-8">
+                    <div className="flex justify-end space-x-2">
+                      <Button key="back" onClick={hideModal}>
+                        Cancel
+                      </Button>
+                      <Button
+                        htmlType="submit"
+                        key="submit"
+                        type="primary"
+                        className="bg-blue-500"
+                        loading={isLoading}
+                        onClick={handlerBookingSubmit}
+                      >
+                        Submit
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </>
+                </>
               }
             >
               <p>Apakah Anda yakin ingin submit data?</p>
             </Modal>
-        <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
-          <div className="hidden xl:flex space-x-2 items-center text-black">
-            <div className="hidden xl:flex text-blue-500 font-medium ">
-              Detail pesanan
-            </div>
-          </div>
-          <div>
-            <MdHorizontalRule
-              size={20}
-              className="hidden xl:flex text-black"
-            />
-          </div>
-          <div className="hidden xl:flex space-x-2 items-center">
-            <RxCrossCircled size={20} className="text-black" />
-            <div className="hidden xl:block text-black">
-              Pembayaran tiket
-            </div>
-          </div>
-          {/* <div>
+
+            {/* modal for list penumpang */}
+            <Modal
+              open={isModalOpenListPenumpang}
+              onOk={handleOkListPenumpang}
+              onCancel={handleCancelListPenumpang}
+              okText="Cancel"
+              cancelText="Submit"
+              maskClosable={false}
+              footer={
+                <>
+                  <div className="blok mt-8">
+                    <div className="flex justify-end space-x-2">
+                      <Button key="back" onClick={handleCancelListPenumpang}>
+                        Cancel
+                      </Button>
+                      <Button
+                        htmlType="submit"
+                        key="submit"
+                        type="primary"
+                        className="bg-blue-500"
+                        loading={isLoading}
+                        onClick={handleOkListPenumpang}
+                      >
+                        Submit
+                      </Button>
+                    </div>
+                  </div>
+                </>
+              }
+            >
+              {loadingExistingPenumpang && (
+                <>
+                  <Skeleton width={"100%"} height={12} />
+                  <Skeleton width={"80%"} height={12} />
+                  <Skeleton width={"100%"} height={12} />
+                  <Skeleton width={"80%"} height={12} />
+                  <Skeleton width={"100%"} height={12} />
+                </>
+              )}
+              {loadingExistingPenumpang == false && (
+                <>
+                  <div>
+                    <Table
+                      rowSelection={{
+                        type: "radio",
+                        onChange: handleRowSelectionChange,
+                      }}
+                      expandable={{
+                        expandedRowRender: (record) => (
+                          <>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-8">
+                              <div className="my-2">
+                                <p style={{ margin: 0 }} className="text-xs">
+                                  <strong>NIK:</strong> {record.nik}
+                                </p>
+                              </div>
+                              <div className="my-2">
+                                <p style={{ margin: 0 }} className="text-xs">
+                                  <strong>Nomor HP:</strong>
+                                  <div>
+                                    {record.hp && record.hp !== ""
+                                      ? record.hp
+                                      : "-"}
+                                  </div>
+                                </p>
+                              </div>
+                              <div className="my-2">
+                                <p style={{ margin: 0 }} className="text-xs">
+                                  <strong>Tanggal Lahir:</strong>{" "}
+                                  {dayjs(record.ttl).format("DD/MM/YYYY")}
+                                </p>
+                              </div>
+                            </div>
+                          </>
+                        ),
+                      }}
+                      columns={columns}
+                      dataSource={existingPenumpang}
+                      pagination={{ pageSize: 5 }}
+                    />
+                  </div>
+                </>
+              )}
+            </Modal>
+            {/* header  flow */}
+
+            <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
+              <div className="hidden xl:flex space-x-2 items-center text-black">
+                <div className="hidden xl:flex text-blue-500 font-medium ">
+                  Detail pesanan
+                </div>
+              </div>
+              <div>
+                <MdHorizontalRule
+                  size={20}
+                  className="hidden xl:flex text-black"
+                />
+              </div>
+              <div className="hidden xl:flex space-x-2 items-center">
+                <RxCrossCircled size={20} className="text-black" />
+                <div className="hidden xl:block text-black">
+                  Pembayaran tiket
+                </div>
+              </div>
+              {/* <div>
             <MdHorizontalRule
               size={20}
               className="text-black hidden xl:flex"
@@ -611,704 +809,901 @@ export default function BookingPelni() {
             <RxCrossCircled size={20} className="text-black" />
             <div className="text-black">E-Tiket</div>
           </div> */}
-        </div>
+            </div>
 
-      {isLoadingPage === true ? (
-        <>
-          < BookingLoading total={parseInt(TotalPria) + parseInt(TotalWanita)}/> 
-        </>
-      ) : (
-        <>
-          {/* sidebar mobile kai*/}
-          <div className="mt-0 md:mt-8 block xl:hidden w-full rounded-md border border-gray-200 shadow-sm">
-            <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-              <div className="text-black font-medium ">Keberangkatan Kapal</div>
-              <small className="text-xs text-black ">{duration}</small>
-            </div>
-            <div className="p-4 px-4 flex justify-between space-x-12 items-center">
-              <div className="text-black text-xs">
-                <div>{dataDetailPelni && dataDetailPelni.pelabuhan_asal}</div>
-                <div>{tanggal_keberangkatan_pelni}</div>
-              </div>
-              <div className="rounded-full p-2 bg-blue-500">
-                <IoArrowForwardOutline className="text-white" size={18} />
-              </div>
-              <div className="text-black text-xs">
-                <div>{dataDetailPelni && dataDetailPelni.pelabuhan_tujuan}</div>
-                <div>{tanggal_tujuan_pelni}</div>
-              </div>
-            </div>
-            <div className="p-4 pl-8  text-black">
-              <div className="text-xs font-medium ">
-                {dataDetailPelni.shipName}
-              </div>
-              <small>
-                <span>{dataDetailPelni.class}</span> Subclass ({dataDetailPelni.subClass})
-              </small>
-            </div>
-            <div className="p-4 pl-8 mb-4">
-              <ol class="relative border-l-2 border-dotted border-gray-800">
-                <li class="mb-10 ml-4">
-                  <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800 "></div>
-                  <div className="flex space-x-12">
-                    <time class="mb-1 text-sm font-normal leading-none text-black ">
-                      {dataDetailPelni && dataDetailPelni.departureTime}
-                    </time>
-                    <div className="-mt-2">
-                      <div class="text-left text-xs text-black">
+            {isLoadingPage === true ? (
+              <>
+                <BookingLoading
+                  total={parseInt(TotalPria) + parseInt(TotalWanita)}
+                />
+              </>
+            ) : (
+              <>
+                {/* sidebar mobile kai*/}
+                <div className="mt-0 md:mt-8 block xl:hidden w-full rounded-md border border-gray-200 shadow-sm">
+                  <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
+                    <div className="text-black font-medium ">
+                      Keberangkatan Kapal
+                    </div>
+                    <small className="text-xs text-black ">{duration}</small>
+                  </div>
+                  <div className="p-4 px-4 flex justify-between space-x-12 items-center">
+                    <div className="text-black text-xs">
+                      <div>
                         {dataDetailPelni && dataDetailPelni.pelabuhan_asal}
                       </div>
+                      <div>{tanggal_keberangkatan_pelni}</div>
                     </div>
-                  </div>
-                </li>
-                <li class="ml-4">
-                  <div class="absolute w-4 h-4 bg-blue-500 rounded-full mt-0 -left-2 border border-white "></div>
-                  <div className="flex space-x-12">
-                    <time class="mb-1 text-sm leading-none text-black ">
-                      {dataDetailPelni && dataDetailPelni.arrivalTime}
-                    </time>
-                    <div className="-mt-2">
-                      <div class="text-left text-xs  text-black ">
+                    <div className="rounded-full p-2 bg-blue-500">
+                      <IoArrowForwardOutline className="text-white" size={18} />
+                    </div>
+                    <div className="text-black text-xs">
+                      <div>
                         {dataDetailPelni && dataDetailPelni.pelabuhan_tujuan}
                       </div>
+                      <div>{tanggal_tujuan_pelni}</div>
                     </div>
                   </div>
-                </li>
-              </ol>
-            </div>
-          </div>
-          <div className="w-full mb-24 block xl:flex xl:space-x-10">
-            {/* detail passengger kai*/}
-            <Form
-            form={form}
-              onFinish={showModal}
-              className="block w-full  mt-8 mb-4 xl:mt-12"
-            >
-              <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-2 gap-12">
-                <div className="">
-                  <div className="p-4 xl:p-8 form block xl:flex xl:space-x-2">
-                    {/* mobile & desktop Nama*/}
-                    <div className="xl:w-full mt-4 xl:mt-0">
-                      <div className="text-black text-sm">Email Address</div>
-                      <div className="block xl:flex xl:space-x-6">
-                        <div className="w-full">
-                          <Form.Item
-                            name={`emailAdult`}
-                            rules={[
-                              {
-                                required: true,
-                                type: "email",
-                                message:
-                                  "Format Email tidak sesuai.",
-                              },
-                              {
-                                max: 150,
-                                message:
-                                  "Email maksimal 150 karakter.",
-                              },
-                            ]}
-                          >
-                            <Input
-                              size="large"
-                              className="mt-2"
-                              onChange={(e) => setEmail(e.target.value)}
-                              type="text"
-                              placeholder="Email Address"
-                            />
-                          </Form.Item>
-                          <div className="mt-2 text-gray-400">
-                            <small>Contoh: ex-machina@gmail.com</small>
+                  <div className="p-4 pl-8  text-black">
+                    <div className="text-xs font-medium ">
+                      {dataDetailPelni.shipName}
+                    </div>
+                    <small>
+                      <span>{dataDetailPelni.class}</span> Subclass (
+                      {dataDetailPelni.subClass})
+                    </small>
+                  </div>
+                  <div className="p-4 pl-8 mb-4">
+                    <ol class="relative border-l-2 border-dotted border-gray-800">
+                      <li class="mb-10 ml-4">
+                        <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800 "></div>
+                        <div className="flex space-x-12">
+                          <time class="mb-1 text-sm font-normal leading-none text-black ">
+                            {dataDetailPelni && dataDetailPelni.departureTime}
+                          </time>
+                          <div className="-mt-2">
+                            <div class="text-left text-xs text-black">
+                              {dataDetailPelni &&
+                                dataDetailPelni.pelabuhan_asal}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div className="w-full mt-4 xl:mt-0">
-                      {/* desktop nomor hp */}
-                      <div className="w-full">
-                        <div className="text-black text-sm mb-2 ml-2">
-                          Nomor HP
+                      </li>
+                      <li class="ml-4">
+                        <div class="absolute w-4 h-4 bg-blue-500 rounded-full mt-0 -left-2 border border-white "></div>
+                        <div className="flex space-x-12">
+                          <time class="mb-1 text-sm leading-none text-black ">
+                            {dataDetailPelni && dataDetailPelni.arrivalTime}
+                          </time>
+                          <div className="-mt-2">
+                            <div class="text-left text-xs  text-black ">
+                              {dataDetailPelni &&
+                                dataDetailPelni.pelabuhan_tujuan}
+                            </div>
+                          </div>
                         </div>
-                        <Form.Item
-                          name={`nomorHPAdult`}
-                          rules={[
-                            {
-                              required: true,
-                              message: "Tolong diisi input nomor HP",
-                            },
-                            {
-                              min: 10,
-                              message: "Minimal Nomor HP pemesan adalah 10 digit",
-                            },
-                          ]}
-                        >
-                          <PhoneInput
-                            hiddenLabel={true}
-                            international
-                            value={hp}
-                            onChange={setHp}
-                            country="id"
-                            inputStyle={{
-                              width: "100%",
-                              borderColor: "hover:red",
-                              paddingTop: 7,
-                              paddingBottom: 7,
-                            }}
-                          />
-                        </Form.Item>
-                        <div className="mt-2 text-gray-400">
-                          <small>Contoh: (+62) 812345678</small>
-                        </div>
-                      </div>
-                    </div>
+                      </li>
+                    </ol>
                   </div>
                 </div>
-              </div>
-
-              {/* pria loop */}
-
-              {pria &&
-                pria[0].map((e, i) => (
-                  <>
-                    <div>
-                      <div className="Booking  mt-8 mb-4 xl:mt-12 ml-2 xl:ml-0">
-                        <h1 className="text-sm font-medium  text-black">
-                          PRIA PASSENGER
-                        </h1>
-                        <small className="text-black">
-                          Isi sesuai dengan data anda
-                        </small>
-                      </div>
-                      {/* Detailt */}
-                      <div className="flex space-x-12">
-                        {/* form detailt kontal */}
-                        <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-1">
-                          <div className="">
-                            <div className="p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8">
-                              {/* mobile & desktop Nama*/}
-                              <div className="xl:w-full mt-4 xl:mt-0">
-                                <div className="text-black text-sm">
-                                  Titel Anda
-                                </div>
-                                <div className="hidden xl:block">
-                                  <FormControl
-                                    sx={{
-                                      marginTop: 2,
-                                      marginBottom: 2,
-                                      maxWidth: 120,
-                                    }}
-                                    fullWidth
-                                  >
-                                    <Select
-                                      style={{ width: 120 }}
-                                      options={data}
-                                      value={e.usia}
-                                      size="large"
-                                      onChange={handleUsiasubCatagoryChange(
-                                        e,
-                                        i,
-                                        "usia",
-                                        "pria"
-                                      )}
-                                    />
-                                  </FormControl>
-                                </div>
-                                <div className="block xl:hidden">
-                                  <FormControl
-                                    sx={{ marginTop: 2, marginBottom: 2 }}
-                                    fullWidth
-                                  >
-                                    <Select
-                                      style={{ width: 120 }}
-                                      options={data}
-                                      value={e.usia}
-                                      size="large"
-                                      onChange={handleUsiasubCatagoryChange(
-                                        e,
-                                        i,
-                                        "usia",
-                                        "pria"
-                                      )}
-                                    />
-                                  </FormControl>
-                                </div>
-                                <div className="w-full grid grid-cols-1 mt-4">
-                                  <div className="w-full">
-                                    <div className="text-black text-sm">
-                                      Nama Lengkap
-                                    </div>
-                                    <Form.Item
-                                      name={`namalengkapPria${i}`}
-                                      rules={[
-                                        {
-                                          required: true,
-                                          message:
-                                            "Nama Lengkap tidak boleh kosong.",
-                                        },
-                                        {
-                                          min: 5,
-                                          message:
-                                            "Nama Lengkap minimal 5 karakter.",
-                                        },
-                                        {
-                                          max: 50,
-                                          message:
-                                            "Nama Lengkap maksimal 50 karakter.",
-                                        },
-                                        {
-                                          pattern: /^[A-Za-z\s]+$/,
-                                          message: 'Nama Lengkap hanya boleh terdiri dari huruf alfabet.',
-                                        },
-                                      ]}
-                                    >
-                                      <Input
-                                        size="large"
-                                        className="mt-2"
-                                        value={e.nama_lengkap}
-                                        onChange={handleUsiasubCatagoryChange(
-                                          e,
-                                          i,
-                                          "nama_lengkap",
-                                          "pria"
-                                        )}
-                                        type="text"
-                                        placeholder="Nama Lengkap"
-                                        id="default-input"
-                                      />
-                                    </Form.Item>
-                                  </div>
+                <div className="w-full mb-24 block xl:flex xl:space-x-10">
+                  {/* detail passengger kai*/}
+                  <Form
+                    form={form}
+                    onFinish={showModal}
+                    className="block w-full  mt-8 mb-4 xl:mt-12"
+                  >
+                    <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-2 gap-12">
+                      <div className="">
+                        <div className="p-4 xl:p-8 form block xl:flex xl:space-x-2">
+                          {/* mobile & desktop Nama*/}
+                          <div className="xl:w-full mt-4 xl:mt-0">
+                            <div className="text-black text-sm">
+                              Email Address
+                            </div>
+                            <div className="block xl:flex xl:space-x-6">
+                              <div className="w-full">
+                                <Form.Item
+                                  name={`emailAdult`}
+                                  rules={[
+                                    {
+                                      required: true,
+                                      type: "email",
+                                      message: "Format Email tidak sesuai.",
+                                    },
+                                    {
+                                      max: 150,
+                                      message: "Email maksimal 150 karakter.",
+                                    },
+                                  ]}
+                                >
+                                  <Input
+                                    size="large"
+                                    className="mt-2"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    type="text"
+                                    placeholder="Email Address"
+                                  />
+                                </Form.Item>
+                                <div className="mt-2 text-gray-400">
+                                  <small>Contoh: ex-machina@gmail.com</small>
                                 </div>
                               </div>
                             </div>
                           </div>
-                          <div className="mb-8 mt-0">
-                            <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
-                              {/* mobile & desktop NIK*/}
-                              <div className="w-full px-4 xl:px-0">
-                                <div className="xl:px-0 w-full text-black text-sm mb-2">
-                                  Tanggal Lahir
-                                </div>
-                                <Form.Item
-                                  name={`tanggalPria${i}`}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message:
-                                        "Harap input Tanggal Lahir.",
-                                    },
-                                  ]}
-                                >
-                                  <DatePicker
-                                    size="large"
-                                    className="w-full"
-                                    value={dayjs(e.birthdate, "YYYY/MM/DD")}
-                                    format={"DD/MM/YYYY"}
-                                    open={isDatePickerOpenPria[i]} // Pass the state to the open prop
-                                    // inputReadOnly={true}
-                                    onOpenChange={(status) => {
-                                      const newOpenState = [...isDatePickerOpenPria]; // Create a copy of the array
-                                      newOpenState[i] = status; // Update the state for the specific index
-                                      setisDatePickerOpenPria(newOpenState); // Set the updated array as the new state
-                                    }}
-                                    onChange={handleUsiasubCatagoryChange(
-                                      e,
-                                      i,
-                                      "birthdate",
-                                      "pria"
-                                    )}
-                                    disabledDate={(current) => {
-                                      if (e.usia === "infant") {
-                                        return disabledDate(current, e, i);
-                                      } else {
-                                        return disabledDateAdult(current, e, i);
-                                      }
-                                    }}
-                                  />
-                                </Form.Item>
-                                <small className="block -mt-4 text-gray-400">
-                                  Contoh: dd/mm/yyyy
-                                </small>
+                          <div className="w-full mt-4 xl:mt-0">
+                            {/* desktop nomor hp */}
+                            <div className="w-full">
+                              <div className="text-black text-sm mb-2 ml-2">
+                                Nomor HP
                               </div>
-                              <div className="w-full">
-                                <div className="px-4 xl:px-0 w-full block mt-8 xl:mt-0">
-                                  <div className="text-black text-sm mb-2">
-                                    No. Ktp
-                                  </div>
-                                  <Form.Item
-                                    name={`nikPria${i}`}
-                                    rules={[
-                                      {
-                                        required: true,
-                                        message: "NIK tidak boleh kosong.",
-                                      },
-                                      ({ getFieldValue }) => ({
-                                        validator(_, value) {
-                                          if (!isNaN(value) && value !== null && value.toString().length === 16) {
-                                            return Promise.resolve();
+                              <Form.Item
+                                name={`nomorHPAdult`}
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Tolong diisi input nomor HP",
+                                  },
+                                  {
+                                    min: 10,
+                                    message:
+                                      "Minimal Nomor HP pemesan adalah 10 digit",
+                                  },
+                                ]}
+                              >
+                                <PhoneInput
+                                  hiddenLabel={true}
+                                  international
+                                  value={hp}
+                                  onChange={setHp}
+                                  country="id"
+                                  inputStyle={{
+                                    width: "100%",
+                                    borderColor: "hover:red",
+                                    paddingTop: 7,
+                                    paddingBottom: 7,
+                                  }}
+                                />
+                              </Form.Item>
+                              <div className="mt-2 text-gray-400">
+                                <small>Contoh: (+62) 812345678</small>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* pria loop */}
+
+                    {pria &&
+                      pria[0].map((e, i) => (
+                        <>
+                          <div>
+                            <div className="Booking  mt-8 mb-4 xl:mt-12 ml-2 xl:ml-0">
+                              <h1 className="text-sm font-medium  text-black">
+                                PRIA PASSENGER
+                              </h1>
+                              <small className="text-black">
+                                Isi sesuai dengan data anda
+                              </small>
+                            </div>
+                            {/* Detailt */}
+                            <div className="flex space-x-12">
+                              {/* form detailt kontal */}
+                              <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-1">
+                                <div className="">
+                                  <div className="p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8">
+                                    {/* mobile & desktop Nama*/}
+                                    <div className="xl:w-full mt-4 xl:mt-0">
+                                      <div className="text-black text-sm">
+                                        Title Anda
+                                      </div>
+                                      <div className="flex items-center space-x-4">
+                                        <Popover
+                                          className="hidden xl:block"
+                                          placement="topLeft"
+                                          content={
+                                            <>
+                                              <div>
+                                                Pilih otomatis data penumpang
+                                                sebelumnya.
+                                              </div>
+                                            </>
                                           }
-                                          return Promise.reject("Panjang NIK harus 16 digit.");
-                                        },
-                                      }),
-                                    ]}
-                                  >
-                                    <input
-                                          name={`nikPria${i}`}
-                                          type="text"
-                                          pattern="[0-9]*"
-                                          onInput={(e) => {
-                                            e.target.value = e.target.value.replace(/[^\d]/g, ''); // Replace any non-digit characters
-                                            if (e.target.value.includes('.')) {
-                                              e.target.value = e.target.value.replace('.', ''); // Remove any dots
+                                        >
+                                          <div
+                                            onClick={() =>
+                                              showModalListPenumpang(i, "pria")
                                             }
+                                            className="cursor-pointer"
+                                          >
+                                            <CiBoxList size={22} />
+                                          </div>
+                                        </Popover>
+                                        <div className="hidden xl:block">
+                                          <FormControl
+                                            sx={{
+                                              marginTop: 2,
+                                              marginBottom: 2,
+                                              maxWidth: 120,
+                                            }}
+                                            fullWidth
+                                          >
+                                            <Select
+                                              style={{ width: 120 }}
+                                              options={data}
+                                              value={e.usia}
+                                              size="large"
+                                              onChange={handleUsiasubCatagoryChange(
+                                                e,
+                                                i,
+                                                "usia",
+                                                "pria"
+                                              )}
+                                            />
+                                          </FormControl>
+                                        </div>
+                                      </div>
+                                      <div className="flex items-center space-x-4 pb-4">
+                                        <Popover
+                                          className="block xl:hidden"
+                                          placement="topLeft"
+                                          content={
+                                            <>
+                                              <div>
+                                                Pilih otomatis data penumpang
+                                                sebelumnya.
+                                              </div>
+                                            </>
+                                          }
+                                        >
+                                          <div
+                                            onClick={() =>
+                                              showModalListPenumpang(i, "pria")
+                                            }
+                                            className="cursor-pointer"
+                                          >
+                                            <CiBoxList size={22} />
+                                          </div>
+                                        </Popover>
+                                        <div className="block xl:hidden">
+                                          <FormControl
+                                            sx={{
+                                              marginTop: 2,
+                                              marginBottom: 2,
+                                            }}
+                                            fullWidth
+                                          >
+                                            <Select
+                                              style={{ width: 120 }}
+                                              options={data}
+                                              value={e.usia}
+                                              size="large"
+                                              onChange={handleUsiasubCatagoryChange(
+                                                e,
+                                                i,
+                                                "usia",
+                                                "pria"
+                                              )}
+                                            />
+                                          </FormControl>
+                                        </div>
+                                      </div>
+                                      <div className="w-full grid grid-cols-1 mt-4">
+                                        <div className="w-full">
+                                          <div className="text-black text-sm">
+                                            Nama Lengkap
+                                          </div>
+                                          <Form.Item
+                                            name={`namalengkapPria${i}`}
+                                            rules={[
+                                              {
+                                                required: true,
+                                                message:
+                                                  "Nama Lengkap tidak boleh kosong.",
+                                              },
+                                              {
+                                                min: 5,
+                                                message:
+                                                  "Nama Lengkap minimal 5 karakter.",
+                                              },
+                                              {
+                                                max: 50,
+                                                message:
+                                                  "Nama Lengkap maksimal 50 karakter.",
+                                              },
+                                              {
+                                                pattern: /^[A-Za-z\s]+$/,
+                                                message:
+                                                  "Nama Lengkap hanya boleh terdiri dari huruf alfabet.",
+                                              },
+                                            ]}
+                                          >
+                                            <Input
+                                              size="large"
+                                              className="mt-2"
+                                              value={e.nama_lengkap}
+                                              onChange={handleUsiasubCatagoryChange(
+                                                e,
+                                                i,
+                                                "nama_lengkap",
+                                                "pria"
+                                              )}
+                                              type="text"
+                                              placeholder="Nama Lengkap"
+                                              id="default-input"
+                                            />
+                                          </Form.Item>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="mb-8 mt-0">
+                                  <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
+                                    {/* mobile & desktop NIK*/}
+                                    <div className="w-full px-4 xl:px-0">
+                                      <div className="xl:px-0 w-full text-black text-sm mb-2">
+                                        Tanggal Lahir
+                                      </div>
+                                      <Form.Item
+                                        name={`tanggalPria${i}`}
+                                        rules={[
+                                          {
+                                            required: true,
+                                            message:
+                                              "Harap input Tanggal Lahir.",
+                                          },
+                                        ]}
+                                      >
+                                        <DatePicker
+                                          size="large"
+                                          className="w-full"
+                                          value={dayjs(
+                                            e.birthdate,
+                                            "YYYY/MM/DD"
+                                          )}
+                                          format={"DD/MM/YYYY"}
+                                          open={isDatePickerOpenPria[i]} // Pass the state to the open prop
+                                          // inputReadOnly={true}
+                                          onOpenChange={(status) => {
+                                            const newOpenState = [
+                                              ...isDatePickerOpenPria,
+                                            ]; // Create a copy of the array
+                                            newOpenState[i] = status; // Update the state for the specific index
+                                            setisDatePickerOpenPria(
+                                              newOpenState
+                                            ); // Set the updated array as the new state
                                           }}
-                                          onKeyPress={(e) => {
-                                            return (e.charCode >= 48 && e.charCode <= 57) || e.key !== '.'; // Disallow the dot
-                                          }}
-                                          className={'border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0'}
-                                          value={e.idNumber}
-                                          placeholder="No. Ktp / NIK"
                                           onChange={handleUsiasubCatagoryChange(
                                             e,
                                             i,
-                                            "identityNumber",
+                                            "birthdate",
                                             "pria"
                                           )}
-                                          min={0}
-                                          id="default-input"
-                                        />
-                                  </Form.Item>
-                                  <small className="block -mt-4 text-gray-400">
-                                    Contoh: 16 digit nomor
-                                  </small>
-                                  <div></div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                ))}
-
-              {/* wanita loop */}
-              {wanita &&
-                wanita[0].map((e, i) => (
-                  <>
-                    <div>
-                      <div className="Booking  mt-8 mb-4 xl:mt-12 ml-2 xl:ml-0">
-                        <h1 className="text-sm font-medium  text-black">
-                          WANITA PASSENGER
-                        </h1>
-                        <small className="text-black">
-                          Isi sesuai dengan data anda
-                        </small>
-                      </div>
-                      {/* Detailt */}
-                      <div className="flex space-x-12">
-                        {/* form detailt kontal */}
-                        <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-1">
-                          <div className="">
-                            <div className="p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8">
-                              {/* mobile & desktop Nama*/}
-                              <div className="xl:w-full mt-4 xl:mt-0">
-                                <div className="text-black text-sm">
-                                  Titel Anda
-                                </div>
-                                <div className="hidden xl:block">
-                                  <FormControl
-                                    sx={{
-                                      marginTop: 2,
-                                      marginBottom: 2,
-                                      maxWidth: 120,
-                                    }}
-                                    fullWidth
-                                  >
-                                    <Select
-                                      style={{ width: 120 }}
-                                      options={data}
-                                      value={e.usia}
-                                      size="large"
-                                      onChange={handleUsiasubCatagoryChange(
-                                        e,
-                                        i,
-                                        "usia",
-                                        "wanita"
-                                      )}
-                                    />
-                                  </FormControl>
-                                </div>
-                                <div className="block xl:hidden">
-                                  <FormControl
-                                    sx={{ marginTop: 2, marginBottom: 2 }}
-                                    fullWidth
-                                  >
-                                    <Select
-                                      style={{ width: 120 }}
-                                      options={data}
-                                      value={e.usia}
-                                      size="large"
-                                      onChange={handleUsiasubCatagoryChange(
-                                        e,
-                                        i,
-                                        "usia",
-                                        "wanita"
-                                      )}
-                                    />
-                                  </FormControl>
-                                </div>
-                                <div className="w-full grid grid-cols-1 mt-4">
-                                  <div className="w-full">
-                                    <div className="text-black text-sm">
-                                      Nama Lengkap
-                                    </div>
-                                    <Form.Item
-                                      name={`namalengkapWanita${i}`}
-                                      rules={[
-                                        {
-                                          required: true,
-                                          message:
-                                            "Nama Lengkap tidak boleh kosong.",
-                                        },
-                                        {
-                                          min: 5,
-                                          message:
-                                            "Nama Lengkap minimal 5 karakter.",
-                                        },
-                                        {
-                                          max: 50,
-                                          message:
-                                            "Nama Lengkap maksimal 50 karakter.",
-                                        },
-                                        {
-                                          pattern: /^[A-Za-z\s]+$/,
-                                          message: 'Nama Lengkap hanya boleh terdiri dari huruf alfabet.',
-                                        },
-                                      ]}
-                                    >
-                                      <Input
-                                        size="large"
-                                        className="mt-2"
-                                        value={e.nama_lengkap}
-                                        onChange={handleUsiasubCatagoryChange(
-                                          e,
-                                          i,
-                                          "nama_lengkap",
-                                          "wanita"
-                                        )}
-                                        type="text"
-                                        placeholder="Nama Lengkap"
-                                        id="default-input"
-                                      />
-                                    </Form.Item>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="mb-8 mt-0">
-                            <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
-                              {/* mobile & desktop NIK*/}
-                              <div className="w-full px-4 xl:px-0">
-                                <div className="xl:px-0 w-full text-black text-sm mb-2">
-                                  Tanggal Lahir
-                                </div>
-                                <Form.Item
-                                  name={`tanggalWanita${i}`}
-                                  rules={[
-                                    {
-                                      required: true,
-                                      message:
-                                        "Harap input Tanggal Lahir.",
-                                    },
-                                  ]}
-                                >
-                                  <DatePicker
-                                    size="large"
-                                    className="w-full"
-                                    value={dayjs(e.birthdate, "YYYY/MM/DD")}
-                                    format={"DD/MM/YYYY"}
-                                    open={isDatePickerOpenWanita[i]} // Pass the state to the open prop
-                                    // inputReadOnly={true}
-                                    onOpenChange={(status) => {
-                                      const newOpenState = [...isDatePickerOpenWanita]; // Create a copy of the array
-                                      newOpenState[i] = status; // Update the state for the specific index
-                                      setisDatePickerOpenWanita(newOpenState); // Set the updated array as the new state
-                                    }}
-                                    onChange={handleUsiasubCatagoryChange(
-                                      e,
-                                      i,
-                                      "birthdate",
-                                      "wanita"
-                                    )}
-                                    disabledDate={(current) => {
-                                      if (e.usia === "infant") {
-                                        return disabledDate(current, e, i);
-                                      } else {
-                                        return disabledDateAdult(current, e, i);
-                                      }
-                                    }}
-                                  />
-                                </Form.Item>
-                                <small className="block -mt-4 text-gray-400">
-                                  Contoh: dd/mm/yyyy
-                                </small>
-                              </div>
-                              <div className="w-full">
-                                <div className="px-4 xl:px-0 w-full block mt-8 xl:mt-0">
-                                  <div className="text-black text-sm mb-2">
-                                    No. Ktp
-                                  </div>
-                                  <Form.Item
-                                    name={`nikWanita${i}`}
-                                    rules={[
-                                      {
-                                        required: true,
-                                        message: "NIK tidak boleh kosong.",
-                                      },
-                                      ({ getFieldValue }) => ({
-                                        validator(_, value) {
-                                          if (!isNaN(value) && value !== null && value.toString().length === 16) {
-                                            return Promise.resolve();
-                                          }
-                                          return Promise.reject("Panjang NIK harus 16 digit.");
-                                        },
-                                      }),
-                                    ]}
-                                  >
-                                      <input
-                                          name={`nikWanita${i}`}
-                                          type="text"
-                                          pattern="[0-9]*"
-                                          onInput={(e) => {
-                                            e.target.value = e.target.value.replace(/[^\d]/g, ''); // Replace any non-digit characters
-                                            if (e.target.value.includes('.')) {
-                                              e.target.value = e.target.value.replace('.', ''); // Remove any dots
+                                          disabledDate={(current) => {
+                                            if (e.usia === "infant") {
+                                              return disabledDate(
+                                                current,
+                                                e,
+                                                i
+                                              );
+                                            } else {
+                                              return disabledDateAdult(
+                                                current,
+                                                e,
+                                                i
+                                              );
                                             }
                                           }}
-                                          onKeyPress={(e) => {
-                                            return (e.charCode >= 48 && e.charCode <= 57) || e.key !== '.'; // Disallow the dot
+                                        />
+                                      </Form.Item>
+                                      <small className="block -mt-4 text-gray-400">
+                                        Contoh: dd/mm/yyyy
+                                      </small>
+                                    </div>
+                                    <div className="w-full">
+                                      <div className="px-4 xl:px-0 w-full block mt-8 xl:mt-0">
+                                        <div className="text-black text-sm mb-2">
+                                          No. Ktp
+                                        </div>
+                                        <Form.Item
+                                          name={`nikPria${i}`}
+                                          rules={[
+                                            {
+                                              required: true,
+                                              message:
+                                                "NIK tidak boleh kosong.",
+                                            },
+                                            ({ getFieldValue }) => ({
+                                              validator(_, value) {
+                                                if (
+                                                  !isNaN(value) &&
+                                                  value !== null &&
+                                                  value.toString().length === 16
+                                                ) {
+                                                  return Promise.resolve();
+                                                }
+                                                return Promise.reject(
+                                                  "Panjang NIK harus 16 digit."
+                                                );
+                                              },
+                                            }),
+                                          ]}
+                                        >
+                                          <input
+                                            name={`nikPria${i}`}
+                                            type="text"
+                                            pattern="[0-9]*"
+                                            onInput={(e) => {
+                                              e.target.value =
+                                                e.target.value.replace(
+                                                  /[^\d]/g,
+                                                  ""
+                                                ); // Replace any non-digit characters
+                                              if (
+                                                e.target.value.includes(".")
+                                              ) {
+                                                e.target.value =
+                                                  e.target.value.replace(
+                                                    ".",
+                                                    ""
+                                                  ); // Remove any dots
+                                              }
+                                            }}
+                                            onKeyPress={(e) => {
+                                              return (
+                                                (e.charCode >= 48 &&
+                                                  e.charCode <= 57) ||
+                                                e.key !== "."
+                                              ); // Disallow the dot
+                                            }}
+                                            className={
+                                              "border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0"
+                                            }
+                                            value={e.idNumber}
+                                            placeholder="No. Ktp / NIK"
+                                            onChange={handleUsiasubCatagoryChange(
+                                              e,
+                                              i,
+                                              "identityNumber",
+                                              "pria"
+                                            )}
+                                            min={0}
+                                            id="default-input"
+                                          />
+                                        </Form.Item>
+                                        <small className="block -mt-4 text-gray-400">
+                                          Contoh: 16 digit nomor
+                                        </small>
+                                        <div></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      ))}
+
+                    {/* wanita loop */}
+                    {wanita &&
+                      wanita[0].map((e, i) => (
+                        <>
+                          <div>
+                            <div className="Booking  mt-8 mb-4 xl:mt-12 ml-2 xl:ml-0">
+                              <h1 className="text-sm font-medium  text-black">
+                                WANITA PASSENGER
+                              </h1>
+                              <small className="text-black">
+                                Isi sesuai dengan data anda
+                              </small>
+                            </div>
+                            {/* Detailt */}
+                            <div className="flex space-x-12">
+                              {/* form detailt kontal */}
+                              <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-1">
+                                <div className="">
+                                  <div className="p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8">
+                                    {/* mobile & desktop Nama*/}
+                                    <div className="xl:w-full mt-4 xl:mt-0">
+                                      <div className="text-black text-sm">
+                                        Title Anda
+                                      </div>
+                                      <div className="flex items-center space-x-4">
+                                        <Popover
+                                          className="hidden xl:block"
+                                          placement="topLeft"
+                                          content={
+                                            <>
+                                              <div>
+                                                Pilih otomatis data penumpang
+                                                sebelumnya.
+                                              </div>
+                                            </>
+                                          }
+                                        >
+                                          <div
+                                            onClick={() =>
+                                              showModalListPenumpang(
+                                                i,
+                                                "wanita"
+                                              )
+                                            }
+                                            className="cursor-pointer"
+                                          >
+                                            <CiBoxList size={22} />
+                                          </div>
+                                        </Popover>
+                                        <div className="hidden xl:block">
+                                          <FormControl
+                                            sx={{
+                                              marginTop: 2,
+                                              marginBottom: 2,
+                                              maxWidth: 120,
+                                            }}
+                                            fullWidth
+                                          >
+                                            <Select
+                                              style={{ width: 120 }}
+                                              options={data}
+                                              value={e.usia}
+                                              size="large"
+                                              onChange={handleUsiasubCatagoryChange(
+                                                e,
+                                                i,
+                                                "usia",
+                                                "wanita"
+                                              )}
+                                            />
+                                          </FormControl>
+                                        </div>
+                                      </div>
+                                      <div className="flex items-center space-x-4 pb-4">
+                                        <Popover
+                                          className="block xl:hidden"
+                                          placement="topLeft"
+                                          content={
+                                            <>
+                                              <div>
+                                                Pilih otomatis data penumpang
+                                                sebelumnya.
+                                              </div>
+                                            </>
+                                          }
+                                        >
+                                          <div
+                                            onClick={() =>
+                                              showModalListPenumpang(
+                                                i,
+                                                "wanita"
+                                              )
+                                            }
+                                            className="cursor-pointer"
+                                          >
+                                            <CiBoxList size={22} />
+                                          </div>
+                                        </Popover>
+                                        <div className="block xl:hidden">
+                                          <FormControl
+                                            sx={{
+                                              marginTop: 2,
+                                              marginBottom: 2,
+                                            }}
+                                            fullWidth
+                                          >
+                                            <Select
+                                              style={{ width: 120 }}
+                                              options={data}
+                                              value={e.usia}
+                                              size="large"
+                                              onChange={handleUsiasubCatagoryChange(
+                                                e,
+                                                i,
+                                                "usia",
+                                                "wanita"
+                                              )}
+                                            />
+                                          </FormControl>
+                                        </div>
+                                      </div>
+                                      <div className="w-full grid grid-cols-1 mt-4">
+                                        <div className="w-full">
+                                          <div className="text-black text-sm">
+                                            Nama Lengkap
+                                          </div>
+                                          <Form.Item
+                                            name={`namalengkapWanita${i}`}
+                                            rules={[
+                                              {
+                                                required: true,
+                                                message:
+                                                  "Nama Lengkap tidak boleh kosong.",
+                                              },
+                                              {
+                                                min: 5,
+                                                message:
+                                                  "Nama Lengkap minimal 5 karakter.",
+                                              },
+                                              {
+                                                max: 50,
+                                                message:
+                                                  "Nama Lengkap maksimal 50 karakter.",
+                                              },
+                                              {
+                                                pattern: /^[A-Za-z\s]+$/,
+                                                message:
+                                                  "Nama Lengkap hanya boleh terdiri dari huruf alfabet.",
+                                              },
+                                            ]}
+                                          >
+                                            <Input
+                                              size="large"
+                                              className="mt-2"
+                                              value={e.nama_lengkap}
+                                              onChange={handleUsiasubCatagoryChange(
+                                                e,
+                                                i,
+                                                "nama_lengkap",
+                                                "wanita"
+                                              )}
+                                              type="text"
+                                              placeholder="Nama Lengkap"
+                                              id="default-input"
+                                            />
+                                          </Form.Item>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="mb-8 mt-0">
+                                  <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
+                                    {/* mobile & desktop NIK*/}
+                                    <div className="w-full px-4 xl:px-0">
+                                      <div className="xl:px-0 w-full text-black text-sm mb-2">
+                                        Tanggal Lahir
+                                      </div>
+                                      <Form.Item
+                                        name={`tanggalWanita${i}`}
+                                        rules={[
+                                          {
+                                            required: true,
+                                            message:
+                                              "Harap input Tanggal Lahir.",
+                                          },
+                                        ]}
+                                      >
+                                        <DatePicker
+                                          size="large"
+                                          className="w-full"
+                                          value={dayjs(
+                                            e.birthdate,
+                                            "YYYY/MM/DD"
+                                          )}
+                                          format={"DD/MM/YYYY"}
+                                          open={isDatePickerOpenWanita[i]} // Pass the state to the open prop
+                                          // inputReadOnly={true}
+                                          onOpenChange={(status) => {
+                                            const newOpenState = [
+                                              ...isDatePickerOpenWanita,
+                                            ]; // Create a copy of the array
+                                            newOpenState[i] = status; // Update the state for the specific index
+                                            setisDatePickerOpenWanita(
+                                              newOpenState
+                                            ); // Set the updated array as the new state
                                           }}
-                                          className={'border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0'}
-                                          value={e.idNumber}
-                                          placeholder="No. Ktp / NIK"
                                           onChange={handleUsiasubCatagoryChange(
                                             e,
                                             i,
-                                            "identityNumber",
+                                            "birthdate",
                                             "wanita"
                                           )}
-                                          min={0}
-                                          id="default-input"
+                                          disabledDate={(current) => {
+                                            if (e.usia === "infant") {
+                                              return disabledDate(
+                                                current,
+                                                e,
+                                                i
+                                              );
+                                            } else {
+                                              return disabledDateAdult(
+                                                current,
+                                                e,
+                                                i
+                                              );
+                                            }
+                                          }}
                                         />
-                                  </Form.Item>
-                                  <small className="block -mt-4 text-gray-400">
-                                    Contoh: 16 digit nomor
-                                  </small>
-                                  <div></div>
+                                      </Form.Item>
+                                      <small className="block -mt-4 text-gray-400">
+                                        Contoh: dd/mm/yyyy
+                                      </small>
+                                    </div>
+                                    <div className="w-full">
+                                      <div className="px-4 xl:px-0 w-full block mt-8 xl:mt-0">
+                                        <div className="text-black text-sm mb-2">
+                                          No. Ktp
+                                        </div>
+                                        <Form.Item
+                                          name={`nikWanita${i}`}
+                                          rules={[
+                                            {
+                                              required: true,
+                                              message:
+                                                "NIK tidak boleh kosong.",
+                                            },
+                                            ({ getFieldValue }) => ({
+                                              validator(_, value) {
+                                                if (
+                                                  !isNaN(value) &&
+                                                  value !== null &&
+                                                  value.toString().length === 16
+                                                ) {
+                                                  return Promise.resolve();
+                                                }
+                                                return Promise.reject(
+                                                  "Panjang NIK harus 16 digit."
+                                                );
+                                              },
+                                            }),
+                                          ]}
+                                        >
+                                          <input
+                                            name={`nikWanita${i}`}
+                                            type="text"
+                                            pattern="[0-9]*"
+                                            onInput={(e) => {
+                                              e.target.value =
+                                                e.target.value.replace(
+                                                  /[^\d]/g,
+                                                  ""
+                                                ); // Replace any non-digit characters
+                                              if (
+                                                e.target.value.includes(".")
+                                              ) {
+                                                e.target.value =
+                                                  e.target.value.replace(
+                                                    ".",
+                                                    ""
+                                                  ); // Remove any dots
+                                              }
+                                            }}
+                                            onKeyPress={(e) => {
+                                              return (
+                                                (e.charCode >= 48 &&
+                                                  e.charCode <= 57) ||
+                                                e.key !== "."
+                                              ); // Disallow the dot
+                                            }}
+                                            className={
+                                              "border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0"
+                                            }
+                                            value={e.idNumber}
+                                            placeholder="No. Ktp / NIK"
+                                            onChange={handleUsiasubCatagoryChange(
+                                              e,
+                                              i,
+                                              "identityNumber",
+                                              "wanita"
+                                            )}
+                                            min={0}
+                                            id="default-input"
+                                          />
+                                        </Form.Item>
+                                        <small className="block -mt-4 text-gray-400">
+                                          Contoh: 16 digit nomor
+                                        </small>
+                                        <div></div>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
+                        </>
+                      ))}
+
+                    <div className="flex justify-end mr-2 mt-8">
+                      <Button
+                        htmlType="submit"
+                        size="large"
+                        key="submit"
+                        type="primary"
+                        className="bg-blue-500 mx-2 font-semibold"
+                      >
+                        Lanjut ke Konfirmasi
+                      </Button>
+                    </div>
+                  </Form>
+                  {/* sidebar desktop*/}
+                  <div className="w-full md:w-2/3 2xl:w-1/2 xl:mt-12">
+                    <div className="hidden xl:block rounded-md border border-gray-200 shadow-sm">
+                      <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
+                        <div className="text-black text-sm font-medium ">
+                          Keberangkatan Kapal
                         </div>
+                        <small className="text-xs text-black">{duration}</small>
                       </div>
-                    </div>
-                  </>
-                ))}
-
-              <div className="flex justify-end mr-2 mt-8">
-                <Button
-                  htmlType="submit"
-                  size="large"
-                  key="submit"
-                  type="primary"
-                  className="bg-blue-500 mx-2 font-semibold"
-                >
-                  Lanjut ke Konfirmasi
-                </Button>
-              </div>
-            </Form>
-            {/* sidebar desktop*/}
-            <div className="w-full md:w-2/3 2xl:w-1/2 xl:mt-12">
-              <div className="hidden xl:block rounded-md border border-gray-200 shadow-sm">
-                <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
-                  <div className="text-black text-sm font-medium ">
-                    Keberangkatan Kapal
-                  </div>
-                  <small className="text-xs text-black">{duration}</small>
-                </div>
-                <div className="px-4 xl:px-8 p-4 flex justify-between space-x-12 items-center">
-                  <div className="text-xs">
-                    <div className="font-medium  text-black">
-                      {dataDetailPelni && dataDetailPelni.pelabuhan_asal}
-                    </div>
-                    <small className="text-xs text-black">
-                      ({tanggal_keberangkatan_pelni})
-                    </small>
-                  </div>
-                  <div className="rounded-full p-1 bg-blue-500 ">
-                    <IoArrowForwardOutline className="text-white" size={18} />
-                  </div>
-                  <div className="text-xs">
-                    <div className="font-medium  text-black">
-                      {dataDetailPelni && dataDetailPelni.pelabuhan_tujuan}
-                    </div>
-                    <small className="text-xs text-black">
-                      ({tanggal_tujuan_pelni})
-                    </small>
-                  </div>
-                </div>
-
-                <div className="p-4 pl-8 text-black">
-                  <div className="text-xs font-medium ">
-                    {dataDetailPelni && dataDetailPelni.shipName}
-                  </div>
-                  <small>
-                    <span>{dataDetailPelni.class}</span> / Subclass (
-                    {dataDetailPelni.subClass})
-                  </small>
-                </div>
-                <div className="p-4 pl-12 mb-4">
-                  <ol class="relative border-l-2 border-dotted border-gray-800 ">
-                    <li class="mb-10 ml-4 text-sm">
-                      <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800 "></div>
-                      <div className="flex space-x-12">
-                        <time class="mb-1 text-xs font-medium  leading-none text-black ">
-                          {dataDetailPelni && dataDetailPelni.departureTime}
-                        </time>
-                        <div className="">
-                          <h3 class="text-left text-xs font-medium  text-black ">
+                      <div className="px-4 xl:px-8 p-4 flex justify-between space-x-12 items-center">
+                        <div className="text-xs">
+                          <div className="font-medium  text-black">
                             {dataDetailPelni && dataDetailPelni.pelabuhan_asal}
-                          </h3>
+                          </div>
+                          <small className="text-xs text-black">
+                            ({tanggal_keberangkatan_pelni})
+                          </small>
                         </div>
-                      </div>
-                    </li>
-                    <li class="ml-4 text-sm mt-10">
-                      <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white "></div>
-                      <div className="flex space-x-12">
-                        <time class="mb-1 text-xs font-medium  leading-none text-black ">
-                          {dataDetailPelni && dataDetailPelni.arrivalTime}
-                        </time>
-                        <div className="">
-                          <h3 class="text-left text-xs font-medium  text-black ">
+                        <div className="rounded-full p-1 bg-blue-500 ">
+                          <IoArrowForwardOutline
+                            className="text-white"
+                            size={18}
+                          />
+                        </div>
+                        <div className="text-xs">
+                          <div className="font-medium  text-black">
                             {dataDetailPelni &&
                               dataDetailPelni.pelabuhan_tujuan}
-                          </h3>
+                          </div>
+                          <small className="text-xs text-black">
+                            ({tanggal_tujuan_pelni})
+                          </small>
                         </div>
                       </div>
-                    </li>
-                  </ol>
+
+                      <div className="p-4 pl-8 text-black">
+                        <div className="text-xs font-medium ">
+                          {dataDetailPelni && dataDetailPelni.shipName}
+                        </div>
+                        <small>
+                          <span>{dataDetailPelni.class}</span> / Subclass (
+                          {dataDetailPelni.subClass})
+                        </small>
+                      </div>
+                      <div className="p-4 pl-12 mb-4">
+                        <ol class="relative border-l-2 border-dotted border-gray-800 ">
+                          <li class="mb-10 ml-4 text-sm">
+                            <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800 "></div>
+                            <div className="flex space-x-12">
+                              <time class="mb-1 text-xs font-medium  leading-none text-black ">
+                                {dataDetailPelni &&
+                                  dataDetailPelni.departureTime}
+                              </time>
+                              <div className="">
+                                <h3 class="text-left text-xs font-medium  text-black ">
+                                  {dataDetailPelni &&
+                                    dataDetailPelni.pelabuhan_asal}
+                                </h3>
+                              </div>
+                            </div>
+                          </li>
+                          <li class="ml-4 text-sm mt-10">
+                            <div class="absolute mt-2 w-4 h-4 bg-blue-500 rounded-full -left-2 border border-white "></div>
+                            <div className="flex space-x-12">
+                              <time class="mb-1 text-xs font-medium  leading-none text-black ">
+                                {dataDetailPelni && dataDetailPelni.arrivalTime}
+                              </time>
+                              <div className="">
+                                <h3 class="text-left text-xs font-medium  text-black ">
+                                  {dataDetailPelni &&
+                                    dataDetailPelni.pelabuhan_tujuan}
+                                </h3>
+                              </div>
+                            </div>
+                          </li>
+                        </ol>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </>
+            )}
           </div>
         </>
       )}
-
-        </div>
-        </>
-      )
-      
-      }
     </>
   );
 }

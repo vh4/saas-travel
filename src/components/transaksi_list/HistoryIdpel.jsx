@@ -73,6 +73,7 @@ export default function ViewHistoryIdpel({ path }) {
       datas.data = datas.data.map((x, i) => ({
         ...x,
         key: i + 1,
+        hp: x.hp == '' || x.hp == null ? '-' : x.hp
       }))
 
 	  if(type == 'TP'){
@@ -149,7 +150,7 @@ export default function ViewHistoryIdpel({ path }) {
 							label: 'Plane',
 						},
 						{
-							value: 'SHP',
+							value: 'SHPPELNI',
 							label: 'Pelni',
 						},
 						]}
