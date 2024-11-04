@@ -90,7 +90,9 @@ Router.post('/app/redirect', async function (req, res) {
             const tokenUidPin = await axios.post(`${process.env.URL_AUTH_REDIRECT}/index.php?dekrip=null`, {
               dekrip:dekript_token.data
             });
-  
+
+            console.log(tokenUidPin.data);
+
             logger.info(`Response [TOKEN] ${process.env.URL_AUTH_REDIRECT}. data: ${tokenUidPin.data !== null && tokenUidPin.data !== '' ? '------' : 'Not Found!'}`);
             req.session['v_session_uid_pin'] = tokenUidPin.data;
 
@@ -100,7 +102,8 @@ Router.post('/app/redirect', async function (req, res) {
           req.session['expired_session'] = expired;
           req.session['v_uname'] = splitlogin[0] || '';
           logger.info(`INSERTING TOKEN TO SESSION: ${JSON.stringify(data.token)}`);
-    
+          console.log(data);
+
         }        
     
         logger.info(`Response /app/redirect: ${JSON.stringify(data)}`);
