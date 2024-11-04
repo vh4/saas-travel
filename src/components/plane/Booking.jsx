@@ -836,8 +836,6 @@ export default function BookingPesawat() {
     setOpen(false);
   };
 
-  console.log(adult);
-
   return (
     <>
       {contextHolder}
