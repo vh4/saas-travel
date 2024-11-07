@@ -17,9 +17,9 @@ import SearchPelni from "./pages/pelni/Search";
 import BookingPelni from "./pages/pelni/Booking";
 import PaymentPelni from "./pages/pelni/Pembayaran";
 
-import SearchDlu from "./pages/dlu/Search";
-import BookingDlu from "./pages/dlu/Booking"
-import Pembayaran from "./pages/dlu/Pembayaran"
+// import SearchDlu from "./pages/dlu/Search";
+// import BookingDlu from "./pages/dlu/Booking"
+// import Pembayaran from "./pages/dlu/Pembayaran"
 
 import BookingKai from "./pages/kai/Booking";
 import KonfirmasiKai from "./pages/kai/Konfirmasi";
@@ -38,6 +38,8 @@ import Logout from "./pages/Logout";
 import KonfirmasiTransit from "./pages/kai/KonfirmasiTransit";
 import axios from "axios";
 import HistoryIdpel from "./pages/transaksi/HistoryIdpel";
+import { Provider } from "react-redux";
+import store from "./features/createSlice";
 
 export const TiketContext = createContext();
 export const NavContext = createContext();
@@ -86,7 +88,7 @@ function App() {
 
   }
 
-  const initialStateHolidays = []; // Initial state for holidays
+  const initialStateHolidays = [];
 
   useEffect(() => {
     const fetchHolidays = async () => {
@@ -143,7 +145,8 @@ function App() {
 
   return (
     <div className="App">
-       <BrowserRouter>
+      <Provider store={store}>
+      <BrowserRouter>
        <CustomLayout.Provider value={{layout, setLayout}}>
        <HolidaysContext.Provider value={{ holidays, dispatchHolidays }}>
           <LogoutContent.Provider value={{logout,setLogout}} >
@@ -189,6 +192,7 @@ function App() {
        </HolidaysContext.Provider>
        </CustomLayout.Provider>
       </BrowserRouter>     
+      </Provider>
     </div>
   );
 }

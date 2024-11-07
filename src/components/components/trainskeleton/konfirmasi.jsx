@@ -81,7 +81,7 @@ const Sidebar = () => {
       <div className="sidebar w-full xl:w-1/2">
         <div className="mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
           <div className="flex items-center justify-between p-4">
-          <div className="text-black text-sm">Transaksi ID</div>
+            <div className="text-black text-sm">Transaksi ID</div>
             {/* <div className="text-black text-sm">Booking ID</div> */}
             <div className=" text-blue-500 ">
               <Skeleton width={50} height={12} />
@@ -163,29 +163,29 @@ const KonfirmasiLoading = ({ TotalAdult, TotalInfant }) => {
 
           {Array.from({ length: TotalInfant }, (_, i) => (
             <>
-            <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
-              <div className="p-4">
-                {/* Skeleton Placeholder for the name */}
-                <Skeleton width={100} height={16} />
-                <div className="mt-2 flex space-x-8">
-                  <div className="px-4 py-2 text-sm ">
-                    <div className="text-black">NIK</div>
-                    {/* Skeleton Placeholder for NIK */}
-                    <Skeleton width={100} height={12} />
-                  </div>
-                  <div className="px-4 py-2 text-sm ">
-                    <div className="text-black">Tanggal Lahir</div>
-                    {/* Skeleton Placeholder for Tanggal Lahir */}
-                    <Skeleton width={100} height={12} />
-                  </div>
-                  <div className="px-4 py-2 text-sm ">
-                    <div className="text-black">Kursi</div>
-                    {/* Skeleton Placeholder for Kursi */}
-                    <Skeleton width={100} height={12} />
+              <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+                <div className="p-4">
+                  {/* Skeleton Placeholder for the name */}
+                  <Skeleton width={100} height={16} />
+                  <div className="mt-2 flex space-x-8">
+                    <div className="px-4 py-2 text-sm ">
+                      <div className="text-black">NIK</div>
+                      {/* Skeleton Placeholder for NIK */}
+                      <Skeleton width={100} height={12} />
+                    </div>
+                    <div className="px-4 py-2 text-sm ">
+                      <div className="text-black">Tanggal Lahir</div>
+                      {/* Skeleton Placeholder for Tanggal Lahir */}
+                      <Skeleton width={100} height={12} />
+                    </div>
+                    <div className="px-4 py-2 text-sm ">
+                      <div className="text-black">Kursi</div>
+                      {/* Skeleton Placeholder for Kursi */}
+                      <Skeleton width={100} height={12} />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
             </>
           ))}
 

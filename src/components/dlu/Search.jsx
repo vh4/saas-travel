@@ -4,33 +4,22 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import {
-  IoArrowBackOutline,
-  IoArrowForwardOutline,
-} from "react-icons/io5";
+import { IoArrowBackOutline, IoArrowForwardOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import SearchDLU from "./DLUSearch";
-import { notification} from "antd";
+import { notification } from "antd";
 import Page400 from "../components/400";
 import Page500 from "../components/500";
-import {
-  extractTimeWithTimeZone,
-  parseDate,
-  parseTanggal,
-  parseTanggalPelni,
-} from "../../helpers/date";
 import { toRupiah } from "../../helpers/rupiah";
 import { v4 as uuidv4 } from "uuid";
-import { BsArrow90DegDown, BsArrowBarDown, BsArrowDownCircle, BsArrowDownCircleFill } from "react-icons/bs";
-
+import {BsArrowDownCircle} from "react-icons/bs";
+import { extractTimeWithTimeZone, parseTanggal, parseTanggalPelni } from "../../helpers/date";
 export default function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
   const origin = searchParams.get("origin_code");
   const originName = searchParams.get("origin_name");
-
   const destination = searchParams.get("destination_code");
   const destinationName = searchParams.get("destination_name");
-
   const startDate = searchParams.get("start_date");
   const endDate = searchParams.get("end_date");
   const adult = searchParams.get("adult");
@@ -39,25 +28,18 @@ export default function Search() {
   const type_ticket = searchParams.get("type_ticket");
   const type_class = searchParams.get("type_class");
   const type_class_name = searchParams.get("type_class_name");
-
   const count_passangers = searchParams.get("count_passangers");
-
   const count_passangers_name = searchParams.get("count_passangers_name");
-
   const type_vehicle = searchParams.get("type_vehicle");
-
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
-
   const [uuid, setuuid] = useState(null);
-
   const navigate = useNavigate();
   const [ubahPencarian, setUbahPencarian] = useState(false);
   const [err, setErr] = useState(false);
   const [pageErr, setPageErr] = useState(false);
   const [openButton, setOpenButton] = useState(null);
-
   const [api, contextHolder] = notification.useNotification();
 
   const failedNotification = (rd) => {
@@ -214,7 +196,6 @@ export default function Search() {
   };
 
   async function handleSubmit(e, i) {
-
     let params = {
       adult: adult,
       infant: infant,
@@ -223,44 +204,44 @@ export default function Search() {
       ...e,
     };
 
-    const response_fare = await axios.post(`${process.env.REACT_APP_HOST_API}/travel/ship/fare`,
-    {
-        "via": "WEB",
-        "kode_produk": "SHPDLU",
-        "start_date": e.departure_date,
-        "origin_code": e.origin_code,
-        "destination_code": e.destination_code,
-        "type_ticket": e.type_ticket,
-        "type_class": e.type_class,
-        "type_vehicle": e.type_vehicle,
-        "schedule_id": e.id_schedule,
-        "count_passangers": `${adult}#${child}#${infant}#${count_passangers_name}`,
-        "nominal": e.total,
-        "token": token
-    });
+    const response_fare = await axios.post(
+      `${process.env.REACT_APP_HOST_API}/travel/ship/fare`,
+      {
+        via: "WEB",
+        kode_produk: "SHPDLU",
+        start_date: e.departure_date,
+        origin_code: e.origin_code,
+        destination_code: e.destination_code,
+        type_ticket: e.type_ticket,
+        type_class: e.type_class,
+        type_vehicle: e.type_vehicle,
+        schedule_id: e.id_schedule,
+        count_passangers: `${adult}#${child}#${infant}#${count_passangers_name}`,
+        nominal: e.total,
+        token: token,
+      }
+    );
 
-    if(response_fare.data.rc == '00'){
-  
-          params = {
-            ...params,
-            ...response_fare.data.data,
-            type_class_name,
-            count_passangers,
-          }
-      
-          const uuid = uuidv4();
-          localStorage.setItem(`data:dlu/${uuid}`, JSON.stringify(params));
-            
-          navigate(`/dlu/booking/${uuid}`);
+    if (response_fare.data.rc == "00") {
+      params = {
+        ...params,
+        ...response_fare.data.data,
+        type_class_name,
+        count_passangers,
+      };
 
-    }else{
+      const uuid = uuidv4();
+      localStorage.setItem(`data:dlu/${uuid}`, JSON.stringify(params));
 
-        failedNotification(response_fare.data.rd);
+      navigate(`/dlu/booking/${uuid}`);
+    } else {
+      failedNotification(response_fare.data.rd);
     }
-
   }
 
-  const sortedData = dataSearch.sort((a, b) => new Date(a.departure_date) - new Date(b.departure_date));
+  const sortedData = dataSearch.sort(
+    (a, b) => new Date(a.departure_date) - new Date(b.departure_date)
+  );
 
   return (
     <>
@@ -330,23 +311,24 @@ export default function Search() {
                       className="hidden md:flex space-x-2 items-center"
                     >
                       <IoArrowBackOutline className="text-black" size={16} />
-                      <div className="text-black text-xs">
-                        Kembali
-                      </div>
+                      <div className="text-black text-xs">Kembali</div>
                     </Link>
                     <div
                       onClick={() => setUbahPencarian((prev) => !prev)}
                       className="p-2 flex md:hidden space-x-2 items-center cursor-pointer"
                     >
                       <div className="text-xs text-black">Ubah pencarian</div>
-                      <BsArrowDownCircle className="text-black font-bold" size={16} />
+                      <BsArrowDownCircle
+                        className="text-black font-bold"
+                        size={16}
+                      />
                     </div>
                     <button
                       onClick={() => setUbahPencarian((prev) => !prev)}
                       className="hidden md:block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs font-bold"
-                      >
-                  Ubah Pencarian
-                </button>                    
+                    >
+                      Ubah Pencarian
+                    </button>
                   </div>
                 </div>
               </div>
@@ -376,7 +358,9 @@ export default function Search() {
                     {sortedData.map((e, i, arr) => (
                       <>
                         <div className="mt-8 text-black font-bold text-md">
-                          {(i === 0 || e.departure_date !== arr[i - 1].departure_date) && parseTanggal(e.departure_date)}
+                          {(i === 0 ||
+                            e.departure_date !== arr[i - 1].departure_date) &&
+                            parseTanggal(e.departure_date)}
                         </div>
 
                         <div
@@ -469,9 +453,7 @@ export default function Search() {
                                   </>
                                 ) : (
                                   <>
-                                    <button
-                                      class="mt-4 xl:mt-0 text-gray-400 bg-gray-300 space-x-2 hover:bg-gray-300/80 focus:ring-4 focus:outline-none focus:ring-gray-300/50  rounded-lg text-sm px-10 md:px-10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2"
-                                    >
+                                    <button class="mt-4 xl:mt-0 text-gray-400 bg-gray-300 space-x-2 hover:bg-gray-300/80 focus:ring-4 focus:outline-none focus:ring-gray-300/50  rounded-lg text-sm px-10 md:px-10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2">
                                       <div className="text-gray-400 ">
                                         HABIS
                                       </div>
@@ -648,7 +630,7 @@ export default function Search() {
                                                 "KENDARAAN"
                                                   ? "Kendaraan"
                                                   : e.type_passanger}
-                                                  {/*  */}
+                                                {/*  */}
                                               </div>
                                             </div>
                                           </>

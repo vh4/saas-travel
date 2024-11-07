@@ -1,22 +1,19 @@
 import React from "react";
 import { IoArrowBack, IoArrowForwardCircle } from "react-icons/io5";
 import { useSearchParams } from "react-router-dom";
-import { parseTanggal, parseTanggalPelni } from "../../helpers/date";
+import { parseTanggal } from "../../helpers/date";
 
 export default function HeaderTemplateMobileSearch({ children }) {
 
 	const [searchParams, setSearchParams] = useSearchParams();
-
   const originName = searchParams.get("origin_name");
   const destinationName = searchParams.get("destination_name");
-
   const startDate = searchParams.get("start_date");
-  const endDate = searchParams.get("end_date");
-  const adult = searchParams.get("adult");
-  const child = searchParams.get("child");
-  const infant = searchParams.get("infant");
 
-  const count_passangers_name = searchParams.get("count_passangers_name");
+  // const adult = searchParams.get("adult");
+  // const child = searchParams.get("child");
+  // const infant = searchParams.get("infant");
+  // const count_passangers_name = searchParams.get("count_passangers_name");
   
 
   return (

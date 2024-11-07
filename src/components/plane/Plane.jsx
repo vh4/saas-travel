@@ -840,7 +840,7 @@ function Plane() {
               <div className="w-64 xl:w-48 mx-0"></div>
               <div className="block xl:flex justify-between">
                 <div
-                  className={`grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-2`}
+                  className={`grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-2 mx-0 xl:mx-4`}
                 >
                   <div class="w-full mt-1.5 pl-2 md:pl-0 mx-0">
                     <small className="mb-2 text-black">Pilih Maskapai</small>

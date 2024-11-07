@@ -14,7 +14,7 @@ const Page500 = () => {
         <img
           src="/error1.png"
           alt="Session Expired"
-          className="mx-auto" // Tambahkan class mx-auto untuk memastikan gambar berada di tengah secara horizontal
+          className="mx-auto" 
         />
         <div className="mt-4">
           Maaf, terjadi kesalahan. Silakan login kembali.

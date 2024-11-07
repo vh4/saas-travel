@@ -8,7 +8,9 @@ export default function CarouselsMobile(props) {
     return <></>;
   };
 
-  const customLayout = localStorage.getItem("v-data2") ? JSON.parse(localStorage.getItem("v-data2")) : '';
+  const customLayout = localStorage.getItem("v-data2")
+    ? JSON.parse(localStorage.getItem("v-data2"))
+    : "";
 
   var settings = {
     dots: false,
@@ -58,48 +60,50 @@ export default function CarouselsMobile(props) {
     <div className="xl:grid xl:grid-cols-2 w-full px-0 xl:px-4 xl:py-8">
       <div
         style={{
-          color: customLayout?.color?.secondary?.font_color || '#ffff',
-          padding: '0 1rem', // Equivalent to px-4
-          marginBottom: '1rem', // Equivalent to mb-4
-          display: 'block',
+          color: customLayout?.color?.secondary?.font_color || "#ffff",
+          padding: "0 1rem",
+          marginBottom: "1rem",
+          display: "block",
         }}
         className="xl:hidden"
       >
         <div
           style={{
-            display: 'flex',
-            gap: '1rem', // Equivalent to space-x-4
-            paddingRight: '3rem', // Equivalent to pr-12
-            color: 'white', // Static class text-white
-            marginTop: '-1rem', // Equivalent to -mt-4
+            display: "flex",
+            gap: "1rem",
+            paddingRight: "3rem", 
+            color: "white", 
+            marginTop: "-1rem",
           }}
         >
           <img src="/join.svg" width={130} alt="carousal.png" />
           <div>
             <h1
               style={{
-                paddingLeft: '2rem', // Equivalent to 2xl:px-8
-                fontSize: '1.25rem', // Equivalent to text-xl
-                fontWeight: 'bold', // Equivalent to font-bold
+                paddingLeft: "2rem",
+                fontSize: "1.25rem",
+                fontWeight: "bold",
               }}
             >
-              {customLayout?.wording?.primary ?? 'Hai Traveller,'}
+              {customLayout?.wording?.primary ?? "Hai Traveller,"}
             </h1>
             <div
               style={{
-                marginTop: '0.5rem', // Equivalent to mt-2
-                paddingLeft: '2rem', // Equivalent to 2xl:px-8
+                marginTop: "0.5rem",
+                paddingLeft: "2rem",
               }}
             >
-              <div style={{ marginTop: '1rem' }}>
-                {Array.isArray(customLayout?.wording?.secondary?.desktop) && customLayout?.wording?.secondary?.desktop[0]
+              <div style={{ marginTop: "1rem" }}>
+                {Array.isArray(customLayout?.wording?.secondary?.desktop) &&
+                customLayout?.wording?.secondary?.desktop[0]
                   ? customLayout?.wording?.secondary?.desktop[0]
-                  : 'Cukup login ke akun Anda dan melakukan pemesanan tiket untuk berbagai macam perjalanan anda.'}
+                  : "Cukup login ke akun Anda dan melakukan pemesanan tiket untuk berbagai macam perjalanan anda."}
               </div>
-              <div style={{ marginTop: '1.5rem' }}>
-                {Array.isArray(customLayout?.wording?.secondary?.desktop) && customLayout?.wording?.secondary?.desktop[1]
+              <div style={{ marginTop: "1.5rem" }}>
+                {Array.isArray(customLayout?.wording?.secondary?.desktop) &&
+                customLayout?.wording?.secondary?.desktop[1]
                   ? customLayout?.wording?.secondary?.desktop[1]
-                  : 'Nikmati perjalanan anda di beberapa menu travel kereta, kapal, dan pesawat anda.'}
+                  : "Nikmati perjalanan anda di beberapa menu travel kereta, kapal, dan pesawat anda."}
               </div>
             </div>
           </div>

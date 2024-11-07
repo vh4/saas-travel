@@ -1,9 +1,8 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { MdHorizontalRule } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
-import { TiketContext } from "../../App";
 import { Button as ButtonAnt, Alert } from "antd";
 import { notification } from "antd";
 import Page400 from "../components/400";
@@ -13,44 +12,31 @@ import { toRupiah } from "../../helpers/rupiah";
 import BayarLoading from "../components/pelniskeleton/bayar";
 import { Typography } from "antd";
 import { IoArrowForwardOutline } from "react-icons/io5";
-import moment from "moment";
 import PageExpired from "../components/Expired";
 
 export default function Pembayaran() {
   const navigate = useNavigate();
-
-  const { dispatch } = useContext(TiketContext);
   const { Paragraph } = Typography;
-
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
   const [api, contextHolder] = notification.useNotification();
-
-  //loading hanlde submit pembayaran.
   const [isLoading, setLoading] = React.useState(false);
-
   let { id } = useParams();
   const [book, setBook] = useState(null);
-
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   const [errPage, setErrPage] = useState(false);
-
   const [TotalAdult, setTotalAdult] = useState(0);
   const [TotalChild, setTotalChild] = useState(0);
   const [TotalInfant, setTotalInfant] = useState(0);
   const [TotalVehicle, setTotalVehicle] = useState(0);
-
   const [callbackBoolean, setcallbackBoolean] = useState(false);
   const [expiredBookTime, setExpiredBookTime] = useState(null);
-  const [isNavigationDone, setIsNavigationDone] = useState(false);
   const [isBookingExpired, setIsBookingExpired] = useState(false); // Added state for booking expiration
-
+  // const [isNavigationDone, setIsNavigationDone] = useState(false);
   const [err, setErr] = useState(false);
 
   // useEffect(() => {
@@ -98,33 +84,25 @@ export default function Pembayaran() {
     }
 
     Promise.all([getDataAllBook(), cekCallbakIsMitra()])
-		.then(([getDataAllBook, cekCallbakIsMitra]) => {
+      .then(([getDataAllBook, cekCallbakIsMitra]) => {
+        const hasilBooking = getDataAllBook.hasilBooking;
 
-		const hasilBooking = getDataAllBook.hasilBooking;
-
-    if (cekCallbakIsMitra.data.rc == "00") {
-      setcallbackBoolean(true);
-    }
-
-		//jika tidak ada timeLimit.
+        if (cekCallbakIsMitra.data.rc == "00") {
+          setcallbackBoolean(true);
+        }
 
         if (getDataAllBook) {
-		  
-          
-		  setBook(getDataAllBook);
+          setBook(getDataAllBook);
           setExpiredBookTime(hasilBooking.timeLimit);
 
-		  setTotalAdult(getDataAllBook.adult)
-		  setTotalChild(getDataAllBook.child)
-		  setTotalInfant(getDataAllBook.infant)
-		  setTotalVehicle(getDataAllBook.kendaraan)
-
+          setTotalAdult(getDataAllBook.adult);
+          setTotalChild(getDataAllBook.child);
+          setTotalInfant(getDataAllBook.infant);
+          setTotalVehicle(getDataAllBook.kendaraan);
         } else {
           setErrPage(true);
         }
 
-
-        // Set booking expiration flag
         if (
           hasilBooking &&
           new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()
@@ -143,7 +121,6 @@ export default function Pembayaran() {
         setErrPage(true);
       });
   }, [id, token]);
-
 
   async function cekCallbakIsMitra() {
     try {
@@ -169,7 +146,10 @@ export default function Pembayaran() {
     const intervalId = setInterval(() => {
       setremainingBookTime(remainingTime(expiredBookTime));
 
-      if (expiredBookTime && new Date(expiredBookTime).getTime() < new Date().getTime()) {
+      if (
+        expiredBookTime &&
+        new Date(expiredBookTime).getTime() < new Date().getTime()
+      ) {
         setIsBookingExpired(true);
       } else {
         setIsBookingExpired(false);
@@ -197,26 +177,24 @@ export default function Pembayaran() {
     });
   };
 
-  const successNotification = () => {
-    api["success"]({
-      message: "Success!",
-      description: "Successfully, pindah kursi anda sudah berhasil!.",
-      duration: 7,
-    });
-  };
+  // const successNotification = () => {
+  //   api["success"]({
+  //     message: "Success!",
+  //     description: "Successfully, pindah kursi anda sudah berhasil!.",
+  //     duration: 7,
+  //   });
+  // };
 
-  async function handlerPembayaran(e) {
-    e.preventDefault();
-  }
+  // async function handlerPembayaran(e) {
+  //   e.preventDefault();
+  // }
 
   async function handleCallbackSubmit(e) {
     e.preventDefault();
     setLoading(true);
 
     setTimeout(async () => {
-      const dataParse = JSON.parse(
-        localStorage.getItem(`data:dlu-book/${id}`)
-      );
+      const dataParse = JSON.parse(localStorage.getItem(`data:dlu-book/${id}`));
 
       const response = await axios.post(
         `${process.env.REACT_APP_HOST_API}/travel/ship/callback`,
@@ -285,7 +263,12 @@ export default function Pembayaran() {
           {isLoadingPage === true ? (
             <>
               <BayarLoading
-                total={parseInt(TotalAdult) + parseInt(TotalInfant) + parseInt(TotalInfant) + parseInt(TotalVehicle)}
+                total={
+                  parseInt(TotalAdult) +
+                  parseInt(TotalInfant) +
+                  parseInt(TotalInfant) +
+                  parseInt(TotalVehicle)
+                }
               />
             </>
           ) : (
@@ -316,9 +299,7 @@ export default function Pembayaran() {
                       </div>
                     </div>
                     <div className="p-4 border-t">
-                      <div className="mt-3 text-xs text-black">
-                        {book.name}
-                      </div>
+                      <div className="mt-3 text-xs text-black">{book.name}</div>
                       <div className="flex space-x-4">
                         <div className="mt-1 text-xs text-black font-medium ">
                           {book.origin_name}
@@ -344,172 +325,184 @@ export default function Pembayaran() {
                 <div className="mt-4 w-full mx-0 2xl:mx-4">
                   {/* adult, child and infant */}
 
-                     {book.hasilBooking.book_detail && (
-                        <>
-                          <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
-                            <div className="">
-                              <div className="px-2 py-2 text-black border-b border-gray-200 text-xs font-medium ">
-                                {book.hasilBooking.book_detail.book_name} <span>(PEMESAN)</span>
-                              </div>
-                              <div className="mt-2 grid grid-cols-1 md:grid-cols-4">
-                                {/* <div className="px-2 md:px-4 py-2 text-sm">
+                  {book.hasilBooking.book_detail && (
+                    <>
+                      <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+                        <div className="">
+                          <div className="px-2 py-2 text-black border-b border-gray-200 text-xs font-medium ">
+                            {book.hasilBooking.book_detail.book_name}{" "}
+                            <span>(PEMESAN)</span>
+                          </div>
+                          <div className="mt-2 grid grid-cols-1 md:grid-cols-4">
+                            {/* <div className="px-2 md:px-4 py-2 text-sm">
                                           <div className="text-black">NIK</div>
                                           <div className="font-bold text-xs text-black">{bookInfo.PAX_LIST[i][1]}</div>
                                       </div> */}
-                                <div className="px-2 py-2">
-                                  <div className="text-black font-medium text-xs">
-                                    No HP
-                                  </div>
-                                  <div className="mt-2 text-xs text-black">
-								   {book.hasilBooking.book_detail.book_phone}
-                                  </div>
+                            <div className="px-2 py-2">
+                              <div className="text-black font-medium text-xs">
+                                No HP
+                              </div>
+                              <div className="mt-2 text-xs text-black">
+                                {book.hasilBooking.book_detail.book_phone}
+                              </div>
+                            </div>
+                            <div className="px-2 py-2">
+                              <div className="text-black text-xs font-medium ">
+                                KTP
+                              </div>
+                              <div className="mt-2 text-xs text-black">
+                                {book.hasilBooking.book_detail.book_noidentity}
+                              </div>
+                            </div>
+                            <div className="px-2 py-2">
+                              <div className="text-xs text-black font-medium ">
+                                Email
+                              </div>
+                              <div className="mt-2 text-xs text-black">
+                                {book.hasilBooking.book_detail.book_email}
+                              </div>
+                            </div>
+                            <div className="px-2 py-2">
+                              <div className="text-xs text-black font-medium ">
+                                Kota / Kabupaten
+                              </div>
+                              <div className="mt-2 text-xs text-black">
+                                {book.hasilBooking.book_detail.book_city}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {book.hasilBooking.detail_pasangers.data_pax.length > 0 && (
+                    <>
+                      <div className="Booking mt-4 mb-6 xl:mt-6 ml-2 xl:ml-0">
+                        <div className="text-md font-medium text-black">
+                          DETAIL PASSENGERS
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  {book.hasilBooking.detail_pasangers.data_pax &&
+                  book.hasilBooking.detail_pasangers.data_pax.length > 0
+                    ? book.hasilBooking.detail_pasangers.data_pax.map(
+                        (e, i) => (
+                          <>
+                            <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+                              <div className="">
+                                <div className="px-2 py-2 text-black border-b border-gray-200 text-xs font-medium ">
+                                  {e.name} (
+                                  {e.idpasstype == "1"
+                                    ? "ADULT"
+                                    : e.idpasstype == "2"
+                                    ? "CHILDER"
+                                    : "INFANT"}
+                                  )
                                 </div>
-                                <div className="px-2 py-2">
-                                  <div className="text-black text-xs font-medium ">
-                                    KTP
+                                <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
+                                  {/* <div className="px-2 md:px-4 py-2 text-sm">
+                                          <div className="text-black">NIK</div>
+                                          <div className="font-bold text-xs text-black">{bookInfo.PAX_LIST[i][1]}</div>
+                                      </div> */}
+                                  <div className="px-2 py-2">
+                                    <div className="text-black font-medium text-xs">
+                                      ID Tiket
+                                    </div>
+                                    <div className="mt-2 text-xs text-black">
+                                      {e.id_ticket}
+                                    </div>
                                   </div>
-                                  <div className="mt-2 text-xs text-black">
-								  {book.hasilBooking.book_detail.book_noidentity}
+                                  <div className="px-2 py-2">
+                                    <div className="text-black text-xs font-medium ">
+                                      KTP
+                                    </div>
+                                    <div className="mt-2 text-xs text-black">
+                                      {e.idpass && e.idpass !== ""
+                                        ? e.idpass
+                                        : "-"}
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="px-2 py-2">
-                                  <div className="text-xs text-black font-medium ">
-                                    Email
+                                  <div className="px-2 py-2">
+                                    <div className="text-xs text-black font-medium ">
+                                      Tanggal Lahir
+                                    </div>
+                                    <div className="mt-2 text-xs text-black">
+                                      {e.dob}
+                                    </div>
                                   </div>
-                                  <div className="mt-2 text-xs text-black">
-                                    {book.hasilBooking.book_detail.book_email}
-                                  </div>
-                                </div>
-								<div className="px-2 py-2">
-                                  <div className="text-xs text-black font-medium ">
-                                    Kota / Kabupaten
-                                  </div>
-                                  <div className="mt-2 text-xs text-black">
-                                    {book.hasilBooking.book_detail.book_city}
+                                  <div className="px-2 py-2">
+                                    <div className="text-xs text-black font-medium ">
+                                      Kota / Kabupaten
+                                    </div>
+                                    <div className="mt-2 text-xs text-black">
+                                      {e.city}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </>
-                      )}
-				  
-				  {book.hasilBooking.detail_pasangers.data_pax.length > 0 && (
-						<>
-							<div className="Booking mt-4 mb-6 xl:mt-6 ml-2 xl:ml-0">
-								<div className="text-md font-medium text-black">
-								 DETAIL PASSENGERS
-								</div>
-							</div>
-						</>
-					)}
-                     {book.hasilBooking.detail_pasangers.data_pax && book.hasilBooking.detail_pasangers.data_pax.length > 0
-                    ? book.hasilBooking.detail_pasangers.data_pax.map((e, i) => (
-                        <>
-                          <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
-                            <div className="">
-                              <div className="px-2 py-2 text-black border-b border-gray-200 text-xs font-medium ">
-                                {e.name} ({e.idpasstype == "1"
-                                  ? "ADULT"
-                                  : e.idpasstype == "2"
-                                  ? "CHILDER" : "INFANT" }
-                                )
-                              </div>
-                              <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
-                                {/* <div className="px-2 md:px-4 py-2 text-sm">
-                                          <div className="text-black">NIK</div>
-                                          <div className="font-bold text-xs text-black">{bookInfo.PAX_LIST[i][1]}</div>
-                                      </div> */}
-                                <div className="px-2 py-2">
-                                  <div className="text-black font-medium text-xs">
-                                    ID Tiket
-                                  </div>
-                                  <div className="mt-2 text-xs text-black">
-								   {e.id_ticket}
-                                  </div>
-                                </div>
-                                <div className="px-2 py-2">
-                                  <div className="text-black text-xs font-medium ">
-                                    KTP
-                                  </div>
-                                  <div className="mt-2 text-xs text-black">
-                                    {e.idpass && e.idpass !== '' ? e.idpass :  '-'}
-                                  </div>
-                                </div>
-                                <div className="px-2 py-2">
-                                  <div className="text-xs text-black font-medium ">
-                                    Tanggal Lahir
-                                  </div>
-                                  <div className="mt-2 text-xs text-black">
-                                    {e.dob}
-                                  </div>
-                                </div>
-								<div className="px-2 py-2">
-                                  <div className="text-xs text-black font-medium ">
-                                    Kota / Kabupaten
-                                  </div>
-                                  <div className="mt-2 text-xs text-black">
-                                    {e.city}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      ))
+                          </>
+                        )
+                      )
                     : ""}
 
-					{book.hasilBooking.detail_pasangers.data_vehicle.length > 0 && (
-						<>
-							<div className="Booking mt-4 mb-6 xl:mt-6 ml-2 xl:ml-0">
-								<div className="text-md font-medium text-black">
-								DATA VEHICLES
-								</div>
-							</div>
-						</>
-					)}
-				  {book.hasilBooking.detail_pasangers.data_vehicle && book.hasilBooking.detail_pasangers.data_vehicle.length > 0
-                    ? book.hasilBooking.detail_pasangers.data_vehicle.map((e, i) => (
-                        <>
-                          <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
-                            <div className="">
-                              <div className="px-2 py-2 text-black border-b border-gray-200 text-xs font-medium ">
-                                {e.idload}
-                              </div>
-                              <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
-                                {/* <div className="px-2 md:px-4 py-2 text-sm">
+                  {book.hasilBooking.detail_pasangers.data_vehicle.length >
+                    0 && (
+                    <>
+                      <div className="Booking mt-4 mb-6 xl:mt-6 ml-2 xl:ml-0">
+                        <div className="text-md font-medium text-black">
+                          DATA VEHICLES
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  {book.hasilBooking.detail_pasangers.data_vehicle &&
+                  book.hasilBooking.detail_pasangers.data_vehicle.length > 0
+                    ? book.hasilBooking.detail_pasangers.data_vehicle.map(
+                        (e, i) => (
+                          <>
+                            <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+                              <div className="">
+                                <div className="px-2 py-2 text-black border-b border-gray-200 text-xs font-medium ">
+                                  {e.idload}
+                                </div>
+                                <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
+                                  {/* <div className="px-2 md:px-4 py-2 text-sm">
                                           <div className="text-black">NIK</div>
                                           <div className="font-bold text-xs text-black">{bookInfo.PAX_LIST[i][1]}</div>
                                       </div> */}
-                                <div className="px-2 py-2">
-                                  <div className="text-black font-medium text-xs">
-                                    Nama Lengkap
+                                  <div className="px-2 py-2">
+                                    <div className="text-black font-medium text-xs">
+                                      Nama Lengkap
+                                    </div>
+                                    <div className="mt-2 text-xs text-black">
+                                      {e.name}
+                                    </div>
                                   </div>
-                                  <div className="mt-2 text-xs text-black">
-								   {e.name}
+                                  <div className="px-2 py-2">
+                                    <div className="text-xs text-black font-medium ">
+                                      ID Tiket
+                                    </div>
+                                    <div className="mt-2 text-xs text-black">
+                                      {e.id_ticket}
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="px-2 py-2">
-                                  <div className="text-xs text-black font-medium ">
-                                    ID Tiket
-                                  </div>
-                                  <div className="mt-2 text-xs text-black">
-                                    {e.id_ticket}
-                                  </div>
-                                </div>
-								<div className="px-2 py-2">
-                                  <div className="text-xs text-black font-medium ">
-                                    Kota / Kabupaten
-                                  </div>
-                                  <div className="mt-2 text-xs text-black">
-                                    {e.city}
+                                  <div className="px-2 py-2">
+                                    <div className="text-xs text-black font-medium ">
+                                      Kota / Kabupaten
+                                    </div>
+                                    <div className="mt-2 text-xs text-black">
+                                      {e.city}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </>
-                      ))
+                          </>
+                        )
+                      )
                     : ""}
 
                   <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
@@ -518,20 +511,28 @@ export default function Pembayaran() {
                         <div className="">
                           {book && book.name}{" "}
                           {TotalAdult > 0 ? `(Adult) x${TotalAdult}` : ""}{" "}
-						  {TotalChild > 0 ? `(Child) x${TotalChild}` : ""}{" "}
+                          {TotalChild > 0 ? `(Child) x${TotalChild}` : ""}{" "}
                           {TotalInfant > 0 ? `(Infant) x${TotalInfant}` : ""}
-						  {TotalVehicle > 0 ? `(Vehicle) x${TotalVehicle}` : ""}
+                          {TotalVehicle > 0 ? `(Vehicle) x${TotalVehicle}` : ""}
                         </div>
-                        <div>Rp. {book.hasilBooking && toRupiah(book.hasilBooking.nominal)}</div>
-                      </div>
-                      <div className="mt-4 text-xs text-black font-medium  flex justify-between">
-                        <div>Biaya Admin (Fee) x{parseInt(TotalAdult) + parseInt(TotalInfant) + parseInt(TotalChild) + parseInt(TotalVehicle)}</div>
                         <div>
                           Rp.{" "}
                           {book.hasilBooking &&
-                            toRupiah(
-								book.hasilBooking.nominal_admin
-                            )}
+                            toRupiah(book.hasilBooking.nominal)}
+                        </div>
+                      </div>
+                      <div className="mt-4 text-xs text-black font-medium  flex justify-between">
+                        <div>
+                          Biaya Admin (Fee) x
+                          {parseInt(TotalAdult) +
+                            parseInt(TotalInfant) +
+                            parseInt(TotalChild) +
+                            parseInt(TotalVehicle)}
+                        </div>
+                        <div>
+                          Rp.{" "}
+                          {book.hasilBooking &&
+                            toRupiah(book.hasilBooking.nominal_admin)}
                         </div>
                       </div>
                       <div className="mt-4 text-xs text-black font-medium  flex justify-between">
@@ -545,15 +546,12 @@ export default function Pembayaran() {
                           {book &&
                             toRupiah(
                               parseInt(book.hasilBooking.nominal) +
-                                parseInt(
-									book.hasilBooking.nominal_admin
-                                )
+                                parseInt(book.hasilBooking.nominal_admin)
                             )}
                         </div>
                       </div>
                     </div>
                   </div>
-
                 </div>
                 {/* desktop sidebar */}
                 <div className="hidden xl:block sidebar w-full xl:w-2/3 2xl:w-1/2">
@@ -563,7 +561,7 @@ export default function Pembayaran() {
                       <div className="text-black text-xs">Transaksi ID</div>
                       <div className="mt-1 font-medium  text-blue-500 text-[18px]">
                         <Paragraph copyable>
-						{book.hasilBooking && book.hasilBooking.id_transaksi}
+                          {book.hasilBooking && book.hasilBooking.id_transaksi}
                         </Paragraph>
                       </div>
                       <div className="text-grapy-500 text-xs">
@@ -572,9 +570,7 @@ export default function Pembayaran() {
                       </div>
                     </div>
                     <div className="p-4 border-t">
-                      <div className="text-xs text-black">
-                        DLU DESCRIPTION
-                      </div>
+                      <div className="text-xs text-black">DLU DESCRIPTION</div>
                       <div className="mt-3 text-xs text-black">
                         {book.name} ({book.type_class_name})
                       </div>
@@ -599,24 +595,26 @@ export default function Pembayaran() {
                       </div>
                     </div>
                     <div className="p-4 border-t">
-                      <div className="text-xs text-black">
-                        LIST PASSENGERS
-                      </div>
+                      <div className="text-xs text-black">LIST PASSENGERS</div>
                       {book.hasilBooking.detail_pasangers.data_pax &&
                       book.hasilBooking.detail_pasangers.data_pax.length > 0
-                        ? book.hasilBooking.detail_pasangers.data_pax.map((e, i) => (
-                            <div className="mt-3 text-xs text-black font-medium ">
-                              {e.name}  ({e.idpasstype == "1"
+                        ? book.hasilBooking.detail_pasangers.data_pax.map(
+                            (e, i) => (
+                              <div className="mt-3 text-xs text-black font-medium ">
+                                {e.name} (
+                                {e.idpasstype == "1"
                                   ? "ADULT"
                                   : e.idpasstype == "2"
-                                  ? "CHILDER" : "INFANT" }
+                                  ? "CHILDER"
+                                  : "INFANT"}
                                 )
-                            </div>
-                          ))
+                              </div>
+                            )
+                          )
                         : ""}
 
-					  {/* vehicles */}
-					  {/* {book.hasilBooking.detail_pasangers.data_vehicle &&
+                      {/* vehicles */}
+                      {/* {book.hasilBooking.detail_pasangers.data_vehicle &&
                       book.hasilBooking.detail_pasangers.data_vehicle.length > 0
                         ? book.hasilBooking.detail_pasangers.data_vehicle.map((e, i) => (
                             <div className="mt-3 text-xs text-black font-medium ">
@@ -632,8 +630,8 @@ export default function Pembayaran() {
                       banner
                     />
                   </div>
-                {callbackBoolean == true ? (
-                  <div className="mt-2 py-4 rounded-md border border-gray-200 shadow-sm">
+                  {callbackBoolean == true ? (
+                    <div className="mt-2 py-4 rounded-md border border-gray-200 shadow-sm">
                       <>
                         <div className="px-8 py-4 text-sm text-black">
                           Tekan tombol dibawah ini untuk melanjutkan proses
@@ -652,10 +650,10 @@ export default function Pembayaran() {
                           </ButtonAnt>
                         </div>
                       </>
-                  </div>
-                ) : (
-                  <>
-                    {/* <div className="px-8 py-4 text-sm text-black">
+                    </div>
+                  ) : (
+                    <>
+                      {/* <div className="px-8 py-4 text-sm text-black">
                   Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
                   </div>
                   <div className="flex justify-center">
@@ -671,11 +669,11 @@ export default function Pembayaran() {
                       Langsung Bayar
                     </ButtonAnt>
                   </div> */}
-                  </>
-                )}
+                    </>
+                  )}
                 </div>
-              {callbackBoolean == true ? (
-                <div className="block xl:hidden mt-4 py-4 rounded-md border border-gray-200 shadow-sm">
+                {callbackBoolean == true ? (
+                  <div className="block xl:hidden mt-4 py-4 rounded-md border border-gray-200 shadow-sm">
                     <>
                       <div className="flex justify-center">
                         <ButtonAnt
@@ -690,10 +688,10 @@ export default function Pembayaran() {
                         </ButtonAnt>
                       </div>
                     </>
-                </div>
-              ) : (
-                <>
-                  {/* <div className="px-8 py-4 text-sm text-black">
+                  </div>
+                ) : (
+                  <>
+                    {/* <div className="px-8 py-4 text-sm text-black">
                     Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
                     </div>
                     <div className="flex justify-center">
@@ -709,8 +707,8 @@ export default function Pembayaran() {
                         Langsung Bayar
                       </ButtonAnt>
                     </div>                      */}
-                </>
-              )}
+                  </>
+                )}
               </div>
             </>
           )}

@@ -1,31 +1,27 @@
 //make create function reactjs
 
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import TransaksiKaiComponent from "../../components/transaksi_list/ListKai";
 import Layout from "../LayoutUser";
 import { useLocation } from "react-router-dom";
-import _ from 'lodash'
+import _ from "lodash";
 
-export default function TransaksiKai(){
+export default function TransaksiKai() {
+  const location = useLocation();
+  const path = _.startCase(location.pathname.toString()).split("  ").join("/");
 
-    const location = useLocation();
-    const path = _.startCase(location.pathname.toString()).split('  ').join('/');
+  useEffect(() => {
+    document.title = "Travel - list transaksi kereta";
+  }, []);
 
-    useEffect(() =>{
-
-        document.title = 'Travel - list transaksi kereta';
-
-    }, []);
-
-    return(
-        <>
-        <Layout>
-            <div className="mt-0 mb-24 md:mb-0 md:mt-4 px-4 md:px-12">
-                {/* Profile fitur  */}
-                < TransaksiKaiComponent path={path} />
-                
-            </div>
-        </Layout>
-        </>
-    )
+  return (
+    <>
+      <Layout>
+        <div className="mt-0 mb-24 md:mb-0 md:mt-4 px-4 md:px-12">
+          {/* Profile fitur  */}
+          <TransaksiKaiComponent path={path} />
+        </div>
+      </Layout>
+    </>
+  );
 }

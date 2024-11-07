@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { AiOutlineHome } from "react-icons/ai";
 import { BsArrowRightShort } from "react-icons/bs";
 import axios from "axios";
 import { Modal, message } from "antd";
@@ -20,8 +19,7 @@ export default function ViewBooking({ path }) {
   const [isLoading, setIsLoading] = useState(false);
   const [loadBayar, setLoadBayar] = useState(true);
   const [messageApi, contextHolder] = message.useMessage();
-  const [loading, setLoading] = useState(false);
-  const handleOpen = () => setShowModal(true);
+  // const [loading, setLoading] = useState(false);
   const handleClose = () => setShowModal(false);
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
@@ -35,25 +33,6 @@ export default function ViewBooking({ path }) {
       setErr(true);
     }
   }, [token]);
-
-  function success() {
-    messageApi.open({
-      type: "success",
-      content:
-        "Pembayaran anda berhasil, silahkan check tiket anda di menu transaksi.",
-      duration: 7,
-    });
-  }
-
-  function gagal(rd) {
-    messageApi.open({
-      type: "error",
-      content: `Failed, ${
-        rd.toLowerCase().charAt(0).toUpperCase() + rd.slice(1).toLowerCase()
-      }`,
-      duration: 7,
-    });
-  }
 
   useEffect(() => {
     getTransaksiList();
@@ -70,8 +49,8 @@ export default function ViewBooking({ path }) {
             localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
           ),
           product: "DLUKAPAL",
-          startDate: dayjs().format('YYYY-MM-DD'),
-          endDate:dayjs().format('YYYY-MM-DD')
+          startDate: dayjs().format("YYYY-MM-DD"),
+          endDate: dayjs().format("YYYY-MM-DD"),
         }
       );
 
@@ -99,12 +78,7 @@ export default function ViewBooking({ path }) {
     }, 1000);
   }
 
-  const handleBayar = async () => {
-    setLoading(true);
-  };
-
   const intervalRef = React.useRef(null);
-
   const [remainingTimes, setRemainingTimes] = useState([]);
 
   useEffect(() => {
@@ -173,36 +147,36 @@ export default function ViewBooking({ path }) {
             <div className="mt-4 mb-12">
               {byrdata.penumpang.map((e) => (
                 <>
-                <div className="border-b p-4 grid grid-cols-1 md:grid-cols-5 gap-4 mt-4">
+                  <div className="border-b p-4 grid grid-cols-1 md:grid-cols-5 gap-4 mt-4">
                     <div className="text-xs">
                       <div className="">Nama</div>
-                      <div>{e.nama || '-'}</div>
+                      <div>{e.nama || "-"}</div>
                     </div>
                     <div className="text-xs">
                       <div className="">Tanggal Lahir</div>
-                      <div>{e.dob || '-'}</div>
+                      <div>{e.dob || "-"}</div>
                     </div>
                     <div className="text-xs">
                       <div className="">NIK</div>
-                      <div>{e.idpass || '-'}</div>
+                      <div>{e.idpass || "-"}</div>
                     </div>
                     <div className="text-xs">
                       <div className="">ID Tiket</div>
-                      <div>{e.id_ticket || '-'}</div>
+                      <div>{e.id_ticket || "-"}</div>
                     </div>
                   </div>
                 </>
               ))}
-            <div className="p-2 flex space-x-2 items-center mt-4">
-              <CiBoxList size={16}/>
-              <div className="text-xs">Deskripsi</div>
-            </div>
+              <div className="p-2 flex space-x-2 items-center mt-4">
+                <CiBoxList size={16} />
+                <div className="text-xs">Deskripsi</div>
+              </div>
               {/* desktop */}
               {console.log(byrdata)}
-			  <div className="p-4 w-full hidden xl:gap-4 lg:grid lg:grid-cols-10">
+              <div className="p-4 w-full hidden xl:gap-4 lg:grid lg:grid-cols-10">
                 <div className="col-span-2">
                   <div className="text-xs">{byrdata.nama_kapal} </div>
-                  <small>Kelas {byrdata.tipe_class.split('|')[1] || ''}</small>
+                  <small>Kelas {byrdata.tipe_class.split("|")[1] || ""}</small>
                 </div>
                 <div className="col-span-2">
                   <div className="text-xs">
@@ -221,14 +195,12 @@ export default function ViewBooking({ path }) {
                 </div>
                 <div className="col-span-2">
                   <div className="text-xs">
-                  {parseTanggal(byrdata?.tanggal_kedatangan)}{" "}
+                    {parseTanggal(byrdata?.tanggal_kedatangan)}{" "}
                   </div>
                   <small>Tanggal Kedatangan</small>
                 </div>
                 <div className="col-span-2">
-                  <div className="text-xs">
-                    {byrdata.time_kedatangan}
-                  </div>
+                  <div className="text-xs">{byrdata.time_kedatangan}</div>
                   <small>{byrdata.destination[0]?.nama_pelabuhan}</small>
                 </div>
                 <div className="col-span-2">
@@ -345,35 +317,36 @@ export default function ViewBooking({ path }) {
                 data !== undefined &&
                 data.length !== undefined &&
                 data.length !== 0 ? (
-					<div className="mt-4 xl:mt-8">
+                  <div className="mt-4 xl:mt-8">
                     {data.map((e, i) => (
                       <div className="w-full mb-4">
                         <div className="w-full profile-header">
                           <div className="p-2 md:p-8 mt-12 md:mt-0">
                             <div className="flex justify-between items-end">
-                              {
-                              !e.status?.status_payment?.toUpperCase()?.includes('SUKSES')  ? (
+                              {!e.status?.status_payment
+                                ?.toUpperCase()
+                                ?.includes("SUKSES") ? (
                                 <>
-                                <div className="flex space-x-2  items-end">
-                                  <div className="text-xs text-black">
-                                    Id Transaksi
+                                  <div className="flex space-x-2  items-end">
+                                    <div className="text-xs text-black">
+                                      Id Transaksi
+                                    </div>
+                                    <div className="text-xs text-blue-500">
+                                      {e.id_transaksi}
+                                    </div>
                                   </div>
-                                  <div className="text-xs text-blue-500">
-                                    {e.id_transaksi}
-                                  </div>
-                                </div>
-                              </>
+                                </>
                               ) : (
-                              <>
-                              <div className="flex space-x-2  items-end">
-                                <div className="text-xs text-black">
-                                  Kode Booking
-                                </div>
-                                <div className="text-xs text-blue-500">
-                                  {e.kode_booking}
-                                </div>
-                              </div>                             
-                              </>
+                                <>
+                                  <div className="flex space-x-2  items-end">
+                                    <div className="text-xs text-black">
+                                      Kode Booking
+                                    </div>
+                                    <div className="text-xs text-blue-500">
+                                      {e.kode_booking}
+                                    </div>
+                                  </div>
+                                </>
                               )}
                               <div className="text-xs text-black">
                                 Rp. {toRupiah(e.nominal)}
@@ -386,9 +359,13 @@ export default function ViewBooking({ path }) {
                                   size={16}
                                 />
                                 <div className="flex space-x-2 items-center">
-                                  <div>{e.origin[0].nama_pelabuhan?.toUpperCase()}</div>
+                                  <div>
+                                    {e.origin[0].nama_pelabuhan?.toUpperCase()}
+                                  </div>
                                   <BsArrowRightShort />
-                                  <div>{e.destination[0].nama_pelabuhan?.toUpperCase()}</div>
+                                  <div>
+                                    {e.destination[0].nama_pelabuhan?.toUpperCase()}
+                                  </div>
                                 </div>
                               </div>
                               <div className="pl-1">
@@ -411,36 +388,41 @@ export default function ViewBooking({ path }) {
                             </div> */}
                               <div className="flex justify-between space-x-0 xl:space-x-4 items-center pt-4 xl:pt-4">
                                 <div className="flex space-x-4 items-center">
-                                {
-                                    !e.status?.status_payment?.toUpperCase()?.includes('SUKSES')  ? (
-                                   <>
-                                  <div className="text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white inline-block">
-                                  Sisa waktu{" "}
-                                  {remainingTimes[i] &&
-                                  new Date(e.expiredDate).getTime() >
-                                    new Date().getTime()
-                                    ? remainingTime(remainingTimes[i])
-                                    : " habis."}
-                                </div>
-                                  </>
+                                  {!e.status?.status_payment
+                                    ?.toUpperCase()
+                                    ?.includes("SUKSES") ? (
+                                    <>
+                                      <div className="text-xs font-bold py-1 px-3 rounded-full bg-blue-500 text-white inline-block">
+                                        Sisa waktu{" "}
+                                        {remainingTimes[i] &&
+                                        new Date(e.expiredDate).getTime() >
+                                          new Date().getTime()
+                                          ? remainingTime(remainingTimes[i])
+                                          : " habis."}
+                                      </div>
+                                    </>
                                   ) : (
                                     <>
                                       <div className="text-xs py-1 px-3 rounded-full bg-green-500 text-white">
                                         Transaksi Sukses
-                                      </div>                                   
+                                      </div>
                                     </>
-                                  )
-                                }
-                                <div
-                                  onClick={(e) => openModalBayar(e, i)}
-                                  className="cursor-pointer text-blue-500 font-bold text-xs"
-                                >
-                                  Lihat Detail
+                                  )}
+                                  <div
+                                    onClick={(e) => openModalBayar(e, i)}
+                                    className="cursor-pointer text-blue-500 font-bold text-xs"
+                                  >
+                                    Lihat Detail
+                                  </div>
                                 </div>
-                                </div>
-                                {e.status?.status_payment?.toUpperCase()?.includes('SUKSES')  &&  (
+                                {e.status?.status_payment
+                                  ?.toUpperCase()
+                                  ?.includes("SUKSES") && (
                                   <>
-                                    <a href={`https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=${e.status.id_transaksi}`} target="_blank">
+                                    <a
+                                      href={`https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=${e.status.id_transaksi}`}
+                                      target="_blank"
+                                    >
                                       <div className="flex space-x-2 items-center text-black">
                                         <HiOutlinePrinter size={16} />
                                         <div className="text-xs">Cetak</div>

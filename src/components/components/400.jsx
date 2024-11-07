@@ -17,7 +17,7 @@ const Page400 = ({message = 'Terjadi Kesalahan pada page. Silahkan lakukan booki
           <img
             src="/error1.png"
             alt="Session Expired"
-            className="mx-auto" // Tambahkan class mx-auto untuk memastikan gambar berada di tengah secara horizontal
+            className="mx-auto" 
           />
           <div className="mt-4">
               {message}

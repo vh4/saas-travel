@@ -1,6 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
 import React, { useContext, useEffect, useState, useRef } from "react";
-import { CiHome, CiSettings } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Skeleton from "@mui/material/Skeleton";
@@ -8,76 +7,73 @@ import { Box } from "@mui/material";
 import SidebarMobileUser from "./sidebar/mobile/SidebarMobileUser";
 import { Drawer, Typography, Modal, Form, Input, Button, Avatar } from "antd";
 import { notification } from "antd";
-import { toRupiah } from "../../helpers/rupiah";
-import { FaHome, FaListAlt } from "react-icons/fa";
 import ReCAPTCHA from "react-google-recaptcha";
 import { UserOutlined } from "@ant-design/icons";
-import dayjs, { isDayjs } from "dayjs";
-import { IoLogOut, IoLogOutOutline, IoLogOutSharp } from "react-icons/io5";
+import dayjs from "dayjs";
+import { IoLogOutOutline } from "react-icons/io5";
 import { LoginContent, LogoutContent } from "../../App";
 import { AiOutlineAppstore, AiOutlineHome } from "react-icons/ai";
-import { gsap } from 'gsap';
-import { BsClockHistory } from "react-icons/bs";
+import { gsap } from "gsap";
+import { useSelector } from "react-redux";
 
 export default function Header() {
   const customStyle = {
-    color: "white", // Warna teks
+    color: "white",
     padding: "20px",
   };
 
   const navRef = useRef(null);
   const location = useLocation();
-
   const captchaRef = useRef(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [showModal, setShowModal] = React.useState(false);
   const [form] = Form.useForm();
+
   const handleOpen = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
-  const { loginComponent, setLoginComponent } = useContext(LoginContent);
-  const { customComponent, setCustomComponent } = useContext(LoginContent);
 
+  const { loginComponent, setLoginComponent } = useContext(LoginContent);
   const [isExpired, setIsExpired] = useState(false);
   const [login, setLogin] = useState(false);
   const [api, contextHolder] = notification.useNotification();
   const { setLogout } = useContext(LogoutContent);
-
   const { pathname, search } = location;
   const newURL = pathname + search;
+
+  const type = useSelector((state) => state.type.data.type);
+
 
   const onReset = () => {
     form.resetFields();
   };
 
   const token = localStorage.getItem("v_loggers");
-  const customLayout = localStorage.getItem("v-data2") ? JSON.parse(localStorage.getItem("v-data2")) : '';
+  const customLayout = localStorage.getItem("v-data2")
+    ? JSON.parse(localStorage.getItem("v-data2"))
+    : "";
 
   const [custom, setCustom] = useState(false);
 
   useEffect(() => {
-    if (location.pathname === '/') {
-      // If the current path is "/", set to original colors (background primary and font color)
+    if (location.pathname === "/") {
       gsap.to(navRef.current, {
         duration: 0.001,
-        ease: 'power2.inOut',
-        backgroundColor: customLayout?.color?.primary?.background || '#0f172a',
-        color: customLayout?.color?.primary?.font_color || '#ffff',
+        ease: "power2.inOut",
+        backgroundColor: customLayout?.color?.primary?.background || "#0f172a",
+        color: customLayout?.color?.primary?.font_color || "#ffff",
       });
-
     } else {
-      // If the current path is not "/", change to opposite colors
-    gsap.to(navRef.current, {
-      duration: 0.001,
-      ease: 'power2.inOut',
-      backgroundColor: '#ffff',
-      color: '#0f172a',
-      borderBottom: "1px solid #d1d5db",  // Correctly define the border
-    });
+      gsap.to(navRef.current, {
+        duration: 0.001,
+        ease: "power2.inOut",
+        backgroundColor: "#ffff",
+        color: "#0f172a",
+        borderBottom: "1px solid #d1d5db",
+      });
       setCustom(true);
-
     }
-  }, [location.pathname, customLayout]); // Dependencies on path change and customLayout
-  
+  }, [location.pathname, customLayout]);
+
   useEffect(() => {
     if (token != null || token != undefined) {
       setLogin(true);
@@ -168,7 +164,6 @@ export default function Header() {
         "v_",
         JSON.stringify({
           namaPemilik: response.data.data.namaPemilik,
-          // balance: response.data.data.balance,
         })
       );
     }
@@ -228,8 +223,7 @@ export default function Header() {
 
           navigate("/logout");
         });
-    } catch (e) {
-    }
+    } catch (e) {}
   };
 
   useEffect(() => {
@@ -283,9 +277,9 @@ export default function Header() {
             localStorage.setItem("c_name", uid);
             localStorage.setItem("hdrs_c", data.data.is_header_name_and_toast);
 
-            if(data.data.data2 && data.data.data2 != ''){
+            if (data.data.data2 && data.data.data2 != "") {
               localStorage.setItem("v-data2", data.data.data2);
-            }else{
+            } else {
               localStorage.removeItem("v-data2");
             }
 
@@ -315,77 +309,99 @@ export default function Header() {
   };
 
   return (
-    <div 
-        className="">
-        <nav
-          ref={navRef}
-          style={{
-            backgroundColor: customLayout?.color?.primary?.background || '#0f172a',
-            color: customLayout?.color?.primary?.font_color || '#ffff',
-          }}
-          className="px-2 sm:px-4 py-2 xl:py-4 block sticky top-0 w-full z-50 left-0"
-        >
-          {contextHolder}
+    <div className="">
+      <nav
+        ref={navRef}
+        style={{
+          backgroundColor:
+            customLayout?.color?.primary?.background || "#0f172a",
+          color: customLayout?.color?.primary?.font_color || "#ffff",
+        }}
+        className="px-2 sm:px-4 py-2 xl:py-4 block sticky top-0 w-full z-50 left-0"
+      >
+        {contextHolder}
         <div className="container mx-auto">
-          <div className={`flex justify-between items-center ${localStorage.getItem("hdrs_c") == "false" && 'py-0 md:py-2'} -mx-2 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24 no-underline`}>
+          <div
+            className={`flex justify-between items-center ${
+              localStorage.getItem("hdrs_c") == "false" && "py-0 md:py-2"
+            } -mx-2 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24 no-underline`}
+          >
             <div className="">
               {/* <Link to="/" className="flex items-center cursor-pointer no-underline"> */}
-                <div onClick={() => navigate('/')} 
+              <div
+                onClick={() => navigate("/")}
                 style={{
-                  color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                  color: custom
+                    ? "#0f172a"
+                    : customLayout?.color?.primary?.font_color || "#ffff",
                 }}
-                className="judul ml-4 text-xl xl:text-2xl font-extrabold no-underline cursor-pointer">
-                  {customLayout?.header?.logo ?? ''}
-                </div>
+                className="judul ml-4 text-xl xl:text-2xl font-extrabold no-underline cursor-pointer"
+              >
+                {customLayout?.header?.logo ?? ""}
+              </div>
               {/* </Link> */}
             </div>
             <div className="flex space-x-6 items-center xl:order-2">
-            {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) && (
-              <>
-                <Link
-                  to="/"
-                  style={{
-                    color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
-                  }}
-                  className="hidden md:flex cursor-pointer space-x-2 text-sm items-center"
-                >
-                  <AiOutlineHome
-                    style={{
-                      color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
-                    }}
-                    size={18}
-                  />
-                  <div
-                    style={{
-                      color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
-                      fontSize: '15px',
-                    }}
-                  >
-                    Home
-                  </div>
-                </Link>
-              </>
-              )}
-
-              {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
-                <div>
+              {localStorage.getItem(
+                process.env.REACT_APP_SECTRET_LOGIN_API
+              ) && (
+                <>
                   <Link
-                    to="/transaksi/pesawat"
+                    to="/"
                     style={{
-                      color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                      color: custom
+                        ? "#0f172a"
+                        : customLayout?.color?.primary?.font_color || "#ffff",
                     }}
                     className="hidden md:flex cursor-pointer space-x-2 text-sm items-center"
                   >
-                    <AiOutlineAppstore
+                    <AiOutlineHome
                       style={{
-                        color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                        color: custom
+                          ? "#0f172a"
+                          : customLayout?.color?.primary?.font_color || "#ffff",
                       }}
                       size={18}
                     />
                     <div
                       style={{
-                        color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
-                        fontSize: '15px',
+                        color: custom
+                          ? "#0f172a"
+                          : customLayout?.color?.primary?.font_color || "#ffff",
+                        fontSize: "15px",
+                      }}
+                    >
+                      Home
+                    </div>
+                  </Link>
+                </>
+              )}
+
+              {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
+                <div>
+                  <Link
+                    to={`/transaksi/${type == 'auth' ? 'pesawat' : type == 'kereta' ? 'kai' : type}`}
+                    style={{
+                      color: custom
+                        ? "#0f172a"
+                        : customLayout?.color?.primary?.font_color || "#ffff",
+                    }}
+                    className="hidden md:flex cursor-pointer space-x-2 text-sm items-center"
+                  >
+                    <AiOutlineAppstore
+                      style={{
+                        color: custom
+                          ? "#0f172a"
+                          : customLayout?.color?.primary?.font_color || "#ffff",
+                      }}
+                      size={18}
+                    />
+                    <div
+                      style={{
+                        color: custom
+                          ? "#0f172a"
+                          : customLayout?.color?.primary?.font_color || "#ffff",
+                        fontSize: "15px",
                       }}
                     >
                       Transaksi
@@ -435,46 +451,54 @@ export default function Header() {
                 {!localStorage.getItem(
                   process.env.REACT_APP_SECTRET_LOGIN_API
                 ) ? (
-                      <div
+                  <div
+                    style={{
+                      color: custom
+                        ? "#0f172a"
+                        : customLayout?.color?.primary?.font_color || "#ffff",
+                    }}
+                    className="hidden md:flex space-x-4 items-center"
+                  >
+                    <div
+                      className="flex space-x-2 items-center cursor-pointer hover:text-blue-500"
+                      onClick={handleOpen}
+                    >
+                      <UserOutlined size={22} />
+                      <div>Masuk</div>
+                    </div>
+                    <a
+                      href="https://www.rajabiller.com/register"
+                      style={{
+                        color: custom
+                          ? "#0f172a"
+                          : customLayout?.color?.primary?.font_color || "#ffff",
+                        fontSize: "15px",
+                      }}
+                    >
+                      <Button
+                        key="submit"
+                        type="default"
                         style={{
-                          color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                          color: custom
+                            ? "#0f172a"
+                            : customLayout?.color?.primary?.font_color ||
+                              "#ffff",
+                          padding: "0 2rem",
                         }}
-                        className="hidden md:flex space-x-4 items-center"
                       >
-                        <div
-                          className="flex space-x-2 items-center cursor-pointer hover:text-blue-500"
-                          onClick={handleOpen}
-                        >
-                          <UserOutlined size={22} />
-                          <div>Masuk</div>
-                        </div>
-                        <a
-                          href="https://www.rajabiller.com/register"
-                          style={{
-                            color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
-                            fontSize: '15px',
-                          }}
-                        >
-                          <Button
-                            key="submit"
-                            type="default"
-                            style={{
-                              color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
-                              padding: '0 2rem', // Equivalent to px-8 in Tailwind
-                            }}
-                          >
-                            Registrasi
-                          </Button>
-                        </a>
-                      </div>
+                        Registrasi
+                      </Button>
+                    </a>
+                  </div>
                 ) : (
-                      <div
-                        style={{
-                          color: customLayout?.color?.primary?.font_color || '#ffff',
-                        }}
-                        className="hidden relative group space-x-2 md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 md:inline-flex group-hover:block items-end ml-2 mb-2"
-                      >
-                      {localStorage.getItem("hdrs_c") != "false" && (
+                  <div
+                    style={{
+                      color:
+                        customLayout?.color?.primary?.font_color || "#ffff",
+                    }}
+                    className="hidden relative group space-x-2 md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 md:inline-flex group-hover:block items-end ml-2 mb-2"
+                  >
+                    {localStorage.getItem("hdrs_c") != "false" && (
                       <>
                         {user !== null && user !== undefined ? (
                           <>
@@ -482,22 +506,31 @@ export default function Header() {
                               <>
                                 <div className="flex space-x-2 items-center mt-2">
                                   <div className="">
-                                  <div
+                                    <div
                                       style={{
-                                        color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                                        color: custom
+                                          ? "#0f172a"
+                                          : customLayout?.color?.primary
+                                              ?.font_color || "#ffff",
                                       }}
                                     >
                                       {localStorage.getItem("c_name")
                                         ? localStorage
                                             .getItem("c_name")
                                             .charAt(0)
-                                            .toUpperCase() + localStorage.getItem("c_name").slice(1)
+                                            .toUpperCase() +
+                                          localStorage
+                                            .getItem("c_name")
+                                            .slice(1)
                                         : "Rb Travell"}
-                                    </div>    
+                                    </div>
                                     <small
-                                    style={{
-                                      color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
-                                    }}
+                                      style={{
+                                        color: custom
+                                          ? "#0f172a"
+                                          : customLayout?.color?.primary
+                                              ?.font_color || "#ffff",
+                                      }}
                                     >
                                       {localStorage.getItem("c_at")
                                         ? "Logged at " +
@@ -544,18 +577,20 @@ export default function Header() {
               {/* Button */}
               {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
                 <button
-                    data-collapse-toggle="navbar-sticky"
-                    type="button"
-                    style={{
-                      color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
-                      borderRadius: '0.5rem', // Equivalent to Tailwind's rounded-lg
-                      padding: '1rem 1rem', // Equivalent to py-4 px-4
-                      fontSize: '0.875rem', // Equivalent to text-sm
-                    }}
-                    className="md:mr-0 inline-flex items-center md:hidden focus:outline-none"
-                    aria-controls="navbar-sticky"
-                    aria-expanded="false"
-                  >
+                  data-collapse-toggle="navbar-sticky"
+                  type="button"
+                  style={{
+                    color: custom
+                      ? "#0f172a"
+                      : customLayout?.color?.primary?.font_color || "#ffff",
+                    borderRadius: "0.5rem",
+                    padding: "1rem 1rem",
+                    fontSize: "0.875rem",
+                  }}
+                  className="md:mr-0 inline-flex items-center md:hidden focus:outline-none"
+                  aria-controls="navbar-sticky"
+                  aria-expanded="false"
+                >
                   <span className="sr-only">Open main menu</span>
                   <button onClick={() => setIsDrawerOpen(true)}>
                     <svg
@@ -579,7 +614,9 @@ export default function Header() {
                     <Button
                       className="flex items-center px-8 py-4  md:hidden"
                       style={{
-                        color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
+                        color: custom
+                          ? "#0f172a"
+                          : customLayout?.color?.primary?.font_color || "#ffff",
                       }}
                       onClick={handleOpen}
                     >
@@ -601,7 +638,7 @@ export default function Header() {
               closable={true}
               onClose={onCloseDrawer}
               visible={isDrawerOpen}
-              bodyStyle={customStyle} // Terapkan gaya kustom pada isi drawer
+              bodyStyle={customStyle} 
             >
               <div style={{ textAlign: "center" }}>
                 <Avatar size={64} icon={<UserOutlined />} />
@@ -694,7 +731,7 @@ export default function Header() {
             >
               <Input.Password
                 onChange={(e) => setpin(e.target.value)}
-                value={pin} // Pastikan value sesuai dengan nilai state pin
+                value={pin}
                 required
               />
             </Form.Item>
@@ -709,7 +746,7 @@ export default function Header() {
               ]}
             >
               <ReCAPTCHA
-                ref={captchaRef} // Tambahkan ref ke reCAPTCHA
+                ref={captchaRef}
                 onChange={onChange}
                 sitekey="6LdGRpEoAAAAAOqcTSI_5GvfV0_FwqiyOAarv9KM"
               />

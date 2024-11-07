@@ -17,8 +17,8 @@ export default function ViewBooking({ path }) {
   const [isLoading, setIsLoading] = useState(false);
   const [loadBayar, setLoadBayar] = useState(true);
   const [messageApi, contextHolder] = message.useMessage();
-  const [loading, setLoading] = useState(false);
-  const handleOpen = () => setShowModal(true);
+  // const [loading, setLoading] = useState(false);
+  // const handleOpen = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
@@ -32,25 +32,6 @@ export default function ViewBooking({ path }) {
       setErr(true);
     }
   }, [token]);
-
-  function success() {
-    messageApi.open({
-      type: "success",
-      content:
-        "Pembayaran anda berhasil, silahkan check tiket anda di menu transaksi.",
-      duration: 7,
-    });
-  }
-
-  function gagal(rd) {
-    messageApi.open({
-      type: "error",
-      content: `Failed, ${
-        rd.toLowerCase().charAt(0).toUpperCase() + rd.slice(1).toLowerCase()
-      }`,
-      duration: 7,
-    });
-  }
 
   useEffect(() => {
     getTransaksiList();
@@ -94,9 +75,9 @@ export default function ViewBooking({ path }) {
     }, 1000);
   }
 
-  const handleBayar = async () => {
-    setLoading(true);
-  };
+  // const handleBayar = async () => {
+  //   setLoading(true);
+  // };
 
   const intervalRef = React.useRef(null);
 

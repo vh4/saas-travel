@@ -7,14 +7,14 @@ import { useLocation } from "react-router-dom";
 import _ from "lodash";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import { ImHome2 } from "react-icons/im";
 import Box from "@mui/material/Box";
-import { HiUser } from "react-icons/hi";
-import { IoIosListBox } from "react-icons/io";
-import { BsFillBookmarkStarFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { NavContext } from "../App";
 import { AiOutlineAppstore, AiOutlineHome } from "react-icons/ai";
+import { MdOutlineHistory } from "react-icons/md";
+// import { HiUser } from "react-icons/hi";
+// import { BsFillBookmarkStarFill } from "react-icons/bs";
+
 
 export default function LayoutUser({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState("block");
@@ -23,21 +23,24 @@ export default function LayoutUser({ children }) {
   const { nav, setNav } = useContext(NavContext);
 
   const pathSidebar = location.pathname.toString();
-  const token = JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API));
+  const token = JSON.parse(
+    localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+  );
 
   return (
     <div className="flex flex-col min-h-screen">
       <Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
 
-        <div className="flex-grow md:flex relative ml-0 md:ml-16 xl:ml-0 2xl:ml-0 mt-4 md:mt-0 md:justify-center">
-       {token === null || token === undefined ? (<>
-       </>) : (
+      <div className="flex-grow md:flex relative ml-0 md:ml-16 xl:ml-0 2xl:ml-0 mt-4 md:mt-0 md:justify-center">
+        {token === null || token === undefined ? (
+          <></>
+        ) : (
           <div
             className={`${sidebarOpen} w-full md:w-1/2 xl:w-auto 2xl:w-auto md:block xl:block 2xl:block`}
           >
             <Sidebar pathSidebar={pathSidebar} />
           </div>
-       )}
+        )}
 
         <div
           className={
@@ -75,13 +78,19 @@ export default function LayoutUser({ children }) {
               label="Booking"
               icon={<BsFillBookmarkStarFill size={18} />}
             /> */}
-            <BottomNavigationAction
+            {/* <BottomNavigationAction
               to="/transaksi/pesawat"
               className="text-black"
               component={Link}
               label="Transaksi"
               icon={<AiOutlineAppstore className="text-black" size={20} />}
-            />
+            /> */}
+              <BottomNavigationAction
+                to="/transaksi/history_idpel"
+                component={Link}
+                label="List Penumpang"
+                icon={<MdOutlineHistory size={20} />}
+              />
             {/* <BottomNavigationAction
               to="/profile/view"
               component={Link}
@@ -91,9 +100,7 @@ export default function LayoutUser({ children }) {
           </BottomNavigation>
         </Box>
       </div>
-
       {/* <Footer/> */}
-
       {/* <footer className="hidden md:block border-t text-sm text-black py-6">
         <div className="container mx-auto">
           <p className="text-center">

@@ -1,6 +1,5 @@
 import moment from "moment";
 
-//parseTanggal Pembayaran Pelni.
 export const parseTanggal = (d) => {
   var date = new Date(d);
   var tahun = date.getFullYear();
@@ -332,22 +331,14 @@ function addLeadingZero(num) {
   return num < 10 ? `0${num}` : num;
 }
 
-// Fungsi untuk menghitung total durasi dari array data kereta
 export const calculateTotalDurationTransit = (trains) => {
   if (trains.length === 0) return '0 jam 0 menit';
 
-  // Getting the first train's departure datetime
   const firstTrain = trains[0];
   const firstDeparture = moment(`${firstTrain.departureDate} ${firstTrain.departureTime}`, 'YYYY-MM-DD HH:mm');
-
-  // Getting the last train's arrival datetime
   const lastTrain = trains[trains.length - 1];
   const lastArrival = moment(`${lastTrain.arrivalDate} ${lastTrain.arrivalTime}`, 'YYYY-MM-DD HH:mm');
-
-  // Calculating the duration
   const duration = moment.duration(lastArrival.diff(firstDeparture));
-
-  // Extracting hours and minutes
   const hours = duration.hours();
   const minutes = duration.minutes();
 
@@ -356,42 +347,32 @@ export const calculateTotalDurationTransit = (trains) => {
 
 
 export function convertDateToIndonesian(dateString) {
-  // Definisikan nama hari dan bulan dalam Bahasa Indonesia
+
   const days = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Des'];
-
-  // Pisahkan informasi zona waktu dari string tanggal
   const [datePart, timePart, timeZone] = dateString.split(' ');
-
-  // Konversi string tanggal dan waktu ke objek Date JavaScript
-  // Karena JavaScript tidak mendukung format zona waktu custom seperti WITA atau WIB,
-  // kita perlu mengkonversi waktu ke UTC+8 untuk WITA dan UTC+7 untuk WIB secara manual jika diperlukan.
-  let date = new Date(datePart + 'T' + timePart + 'Z'); // Konversi sementara ke UTC
+  let date = new Date(datePart + 'T' + timePart + 'Z');
   
   if (timeZone === 'WITA') {
-    // Tambahkan 8 jam dari UTC untuk WITA
     date.setHours(date.getHours() + 8);
   } else if (timeZone === 'WIB') {
-    // Tambahkan 7 jam dari UTC untuk WIB
     date.setHours(date.getHours() + 7);
   }
 
-  // Format tanggal ke dalam format yang diinginkan
   const dayName = days[date.getDay()];
   const dateNumber = date.getDate();
   const monthName = months[date.getMonth()];
   const year = date.getFullYear();
-
-  // Kembalikan string tanggal yang telah diformat
   return `${dayName}, ${dateNumber} ${monthName} ${year} (${timeZone})`;
+
 }
 
 export function extractTimeWithTimeZone(dateString) {
-  // Pisahkan tanggal menjadi komponen-komponen (tanggal, waktu, zona waktu)
-  const parts = dateString.split(' ');
-  const timePart = parts[1]; // Ambil bagian waktu
-  const timeZone = parts[2]; // Ambil zona waktu
 
-  // Kembalikan waktu dan zona waktu dalam format yang diinginkan
+  const parts = dateString.split(' ');
+  const timePart = parts[1];
+  const timeZone = parts[2]; 
+
   return `${timePart} (${timeZone})`;
+
 }

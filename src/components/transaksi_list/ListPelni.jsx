@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { AiOutlineHome } from "react-icons/ai";
 import { BsArrowRightShort } from "react-icons/bs";
 import axios from "axios";
 import { Modal, message } from "antd";
@@ -21,8 +20,8 @@ export default function ViewBooking({ path }) {
   const [isLoading, setIsLoading] = useState(false);
   const [loadBayar, setLoadBayar] = useState(true);
   const [messageApi, contextHolder] = message.useMessage();
-  const [loading, setLoading] = useState(false);
-  const handleOpen = () => setShowModal(true);
+  // const [loading, setLoading] = useState(false);
+  // const handleOpen = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
@@ -32,34 +31,14 @@ export default function ViewBooking({ path }) {
   const [errPage, setErrPage] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const hardcode_inq = searchParams.get('hc_inq')
-  const hardcode_pay = searchParams.get('hc_pay')
-
+  const hardcode_inq = searchParams.get("hc_inq");
+  const hardcode_pay = searchParams.get("hc_pay");
 
   useEffect(() => {
     if (token == null || token == undefined) {
       setErr(true);
     }
   }, [token]);
-
-  function success() {
-    messageApi.open({
-      type: "success",
-      content:
-        "Pembayaran anda berhasil, silahkan check tiket anda di menu transaksi.",
-      duration: 7,
-    });
-  }
-
-  function gagal(rd) {
-    messageApi.open({
-      type: "error",
-      content: `Failed, ${
-        rd.toLowerCase().charAt(0).toUpperCase() + rd.slice(1).toLowerCase()
-      }`,
-      duration: 7,
-    });
-  }
 
   useEffect(() => {
     getTransaksiList();
@@ -86,16 +65,81 @@ export default function ViewBooking({ path }) {
       const datas = response.data;
       let resp = datas.data || [];
 
-      const harcodeDataInq = { "id_transaksi": 293892199, "tanggal_transaksi": "Jumat, 22 Maret 2024", "kode_booking": "8890583925", "nama_kapal": "KM.KELUD", "origin": "TANJUNG PRIOK (JAKARTA)", "destination": "BELAWAN (MEDAN)", "tanggal_keberangkatan": "20240322", "hari_keberangkatan": "Jumat", "jam_keberangkatan": "23:00", "tanggal_kedatangan": "20240325", "hari_kedatangan": "Senin", "subClass": "C", "jam_kedatangan": "15:00", "penumpang": [ { "nama": "Komang J" } ], "komisi": 0, "url_etiket": "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=293892199", "url_struk": "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=293892199", "expiredDate": dayjs().add(1, "hours"), "url_image": "https://rajabiller.fastpay.co.id/travel/app/generate_image_etiket?id_transaksi=293892199", "nominal": "964000", "nominal_admin": "10000", "status": { "id_transaksi": 293892199, "paymentCode": "8890583925", "Produk": "Tiket Pelni", "Status": "Booking", "status_booking": "Sukses", "status_payment": "Belum ada payment" } }
-      const harcodeDataPay =  { "id_transaksi": 293887921, "tanggal_transaksi": "Jumat, 22 Maret 2024", "kode_booking": "8830480474", "nama_kapal": "KM.KELUD", "origin": "TANJUNG PRIOK (JAKARTA)", "destination": "BELAWAN (MEDAN)", "tanggal_keberangkatan": "20240322", "hari_keberangkatan": "Jumat", "jam_keberangkatan": "23:00", "tanggal_kedatangan": "20240325", "hari_kedatangan": "Senin", "subClass": "A", "jam_kedatangan": "15:00", "penumpang": [ { "nama": "Fathoni Waseso J" } ], "komisi": 0, "url_etiket": "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=293887921", "url_struk": "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=293887921", "expiredDate": dayjs().add(1, "hours"), "url_image": "https://rajabiller.fastpay.co.id/travel/app/generate_image_etiket?id_transaksi=293887921", "nominal": "1720000", "nominal_admin": "10000", "status": { "id_transaksi": 293887921, "paymentCode": "8830480474", "Produk": "Tiket Pelni", "Status": "Payment", "status_booking": "Sukses", "status_payment": "Sukses" }}
+      const harcodeDataInq = {
+        id_transaksi: 293892199,
+        tanggal_transaksi: "Jumat, 22 Maret 2024",
+        kode_booking: "8890583925",
+        nama_kapal: "KM.KELUD",
+        origin: "TANJUNG PRIOK (JAKARTA)",
+        destination: "BELAWAN (MEDAN)",
+        tanggal_keberangkatan: "20240322",
+        hari_keberangkatan: "Jumat",
+        jam_keberangkatan: "23:00",
+        tanggal_kedatangan: "20240325",
+        hari_kedatangan: "Senin",
+        subClass: "C",
+        jam_kedatangan: "15:00",
+        penumpang: [{ nama: "Komang J" }],
+        komisi: 0,
+        url_etiket:
+          "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=293892199",
+        url_struk:
+          "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=293892199",
+        expiredDate: dayjs().add(1, "hours"),
+        url_image:
+          "https://rajabiller.fastpay.co.id/travel/app/generate_image_etiket?id_transaksi=293892199",
+        nominal: "964000",
+        nominal_admin: "10000",
+        status: {
+          id_transaksi: 293892199,
+          paymentCode: "8890583925",
+          Produk: "Tiket Pelni",
+          Status: "Booking",
+          status_booking: "Sukses",
+          status_payment: "Belum ada payment",
+        },
+      };
+      const harcodeDataPay = {
+        id_transaksi: 293887921,
+        tanggal_transaksi: "Jumat, 22 Maret 2024",
+        kode_booking: "8830480474",
+        nama_kapal: "KM.KELUD",
+        origin: "TANJUNG PRIOK (JAKARTA)",
+        destination: "BELAWAN (MEDAN)",
+        tanggal_keberangkatan: "20240322",
+        hari_keberangkatan: "Jumat",
+        jam_keberangkatan: "23:00",
+        tanggal_kedatangan: "20240325",
+        hari_kedatangan: "Senin",
+        subClass: "A",
+        jam_kedatangan: "15:00",
+        penumpang: [{ nama: "Fathoni Waseso J" }],
+        komisi: 0,
+        url_etiket:
+          "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=293887921",
+        url_struk:
+          "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=293887921",
+        expiredDate: dayjs().add(1, "hours"),
+        url_image:
+          "https://rajabiller.fastpay.co.id/travel/app/generate_image_etiket?id_transaksi=293887921",
+        nominal: "1720000",
+        nominal_admin: "10000",
+        status: {
+          id_transaksi: 293887921,
+          paymentCode: "8830480474",
+          Produk: "Tiket Pelni",
+          Status: "Payment",
+          status_booking: "Sukses",
+          status_payment: "Sukses",
+        },
+      };
 
-
-      if (hardcode_pay === '2') {
-        resp = [harcodeDataPay, ...resp]; // Append if not present
+      if (hardcode_pay === "2") {
+        resp = [harcodeDataPay, ...resp];
       }
-  
-      if (hardcode_inq === '2') {
-        resp = [harcodeDataInq, ...resp]; // Append if not present
+
+      if (hardcode_inq === "2") {
+        resp = [harcodeDataInq, ...resp];
       }
 
       setData(resp);
@@ -117,9 +161,9 @@ export default function ViewBooking({ path }) {
     }, 1000);
   }
 
-  const handleBayar = async () => {
-    setLoading(true);
-  };
+  // const handleBayar = async () => {
+  //   setLoading(true);
+  // };
 
   const intervalRef = React.useRef(null);
 
@@ -191,7 +235,7 @@ export default function ViewBooking({ path }) {
             <div className="mt-4 mb-12">
               {byrdata.penumpang.map((e) => (
                 <>
-                <div className="border-b p-4 grid grid-cols-1 md:grid-cols-5 gap-4 mt-4">
+                  <div className="border-b p-4 grid grid-cols-1 md:grid-cols-5 gap-4 mt-4">
                     <div className="text-xs">
                       <div className="">Nama</div>
                       <div>{e.nama}</div>
@@ -199,12 +243,12 @@ export default function ViewBooking({ path }) {
                   </div>
                 </>
               ))}
-            <div className="p-2 flex space-x-2 items-center mt-4">
-              <CiBoxList size={16}/>
-              <div className="text-xs">Deskripsi</div>
-            </div>
+              <div className="p-2 flex space-x-2 items-center mt-4">
+                <CiBoxList size={16} />
+                <div className="text-xs">Deskripsi</div>
+              </div>
               {/* desktop */}
-			  <div className="p-4 w-full hidden xl:gap-4 lg:grid lg:grid-cols-10">
+              <div className="p-4 w-full hidden xl:gap-4 lg:grid lg:grid-cols-10">
                 <div className="col-span-2">
                   <div className="text-xs">{byrdata.nama_kapal} </div>
                   <small>Subclass {byrdata.subClass}</small>
@@ -380,35 +424,36 @@ export default function ViewBooking({ path }) {
                 data !== undefined &&
                 data.length !== undefined &&
                 data.length !== 0 ? (
-					        <div className="mt-4 xl:mt-8">
+                  <div className="mt-4 xl:mt-8">
                     {data.map((e, i) => (
-                        <div className="mt-4 xl:mt-0">
+                      <div className="mt-4 xl:mt-0">
                         <div className="w-full profile-header">
                           <div className="p-2 md:px-8 md:py-6 mt-4 mb-8 md:mb-0 md:mt-0">
                             <div className="flex justify-between items-end">
-                              {
-                              !e.status?.status_payment?.toUpperCase()?.includes('SUKSES')  ? (
-                              <>
-                                <div className="flex space-x-2  items-end">
-                                  <div className="text-xs text-black">
-                                    Id Transaksi
+                              {!e.status?.status_payment
+                                ?.toUpperCase()
+                                ?.includes("SUKSES") ? (
+                                <>
+                                  <div className="flex space-x-2  items-end">
+                                    <div className="text-xs text-black">
+                                      Id Transaksi
+                                    </div>
+                                    <div className="text-xs text-blue-500">
+                                      {e.id_transaksi}
+                                    </div>
                                   </div>
-                                  <div className="text-xs text-blue-500">
-                                    {e.id_transaksi}
-                                  </div>
-                                </div>
-                              </>
+                                </>
                               ) : (
-                              <>
-                              <div className="flex space-x-2  items-end">
-                                <div className="text-xs text-black">
-                                  Kode Booking
-                                </div>
-                                <div className="text-xs text-blue-500">
-                                  {e.kode_booking}
-                                </div>
-                              </div>                             
-                              </>
+                                <>
+                                  <div className="flex space-x-2  items-end">
+                                    <div className="text-xs text-black">
+                                      Kode Booking
+                                    </div>
+                                    <div className="text-xs text-blue-500">
+                                      {e.kode_booking}
+                                    </div>
+                                  </div>
+                                </>
                               )}
                               <div className="text-xs text-black">
                                 Rp. {toRupiah(e.nominal)}
@@ -444,11 +489,12 @@ export default function ViewBooking({ path }) {
                                  - 
                               </div>
                             </div> */}
-                                  <div className="flex justify-between space-x-0 xl:space-x-4 items-center pt-4 xl:pt-4">
-                                    <div className="flex space-x-4 items-center">
-                                    {
-                                      !e.status?.status_payment?.toUpperCase()?.includes('SUKSES')  ? (
-                                      <>
+                              <div className="flex justify-between space-x-0 xl:space-x-4 items-center pt-4 xl:pt-4">
+                                <div className="flex space-x-4 items-center">
+                                  {!e.status?.status_payment
+                                    ?.toUpperCase()
+                                    ?.includes("SUKSES") ? (
+                                    <>
                                       <div className="flex space-x-2 items-center text-xs py-1 text-black">
                                         <CiTimer size={16} />
                                         <div>
@@ -459,37 +505,40 @@ export default function ViewBooking({ path }) {
                                             : " habis."}
                                         </div>
                                       </div>
-                                      </>
-                                      )                                        
-                                      : (
-                                        <>
-                                          <div className="text-xs py-1 px-3 rounded-full bg-green-500 text-white">
-                                            Transaksi Sukses
-                                          </div>                                   
-                                        </>
-                                      )
-                                    }
-                                    {e.status?.status_payment?.toUpperCase()?.includes('SUKSES')  &&  (
-                                      <>
-                                        <a href={`https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=${e.status.id_transaksi}`} target="_blank">
-                                          <div className="flex space-x-2 items-center text-black">
-                                            <HiOutlinePrinter size={16} />
-                                            <div className="text-xs">Cetak</div>
-                                          </div>
-                                        </a>
-                                      </>
-                                    )}
-                                    <div className="flex space-x-2 items-center">
-                                      <CiCircleMore size={16} />                                    
+                                    </>
+                                  ) : (
+                                    <>
+                                      <div className="text-xs py-1 px-3 rounded-full bg-green-500 text-white">
+                                        Transaksi Sukses
+                                      </div>
+                                    </>
+                                  )}
+                                  {e.status?.status_payment
+                                    ?.toUpperCase()
+                                    ?.includes("SUKSES") && (
+                                    <>
                                       <a
-                                        onClick={(e) => openModalBayar(e, i)}
-                                        className="cursor-pointer text-black text-xs hover:text-black"
+                                        href={`https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=${e.status.id_transaksi}`}
+                                        target="_blank"
                                       >
-                                        Lihat Detail
+                                        <div className="flex space-x-2 items-center text-black">
+                                          <HiOutlinePrinter size={16} />
+                                          <div className="text-xs">Cetak</div>
+                                        </div>
                                       </a>
-                                    </div>
-                                    </div>
+                                    </>
+                                  )}
+                                  <div className="flex space-x-2 items-center">
+                                    <CiCircleMore size={16} />
+                                    <a
+                                      onClick={(e) => openModalBayar(e, i)}
+                                      className="cursor-pointer text-black text-xs hover:text-black"
+                                    >
+                                      Lihat Detail
+                                    </a>
                                   </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>

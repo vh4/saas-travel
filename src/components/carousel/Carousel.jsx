@@ -8,11 +8,9 @@ export default function Carousels(props) {
     return <></>;
   };
 
-  const SlickArrowLeft = () => {
-    return <></>;
-  };
-
-  const customLayout = localStorage.getItem("v-data2") ? JSON.parse(localStorage.getItem("v-data2")) : '';
+  const customLayout = localStorage.getItem("v-data2")
+    ? JSON.parse(localStorage.getItem("v-data2"))
+    : "";
 
   var settings = {
     dots: true,
@@ -28,8 +26,8 @@ export default function Carousels(props) {
     swipeToSlide: true,
     accessibility: true,
     autoplaySpeed: 2000,
-    centerMode: true, // Menyertakan centerMode
-    centerPadding: "50px", // Sesuaikan dengan jumlah padding yang Anda inginkan
+    centerMode: true,
+    centerPadding: "50px",
     responsive: [
       {
         breakpoint: 1024,
@@ -63,43 +61,44 @@ export default function Carousels(props) {
       <div className="hidden xl:block ">
         <div
           style={{
-            color: customLayout?.color?.primary?.font_color || 'white',
-            paddingLeft: '3rem', // Equivalent to pl-12
-            display: 'flex',
-            gap: '1rem', // Equivalent to space-x-4
+            color: customLayout?.color?.primary?.font_color || "white",
+            paddingLeft: "3rem", 
+            display: "flex",
+            gap: "1rem", 
           }}
         >
           <img src="/join.svg" width={160} alt="carousal.png" />
           <div>
             <h1
               style={{
-                paddingLeft: '2rem', // Equivalent to 2xl:px-8
-                fontSize: '1.25rem', // Equivalent to text-xl
-                fontWeight: 'bold',
+                paddingLeft: "2rem", 
+                fontSize: "1.25rem", 
+                fontWeight: "bold",
               }}
             >
-              {customLayout?.wording?.primary ?? 'Hai Traveller,'}
+              {customLayout?.wording?.primary ?? "Hai Traveller,"}
             </h1>
             <div
               style={{
-                marginTop: '0.5rem', // Equivalent to mt-2
-                paddingLeft: '2rem', // Equivalent to 2xl:px-8
+                marginTop: "0.5rem", 
+                paddingLeft: "2rem", 
               }}
             >
-              <div style={{ marginTop: '1rem' }}>
-                {Array.isArray(customLayout?.wording?.secondary?.desktop) && customLayout?.wording?.secondary?.desktop[0]
+              <div style={{ marginTop: "1rem" }}>
+                {Array.isArray(customLayout?.wording?.secondary?.desktop) &&
+                customLayout?.wording?.secondary?.desktop[0]
                   ? customLayout?.wording?.secondary?.desktop[0]
                   : `Cukup login ke akun Anda dan melakukan pemesanan tiket untuk berbagai macam perjalanan anda.`}
               </div>
-              <div style={{ marginTop: '1.5rem' }}>
-                {Array.isArray(customLayout?.wording?.secondary?.desktop) && customLayout?.wording?.secondary?.desktop[1]
+              <div style={{ marginTop: "1.5rem" }}>
+                {Array.isArray(customLayout?.wording?.secondary?.desktop) &&
+                customLayout?.wording?.secondary?.desktop[1]
                   ? customLayout?.wording?.secondary?.desktop[1]
                   : `Nikmati perjalanan anda di beberapa menu travel kereta, kapal, dan pesawat anda.`}
               </div>
             </div>
           </div>
         </div>
-
       </div>
       <Slider {...settings}>
         <div className="flex justify-center px-2">

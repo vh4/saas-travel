@@ -8,7 +8,9 @@ export default function CarouselsMobile(props) {
     return <></>;
   };
 
-  const customLayout = localStorage.getItem("v-data2") ? JSON.parse(localStorage.getItem("v-data2")) : '';
+  const customLayout = localStorage.getItem("v-data2")
+    ? JSON.parse(localStorage.getItem("v-data2"))
+    : "";
 
   var settings = {
     dots: true,
@@ -55,17 +57,18 @@ export default function CarouselsMobile(props) {
 
   return (
     <div className="xl:grid xl:grid-cols-2 w-full px-0 xl:px-4 xl:py-8">
-      <div className={`block md:hidden px-4 mb-4`}
-      style={{    
-               color: customLayout?.color?.secondary?.font_color || '#ffff',
-            }}
+      <div
+        className={`block md:hidden px-4 mb-4`}
+        style={{
+          color: customLayout?.color?.secondary?.font_color || "#ffff",
+        }}
       >
         <div className="font-semibold text-sm">Hai traveller,</div>
         <div className="text-xs mt-6">
-                {Array.isArray(customLayout?.wording?.secondary?.desktop) && customLayout?.wording?.secondary?.mobile 
-                  ? customLayout?.wording?.secondary?.mobile
-                  : `Cukup login ke akun Anda dan melakukan pemesanan tiket untuk berbagai macam perjalanan anda.`
-                }
+          {Array.isArray(customLayout?.wording?.secondary?.desktop) &&
+          customLayout?.wording?.secondary?.mobile
+            ? customLayout?.wording?.secondary?.mobile
+            : `Cukup login ke akun Anda dan melakukan pemesanan tiket untuk berbagai macam perjalanan anda.`}
         </div>
       </div>
       <Slider {...settings}>

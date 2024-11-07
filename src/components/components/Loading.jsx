@@ -10,7 +10,7 @@ export const Loading = () => {
           <Sider width={400} theme="light" style={{ padding: "12px" }}>
             <Content style={{ padding: "12px", marginTop: "8px" }}>
               <Skeleton
-                style={{ width: "100%", background: "#fff" }} // Tambahkan background putih di sini
+                style={{ width: "100%", background: "#fff" }}
                 active={true}
                 paragraph={{ rows: 8 }}
               />
@@ -18,7 +18,7 @@ export const Loading = () => {
           </Sider>
           <Content style={{ padding: "12px", marginTop: "16px", background:"#fff" }}>
             <Skeleton
-              style={{ width: "100%"}} // Tambahkan background putih di sini
+              style={{ width: "100%"}}
               active={true}
               paragraph={{ rows: 14 }}
             />

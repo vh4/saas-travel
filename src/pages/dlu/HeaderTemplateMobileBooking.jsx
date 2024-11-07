@@ -1,7 +1,6 @@
 import React from "react";
-import { IoArrowBack, IoArrowForwardCircle, IoCheckmarkCircle } from "react-icons/io5";
-import { MdHorizontalRule } from "react-icons/md";
-import { RxCheckCircled, RxCrossCircled } from "react-icons/rx";
+import { IoArrowBack, IoCheckmarkCircle } from "react-icons/io5";
+import { RxCrossCircled } from "react-icons/rx";
 
 export default function HeaderTemplateMobileBooking({ children }) {
 

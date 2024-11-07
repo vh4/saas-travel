@@ -4,14 +4,9 @@ import { useSearchParams } from "react-router-dom";
 import { parseTanggal } from "../../helpers/date";
 
 export default function HeaderTemplateMobileSearch({ children }) {
+  const [searchParams, setSearchParams] = useSearchParams();
 
-	const [searchParams, setSearchParams] = useSearchParams();
-
-  const origin = searchParams.get("origin");
-  const destination = searchParams.get("destination");
   const date = searchParams.get("date");
-  // const kotaBerangkat = searchParams.get("kotaBerangkat");
-  // const kotaTujuan = searchParams.get("kotaTujuan");
   const stasiunBerangkat = searchParams.get("stasiunBerangkat");
   const stasiunTujuan = searchParams.get("stasiunTujuan");
   const adult = searchParams.get("adult");
@@ -22,23 +17,29 @@ export default function HeaderTemplateMobileSearch({ children }) {
   return (
     <div className="flex flex-col min-h-screen">
       <div>
-      <div className="block md:hidden">
-      <div className="flex justify-center items-center w-full text-black p-2.5">
+        <div className="block md:hidden">
+          <div className="flex justify-center items-center w-full text-black p-2.5">
             <div className="ml-2" onClick={() => window.history.back()}>
-                <IoArrowBack size={22} />
+              <IoArrowBack size={22} />
             </div>
             <div className="flex flex-col items-center justify-center text-center mx-auto">
-                <div className="flex space-x-4 items-center justify-center text-xs">
-                    <div>{stasiunBerangkat}</div>
-                    <IoArrowForwardCircle className="block text-blue-500" size={24} />
-                    <div>{stasiunTujuan}</div>
-                </div>
-                <div className="text-xs">
-                  <small>{tanggal_keberangkatan_kereta} ⍟ {parseInt(adult) + parseInt(infant)}{" "} Penumpang</small>
-                </div>
+              <div className="flex space-x-4 items-center justify-center text-xs">
+                <div>{stasiunBerangkat}</div>
+                <IoArrowForwardCircle
+                  className="block text-blue-500"
+                  size={24}
+                />
+                <div>{stasiunTujuan}</div>
+              </div>
+              <div className="text-xs">
+                <small>
+                  {tanggal_keberangkatan_kereta} ⍟{" "}
+                  {parseInt(adult) + parseInt(infant)} Penumpang
+                </small>
+              </div>
             </div>
+          </div>
         </div>
-      </div>
       </div>
       <div className="flex-grow">
         <div className="container mx-auto px-0 xl:px-32">

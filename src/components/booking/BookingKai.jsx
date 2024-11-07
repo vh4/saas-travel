@@ -33,7 +33,7 @@ export default function ViewBooking({ path }) {
     }
   }, [token]);
 
-  const handleOpen = () => setShowModal(true);
+  // const handleOpen = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
 
   function success() {

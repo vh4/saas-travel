@@ -7,12 +7,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Popper } from "@mui/material";
 import { IoBoatSharp } from "react-icons/io5";
-import { useNavigate, createSearchParams } from "react-router-dom";
 import onClickOutside from "react-onclickoutside";
 import { makeStyles } from "@mui/styles";
-import { DateRangePicker, InputGroup } from "rsuite";
+import { InputGroup } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
-import { Button, DatePicker, Select, message } from "antd";
+import { Button, Select, message } from "antd";
 import Cookies from "js-cookie";
 import { AiOutlineSwap } from "react-icons/ai";
 import dayjs from "dayjs";
@@ -63,11 +62,8 @@ function DLU() {
     setAnchorEl("hidden");
   };
 
-  const navigate = useNavigate();
-
   const [isLoading, setLoading] = React.useState(false);
   const [DLUStasiun, setDLUStasiun] = React.useState({});
-
   const [openBerangka, SetopenBerangka] = React.useState(false);
   const [openTujuan, setOpenTujuan] = React.useState(false);
 
@@ -75,12 +71,9 @@ function DLU() {
   const loadingBerangkat = openBerangka && DLUData.length === 0;
   const loadingTujuan = openTujuan && DLUData.length === 0;
   const [messageApi, contextHolder] = message.useMessage();
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-
   const [type_vehicle, settype_vehicle] = useState([]);
   const [class_passengers, setclass_passengers] = useState([]);
   const [type_passanger, settype_passanger] = useState([]);
-
   const [openDate, setOpenDate] = React.useState(false);
   const handleOpenDate = () => setOpenDate(true);
   const handleCloseDate = () => {
@@ -89,8 +82,8 @@ function DLU() {
   const [currentViewDate, setCurrentViewDate] = useState(dayjs());
 
   const findHolidayDescriptionsForMonth = (date) => {
-    const month = date.month(); // Bulan dari tanggal yang sedang dilihat
-    const year = date.year(); // Bulan dari tanggal yang sedang dilihat
+    const month = date.month();
+    const year = date.year();
 
     const holidaysInMonth = holidays.filter(
       (holiday) =>
@@ -115,7 +108,7 @@ function DLU() {
         sx={{
           color:
             (isSunday || isHoliday) && !outsideCurrentMonth ? "red" : "inherit",
-          backgroundColor: isHoliday ? "#ffecb3" : "inherit", // Opsional: tambah warna latar untuk hari libur
+          backgroundColor: isHoliday ? "#ffecb3" : "inherit",
         }}
       />
     );
@@ -125,9 +118,9 @@ function DLU() {
     messageApi.open({
       type: "error",
       content: "Pelabuhan Asal tidak boleh sama dengan Pelabuhan Tujuan.",
-      duration: 10, // Durasi pesan 5 detik
-      top: "50%", // Posisi pesan di tengah layar
-      className: "custom-message", // Tambahkan kelas CSS kustom jika diperlukan
+      duration: 10,
+      top: "50%",
+      className: "custom-message",
     });
   };
 
@@ -135,9 +128,9 @@ function DLU() {
     messageApi.open({
       type: "error",
       content: "Pelabuhan Tujuan tidak boleh sama dengan Pelabuhan Asal.",
-      duration: 10, // Durasi pesan 5 detik
-      top: "50%", // Posisi pesan di tengah layar
-      className: "custom-message", // Tambahkan kelas CSS kustom jika diperlukan
+      duration: 10,
+      top: "50%",
+      className: "custom-message",
     });
   };
 
@@ -145,9 +138,9 @@ function DLU() {
     messageApi.open({
       type: "error",
       content: message,
-      duration: 10, // Durasi pesan 5 detik
-      top: "50%", // Posisi pesan di tengah layar
-      className: "custom-message", // Tambahkan kelas CSS kustom jika diperlukan
+      duration: 10,
+      top: "50%",
+      className: "custom-message",
     });
   };
 
@@ -298,7 +291,7 @@ function DLU() {
     }
 
     (async () => {
-      await sleep(1e3); // For demo purposes.
+      await sleep(1e3);
 
       if (active) {
         setDLUData([...DLUStasiun.data]);
@@ -325,7 +318,7 @@ function DLU() {
     }
 
     (async () => {
-      await sleep(1e3); // For demo purposes.
+      await sleep(1e3);
 
       if (active) {
         setDLUData([...DLUStasiun.data]);
@@ -452,7 +445,7 @@ function DLU() {
     const type_passangers = response.data.data.type_passanger;
     const type_passangersParsing = type_passangers
       ? type_passangers.map((item) => ({
-          value: parseInt(item.id, 10), // Mengubah id menjadi integer
+          value: parseInt(item.id, 10),
           label: item.name,
         }))
       : [];
@@ -460,7 +453,7 @@ function DLU() {
     const type_vehicles = response.data.data.type_vehicle;
     const type_vehiclesParsingData = type_vehicles
       ? type_vehicles.map((item) => ({
-          value: parseInt(item.id, 10), // Mengubah id menjadi integer
+          value: parseInt(item.id, 10),
           label: item.name,
         }))
       : [];
@@ -468,7 +461,7 @@ function DLU() {
     const class_passangerses = response.data.data.class_passanger;
     const class_passangersesParsingData = class_passangerses
       ? class_passangerses.map((item) => ({
-          value: parseInt(item.id, 10), // Mengubah id menjadi integer
+          value: parseInt(item.id, 10),
           label: item.name,
         }))
       : [];
@@ -613,14 +606,13 @@ function DLU() {
 
         var str = "";
         for (var key in params) {
-            if (str != "") {
-                str += "&";
-            }
-            str += key + "=" + encodeURIComponent(params[key]);
-        } 
-        
-        window.location = `/dlu/search?${str}`; 
-        
+          if (str != "") {
+            str += "&";
+          }
+          str += key + "=" + encodeURIComponent(params[key]);
+        }
+
+        window.location = `/dlu/search?${str}`;
       }
     }, 1000);
   }

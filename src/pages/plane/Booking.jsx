@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import Layout from "../BookingLayout";
 import BookingPesawatComponent from "../../components/plane/Booking";
-import HeaderTemplateMobileSearch from "./HeaderTemplateMobileBooking";
 import HeaderTemplateMobileBooking from "./HeaderTemplateMobileBooking";
 
 export default function Booking(){

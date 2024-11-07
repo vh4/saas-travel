@@ -1,6 +1,5 @@
-import React, { useState, useContext } from "react";
-import { FaUserCircle, FaListAlt } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import {
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,
@@ -10,13 +9,38 @@ import { notification } from "antd";
 import { IoExitOutline } from "react-icons/io5";
 import { LogoutContent } from "../../../../App";
 import { AiOutlineAppstore } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import Skeleton from "react-loading-skeleton";
+import { fetchDataType, setLoading, setType } from "../../../../features/createSlice";
 
-export default function SidebarMobileUser({ pathSidebar }) {
+export default function SidebarMobileUser() {
   const [dropdownTransaksi, setDropdownTransaksi] = useState(false);
-  const [dropdownBooking, setDropdownBooking] = useState(false);
   const [api, contextHolder] = notification.useNotification();
   const { setLogout } = useContext(LogoutContent);
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  const type = useSelector((state) => state.type.data.type);
+  const isLoading = useSelector((state) => state.type.isLoading);
+  
+  const [searchParams, setSearchParams] = useSearchParams();
+  const urlForLogin = window.location.pathname;
+
+  const location = useLocation();
+  // Get the last segment of the path
+  let lastSegment = location.pathname.split("/").filter(Boolean).pop();
+      lastSegment = lastSegment == 'kai' ? 'kereta' : lastSegment;
+
+  useEffect(() => {
+
+    if(urlForLogin === "/" && searchParams.size == 0){
+      dispatch(fetchDataType());
+    }else{
+      dispatch(setType(lastSegment));
+      dispatch(setLoading(false));
+    }
+
+  }, [dispatch, type]); //
 
   const suksesLogout = () => {
     api["success"]({
@@ -44,13 +68,12 @@ export default function SidebarMobileUser({ pathSidebar }) {
         });
 
         navigate("/logout");
-
       });
-  }
+  };
 
   return (
     <aside className="w-full" aria-label="Sidebar">
-        {contextHolder}
+      {contextHolder}
       <div className="mt-4">
         <ul className="mt-0 space-y-2 relative">
           <>
@@ -69,39 +92,60 @@ export default function SidebarMobileUser({ pathSidebar }) {
                 </span>
               </div>
               {dropdownTransaksi ? (
-                <MdOutlineKeyboardArrowDown
-                  className="text-black"
-                  size={18}
-                />
+                <MdOutlineKeyboardArrowDown className="text-black" size={18} />
               ) : (
                 <MdOutlineKeyboardArrowUp className="text-black" size={18} />
               )}
             </div>
             <div className={`${!dropdownTransaksi ? "block" : "hidden"}`}>
-              <Link
-                to="/transaksi/kai"
-                className={` block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}
-              >
-                <div className="text-black text-base text-left font-normal">
-                  Kereta
+              {(isLoading || type === "auth" || type === "kereta") && (
+                <div className="">
+                  {isLoading ? (
+                    <Skeleton height={20} width={150} />
+                  ) : (
+                    <Link
+                      to="/transaksi/kai"
+                      className={` block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}
+                    >
+                      <div className="text-black text-base text-left font-normal">
+                        Kereta
+                      </div>
+                    </Link>
+                  )}
                 </div>
-              </Link>
-              <Link
-                to="/transaksi/pesawat"
-                className={`block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}
-              >
-                <div className="text-black text-left text-base font-normal">
-                  Pesawat
+              )}
+              {(isLoading || type === "auth" || type === "pesawat") && (
+                <div className="">
+                  {isLoading ? (
+                    <Skeleton height={20} width={150} />
+                  ) : (
+                    <Link
+                      to="/transaksi/pesawat"
+                      className={`block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}
+                    >
+                      <div className="text-black text-left text-base font-normal">
+                        Pesawat
+                      </div>
+                    </Link>
+                  )}
                 </div>
-              </Link>
-              <Link
-                to="/transaksi/pelni"
-                className={`block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}
-              >
-                <div className="text-black text-left text-base font-normal">
-                  Pelni
+              )}
+              {(isLoading || type === "auth" || type === "pelni") && (
+                <div className="">
+                  {isLoading ? (
+                    <Skeleton height={20} width={150} />
+                  ) : (
+                    <Link
+                      to="/transaksi/pelni"
+                      className={`block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}
+                    >
+                      <div className="text-black text-left text-base font-normal">
+                        Pelni
+                      </div>
+                    </Link>
+                  )}
                 </div>
-              </Link>
+              )}
               <Link
                 to="/transaksi/history_idpel"
                 className={`block px-8 cursor-pointer rounded-lg hover:bg-cyan-100 py-2.5 text-black`}
@@ -119,65 +163,17 @@ export default function SidebarMobileUser({ pathSidebar }) {
                 </div>
               </Link> */}
             </div>
-
-            {/* <div
-              onClick={(e) =>
-                dropdownBooking === true
-                  ? setDropdownBooking(false)
-                  : setDropdownBooking(true)
-              }
-              className={`flex justify-between cursor-pointer items-center p-2 text-base font-normal text-black rounded-lg `}
-            >
-              <div className="flex items-center">
-                <FaListAlt className="text-blue-500" size={18} />
-                <span className="flex-1 ml-3 whitespace-nowrap">
-                  List Booking
-                </span>
-              </div>
-              {dropdownBooking ? (
-                <MdOutlineKeyboardArrowDown
-                  className="text-black"
-                  size={18}
-                />
-              ) : (
-                <MdOutlineKeyboardArrowUp className="text-black" size={18} />
-              )}
-            </div> */}
-            {/* <div className={`${!dropdownBooking ? "block" : "hidden"}`}>
-              <Link
-                to="/booking/kai"
-                className="block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-black"
-              >
-                <div className="text-black text-left text-base font-normal">
-                  Booking Kai
-                </div>
-              </Link>
-              <Link
-                to="/booking/pesawat"
-                className="block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-black"
-              >
-                <div className="text-black text-left text-base font-normal">
-                  Booking Pesawat
-                </div>
-              </Link>
-              <Link
-                to="/booking/pelni"
-                className="block px-8 rounded-lg hover:bg-cyan-100 py-2.5 text-black"
-              >
-                <div className="text-black text-left text-base font-normal">
-                  Booking Pelni
-                </div>
-              </Link>
-            </div> */}
             <Link onClick={LogoutHandler}>
               <div
                 className={`flex cursor-pointer items-center p-2 text-base font-normal text-black rounded-lg `}
               >
-                {localStorage.getItem('hdrs_c') != 'false' && (
+                {localStorage.getItem("hdrs_c") != "false" && (
                   <>
                     <div className="flex mt-2">
                       <IoExitOutline className="text-blue-500" size={20} />
-                      <span className="flex-1 ml-3 whitespace-nowrap">Logout</span>
+                      <span className="flex-1 ml-3 whitespace-nowrap">
+                        Logout
+                      </span>
                     </div>
                   </>
                 )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Children } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { MdHorizontalRule } from "react-icons/md";
 import FormControl from "@mui/material/FormControl";
 import "react-phone-number-input/style.css";
@@ -14,10 +14,7 @@ import { Input, Form } from "antd";
 import { Select as SelectAnt } from "antd";
 import dayjs from "dayjs";
 import { notification } from "antd";
-import {
-  getCurrentDate,
-  parseDate,
-} from "../../helpers/date";
+import { getCurrentDate, parseDate } from "../../helpers/date";
 import BookingLoading from "../components/planeskeleton/booking";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
@@ -33,15 +30,11 @@ export default function BookingDLU() {
 
   const { id } = useParams();
   const [form] = Form.useForm();
-  const onReset = () => {
-    form.resetFields();
-  };
-
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
 
-  const [dataDetail, setdataDetail] = React.useState(null);
+  // const [dataDetail, setdataDetail] = React.useState(null);
   const [dataDetailForBooking, setdataDetailForBooking] = React.useState(null);
   const [isInternational, setIsInternational] = React.useState(0);
 
@@ -130,8 +123,8 @@ export default function BookingDLU() {
     }
   }, [token]);
 
-  const [selectedCountry, setSelectedCountry] = useState({});
-  const [countries, setCountries] = useState({});
+  // const [selectedCountry, setSelectedCountry] = useState({});
+  // const [countries, setCountries] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -140,8 +133,8 @@ export default function BookingDLU() {
           `${process.env.REACT_APP_HOST_API}/travel/country`
         );
         const data = response.data;
-        setCountries(data.countries);
-        setSelectedCountry(data.userCountryCode);
+        // setCountries(data.countries);
+        // setSelectedCountry(data.userCountryCode);
       } catch (error) {
         setErrPage(true);
         console.log(error.message || "An error occurred while fetching data.");
@@ -171,7 +164,7 @@ export default function BookingDLU() {
           SetTotalAdult(TotalAdult);
           setTotalChild(TotalChild);
           setTotalInfant(TotalInfant);
-          setTotalKendaraan(TotalKendaraan)
+          setTotalKendaraan(TotalKendaraan);
 
           const AdultArr = Array.from({ length: TotalAdult }, () => ({
             gender: "L",
@@ -211,7 +204,6 @@ export default function BookingDLU() {
           setChild([ChildArr]);
           setAdult([AdultArr]);
           setKendaraan([KendaraanArr]);
-
         } else {
           setErrPage(true);
         }
@@ -298,7 +290,7 @@ export default function BookingDLU() {
         .join("-");
 
       infantCategory[i][category] = tanggalParse;
-    }else if (category == "gender") {
+    } else if (category == "gender") {
       infantCategory[i][category] = e;
     } else {
       infantCategory[i][category] = e.target.value;
@@ -333,7 +325,6 @@ export default function BookingDLU() {
 
       setIsLoading(true);
 
-
       child[0].forEach(async (item) => {
         let date = new Date(item.birthdate);
         let dateString =
@@ -343,61 +334,53 @@ export default function BookingDLU() {
           "-" +
           date.getFullYear();
 
-
         //L;Tony;3527032701970078;24-10-1997;Sampang;;1;5 // 1 => adult, 2 => child, 3 => infant.
-        end_child += `${item.gender};${item.nama_depan + " " + item.nama_belakang};;${dateString};${item.nama_kota};;2;${dataDetailForBooking.type_class}#`;
-          
+        end_child += `${item.gender};${
+          item.nama_depan + " " + item.nama_belakang
+        };;${dateString};${item.nama_kota};;2;${
+          dataDetailForBooking.type_class
+        }#`;
       });
-
-      // if (end_child.endsWith("#")) {
-      //   end_child = end_child.slice(0, -1); // Menghilangkan karakter terakhir ("#")
-      // }
 
       infant[0].forEach(async (item) => {
         let date = new Date(item.birthdate);
         let dateString =
-
           date.getDate().toString().padStart(2, "0") +
           "-" +
           (date.getMonth() + 1).toString().padStart(2, "0") +
           "-" +
           date.getFullYear();
-      
+
         //L;Tony;3527032701970078;24-10-1997;Sampang;;1;5 // 1 => adult, 2 => child, 3 => infant.
-        end_infant += `${item.gender};${item.nama_depan + " " + item.nama_belakang};;${dateString};${item.nama_kota};;3;${dataDetailForBooking.type_class}#`
-
-          
-      }); //kok error jadinya
-
-
-      // if (end_infant.endsWith("#")) {
-      //   end_infant = end_infant.slice(0, -1); // Menghilangkan karakter terakhir ("#")
-      // }
+        end_infant += `${item.gender};${
+          item.nama_depan + " " + item.nama_belakang
+        };;${dateString};${item.nama_kota};;3;${
+          dataDetailForBooking.type_class
+        }#`;
+      });
 
       adult[0].forEach(async (item) => {
         let date = new Date(item.birthdate);
         let dateString =
-
           date.getDate().toString().padStart(2, "0") +
           "-" +
           (date.getMonth() + 1).toString().padStart(2, "0") +
           "-" +
           date.getFullYear();
-        
-        //L;Tony;3527032701970078;24-10-1997;Sampang;;1;5 // 1 => adult, 2 => child, 3 => infant.
-        end_adult += `${item.gender};${item.nama_depan + " " + item.nama_belakang};${item.idNumber};${dateString};${item.nama_kota};;1;${dataDetailForBooking.type_class}#`
 
+        //L;Tony;3527032701970078;24-10-1997;Sampang;;1;5 // 1 => adult, 2 => child, 3 => infant.
+        end_adult += `${item.gender};${
+          item.nama_depan + " " + item.nama_belakang
+        };${item.idNumber};${dateString};${item.nama_kota};;1;${
+          dataDetailForBooking.type_class
+        }#`;
       });
 
-      // if (end_adult.endsWith("#")) {
-      //   end_adult = end_adult.slice(0, -1); // Menghilangkan karakter terakhir ("#")
-      // }
-
       kendaraan[0].forEach(async (item) => {
-        
         //Nama pemilik;M1234NG;Sampang;0;4;;
-        end_kendaraan += `${item.nama_depan + " " +  item.nama_belakang};${item.no_polisi};${item.nama_kota};0;${dataDetailForBooking.type_vehicle};;#`;
-
+        end_kendaraan += `${item.nama_depan + " " + item.nama_belakang};${
+          item.no_polisi
+        };${item.nama_kota};0;${dataDetailForBooking.type_vehicle};;#`;
       });
 
       // if (end_kendaraan.endsWith("#")) {
@@ -405,35 +388,35 @@ export default function BookingDLU() {
       // }
 
       const book = {
-        "via": "WEB",
-        "kode_produk": "SHPDLU",
-        "departure": dataDetailForBooking.departure,
-        "arrival": dataDetailForBooking.arrival,
-        "ship_name": dataDetailForBooking.name,
-        "origin_code": dataDetailForBooking.origin_code,
-        "destination_code": dataDetailForBooking.destination_code,
-        "type_ticket": dataDetailForBooking.type_ticket,
-        "type_class": dataDetailForBooking.type_class,
-        "type_vehicle": dataDetailForBooking.type_vehicle,
-        "schedule_id": dataDetailForBooking.id_schedule?.toString(),
-        "count_passangers": dataDetailForBooking.count_passangers,
-        "nominal": dataDetailForBooking.total?.toString(),
-        "book_detail": {
-            "book_gender": title,
-            "book_name": namaDepan + " " + namaBelakang,
-            "book_noidentity": identity,
-            "book_email": email,
-            "book_phone": hp,
-            "book_city": city
+        via: "WEB",
+        kode_produk: "SHPDLU",
+        departure: dataDetailForBooking.departure,
+        arrival: dataDetailForBooking.arrival,
+        ship_name: dataDetailForBooking.name,
+        origin_code: dataDetailForBooking.origin_code,
+        destination_code: dataDetailForBooking.destination_code,
+        type_ticket: dataDetailForBooking.type_ticket,
+        type_class: dataDetailForBooking.type_class,
+        type_vehicle: dataDetailForBooking.type_vehicle,
+        schedule_id: dataDetailForBooking.id_schedule?.toString(),
+        count_passangers: dataDetailForBooking.count_passangers,
+        nominal: dataDetailForBooking.total?.toString(),
+        book_detail: {
+          book_gender: title,
+          book_name: namaDepan + " " + namaBelakang,
+          book_noidentity: identity,
+          book_email: email,
+          book_phone: hp,
+          book_city: city,
         },
-        "passangers": {
-            "adult": end_adult,
-            "child": end_child,
-            "infant": end_infant,
-            "vehicle": end_kendaraan,
+        passangers: {
+          adult: end_adult,
+          child: end_child,
+          infant: end_infant,
+          vehicle: end_kendaraan,
         },
-        "token": token
-    }
+        token: token,
+      };
 
       const bookingResponse = await axios.post(
         `${process.env.REACT_APP_HOST_API}/travel/ship/book`,
@@ -444,19 +427,17 @@ export default function BookingDLU() {
       );
 
       if (bookingResponse.data.rc === "00") {
-
         const uuid = uuidv4();
 
         const params = {
           ...dataDetailForBooking,
-          hasilBooking:bookingResponse.data?.data
-        }
+          hasilBooking: bookingResponse.data?.data,
+        };
 
         setIsLoading(false);
 
         localStorage.setItem(`data:dlu-book/${uuid}`, JSON.stringify(params));
         navigate(`/dlu/payment/${uuid}`);
-        
 
         // if (bookingResponse.data.callback === null) {
         //   navigate({
@@ -469,7 +450,6 @@ export default function BookingDLU() {
         //     search: `?v_flight=${id}&v_book=${uuid}`,
         //   });
         // }
-
       } else {
         setIsLoading(false);
 
@@ -483,65 +463,40 @@ export default function BookingDLU() {
       }
 
       hideModal();
-
     } catch (error) {
-
       failedNotification(error.message);
       hideModal();
-
     }
   };
 
   const disabledDate = (current, e, i) => {
-
-      const currentDay = dayjs().add(1, "day");
-
-      const dayBookStart = dayjs(
-        dataDetailForBooking.departure_date
-      ).add(1, "day");
-      const twoYearsAgo = dayjs(dayBookStart).subtract(2, "year");
-      const endOfDays = twoYearsAgo.subtract(1, "day");
-
-      const currentDate = dayjs(currentDay).subtract(1, "day");
-
-      return current && (current < endOfDays || current > currentDate);
-    
-  };
-
-
-  const disabledDateAdult = (current) => {
-    const dayBook = dayjs(dataDetailForBooking.departure_date).add(
+    const currentDay = dayjs().add(1, "day");
+    const dayBookStart = dayjs(dataDetailForBooking.departure_date).add(
       1,
       "day"
     );
+    const twoYearsAgo = dayjs(dayBookStart).subtract(2, "year");
+    const endOfDays = twoYearsAgo.subtract(1, "day");
+    const currentDate = dayjs(currentDay).subtract(1, "day");
+    return current && (current < endOfDays || current > currentDate);
+  };
 
+  const disabledDateAdult = (current) => {
+    const dayBook = dayjs(dataDetailForBooking.departure_date).add(1, "day");
     const TenYearsAgo = dayjs(dayBook).subtract(12, "year");
-
-    // const endOfMonth = TenYearsAgo.endOf("month");
-    // const endOfDays = endOfMonth.subtract(1, "day");
-
     return current && current > TenYearsAgo;
   };
 
   const disabledDateChild = (current) => {
-    const dayBook = dayjs(dataDetailForBooking.departure_date).add(
-      1,
-      "day"
-    );
+    const dayBook = dayjs(dataDetailForBooking.departure_date).add(1, "day");
     const twoYearsAgo = dayjs(dayBook).subtract(2, "year");
     const TenYearsAgo = dayjs(dayBook).subtract(12, "year");
-
-    // const startOfMonth = TenYearsAgo.endOf("month");
-    // const endOfDays = startOfMonth.subtract(1, "day");
-    // const endOfMonth = twoYearsAgo.endOf("month");
-    // const endOfMonth = twoYearsAgo.subtract(1, "day");
     const startOfMonth = TenYearsAgo.subtract(1, "day");
-
     return current && (current < startOfMonth || current > twoYearsAgo);
   };
 
   const {
-    handleSubmit,
+    // handleSubmit,
     formState: { errors },
   } = useForm();
 
@@ -552,8 +507,6 @@ export default function BookingDLU() {
   const hideModal = () => {
     setOpen(false);
   };
-
-  
 
   return (
     <>
@@ -634,19 +587,8 @@ export default function BookingDLU() {
                   Pembayaran tiket
                 </div>
               </div>
-              {/* <div>
-                <MdHorizontalRule
-                  size={20}
-                  className="text-black hidden xl:flex"
-                />
-              </div>
-              <div className="flex space-x-2 items-center">
-                <RxCrossCircled size={20} className="text-black" />
-                <div className="text-black">E-Tiket</div>
-              </div> */}
             </div>
-            {/* sidebar mobile plane*/}
-
+            {/* sidebar mobile dlu*/}
             {isLoadingPage === true ? (
               <>
                 <BookingLoading
@@ -747,7 +689,7 @@ export default function BookingDLU() {
                 )}
 
                 <div className=" w-full mb-24 block xl:flex xl:space-x-10">
-                  {/* detail passengger Pesawat*/}
+                  {/* detail passengger dlu*/}
                   <Form
                     form={form}
                     ref={formRef}
@@ -756,142 +698,139 @@ export default function BookingDLU() {
                     className="block w-full  mt-8 mb-4 xl:mt-12"
                   >
                     <div className="Booking mb-4 ml-2 xl:ml-0">
-                    <h1 className="text-sm text-black">
-                      DATA PEMESAN
-                    </h1>
-                    <small className="text-black">
-                      Isi sesuai dengan data anda
-                    </small>
-                  </div>                  
+                      <h1 className="text-sm text-black">DATA PEMESAN</h1>
+                      <small className="text-black">
+                        Isi sesuai dengan data anda
+                      </small>
+                    </div>
                     <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-2 gap-12">
                       <div className="">
-                        
-                        {/* mobile & desktop*/}  
+                        {/* mobile & desktop*/}
                         <div className="p-4 xl:p-8 form block xl:flex xl:space-x-2">
                           <div className="xl:w-full mt-4 xl:mt-0">
-                              <div className="text-black text-sm">
-                                Title Anda
-                              </div>
-                              <div className="hidden xl:block">
-                                <FormControl
-                                  sx={{
-                                    marginTop: 2,
-                                    marginBottom: 2,
-                                    maxWidth: 120,
-                                  }}
-                                  fullWidth
-                                >
-                                  <SelectAnt
-                                    style={{ width: 120 }}
-                                    options={data}
-                                    value={title}
-                                    size="large"
-                                    onChange={(e) => setTitle(e)}
-                                  />
-                                </FormControl>
-                              </div>
-                              <div className="block xl:hidden">
-                                <FormControl
-                                  sx={{ marginTop: 2, marginBottom: 2 }}
-                                  fullWidth
-                                >
-                                  <SelectAnt
-                                    style={{ width: 120 }}
-                                    options={data}
-                                    value={title}
-                                    size="large"
-                                    onChange={(e) => setTitle(e.target.value)}
-                                  />
-                                </FormControl>
-                              </div>
-                              <div className="w-full grid grid-cols-2 gap-2">
-                                <div className="w-full">
-                                  <div className="text-black text-sm">
-                                    Nama Depan
-                                  </div>
-                                  <Form.Item
-                                    required={true}
-                                    hasFeedback
-                                    name={`namaDepan`}
-                                    rules={[
-                                      {
-                                        required: true,
-                                        message:
-                                          "Nama Depan tidak boleh kosong.",
-                                      },
-                                      {
-                                        min: 3,
-                                        message:
-                                          "Nama Depan minimal 3 karakter.",
-                                      },
-                                      {
-                                        max: 25,
-                                        message:
-                                          "Nama Depan maksimal 25 karakter.",
-                                      },
-                                      {
-                                        pattern: /^[A-Za-z\s]+$/,
-                                        message:
-                                          "Nama Depan hanya boleh terdiri dari huruf alfabet.",
-                                      },
-                                    ]}
-                                  >
-                                    <Input
-                                      size="large"
-                                      className="mt-2"
-                                      value={namaDepan}
-                                      onChange={(e) => setNamaDepan(e.target.value)}
-                                      type="text"
-                                      placeholder="Nama Depan"
-                                      id="default-input"
-                                    />
-                                  </Form.Item>
+                            <div className="text-black text-sm">Title Anda</div>
+                            <div className="hidden xl:block">
+                              <FormControl
+                                sx={{
+                                  marginTop: 2,
+                                  marginBottom: 2,
+                                  maxWidth: 120,
+                                }}
+                                fullWidth
+                              >
+                                <SelectAnt
+                                  style={{ width: 120 }}
+                                  options={data}
+                                  value={title}
+                                  size="large"
+                                  onChange={(e) => setTitle(e)}
+                                />
+                              </FormControl>
+                            </div>
+                            <div className="block xl:hidden">
+                              <FormControl
+                                sx={{ marginTop: 2, marginBottom: 2 }}
+                                fullWidth
+                              >
+                                <SelectAnt
+                                  style={{ width: 120 }}
+                                  options={data}
+                                  value={title}
+                                  size="large"
+                                  onChange={(e) => setTitle(e.target.value)}
+                                />
+                              </FormControl>
+                            </div>
+                            <div className="w-full grid grid-cols-2 gap-2">
+                              <div className="w-full">
+                                <div className="text-black text-sm">
+                                  Nama Depan
                                 </div>
-                                <div className="w-full">
-                                  <div className="text-black text-sm">
-                                    Nama Belakang
-                                  </div>
-                                  <Form.Item
-                                    required={true}
-                                    hasFeedback
-                                    name={`namaBelakang}`}
-                                    rules={[
-                                      {
-                                        required: true,
-                                        message:
-                                          "Nama Belakang tidak boleh kosong.",
-                                      },
-                                      {
-                                        min: 3,
-                                        message:
-                                          "Nama Belakang minimal 3 karakter.",
-                                      },
-                                      {
-                                        max: 25,
-                                        message:
-                                          "Nama Belakang maksimal 25 karakter.",
-                                      },
-                                      {
-                                        pattern: /^[A-Za-z\s]+$/,
-                                        message:
-                                          "Nama Belakang hanya boleh terdiri dari huruf alfabet.",
-                                      },
-                                    ]}
-                                  >
-                                    <Input
-                                      size="large"
-                                      className="mt-2"
-                                      value={namaBelakang}
-                                      onChange={(e) => setNamaBelakang(e.target.value)}
-                                      type="text"
-                                      placeholder="Nama Belakang"
-                                      id="default-input"
-                                    />
-                                  </Form.Item>
-                                </div>
+                                <Form.Item
+                                  required={true}
+                                  hasFeedback
+                                  name={`namaDepan`}
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message: "Nama Depan tidak boleh kosong.",
+                                    },
+                                    {
+                                      min: 3,
+                                      message: "Nama Depan minimal 3 karakter.",
+                                    },
+                                    {
+                                      max: 25,
+                                      message:
+                                        "Nama Depan maksimal 25 karakter.",
+                                    },
+                                    {
+                                      pattern: /^[A-Za-z\s]+$/,
+                                      message:
+                                        "Nama Depan hanya boleh terdiri dari huruf alfabet.",
+                                    },
+                                  ]}
+                                >
+                                  <Input
+                                    size="large"
+                                    className="mt-2"
+                                    value={namaDepan}
+                                    onChange={(e) =>
+                                      setNamaDepan(e.target.value)
+                                    }
+                                    type="text"
+                                    placeholder="Nama Depan"
+                                    id="default-input"
+                                  />
+                                </Form.Item>
                               </div>
+                              <div className="w-full">
+                                <div className="text-black text-sm">
+                                  Nama Belakang
+                                </div>
+                                <Form.Item
+                                  required={true}
+                                  hasFeedback
+                                  name={`namaBelakang}`}
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message:
+                                        "Nama Belakang tidak boleh kosong.",
+                                    },
+                                    {
+                                      min: 3,
+                                      message:
+                                        "Nama Belakang minimal 3 karakter.",
+                                    },
+                                    {
+                                      max: 25,
+                                      message:
+                                        "Nama Belakang maksimal 25 karakter.",
+                                    },
+                                    {
+                                      pattern: /^[A-Za-z\s]+$/,
+                                      message:
+                                        "Nama Belakang hanya boleh terdiri dari huruf alfabet.",
+                                    },
+                                  ]}
+                                >
+                                  <Input
+                                    size="large"
+                                    className="mt-2"
+                                    value={namaBelakang}
+                                    onChange={(e) =>
+                                      setNamaBelakang(e.target.value)
+                                    }
+                                    type="text"
+                                    placeholder="Nama Belakang"
+                                    id="default-input"
+                                  />
+                                </Form.Item>
+                              </div>
+                            </div>
                           </div>
-                        </div>                     
+                        </div>
 
                         {/* mobile & desktop*/}
                         <div className="p-4 xl:p-8 -mt-10 form block xl:flex xl:space-x-2">
@@ -975,11 +914,10 @@ export default function BookingDLU() {
                             </div>
                           </div>
                         </div>
-                        
+
                         {/* city and NIK */}
                         <div className="mb-8 mt-0 xl:mt-4">
                           <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6 ">
-                            
                             {/* city */}
                             <div className="w-full px-4 xl:px-0">
                               <div className="w-full">
@@ -993,9 +931,8 @@ export default function BookingDLU() {
                                   rules={[
                                     {
                                       required: true,
-                                      message:
-                                        "Nama kota tidak boleh kosong.",
-                                    }
+                                      message: "Nama kota tidak boleh kosong.",
+                                    },
                                   ]}
                                 >
                                   <Input
@@ -1027,7 +964,7 @@ export default function BookingDLU() {
                                   rules={[
                                     {
                                       required: true,
-                                      message:"NIK tidak boleh kosong."
+                                      message: "NIK tidak boleh kosong.",
                                     },
                                     ({ getFieldValue }) => ({
                                       validator(_, value) {
@@ -1049,14 +986,15 @@ export default function BookingDLU() {
                                     type="text"
                                     pattern="[0-9]*"
                                     onInput={(e) => {
-                                      e.target.value =
-                                        e.target.value.replace(
-                                          /[^\d]/g,
-                                          ""
-                                        ); // Replace any non-digit characters
+                                      e.target.value = e.target.value.replace(
+                                        /[^\d]/g,
+                                        ""
+                                      ); // Replace any non-digit characters
                                       if (e.target.value.includes(".")) {
-                                        e.target.value =
-                                          e.target.value.replace(".", ""); // Remove any dots
+                                        e.target.value = e.target.value.replace(
+                                          ".",
+                                          ""
+                                        ); // Remove any dots
                                       }
                                     }}
                                     onKeyPress={(e) => {
@@ -1070,9 +1008,10 @@ export default function BookingDLU() {
                                       "border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0"
                                     }
                                     value={identity}
-                                    placeholder={"No. Ktp / NIK"
+                                    placeholder={"No. Ktp / NIK"}
+                                    onChange={(e) =>
+                                      setIdentity(e.target.value)
                                     }
-                                    onChange={(e) => setIdentity(e.target.value)}
                                     min={0}
                                     id="default-input"
                                   />
@@ -1083,9 +1022,8 @@ export default function BookingDLU() {
                                 <div></div>
                               </div>
                             </div>
-                            </div>
+                          </div>
                         </div>
-
                       </div>
                     </div>
 
@@ -1389,7 +1327,7 @@ export default function BookingDLU() {
                                             required: true,
                                             message:
                                               "Nama kota tidak boleh kosong.",
-                                          }
+                                          },
                                         ]}
                                       >
                                         <Input
@@ -1645,16 +1583,16 @@ export default function BookingDLU() {
                                           "birthdate"
                                         )}
                                         disabledDate={disabledDateChild}
-                                        open={isDatePickerOpenChild[i]} // Pass the state to the open prop
+                                        open={isDatePickerOpenChild[i]} 
                                         // inputReadOnly={true}
                                         onOpenChange={(status) => {
                                           const newOpenState = [
                                             ...isDatePickerOpenChild,
-                                          ]; // Create a copy of the array
-                                          newOpenState[i] = status; // Update the state for the specific index
+                                          ]; 
+                                          newOpenState[i] = status;
                                           setIsDatePickerOpenChild(
                                             newOpenState
-                                          ); // Set the updated array as the new state
+                                          ); 
                                         }}
                                       />
                                     </Form.Item>
@@ -1675,7 +1613,7 @@ export default function BookingDLU() {
                                           required: true,
                                           message:
                                             "Nama kota tidak boleh kosong.",
-                                        }
+                                        },
                                       ]}
                                     >
                                       <Input
@@ -1886,16 +1824,16 @@ export default function BookingDLU() {
                                           "birthdate"
                                         )}
                                         disabledDate={disabledDate}
-                                        open={isDatePickerOpenInfant[i]} // Pass the state to the open prop
+                                        open={isDatePickerOpenInfant[i]}
                                         // inputReadOnly={true}
                                         onOpenChange={(status) => {
                                           const newOpenState = [
                                             ...isDatePickerOpenInfant,
-                                          ]; // Create a copy of the array
-                                          newOpenState[i] = status; // Update the state for the specific index
+                                          ];
+                                          newOpenState[i] = status; 
                                           setIsDatePickerOpenInfant(
                                             newOpenState
-                                          ); // Set the updated array as the new state
+                                          );
                                         }}
                                       />
                                     </Form.Item>
@@ -1916,7 +1854,7 @@ export default function BookingDLU() {
                                           required: true,
                                           message:
                                             "Nama kota tidak boleh kosong.",
-                                        }
+                                        },
                                       ]}
                                     >
                                       <Input
@@ -1961,7 +1899,10 @@ export default function BookingDLU() {
                             <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-1">
                               <div className="">
                                 <div className="px-4 xl:px-8 mt-4">
-                                  <small className="text-orange-500">*<b>Note</b>: Pastikan nama pemilik sesuai dengan STNK.</small>
+                                  <small className="text-orange-500">
+                                    *<b>Note</b>: Pastikan nama pemilik sesuai
+                                    dengan STNK.
+                                  </small>
                                 </div>
                                 <div className="p-4 xl:p-8 -mt-0 xl:-mt-4 form block xl:flex xl:space-x-2">
                                   {/* mobile & desktop Nama*/}
@@ -2083,7 +2024,10 @@ export default function BookingDLU() {
                                             size="large"
                                             className="mt-2"
                                             value={e.no_polisi}
-                                            onInput={e => e.target.value = e.target.value.toUpperCase()}
+                                            onInput={(e) =>
+                                              (e.target.value =
+                                                e.target.value.toUpperCase())
+                                            }
                                             onChange={handleKendaraansubCatagoryChange(
                                               i,
                                               "no_polisi"
@@ -2125,8 +2069,7 @@ export default function BookingDLU() {
                                         </Form.Item>
                                       </div>
                                     </div>
-                                  </div>                               
-
+                                  </div>
                                 </div>
                               </div>
                             </div>

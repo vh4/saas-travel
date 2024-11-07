@@ -8,7 +8,7 @@ import { FaPlaneDeparture, FaPlaneArrival } from "react-icons/fa";
 import { Chip, Box } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import onClickOutside from "react-onclickoutside";
-import { createSearchParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { Button, message, Tooltip } from "antd";
 import Cookies from "js-cookie";

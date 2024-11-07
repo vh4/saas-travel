@@ -3,7 +3,6 @@ import Layout from "../BookingLayout";
 import PembayaranComponent from '../../components/pelni/Pembayaran'
 import HeaderTemplateMobilDetailBooking from "./HeaderTemplateMobilDetailBooking";
 
-
 export default function Pembayaran(){
     useEffect(() => {
         document.title = 'Travel - pelni booking';
