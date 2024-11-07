@@ -32,15 +32,10 @@ export default function SidebarMobileUser() {
       lastSegment = lastSegment == 'kai' ? 'kereta' : lastSegment;
 
   useEffect(() => {
- //
-    if(urlForLogin === "/" && searchParams.size == 0){
-      dispatch(fetchDataType());
-    }else{
-      dispatch(setType(lastSegment));
-      dispatch(setLoading(false));
-    }
 
-  }, [dispatch, type]); //
+        dispatch(fetchDataType());
+    
+      }, [dispatch, type]); //
 
   const suksesLogout = () => {
     api["success"]({

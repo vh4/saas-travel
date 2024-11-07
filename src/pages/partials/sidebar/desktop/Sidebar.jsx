@@ -16,7 +16,6 @@ export default function Sidebar({ nameMenu, setNameMenu }) {
 
         if(urlForLogin === "/" && searchParams.size == 0){
             dispatch(fetchDataType());
-            setNameMenu(type)
         }
 
     }, [dispatch, type]); //

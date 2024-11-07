@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Flex, message, Select, Table } from "antd";
 import Page500 from "../components/500";
+import dayjs from "dayjs";
 
 export default function ViewHistoryIdpel({ path }) {
   const [data, setData] = useState([]);
@@ -41,6 +42,22 @@ export default function ViewHistoryIdpel({ path }) {
       dataIndex: "",
       key: "",
     },
+  ];
+
+  const columnsMobile = [
+    Table.SELECTION_COLUMN,
+    Table.EXPAND_COLUMN,
+    {
+      title: "Nama",
+      dataIndex: "nama",
+      key: "nama",
+    },
+    {
+      title: "Type",
+      dataIndex: "tipe",
+      key: "tipe",
+    },
+
   ];
 
   const [err, setErr] = useState(false);
@@ -154,7 +171,9 @@ export default function ViewHistoryIdpel({ path }) {
                   ]}
                 />
               </div>
+              {/* desktop */}
               <div className="mt-6">
+                <div className="hidden xl:block">
                 <Flex gap="middle" vertical>
                   <Table
                     columns={columns}
@@ -171,6 +190,41 @@ export default function ViewHistoryIdpel({ path }) {
                     rowKey="key"
                   />
                 </Flex>
+                </div>
+                {/* for mobile */}
+                <div className="block xl:hidden">
+                <Flex gap="middle" vertical>
+                    <Table
+                     rowSelection={{}}
+                      expandable={{
+                        expandedRowRender: (record) => (
+                          <>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-8">
+                                <div className="my-2">
+                                  <p style={{ margin: 0 }} className="text-xs">
+                                    <strong>NIK:</strong> {record.nik}
+                                  </p>
+                                </div>
+                                <div className="my-2">
+                                  <p style={{ margin: 0 }} className="text-xs">
+                                    <strong>Nomor HP:</strong> {record.hp && record.hp !== '' ? record.hp : '-'}
+                                  </p>
+                                </div>
+                                <div className="my-2">
+                                  <p style={{ margin: 0 }}  className="text-xs">
+                                    <strong>Tanggal Lahir:</strong> {dayjs(record.ttl).format("DD/MM/YYYY")}
+                                  </p>
+                                </div>
+                              </div>
+                          </>
+                        ),
+                      }}
+                      columns={columnsMobile}
+                      dataSource={data}
+                      pagination={{pageSize:5}}
+                    />
+                </Flex>
+                </div>
               </div>
             </div>
           </>

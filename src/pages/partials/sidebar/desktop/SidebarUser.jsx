@@ -6,7 +6,7 @@ import { IoAirplaneOutline, IoBoatOutline } from "react-icons/io5";
 import { MdOutlineHistory } from "react-icons/md";
 import { BsTrainFront } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDataType, setType, setLoading } from "../../../../features/createSlice";
+import { fetchDataType, setType } from "../../../../features/createSlice";
 import Skeleton from "react-loading-skeleton";
 
 export default function SidebarUser({ pathSidebar }) {
@@ -25,12 +25,7 @@ export default function SidebarUser({ pathSidebar }) {
 
   useEffect(() => {
 
-    if(urlForLogin === "/" && searchParams.size == 0){
-      dispatch(fetchDataType());
-    }else{
-      dispatch(setType(lastSegment));
-      dispatch(setLoading(false));
-    }
+    dispatch(fetchDataType());
 
   }, [dispatch, type]); //
 
