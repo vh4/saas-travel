@@ -32,7 +32,7 @@ export default function SidebarMobileUser() {
       lastSegment = lastSegment == 'kai' ? 'kereta' : lastSegment;
 
   useEffect(() => {
-
+ //
     if(urlForLogin === "/" && searchParams.size == 0){
       dispatch(fetchDataType());
     }else{

@@ -284,7 +284,7 @@ export default function BookingKai() {
           //   },
           // ]);
 
-          infantCategory[indexPreviousPenumpang.index]["birthdate"] = birthDate;
+          // infantCategory[indexPreviousPenumpang.index]["birthdate"] = birthDate;
         }
 
         infantCategory[indexPreviousPenumpang.index]["name"] =

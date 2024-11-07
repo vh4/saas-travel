@@ -617,7 +617,7 @@ export default function BookingPelni() {
     return current && (current < endOfDays || current > currentDate);
   };
 
-  const disabledDateAdult = (current) => {
+  const disabledDateAdult = (current, e, i) => {
     const TenYearsAgo = dayjs().subtract(2, "year");
     const endOfDays = TenYearsAgo.subtract(2, "day");
 
