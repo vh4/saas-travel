@@ -1,4 +1,6 @@
-const { Pool } =  require('pg');
+const {
+    Pool
+} = require('pg');
 const logger = require('../utils/logger.js');
 
 const {
@@ -10,7 +12,7 @@ const {
 } = process.env;
 
 if (!DB_USERNAME || !DB_HOST || !DB_DATABASE || !DB_PASSWORD || !DB_PORT) {
-	logger.info(".env empty data !.")
+    logger.info(".env empty data !.")
     throw new Error('.env empty data !.');
 }
 
@@ -28,7 +30,7 @@ const poolConfig = {
 
 const pool = new Pool(poolConfig);
 
-async function checkConnection(pool, poolName){
+async function checkConnection(pool, poolName) {
     let client = null;
     try {
         client = await pool.connect();
@@ -54,6 +56,6 @@ async function dbCheck() {
 }
 
 module.exports = {
-	pool,
-	dbCheck
+    pool,
+    dbCheck
 };

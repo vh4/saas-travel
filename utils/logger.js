@@ -5,13 +5,13 @@ const prettyStream = pinoPretty();
 const prettyLogger = pino({}, prettyStream);
 
 const logger = {
-  info: (message) => {
-    prettyLogger.info(message);
-  },
+    info: (message) => {
+        prettyLogger.info(message);
+    },
 
-  error: (message) => {
-    prettyLogger.error(message);
-  },
+    error: (message) => {
+        prettyLogger.error(message);
+    },
 };
 
 module.exports = logger; //update logger
