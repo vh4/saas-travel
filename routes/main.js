@@ -591,4 +591,4 @@ Router.get('/is_type', async function(req, res) {
 
 });
 
-module.exports = Router;
+module.exports = Router; //
