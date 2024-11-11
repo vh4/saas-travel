@@ -69,8 +69,6 @@ export default function MainPage() {
         type: params,
       });
 
-      console.log(response.data);
-
       if (response.data.rc === "00") {
         localStorage.setItem(process.env.REACT_APP_SECTRET_LOGIN_API, JSON.stringify(response.data.token));
         localStorage.setItem("expired_date", response.data.expired_date);
