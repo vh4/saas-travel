@@ -36,7 +36,6 @@ export default function MainPage() {
     const fetchData = async () => {
       try {
         let params = "";
-
         if (searchParams.get("auth")) {
           params = "auth";
         } else if (searchParams.get("pelni")) {
@@ -48,7 +47,10 @@ export default function MainPage() {
         }
 
         if (window.location.pathname === "/" && searchParams.get(params)) {
-          const decodedParam = decodeURIComponent(searchParams.get(params));
+
+          const encodedParam = searchParams.get(params).replace(/ /g, "+");
+          const decodedParam = decodeURIComponent(encodedParam);
+
           handlerLogin(decodedParam, searchParams.get("merchant"), params);
         }
       } catch (error) {
