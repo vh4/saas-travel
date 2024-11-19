@@ -61,7 +61,7 @@ export default function Carousels(props) {
       <div className="hidden xl:block ">
         <div
           style={{
-            color: customLayout?.color?.primary?.font_color || "white",
+            color: customLayout?.color?.secondary?.font_color || "white",
             paddingLeft: "3rem", 
             display: "flex",
             gap: "1rem", 
