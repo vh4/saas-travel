@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MdHorizontalRule } from "react-icons/md";
 import "react-phone-number-input/style.css";
 import "../../index.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { RxCrossCircled } from "react-icons/rx";
 import "react-phone-input-2/lib/bootstrap.css";
@@ -20,19 +20,24 @@ import BookingLoading from "../components/pelniskeleton/booking";
 import ManyRequest from "../components/Manyrequest";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { IoArrowForwardOutline } from "react-icons/io5";
-import { v4 as uuidv4 } from "uuid";
 import Skeleton from "react-loading-skeleton";
 import { CiBoxList } from "react-icons/ci";
+import { useDispatch, useSelector } from "react-redux";
+import { setDataBookPelni, setisOkBalancePelni } from "../../features/createSlice";
+import { callbackFetchData } from "../../features/callBackSlice";
 
 export default function BookingPelni() {
+  
+  const dataSearch = useSelector((state) => state.bookpelni.searchDataPelni);
+  console.log(dataSearch);
+  const dispatch = useDispatch();
+
   const [api, contextHolder] = notification.useNotification();
   const [form] = Form.useForm();
   const onReset = () => {
     form.resetFields();
   };
   const navigate = useNavigate();
-  const { id } = useParams();
-
   const failedNotification = (rd) => {
     api["error"]({
       message: "Error!",
@@ -92,77 +97,6 @@ export default function BookingPelni() {
     },
   ];
 
-  // useEffect(() => {
-
-  //   Promise.all([getDataPelniSearch()])
-  //     .then(([bookResponse]) => {
-  //       if (bookResponse.data.rc === "00") {
-  //         setdataDetailPelni(bookResponse.data);
-
-  //         const TotalWanita = parseInt(bookResponse.data.female) || 0;
-  //         const TotalPria = parseInt(bookResponse.data.male) || 0;
-
-  //         setTotalPria(TotalPria)
-  //         setTotalWanita(TotalWanita);
-
-  //         const WanitaArr = Array.from({ length: TotalWanita }, () => ({
-  //           name: "",
-  //           birthdate: getCurrentDate(),
-  //           identityNumber: "",
-  //           gender: "F",
-  //           usia: "adult",
-  //         }));
-
-  //         const PriaArr = Array.from({ length: TotalPria }, () => ({
-  //           name: "",
-  //           birthdate: getCurrentDate(),
-  //           identityNumber: "",
-  //           gender: "M",
-  //           usia: "adult",
-  //         }));
-
-  //         setWanita([WanitaArr]);
-  //         setPria([PriaArr]);
-
-  //         const date_Keberangkatan = new Date(bookResponse.data.departureDate);
-
-  //         const date_tujuan = new Date(bookResponse.data.arrivalDate);
-
-  //         const duration = bookResponse.data.duration
-
-  //         const tanggal_keberangkatan_pelni = parseDate(date_Keberangkatan);
-  //         const tanggal_tujuan_pelni = parseDate(date_tujuan);
-
-  //         Settanggal_keberangkatan_pelni(tanggal_keberangkatan_pelni);
-  //         Settanggal_tujuan_pelni(tanggal_tujuan_pelni)
-  //         setDuration(duration);
-
-  //       }else{
-  //           setErrPage(true);
-  //       }
-
-  //       setTimeout(() => {
-  //         setIsLoadingPage(false);
-  //       }, 2000);
-  //     })
-  //     .catch(() => {
-  //       setIsLoadingPage(false);
-  //       setErrPage(true);
-  //     });
-  // }, [id]);
-
-  // async function getDataPelniSearch() {
-  //   try {
-  //     const response = await axios.get(
-  //       `${process.env.REACT_APP_HOST_API}/travel/pelni/search/p_search/${id}`
-  //     );
-
-  //     return response;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
-
   useEffect(() => {
     Promise.all([getDataPelniSearch()])
       .then(([bookResponse]) => {
@@ -221,12 +155,12 @@ export default function BookingPelni() {
         setIsLoadingPage(false);
         setErrPage(true);
       });
-  }, [id]);
+  }, []);
 
   async function getDataPelniSearch() {
     try {
-      const response = localStorage.getItem(`data:pelni/${id}`);
-      return JSON.parse(response);
+      const response = dataSearch;
+      return response;
     } catch (error) {
       return null;
     }
@@ -391,18 +325,15 @@ export default function BookingPelni() {
       params
     );
 
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
     if (response.data.rc !== "00") {
       if (response.data.rc === "11") {
+
         setIsLoading(false);
         setmanyRequestBook(true);
       }
-
       failedNotification(response.data.rd);
     } else {
+
       const data = response.data.data;
       const infobooking = await axios.post(
         `${process.env.REACT_APP_HOST_API}/travel/pelni/book_info`,
@@ -411,54 +342,37 @@ export default function BookingPelni() {
           token: token,
         }
       );
-
       if (infobooking.data.rc !== "00") {
         failedNotification(infobooking.data.rd);
         setIsLoading(false);
       } else {
-        // const transactionId = await axios.post(
-        //     `${process.env.REACT_APP_HOST_API}/travel/pelni/booking/passengers`,
-        //     {
-        //         ...params,
-        //         arrivalDate: dataDetailPelni.arrivalTime,
-        //         departureTime: dataDetailPelni.departureTime,
-        //         transactionId: data.transactionId
-        //       }
-        //   );
 
-        //   if (transactionId.data.rc == "00") {
-        //     navigate(`/pelni/payment/${data.transactionId}`);
+        const idtrx = data.transactionId;
+        const allowPayment = data.is_allowed_pay;
+        const resps = {
+          ...params,
+          arrivalDate: dataDetailPelni.arrivalTime,
+          departureTime: dataDetailPelni.departureTime,
+          transactionId: data.transactionId,
+          book: response,
+          infobooking: infobooking,
+        }
 
-        //   } else {
-        //     failedNotification(transactionId.data.rd);
-        //     setIsLoading(false);
-        //   }
+        dispatch(setDataBookPelni(resps));
+        dispatch(setisOkBalancePelni(allowPayment));
 
-        const uuid = uuidv4();
-        localStorage.setItem(
-          `data:pl-passenger/${uuid}`,
-          JSON.stringify({
-            ...params,
-            arrivalDate: dataDetailPelni.arrivalTime,
-            departureTime: dataDetailPelni.departureTime,
-            transactionId: data.transactionId,
-            book: response,
-            infobooking: infobooking,
-          })
-        );
-
+        //set data callback
+        dispatch(callbackFetchData({ type: 'pelni', id_transaksi:idtrx  }));
+          
         if (response.data.callback === null) {
-          navigate(`/pelni/payment/${uuid}`);
-        } else {
-          // SuccessNotification(
-          //   `Response callback is : ${typeof response.data.callback === 'object' ? JSON.stringify(response.data.callback) : response.data.callback}`
-          // );
-
-          // navigate(`/`);
-          navigate(`/pelni/payment/${uuid}`);
+          navigate(`/pelni/payment`);
+          
+        } else { //loloskan aja njir
+          navigate(`/pelni/payment`);
         }
 
         setIsLoading(false);
+
       }
     }
 
@@ -477,7 +391,6 @@ export default function BookingPelni() {
   ];
 
   /* list penumpang */
-
   const [existingPenumpang, setExistingPenumpang] = useState([]);
   const [loadingExistingPenumpang, setLoadingExistingPenumpang] =
     useState(false);
@@ -820,7 +733,7 @@ export default function BookingPelni() {
             ) : (
               <>
                 {/* sidebar mobile kai*/}
-                <div className="mt-0 md:mt-8 block xl:hidden w-full rounded-md border border-gray-200 shadow-sm">
+                <div className="mt-0 md:mt-8 block xl:hidden w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
                   <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                     <div className="text-black font-medium ">
                       Keberangkatan Kapal
@@ -891,9 +804,9 @@ export default function BookingPelni() {
                   <Form
                     form={form}
                     onFinish={showModal}
-                    className="block w-full  mt-8 mb-4 xl:mt-12"
+                    className="block w-full mt-2 mb-4 xl:mt-12"
                   >
-                    <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-2 gap-12">
+                    <div className="w-full mt-0 border-b xl:border xl:border-gray-200 xl:shadow-sm col-span-1 xl:col-span-2 gap-12">
                       <div className="">
                         <div className="p-4 xl:p-8 form block xl:flex xl:space-x-2">
                           {/* mobile & desktop Nama*/}
@@ -980,7 +893,7 @@ export default function BookingPelni() {
                       pria[0].map((e, i) => (
                         <>
                           <div>
-                            <div className="Booking  mt-8 mb-4 xl:mt-12 ml-2 xl:ml-0">
+                            <div className="Booking mt-4 mb-0 xl:mb-4 xl:mt-12 ml-2 xl:ml-0">
                               <h1 className="text-sm font-medium  text-black">
                                 PRIA PASSENGER
                               </h1>
@@ -991,7 +904,7 @@ export default function BookingPelni() {
                             {/* Detailt */}
                             <div className="flex space-x-12">
                               {/* form detailt kontal */}
-                              <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-1">
+                              <div className="w-full mt-4 xl:mt-0 border-b xl:border xl:border-gray-200 xl:shadow-sm col-span-1 xl:col-span-1">
                                 <div className="">
                                   <div className="p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8">
                                     {/* mobile & desktop Nama*/}
@@ -1293,7 +1206,7 @@ export default function BookingPelni() {
                       wanita[0].map((e, i) => (
                         <>
                           <div>
-                            <div className="Booking  mt-8 mb-4 xl:mt-12 ml-2 xl:ml-0">
+                            <div className="Booking mt-4 mb-0 xl:mb-4 xl:mt-12 ml-2 xl:ml-0">
                               <h1 className="text-sm font-medium  text-black">
                                 WANITA PASSENGER
                               </h1>
@@ -1304,7 +1217,7 @@ export default function BookingPelni() {
                             {/* Detailt */}
                             <div className="flex space-x-12">
                               {/* form detailt kontal */}
-                              <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-1">
+                              <div className="w-full mt-4 xl:mt-0 border-b xl:border xl:border-gray-200 xl:shadow-sm col-span-1 xl:col-span-1">
                                 <div className="">
                                   <div className="p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8">
                                     {/* mobile & desktop Nama*/}

@@ -1,10 +1,12 @@
 import React from "react";
-import { IoArrowBack, IoArrowForwardCircle } from "react-icons/io5";
+import { IoArrowBack } from "react-icons/io5";
 import { useSearchParams } from "react-router-dom";
 import { parseTanggal } from "../../helpers/date";
+import {SlArrowRight} from 'react-icons/sl'
 
 export default function HeaderTemplateMobileSearch({ children }) {
   const [searchParams, setSearchParams] = useSearchParams();
+
 
   const date = searchParams.get("date");
   const stasiunBerangkat = searchParams.get("stasiunBerangkat");
@@ -18,26 +20,25 @@ export default function HeaderTemplateMobileSearch({ children }) {
     <div className="flex flex-col min-h-screen">
       <div>
         <div className="block md:hidden">
-          <div className="flex justify-center items-center w-full text-black p-2.5">
-            <div className="ml-2" onClick={() => window.history.back()}>
+          <div className="flex items-center w-full text-black px-4 py-2">
+            <div className="mr-auto" onClick={() => window.history.back()}>
               <IoArrowBack size={22} />
             </div>
-            <div className="flex flex-col items-center justify-center text-center mx-auto">
-              <div className="flex space-x-4 items-center justify-center text-xs">
-                <div>{stasiunBerangkat}</div>
-                <IoArrowForwardCircle
-                  className="block text-blue-500"
-                  size={24}
-                />
-                <div>{stasiunTujuan}</div>
+            <div className="flex flex-col items-center text-center mx-auto mt-2">
+              <div className="flex items-center space-x-2 text-sm font-medium">
+                <span>{stasiunBerangkat.length > 12 ? stasiunBerangkat.slice(0,12) + '...' : stasiunBerangkat}</span>
+                <SlArrowRight className="text-blue-500" size={15} />
+                <span>{stasiunTujuan.length > 12 ? stasiunTujuan.slice(0,12) + '...' : stasiunTujuan}</span>
               </div>
-              <div className="text-xs">
+              <div className="mt-2 text-xs text-gray-500">
                 <small>
                   {tanggal_keberangkatan_kereta} ⍟{" "}
-                  {parseInt(adult) + parseInt(infant)} Penumpang
+                  {parseInt(adult) + parseInt(infant)}{" "}
+                  Penumpang
                 </small>
               </div>
             </div>
+            <div className="ml-auto"></div>
           </div>
         </div>
       </div>
@@ -46,13 +47,7 @@ export default function HeaderTemplateMobileSearch({ children }) {
           <main>{children}</main>
         </div>
       </div>
-      {/* <footer className="border-t text-sm text-black py-6">
-        <div className="container mx-auto">
-          <p className="text-center">
-            © 2015-2023 rajabiller.com. All rights reserved.
-          </p>
-        </div>
-      </footer> */}
+      {/* Footer */}
     </div>
   );
 }

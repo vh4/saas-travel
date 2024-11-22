@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Layout from "../BookingLayout";
 import PembayaranComponent from '../../components/pelni/Pembayaran'
-import HeaderTemplateMobilDetailBooking from "./HeaderTemplateMobilDetailBooking";
+import HeaderTemplateMobilDetailBooking from "./HeaderTemplateMobile";
 
 export default function Pembayaran(){
     useEffect(() => {

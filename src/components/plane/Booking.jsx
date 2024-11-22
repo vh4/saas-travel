@@ -4,7 +4,6 @@ import FormControl from "@mui/material/FormControl";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-input-2";
 import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { RxCrossCircled } from "react-icons/rx";
@@ -26,20 +25,23 @@ import { ExclamationCircleFilled } from "@ant-design/icons";
 import { IoArrowForwardOutline } from "react-icons/io5";
 import { CiBoxList } from "react-icons/ci";
 import Select from "react-select";
-import { v4 as uuidv4 } from "uuid";
 import Skeleton from "react-loading-skeleton";
+import { useDispatch, useSelector } from "react-redux";
+import { callbackFetchData } from "../../features/callBackSlice";
+import { setDataBookPesawat, setisOkBalance } from "../../features/createSlice";
 
 export default function BookingPesawat() {
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const { id } = useParams();
   const [form] = Form.useForm();
   const onReset = () => {
     form.resetFields();
   };
 
+  const dataSearch = useSelector((state) => state.bookpesawat.searchData);
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
@@ -68,6 +70,7 @@ export default function BookingPesawat() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [err, setErr] = useState(false);
+  const dispatch = useDispatch();
 
   const data = [
     {
@@ -149,69 +152,6 @@ export default function BookingPesawat() {
     fetchData();
   }, []);
 
-  // don't delete this.
-
-  // useEffect(() => {
-  //   Promise.all([getDataPesawatSearch()])
-  //     .then(([bookResponse]) => {
-
-  //       if (bookResponse.data.rc === "00") {
-  //         const dataDetailForBooking = bookResponse.data._flight_forBooking;
-  //         const dataDetail = bookResponse.data._flight;
-
-  //         setdataDetailForBooking(dataDetailForBooking);
-  //         setIsInternational(dataDetailForBooking.isInternational)
-  //         setdataDetail(dataDetail);
-
-  //         const TotalAdult = parseInt(dataDetailForBooking.adult) || 0;
-  //         const TotalChild = parseInt(dataDetailForBooking.child) || 0;
-  //         const TotalInfant = parseInt(dataDetailForBooking.infant) || 0; //
-
-  //         SetTotalAdult(TotalAdult);
-  //         setTotalChild(TotalChild);
-  //         setTotalInfant(TotalInfant);
-
-  //         const AdultArr = Array.from({ length: TotalAdult }, () => ({
-  //           gender: "MR",
-  //           nama_depan: "",
-  //           nama_belakang: "",
-  //           birthdate: getCurrentDate(),
-  //           idNumber: "",
-  //         }));
-
-  //         const InfantArr = Array.from({ length: TotalInfant }, () => ({
-  //           gender: "MR",
-  //           nama_depan: "",
-  //           nama_belakang: "",
-  //           birthdate: getCurrentDate(),
-  //         }));
-
-  //         const ChildArr = Array.from({ length: TotalChild }, () => ({
-  //           gender: "MR",
-  //           nama_depan: "",
-  //           nama_belakang: "",
-  //           birthdate: getCurrentDate(),
-  //           idNumber: "",
-  //         }));
-
-  //         setInfant([InfantArr]);
-  //         setChild([ChildArr]);
-  //         setAdult([AdultArr]);
-  //       } else {
-  //         setErrPage(true);
-  //       }
-
-  //       setTimeout(() => {
-  //         setIsLoadingPage(false);
-
-  //       }, 2000);
-  //     })
-  //     .catch(() => {
-  //       setIsLoadingPage(false);
-  //       setErrPage(true);
-  //     });
-  // }, [id]);
-
   useEffect(() => {
     Promise.all([getDataPesawatSearch()])
       .then(([bookResponse]) => {
@@ -273,31 +213,18 @@ export default function BookingPesawat() {
         setIsLoadingPage(false);
         setErrPage(true);
       });
-  }, [id]);
+  }, []);
 
   async function getDataPesawatSearch() {
     try {
-      const response = localStorage.getItem(`data:flight/${id}`);
-      return JSON.parse(response);
+      const response = dataSearch;
+      return response;
     } catch (error) {
       return null;
     }
   }
 
-  // async function getDataPesawatSearch() {
-  //   try {
-  //     const response = await axios.get(
-  //       `${process.env.REACT_APP_HOST_API}/travel/pesawat/search/flight/${id}`
-  //     );
-
-  //     return response;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
-
   /* list penumpang */
-
   const [existingPenumpang, setExistingPenumpang] = useState([]);
   const [loadingExistingPenumpang, setLoadingExistingPenumpang] =
     useState(false);
@@ -398,6 +325,7 @@ export default function BookingPesawat() {
         const birthDate = dayjs(selectedPassenger.ttl, "YYYY/MM/DD");
         if (!disabledDateChild(birthDate)) {
           // If birthDate is valid, set it in the form
+
           form.setFields([
             {
               name: [`tanggallahirChild${indexPreviousPenumpang.index}`],
@@ -405,7 +333,7 @@ export default function BookingPesawat() {
             },
           ]);
   
-          childCategory[indexPreviousPenumpang.index]['birthdate'] = birthDate
+          childCategory[indexPreviousPenumpang.index]['birthdate'] = selectedPassenger.ttl
   
         } else {
           // If birthDate is not valid, clear the field
@@ -444,7 +372,7 @@ export default function BookingPesawat() {
             },
           ]);
   
-          infantCategory[indexPreviousPenumpang.index]['birthdate'] = birthDate
+          infantCategory[indexPreviousPenumpang.index]['birthdate'] = selectedPassenger.ttl
   
         } else {
           // If birthDate is not valid, clear the field
@@ -678,59 +606,33 @@ export default function BookingPesawat() {
       );
 
       if (bookingResponse.data.rc === "00") {
-        // const uuid = await axios.post(
-        //     `${process.env.REACT_APP_HOST_API}/travel/pesawat/book/flight`,
-        //     {
-        //         _DetailPassenger:{
-        //             adults: data_adult,
-        //             children: child[0],
-        //             infants: infant[0],
-        //         },
-        //         _Bookingflight: bookingResponse.data.data,
-        //         uuid:bookingResponse.data.uuid
-        //     }
-        //   );
 
-        // if(uuid.data.rc === '00'){
-        //     navigate({
-        //         pathname: `/flight/payment`,
-        //         search: `?v_flight=${id}&v_book=${uuid.data.uuid}`,
-        //     });
+        const idtrx = bookingResponse.data.data.transactionId;
+        const allowPayment = bookingResponse.data.data.is_allowed_pay;
+        const data = {
+          _DetailPassenger: {
+            adults: data_adult,
+            children: child[0],
+            infants: infant[0],
+          },
+          _Bookingflight: bookingResponse.data.data
+        }
 
-        // }else{
-        //     failedNotification(uuid.data.rd);
-        // }
+        //set booking data
+        dispatch(setDataBookPesawat(data));
+        dispatch(setisOkBalance(allowPayment));
 
-        const uuid = uuidv4();
-        localStorage.setItem(
-          `data:f-book/${uuid}`,
-          JSON.stringify({
-            _DetailPassenger: {
-              adults: data_adult,
-              children: child[0],
-              infants: infant[0],
-            },
-            _Bookingflight: bookingResponse.data.data,
-            uuid: bookingResponse.data.uuid,
-          })
-        );
-
+        //set data callback
+        dispatch(callbackFetchData({ type: 'plane', id_transaksi:idtrx  }));
         setIsLoading(false);
 
-        if (bookingResponse.data.callback === null) {
+        if (bookingResponse.data.callback === null) { //loloskan aja njir
           navigate({
             pathname: `/flight/payment`,
-            search: `?v_flight=${id}&v_book=${uuid}`,
           });
         } else {
-          // SuccessNotification(
-          //   `Response callback is : ${typeof bookingResponse.data.callback === 'object' ? JSON.stringify(bookingResponse.data.callback) : bookingResponse.data.callback}`
-          // );
-
-          // navigate('/');
           navigate({
             pathname: `/flight/payment`,
-            search: `?v_flight=${id}&v_book=${uuid}`,
           });
         }
       } else {
@@ -1025,7 +927,7 @@ export default function BookingPesawat() {
               <>
                 {dataDetail &&
                   dataDetail.map((dataDetail) => (
-                    <div className="mt-0 mb-4 md:mb-0 md:mt-8 xl:mt-0 block xl:hidden rounded-md border border-gray-200 shadow-sm">
+                    <div className="mt-0 mb-4 md:mb-0 md:mt-8 xl:mt-0 block xl:hidden border-b">
                       <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                         <div className="text-black text-sm font-medium ">
                           Keberangkatan Pesawat
@@ -1110,9 +1012,9 @@ export default function BookingPesawat() {
                     onFinishFailed={onFinishFailed}
                     className="block w-full  mt-8 mb-4 xl:mt-12"
                   >
-                    <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-2 gap-12">
+                    <div className="w-full mt-4 xl:mt-0 border-b xl:border xl:border-gray-200 xl:shadow-sm col-span-1 xl:col-span-2 gap-12">
                       <div className="">
-                        <div className="p-4 xl:p-8 form block xl:flex xl:space-x-2">
+                        <div className="p-2 xl:p-8 form block xl:flex xl:space-x-2">
                           {/* mobile & desktop Nama*/}
                           <div className="xl:w-full mt-4 xl:mt-0">
                             <div className="text-black text-sm">
@@ -1200,7 +1102,7 @@ export default function BookingPesawat() {
                     {adult[0].map((e, i) => (
                       <>
                         <div>
-                          <div className="Booking  mt-8 mb-4 xl:mt-12 ml-2 xl:ml-0">
+                          <div className="Booking mt-8 mb-4 xl:mt-12 ml-2 xl:ml-0">
                             <h1 className="text-sm text-black">
                               ADULT PASSENGER
                             </h1>
@@ -1211,7 +1113,7 @@ export default function BookingPesawat() {
                           {/* Detailt */}
                           <div className="flex space-x-12">
                             {/* form detailt kontal */}
-                            <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-1">
+                            <div className="w-full mt-4 xl:mt-0 border-b xl:border xl:border-gray-200 xl:shadow-sm col-span-1 xl:col-span-1">
                               <div className="">
                                 <div className="p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8">
                                   {/* mobile & desktop Nama*/}
@@ -1620,7 +1522,7 @@ export default function BookingPesawat() {
                                               e.expireddate,
                                               "YYYY/MM/DD"
                                             )}
-                                            format={"DD/MM/YYYY"}
+                                            format={"YYYY/MM/DD"}
                                             onChange={handleAdultsubCatagoryChange(
                                               i,
                                               "expireddate"
@@ -1669,7 +1571,7 @@ export default function BookingPesawat() {
                           {/* Detailt */}
                           <div className="flex space-x-12">
                             {/* form detailt kontal */}
-                            <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-1">
+                            <div className="w-full mt-4 xl:mt-0 border-b xl:border xl:border-gray-200 xl:shadow-sm col-span-1 xl:col-span-1">
                               <div className="">
                                 <div className="p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8">
                                   {/* mobile & desktop Nama*/}
@@ -1918,11 +1820,12 @@ export default function BookingPesawat() {
                                         },
                                       ]}
                                     >
+    
                                       <DatePicker
                                         size="large"
                                         className="w-full"
                                         value={dayjs(e.birthdate, "YYYY/MM/DD")}
-                                        format={"DD/MM/YYYY"}
+                                        format={"YYYY/MM/DD"}
                                         onChange={handleChildsubCatagoryChange(
                                           i,
                                           "birthdate"
@@ -2120,7 +2023,7 @@ export default function BookingPesawat() {
                                               e.expireddate,
                                               "YYYY/MM/DD"
                                             )}
-                                            format={"DD/MM/YYYY"}
+                                            format={"YYYY/MM/DD"}
                                             onChange={handleChildsubCatagoryChange(
                                               i,
                                               "expireddate"
@@ -2169,7 +2072,7 @@ export default function BookingPesawat() {
                           {/* Detailt */}
                           <div className="flex space-x-12">
                             {/* form detailt kontal */}
-                            <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-1">
+                            <div className="w-full mt-4 xl:mt-0 border-b xl:border xl:border-gray-200 xl:shadow-sm col-span-1 xl:col-span-1">
                               <div className="">
                                 <div className="p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8">
                                   {/* mobile & desktop Nama*/}
@@ -2378,7 +2281,7 @@ export default function BookingPesawat() {
                                         size="large"
                                         className="w-full"
                                         value={dayjs(e.birthdate, "YYYY/MM/DD")}
-                                        format={"DD/MM/YYYY"}
+                                        format={"YYYY/MM/DD"}
                                         onChange={handleInfantsubCatagoryChange(
                                           i,
                                           "birthdate"
@@ -2577,7 +2480,7 @@ export default function BookingPesawat() {
                                               e.expireddate,
                                               "YYYY/MM/DD"
                                             )}
-                                            format={"DD/MM/YYYY"}
+                                            format={"YYYY/MM/DD"}
                                             onChange={handleInfantsubCatagoryChange(
                                               i,
                                               "expireddate"

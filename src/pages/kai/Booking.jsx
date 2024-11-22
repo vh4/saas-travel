@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Layout from "../BookingLayout";
 import BookingKai from '../../components/kai/Booking'
-import HeaderTemplateMobileBooking from "./HeaderTemplateMobileBooking";
+import HeaderTemplateMobileBooking from "./HeaderTemplateMobile";
 
 export default function Booking(){
 

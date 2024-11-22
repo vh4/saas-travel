@@ -7,7 +7,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Popper } from "@mui/material";
 import { IoBoatSharp } from "react-icons/io5";
-import { useNavigate, createSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import onClickOutside from "react-onclickoutside";
 import { InputGroup } from "rsuite";
 import "rsuite/dist/rsuite.min.css";

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useSearchParams } from "react-router-dom";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { RxCrossCircled } from "react-icons/rx";
 import {
@@ -21,6 +20,9 @@ import PageExpired from "../components/Expired";
 import KonfirmasiLoading from "../components/trainskeleton/konfirmasi";
 import {Typography } from 'antd';
 import moment from 'moment';
+import { useDispatch, useSelector } from "react-redux";
+import { callbackFetchData } from "../../features/callBackSlice";
+import { setDataBookKereta, setisOkBalanceKereta } from "../../features/createSlice";
 
 const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCount, setSelectedCount, setgerbongsamawajib, gerbongsamawajib,  selectedCheckboxes, setSelectedCheckboxes}) => {
   
@@ -272,9 +274,13 @@ seats.forEach((seat) => {
 };
 
 export default function Konfirmasi() {
+
   const [api, contextHolder] = notification.useNotification();
   const { Paragraph } = Typography;
   const [selectedCount, setSelectedCount] = useState(0);
+  const dispatch = useDispatch();
+  const bookKereta = useSelector((state) => state.bookkereta.bookDataKereta);
+  const dataSearch = useSelector((state) => state.bookkereta.searchDataKereta);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -302,14 +308,6 @@ export default function Konfirmasi() {
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
-
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const uuid_book = searchParams.get("k_book");
-  const uuid_train_data = searchParams.get("k_train");
-  const callback_train = localStorage.getItem('callback_train') || null;
-  
-  // const uuid_auth = searchParams.get("k_auth");
 
   const [dataBookingTrain, setdataBookingTrain] = useState(null);
   const [dataDetailTrain, setdataDetailTrain] = useState(null);
@@ -341,8 +339,6 @@ export default function Konfirmasi() {
 
   const [changeState, setChangeSet] = useState({}); //change seats.
   const [changeStateKetikaGagalTidakUpdate, setchangeStateKetikaGagalTidakUpdate] = useState({}); //change seats.
-  const [isNavigationDone, setIsNavigationDone] = useState(false);
-
   const [gerbongsamawajib, setgerbongsamawajib] = useState(0);
 
   const [open, setOpen] = React.useState(false);
@@ -446,7 +442,7 @@ export default function Konfirmasi() {
     } else {
       setIsBookingExpired(false);
     }
-  }, [uuid_book, uuid_train_data, token]);
+  }, [token]);
 
 
   const [remainingBookTime, setremainingBookTime] = useState(remainingTime(expiredBookTime));
@@ -472,45 +468,20 @@ export default function Konfirmasi() {
   }, [expiredBookTime]);
   
 
-  // async function getDataTrain() {
-  //   try {
-  //     const response = await axios.get(
-  //       `${process.env.REACT_APP_HOST_API}/travel/train/search/k_search/${uuid_train_data}`
-  //     );
-
-  //     return response;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
-
-
-
   async function getDataTrain() {
     try {
-      const response = localStorage.getItem(`data:k-train/${uuid_train_data}`);
-      return JSON.parse(response);
+      const response = dataSearch;
+      return response;
 
     } catch (error) {
       return null;
     }
   }
 
-  // async function getHasilBooking() {
-  //   try {
-  //     const response = await axios.get(
-  //       `${process.env.REACT_APP_HOST_API}/travel/train/book/k_book/${uuid_book}`
-  //     );
-  //     return response;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
-
   async function getHasilBooking() {
     try {
-      const response = localStorage.getItem(`data:k-book/${uuid_book}`);
-      return JSON.parse(response);
+      const response = bookKereta;
+      return response;
     } catch (error) {
       return null;
     }
@@ -532,9 +503,7 @@ export default function Konfirmasi() {
         destination: dataDetailTrain[0].tujuan_id_station,
         date: dataBookingTrain[0].arrivalDate,
         trainNumber: dataBookingTrain[0].trainNumber,
-        token: JSON.parse(
-          localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-        ),
+        token: token,
       }
     );
 
@@ -551,48 +520,19 @@ export default function Konfirmasi() {
 
     setIsLoading(true);
 
-    if(callback_train && callback_train == 'true'){
+      const idtrx = hasilBooking.transactionId;
+      const allowPayment = hasilBooking.is_allowed_pay;
 
-      // setTimeout(async () => {
-        
-      //   const dataParse = JSON.parse(localStorage.getItem(`data:k-book/${uuid_book}`))
+      //set booking data
+      dispatch(setisOkBalanceKereta(allowPayment));
 
-      //   const response = await axios.post(
-      //     `${process.env.REACT_APP_HOST_API}/travel/train/callback`,
-      //     {
-      //       id_transaksi:dataParse.hasil_book.transactionId
-      //     }
-      //   );
+      //set data callback
+      dispatch(callbackFetchData({ type: 'train', id_transaksi:idtrx  }));
 
-      // if(response.data.rc == '00'){
-      //   navigate('/')
-      // }else{
-      //   failedNotification(response.data.rd)
-      // }
-
-      // setIsLoading(false);
-
-      // }, 100);
-
-      setTimeout(() => {
-        setIsLoading(false);
-        navigate({
-          pathname: `/train/bayar`,
-          search: `?k_train=${uuid_train_data}&k_book=${uuid_book}`,
-        });
-      }, 100);
-      
-    }else{
-      e.preventDefault();
-      setTimeout(() => {
-        setIsLoading(false);
-        navigate({
-          pathname: `/train/bayar`,
-          search: `?k_train=${uuid_train_data}&k_book=${uuid_book}`,
-        });
-      }, 100);
-
-    }
+      setIsLoading(false);
+      navigate({
+        pathname: `/train/bayar`,
+      });
     
   };  
 
@@ -622,7 +562,7 @@ export default function Konfirmasi() {
       wagonNumber: wagonNumber,
       wagonCode: className,
       seats: changeStateFix[0],
-      token: JSON.parse(localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)),
+      token: token,
     };
   
     gantiKursiFix.seats = gantiKursiFix.seats.filter((seat) => seat.type !== "infant");
@@ -655,36 +595,17 @@ export default function Konfirmasi() {
       
       hasilBookingData['transactionId'] = idtrx;
 
-      //passenger nya harusmya di update yang baru change seats.
-      // const response = await axios.put(
-      //   `${process.env.REACT_APP_HOST_API}/travel/train/book/k_book`,
-      //   {
-      //     // uuid: uuid_book,
-      //     passengers: passengers,
-      //     hasil_book: hasilBookingData,
-      //     // uuid_permission: uuid_auth,
-      //   }
-      // );
+      const data = {
+        passengers: passengers,
+        hasil_book: hasilBookingData,
+      }
 
-      localStorage.setItem(`data:k-book/${uuid_book}`, JSON.stringify(
-        {
-          passengers: passengers,
-          hasil_book: hasilBookingData,
-        }
-      ));
+      dispatch(setDataBookKereta(data));
+
 
       setisLoadingPindahKursi(false);
       successNotification();
       setHasilBooking(hasilBookingData);
-
-      // if (response.data.rc === "00") {
-      //   setHasilBooking(hasilBookingData);
-      //   setisLoadingPindahKursi(false);
-      //   successNotification();
-      // } else {
-      //   setisLoadingPindahKursi(false);
-      //   failedNotification(response.data.rd);
-      // }
 
       setchangeStateKetikaGagalTidakUpdate(JSON.stringify(changeState))
 
@@ -705,8 +626,6 @@ export default function Konfirmasi() {
   };
 
   const [backdrop, setBackdrop] = React.useState('static');
-  const handleOpen = () => setOpen(true);
-
   function gantigerbong(value){
 
     setSelectedCount(0); 
@@ -971,11 +890,11 @@ export default function Konfirmasi() {
           ) : (
             <>
               <div className="block xl:flex xl:justify-around mb-24 md:space-x-4">
-                <div className="block md:hidden">
+                <div className="block md:hidden mb-4 xl:mb-0">
                   <Alert message={`Expired Booking : ${remainingBookTime}`} banner />
                 </div>
                 <div className="w-full mx-0 2xl:mx-4">
-                  <div className="mt-2 md:mt-8 w-full rounded-md border border-gray-200 shadow-sm">
+                  <div className="mt-2 md:mt-8 w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
                     <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                       <div className="text-black font-medium  ">
                         Keberangkatan kereta
@@ -1043,7 +962,7 @@ export default function Konfirmasi() {
                   </div>
                   {/* adult */}
                   {passengers.adults && passengers.adults.length > 0 ? (
-                    <div className="text-sm xl:text-sm font-bold text-black mt-12">
+                    <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
                       <p>ADULT PASSENGERS</p>
                     </div>
                   ) : (
@@ -1052,7 +971,7 @@ export default function Konfirmasi() {
                   {passengers.adults && passengers.adults.length > 0
                     ? passengers.adults.map((e, i) => (
                         <>
-                          <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+                          <div className="p-2 mt-4 w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
                             <div className="p-2">
                               <div className="px-2 xl:px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
                                 {e.name}
@@ -1098,7 +1017,7 @@ export default function Konfirmasi() {
                     : ""}
                   {/* infants */}
                   {passengers.infants && passengers.infants.length > 0 ? (
-                    <div className="text-sm xl:text-sm font-bold text-black mt-12">
+                    <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
                       <p>INFANTS PASSENGERS</p>
                     </div>
                   ) : (
@@ -1107,7 +1026,7 @@ export default function Konfirmasi() {
                   {passengers.infants && passengers.infants.length > 0
                     ? passengers.infants.map((e, i) => (
                         <>
-                          <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+                          <div className="p-2 mt-4 w-full rounded-md border-b xlborder xl:border-gray-200 xl:shadow-sm">
                             <div className="mt-2">
                               <div className="px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
                                 {e.name}
@@ -1160,7 +1079,7 @@ export default function Konfirmasi() {
                   <div className="text-sm xl:text-sm font-bold text-black mt-12">
                     <p>PRICE DETAILT</p>
                   </div>
-                  <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
+                  <div className="p-2 mt-4 w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
                     <div className="p-4">
                       <div className="text-xs text-black font-medium  flex justify-between">
                         <div>

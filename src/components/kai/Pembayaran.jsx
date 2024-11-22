@@ -1,10 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useSearchParams } from "react-router-dom";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { MdHorizontalRule } from "react-icons/md";
-import { useNavigate, createSearchParams } from "react-router-dom";
-import { TiketContext } from "../../App";
 import { Alert, Button as ButtonAnt, Modal } from "antd";
 import { notification } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
@@ -16,22 +13,21 @@ import BayarLoading from "../components/trainskeleton/bayar";
 import { Typography } from "antd";
 import moment from "moment";
 import Tiket from "./Tiket";
-import { ExclamationCircleFilled } from '@ant-design/icons';
+import { ExclamationCircleFilled } from "@ant-design/icons";
+import { useSelector } from "react-redux";
 
 export default function Pembayaran() {
-  const navigate = useNavigate();
-
-  const [searchParams, setSearchParams] = useSearchParams();
+  const isOk = useSelector((state) => state.callback.isOk);
+  const isCurrentBalance = useSelector(
+    (state) => state.bookkereta.isOkBalanceKereta
+  );
+  const bookKereta = useSelector((state) => state.bookkereta.bookDataKereta);
+  const dataSearch = useSelector((state) => state.bookkereta.searchDataKereta);
   const { Paragraph } = Typography;
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const uuid_book = searchParams.get("k_book");
-  const uuid_train_data = searchParams.get("k_train");
-
-  const { dispatch } = useContext(TiketContext);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -46,7 +42,6 @@ export default function Pembayaran() {
   );
 
   const [TotalAdult, setTotalAdult] = useState(0);
-  //   const [TotalChild, setTotalChild] = useState(0);
   const [TotalInfant, setTotalInfant] = useState(0);
 
   const [err, setErr] = useState(false);
@@ -56,8 +51,6 @@ export default function Pembayaran() {
   const [expiredBookTime, setExpiredBookTime] = useState(null);
 
   const [api, contextHolder] = notification.useNotification();
-  const [isNavigationDone, setIsNavigationDone] = useState(false);
-  const [whiteList, setWhiteList] = useState(0);
   const [isSimulated, setisSimulate] = useState(0);
 
   const [ispay, setispay] = useState(false);
@@ -70,7 +63,6 @@ export default function Pembayaran() {
   const hideModal = () => {
     setOpen(false);
   };
-
 
   const failedNotification = (rd) => {
     api["error"]({
@@ -87,38 +79,29 @@ export default function Pembayaran() {
       setErr(true);
     }
 
-    Promise.all([getDataTrain(), getHasilBooking(), cekCallbakIsMitra(), cekWhiteListUsername()])
+    Promise.all([
+      getDataTrain(),
+      getHasilBooking(),
+      cekIsMerchant(),
+      cekWhiteListUsername(),
+    ])
       .then(
         ([
           ResponsegetDataTrain,
           ResponsegetHasilBooking,
-          cekCallbakIsMitra,
-          cekWhiteListUsername
+          cekIsMerchant,
+          cekWhiteListUsername,
         ]) => {
-          if (cekCallbakIsMitra.data.rc == "00") {
+          if (cekIsMerchant.data.rc == "00") {
             setcallbackBoolean(true);
           }
 
-
-        const isWhiteList = cekWhiteListUsername?.is_whitelist || 0;
-        const isSimulate = cekWhiteListUsername?.is_simulate || 0;
-        setWhiteList(isWhiteList);
-        setisSimulate(isSimulate)
+          const isSimulate = cekWhiteListUsername?.is_simulate || 0;
+          setisSimulate(isSimulate);
 
           if (ResponsegetDataTrain) {
             setdataDetailTrain(ResponsegetDataTrain.train_detail);
             setdataBookingTrain(ResponsegetDataTrain.train);
-
-            const dataBookingTrain = ResponsegetDataTrain.train;
-            const classTrain =
-              dataBookingTrain[0].seats[0].grade === "E"
-                ? "Eksekutif"
-                : dataBookingTrain[0].seats[0].grade === "B"
-                ? "Bisnis"
-                : "Ekonomi";
-            const tanggal_keberangkatan_kereta = parseTanggal(
-              dataBookingTrain[0].departureDate
-            );
           } else {
             setErrPage(true);
           }
@@ -151,7 +134,6 @@ export default function Pembayaran() {
             });
 
             setTotalAdult(passengers.adults.length);
-            //   setTotalChild(passengers.children ? passengers.children.length : 0);
             setTotalInfant(passengers.infants.length);
           } else {
             setErrPage(true);
@@ -176,7 +158,7 @@ export default function Pembayaran() {
         setIsLoadingPage(false);
         setErrPage(true);
       });
-  }, [uuid_book, uuid_train_data, token]);
+  }, [token]);
 
   const [remainingBookTime, setremainingBookTime] = useState(
     remainingTime(expiredBookTime)
@@ -191,10 +173,6 @@ export default function Pembayaran() {
         new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()
       ) {
         setIsBookingExpired(true);
-
-        localStorage.removeItem(`data:k-train/${uuid_train_data}`);
-        localStorage.removeItem(`data:k-book/${uuid_book}`);
-
       } else {
         setIsBookingExpired(false);
       }
@@ -203,46 +181,21 @@ export default function Pembayaran() {
     return () => clearInterval(intervalId);
   }, [expiredBookTime]);
 
-  // async function getDataTrain() {
-  //   try {
-  //     const response = await axios.get(
-  //       `${process.env.REACT_APP_HOST_API}/travel/train/search/k_search/${uuid_train_data}`
-  //     );
-
-  //     return response;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
-
   async function getDataTrain() {
     try {
-      const response = localStorage.getItem(`data:k-train/${uuid_train_data}`);
-      return JSON.parse(response);
+      const response = dataSearch;
+      return response;
     } catch (error) {
       return null;
     }
   }
 
-  // async function getHasilBooking() {
-  //   try {
-  //     const response = await axios.get(
-  //       `${process.env.REACT_APP_HOST_API}/travel/train/book/k_book/${uuid_book}`
-  //     );
-  //     return response;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
-
-  async function cekCallbakIsMitra() {
+  async function cekIsMerchant() {
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_HOST_API}/travel/is_merchant`,
         {
-          token: JSON.parse(
-            localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-          ),
+          token: token,
         }
       );
       return response;
@@ -256,9 +209,8 @@ export default function Pembayaran() {
       const response = await axios.get(
         `${process.env.REACT_APP_HOST_API}/travel/is_whitelist`
       );
-      
-      return response.data;
 
+      return response.data;
     } catch (error) {
       throw error;
     }
@@ -266,8 +218,8 @@ export default function Pembayaran() {
 
   async function getHasilBooking() {
     try {
-      const response = localStorage.getItem(`data:k-book/${uuid_book}`);
-      return JSON.parse(response);
+      const response = bookKereta;
+      return response;
     } catch (error) {
       return null;
     }
@@ -287,9 +239,7 @@ export default function Pembayaran() {
         discount: hasilBooking.discount,
         simulateSuccess: isSimulated, //
         pay_type: "TUNAI",
-        token: JSON.parse(
-          localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-        ),
+        token: token,
       }
     );
 
@@ -308,64 +258,15 @@ export default function Pembayaran() {
             parseInt(hasilBooking.discount) +
             parseInt(hasilBooking.nominalAdmin)
         ),
-      }
-
-      // dispatch({
-      //   type: "PAY_TRAIN",
-      // });
-
-      // setTimeout(() => {
-      //   setIsLoading(false);
-
-      //   navigate({
-      //     pathname: "/train/tiket-kai",
-      //     search: `?${createSearchParams(params)}`,
-      //   });
-      // }, 100);
-
+      };
       setispay(true);
       setHasilbayar(params);
-
-      localStorage.removeItem(`data:k-train/${uuid_train_data}`);
-      localStorage.removeItem(`data:k-book/${uuid_book}`);
-
-
     } else {
       setTimeout(() => {
         failedNotification(response.data.rd);
         setIsLoading(false);
       }, 100);
     }
-  }
-
-  async function handleCallbackSubmit(e) {
-    e.preventDefault();
-    setIsLoading(true);
-
-    setTimeout(async () => {
-      const dataParse = JSON.parse(
-        localStorage.getItem(`data:k-book/${uuid_book}`)
-      );
-
-      const response = await axios.post(
-        `${process.env.REACT_APP_HOST_API}/travel/train/callback`,
-        {
-          id_transaksi: dataParse.hasil_book.transactionId,
-        }
-      );
-
-      if (response.data.rc == "00") {
-        navigate("/");
-
-        localStorage.removeItem(`data:k-train/${uuid_train_data}`);
-        localStorage.removeItem(`data:k-book/${uuid_book}`);
-
-      } else {
-        failedNotification(response.data.rd);
-      }
-
-      setIsLoading(false);
-    }, 100);
   }
 
   return (
@@ -385,40 +286,38 @@ export default function Pembayaran() {
         <>
           <PageExpired />
         </>
-      ) :
-      
-      ispay == true ? 
-      (
-      <>
-        <Tiket data={hasilbayar} />
-      </>)
-      :
-      (
+      ) : ispay == true ? (
+        <>
+          <Tiket data={hasilbayar} />
+        </>
+      ) : (
         <>
           {/* header kai flow */}
           <Modal
-              title={
-                (<>
-                  <div className="flex space-x-2 items-center">
-                      <ExclamationCircleFilled className="text-orange-500 text-xl" />
-                      <div className="text-bold text-xl text-orange-500">Are you sure?</div>
+            title={
+              <>
+                <div className="flex space-x-2 items-center">
+                  <ExclamationCircleFilled className="text-orange-500 text-xl" />
+                  <div className="text-bold text-xl text-orange-500">
+                    Are you sure?
                   </div>
-                </>)
-              }
-              open={open}
-              onOk={hideModal}
-              onCancel={hideModal}
-              okText="Cancel"
-              cancelText="Submit"
-              maskClosable={false}
-              footer={
-                <>
+                </div>
+              </>
+            }
+            open={open}
+            onOk={hideModal}
+            onCancel={hideModal}
+            okText="Cancel"
+            cancelText="Submit"
+            maskClosable={false}
+            footer={
+              <>
                 <div className="blok mt-8">
                   <div className="flex justify-end space-x-2">
-                  <ButtonAnt key="back" onClick={hideModal}>
-                    Cancel
-                  </ButtonAnt>
-                  <ButtonAnt
+                    <ButtonAnt key="back" onClick={hideModal}>
+                      Cancel
+                    </ButtonAnt>
+                    <ButtonAnt
                       htmlType="submit"
                       key="submit"
                       type="primary"
@@ -431,10 +330,10 @@ export default function Pembayaran() {
                   </div>
                 </div>
               </>
-              }
-            >
-              <p>Apakah Anda yakin ingin melakukan pembayaran ?</p>
-            </Modal>
+            }
+          >
+            <p>Apakah Anda yakin ingin melakukan pembayaran ?</p>
+          </Modal>
           <div className="px-0 md:px-12 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
               <AiOutlineCheckCircle className="text-black" size={20} />
@@ -671,8 +570,23 @@ export default function Pembayaran() {
                   </div>
                 </div>
                 {/* desktop sidebar */}
-                <div className="sidebar hidden xl:block w-full xl:w-2/3 2xl:w-1/2">
-                  <div className="mt-8 py-2 rounded-md border-b border-gray-200 shadow-sm">
+                <div className="sidebar hidden md:block w-full xl:w-2/3 2xl:w-1/2">
+                  <div className="py-2 rounded-md border-b border-gray-200 shadow-sm">
+                    <div className="mt-4">
+                      {!isOk ||
+                        (!isCurrentBalance && (
+                          <>
+                            <div className="mt-4">
+                              <Alert
+                                message={`Saldo anda tidak mencukupi. silahkan deposit.`}
+                                type="error"
+                                banner
+                                closable
+                              />
+                            </div>
+                          </>
+                        ))}
+                    </div>
                     <div className="px-4 py-2">
                       {/* <div className="text-black text-xs">Booking ID</div> */}
                       <div className="text-black text-xs">Transaksi ID</div>
@@ -708,9 +622,7 @@ export default function Pembayaran() {
                       </div>
                     </div>
                     <div className="p-4 border-t">
-                      <div className="text-xs text-black">
-                        LIST PASSENGERS
-                      </div>
+                      <div className="text-xs text-black">LIST PASSENGERS</div>
                       {passengers.adults &&
                         passengers.adults.length > 0 &&
                         passengers.adults.map((e, i) => (
@@ -742,24 +654,26 @@ export default function Pembayaran() {
                   </div>
                   {callbackBoolean == true ? (
                     <div className="mt-2 py-4 rounded-md border-t border-gray-200 shadow-sm">
-                      <>
-                        <div className="px-8 md:px-4 py-4 text-sm text-black">
-                          Tekan tombol dibawah ini untuk melanjutkan proses
-                          transaksi.
-                        </div>
-                        <div className="flex justify-center">
-                          <ButtonAnt
-                          onClick={whiteList == 1 ? showModal : handleCallbackSubmit} 
-                          size="large"
-                            key="submit"
-                            type="primary"
-                            className="bg-blue-500 px-8 font-semibold"
-                            loading={isLoading}
-                          >
-                            Bayar Sekarang
-                          </ButtonAnt>
-                        </div>
-                      </>
+                      {isOk && isCurrentBalance && (
+                        <>
+                          <div className="px-8 md:px-4 py-4 text-sm text-black">
+                            Tekan tombol dibawah ini untuk melanjutkan proses
+                            transaksi.
+                          </div>
+                          <div className="flex justify-center">
+                            <ButtonAnt
+                              onClick={isOk && isCurrentBalance && showModal}
+                              size="large"
+                              key="submit"
+                              type="primary"
+                              className="bg-blue-500 px-8 font-semibold"
+                              loading={isLoading}
+                            >
+                              Bayar Sekarang
+                            </ButtonAnt>
+                          </div>
+                        </>
+                      )}
                     </div>
                   ) : (
                     <>
@@ -782,26 +696,43 @@ export default function Pembayaran() {
                     </>
                   )}
                 </div>
-              {callbackBoolean == true ? (
-                <div className="block xl:hidden mt-8 py-4 rounded-md border border-gray-200 shadow-sm">
+                {callbackBoolean == true ? (
+                  <div className="block xl:hidden mt-8 py-2 rounded-md">
                     <>
-                      <div className="flex justify-center">
-                        <ButtonAnt
-                          onClick={whiteList == 1 ? showModal : handleCallbackSubmit} 
-                          size="large"
-                          key="submit"
-                          type="primary"
-                          className="bg-blue-500 mx-2 font-semibold"
-                          loading={isLoading}
-                        >
-                          Bayar Sekarang
-                        </ButtonAnt>
-                      </div>
+                      {isOk && isCurrentBalance && (
+                        <>
+                          <div className="flex justify-center">
+                            <ButtonAnt
+                              onClick={showModal}
+                              size="large"
+                              key="submit"
+                              type="primary"
+                              className="bg-blue-500 mx-2 font-semibold"
+                              loading={isLoading}
+                            >
+                              Bayar Sekarang
+                            </ButtonAnt>
+                          </div>
+                        </>
+                      )}
                     </>
-                </div>
-              ) : (
-                <>
-                  {/* <div className="px-8 py-4 text-sm text-black">
+                    {!isOk ||
+                      (!isCurrentBalance && (
+                        <>
+                          <div className="mt-4">
+                            <Alert
+                              message={`Saldo anda tidak mencukupi. silahkan deposit.`}
+                              type="error"
+                              banner
+                              closable
+                            />
+                          </div>
+                        </>
+                      ))}
+                  </div>
+                ) : (
+                  <>
+                    {/* <div className="px-8 py-4 text-sm text-black">
                     Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
                     </div>
                     <div className="flex justify-center">
@@ -817,8 +748,8 @@ export default function Pembayaran() {
                         Langsung Bayar
                       </ButtonAnt>
                     </div>                      */}
-                </>
-              )}
+                  </>
+                )}
               </div>
             </>
           )}

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useSearchParams, useNavigate, Route } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import { IoArrowBackOutline, IoArrowForwardOutline, IoSearchCircle, IoSearchCircleOutline, IoSearchOutline } from "react-icons/io5";
+import { IoArrowBackOutline, IoArrowForwardOutline, IoSearchOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Searchpelni from "./PelniSearch";
 import { notification, Spin, Timeline } from "antd";
@@ -13,18 +13,20 @@ import Page500 from "../components/500";
 import { duration, durationFull } from "../../helpers/pelni";
 import { parseTanggal, parseTanggalPelni } from "../../helpers/date";
 import { toRupiah } from "../../helpers/rupiah";
-import moment from "moment";
 import dayjs from "dayjs";
-import { v4 as uuidv4 } from 'uuid';
 import { Whisper, Popover } from "rsuite";
 import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 import { BsArrowDownCircle } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { setDataSearchPelni } from "../../features/createSlice";
+import { SlArrowDown, SlArrowLeft } from "react-icons/sl";
 
 export default function Search() {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const origin = searchParams.get("origin");
   const originName = searchParams.get("originName");
+  const dispatch = useDispatch();
 
   const destination = searchParams.get("destination");
   const destinationName = searchParams.get("destinationName");
@@ -188,9 +190,7 @@ export default function Search() {
       male: 1,
       female: e.fares[i].AVAILABILITY.F,
       uuid:uuid,
-      token: JSON.parse(
-        localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-      ),
+      token: token
     };
 
     try {
@@ -225,9 +225,7 @@ export default function Search() {
       destinationCall: e.DES_CALL,
       departureDate: departureDate,
       shipNumber: e.SHIP_NO,
-      token: JSON.parse(
-        localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-      ),
+      token: token,
     };
 
     const response = await axios.post(
@@ -274,21 +272,11 @@ export default function Search() {
       rd: "success",
     };
 
-    // const uuid = await axios.post(
-    //   `${process.env.REACT_APP_HOST_API}/travel/pelni/search/p_search`,
-    //   params
-    // );
-
-    // if (uuid.data.rc == "00") {
-    //   navigate(`/pelni/booking/${uuid.data.uuid}`);
-    // } else {
-    //   failedNotification(uuid.data.rd);
-    // }
-
-    const uuid = uuidv4();
-    localStorage.setItem(`data:pelni/${uuid}`, JSON.stringify(params));
-
-    navigate(`/pelni/booking/${uuid}`);
+    dispatch(setDataSearchPelni(params));
+    
+    setTimeout(() => {
+      navigate(`/pelni/booking`);
+    }, 1000);
 
   }
 
@@ -299,9 +287,7 @@ export default function Search() {
     const response = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/pelni/get_origin`,
       {
-        token: JSON.parse(
-          localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-        ),
+        token: token,
       }
     );
 
@@ -360,7 +346,7 @@ export default function Search() {
             <div className="hidden md:block judul-search  text-black">
               PILIH JADWAL
             </div>
-            <div className="mt-0 md:mt-8">
+            <div className="mt-4 md:mt-8">
               <div className="block md:flex flex-col md:flex-row md:justify-between items-center md:space-x-4">
                 <div className="hidden md:flex items-center space-x-3 text-center md:text-left">
                   <small className="text-xs font-normal  text-black">
@@ -391,7 +377,7 @@ export default function Search() {
                   </small>
                 </div>
               </div>
-              <div className="flex justify-between mt-2 md:mt-8">
+              <div className="flex justify-between mt-4 md:mt-8">
                   <div className="relative flex items-center space-x-2 text-black text-xs font-normal ">
                     <Whisper
                     className="text-black"
@@ -449,8 +435,8 @@ export default function Search() {
                     <div
                       className="pl-2 flex  space-x-2 items-center cursor-pointer"
                     >
-                      <div className="text-xs text-black">Nama Kapal</div>
                       <IoSearchOutline className="text-black " size={18} />
+                      <div className="text-xs text-black">Nama Kapal</div>
                     </div>
                     </Whisper>
 
@@ -458,8 +444,8 @@ export default function Search() {
                     onClick={() => setUbahPencarian((prev) => !prev)}      
                     className="pl-2 flex md:hidden space-x-2 items-center cursor-pointer"
                     >
+                      <SlArrowDown className="text-black " size={16} />
                       <div className="text-xs text-black">Ubah Pencarian</div>
-                      <BsArrowDownCircle className="text-black " size={16} />
                     </div>
                   </div>
                   <div className="mt-0 block md:flex space-x-0 md:space-x-4 mr-0 md:mr-0 justify-start md:justify-end">
@@ -467,7 +453,7 @@ export default function Search() {
                       to="/"
                       className="hidden md:flex space-x-2 items-center"
                     >
-                      <IoArrowBackOutline className="text-black" size={16} />
+                      <SlArrowLeft className="text-black" size={16} />
                       <div className="text-black text-xs">
                         Kembali
                       </div>
@@ -501,7 +487,7 @@ export default function Search() {
                   </div>
                 ))
               ) : notFound !== true && filteredData.length !== 0 ? (
-                <div className="row mb-24 w-full p-2">
+                <div className="row w-full p-2">
                   {/* untuk sorting yang  availbility nya tidak habis. */}
                   <div>
                   {filteredData.map(
@@ -521,7 +507,7 @@ export default function Search() {
                                   e.fares[i]["F_available"] == "0"
                                     ? "bg-gray-200"
                                     : "bg-white"
-                                } border border-gray-200 rounded-lg shadow-sm  hover:border transition-transform transform hover:scale-105`}
+                                } border-b xl:border xl:border-gray-200 xl:rounded-lg xl:shadow-sm  hover:border transition-transform transform hover:scale-105`}
                               >
                                 {/* desktop cari */}
                                 <div className="hidden xl:block w-full text-black ">
@@ -678,14 +664,14 @@ export default function Search() {
                                         </div>
                                       </div>
                                       <div className="flex justify-start">
-                                        <div className="flex space-x-2 items-start">
+                                        <div className="flex space-x-6 items-start">
                                           <div>
                                             <h1 className="mt-10 xl:mt-0 text-xs font-normal ">{`${e.DEP_TIME.slice(
                                               0,
                                               2
                                             )}:${e.DEP_TIME.slice(2)}`}</h1>
                                             <small className="text-black">
-                                              {originName}
+                                              {originName.length > 10 ? originName.slice(0,10) + '...' : originName }
                                             </small>
                                           </div>
                                           <div className="w-full mt-12 px-4 border-b-2"></div>
@@ -709,13 +695,13 @@ export default function Search() {
                                               2
                                             )}:${e.ARV_TIME.slice(2)}`}</h1>
                                             <small className="text-black">
-                                              {destinationName}
+                                             {destinationName.length > 10 ? destinationName.slice(0,10) + '...' : destinationName }
                                             </small>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
-                                    <div className="flex justify-center text-xs mt-2 text-blue-500 cursor-pointer text-center items-center mb-2"  
+                                    <div className="flex justify-center space-x-2 text-xs mt-4 cursor-pointer text-center items-center mb-2"  
                                       onClick={(event) =>{
                                         event.stopPropagation();
                                         openButton == `open-${k + i}${e.SHIP_NO}`
@@ -724,7 +710,8 @@ export default function Search() {
                                       }
                                     }
                                       >
-                                  Detail Route
+                                      <SlArrowDown />
+                                      <div>Detail Route</div>
                                       </div>
                                   {openButton === `open-${k + i}${e.SHIP_NO}` ? (
                                     <div className={`block xl:hidden ${openButton === `open-${k + i}${e.SHIP_NO}` ? '' : 'max-h-0'}`}>

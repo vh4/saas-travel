@@ -1,9 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { MdHorizontalRule } from "react-icons/md";
-import { useNavigate, useParams } from "react-router-dom";
-import { TiketContext } from "../../App";
 import { Button as ButtonAnt, Alert, Modal } from "antd";
 import { notification } from "antd";
 import Page400 from "../components/400";
@@ -17,13 +15,13 @@ import moment from "moment";
 import PageExpired from "../components/Expired";
 import Tiket from "./Tiket";
 import { ExclamationCircleFilled } from '@ant-design/icons';
+import { useSelector } from "react-redux";
 
 export default function Pembayaran() {
-  const navigate = useNavigate();
-
-  const { dispatch } = useContext(TiketContext);
+  const isOk = useSelector((state) => state.callback.isOk);
+  const bookPelni = useSelector((state) => state.bookpelni.bookDataPelni);
+  const isCurrentBalance = useSelector((state) => state.bookpelni.isOkBalancePelni);
   const { Paragraph } = Typography;
-
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
@@ -33,31 +31,21 @@ export default function Pembayaran() {
   }, []);
 
   const [api, contextHolder] = notification.useNotification();
-
-  //loading hanlde submit pembayaran.
   const [isLoading, setLoading] = React.useState(false);
   const [passengers, setPassengers] = useState({});
-
-  let { id } = useParams();
   const [book, setBook] = useState(null);
-
   const [bookInfo, setBookInfo] = useState(null);
   const [isLoadingPage, setIsLoadingPage] = useState(true);
   const [errPage, setErrPage] = useState(false);
-
   const [TotalAdult, setTotalAdult] = useState(0);
   const [TotalInfant, setTotalInfant] = useState(0);
   const [callbackBoolean, setcallbackBoolean] = useState(false);
   const [expiredBookTime, setExpiredBookTime] = useState(null);
-  const [isNavigationDone, setIsNavigationDone] = useState(false);
-  const [isBookingExpired, setIsBookingExpired] = useState(false); // Added state for booking expiration
-  const [whiteList, setWhiteList] = useState(0);
+  const [isBookingExpired, setIsBookingExpired] = useState(false);
   const [ispay, setispay] = useState(false);
   const [hasilbayar, setHasilbayar] = useState(null);
   const [isSimulated, setisSimulate] = useState(0);
-
   const [err, setErr] = useState(false);
-
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
@@ -65,46 +53,6 @@ export default function Pembayaran() {
   const hideModal = () => {
     setOpen(false);
   };
-
-
-  // useEffect(() => {
-  //   if (token === null || token === undefined) {
-  //     setErr(true);
-  //   }
-
-  //   Promise.all([getInfoBooking(), getInfoBookingInfo(), getDataPassengers()])
-  //     .then(([bookResponse, bookInfoResponse, passenggerResponse]) => {
-  //       if (bookResponse.data.rc === "00") {
-  //         setBook(bookResponse.data.data);
-  //       }else{
-  //         setErrPage(true);
-  //       }
-
-  //       if (bookInfoResponse.data.rc === "00") {
-  //         setBookInfo(bookInfoResponse.data.data);
-  //       }else{
-  //         setErrPage(true);
-  //       }
-
-  //       if (passenggerResponse.data.rc === "00") {
-  //         setPassengers(passenggerResponse.data);
-  //         setTotalAdult(passenggerResponse.data.adult);
-  //         setTotalInfant(passenggerResponse.data.infant);
-
-  //       }else{
-  //         setErrPage(true);
-  //       }
-
-  //       setTimeout(() => {
-  //         setIsLoadingPage(false);
-  //       }, 2000);
-
-  //     })
-  //     .catch(() => {
-  //       setIsLoadingPage(false);
-  //       setErrPage(true);
-  //     });
-  // }, [id, token]);
 
   useEffect(() => {
     if (token === null || token === undefined) {
@@ -122,10 +70,7 @@ export default function Pembayaran() {
           setcallbackBoolean(true);
         }
 
-        const isWhiteList = cekWhiteListUsername?.is_whitelist || 0;
         const isSimulate = cekWhiteListUsername?.is_simulate || 0;
-
-        setWhiteList(isWhiteList);
         setisSimulate(isSimulate)
 
         if (bookResponse.data.rc === "00") {
@@ -167,7 +112,7 @@ export default function Pembayaran() {
         setIsLoadingPage(false);
         setErrPage(true);
       });
-  }, [id, token]);
+  }, [token]);
 
   const [remainingBookTime, setremainingBookTime] = useState(
     remainingTime(expiredBookTime)
@@ -180,10 +125,6 @@ export default function Pembayaran() {
       if (book && new Date(book.payLimit).getTime() < new Date().getTime()) {
         setIsBookingExpired(true);
 
-                
-        localStorage.removeItem(`data:pl-passenger/${id}`);
-        localStorage.removeItem(`data:pelni/${id}`);
-
       } else {
         setIsBookingExpired(false);
       }
@@ -192,56 +133,21 @@ export default function Pembayaran() {
     return () => clearInterval(intervalId);
   }, [expiredBookTime]);
 
-  // async function getInfoBooking() {
-  //   try {
-  //     const response = await axios.get(
-  //       `${process.env.REACT_APP_HOST_API}/travel/pelni/book/${id[1]}`
-  //     );
-  //     return response;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
-
-  // async function getInfoBookingInfo() {
-  //   try {
-  //     const response = await axios.get(
-  //       `${process.env.REACT_APP_HOST_API}/travel/pelni/book_info/${id[1]}`
-  //     );
-  //     return response;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
-
   async function getDataAllBook() {
     try {
-      const response = localStorage.getItem(`data:pl-passenger/${id}`);
-      return JSON.parse(response);
+      const response = bookPelni;
+      return response;
     } catch (error) {
       return null;
     }
   }
-
-  // async function getDataPassengers() {
-  //   try {
-  //     const response = await axios.get(
-  //       `${process.env.REACT_APP_HOST_API}/travel/pelni/booking/passengers/${id}`
-  //     );
-  //     return response;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
 
   async function cekCallbakIsMitra() {
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_HOST_API}/travel/is_merchant`,
         {
-          token: JSON.parse(
-            localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-          ),
+          token: token,
         }
       );
       return response;
@@ -272,15 +178,6 @@ export default function Pembayaran() {
     });
   };
 
-  const successNotification = () => {
-    api["success"]({
-      message: "Success!",
-      description: "Successfully, pindah kursi anda sudah berhasil!.",
-      duration: 7,
-    });
-  };
-
-
   async function handlerPembayaran(e) {
     e.preventDefault();
     setLoading(true);
@@ -298,7 +195,6 @@ export default function Pembayaran() {
 
     if (response.data.rc === "00") {
       const params = {
-        // airline: dataDetail.airline,
         booking_id: response.data?.data?.bookCode,
         nomor_hp_booking: book.paymentCode,
         id_transaksi: response.data?.data?.transaction_id,
@@ -313,20 +209,7 @@ export default function Pembayaran() {
 
       setispay(true);
       setHasilbayar(params);
-
-    //   // dispatch({
-    //   //   type: "PAY_FLIGHT",
-    //   // });
-
-    //   // navigate({
-    //   //   pathname: "/flight/tiket-pesawat",
-    //   //   search: `?${createSearchParams(params)}`,
-    //   // });
-
       setLoading(false);
-
-      localStorage.removeItem(`data:pl-passenger/${id}`);
-      localStorage.removeItem(`data:pelni/${id}`);
 
     } else {
       setTimeout(() => {
@@ -335,36 +218,7 @@ export default function Pembayaran() {
       }, 1000);
     }
   }
-  async function handleCallbackSubmit(e) {
-    e.preventDefault();
-    setLoading(true);
-
-    setTimeout(async () => {
-      const dataParse = JSON.parse(
-        localStorage.getItem(`data:pl-passenger/${id}`)
-      );
-
-      const response = await axios.post(
-        `${process.env.REACT_APP_HOST_API}/travel/pelni/callback`,
-        {
-          id_transaksi: dataParse.transactionId,
-        }
-      );
-
-      if (response.data.rc == "00") {
-        navigate("/");
-
-        localStorage.removeItem(`data:pl-passenger/${id}`);
-        localStorage.removeItem(`data:pelni/${id}`);
-
-      } else {
-        failedNotification(response.data.rd);
-      }
-
-      setLoading(false);
-    }, 100);
-  }
-
+  
   return (
     <>
       {contextHolder}
@@ -617,7 +471,21 @@ export default function Pembayaran() {
                 </div>
                 {/* desktop sidebar */}
                 <div className="hidden xl:block sidebar w-full xl:w-2/3 2xl:w-1/2">
-                  <div className="mt-8 py-2 rounded-md border-b border-gray-200 shadow-sm">
+                  <div className="py-2 rounded-md border-b border-gray-200 shadow-sm">
+                      <div className="mt-4">
+                        {!isOk || !isCurrentBalance && (
+                          <>
+                            <div className="mt-4">
+                            <Alert
+                              message={`Saldo anda tidak mencukupi. silahkan deposit.`}
+                              type="error"
+                              banner
+                              closable
+                            />
+                            </div>
+                          </>
+                        )}
+                    </div>
                     <div className="px-4 py-2">
                       {/* <div className="text-black text-xs">Status Booking</div> */}
                       <div className="text-black text-xs">Transaksi ID</div>
@@ -687,7 +555,9 @@ export default function Pembayaran() {
                     />
                   </div>
                 {callbackBoolean == true ? (
-                  <div className="mt-2 py-4 rounded-md border-t border-gray-200 shadow-sm">
+                  <div className="hidden xl:block mt-2 py-2 rounded-md border-t border-gray-200 shadow-sm">
+                  <>
+                    {isOk && isCurrentBalance && (
                       <>
                         <div className="px-8 md:px-4 py-4 text-sm text-black">
                           Tekan tombol dibawah ini untuk melanjutkan proses
@@ -695,8 +565,8 @@ export default function Pembayaran() {
                         </div>
                         <div className="flex justify-center">
                           <ButtonAnt
-                          onClick={whiteList == 1 ? showModal : handleCallbackSubmit} 
-                          size="large"
+                            onClick={isOk && isCurrentBalance && showModal}                        
+                            size="large"
                             key="submit"
                             type="primary"
                             className="bg-blue-500 px-12 font-semibold"
@@ -706,44 +576,46 @@ export default function Pembayaran() {
                           </ButtonAnt>
                         </div>
                       </>
-                  </div>
+                    )}
+                  </>
+              </div>
                 ) : (
                   <>
-                    {/* <div className="px-8 py-4 text-sm text-black">
-                  Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
-                  </div>
-                  <div className="flex justify-center">
-                    <ButtonAnt
-                      onClick={handlerPembayaran}
-                      size="large"
-                      key="submit"
-                      type="primary"
-                      className="bg-blue-500 mx-2 font-semibold mt-4"
-                      loading={isLoading}
-                      disabled
-                    >
-                      Langsung Bayar
-                    </ButtonAnt>
-                  </div> */}
                   </>
                 )}
                 </div>
               {callbackBoolean == true ? (
                 <div className="block xl:hidden mt-4 py-4 rounded-md border border-gray-200 shadow-sm">
                     <>
-                      <div className="flex justify-center">
-                        <ButtonAnt
-                          onClick={whiteList == 1 ? showModal : handleCallbackSubmit} 
-                          size="large"
-                          key="submit"
-                          type="primary"
-                          className="bg-blue-500 mx-2 font-semibold"
-                          loading={isLoading}
-                        >
-                          Bayar Sekarang
-                        </ButtonAnt>
-                      </div>
+                    {isOk && isCurrentBalance && (
+                      <>
+                        <div className="flex justify-center">
+                          <ButtonAnt
+                            onClick={showModal}                        
+                            size="large"
+                            key="submit"
+                            type="primary"
+                            className="bg-blue-500 mx-2 font-semibold mt-4"
+                            loading={isLoading}
+                          >
+                            Bayar Sekarang
+                          </ButtonAnt>
+                        </div>
+                      </>
+                    )}
                     </>
+                    {!isOk || !isCurrentBalance && (
+                      <>
+                        <div className="mt-4">
+                        <Alert
+                          message={`Saldo anda tidak mencukupi. silahkan deposit.`}
+                          type="error"
+                          banner
+                          closable
+                        />
+                        </div>
+                      </>
+                    )}
                 </div>
               ) : (
                 <>

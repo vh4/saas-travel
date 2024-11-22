@@ -20,9 +20,10 @@ import ManyRequest from "../components/Manyrequest";
 import BookingLoading from "../components/trainskeleton/booking";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { IoArrowForwardOutline } from "react-icons/io5";
-import { v4 as uuidv4 } from "uuid";
 import { CiBoxList } from "react-icons/ci";
 import Skeleton from "react-loading-skeleton";
+import { useDispatch, useSelector } from "react-redux";
+import { setDataBookKereta } from "../../features/createSlice";
 
 export default function BookingKai() {
   const [api, contextHolder] = notification.useNotification();
@@ -51,6 +52,9 @@ export default function BookingKai() {
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
+
+  const dispatch = useDispatch();
+  const dataSearch = useSelector((state) => state.bookkereta.searchDataKereta);
 
   const columns = [
     Table.SELECTION_COLUMN,
@@ -121,7 +125,7 @@ export default function BookingKai() {
 
           const AdultArr = Array.from({ length: TotalAdult }, () => ({
             name: "",
-            birthdate: getCurrentDate(),
+            birthdate: "",
             idNumber: "",
             phone: "",
           }));
@@ -152,22 +156,10 @@ export default function BookingKai() {
       });
   }, [id, token]);
 
-  // async function getDataTrain() {
-  //   try {
-  //     const response = await axios.get(
-  //       `${process.env.REACT_APP_HOST_API}/travel/train/search/k_search/${id}`
-  //     );
-
-  //     return response;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
-
   async function getDataTrain() {
     try {
-      const response = localStorage.getItem(`data:k-train/${id}`);
-      return JSON.parse(response);
+      const response = dataSearch;
+      return response;
     } catch (error) {
       return null;
     }
@@ -178,8 +170,6 @@ export default function BookingKai() {
   const [existingPenumpang, setExistingPenumpang] = useState([]);
   const [loadingExistingPenumpang, setLoadingExistingPenumpang] =
     useState(false);
-
-  const [pilihExistingPenumpang, setPilihExistingPenumpang] = useState([]);
 
   const previousDataPenumpang = async () => {
     try {
@@ -225,11 +215,6 @@ export default function BookingKai() {
     setIsModalListOpenPenumpang(false);
   };
 
-  // name: "",
-  // birthdate: getCurrentDate(),
-  // idNumber: "",
-  // phone: "",
-
   const handleOkListPenumpang = () => {
     // Update form data saat klik submit berdasarkan `selectedPassenger`
     if (selectedPassenger) {
@@ -274,7 +259,7 @@ export default function BookingKai() {
           //   },
           // ]);
 
-          infantCategory[indexPreviousPenumpang.index]["birthdate"] = birthDate;
+          infantCategory[indexPreviousPenumpang.index]["birthdate"] = selectedPassenger.ttl;
         } else {
           // If birthDate is not valid, clear the field
           // form.setFields([
@@ -355,7 +340,6 @@ export default function BookingKai() {
 
     onReset();
 
-    const uuid = uuidv4();
     var priceInfantChild;
     TotalInfant > 0
       ? (priceInfantChild = dataBookingTrain[0].seats[0].priceAdult)
@@ -392,9 +376,7 @@ export default function BookingKai() {
           adults: adult[0],
           infants: TotalInfant > 0 ? infant[0] : [],
         },
-        token: JSON.parse(
-          localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-        ),
+        token: token,
       }
     );
 
@@ -407,81 +389,29 @@ export default function BookingKai() {
         failedNotification(response.data.rd);
       }
     } else {
+      
       const hasilDataBooking = response.data.data;
-
-      // const uuid_hasilBooking = await axios.post(
-
-      //   `${process.env.REACT_APP_HOST_API}/travel/train/book/k_book`,
-      //   {
-      //       passengers:{
-      //           adults: adult[0],
-      //           infants: TotalInfant > 0 ? infant[0] : []
-      //       },
-      //       hasil_book:hasilDataBooking,
-      //       uuid:response.data.uuid,
-      //   }
-      // );
-
-      localStorage.setItem(
-        `data:k-book/${uuid}`,
-        JSON.stringify({
+      const resp = {
           passengers: {
             adults: adult[0],
             infants: TotalInfant > 0 ? infant[0] : [],
           },
           hasil_book: hasilDataBooking,
-          // uuid:response.data.uuid,
-        })
-      );
-      ///
+      }
 
-      navigate({
-        pathname: `/train/konfirmasi`,
-        search: `?k_train=${id}&k_book=${uuid}`,
-      });
+      dispatch(setDataBookKereta(resp));
 
-      // if(response.data.callback === null) {
+      setTimeout(() => {
+        navigate({
+          pathname: `/train/konfirmasi`,
+        });
+      }, 1000);
 
-      //   localStorage.setItem('callback_train', false);
-
-      // }else{
-
-      //   localStorage.setItem('callback_train', true);
-
-      // }
-
-      // if(response.data.callback === null) {
-
-      //   navigate({
-      //       pathname: `/train/konfirmasi`,
-      //       search: `?k_train=${id}&k_book=${uuid}`,
-      //     });
-
-      // }else{
-
-      //   SuccessNotification(
-      //     `Response callback is : ${typeof response.data.callback === 'object' ? JSON.stringify(response.data.callback) : response.data.callback}`
-      //   );
-
-      // }
-
-      // if (uuid_hasilBooking.data.rc == "00") {
-
-      //   // localStorage.setItem(dataBookingTrain[0].trainNumber + '_fareAdmin', JSON.stringify(Fare.data.data));
-      //   navigate({
-      //       pathname: `/train/konfirmasi`,
-      //       search: `?k_train=${id}&k_book=${uuid_hasilBooking.data.uuid}`,
-      //     });
-
-      // } else {
-
-      //   failedNotification(uuid_hasilBooking.data.rd);
-
-      // }
     }
 
     setIsLoading(false);
     hideModal();
+    
   };
 
   const disabledDate = (current, e, i) => {
@@ -690,7 +620,7 @@ export default function BookingKai() {
                 ) : (
                   <>
                     {/* sidebar mobile kai*/}
-                    <div className="mt-0 md:mt-8 block xl:hidden w-full rounded-md border border-gray-200 shadow-sm">
+                    <div className="mt-0 md:mt-8 block xl:hidden w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
                       <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                         <div className="text-black font-medium ">
                           Keberangkatan kereta
@@ -809,7 +739,7 @@ export default function BookingKai() {
                           adult[0].map((e, i) => (
                             <>
                               <div>
-                                <div className="Booking ml-2 md:ml-0 mt-8 mb-4 xl:mt-4">
+                                <div className="Booking ml-2 md:ml-0 mt-8 mb-0 xl:mb-4 xl:mt-4">
                                   <h1 className="text-sm font-medium  text-black">
                                     ADULT PASSENGER
                                   </h1>
@@ -820,9 +750,9 @@ export default function BookingKai() {
                                 {/* Detailt */}
                                 <div className="flex space-x-12">
                                   {/* form detailt kontal */}
-                                  <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-2">
+                                  <div className="w-full mt-4 xl:mt-0 border-b xl:border xl:border-gray-200 xl:shadow-sm col-span-1 xl:col-span-2">
                                     <div className="">
-                                      <div className="mt-8 px-4 xl:px-8 form block xl:flex space-x-2 xl:space-x-8">
+                                      <div className="mt-4 xl:mt-8 px-4 xl:px-8 form block xl:flex space-x-2 xl:space-x-8">
                                         {/* mobile & desktop Nama*/}
                                         <div className="xl:w-full xl:mt-0">
                                           <div className="flex items-center space-x-4">
@@ -1055,7 +985,7 @@ export default function BookingKai() {
                           infant[0].map((e, i) => (
                             <>
                               <div>
-                                <div className="Booking ml-2  md:ml-0 mt-8 mb-4 xl:mt-12">
+                                <div className="Booking ml-2  md:ml-0 mt-8 mb-0 xl:mb-4 xl:mt-12">
                                   <h1 className="xl:text-sm font-medium  text-black text-sm">
                                     INFANT PASSENGER
                                   </h1>
@@ -1066,9 +996,9 @@ export default function BookingKai() {
                                 {/* Detailt */}
                                 <div className="flex space-x-12">
                                   {/* form detailt kontal */}
-                                  <div className="w-full mt-4 xl:mt-0 border border-gray-200 shadow-sm col-span-1 xl:col-span-2">
+                                  <div className="w-full mt-4 xl:mt-0 border-b xl:border xl:border-gray-200 xl:shadow-sm col-span-1 xl:col-span-2">
                                     <div className="">
-                                      <div className="mt-8 px-4 xl:px-8 form block xl:flex space-x-2 xl:space-x-8">
+                                      <div className="mt-4 xl:mt-8 px-4 xl:px-8 form block xl:flex space-x-2 xl:space-x-8">
                                         {/* mobile & desktop Nama*/}
                                         <div className="xl:w-full xl:mt-0">
                                           <div className="flex items-center space-x-4">

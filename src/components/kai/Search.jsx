@@ -10,9 +10,7 @@ import {
   IoSearchCircle,
 } from "react-icons/io5";
 import { Link } from "react-router-dom";
-// import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
-import { createTheme } from "@mui/material/styles";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -21,9 +19,7 @@ import moment from "moment";
 import { toRupiah } from "../../helpers/rupiah";
 import {
   calculateTotalDurationTransit,
-  formatDurationTransit,
   parseTanggal,
-  sumDurations,
 } from "../../helpers/date";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
@@ -31,16 +27,14 @@ import { Radio, Space, notification } from "antd";
 import { Popover, Whisper } from "rsuite";
 import { v4 as uuidv4 } from "uuid";
 import { MdSort } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { setDataSearchKereta } from "../../features/createSlice";
 
 export default function Search() {
-  const theme = createTheme({
-    typography: {
-      fontSize: 8,
-    },
-  });
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [uuids, setuuid] = useState(null);
+  const dispatch = useDispatch();
 
   const origin = searchParams.get("origin");
   const destination = searchParams.get("destination");
@@ -97,16 +91,6 @@ export default function Search() {
   const [valHargaRange, setHargaRange] = useState([0, 10000000]);
 
   const [api, contextHolder] = notification.useNotification();
-
-  // const failedNotification = (rd) => {
-  //   api["error"]({
-  //     message: "Error!",
-  //     description:
-  //       rd.toLowerCase().charAt(0).toUpperCase() +
-  //       rd.slice(1).toLowerCase() +
-  //       "",
-  //   });
-  // };
 
   const handleGradeFilterChange = (e) => {
     let newGradeFilter = [...gradeFilter];
@@ -227,9 +211,7 @@ export default function Search() {
       const response = await axios.post(
         `${process.env.REACT_APP_HOST_API}/travel/train/station`,
         {
-          token: JSON.parse(
-            localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-          ),
+          token: token,
         }
       );
 
@@ -259,9 +241,7 @@ export default function Search() {
           `${process.env.REACT_APP_HOST_API}/travel/train/search`,
           {
             productCode: "WKAI",
-            token: JSON.parse(
-              localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-            ),
+            token: token,
             origin: origin,
             destination: destination,
             date: date,
@@ -333,24 +313,13 @@ export default function Search() {
     const dataLengkap = {
       train: detailBooking,
       train_detail: detailKereta,
-      uuid: uuids,
     };
 
-    // const uuid = await axios.post(
-    //   `${process.env.REACT_APP_HOST_API}/travel/train/search/k_search`,
-    //   dataLengkap,
-    // );
+    dispatch(setDataSearchKereta(dataLengkap));
+    setTimeout(() => {
+      navigate("/train/booking/");
+    }, 1000);
 
-    // if (uuid.data.rc == "00") {
-    //   navigate("/train/booking/" + uuid.data.uuid);
-    // } else {
-    //   failedNotification(uuid.data.rd);
-    // }
-
-    const uuid = uuidv4();
-    localStorage.setItem(`data:k-train/${uuid}`, JSON.stringify(dataLengkap));
-
-    navigate("/train/booking/" + uuid);
   }
 
   const bookingHandlerDetailTransit = (dataDetailTrainTransit, category) => {
@@ -412,8 +381,6 @@ export default function Search() {
           let isGradeMatch = true; // Default true jika tidak ada filter grade
           let isPriceMatch = true; // Default true jika tidak ada filter harga
           let isWaktuMatch = true; // Default true jika tidak ada filter harga
-          let isSortHargaTerendah = true; // Default true jika tidak ada filter harga
-          let isSortHargaTertinggi = true; // Default true jika tidak ada filter harga
 
           if (isGradeFilterActive) {
             isGradeMatch = trainPair[0].seats.some(seat => activeGrades.includes(seat.grade));
@@ -425,7 +392,6 @@ export default function Search() {
               return acc + train.seats.reduce((acc, seat) => acc + parseInt(seat.priceAdult), 0);
             }, 0);
     
-            // Cek apakah total harga dalam rentang yang diinginkan
             isPriceMatch = totalPrice >= valHargaRange[0] && totalPrice <= valHargaRange[1];
           
           }
@@ -700,9 +666,7 @@ export default function Search() {
           `${process.env.REACT_APP_HOST_API}/travel/train/search`,
           {
             productCode: "WKAI",
-            token: JSON.parse(
-              localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-            ),
+            token: token,
             origin: origin,
             destination: destination,
             date: date,
@@ -839,7 +803,7 @@ export default function Search() {
                   speaker={hargaPopoOver}
                   placement="bottomStart"
                 >
-                  <button className="text-black block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium ">
+                  <button className="text-black block border rounded-full p-2 px-4 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium ">
                     HARGA
                   </button>
                 </Whisper>
@@ -850,7 +814,7 @@ export default function Search() {
                   speaker={waktuPopoOver}
                   placement="bottomStart"
                 >
-                  <button className="text-black block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium ">
+                  <button className="text-black rounded-full block border p-2 px-4 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium ">
                     WAKTU
                   </button>
                 </Whisper>
@@ -861,7 +825,7 @@ export default function Search() {
                   speaker={KelasPopoOver}
                   placement="bottomStart"
                 >
-                  <button className="text-black block border p-2 px-2 md:px-4 focus:ring-1 focus:ring-gray-300">
+                  <button className="text-black rounded-full block border p-2 px-4 md:px-4 focus:ring-1 focus:ring-gray-300">
                     KELAS
                   </button>
                 </Whisper>
@@ -963,7 +927,7 @@ export default function Search() {
                               e.seats[0].availability
                               ? "bg-white"
                               : "bg-gray-200"
-                          } border border-gray-200 rounded-lg shadow-sm  hover:border transition-transform transform hover:scale-105`}
+                          } border-b border-t xl:border xl:border-gray-200 xl:rounded-lg xl:shadow-sm  hover:border transition-transform transform hover:scale-105`}
                         >
                           {/* desktop cari */}
 

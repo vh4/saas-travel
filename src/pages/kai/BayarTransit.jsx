@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect} from "react";
 import Layout from "../BookingLayout";
 import PembayaranComponentTransit from '../../components/kai/PembayaranTransit'
-import HeaderTemplateMobilDetailBooking from "./HeaderTemplateMobilDetailBooking";
+import HeaderTemplateMobilDetailBooking from "./HeaderTemplateMobile";
 
 export default function BayarTransit(){
     useEffect(() => {

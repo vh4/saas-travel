@@ -14,7 +14,7 @@ import Carousels from "../../components/carousel/Carousel";
 import CarouselsMobile from "../../components/carousel/CarouselMobile";
 import CarouselsTablet from "../../components/carousel/CarouselTablet";
 import {  notification, Skeleton as SkeletonAntMobile } from "antd";
-import { fetchDataType } from "../../features/createSlice";
+import { fetchDataType } from "../../features/dataTypeSlice";
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
@@ -130,7 +130,6 @@ export default function MainPage() {
               </div>
               <div className="block mt-2 pb-12 px-4">
                 <div className="w-full">
-                  {console.log(`type => ${type}`)}
                   {isLoading ? (
                     <>
                     <div className="mx-0 xl:mx-8">

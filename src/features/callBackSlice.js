@@ -23,8 +23,8 @@ const callbackFetchData = createAsyncThunk(
 		  return { isOk: false };
 		}
 	  } catch (error) {
-		console.error(error);
-		return rejectWithValue(error.response?.data || "An error occurred");
+		  console.error(error);
+		  return rejectWithValue(error.response?.data || "An error occurred");
 	  }
 	}
   );

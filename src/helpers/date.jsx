@@ -9,64 +9,64 @@ export const parseTanggal = (d) => {
 
   switch (hari) {
     case 0:
-      hari = "Minggu";
+      hari = "Min";
       break;
     case 1:
-      hari = "Senin";
+      hari = "Sen";
       break;
     case 2:
-      hari = "Selasa";
+      hari = "Sel";
       break;
     case 3:
-      hari = "Rabu";
+      hari = "Rab";
       break;
     case 4:
-      hari = "Kamis";
+      hari = "Kam";
       break;
     case 5:
-      hari = "Jum'at";
+      hari = "Jum";
       break;
     case 6:
-      hari = "Sabtu";
+      hari = "Sab";
       break;
   }
 
   switch (bulan) {
     case 0:
-      bulan = "Januari";
+      bulan = "Jan";
       break;
     case 1:
-      bulan = "Februari";
+      bulan = "Feb";
       break;
     case 2:
-      bulan = "Maret";
+      bulan = "Mar";
       break;
     case 3:
-      bulan = "April";
+      bulan = "Apr";
       break;
     case 4:
       bulan = "Mei";
       break;
     case 5:
-      bulan = "Juni";
+      bulan = "Jun";
       break;
     case 6:
-      bulan = "Juli";
+      bulan = "Jul";
       break;
     case 7:
-      bulan = "Agustus";
+      bulan = "Aug";
       break;
     case 8:
-      bulan = "September";
+      bulan = "Sep";
       break;
     case 9:
-      bulan = "Oktober";
+      bulan = "Oct";
       break;
     case 10:
-      bulan = "November";
+      bulan = "Nov";
       break;
     case 11:
-      bulan = "Desember";
+      bulan = "Des";
       break;
   }
 

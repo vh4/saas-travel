@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Layout from "../BookingLayout";
 import KonfirmasiComponentTransit from '../../components/kai/KonfirmasiTransit'
-import HeaderTemplateMobileKonfirmasi from './HeaderTemplateMobileKonfirmasi'
+import HeaderTemplateMobileKonfirmasi from './HeaderTemplateMobile'
 
 export default function KonfirmasiTransit(){
     useEffect(() => {

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Layout from "../BookingLayout";
 import BookingPesawatComponent from "../../components/plane/Booking";
-import HeaderTemplateMobileBooking from "./HeaderTemplateMobileBooking";
+import HeaderTemplateMobile from "./HeaderTemplateMobile";
 
 export default function Booking(){
     useEffect(() => {
@@ -11,14 +11,14 @@ export default function Booking(){
     return(
         <>
             <div className="block md:hidden">
-                <HeaderTemplateMobileBooking>
+                <HeaderTemplateMobile>
                     <div className="container">
                         <div className="w-full px-4"> 
                             {/* menu fitur  */}
                             <BookingPesawatComponent />
                         </div>
                     </div>
-                </HeaderTemplateMobileBooking>
+                </HeaderTemplateMobile>
             </div>
             <div className="hidden md:block">
                 <Layout>

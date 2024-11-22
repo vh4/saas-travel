@@ -11,7 +11,7 @@ import { LogoutContent } from "../../../../App";
 import { AiOutlineAppstore } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import Skeleton from "react-loading-skeleton";
-import { fetchDataType, setLoading, setType } from "../../../../features/createSlice";
+import { fetchDataType } from "../../../../features/dataTypeSlice";
 
 export default function SidebarMobileUser() {
   const [dropdownTransaksi, setDropdownTransaksi] = useState(false);
