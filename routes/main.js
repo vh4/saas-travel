@@ -3,17 +3,14 @@ const axios = require('axios');
 const logger = require('../utils/logger.js');
 const {
     getCountry,
-    getInfoClientAll
+    getInfoClientAll,
+    jwtDecoded
 } = require('../utils/utils.js');
 const {
     WhiteListtravelFunction,
     IsSimulatetravelFunction
 } = require('../model/global.js');
 require('dotenv').config()
-const {
-    jwtDecode
-} = require('jwt-decode');
-
 const Router = express.Router();
 const country = getCountry();
 
@@ -50,6 +47,7 @@ Router.post('/app/redirect', async function(req, res) {
 
             //3. to getting accessToken and auth_page (kereta, pelni, plane)
             const response = await axios.post(process.env.HOST_AUTH, requestPayload);
+
             // Log the response payload with masked password
             logger.info(`Response HIT RAJABILLER JSON: ${JSON.stringify(response?.data)}`);
 
@@ -70,7 +68,7 @@ Router.post('/app/redirect', async function(req, res) {
             //4. check is valid in via rajabiller.com
             if (data.rc === '00') {
 
-                if (merchant !== null && merchant !== undefined) {
+                if (merchant !== null && merchant !== undefined && url != '') {
 
                     // Define session data for merchant
                     const merchantSessionData = {
@@ -108,9 +106,19 @@ Router.post('/app/redirect', async function(req, res) {
                     if (!typeCategory || typeCategory == '') {
                         typeCategory = 'auth';
                     }
-
+                    
                     logger.info(`Response [TOKEN] ${process.env.URL_AUTH_REDIRECT}. data: ${tokenUidPin.data !== null && tokenUidPin.data !== '' ? '------' : 'Not Found!'}`);
-                    req.session['v_session_uid_pin'] = tokenUidPin.data;
+                    
+                    //6. AMBIL UID DAN PIN lewat decoded token untuk booking di rajabiller dapatin callback.
+                    const jwtDecodedResponse = await jwtDecoded(data.token);            
+                    if (jwtDecodedResponse == undefined || jwtDecodedResponse == null || jwtDecodedResponse?.trim() == '') {
+                        return res.send({
+                            rc: '03',
+                            rd: 'gagal!'
+                        });
+                    }
+
+                    req.session['v_session_uid_pin'] = jwtDecodedResponse;
                     req.session['type'] = typeCategory
 
                 }
@@ -297,20 +305,17 @@ Router.post('/app/history_idpel', async function(req, res) {
     } = req.body;
     try {
 
-        const jwtdecoderesp = jwtDecode(token);
         const username = req.session['v_uname'];
-        const uidPinString = await axios.post(`${process.env.URL_AUTH_REDIRECT}/index.php?dekrip=null`, {
-            dekrip: jwtdecoderesp.data
-        });
+        const jwtDecodedResponse = await jwtDecoded(token);
 
-        if (uidPinString.data == undefined || uidPinString.data == null || uidPinString.data?.trim() == '') {
+        if (jwtDecodedResponse == undefined || jwtDecodedResponse == null || jwtDecodedResponse?.trim() == '') {
             return res.send({
                 rc: '03',
                 rd: 'gagal!'
             });
         }
 
-        const splitUidPin = uidPinString.data.split('|');
+        const splitUidPin = jwtDecodedResponse.split('|');
         const uid = splitUidPin[0];
         const pin = splitUidPin[1];
 
@@ -542,16 +547,15 @@ Router.post('/app/transaction_book_list', async function(req, res) {
 
 Router.get('/is_whitelist', async function(req, res) {
 
-    // const whitelist = ['usertravel1', 'usertravel', 'Fitra1990', 'Fitra1904'];
     const idoutlet = req.session['id_outlet'] || '';
-    const isSimulate = await IsSimulatetravelFunction();
+    const isSimulate = idoutlet == 'SP300203' ? 1 : await IsSimulatetravelFunction();
 
     if (WhiteListtravelFunction(idoutlet)) {
 
         return res.status(200).json({
             rc: '00',
             rd: 'success',
-            is_whitelist: 1,
+            // is_whitelist: 1,
             is_simulate: isSimulate
         })
 
@@ -560,7 +564,7 @@ Router.get('/is_whitelist', async function(req, res) {
     return res.status(200).json({
         rc: '00',
         rd: 'success',
-        is_whitelist: 0,
+        // is_whitelist: 0,
         is_simulate: isSimulate
     })
 

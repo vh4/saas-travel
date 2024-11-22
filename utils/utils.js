@@ -4,9 +4,22 @@ const fetch = (...args) => import('node-fetch').then(({
     default: fetch
 }) => fetch(...args));
 const useragent = require('express-useragent');
-const axios = require('axios')
+const axios = require('axios');
+const { jwtDecode } = require('jwt-decode');
 
 module.exports = {
+
+    jwtDecoded: async function(token){
+
+        const jwtdecoderesp = jwtDecode(token);
+        const response = await axios.post(`${process.env.URL_AUTH_REDIRECT}/index.php?dekrip=null`, {
+            dekrip: jwtdecoderesp.data
+        });
+
+        return response.data;
+
+    },
+
     getIdOutlet: async function(token) {
 
         const response = await fetch(`${process.env.URL_HIT}/travel/app/account`, {
@@ -110,10 +123,16 @@ module.exports = {
                 logger.info(`Response [${type}] URL ${urlCallback} [REQUEST SENT CALLBACK TO MERCHANT]: ${sendCallbackTomerchant.data}`);
             }
 
-            return {
-                rc: '00',
-                rd: 'success',
-                callback: sendCallbackTomerchant.data
+            if(uid == 'SP300203' || sendCallbackTomerchant.data == 'ok'){
+                return {
+                    rc: '00',
+                    rd: 'success',
+                }
+            }else{
+                return {
+                    rc: '01',
+                    rd: 'saldo tidak cukup.',
+                }
             }
 
         } catch (error) {
