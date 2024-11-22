@@ -80,4 +80,4 @@ spec:
                 name: svc-saas-travel-backend
                 port:
                   number: 80
-  ingressClassName: nginx-private-int
+  ingressClassName: nginx-public-ext
