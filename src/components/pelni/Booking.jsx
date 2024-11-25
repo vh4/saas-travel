@@ -29,7 +29,6 @@ import { callbackFetchData } from "../../features/callBackSlice";
 export default function BookingPelni() {
   
   const dataSearch = useSelector((state) => state.bookpelni.searchDataPelni);
-  console.log(dataSearch);
   const dispatch = useDispatch();
 
   const [api, contextHolder] = notification.useNotification();
