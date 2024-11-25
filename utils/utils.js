@@ -123,7 +123,7 @@ module.exports = {
                 logger.info(`Response [${type}] URL ${urlCallback} [REQUEST SENT CALLBACK TO MERCHANT]: ${sendCallbackTomerchant.data}`);
             }
 
-            if(uid == 'SP300203' || sendCallbackTomerchant.data == 'ok'){
+            if(sendCallbackTomerchant.data == 'ok'){
                 return {
                     rc: '00',
                     rd: 'success',
