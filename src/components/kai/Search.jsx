@@ -829,14 +829,14 @@ export default function Search() {
                     KELAS
                   </button>
                 </Whisper>
-                <Radio.Group
+                {/* <Radio.Group
                   className="hidden md:block"
                   onChange={handleIsTransit}
                   value={isTransit}
                 >
                   <Radio className="font-normal" value={1}>Langsung</Radio>
                   <Radio className="font-normal" value={2}>Transit</Radio>
-                </Radio.Group>
+                </Radio.Group> */}
               </div>
 
               <div className="flex space-x-2.5 items-center">
@@ -887,7 +887,7 @@ export default function Search() {
               </div>
             </div> */}
           </div>
-          <div className="mt-4 flex justify-center md:hidden">
+          {/* <div className="mt-4 flex justify-center md:hidden">
             <Radio.Group
               className=""
               onChange={handleIsTransit}
@@ -896,7 +896,7 @@ export default function Search() {
               <Radio value={1}>Langsung</Radio>
               <Radio value={2}>Transit</Radio>
             </Radio.Group>
-          </div>
+          </div> */}
 
           {/* for non transit. */}
           {isTransit === 1 && (

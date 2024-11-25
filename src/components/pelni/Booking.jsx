@@ -21,7 +21,7 @@ import ManyRequest from "../components/Manyrequest";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { IoArrowForwardOutline } from "react-icons/io5";
 import Skeleton from "react-loading-skeleton";
-import { CiBoxList } from "react-icons/ci";
+import { CiBoxList, CiSearch } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import { setDataBookPelni, setisOkBalancePelni } from "../../features/createSlice";
 import { callbackFetchData } from "../../features/callBackSlice";
@@ -392,6 +392,7 @@ export default function BookingPelni() {
 
   /* list penumpang */
   const [existingPenumpang, setExistingPenumpang] = useState([]);
+  const [originalPenumpang, setOriginalPenumpang] = useState([]); // Data awal
   const [loadingExistingPenumpang, setLoadingExistingPenumpang] =
     useState(false);
 
@@ -413,6 +414,7 @@ export default function BookingPelni() {
       }));
 
       setExistingPenumpang(parsing.data);
+      setOriginalPenumpang(parsing.data);
       setLoadingExistingPenumpang(false);
     } catch (error) {
       setExistingPenumpang([]);
@@ -439,7 +441,7 @@ export default function BookingPelni() {
     setIsModalListOpenPenumpang(false);
   };
 
-  const handleOkListPenumpang = () => {
+  const handleOkListPenumpang = (selectedPassenger) => {
     // Update form data saat klik submit berdasarkan `selectedPassenger`
     if (selectedPassenger) {
       if (indexPreviousPenumpang.type === "pria") {
@@ -516,9 +518,12 @@ export default function BookingPelni() {
 
   const handleRowSelectionChange = (selectedRowKeys, selectedRows) => {
     if (selectedRows.length > 0) {
-      setSelectedPassenger(selectedRows[0]); // Set data sementara tanpa mengubah form
+      const selectedPassenger = selectedRows[0];
+      setSelectedPassenger(selectedPassenger);
+      handleOkListPenumpang(selectedPassenger); 
     }
   };
+
 
   const disabledDate = (current, e, i) => {
     const twoYearsAgo = dayjs().subtract(2, "year");
@@ -543,6 +548,18 @@ export default function BookingPelni() {
   };
   const hideModal = () => {
     setOpen(false);
+  };
+
+  const searchIdpelHistory = (query) => {
+    if (!query.trim()) {
+      setExistingPenumpang(originalPenumpang);
+      return;
+    }
+
+    const filtered = originalPenumpang.filter((e) =>
+      e.name.toLowerCase().includes(query.toLowerCase())
+    );
+    setExistingPenumpang(filtered);
   };
 
   return (
@@ -613,29 +630,8 @@ export default function BookingPelni() {
               open={isModalOpenListPenumpang}
               onOk={handleOkListPenumpang}
               onCancel={handleCancelListPenumpang}
-              okText="Cancel"
-              cancelText="Submit"
               maskClosable={false}
-              footer={
-                <>
-                  <div className="blok mt-8">
-                    <div className="flex justify-end space-x-2">
-                      <Button key="back" onClick={handleCancelListPenumpang}>
-                        Cancel
-                      </Button>
-                      <Button
-                        htmlType="submit"
-                        key="submit"
-                        type="primary"
-                        className="bg-blue-500"
-                        loading={isLoading}
-                        onClick={handleOkListPenumpang}
-                      >
-                        Submit
-                      </Button>
-                    </div>
-                  </div>
-                </>
+              footer={false
               }
             >
               {loadingExistingPenumpang && (
@@ -650,6 +646,15 @@ export default function BookingPelni() {
               {loadingExistingPenumpang == false && (
                 <>
                   <div>
+                    <div className="w-full flex justify-end mt-6">
+                          <Input
+                            className="w-1/2 mt-2 mb-4"
+                            prefix={<CiSearch />}
+                            placeholder="Searching...."
+                            onChange={(e) => searchIdpelHistory(e.target.value)}
+                            size="middle"
+                          />
+                      </div>
                     <Table
                       rowSelection={{
                         type: "radio",

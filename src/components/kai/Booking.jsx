@@ -20,7 +20,7 @@ import ManyRequest from "../components/Manyrequest";
 import BookingLoading from "../components/trainskeleton/booking";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { IoArrowForwardOutline } from "react-icons/io5";
-import { CiBoxList } from "react-icons/ci";
+import { CiBoxList, CiSearch } from "react-icons/ci";
 import Skeleton from "react-loading-skeleton";
 import { useDispatch, useSelector } from "react-redux";
 import { setDataBookKereta } from "../../features/createSlice";
@@ -168,6 +168,7 @@ export default function BookingKai() {
   /* list penumpang */
 
   const [existingPenumpang, setExistingPenumpang] = useState([]);
+  const [originalPenumpang, setOriginalPenumpang] = useState([]); // Data awal
   const [loadingExistingPenumpang, setLoadingExistingPenumpang] =
     useState(false);
 
@@ -189,6 +190,7 @@ export default function BookingKai() {
       }));
 
       setExistingPenumpang(parsing.data);
+      setOriginalPenumpang(parsing.data);
       setLoadingExistingPenumpang(false);
     } catch (error) {
       setExistingPenumpang([]);
@@ -215,26 +217,25 @@ export default function BookingKai() {
     setIsModalListOpenPenumpang(false);
   };
 
-  const handleOkListPenumpang = () => {
-    // Update form data saat klik submit berdasarkan `selectedPassenger`
+  const handleOkListPenumpang = (selectedPassenger) => {
     if (selectedPassenger) {
       if (indexPreviousPenumpang.type === "adult") {
         const adultCategory = adult[0];
-
+  
         const list_prefix = ["08"];
         const hp = list_prefix.some((prefix) =>
           selectedPassenger.hp.startsWith(prefix)
         )
           ? `628${selectedPassenger.hp.slice(2)}`
           : selectedPassenger.hp;
-
+  
         adultCategory[indexPreviousPenumpang.index]["name"] =
           selectedPassenger.nama;
         adultCategory[indexPreviousPenumpang.index]["phone"] = hp;
         adultCategory[indexPreviousPenumpang.index]["idNumber"] =
           selectedPassenger.nik;
         setAdult([adultCategory]);
-
+  
         form.setFields([
           {
             name: [`adultNameLengkap${indexPreviousPenumpang.index}`],
@@ -248,36 +249,19 @@ export default function BookingKai() {
         ]);
       } else if (indexPreviousPenumpang.type === "infant") {
         const infantCategory = infant[0];
-
+  
         const birthDate = dayjs(selectedPassenger.ttl, "YYYY/MM/DD");
         if (!disabledDate(birthDate)) {
-          // If birthDate is valid, set it in the form
-          // form.setFields([
-          //   {
-          //     name: [`infanttanggallhr${indexPreviousPenumpang.index}`],
-          //     value: birthDate,
-          //   },
-          // ]);
-
-          infantCategory[indexPreviousPenumpang.index]["birthdate"] = selectedPassenger.ttl;
-        } else {
-          // If birthDate is not valid, clear the field
-          // form.setFields([
-          //   {
-          //     name: [`infanttanggallhr${indexPreviousPenumpang.index}`],
-          //     value: null,
-          //   },
-          // ]);
-
-          // infantCategory[indexPreviousPenumpang.index]["birthdate"] = birthDate;
+          infantCategory[indexPreviousPenumpang.index]["birthdate"] =
+            selectedPassenger.ttl;
         }
-
+  
         infantCategory[indexPreviousPenumpang.index]["name"] =
           selectedPassenger.nama;
         infantCategory[indexPreviousPenumpang.index]["idNumber"] =
           selectedPassenger.nik;
         setInfant([infantCategory]);
-
+  
         form.setFields([
           {
             name: [`infantNamaLengkap${indexPreviousPenumpang.index}`],
@@ -290,13 +274,15 @@ export default function BookingKai() {
         ]);
       }
     }
-
+  
     setIsModalListOpenPenumpang(false);
   };
 
   const handleRowSelectionChange = (selectedRowKeys, selectedRows) => {
     if (selectedRows.length > 0) {
-      setSelectedPassenger(selectedRows[0]); // Set data sementara tanpa mengubah form
+      const selectedPassenger = selectedRows[0];
+      setSelectedPassenger(selectedPassenger);
+      handleOkListPenumpang(selectedPassenger); 
     }
   };
 
@@ -429,6 +415,18 @@ export default function BookingKai() {
     setOpen(false);
   };
 
+  const searchIdpelHistory = (query) => {
+    if (!query.trim()) {
+      setExistingPenumpang(originalPenumpang);
+      return;
+    }
+
+    const filtered = originalPenumpang.filter((e) =>
+      e.nama.toLowerCase().includes(query.toLowerCase())
+    );
+    setExistingPenumpang(filtered);
+  };
+
   return (
     <>
       {/* message notification  */}
@@ -496,30 +494,8 @@ export default function BookingKai() {
             open={isModalOpenListPenumpang}
             onOk={handleOkListPenumpang}
             onCancel={handleCancelListPenumpang}
-            okText="Cancel"
-            cancelText="Submit"
             maskClosable={false}
-            footer={
-              <>
-                <div className="blok mt-8">
-                  <div className="flex justify-end space-x-2">
-                    <Button key="back" onClick={handleCancelListPenumpang}>
-                      Cancel
-                    </Button>
-                    <Button
-                      htmlType="submit"
-                      key="submit"
-                      type="primary"
-                      className="bg-blue-500"
-                      loading={isLoading}
-                      onClick={handleOkListPenumpang}
-                    >
-                      Submit
-                    </Button>
-                  </div>
-                </div>
-              </>
-            }
+            footer={false}
           >
             {loadingExistingPenumpang && (
               <>
@@ -533,6 +509,15 @@ export default function BookingKai() {
             {loadingExistingPenumpang == false && (
               <>
                 <div>
+                  <div className="w-full flex justify-end mt-6">
+                    <Input
+                      className="w-1/2 mt-2 mb-4"
+                      prefix={<CiSearch />}
+                      placeholder="Searching...."
+                      onChange={(e) => searchIdpelHistory(e.target.value)}
+                      size="middle"
+                     />
+                  </div>
                   <Table
                     rowSelection={{
                       type: "radio",
