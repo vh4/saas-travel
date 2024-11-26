@@ -249,7 +249,7 @@ export default function BookingPesawat() {
 
       parsing.data = parsing.data.map((x, i) => ({
         ...x,
-        name: x.nama_depan + x.nama_belakang,
+        name: x.nama_depan + ' ' +  x.nama_belakang,
         }))
 
       setExistingPenumpang(parsing.data);
