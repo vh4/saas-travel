@@ -17,7 +17,7 @@ const callbackFetchData = createAsyncThunk(
 			id_transaksi,
 		  }
 		);
-		if (response.data.rc === "00") {
+		if (response.data.rc == "00") {
 		  return { isOk: true };
 		} else {
 		  return { isOk: false };

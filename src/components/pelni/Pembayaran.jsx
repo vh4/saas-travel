@@ -473,7 +473,7 @@ export default function Pembayaran() {
                 <div className="hidden xl:block sidebar w-full xl:w-2/3 2xl:w-1/2">
                   <div className="py-2 rounded-md border-b border-gray-200 shadow-sm">
                       <div className="mt-4">
-                        {!isOk || !isCurrentBalance && (
+                        {isOk == false || isCurrentBalance == false ? (
                           <>
                             <div className="mt-4">
                             <Alert
@@ -484,7 +484,7 @@ export default function Pembayaran() {
                             />
                             </div>
                           </>
-                        )}
+                        ) : ''}
                     </div>
                     <div className="px-4 py-2">
                       {/* <div className="text-black text-xs">Status Booking</div> */}
@@ -557,7 +557,7 @@ export default function Pembayaran() {
                 {callbackBoolean == true ? (
                   <div className="hidden xl:block mt-2 py-2 rounded-md border-t border-gray-200 shadow-sm">
                   <>
-                    {isOk && isCurrentBalance && (
+                    {isOk == true && isCurrentBalance == true ? (
                       <>
                         <div className="px-8 md:px-4 py-4 text-sm text-black">
                           Tekan tombol dibawah ini untuk melanjutkan proses
@@ -576,7 +576,7 @@ export default function Pembayaran() {
                           </ButtonAnt>
                         </div>
                       </>
-                    )}
+                    ) : ''}
                   </>
               </div>
                 ) : (
@@ -587,7 +587,7 @@ export default function Pembayaran() {
               {callbackBoolean == true ? (
                 <div className="block xl:hidden mt-4 py-4 rounded-md border border-gray-200 shadow-sm">
                     <>
-                    {isOk && isCurrentBalance && (
+                    {isOk == true && isCurrentBalance == true ? (
                       <>
                         <div className="flex justify-center">
                           <ButtonAnt
@@ -602,9 +602,9 @@ export default function Pembayaran() {
                           </ButtonAnt>
                         </div>
                       </>
-                    )}
+                    ) : ''}
                     </>
-                    {!isOk || !isCurrentBalance && (
+                    {isOk == false || isCurrentBalance == false ? (
                       <>
                         <div className="mt-4">
                         <Alert
@@ -615,7 +615,7 @@ export default function Pembayaran() {
                         />
                         </div>
                       </>
-                    )}
+                    ) : ''}
                 </div>
               ) : (
                 <>
