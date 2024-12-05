@@ -123,17 +123,20 @@ module.exports = {
                 logger.info(`Response [${type}] URL ${urlCallback} [REQUEST SENT CALLBACK TO MERCHANT]: ${sendCallbackTomerchant.data}`);
             }
 
-            if(sendCallbackTomerchant.data == 'ok'){
-                return {
-                    rc: '00',
-                    rd: 'success',
-                }
-            }else{
-                return {
-                    rc: '01',
-                    rd: 'saldo tidak cukup.',
-                }
+            const response_mitra = sendCallbackTomerchant.data;
+
+            if (!response_mitra) {
+                return { rc: '01', rd: 'saldo tidak cukup.' };
             }
+            
+            const splitResponse = response_mitra.split('.');
+            
+            if (splitResponse.length === 2 && splitResponse[0] === 'ok' && splitResponse[1] === id_transaksi) {
+                return { rc: '00', rd: 'success' };
+            }
+            
+            return { rc: '01', rd: 'saldo tidak cukup.' };
+            
 
         } catch (error) {
 
