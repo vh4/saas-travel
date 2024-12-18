@@ -574,7 +574,7 @@ Router.post('/is_whitelist', async function(req, res) {
     return res.status(200).json({
         rc: '00',
         rd: 'success',
-        is_simulate: 0
+        is_simulate: 1
     })
 
 

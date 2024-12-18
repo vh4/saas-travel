@@ -428,7 +428,7 @@ Router.post('/train/payment', AuthLogin, async function(req, res) { // Menambahk
         //kirim callback ke-2
         logger.info(`Requests /train/payment HIT API CALLBACK (responseCallbackCheckSaldoTerpotong): ${JSON.stringify(requestCallbackSaldoTerpotong)}`);
         const responseCallbackCheckSaldoTerpotong = axios.post(urlCallback, requestCallbackSaldoTerpotong)
-        logger.info(`Response /train/payment HIT API CALLBACK (responseCallbackCheckSaldoTerpotong): ${JSON.stringify(response.data)}`);
+        logger.info(`Response /train/payment HIT API CALLBACK (responseCallbackCheckSaldoTerpotong): ${JSON.stringify(responseCallbackCheckSaldoTerpotong.data)}`);
 
         const response_mitra = responseCallbackCheckSaldoTerpotong.data;
         if (!response_mitra) {
