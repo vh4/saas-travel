@@ -441,26 +441,8 @@ Router.post('/train/payment', AuthLogin, async function(req, res) { // Menambahk
         }
 
         //check devel or not.
-        const isDevel = await WhitelistDevelByIdOutlet(uid, 'WKAI');
-        if(isDevel){
-
-            logger.info(`Requests /train/payment HIT API TRAVEL (isDevel): ${JSON.stringify(data)}`);
-            const response = await axios.post(
-                `${process.env.URL_HIT}/train/payment`, data
-            );
-    
-            logger.info(`Response /train/payment HIT API TRAVEL (isDevel): ${JSON.stringify(response.data)}`);
-
-            //kirim callback payment ke mitra. dengan hardcore.
-            const responseCallback = hardcodeKereta;                    
-            const responseCallbackDevel = await axios.post(urlCallback, responseCallback);
-
-            logger.info(`Response /train/payment HIT MITRA CALLBACK (responseCallbackDevel isDevel): ${JSON.stringify(responseCallbackDevel)}`);
-
-            //send callback to mitra devel.
-            return res.send(response.data);
-
-        }else{
+        const isProd = await WhitelistDevelByIdOutlet(uid, 'WKAI');
+        if(isProd){
 
             const method = 'bayarkereta'
             const type = 'plane';
@@ -485,6 +467,24 @@ Router.post('/train/payment', AuthLogin, async function(req, res) { // Menambahk
             }
 
             return res.send(response);
+
+        }else{
+
+            logger.info(`Requests /train/payment HIT API TRAVEL (isDevel): ${JSON.stringify(data)}`);
+            const response = await axios.post(
+                `${process.env.URL_HIT}/train/payment`, data
+            );
+    
+            logger.info(`Response /train/payment HIT API TRAVEL (isDevel): ${JSON.stringify(response.data)}`);
+
+            //kirim callback payment ke mitra. dengan hardcore.
+            const responseCallback = hardcodeKereta;                    
+            const responseCallbackDevel = await axios.post(urlCallback, responseCallback);
+
+            logger.info(`Response /train/payment HIT MITRA CALLBACK (responseCallbackDevel isDevel): ${JSON.stringify(responseCallbackDevel)}`);
+
+            //send callback to mitra devel.
+            return res.send(response.data);
         
         }
 

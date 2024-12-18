@@ -559,14 +559,14 @@ Router.post('/is_whitelist', async function(req, res) {
 
     const idoutlet = req.session['id_outlet'] || '';
     const data = req.body
-    const isDevel = await WhitelistDevelByIdOutlet(idoutlet, data.produk || '');
+    const isProd = await WhitelistDevelByIdOutlet(idoutlet, data.produk || '');
 
-    if (isDevel) {
+    if (isProd) {
 
         return res.status(200).json({
             rc: '00',
             rd: 'success',
-            is_simulate: 1
+            is_simulate: 0
         })
 
     }
