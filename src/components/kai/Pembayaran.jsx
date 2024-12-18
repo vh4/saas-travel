@@ -673,6 +673,7 @@ export default function Pembayaran() {
                               Bayar Sekarang
                             </ButtonAnt>
                           </div>
+                          {isSimulated == 1 ? (<Alert className="mt-4"  message="Don't worry, clicking the 'Bayar' button will not affect your balance." banner/>) : ''}
                         </>
                       ) : ''}
                     </div>
@@ -714,6 +715,7 @@ export default function Pembayaran() {
                               Bayar Sekarang
                             </ButtonAnt>
                           </div>
+                          {isSimulated === 1 ? (<Alert className="mt-4" message="Don't worry, clicking the 'Bayar' will not affect your balance." banner/>) : ''}
                         </>
                       ) : ''}
                     </>

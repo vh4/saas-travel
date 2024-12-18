@@ -218,6 +218,8 @@ export default function Pembayaran() {
       {
         airline: dataDetailForBooking.airline,
         transactionId: hasilBooking.transactionId,
+        nominal:hasilBooking.nominal,
+        nominal:hasilBooking.nominalAdmin,
         bookingCode: hasilBooking.bookingCode,
         simulateSuccess: isSimulated, //
         paymentCode: hasilBooking.paymentCode,
@@ -699,6 +701,7 @@ export default function Pembayaran() {
                                 Bayar Sekarang
                               </Button>
                             </div>
+                            {isSimulated === 1 ? (<Alert className="mt-4" message="Don't worry, clicking the 'Bayar' will not affect your balance." banner/>) : ''}
                           </>
                         ) : ''}
                       </>
@@ -725,6 +728,7 @@ export default function Pembayaran() {
                             Bayar Sekarang
                           </Button>
                         </div>
+                        {isSimulated === 1 ? (<Alert className="mt-4" message="Don't worry, clicking the 'Bayar' will not affect your balance." banner/>) : ''}
                       </>
                     ) : ''}
                     </>

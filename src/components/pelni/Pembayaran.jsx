@@ -189,7 +189,9 @@ export default function Pembayaran() {
       {
         paymentCode: book?.paymentCode,
         transactionId: book?.transactionId,
-        simulateSuccess: isSimulated == 1 ? "yes" : "no", //
+        nominal:book?.normalSales,
+        nominal_admin:book?.nominal_admin,
+        simulateSuccess: isSimulated, //
         token: token
       }
       
@@ -577,6 +579,7 @@ export default function Pembayaran() {
                             Bayar Sekarang
                           </ButtonAnt>
                         </div>
+                        {isSimulated === 1 ? (<Alert className="mt-4" message="Don't worry, clicking the 'Bayar' will not affect your balance." banner/>) : ''}
                       </>
                     ) : ''}
                   </>
@@ -603,6 +606,7 @@ export default function Pembayaran() {
                             Bayar Sekarang
                           </ButtonAnt>
                         </div>
+                        {isSimulated === 1 ? (<Alert className="mt-4" message="Don't worry, clicking the 'Bayar' will not affect your balance." banner/>) : ''}
                       </>
                     ) : ''}
                     </>
