@@ -40,6 +40,7 @@ import axios from "axios";
 import HistoryIdpel from "./pages/transaksi/HistoryIdpel";
 import { Provider } from "react-redux";
 import store from "./features/createSlice";
+import Unauthorized from "./pages/partials/Unauthorized";
 
 export const TiketContext = createContext();
 export const NavContext = createContext();
@@ -156,6 +157,7 @@ function App() {
                 <Routes>
                  
                   <Route exact path="/" element={<MainPage />}></Route>
+                  <Route path="/unauthorized" element={<Unauthorized />}></Route>
                   <Route path="/pesawat" element={<MainPage />}></Route>
                   <Route path="/pelni" element={<MainPage />}></Route>
                   <Route path="/kereta" element={<MainPage />}></Route>

@@ -158,8 +158,10 @@ export default function Pembayaran() {
 
   async function cekWhiteListUsername() {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_HOST_API}/travel/is_whitelist`
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/travel/is_whitelist`, {
+          produk: 'SHPPELNI'
+        }
       );
       
       return response.data;

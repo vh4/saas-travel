@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { Router, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import dayjs from "dayjs";
 import Layout from "../Layout";
@@ -28,6 +28,7 @@ export default function MainPage() {
   const type = useSelector((state) => state.type.data.type);
   const isLoading = useSelector((state) => state.type.isLoading);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = "Travel kereta, pesawat, dan pelni";
@@ -89,9 +90,12 @@ export default function MainPage() {
 
         dispatch(fetchDataType());
 
+      }else{
+        navigate('/unauthorized');
       }
     } catch (error) {
       console.error("Error in handlerLogin:", error.message);
+      navigate('/unauthorized');
     }
   };
 

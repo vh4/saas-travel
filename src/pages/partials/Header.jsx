@@ -53,9 +53,10 @@ export default function Header() {
     : "";
 
   const [custom, setCustom] = useState(false);
+  const list = ['/', '/pesawat', '/kereta', '/pelni']
 
   useEffect(() => {
-    if (location.pathname === "/") {
+    if (list.includes(location.pathname)) {
       gsap.to(navRef.current, {
         duration: 0.001,
         ease: "power2.inOut",
