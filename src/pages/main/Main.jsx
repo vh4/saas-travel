@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import dayjs from "dayjs";
 import Layout from "../Layout";
@@ -27,32 +27,37 @@ export default function MainPage() {
 
   const type = useSelector((state) => state.type.data.type);
   const isLoading = useSelector((state) => state.type.isLoading);
+  const location = useLocation();
 
   useEffect(() => {
     document.title = "Travel kereta, pesawat, dan pelni";
   }, []);
 
+  const list = ['/', '/pesawat', '/kereta', '/pelni']
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let params = "";
-        if (searchParams.get("auth")) {
+        let params = "auth";
+
+        if (window.location.pathname == '/auth') {
           params = "auth";
-        } else if (searchParams.get("pelni")) {
+        } else if (window.location.pathname == '/pelni') {
           params = "pelni";
-        } else if (searchParams.get("kereta")) {
+        } else if (window.location.pathname == '/kereta') {
           params = "kereta";
-        } else if (searchParams.get("pesawat")) {
+        } else if (window.location.pathname == '/pesawat') {
           params = "pesawat";
         }
 
-        if (window.location.pathname === "/" && searchParams.get(params)) {
+        if (list.includes(window.location.pathname) && searchParams.get("auth")) {
 
-          const encodedParam = searchParams.get(params).replace(/ /g, "+");
+          const encodedParam = searchParams.get("auth").replace(/ /g, "+");
           const decodedParam = decodeURIComponent(encodedParam);
 
           handlerLogin(decodedParam, searchParams.get("merchant"), params);
         }
+
       } catch (error) {
         console.error("Error fetching data:", error.message);
       }

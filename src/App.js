@@ -154,7 +154,12 @@ function App() {
             <NavContext.Provider value={{nav,setNav}}>
               <LoginContent.Provider value={{loginComponent, setLoginComponent}}>
                 <Routes>
+                 
                   <Route exact path="/" element={<MainPage />}></Route>
+                  <Route path="/pesawat" element={<MainPage />}></Route>
+                  <Route path="/pelni" element={<MainPage />}></Route>
+                  <Route path="/kereta" element={<MainPage />}></Route>
+
                   <Route path="/train/search" element={< SearchKai/>}></Route>
                   <Route path="/flight/search" element={< SearchPlane/>}></Route>
                   <Route path="/pelni/search" element={< SearchPelni/>}></Route>
