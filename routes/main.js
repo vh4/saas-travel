@@ -6,10 +6,11 @@ const {
     getInfoClientAll,
     jwtDecoded
 } = require('../utils/utils.js');
-const {
-    WhiteListtravelFunction,
-    IsSimulatetravelFunction
-} = require('../model/global.js');
+const { WhitelistDevelByIdOutlet } = require('../model/global.js');
+// const {
+//     WhiteListtravelFunction,
+//     IsSimulatetravelFunction
+// } = require('../model/global.js');
 require('dotenv').config()
 const Router = express.Router();
 const country = getCountry();
@@ -554,18 +555,18 @@ Router.post('/app/transaction_book_list', async function(req, res) {
     }
 });
 
-Router.get('/is_whitelist', async function(req, res) {
+Router.post('/is_whitelist', async function(req, res) {
 
     const idoutlet = req.session['id_outlet'] || '';
-    const isSimulate = idoutlet == 'SP300203' ? 1 : await IsSimulatetravelFunction();
+    const data = req.body
+    const isDevel = await WhitelistDevelByIdOutlet(idoutlet, data.produk || '');
 
-    if (WhiteListtravelFunction(idoutlet)) {
+    if (isDevel) {
 
         return res.status(200).json({
             rc: '00',
             rd: 'success',
-            // is_whitelist: 1,
-            is_simulate: isSimulate
+            is_simulate: 1
         })
 
     }
@@ -573,8 +574,7 @@ Router.get('/is_whitelist', async function(req, res) {
     return res.status(200).json({
         rc: '00',
         rd: 'success',
-        // is_whitelist: 0,
-        is_simulate: isSimulate
+        is_simulate: 0
     })
 
 
