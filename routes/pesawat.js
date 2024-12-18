@@ -8,9 +8,56 @@ const {
     AuthLogin
 } = require('../middleware/auth.js');
 const {
-    axiosSendCallback
+    axiosSendCallback,
+    axiosSendCallbackPayment
 } = require('../utils/utils.js');
 require('dotenv').config()
+const hardcodePesawat = {
+    "trxid": "199512506",
+    "rc": "00",
+    "status": "Sukses",
+    "produk": "BAYAR TPJT",
+    "maskapai": "Super Air Jet",
+    "kode_maskapai": "IU659",
+    "sub_class": "Y",
+    "tgl_berangkat": "Rabu, 15 November 2023",
+    "jam_berangkat": "13:30",
+    "tgl_tiba": "Rabu, 15 November 2023",
+    "jam_tiba": "14:25",
+    "durasi": "0 jam 55 menit",
+    "tujuan": "Samarinda (AAP)-Yogyakarta (YIA)",
+    "tagihan": "3169000",
+    "adm": "0",
+    "total_bayar": "3169000",
+    "waktu_trx": "2023-11-14 11:48:53",
+    "url_etiket": "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=199512506",
+    "url_struk": "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=199512506",
+    "kode_booking": "ABOWSD",
+    "username": "userlogin",
+    "merchant": "",
+    "total_komisi": "19000",
+    "komisi_mitra": "9500",
+    "komisi_merchant": "9500",
+    "saldo_terpotong_mitra": "3169000",
+    "saldo_terpotong_merchant": "3169000",
+    "data_penumpang": [{
+            "status": "DEWASA",
+            "nama": "AGUS SURATNO SURATNO",
+            "title": "MR",
+            "nik": "3402161903710002",
+            "tgl_lahir": "03/19/1971",
+            "no_hp": "081392891155"
+        },
+        {
+            "status": "DEWASA",
+            "nama": "KASIDI KASIDI",
+            "title": "MR",
+            "nik": "3402102707780002",
+            "tgl_lahir": "07/27/1978",
+            "no_hp": ""
+        }
+    ]
+}
 
 const Router = express.Router();
 
@@ -329,17 +376,94 @@ Router.post('/plane/callback', AuthLogin, async function(req, res) { // Menambah
 
 
 Router.post('/flight/payment', AuthLogin, async function(req, res) {
-    const data = req.body;
-    logger.info(`Request /flight/payment: ${JSON.stringify(data)}`);
 
     try {
-        const response = await axios.post(
-            `${process.env.URL_HIT}/flight/payment`,
-            data
-        );
+        const data = req.body;
+        //if is_simulate devel => hit to api travel and harcode callback
+        const uidpin = req.session['v_session_uid_pin'].split('|') || [];
+        const uid = uidpin[0] || null;
+        const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
+        const urlCallback = parseDataKhususMerchant?.url;
+        const requestCallbackSaldoTerpotong = {
+            bookingCode: data.bookingCode,
+            trxid: data.transactionId,
+            nominal: data.nominal,
+            nominal_admin: data.nominal_admin
+        }
 
-        logger.info(`Response /flight/payment: ${JSON.stringify(response.data)}`);
-        return res.send(response.data);
+        //kirim callback ke-2
+        logger.info(`Requests /flight/payment HIT API CALLBACK (responseCallbackCheckSaldoTerpotong): ${JSON.stringify(requestCallbackSaldoTerpotong)}`);
+        const responseCallbackCheckSaldoTerpotong = await axios.post(urlCallback, requestCallbackSaldoTerpotong)
+        logger.info(`Response /flight/payment HIT API CALLBACK (responseCallbackCheckSaldoTerpotong): ${JSON.stringify(responseCallbackCheckSaldoTerpotong.data)}`);
+
+
+        const response_mitra = responseCallbackCheckSaldoTerpotong.data;
+        if (!response_mitra) {
+            return {
+                rc: '01',
+                rd: 'saldo tidak cukup.'
+            };
+        }
+        const splitResponse = response_mitra.split('.');
+
+        if (splitResponse[0] !== 'ok' || splitResponse[1] !== data.transactionId) {
+            return {
+                rc: '01',
+                rd: 'saldo tidak cukup.'
+            };
+        }
+
+
+        //check devel or not.
+        const isProd = await WhitelistDevelByIdOutlet(uid, 'PESAWAT');
+        if (isProd) {
+
+            const method = 'bayarpesawat'
+            const type = 'plane';
+
+            logger.info(`Requests /flight/payment HIT API RAJABILLER (isProduction): ${data.transactionId}`);
+            const responseCallback = await axiosSendCallbackPayment(req, method, data.transactionId, type);
+            logger.info(`Response /flight/payment HIT API RAJABILLER (responseCallback isProduction): ${JSON.stringify(responseCallback)}`);
+
+            const response = {
+                rc: responseCallback.rc,
+                rd: responseCallback.status,
+                data: responseCallback.data ? {
+                    transaction_id: responseCallback.data.trxid,
+                    url_etiket: responseCallback.data.url_etiket,
+                    url_image: null,
+                    url_struk: responseCallback.data.url_struk,
+                    nominal: responseCallback.data.tagihan,
+                    komisi: null,
+                    komisi_mitra: responseCallback.data.komisi_mitra,
+                    komisi_merchant: responseCallback.data.komisi_merchant,
+                    total_komisi: responseCallback.data.total_komisi
+                } : null
+            }
+
+            return res.send(response);
+
+        } else {
+
+            logger.info(`Requests /flight/payment HIT API TRAVEL (isDevel): ${JSON.stringify(data)}`);
+            const response = await axios.post(
+                `${process.env.URL_HIT}/flight/payment`, data
+            );
+
+            logger.info(`Response /flight/payment HIT API TRAVEL (isDevel): ${JSON.stringify(response.data)}`);
+
+            //kirim callback payment ke mitra. dengan hardcore.
+            const responseCallback = hardcodePesawat;
+            const responseCallbackDevel = await axios.post(urlCallback, responseCallback);
+
+            logger.info(`Response /flight/payment HIT MITRA CALLBACK (responseCallbackDevel isDevel): ${JSON.stringify(responseCallbackDevel.data)}`);
+
+            //send callback to mitra devel.
+            return res.send(response.data);
+
+        }
+
+
     } catch (error) {
         logger.error(`Error /flight/payment: ${error.message}`);
         return res.status(200).send({

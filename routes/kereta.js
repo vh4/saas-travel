@@ -12,7 +12,9 @@ const {
     axiosSendCallbackKhususKaiTransit,
     axiosSendCallbackPayment
 } = require('../utils/utils.js');
-const { WhitelistDevelByIdOutlet } = require('../model/global.js');
+const {
+    WhitelistDevelByIdOutlet
+} = require('../model/global.js');
 const Router = express.Router();
 require('dotenv').config()
 
@@ -40,27 +42,26 @@ const hardcodeKereta = {
     "komisi_merchant": "3000",
     "saldo_terpotong_mitra": "124250",
     "saldo_terpotong_merchant": "128500",
-    "data_penumpang": [
-      {
-        "nama": "MUHADI",
-        "kursi": "EKO-5/5B",
-        "telepon": "089629782291",
-        "nomor_identitas": "3305032512990004"
-      },
-      {
-        "nama": "TITI SRI WAHYUNI",
-        "kursi": "EKO-5/5C",
-        "telepon": "0896297822911",
-        "nomor_identitas": "3305044809990005"
-      },
-      {
-        "nama": "EARLYTA ARSYIFA SALSABIL",
-        "kursi": "",
-        "telepon": "",
-        "nomor_identitas": "3305035104230001"
-      }
+    "data_penumpang": [{
+            "nama": "MUHADI",
+            "kursi": "EKO-5/5B",
+            "telepon": "089629782291",
+            "nomor_identitas": "3305032512990004"
+        },
+        {
+            "nama": "TITI SRI WAHYUNI",
+            "kursi": "EKO-5/5C",
+            "telepon": "0896297822911",
+            "nomor_identitas": "3305044809990005"
+        },
+        {
+            "nama": "EARLYTA ARSYIFA SALSABIL",
+            "kursi": "",
+            "telepon": "",
+            "nomor_identitas": "3305035104230001"
+        }
     ]
-  }
+}
 
 Router.post('/train/station', async function(req, res) { // Menambahkan async
     try {
@@ -411,46 +412,53 @@ Router.post('/train/transit/callback', AuthLogin, async function(req, res) { // 
 });
 
 Router.post('/train/payment', AuthLogin, async function(req, res) { // Menambahkan async
-    
+
     try {
-        const data = req.body;        
+        const data = req.body;
         //if is_simulate devel => hit to api travel and harcode callback
         const uidpin = req.session['v_session_uid_pin'].split('|') || [];
         const uid = uidpin[0] || null;
         const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
         const urlCallback = parseDataKhususMerchant?.url;
         const requestCallbackSaldoTerpotong = {
-            bookingCode:data.bookingCode,
-            trxid:data.transactionId,
-            nominal:data.nominal,
+            bookingCode: data.bookingCode,
+            trxid: data.transactionId,
+            nominal: data.nominal,
+            nominal_admin: data.nominal_admin
         }
 
         //kirim callback ke-2
         logger.info(`Requests /train/payment HIT API CALLBACK (responseCallbackCheckSaldoTerpotong): ${JSON.stringify(requestCallbackSaldoTerpotong)}`);
-        const responseCallbackCheckSaldoTerpotong = axios.post(urlCallback, requestCallbackSaldoTerpotong)
+        const responseCallbackCheckSaldoTerpotong = await axios.post(urlCallback, requestCallbackSaldoTerpotong)
         logger.info(`Response /train/payment HIT API CALLBACK (responseCallbackCheckSaldoTerpotong): ${JSON.stringify(responseCallbackCheckSaldoTerpotong.data)}`);
 
         const response_mitra = responseCallbackCheckSaldoTerpotong.data;
         if (!response_mitra) {
-            return { rc: '01', rd: 'saldo tidak cukup.' };
+            return {
+                rc: '01',
+                rd: 'saldo tidak cukup.'
+            };
         }
         const splitResponse = response_mitra.split('.');
-        
+
         if (splitResponse[0] !== 'ok' || splitResponse[1] !== data.transactionId) {
-            return { rc: '01', rd: 'saldo tidak cukup.' };
+            return {
+                rc: '01',
+                rd: 'saldo tidak cukup.'
+            };
         }
 
         //check devel or not.
         const isProd = await WhitelistDevelByIdOutlet(uid, 'WKAI');
-        if(isProd){
+        if (isProd) {
 
             const method = 'bayarkereta'
-            const type = 'plane';
-           
+            const type = 'kereta';
+
             logger.info(`Requests /train/payment HIT API RAJABILLER (isProduction): ${data.transactionId}`);
             const responseCallback = await axiosSendCallbackPayment(req, method, data.transactionId, type);
             logger.info(`Response /train/payment HIT API RAJABILLER (responseCallback isProduction): ${JSON.stringify(responseCallback)}`);
-            
+
             const response = {
                 rc: responseCallback.rc,
                 rd: responseCallback.status,
@@ -459,33 +467,33 @@ Router.post('/train/payment', AuthLogin, async function(req, res) { // Menambahk
                     url_etiket: responseCallback.data.url_etiket,
                     url_image: null,
                     url_struk: responseCallback.data.url_struk,
-                    komisi:null,
+                    komisi: null,
                     komisi_mitra: responseCallback.data.komisi_mitra,
                     komisi_merchant: responseCallback.data.komisi_merchant,
-                    total_komisi:responseCallback.data.total_komisi
+                    total_komisi: responseCallback.data.total_komisi
                 } : null
             }
 
             return res.send(response);
 
-        }else{
+        } else {
 
             logger.info(`Requests /train/payment HIT API TRAVEL (isDevel): ${JSON.stringify(data)}`);
             const response = await axios.post(
                 `${process.env.URL_HIT}/train/payment`, data
             );
-    
+
             logger.info(`Response /train/payment HIT API TRAVEL (isDevel): ${JSON.stringify(response.data)}`);
 
             //kirim callback payment ke mitra. dengan hardcore.
-            const responseCallback = hardcodeKereta;                    
+            const responseCallback = hardcodeKereta;
             const responseCallbackDevel = await axios.post(urlCallback, responseCallback);
 
-            logger.info(`Response /train/payment HIT MITRA CALLBACK (responseCallbackDevel isDevel): ${JSON.stringify(responseCallbackDevel)}`);
+            logger.info(`Response /train/payment HIT MITRA CALLBACK (responseCallbackDevel isDevel): ${JSON.stringify(responseCallbackDevel.data)}`);
 
             //send callback to mitra devel.
             return res.send(response.data);
-        
+
         }
 
     } catch (error) {

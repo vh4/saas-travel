@@ -6,11 +6,52 @@ const {
     AuthLogin
 } = require('../middleware/auth.js');
 const {
-    axiosSendCallback
+    axiosSendCallback,
+    axiosSendCallbackPayment
 } = require('../utils/utils.js');
 
 require('dotenv').config()
 const Router = express.Router();
+const hardcodepelni = {
+    "trxid": "3096161320",
+    "rc": "77",
+    "status": "Transaksi sudah terbayar",
+    "produk": "BAYAR SHPPELNI",
+    "nama_kapal": "KM.TATAMAILAU",
+    "sub_class": "E",
+    "tgl_berangkat": "Rabu,22 November 2023 ",
+    "jam_berangkat": "06:00",
+    "tujuan": "TUAL-TIMIKA",
+    "tgl_tiba": "Kamis,23 November 2023 ",
+    "jam_tiba": "11:00",
+    "tagihan": "263000",
+    "adm": "20000",
+    "total_bayar": "283000",
+    "waktu_trx": "2023-11-14 15:59:07",
+    "url_etiket": "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=3096161320",
+    "url_struk": "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=3096161320",
+    "kode_booking": "BLJ6FM",
+    "username": "userlogin",
+    "merchant": "",
+    "total_komisi": "8500",
+    "komisi_mitra": "5000",
+    "komisi_merchant": "3500",
+    "saldo_terpotong_mitra": "274500",
+    "saldo_terpotong_merchant": "279500",
+    "data_penumpang": [{
+            "nama": "TURIKATI SANMAS",
+            "tgl_lahir": "1986-04-21",
+            "nik": "",
+            "kabin": "5/5072-1"
+        },
+        {
+            "nama": "NAZWA HAIRUL NISA",
+            "tgl_lahir": "2022-12-25",
+            "nik": "8102036104860003",
+            "kabin": "n/a"
+        }
+    ]
+}
 
 async function makeAxiosPost(url, data) {
     try {
@@ -373,17 +414,91 @@ Router.post('/pelni/book_info', AuthLogin, async (req, res) => {
 // });
 
 Router.post('/pelni/payment', AuthLogin, async function(req, res) {
-    const data = req.body;
-    logger.info(`Request /pelni/payment: ${JSON.stringify(data)}`);
-
     try {
-        const response = await axios.post(
-            `${process.env.URL_HIT}/pelni/payment`,
-            data
-        );
+        const data = req.body;
+        //if is_simulate devel => hit to api travel and harcode callback
+        const uidpin = req.session['v_session_uid_pin'].split('|') || [];
+        const uid = uidpin[0] || null;
+        const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
+        const urlCallback = parseDataKhususMerchant?.url;
+        const requestCallbackSaldoTerpotong = {
+            bookingCode: data.bookingCode,
+            trxid: data.transactionId,
+            nominal: data.nominal,
+            nominal_admin: data.nominal_admin
+        }
 
-        logger.info(`Response /pelni/payment: ${JSON.stringify(response.data)}`);
-        return res.send(response.data);
+        //kirim callback ke-2
+        logger.info(`Requests /pelni/payment HIT API CALLBACK (responseCallbackCheckSaldoTerpotong): ${JSON.stringify(requestCallbackSaldoTerpotong)}`);
+        const responseCallbackCheckSaldoTerpotong = await axios.post(urlCallback, requestCallbackSaldoTerpotong)
+        logger.info(`Response /pelni/payment HIT API CALLBACK (responseCallbackCheckSaldoTerpotong): ${JSON.stringify(responseCallbackCheckSaldoTerpotong.data)}`);
+
+
+        const response_mitra = responseCallbackCheckSaldoTerpotong.data;
+        if (!response_mitra) {
+            return {
+                rc: '01',
+                rd: 'saldo tidak cukup.'
+            };
+        }
+        const splitResponse = response_mitra.split('.');
+
+        if (splitResponse[0] !== 'ok' || splitResponse[1] !== data.transactionId) {
+            return {
+                rc: '01',
+                rd: 'saldo tidak cukup.'
+            };
+        }
+
+
+        //check devel or not.
+        const isProd = await WhitelistDevelByIdOutlet(uid, 'SHPPELNI');
+        if (isProd) {
+
+            const method = 'bayarkapal'
+            const type = 'pelni';
+
+            logger.info(`Requests /pelni/payment HIT API RAJABILLER (isProduction): ${data.transactionId}`);
+            const responseCallback = await axiosSendCallbackPayment(req, method, data.transactionId, type);
+            logger.info(`Response /pelni/payment HIT API RAJABILLER (responseCallback isProduction): ${JSON.stringify(responseCallback)}`);
+
+            const response = {
+                rc: responseCallback.rc,
+                rd: responseCallback.status,
+                data: responseCallback.data ? {
+                    transaction_id: responseCallback.data.trxid,
+                    url_etiket: responseCallback.data.url_etiket,
+                    url_image: null,
+                    url_struk: responseCallback.data.url_struk,
+                    nominal: responseCallback.data.tagihan,
+                    komisi: null,
+                    komisi_mitra: responseCallback.data.komisi_mitra,
+                    komisi_merchant: responseCallback.data.komisi_merchant,
+                    total_komisi: responseCallback.data.total_komisi
+                } : null
+            }
+
+            return res.send(response);
+
+        } else {
+
+            logger.info(`Requests /pelni/payment HIT API TRAVEL (isDevel): ${JSON.stringify(data)}`);
+            const response = await axios.post(
+                `${process.env.URL_HIT}/pelni/payment`, data
+            );
+
+            logger.info(`Response /pelni/payment HIT API TRAVEL (isDevel): ${JSON.stringify(response.data)}`);
+
+            //kirim callback payment ke mitra. dengan hardcore.
+            const responseCallback = hardcodepelni;
+            const responseCallbackDevel = await axios.post(urlCallback, responseCallback);
+
+            logger.info(`Response /pelni/payment HIT MITRA CALLBACK (responseCallbackDevel isDevel): ${JSON.stringify(responseCallbackDevel.data)}`);
+
+            //send callback to mitra devel.
+            return res.send(response.data);
+
+        }
     } catch (error) {
         logger.error(`Error /pelni/payment: ${error.message}`);
         return res.status(200).send({
