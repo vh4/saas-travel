@@ -29,7 +29,7 @@ Router.post('/app/redirect', async function(req, res) {
         const dekript = await axios.post(`${process.env.URL_AUTH_REDIRECT}/index.php?dekrip=null`, {
             dekrip: auth
         });
-
+        
         //2. check if exists or valid
         if (dekript.data !== undefined && dekript.data !== null && dekript.data?.trim() !== '') {
 
@@ -41,6 +41,8 @@ Router.post('/app/redirect', async function(req, res) {
                 info: JSON.stringify(getInfoClientAll(req), null, 4),
                 from: 'Web Travel Auth'
             };
+
+            const typeFromPathWeb = splitlogin[3] || '';
 
             // Log the request payload with masked password
             logger.info(`Request HIT RAJABILLER JSON: ${JSON.stringify({ ...requestPayload, password: '---------' })}`);
@@ -104,7 +106,14 @@ Router.post('/app/redirect', async function(req, res) {
 
                     //if not valid, then hardcode existing / default => the default is auth
                     if (!typeCategory || typeCategory == '') {
-                        typeCategory = 'auth';
+                        typeCategory = '';
+                    }
+
+                    if((typeFromPathWeb !== typeCategory)){
+                        return res.send({
+                            rc: '03',
+                            rd: 'gagal!'
+                        });
                     }
                     
                     logger.info(`Response [TOKEN] ${process.env.URL_AUTH_REDIRECT}. data: ${tokenUidPin.data !== null && tokenUidPin.data !== '' ? '------' : 'Not Found!'}`);
