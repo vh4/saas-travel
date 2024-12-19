@@ -5,11 +5,14 @@ const fetch = (...args) => import('node-fetch').then(({
 }) => fetch(...args));
 const useragent = require('express-useragent');
 const axios = require('axios');
-const { jwtDecode } = require('jwt-decode');
+const {
+    jwtDecode
+} = require('jwt-decode');
+const { WhitelistDevelByIdOutlet } = require('../model/global');
 
 module.exports = {
 
-    jwtDecoded: async function(token){
+    jwtDecoded: async function(token) {
 
         const jwtdecoderesp = jwtDecode(token);
         const response = await axios.post(`${process.env.URL_AUTH_REDIRECT}/index.php?dekrip=null`, {
@@ -126,17 +129,27 @@ module.exports = {
             const response_mitra = sendCallbackTomerchant.data;
 
             if (!response_mitra) {
-                return { rc: '01', rd: 'saldo tidak cukup.' };
+                return {
+                    rc: '01',
+                    rd: 'saldo tidak cukup.'
+                };
             }
-            
+
             const splitResponse = response_mitra.split('.');
-            
+
             if (splitResponse.length === 2 && splitResponse[0] === 'ok' && splitResponse[1] === id_transaksi) {
-                return { rc: '00', rd: 'success', data:getResponseGlobal.data };
+                return {
+                    rc: '00',
+                    rd: 'success',
+                    data: getResponseGlobal.data
+                };
             }
-            
-            return { rc: '01', rd: 'saldo tidak cukup.' };
-            
+
+            return {
+                rc: '01',
+                rd: 'saldo tidak cukup.'
+            };
+
 
         } catch (error) {
 
@@ -213,7 +226,7 @@ module.exports = {
 
             //redturn response dari payment api rb bukan mitra.
             return getResponseGlobal.data;
-            
+
 
         } catch (error) {
 
@@ -290,7 +303,85 @@ module.exports = {
                 rd: 'Internal Server Error.'
             };
         }
+    },
+
+
+    processCallbackSaldoTerpotong: async function(urlCallback, requestData) {
+        logger.info(`Requests HIT API CALLBACK (processCallbackSaldoTerpotong): ${JSON.stringify(requestData)}`);
+        const response = await axios.post(urlCallback, requestData);
+        logger.info(`Response HIT API CALLBACK (processCallbackSaldoTerpotong): ${JSON.stringify(response.data)}`);
+        return response.data;
+    },
+
+    processPayment: async function(req, data, uid, isProd, method, type, hardcodeCallback) {
+        const urlCallback = JSON.parse(req.session['khusus_merchant'])?.url;
+
+        // Proses callback saldo terpotong
+        const requestCallbackSaldoTerpotong = {
+            bookingCode: data.bookingCode,
+            trxid: data.transactionId,
+            nominal: data.nominal,
+            nominal_admin: data.nominal_admin
+        };
+        const responseMitra = await this.processCallbackSaldoTerpotong(urlCallback, requestCallbackSaldoTerpotong);
+
+        if (!responseMitra || responseMitra.split('.')[0] !== 'ok' || responseMitra.split('.')[1] !== data.transactionId) {
+            return {
+                rc: '01',
+                rd: 'Saldo tidak cukup.'
+            };
+        }
+
+        if (isProd) {
+            logger.info(`Requests HIT API RAJABILLER (Production): ${data.transactionId}`);
+            const responseCallback = await this.axiosSendCallbackPayment(req, method, data.transactionId, type);
+            logger.info(`Response HIT API RAJABILLER (Production): ${JSON.stringify(responseCallback)}`);
+
+            return {
+                rc: responseCallback.rc,
+                rd: responseCallback.status,
+                data: responseCallback.data ? {
+                    transaction_id: responseCallback.data.trxid,
+                    url_etiket: responseCallback.data.url_etiket,
+                    url_struk: responseCallback.data.url_struk,
+                    nominal: responseCallback.data.tagihan,
+                    komisi_mitra: responseCallback.data.komisi_mitra,
+                    komisi_merchant: responseCallback.data.komisi_merchant,
+                    total_komisi: responseCallback.data.total_komisi
+                } : null
+            };
+        } else {
+            logger.info(`Requests HIT API TRAVEL (Development): ${JSON.stringify(data)}`);
+            const response = await axios.post(`${process.env.URL_HIT}/${type}/payment`, data);
+            logger.info(`Response HIT API TRAVEL (Development): ${JSON.stringify(response.data)}`);
+
+            // Kirim callback payment dengan hardcode
+            await axios.post(urlCallback, hardcodeCallback);
+
+            return response.data;
+        }
+    },
+
+
+    handlePayment: async function(req, res, type, method, hardcodeCallback, whitelistKey) {
+        try {
+            const data = req.body;
+            const uidpin = req.session['v_session_uid_pin'].split('|') || [];
+            const uid = uidpin[0] || null;
+
+            const isProd = await WhitelistDevelByIdOutlet(uid, whitelistKey);
+            const response = await this.processPayment(req, data, uid, isProd, method, type, hardcodeCallback);
+
+            return res.send(response);
+        } catch (error) {
+            logger.error(`Error /${type}/payment: ${error.message}`);
+            return res.status(200).send({
+                rc: '68',
+                rd: 'Internal Server Error.'
+            });
+        }
     }
+
 
 
 };

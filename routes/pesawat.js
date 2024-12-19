@@ -9,7 +9,7 @@ const {
 } = require('../middleware/auth.js');
 const {
     axiosSendCallback,
-    axiosSendCallbackPayment
+    handlePayment
 } = require('../utils/utils.js');
 require('dotenv').config()
 const hardcodePesawat = {
@@ -153,55 +153,6 @@ Router.post('/flight/fare', async function(req, res) {
     }
 });
 
-//insert data search to session storage.
-// Router.post('/pesawat/search/flight', AuthLogin, async (req, res) => {
-// 	const data = req.body;
-
-// 	if(typeof data == 'object'){
-// 		logger.info(`INSERT SESSION /pesawat/search/_flight: ${JSON.stringify(data)}`);
-
-//     const uuid = uuidv4();
-// 		req.session[uuid] = data;
-
-// 		return res.send({
-// 			uuid:uuid,
-// 			rc:'00',
-// 			rd:'success'
-// 		})
-
-// 	}else{
-// 		return res.send({
-// 			rc:'03',
-// 			rd:'Data yang anda berikan salah.'
-// 		})
-// 	}
-
-// });
-
-
-//select data search for booking to session storage.
-// Router.get('/pesawat/search/flight/:id', AuthLogin, async (req, res) => {
-//   const uuid = req.params.id;
-//   logger.info(`PARAMS /pesawat/search/flight/:id: ${uuid}`);
-
-//   const data = req.session[uuid];
-
-//   if (data) {
-//     logger.info(`GETTING DATA SESSION /pesawat/search/flight/:id: ${JSON.stringify(data)}`);
-//     return res.send({
-//       rc: '00',
-//       rd: 'success',
-//       ...data
-//     });
-
-//   } else {
-//     return res.send({
-//       rc: '03',
-//       rd: 'ID tidak ditemukan.'
-//     })
-//   }
-// });
-
 Router.post('/flight/book', AuthLogin, async function(req, res) {
 
     try {
@@ -326,151 +277,10 @@ Router.post('/plane/callback', AuthLogin, async function(req, res) { // Menambah
 
 });
 
-//insert data book to session storage.
-// Router.post('/pesawat/book/flight', AuthLogin, async (req, res) => {
-// 	const data = req.body;
 
-// 	if(typeof data == 'object'){
-// 		logger.info(`INSERT SESSION /pesawat/book/flight: ${JSON.stringify(data)}`);
-
-//     const uuid = uuidv4();
-// 		req.session[uuid] = data;
-
-// 		return res.send({
-// 			uuid:uuid,
-// 			rc:'00',
-// 			rd:'success'
-// 		})
-
-// 	}else{
-// 		return res.send({
-// 			rc:'03',
-// 			rd:'Data yang anda berikan salah.'
-// 		})
-// 	}
-
-// });
-
-//select data booking for booking to session storage.
-// Router.get('/pesawat/book/flight/:id', AuthLogin, async (req, res) => {
-//   const uuid = req.params.id;
-//   logger.info(`PARAMS /pesawat/book/flight/:id: ${uuid}`);
-
-//   const data = req.session[uuid];
-
-//   if (data) {
-//     logger.info(`GETTING DATA SESSION /pesawat/book/flight/:id: ${JSON.stringify(data)}`);
-//     return res.send({
-//       rc: '00',
-//       rd: 'success',
-//       ...data
-//     });
-
-//   } else {
-//     return res.send({
-//       rc: '03',
-//       rd: 'ID tidak ditemukan.'
-//     })
-//   }
-// });
-
-
-Router.post('/flight/payment', AuthLogin, async function(req, res) {
-
-    try {
-        const data = req.body;
-        //if is_simulate devel => hit to api travel and harcode callback
-        const uidpin = req.session['v_session_uid_pin'].split('|') || [];
-        const uid = uidpin[0] || null;
-        const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
-        const urlCallback = parseDataKhususMerchant?.url;
-        const requestCallbackSaldoTerpotong = {
-            bookingCode: data.bookingCode,
-            trxid: data.transactionId,
-            nominal: data.nominal,
-            nominal_admin: data.nominal_admin
-        }
-
-        //kirim callback ke-2
-        logger.info(`Requests /flight/payment HIT API CALLBACK (responseCallbackCheckSaldoTerpotong): ${JSON.stringify(requestCallbackSaldoTerpotong)}`);
-        const responseCallbackCheckSaldoTerpotong = await axios.post(urlCallback, requestCallbackSaldoTerpotong)
-        logger.info(`Response /flight/payment HIT API CALLBACK (responseCallbackCheckSaldoTerpotong): ${JSON.stringify(responseCallbackCheckSaldoTerpotong.data)}`);
-
-
-        const response_mitra = responseCallbackCheckSaldoTerpotong.data;
-        if (!response_mitra) {
-            return {
-                rc: '01',
-                rd: 'saldo tidak cukup.'
-            };
-        }
-        const splitResponse = response_mitra.split('.');
-
-        if (splitResponse[0] !== 'ok' || splitResponse[1] !== data.transactionId) {
-            return {
-                rc: '01',
-                rd: 'saldo tidak cukup.'
-            };
-        }
-
-
-        //check devel or not.
-        const isProd = await WhitelistDevelByIdOutlet(uid, 'PESAWAT');
-        if (isProd) {
-
-            const method = 'bayarpesawat'
-            const type = 'plane';
-
-            logger.info(`Requests /flight/payment HIT API RAJABILLER (isProduction): ${data.transactionId}`);
-            const responseCallback = await axiosSendCallbackPayment(req, method, data.transactionId, type);
-            logger.info(`Response /flight/payment HIT API RAJABILLER (responseCallback isProduction): ${JSON.stringify(responseCallback)}`);
-
-            const response = {
-                rc: responseCallback.rc,
-                rd: responseCallback.status,
-                data: responseCallback.data ? {
-                    transaction_id: responseCallback.data.trxid,
-                    url_etiket: responseCallback.data.url_etiket,
-                    url_image: null,
-                    url_struk: responseCallback.data.url_struk,
-                    nominal: responseCallback.data.tagihan,
-                    komisi: null,
-                    komisi_mitra: responseCallback.data.komisi_mitra,
-                    komisi_merchant: responseCallback.data.komisi_merchant,
-                    total_komisi: responseCallback.data.total_komisi
-                } : null
-            }
-
-            return res.send(response);
-
-        } else {
-
-            logger.info(`Requests /flight/payment HIT API TRAVEL (isDevel): ${JSON.stringify(data)}`);
-            const response = await axios.post(
-                `${process.env.URL_HIT}/flight/payment`, data
-            );
-
-            logger.info(`Response /flight/payment HIT API TRAVEL (isDevel): ${JSON.stringify(response.data)}`);
-
-            //kirim callback payment ke mitra. dengan hardcore.
-            const responseCallback = hardcodePesawat;
-            const responseCallbackDevel = await axios.post(urlCallback, responseCallback);
-
-            logger.info(`Response /flight/payment HIT MITRA CALLBACK (responseCallbackDevel isDevel): ${JSON.stringify(responseCallbackDevel.data)}`);
-
-            //send callback to mitra devel.
-            return res.send(response.data);
-
-        }
-
-
-    } catch (error) {
-        logger.error(`Error /flight/payment: ${error.message}`);
-        return res.status(200).send({
-            rc: '68',
-            rd: 'Internal Server Error.'
-        });
-    }
+Router.post('/flight/payment', AuthLogin, async (req, res) => {
+    await handlePayment(req, res, 'flight', 'bayarpesawat', hardcodePesawat, 'PESAWAT');
 });
+
 
 module.exports = Router;
