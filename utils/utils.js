@@ -321,13 +321,20 @@ module.exports = {
 
     processPayment: async function(req, data, uid, isProd, method, type, hardcodeCallback) {
         const urlCallback = JSON.parse(req.session['khusus_merchant'])?.url;
-
+        // username: callback.username,
+        // merchant: callback.merchant,
+        // total_komisi: callback.total_komisi,
+        // komisi_mitra: callback.komisi_mitra,
+        // komisi_merchant: callback.komisi_merchant,
+        // saldo_terpotong_mitra: callback.saldo_terpotong_mitra,
+        // saldo_terpotong_merchant: callback.saldo_terpotong_merchant,
         // Proses callback saldo terpotong
         const requestCallbackSaldoTerpotong = {
-            bookingCode: data.bookingCode,
             trxid: data.transactionId,
-            nominal: data.nominal,
-            nominal_admin: data.nominal_admin
+            saldoterpotongmitra:data.saldo_terpotong_mitra,
+            saldoterpotongmerchant: data.saldo_terpotong_merchant,
+            username: data.username,
+            merchant: data.merchant
         };
         const responseMitra = await this.processCallbackSaldoTerpotong(urlCallback, requestCallbackSaldoTerpotong);
 
