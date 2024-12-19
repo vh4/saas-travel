@@ -12,8 +12,6 @@ const {
     axiosSendCallbackKhususKaiTransit,
     handlePayment
 } = require('../utils/utils.js');
-const {
-} = require('../model/global.js');
 const Router = express.Router();
 require('dotenv').config()
 
