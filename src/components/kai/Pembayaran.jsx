@@ -18,6 +18,8 @@ import { useSelector } from "react-redux";
 
 export default function Pembayaran() {
   const isOk = useSelector((state) => state.callback.isOk);
+  const callback = useSelector((state) => state.callback);
+
   const isCurrentBalance = useSelector(
     (state) => state.bookkereta.isOkBalanceKereta
   );
@@ -242,6 +244,14 @@ export default function Pembayaran() {
         simulateSuccess: isSimulated, //
         pay_type: "TUNAI",
         token: token,
+        //cal;back
+        username: callback.username,
+        merchant: callback.merchant,
+        total_komisi: callback.total_komisi,
+        komisi_mitra: callback.komisi_mitra,
+        komisi_merchant: callback.komisi_merchant,
+        saldo_terpotong_mitra: callback.saldo_terpotong_mitra,
+        saldo_terpotong_merchant: callback.saldo_terpotong_merchant,
       }
     );
 
