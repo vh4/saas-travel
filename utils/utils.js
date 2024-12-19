@@ -243,12 +243,12 @@ module.exports = {
             const urlCallback = parseDataKhususMerchant?.url;
             const send_format = parseDataKhususMerchant?.data1; //format json / text.
 
-            logger.info(`Request /travel/${type}/callback [FUNCTION axiosSendCallback] [id_transaksi] : ${id_transaksi} [MERCHANT IF EXISTS]: ${JSON.stringify(parseDataKhususMerchant || '')} [uid] : ${uid}`);
+            logger.info(`Request /travel/${type}/callback [FUNCTION axiosSendCallbackPayment] [id_transaksi] : ${id_transaksi} [MERCHANT IF EXISTS]: ${JSON.stringify(parseDataKhususMerchant || '')} [uid] : ${uid}`);
             let getResponseGlobal = null;
 
             if (send_format?.toUpperCase() == 'JSON') {
 
-                logger.info(`REQUEST [${type}][JSON] /travel/${type}/callback: ${JSON.stringify({
+                logger.info(`REQUEST [${type}][JSON] /travel/${type}/callback : ${JSON.stringify({
                     method: method,
                     uid:uid,
                     pin:'----',
@@ -289,13 +289,20 @@ module.exports = {
                 logger.info(`Response [${type}] URL ${urlCallback} [REQUEST SENT CALLBACK TO MERCHANT]: ${sendCallbackTomerchant.data}`);
             }
 
+            if(getResponseGlobal.data.rc !== '00'){
+                return {
+                    rc: getResponseGlobal.data.rc,
+                    rd: getResponseGlobal.data.status
+                };
+            }
+
             //redturn response dari payment api rb bukan mitra.
             return getResponseGlobal.data;
 
 
         } catch (error) {
 
-            logger.error(`Error [${type}] [FUNCTION] axiosSendCallback: ${error.message}`);
+            logger.error(`Error [${type}] [FUNCTION] axiosSendCallbackPayment: ${error.message}`);
             return {
                 rc: '68',
                 rd: 'Internal Server Error.'
@@ -339,14 +346,14 @@ module.exports = {
             return {
                 rc: responseCallback.rc,
                 rd: responseCallback.status,
-                data: responseCallback.data ? {
-                    transaction_id: responseCallback.data.trxid,
-                    url_etiket: responseCallback.data.url_etiket,
-                    url_struk: responseCallback.data.url_struk,
-                    nominal: responseCallback.data.tagihan,
-                    komisi_mitra: responseCallback.data.komisi_mitra,
-                    komisi_merchant: responseCallback.data.komisi_merchant,
-                    total_komisi: responseCallback.data.total_komisi
+                data: responseCallback.rc == '00' ? {
+                    transaction_id: responseCallback.trxid,
+                    url_etiket: responseCallback.url_etiket,
+                    url_struk: responseCallback.url_struk,
+                    nominal: responseCallback.tagihan,
+                    komisi_mitra: responseCallback.komisi_mitra,
+                    komisi_merchant: responseCallback.komisi_merchant,
+                    total_komisi: responseCallback.total_komisi
                 } : null
             };
         } else {
