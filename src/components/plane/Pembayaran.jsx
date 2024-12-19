@@ -219,7 +219,7 @@ export default function Pembayaran() {
         airline: dataDetailForBooking.airline,
         transactionId: hasilBooking.transactionId,
         nominal:hasilBooking.nominal,
-        nominal:hasilBooking.nominalAdmin,
+        nominal_admin:hasilBooking.nominalAdmin,
         bookingCode: hasilBooking.bookingCode,
         simulateSuccess: isSimulated, //
         paymentCode: hasilBooking.paymentCode,
