@@ -372,7 +372,7 @@ export default function Pembayaran() {
           ) : (
             <>
               <div className="block xl:flex xl:justify-around mb-24 xl:space-x-4">
-                <div className="block md:hidden">
+                <div className="block xl:hidden">
                   <Alert
                     message={`Expired Booking : ${remainingBookTime}`}
                     banner
@@ -684,7 +684,7 @@ export default function Pembayaran() {
                   </div>
 
                   {/* desktop payment button */}
-                  <div className="hidden md:block mt-2">
+                  <div className="hidden xl:block mt-2">
                     <Alert
                       message={`Expired Booking : ${remainingBookTime}`}
                       banner

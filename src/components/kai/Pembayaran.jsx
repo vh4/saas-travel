@@ -382,7 +382,7 @@ export default function Pembayaran() {
           ) : (
             <>
               <div className="block xl:flex xl:justify-around mb-24 xl:space-x-4">
-                <div className="block md:hidden">
+                <div className="block xl:hidden">
                   <Alert
                     message={`Expired Booking : ${remainingBookTime}`}
                     banner
@@ -657,14 +657,14 @@ export default function Pembayaran() {
                         ))}
                     </div>
                   </div>
-                  <div className="hidden md:block mt-2">
+                  <div className="hidden xl:block mt-2">
                     <Alert
                       message={`Expired Booking : ${remainingBookTime}`}
                       banner
                     />
                   </div>
                   {callbackBoolean == true ? (
-                    <div className="mt-2 py-4 rounded-md border-t border-gray-200 shadow-sm">
+                    <div className="hidden xl:block mt-2 py-4 rounded-md border-t border-gray-200 shadow-sm">
                       {isOk == true && isCurrentBalance == true ? (
                         <>
                           <div className="px-8 md:px-4 py-4 text-sm text-black">
