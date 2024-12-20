@@ -145,11 +145,11 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
         logger.info(`Response HIT API TRAVEL (Development): ${JSON.stringify(response.data)}`);
 
         // Kirim callback payment dengan hardcode
-        logger.info(`REQUEST KIRIM KE-3 SENT CALLBACK TO MERCHANT  DEVEL (axiosSendCallbackPayment): ${JSON.stringify(data)}`);
-        await log_request(data.trxid, req.ip, uid, data.trxid, `REQUEST CALLBACK KE-3 DEVEL => ${JSON.stringify(data)}`);
+        logger.info(`REQUEST KIRIM KE-3 SENT CALLBACK TO MERCHANT  DEVEL (axiosSendCallbackPayment): ${JSON.stringify(hardcodeCallback)}`);
+        await log_request(data.transactionId, req.ip, uid, data.transactionId, `REQUEST CALLBACK KE-3 DEVEL => ${JSON.stringify(hardcodeCallback)}`);
         const responseCallbackDevel= await axios.post(urlCallback, hardcodeCallback);
         logger.info(`RESPONSE KIRIM KE-3 SENT CALLBACK TO MERCHANT DEVEL (axiosSendCallbackPayment): ${JSON.stringify(responseCallbackDevel.data)}`);
-        await log_response(data.trxid, req.ip, uid, data.trxid, `RESPONSE CALLBACK KE-3 DEVEL => ${JSON.stringify(responseCallbackDevel.data)}`);
+        await log_response(data.transactionId, req.ip, uid, data.transactionId, `RESPONSE CALLBACK KE-3 DEVEL => ${JSON.stringify(responseCallbackDevel.data)}`);
 
         return response.data;
     }
@@ -266,7 +266,7 @@ module.exports = {
             );
             const response_mitra = sendCallbackTomerchant.data;
             logger.info(`[RESPONSE KIRIM KE-1 SENT CALLBACK TO MERCHANT (axiosSendCallback)] [${type}] URL ${urlCallback}: ${JSON.stringify(sendCallbackTomerchant.data)}`);
-            await log_response(id_transaksi, req.ip, uid, id_transaksi, `REQUEST CALLBACK KE-1 => ${JSON.stringify(sendCallbackTomerchant.data)}`);
+            await log_response(id_transaksi, req.ip, uid, id_transaksi, `RESPONSE CALLBACK KE-1 => ${JSON.stringify(sendCallbackTomerchant.data)}`);
 
             if (!response_mitra) {
                 return {
