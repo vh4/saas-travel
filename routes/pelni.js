@@ -12,9 +12,9 @@ const {
 require('dotenv').config()
 const Router = express.Router();
 const hardcodepelni = {
-    "trxid": "3096161320",
-    "rc": "77",
-    "status": "Transaksi sudah terbayar",
+    "trxid": "3096161201",
+    "rc": "00",
+    "status": "Sukses",
     "produk": "BAYAR SHPPELNI",
     "nama_kapal": "KM.TATAMAILAU",
     "sub_class": "E",
@@ -26,10 +26,10 @@ const hardcodepelni = {
     "tagihan": "263000",
     "adm": "20000",
     "total_bayar": "283000",
-    "waktu_trx": "2023-11-14 15:59:07",
-    "url_etiket": "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=3096161320",
-    "url_struk": "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=3096161320",
+    "waktu_trx": "2023-11-14 16:19:07",
     "kode_booking": "BLJ6FM",
+    "url_etiket": "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=3096161201",
+    "url_struk": "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=3096161201",
     "username": "userlogin",
     "merchant": "",
     "total_komisi": "8500",
@@ -37,20 +37,21 @@ const hardcodepelni = {
     "komisi_merchant": "3500",
     "saldo_terpotong_mitra": "274500",
     "saldo_terpotong_merchant": "279500",
-    "data_penumpang": [{
-            "nama": "TURIKATI SANMAS",
-            "tgl_lahir": "1986-04-21",
-            "nik": "",
-            "kabin": "5/5072-1"
-        },
-        {
-            "nama": "NAZWA HAIRUL NISA",
-            "tgl_lahir": "2022-12-25",
-            "nik": "8102036104860003",
-            "kabin": "n/a"
-        }
+    "data_penumpang": [
+      {
+        "nama": "TURIKATI SANMAS",
+        "tgl_lahir": "1986-04-21",
+        "nik": "",
+        "kabin": "5/5072-1"
+      },
+      {
+        "nama": "NAZWA HAIRUL NISA",
+        "tgl_lahir": "2022-12-25",
+        "nik": "8102036104860003",
+        "kabin": "n/a"
+      }
     ]
-}
+  }
 
 async function makeAxiosPost(url, data) {
     try {

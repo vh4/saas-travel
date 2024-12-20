@@ -16,10 +16,10 @@ const Router = express.Router();
 require('dotenv').config()
 
 const hardcodeKereta = {
-    "trxid": "3095045080",
-    "rc": "77",
-    "status": "Transaksi sudah terbayar",
-    "produk": "CEK WKAI",
+    "trxid": "3095045099",
+    "rc": "00",
+    "status": "Sukses",
+    "produk": "BAYAR WKAI",
     "kereta": "KUTOJAYA SELATAN (259)",
     "class": "EKO",
     "tgl_berangkat": "2023-11-14",
@@ -29,8 +29,8 @@ const hardcodeKereta = {
     "adm": "7500",
     "total_bayar": "131500",
     "waktu_trx": "2023-11-14",
-    "url_etiket": "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=3095045080",
-    "url_struk": "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=3095045080",
+    "url_etiket": "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=3095045099",
+    "url_struk": "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=3095045099",
     "kode_booking": "WHV6X77",
     "username": "userlogin",
     "merchant": "",
@@ -39,26 +39,27 @@ const hardcodeKereta = {
     "komisi_merchant": "3000",
     "saldo_terpotong_mitra": "124250",
     "saldo_terpotong_merchant": "128500",
-    "data_penumpang": [{
-            "nama": "MUHADI",
-            "kursi": "EKO-5/5B",
-            "telepon": "089629782291",
-            "nomor_identitas": "3305032512990004"
-        },
-        {
-            "nama": "TITI SRI WAHYUNI",
-            "kursi": "EKO-5/5C",
-            "telepon": "0896297822911",
-            "nomor_identitas": "3305044809990005"
-        },
-        {
-            "nama": "EARLYTA ARSYIFA SALSABIL",
-            "kursi": "",
-            "telepon": "",
-            "nomor_identitas": "3305035104230001"
-        }
+    "data_penumpang": [
+      {
+        "nama": "MUHADI",
+        "kursi": "EKO-3/17B",
+        "telepon": "089629782291",
+        "nomor_identitas": "3305032512990004"
+      },
+      {
+        "nama": "TITI SRI WAHYUNI",
+        "kursi": "EKO-3/17C",
+        "telepon": "0896297822911",
+        "nomor_identitas": "3305044809990005"
+      },
+      {
+        "nama": "EARLYTA ARSYIFA SALSABIL",
+        "kursi": "",
+        "telepon": "",
+        "nomor_identitas": "3305035104230001"
+      }
     ]
-}
+  }
 
 Router.post('/train/station', async function(req, res) { // Menambahkan async
     try {
