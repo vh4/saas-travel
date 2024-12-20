@@ -1,4 +1,6 @@
 const logger = require('../utils/logger.js');
+const moment = require('moment');
+
 const {
     pool
 } = require('../databases/db.js')
@@ -24,6 +26,74 @@ const WhitelistDevelByIdOutlet = async (idoutlet, produk) => {
 }
 
 
+const log_request = async (id_log, ip_src, id_outlet, mid, raw_message) => {
+    const date_request = moment().format("YYYY-MM-DD");
+    const time_request = moment().format("HH:mm:ss");
+
+    try {
+        const query = `
+            INSERT INTO log_request(
+                id_log, ip_src, id_outlet, mid, date_request, time_request, raw_message
+            ) VALUES($1, $2, $3, $4, $5, $6, $7);
+        `;
+
+        await dbCheck.query(query, [
+            id_log,
+            ip_src,
+            id_outlet,
+            mid,
+            date_request,
+            time_request,
+            raw_message,
+        ]);
+
+        logger.info(
+            `Log request berhasil dimasukkan untuk id_outlet: ${id_outlet}, mid: ${mid}, raw_message: ${raw_message}`
+        );
+    } catch (error) {
+        logger.error(
+            `Gagal memasukkan log request untuk id_outlet: ${id_outlet}, mid: ${mid}. Error: ${
+                error instanceof Error ? error.message : "Unknown error"
+            }. Stack: ${error instanceof Error ? error.stack : "No stack available"}`
+        );
+    }
+};
+
+const log_response = async (id_log, ip_src, id_outlet, mid, raw_message) => {
+    const date_response = moment().format("YYYY-MM-DD");
+    const time_response = moment().format("HH:mm:ss");
+
+    try {
+        const query = `
+            INSERT INTO log_response(
+                id_log, ip_src, id_outlet, mid, date_response, time_response, raw_message
+            ) VALUES($1, $2, $3, $4, $5, $6, $7);
+        `;
+
+        await dbCheck.query(query, [
+            id_log,
+            ip_src,
+            id_outlet,
+            mid,
+            date_response,
+            time_response,
+            raw_message,
+        ]);
+
+        logger.info(
+            `Log response berhasil dimasukkan untuk id_outlet: ${id_outlet}, mid: ${mid}, raw_message: ${raw_message}`
+        );
+    } catch (error) {
+        logger.error(
+            `Gagal memasukkan log response untuk id_outlet: ${id_outlet}, mid: ${mid}. Error: ${
+                error instanceof Error ? error.message : "Unknown error"
+            }. Stack: ${error instanceof Error ? error.stack : "No stack available"}`
+        );
+    }
+};
+
 module.exports = {
-    WhitelistDevelByIdOutlet
+    WhitelistDevelByIdOutlet,
+    log_request,
+    log_response
 }

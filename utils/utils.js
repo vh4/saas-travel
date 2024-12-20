@@ -24,12 +24,10 @@ async function axiosSendCallbackPayment(req, method, id_transaksi, type = '') {
         const urlCallback = parseDataKhususMerchant?.url;
         const send_format = parseDataKhususMerchant?.data1; //format json / text.
 
-        logger.info(`Request /travel/${type}/callback [FUNCTION axiosSendCallbackPayment] [id_transaksi] : ${id_transaksi} [MERCHANT IF EXISTS]: ${JSON.stringify(parseDataKhususMerchant || '')} [uid] : ${uid}`);
         let getResponseGlobal = null;
-
         if (send_format?.toUpperCase() == 'JSON') {
 
-            logger.info(`REQUEST [${type}][JSON] /travel/${type}/callback : ${JSON.stringify({
+            logger.info(`REQUEST HIT API RAJABILLER (Production)[JSON] /travel/${type}/payment : ${JSON.stringify({
                 method: method,
                 uid:uid,
                 pin:'----',
@@ -44,31 +42,24 @@ async function axiosSendCallbackPayment(req, method, id_transaksi, type = '') {
                 pin: pin,
                 trxid: id_transaksi
             });
-            logger.info(`RESPONSE [${type}][JSON] /travel/${type}/callback: ${JSON.stringify(getResponseGlobal.data)}`);
+            logger.info(`RESPONSE HIT API RAJABILLER (Production)[JSON] /travel/${type}/payment : ${JSON.stringify(getResponseGlobal.data)}`);
 
         } else {
 
             const url = `https://rajabiller.fastpay.co.id/transaksi/api_otomax.php?method=${method}&uid=${uid}&pin=${pin}&trxid=${id_transaksi}`;
-            logger.info(`REQUEST [${type}][OTOMAX] /travel/${type}/callback: https://rajabiller.fastpay.co.id/transaksi/api_otomax.php?method=${method}&uid=${uid}&pin=${pin}&trxid=${id_transaksi}`);
-
-            //GETTING DATA CALLBACK FROM RAJABILLER
+            
+            logger.info(`REQUEST HIT API RAJABILLER (Production)[OTOMAX] /travel/${type}/payment: https://rajabiller.fastpay.co.id/transaksi/api_otomax.php?method=${method}&uid=${uid}&pin=${pin}&trxid=${id_transaksi}`);
             getResponseGlobal = await axios.get(url);
-
-            logger.info(`RESPONSE [${type}][OTOMAX] /travel/${type}/callback: ${JSON.stringify(getResponseGlobal.data)}`);
+            logger.info(`RESPONSE HIT API RAJABILLER (Production)[OTOMAX] /travel/${type}/payment: ${JSON.stringify(getResponseGlobal.data)}`);
 
         }
 
-        logger.info(`REQUEST [${type}] URL ${urlCallback} [REQUEST SENT CALLBACK TO MERCHANT]: ${JSON.stringify(getResponseGlobal.data)}`);
-        const sendCallbackTomerchant = await axios.post(
-            urlCallback,
-            getResponseGlobal.data || null
-        );
-
-        if (typeof sendCallbackTomerchant.data === "object") {
-            logger.info(`Response [${type}] URL ${urlCallback} [REQUEST SENT CALLBACK TO MERCHANT]: ${JSON.stringify(sendCallbackTomerchant.data)}`);
-        } else {
-            logger.info(`Response [${type}] URL ${urlCallback} [REQUEST SENT CALLBACK TO MERCHANT]: ${sendCallbackTomerchant.data}`);
-        }
+            logger.info(`[REQUEST KIRIM KE-3 SENT CALLBACK TO MERCHANT (axiosSendCallbackPayment)] [${type}] URL ${urlCallback} : ${JSON.stringify(getResponseGlobal.data)}`);
+            const sendCallbackTomerchant = await axios.post(
+                urlCallback,
+                getResponseGlobal.data || null
+            );
+            logger.info(`[RESPONSE KIRIM KE-3 SENT CALLBACK TO MERCHANT (axiosSendCallbackPayment)] [${type}] URL ${urlCallback}: ${JSON.stringify(sendCallbackTomerchant.data)}`);
 
         if(getResponseGlobal.data.rc !== '00'){
             return {
@@ -83,7 +74,7 @@ async function axiosSendCallbackPayment(req, method, id_transaksi, type = '') {
 
     } catch (error) {
 
-        logger.error(`Error [${type}] [FUNCTION] axiosSendCallbackPayment: ${error.message}`);
+        logger.error(`Error id_transaksi =>${id_transaksi}, [${type}][FUNCTION] axiosSendCallbackPayment: ${error.message}`);
         return {
             rc: '68',
             rd: 'Internal Server Error.'
@@ -94,9 +85,9 @@ async function axiosSendCallbackPayment(req, method, id_transaksi, type = '') {
 }
 
 async function processCallbackSaldoTerpotong(urlCallback, requestData) {
-    logger.info(`Requests HIT API CALLBACK (processCallbackSaldoTerpotong): ${JSON.stringify(requestData)}`);
+    logger.info(`REQUEST KIRIM KE-2 SENT CALLBACK TO MERCHANT (processCallbackSaldoTerpotong): ${JSON.stringify(requestData)}`);
     const response = await axios.post(urlCallback, requestData);
-    logger.info(`Response HIT API CALLBACK (processCallbackSaldoTerpotong): ${JSON.stringify(response.data)}`);
+    logger.info(`RESPONSE KIRIM KE-2 SENT CALLBACK TO MERCHANT (processCallbackSaldoTerpotong): ${JSON.stringify(response.data)}`);
     return response.data;
 }
 
@@ -127,10 +118,7 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
     }
 
     if (isProd) {
-        logger.info(`Requests HIT API RAJABILLER (Production): ${data.transactionId}`);
         const responseCallback = await axiosSendCallbackPayment(req, method, data.transactionId, type);
-        logger.info(`Response HIT API RAJABILLER (Production): ${JSON.stringify(responseCallback)}`);
-
         return {
             rc: responseCallback.rc,
             rd: responseCallback.status,
@@ -150,7 +138,9 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
         logger.info(`Response HIT API TRAVEL (Development): ${JSON.stringify(response.data)}`);
 
         // Kirim callback payment dengan hardcode
-        await axios.post(urlCallback, hardcodeCallback);
+        logger.info(`REQUEST KIRIM KE-3 SENT CALLBACK TO MERCHANT (axiosSendCallbackPayment): ${JSON.stringify(requestData)}`);
+        const responseCallbackDevel= await axios.post(urlCallback, hardcodeCallback);
+        logger.info(`RESPONSE KIRIM KE-3 SENT CALLBACK TO MERCHANT (axiosSendCallbackPayment): ${JSON.stringify(responseCallbackDevel.data)}`);
 
         return response.data;
     }
@@ -226,12 +216,10 @@ module.exports = {
             const urlCallback = parseDataKhususMerchant?.url;
             const send_format = parseDataKhususMerchant?.data1; //format json / text.
 
-            logger.info(`Request /travel/${type}/callback [FUNCTION axiosSendCallback] [id_transaksi] : ${id_transaksi} [MERCHANT IF EXISTS]: ${JSON.stringify(parseDataKhususMerchant || '')} [uid] : ${uid}`);
             let getResponseGlobal = null;
-
             if (send_format?.toUpperCase() == 'JSON') {
 
-                logger.info(`REQUEST [${type}][JSON] /travel/${type}/callback: ${JSON.stringify({
+                logger.info(`REQUEST HIT API RAJABILLER (Production)[JSON] /travel/${type}/callback : ${JSON.stringify({
                     method: method,
                     uid:uid,
                     pin:'----',
@@ -246,13 +234,13 @@ module.exports = {
                     pin: pin,
                     trxid: id_transaksi
                 });
-                logger.info(`RESPONSE [${type}][JSON] /travel/${type}/callback: ${JSON.stringify(getResponseGlobal.data)}`);
+                logger.info(`RESPONSE HIT API RAJABILLER (Production)[JSON] /travel/${type}/callback: ${JSON.stringify(getResponseGlobal.data)}`);
 
             } else {
 
                 const url = `https://rajabiller.fastpay.co.id/transaksi/api_otomax.php?method=${method}&uid=${uid}&pin=${pin}&trxid=${id_transaksi}`;
+                
                 logger.info(`REQUEST [${type}][OTOMAX] /travel/${type}/callback: https://rajabiller.fastpay.co.id/transaksi/api_otomax.php?method=${method}&uid=${uid}&pin=${pin}&trxid=${id_transaksi}`);
-
                 //GETTING DATA CALLBACK FROM RAJABILLER
                 getResponseGlobal = await axios.get(url);
 
@@ -260,19 +248,13 @@ module.exports = {
 
             }
 
-            logger.info(`REQUEST [${type}] URL ${urlCallback} [REQUEST SENT CALLBACK TO MERCHANT]: ${JSON.stringify(getResponseGlobal.data)}`);
+            logger.info(`[REQUEST KIRIM KE-3 SENT CALLBACK TO MERCHANT (axiosSendCallback)] [${type}] URL ${urlCallback} : ${JSON.stringify(getResponseGlobal.data)}`);
             const sendCallbackTomerchant = await axios.post(
                 urlCallback,
                 getResponseGlobal.data || null
             );
-
-            if (typeof sendCallbackTomerchant.data === "object") {
-                logger.info(`Response [${type}] URL ${urlCallback} [REQUEST SENT CALLBACK TO MERCHANT]: ${JSON.stringify(sendCallbackTomerchant.data)}`);
-            } else {
-                logger.info(`Response [${type}] URL ${urlCallback} [REQUEST SENT CALLBACK TO MERCHANT]: ${sendCallbackTomerchant.data}`);
-            }
-
             const response_mitra = sendCallbackTomerchant.data;
+            logger.info(`[RESPONSE KIRIM KE-3 SENT CALLBACK TO MERCHANT (axiosSendCallback)] [${type}] URL ${urlCallback}: ${JSON.stringify(sendCallbackTomerchant.data)}`);
 
             if (!response_mitra) {
                 return {

@@ -21,13 +21,15 @@ const {
 const axios = require('axios')
 const {
     dbCheck
-} = require('./databases/db')
+} = require('./databases/db');
+const { dbCheckLog } = require('./databases/db_log');
 
 const app = express();
 const port = 9999;
 app.use(timeout('3600s'))
 //for checked databases.
 dbCheck();
+// dbCheckLog();
 
 // Use cookie-parser middleware
 app.use(cookieParser());
