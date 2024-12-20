@@ -238,7 +238,7 @@ Router.post('/train/callback', AuthLogin, async function(req, res) { // Menambah
 
         const method = 'cekkereta'
         const {
-            id_transaksi
+            id_transaksi,
         } = req.body;
         const type = 'train';
 

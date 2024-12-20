@@ -29,7 +29,7 @@ const port = 9999;
 app.use(timeout('3600s'))
 //for checked databases.
 dbCheck();
-// dbCheckLog();
+dbCheckLog();
 
 // Use cookie-parser middleware
 app.use(cookieParser());

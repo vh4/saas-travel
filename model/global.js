@@ -5,6 +5,10 @@ const {
     pool
 } = require('../databases/db.js')
 
+const {
+    poolLog
+} = require('../databases/db_log.js')
+
 const WhitelistDevelByIdOutlet = async (idoutlet, produk) => {
     try {
 
@@ -37,7 +41,7 @@ const log_request = async (id_log, ip_src, id_outlet, mid, raw_message) => {
             ) VALUES($1, $2, $3, $4, $5, $6, $7);
         `;
 
-        await dbCheck.query(query, [
+        await poolLog.query(query, [
             id_log,
             ip_src,
             id_outlet,
@@ -70,7 +74,7 @@ const log_response = async (id_log, ip_src, id_outlet, mid, raw_message) => {
             ) VALUES($1, $2, $3, $4, $5, $6, $7);
         `;
 
-        await dbCheck.query(query, [
+        await poolLog.query(query, [
             id_log,
             ip_src,
             id_outlet,
