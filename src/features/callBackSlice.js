@@ -12,16 +12,18 @@ const initialState = {
   komisi_merchant: null,
   saldo_terpotong_mitra: null,
   saldo_terpotong_merchant: null,
+  // mid:null
 };
 
 const callbackFetchData = createAsyncThunk(
 	"travel/callback",
-	async ({ type, id_transaksi }, { rejectWithValue }) => {
+	async ({ type, id_transaksi, mid }, { rejectWithValue }) => {
 	  try {
 		const response = await axios.post(
 		  `${process.env.REACT_APP_HOST_API}/travel/${type}/callback`,
 		  {
 			id_transaksi,
+      mid
 		  }
 		);
 
@@ -38,6 +40,7 @@ const callbackFetchData = createAsyncThunk(
         komisi_merchant: data.komisi_merchant,
         saldo_terpotong_mitra: data.saldo_terpotong_mitra,
         saldo_terpotong_merchant: data.saldo_terpotong_merchant,
+        // mid:data.mid
       };
 		} else {
 		  return { isOk: false };
@@ -77,6 +80,7 @@ export const callbackSlice = createSlice({
           state.komisi_merchant = action.payload.komisi_merchant;
           state.saldo_terpotong_mitra = action.payload.saldo_terpotong_mitra;
           state.saldo_terpotong_merchant = action.payload.saldo_terpotong_merchant;
+          // state.mid = action.payload.mid;
         }
         state.isError = false;
         state.isLoading = false;
