@@ -117,7 +117,7 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
     };
     const responseMitra = await processCallbackSaldoTerpotong(urlCallback, requestCallbackSaldoTerpotong, uid, req.ip);
 
-    if (!responseMitra || responseMitra.split('.')[0] !== 'ok' || responseMitra.split('.')[1] !== data.transactionId) {
+    if (!responseMitra || ['payment', 'ok'].includes(responseMitra.split('.')[0]) === false || responseMitra.split('.')[1] !== data.transactionId) {
         return {
             rc: '01',
             rd: 'Saldo tidak cukup.'
