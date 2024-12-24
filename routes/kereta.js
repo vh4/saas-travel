@@ -9,7 +9,7 @@ const {
 } = require('../middleware/auth.js');
 const {
     axiosSendCallback,
-    axiosSendCallbackKhususKaiTransit,
+    // axiosSendCallbackKhususKaiTransit,
     handlePayment
 } = require('../utils/utils.js');
 const Router = express.Router();
@@ -258,60 +258,60 @@ Router.post('/train/callback', AuthLogin, async function(req, res) { // Menambah
 
 });
 
-Router.post('/train/transit/callback', AuthLogin, async function(req, res) { // Menambahkan async
+// Router.post('/train/transit/callback', AuthLogin, async function(req, res) { // Menambahkan async
 
-    //kirim callback ke-1
-    try {
+//     //kirim callback ke-1
+//     try {
 
-        const method = 'cekkereta'
-        const idtrxList = req.body;
-        const type = 'train';
+//         const method = 'cekkereta'
+//         const idtrxList = req.body;
+//         const type = 'train';
 
-        logger.info(`Request /train/transit/callback: ${idtrxList.id_transaksi}`);
-        const response = await axiosSendCallbackKhususKaiTransit(req, method, idtrxList.id_transaksi, type);
-        return res.send(response);
+//         logger.info(`Request /train/transit/callback: ${idtrxList.id_transaksi}`);
+//         const response = await axiosSendCallbackKhususKaiTransit(req, method, idtrxList.id_transaksi, type);
+//         return res.send(response);
 
-    } catch (error) {
+//     } catch (error) {
 
-        logger.error(`Error /train/callback: ${error.message}`);
-        return res.status(200).send({
-            rc: '68',
-            rd: 'Internal Server Error.'
-        });
+//         logger.error(`Error /train/callback: ${error.message}`);
+//         return res.status(200).send({
+//             rc: '68',
+//             rd: 'Internal Server Error.'
+//         });
 
-    }
+//     }
 
-});
+// });
 
-Router.post('/train/payment-transit', AuthLogin, async function(req, res) { // Menambahkan async
-    try {
-        const data = req.body;
+// Router.post('/train/payment-transit', AuthLogin, async function(req, res) { // Menambahkan async
+//     try {
+//         const data = req.body;
 
-        logger.info(`Request /train/payment-transit: ${JSON.stringify(data)}`);
+//         logger.info(`Request /train/payment-transit: ${JSON.stringify(data)}`);
 
-        const promiseArray = data.map(d => {
+//         const promiseArray = data.map(d => {
 
-            logger.info(`Request /train/payment-transit/${d.transactionId}: ${JSON.stringify(d)}`);
+//             logger.info(`Request /train/payment-transit/${d.transactionId}: ${JSON.stringify(d)}`);
 
-            return axios.post(
-                `${process.env.URL_HIT}/train/payment`, d
-            ).then(response => response.data);
+//             return axios.post(
+//                 `${process.env.URL_HIT}/train/payment`, d
+//             ).then(response => response.data);
 
-        });
+//         });
 
-        const getResponseGlobal = await Promise.all(promiseArray);
+//         const getResponseGlobal = await Promise.all(promiseArray);
 
-        logger.info(`Response /train/payment-transit: ${JSON.stringify(getResponseGlobal)}`);
-        return res.send(getResponseGlobal);
+//         logger.info(`Response /train/payment-transit: ${JSON.stringify(getResponseGlobal)}`);
+//         return res.send(getResponseGlobal);
 
-    } catch (error) {
-        logger.error(`Error /train/payment-transit: ${error.message}`);
-        return res.status(200).send({
-            rc: '68',
-            rd: 'Internal Server Error.'
-        });
-    }
-});
+//     } catch (error) {
+//         logger.error(`Error /train/payment-transit: ${error.message}`);
+//         return res.status(200).send({
+//             rc: '68',
+//             rd: 'Internal Server Error.'
+//         });
+//     }
+// });
 
 Router.post('/train/change_seat', async function(req, res) { // Menambahkan async
     try {
