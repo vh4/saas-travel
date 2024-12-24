@@ -32,7 +32,8 @@ const callbackFetchData = createAsyncThunk(
       const data = response.data.data;
 
 		  return { 
-        isOk: true,  
+        isOk: true,
+        rd:response.data.rd,
         username: data.username,
         merchant: data.merchant,
         total_komisi: data.total_komisi,
@@ -40,7 +41,6 @@ const callbackFetchData = createAsyncThunk(
         komisi_merchant: data.komisi_merchant,
         saldo_terpotong_mitra: data.saldo_terpotong_mitra,
         saldo_terpotong_merchant: data.saldo_terpotong_merchant,
-        // mid:data.mid
       };
 		} else {
 		  return { isOk: false };

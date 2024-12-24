@@ -18,6 +18,8 @@ import { useSelector } from "react-redux";
 
 export default function Pembayaran() {
   const isOk = useSelector((state) => state.callback.isOk);
+  const keterangan = useSelector((state) => state.callback.rd);
+
   const callback = useSelector((state) => state.callback);
 
   const isCurrentBalance = useSelector(
@@ -589,7 +591,7 @@ export default function Pembayaran() {
                           <>
                             <div className="mt-4">
                               <Alert
-                                message={`Saldo anda tidak mencukupi. silahkan deposit.`}
+                                message={keterangan}
                                 type="error"
                                 banner
                                 closable
@@ -733,7 +735,7 @@ export default function Pembayaran() {
                         <>
                           <div className="mt-4">
                             <Alert
-                              message={`Saldo anda tidak mencukupi. silahkan deposit.`}
+                              message={keterangan}
                               type="error"
                               banner
                               closable

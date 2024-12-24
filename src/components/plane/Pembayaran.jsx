@@ -73,6 +73,7 @@ export default function Pembayaran() {
 
   const isOk = useSelector((state) => state.callback.isOk);
   const callback = useSelector((state) => state.callback);
+  const keterangan = useSelector((state) => state.callback.rd);
 
   const bookPesawat = useSelector((state) => state.bookpesawat.bookData);
   const isCurrentBalance = useSelector((state) => state.bookpesawat.isOkBalance);
@@ -585,14 +586,14 @@ export default function Pembayaran() {
                   </div>
                 </div>
                 {/* desktop sidebar */}
-                <div className="sidebar hidden md:block w-full xl:w-2/3 2xl:w-1/2">
+                <div className="sidebar hidden xl:block w-full xl:w-2/3 2xl:w-1/2">
                   <div className="py-2 rounded-md border-b border-gray-200 shadow-sm">
                       <div className="mt-4">
                         {isOk == false || isCurrentBalance == false ? (
                           <>
                             <div className="mt-4">
                             <Alert
-                              message={`Saldo anda tidak mencukupi. silahkan deposit.`}
+                              message={keterangan}
                               type="error"
                               banner
                               closable
@@ -746,7 +747,7 @@ export default function Pembayaran() {
                       <>
                         <div className="mt-4">
                         <Alert
-                          message={`Saldo anda tidak mencukupi. silahkan deposit.`}
+                          message={keterangan}
                           type="error"
                           banner
                           closable
