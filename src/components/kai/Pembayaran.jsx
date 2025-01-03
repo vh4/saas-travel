@@ -18,6 +18,8 @@ import { useSelector } from "react-redux";
 
 export default function Pembayaran() {
   const isOk = useSelector((state) => state.callback.isOk);
+
+  const status = useSelector((state) => state.callback.rc);
   const keterangan = useSelector((state) => state.callback.rd);
 
   const callback = useSelector((state) => state.callback);
@@ -590,12 +592,16 @@ export default function Pembayaran() {
                       {isOk == false || isCurrentBalance == false ? (
                           <>
                             <div className="mt-4">
-                              <Alert
+                              {status !== '68' && status !== '99' ? 
+                              (
+                                <Alert
                                 message={keterangan}
                                 type="error"
                                 banner
                                 closable
                               />
+                              ) : null
+                              }
                             </div>
                           </>
                         ) : ''}
@@ -734,12 +740,16 @@ export default function Pembayaran() {
                     {isOk == false || isCurrentBalance == false ? (
                         <>
                           <div className="mt-4">
-                            <Alert
-                              message={keterangan}
-                              type="error"
-                              banner
-                              closable
-                            />
+                          {status !== '68' && status !== '99' ? 
+                              (
+                                <Alert
+                                message={keterangan}
+                                type="error"
+                                banner
+                                closable
+                              />
+                              ) : null
+                              }
                           </div>
                         </>
                       ) : ''}

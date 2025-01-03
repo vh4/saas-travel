@@ -5,6 +5,8 @@ const initialState = {
   isError: false,
   isLoading: false,
   isOk: false,
+  rc:null,
+  rd:null,
   username: null,
   merchant: null,
   total_komisi: null,
@@ -12,7 +14,6 @@ const initialState = {
   komisi_merchant: null,
   saldo_terpotong_mitra: null,
   saldo_terpotong_merchant: null,
-  // mid:null
 };
 
 const callbackFetchData = createAsyncThunk(
@@ -30,9 +31,9 @@ const callbackFetchData = createAsyncThunk(
     if (response.data.rc == "00") {
 
       const data = response.data.data;
-
 		  return { 
         isOk: true,
+        rc: response.data.rc,
         rd:response.data.rd,
         username: data.username,
         merchant: data.merchant,
@@ -43,7 +44,11 @@ const callbackFetchData = createAsyncThunk(
         saldo_terpotong_merchant: data.saldo_terpotong_merchant,
       };
 		} else {
-		  return { isOk: false };
+		  return { 
+        isOk: false,
+        rc: response.data.rc,
+        rd:response.data.rd,
+        };
 		}
 	  } catch (error) {
 		  console.error(error);
@@ -72,7 +77,6 @@ export const callbackSlice = createSlice({
       .addCase(callbackFetchData.fulfilled, (state, action) => {
         state.isOk = action.payload.isOk;
         if(action.payload.isOk == true){
-          console.log(action.payload.username);
           state.username = action.payload.username;
           state.merchant = action.payload.merchant;
           state.total_komisi = action.payload.total_komisi;
@@ -83,6 +87,8 @@ export const callbackSlice = createSlice({
           // state.mid = action.payload.mid;
         }
         state.isError = false;
+        state.rc = action.payload.rc;
+        state.rd = action.payload.rd;
         state.isLoading = false;
       })
       .addCase(callbackFetchData.rejected, (state, action) => {
