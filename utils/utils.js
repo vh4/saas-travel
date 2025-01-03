@@ -224,6 +224,13 @@ module.exports = {
 
         try {
 
+            if(!req.session['v_session_uid_pin']){
+                return {
+                    rc: '99',
+                    rd: 'Youre login via username and password.'
+                };
+            }
+
             //getting data from session
             const uidpin = req.session['v_session_uid_pin'].split('|') || [];
             const uid = uidpin[0] || null;
@@ -389,6 +396,15 @@ module.exports = {
     handlePayment: async function(req, res, type, method, hardcodeCallback, whitelistKey) {
         try {
             const data = req.body;
+            
+            //for login via username and password
+            if(!req.session['v_session_uid_pin']){
+                return {
+                    rc: '99',
+                    rd: 'Youre login via username and password.'
+                };
+            }
+
             const uidpin = req.session['v_session_uid_pin'].split('|') || [];
             const uid = uidpin[0] || null;
 
