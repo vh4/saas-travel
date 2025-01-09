@@ -595,7 +595,7 @@ export default function Pembayaran() {
                               {status !== '68' && status !== '99' ? 
                               (
                                 <Alert
-                                message={keterangan}
+                                message={isCurrentBalance == false ? 'Saldo tidak cukup.': keterangan}
                                 type="error"
                                 banner
                                 closable
@@ -743,7 +743,7 @@ export default function Pembayaran() {
                           {status !== '68' && status !== '99' ? 
                               (
                                 <Alert
-                                message={keterangan}
+                                message={isCurrentBalance == false ? 'Saldo tidak cukup.': keterangan}
                                 type="error"
                                 banner
                                 closable
