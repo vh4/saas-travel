@@ -25,6 +25,7 @@ import { CiBoxList, CiSearch } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import { setDataBookPelni, setisOkBalancePelni } from "../../features/createSlice";
 import { callbackFetchData } from "../../features/callBackSlice";
+import { AiOutlineClockCircle } from "react-icons/ai";
 
 export default function BookingPelni() {
   
@@ -82,8 +83,6 @@ export default function BookingPelni() {
   }, [token]);
 
   const columns = [
-    Table.SELECTION_COLUMN,
-    Table.EXPAND_COLUMN,
     {
       title: "Nama",
       dataIndex: "nama",
@@ -630,8 +629,7 @@ export default function BookingPelni() {
               onOk={handleOkListPenumpang}
               onCancel={handleCancelListPenumpang}
               maskClosable={false}
-              footer={false
-              }
+              footer={false}
             >
               {loadingExistingPenumpang && (
                 <>
@@ -655,10 +653,12 @@ export default function BookingPelni() {
                           />
                       </div>
                     <Table
-                      rowSelection={{
-                        type: "radio",
-                        onChange: handleRowSelectionChange,
-                      }}
+                      onRow={(record) => ({
+                        onClick: () => {
+                          handleRowSelectionChange([record.key], [record]); // Trigger selection manually
+                        },
+                        style:{cursor: 'pointer'}
+                      })}
                       expandable={{
                         expandedRowRender: (record) => (
                           <>
@@ -671,11 +671,7 @@ export default function BookingPelni() {
                               <div className="my-2">
                                 <p style={{ margin: 0 }} className="text-xs">
                                   <strong>Nomor HP:</strong>
-                                  <div>
-                                    {record.hp && record.hp !== ""
-                                      ? record.hp
-                                      : "-"}
-                                  </div>
+                                  <div>{record.hp && record.hp !== "" ? record.hp : "-"}</div>
                                 </p>
                               </div>
                               <div className="my-2">
@@ -684,7 +680,7 @@ export default function BookingPelni() {
                                   {dayjs(record.ttl).format("DD/MM/YYYY")}
                                 </p>
                               </div>
-                            </div>
+                            </div> 
                           </>
                         ),
                       }}
@@ -699,20 +695,21 @@ export default function BookingPelni() {
             {/* header  flow */}
 
             <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
-              <div className="hidden xl:flex space-x-2 items-center text-black">
-                <div className="hidden xl:flex text-blue-500 font-medium ">
-                  Detail pesanan
-                </div>
+              <div className="hidden xl:flex space-x-2 items-center ">
+              <AiOutlineClockCircle size={20} className="" />
+              <div className="hidden xl:flex font-medium ">
+                Detail pesanan
+              </div>
               </div>
               <div>
                 <MdHorizontalRule
                   size={20}
-                  className="hidden xl:flex text-black"
+                  className="hidden xl:flex "
                 />
               </div>
               <div className="hidden xl:flex space-x-2 items-center">
-                <RxCrossCircled size={20} className="text-black" />
-                <div className="hidden xl:block text-black">
+                <RxCrossCircled size={20} className="" />
+                <div className="hidden xl:block ">
                   Pembayaran tiket
                 </div>
               </div>

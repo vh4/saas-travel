@@ -341,19 +341,21 @@ export default function ViewTransaksi({ path }) {
                         : "-"}
                     </div>
                   </div>
-                  {e.status === "DEWASA" ? (
                     <div className="text-xs">
                       <div className="">No</div>
-                      <div>
-                        {e.no_hp.toLowerCase().charAt(0).toUpperCase() +
-                          e.no_hp.slice(1).toLowerCase() !==
-                        "Undefined"
-                          ? e.no_hp.toLowerCase().charAt(0).toUpperCase() +
-                            e.no_hp.slice(1).toLowerCase()
-                          : "-"}
-                      </div>
+                      {e.status === "DEWASA" ? (
+                        <>
+                          <div>
+                            {e.no_hp.toLowerCase().charAt(0).toUpperCase() +
+                              e.no_hp.slice(1).toLowerCase() !==
+                            "Undefined"
+                              ? e.no_hp.toLowerCase().charAt(0).toUpperCase() +
+                                e.no_hp.slice(1).toLowerCase()
+                              : "-"}
+                          </div>
+                        </>
+                      ) : "-"}
                     </div>
-                  ) : null}
                   <div className="text-xs">
                     <div className="">Tanggal Lahir</div>
                     <div>
@@ -370,7 +372,7 @@ export default function ViewTransaksi({ path }) {
             </div>
             {/* desktop */}
             <div className="mt-4 hidden md:block">
-              <div className="border p-4 grid grid-cols-8 gap-2 items-center">
+              <div className="border-y p-4 grid grid-cols-8 gap-2 items-center">
                 <div className="">
                   <div className="max-w-[80px]">
                     <img src={byrdata.airlineIcon} alt="logo.png" />
@@ -393,14 +395,11 @@ export default function ViewTransaksi({ path }) {
                     className="flex justify-center text-black"
                     size={16}
                   />
+                  <small className="">{byrdata.duration}</small>
                 </div>
                 <div className="text-xs">
                   <div className="">{byrdata.jam_kedatangan}</div>
                   <div className="text-xs">{byrdata.destination}</div>
-                </div>
-                <div className="text-xs">
-                  <div className="">{byrdata.duration}</div>
-                  <div className="text-xs">Langsung</div>
                 </div>
                 <div className="text-xs">
                   <div className="">Rp. {toRupiah(byrdata.nominal)}</div>
@@ -453,7 +452,6 @@ export default function ViewTransaksi({ path }) {
                 <div className="flex space-x-8 items-center mt-4">
                   <div className="text-xs">
                     <div className="">{byrdata.duration}</div>
-                    <div className="text-xs font-normal">Langsung</div>
                   </div>
                 </div>
                 <div className="mt-4 text-xs">

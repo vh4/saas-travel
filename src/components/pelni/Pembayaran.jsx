@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { AiOutlineCheckCircle } from "react-icons/ai";
+import { AiOutlineCheckCircle, AiOutlineClockCircle } from "react-icons/ai";
 import { MdHorizontalRule } from "react-icons/md";
 import { Button as ButtonAnt, Alert, Modal } from "antd";
 import { notification } from "antd";
@@ -16,6 +16,7 @@ import PageExpired from "../components/Expired";
 import Tiket from "./Tiket";
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { useSelector } from "react-redux";
+import { IoMdCheckmarkCircle } from "react-icons/io";
 
 export default function Pembayaran() {
   const isOk = useSelector((state) => state.callback.isOk);
@@ -303,9 +304,10 @@ export default function Pembayaran() {
             </Modal>
           <div className="px-0 md:px-12 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
-              <AiOutlineCheckCircle className="text-black" size={20} />
-              <div className="hidden xl:flex text-black">Detail pesanan</div>
-              <div className="block xl:hidden text-black">Detail</div>
+              <IoMdCheckmarkCircle className="text-green-500" size={20} />
+              <div className="hidden xl:flex text-green-500">
+                Detail pesanan
+              </div>
             </div>
             <div>
               <MdHorizontalRule
@@ -314,7 +316,8 @@ export default function Pembayaran() {
               />
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
-              <div className="hidden xl:block text-blue-500 font-bold">
+              <AiOutlineClockCircle size={20} className="" />
+              <div className="hidden xl:block ">
                 Pembayaran tiket
               </div>
             </div>
@@ -393,16 +396,16 @@ export default function Pembayaran() {
                   {bookInfo.PAX_LIST.length > 0
                     ? bookInfo.PAX_LIST.map((e, i) => (
                         <>
-                          <div className="p-2 md:p-8 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
+                          <div className="p-2 xl:px-8 xl:mt-6 mt-4 w-full rounded-md border-gray-200 shadow-sm">
                             <div className="">
-                              <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-medium ">
+                              <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-semibold ">
                                 {bookInfo.PAX_LIST[i][0]} (
                                 {bookInfo.PAX_LIST[i][6] == "N/A"
                                   ? "INFANT"
                                   : "ADULT"}
                                 )
                               </div>
-                              <div className="mt-2 md:mt-4 grid grid-cols-2 md:grid-cols-3">
+                              <div className="mt-2 md:mt-4 grid grid-cols-2 md:grid-cols-4">
                                 {/* <div className="px-2 md:px-4 py-2 text-sm">
                                           <div className="text-black">NIK</div>
                                           <div className="font-bold text-xs text-black">{bookInfo.PAX_LIST[i][1]}</div>
@@ -446,7 +449,7 @@ export default function Pembayaran() {
                         </>
                       ))
                     : ""}
-                  <div className="p-2 md:p-8 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
+                  <div className="p-2 xl:px-8 xl:mt-6 mt-4 w-full">
                     <div className="p-2">
                       <div className="text-xs text-black font-medium  flex justify-between">
                         <div>
@@ -470,7 +473,7 @@ export default function Pembayaran() {
                         <div>Diskon (Rp.)</div>
                         <div>Rp. {book && book.discount}</div>
                       </div>
-                      <div className="mt-8 pt-2 border-t border-gray-200 text-sm text-black font-medium  flex justify-between">
+                      <div className="mt-8 pt-2 border-t border-gray-200 text-sm text-black font-semibold flex justify-between">
                         <div>Total Harga</div>
                         <div>
                           Rp.{" "}

@@ -75,7 +75,7 @@ function Plane() {
   const [currentViewDate, setCurrentViewDate] = useState(dayjs());
   const { holidays, dispatchHolidays } = React.useContext(HolidaysContext);
   const currentDate = dayjs();
-  const aheadDate = dayjs().add(6, "months");
+  const aheadDate = dayjs().add(5 * 12, "months");
 
 
   const findHolidayDescriptionsForMonth = (date) => {
@@ -792,7 +792,7 @@ function Plane() {
                 value={tanggalKeberangkatan}
                 shouldDisableDate={(current) => {
                   const currentDate = dayjs();
-                  const aheadDate = dayjs().add(6, "months");
+                  const aheadDate = dayjs().add(5 * 12, "months");
                   return (
                     current &&
                     (current < currentDate.startOf("day") ||

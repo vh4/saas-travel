@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { AiOutlineCheckCircle } from "react-icons/ai";
+import { AiOutlineCheckCircle, AiOutlineClockCircle } from "react-icons/ai";
 import { MdHorizontalRule } from "react-icons/md";
 import { Alert, Button as ButtonAnt, Modal } from "antd";
 import { notification } from "antd";
@@ -15,6 +15,7 @@ import moment from "moment";
 import Tiket from "./Tiket";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import { IoMdCheckmarkCircle } from "react-icons/io";
 
 export default function Pembayaran() {
   const isOk = useSelector((state) => state.callback.isOk);
@@ -352,29 +353,30 @@ export default function Pembayaran() {
           </Modal>
           <div className="px-0 md:px-12 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
-              <AiOutlineCheckCircle className="text-black" size={20} />
-              <div className="hidden xl:flex text-black">Detail pesanan</div>
+              <IoMdCheckmarkCircle className="text-green-500" size={20} />
+              <div className="hidden xl:flex text-green-500">Detail pesanan</div>
             </div>
             <div>
               <MdHorizontalRule
                 size={20}
-                className="hidden xl:flex text-black"
+                className="hidden xl:flex "
               />
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
-              <AiOutlineCheckCircle className="text-black" size={20} />
-              <div className="hidden xl:flex text-black">
+              <IoMdCheckmarkCircle className="text-green-500" size={20} />
+              <div className="hidden xl:flex text-green-500">
                 Konfirmasi pesanan
               </div>
             </div>
             <div className="hidden xl:flex">
               <MdHorizontalRule
                 size={20}
-                className="text-black hidden xl:flex"
+                className=" hidden xl:flex"
               />
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
-              <div className="font-medium  hidden xl:block text-blue-500">
+              <AiOutlineClockCircle size={20}/>
+              <div className="font-medium  hidden xl:block">
                 Pembayaran tiket
               </div>
             </div>
@@ -435,9 +437,9 @@ export default function Pembayaran() {
                   {passengers.adults.length > 0
                     ? passengers.adults.map((e, i) => (
                         <>
-                          <div className="p-2 md:p-8 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
+                          <div className="p-2 xl:px-8 xl:mt-6 mt-4 w-full">
                             <div className="">
-                              <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-medium ">
+                              <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-semibold ">
                                 {e.name}
                               </div>
                               <div className="mt-2 grid w-full grid-cols-2 md:grid-cols-4">
@@ -492,9 +494,9 @@ export default function Pembayaran() {
                   {passengers.infants.length > 0
                     ? passengers.infants.map((e, i) => (
                         <>
-                          <div className="p-2 md:p-8 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
+                          <div className="p-2 xl:px-8 xl:mt-6 mt-4 w-full">
                             <div className="">
-                              <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-medium ">
+                              <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-semibold ">
                                 {e.name}
                               </div>
                               <div className="mt-2 grid w-full grid-cols-2 md:grid-cols-4">
@@ -546,7 +548,7 @@ export default function Pembayaran() {
                         </>
                       ))
                     : ""}
-                  <div className="p-2 md:p-8 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
+                  <div className="p-2 xl:px-8 xl:mt-6 mt-4 w-full">
                     <div className="p-2">
                       <div className="text-xs text-black font-medium  flex justify-between">
                         <div>
@@ -570,7 +572,7 @@ export default function Pembayaran() {
                         <div>Diskon (Rp.)</div>
                         <div>Rp. {hasilBooking && hasilBooking.discount}</div>
                       </div>
-                      <div className="mt-8 pt-2 border-t border-gray-200 text-sm text-black font-medium  flex justify-between">
+                      <div className="mt-8 pt-2 border-t border-gray-200 text-sm text-black font-semibold  flex justify-between">
                         <div>Total Harga</div>
                         <div>
                           Rp.{" "}

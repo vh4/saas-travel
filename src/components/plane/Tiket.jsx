@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import {AiOutlineCheckCircle} from "react-icons/ai"
 import {MdHorizontalRule} from 'react-icons/md'
 import {AiOutlineDownload} from "react-icons/ai"
 import { MdVerified } from "react-icons/md";
+import { IoMdCheckmarkCircle } from "react-icons/io";
 
 export default function Tiket({data}){
 
@@ -12,25 +13,31 @@ export default function Tiket({data}){
         <div className='hidden md:block bg-white border-b rounded-lg p-4 md:p-8 lg:p-6 max-w-4xl mx-auto relative'>
             <div className='flex text-black justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center'>
                 <div className='flex space-x-2 items-center'>
-                    <AiOutlineCheckCircle className='text-black' size={20} />
-                    <div className='hidden xl:flex text-black'>Detail pesanan</div>
-                    <div className='block xl:hidden text-black'>Detail</div>
+                    <IoMdCheckmarkCircle className="text-green-500" size={20} />
+                    <div className="hidden xl:flex text-green-500">
+                        Detail pesanan
+                    </div>
+                    {/* <div className='block xl:hidden text-black'>Detail</div> */}
                 </div>
                 <div>
                     <MdHorizontalRule size={20} className='text-black hidden xl:flex' />
                 </div>
                 <div className='flex space-x-2 items-center'>
-                    <AiOutlineCheckCircle className='text-black' size={20} />
-                    <div className='hidden xl:flex text-black'>Pembayaran tiket</div>
-                    <div className='block xl:hidden text-black'>Payment</div>
+                    <IoMdCheckmarkCircle className="text-green-500" size={20} />
+                    <div className="hidden xl:flex text-green-500">
+                        Pembayaran Tiket
+                    </div>
+                    {/* <div className='block xl:hidden text-black'>Payment</div> */}
                 </div>
                 <div>
                     <MdHorizontalRule size={20} className='text-black hidden xl:flex' />
                 </div>
                 <div className='flex space-x-2 items-center'>
-                    <AiOutlineCheckCircle className='text-black' size={20} />
-                    <div className='hidden xl:flex text-black'>E-tiket</div>
-                    <div className='block xl:hidden text-black'>E-tiket</div>
+                    <IoMdCheckmarkCircle className="text-green-500" size={20} />
+                    <div className="hidden xl:flex text-green-500">
+                        E-tiket
+                    </div>
+                    {/* <div className='block xl:hidden text-black'>E-tiket</div> */}
                 </div>
             </div>
             <MdVerified size={32} className="text-green-400 absolute right-6 top-4" />

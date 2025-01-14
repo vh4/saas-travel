@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { AiOutlineCheckCircle } from "react-icons/ai";
+import { AiOutlineCheckCircle, AiOutlineClockCircle } from "react-icons/ai";
 // import { RxCrossCircled } from "react-icons/rx";
 import { MdHorizontalRule } from "react-icons/md";
 import { BsArrowRightShort } from "react-icons/bs";
@@ -19,6 +19,7 @@ import PageExpired from "../components/Expired";
 import Tiket from "./Tiket";
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { useSelector } from "react-redux";
+import { IoMdCheckmarkCircle } from "react-icons/io";
 
 export default function Pembayaran() {
   const { Paragraph } = Typography;
@@ -336,7 +337,7 @@ export default function Pembayaran() {
             </Modal>
           <div className="px-0 md:px-12 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
-              <AiOutlineCheckCircle className="text-green-500" size={20} />
+              <IoMdCheckmarkCircle className="text-green-500" size={20} />
               <div className="hidden xl:flex text-green-500">
                 Detail pesanan
               </div>
@@ -344,18 +345,19 @@ export default function Pembayaran() {
             <div>
               <MdHorizontalRule
                 size={20}
-                className="text-black hidden xl:flex"
+                className=" hidden xl:flex"
               />
             </div>
             <div className="flex space-x-2 items-center">
-              <div className="hidden xl:flex text-black font-medium ">
+              <AiOutlineClockCircle size={20} className="" />
+              <div className="hidden xl:flex  font-medium ">
                 Pembayaran tiket
               </div>
             </div>
             {/* <div>
               <MdHorizontalRule
                 size={20}
-                className="text-black hidden xl:flex"
+                className=" hidden xl:flex"
               />
             </div>
             <div className="flex space-x-2 items-center">
@@ -441,9 +443,9 @@ export default function Pembayaran() {
                   {dataDetailPassenger && dataDetailPassenger.adults.length > 0
                     ? dataDetailPassenger.adults.map((e, i) => (
                         <>
-                          <div className="p-0 md:p-8 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
+                          <div className="p-0 xl:px-8 xl:mt-6 mt-4 w-full rounded-md  border-gray-200 shadow-sm">
                             <div className="">
-                              <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-medium">
+                              <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-semibold">
                                 {e.nama_depan} {e.nama_belakang}
                               </div>
                               <div className="grid grid-cols-1 md:grid-cols-4 mt-2 gap-4 md:gap-6">
@@ -491,9 +493,9 @@ export default function Pembayaran() {
                   dataDetailPassenger.children.length > 0
                     ? dataDetailPassenger.children.map((e, i) => (
                         <>
-                          <div className="p-0 md:p-8 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
+                          <div className="p-0 xl:px-8 xl:mt-6 mt-4 w-full rounded-md  border-gray-200 shadow-sm">
                             <div className="">
-                              <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-medium">
+                              <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-semibold">
                                 {e.nama_depan} {e.nama_belakang}
                               </div>
                               <div className="grid grid-cols-2 md:grid-cols-4">
@@ -524,9 +526,9 @@ export default function Pembayaran() {
                   {dataDetailPassenger && dataDetailPassenger.infants.length > 0
                     ? dataDetailPassenger.infants.map((e, i) => (
                         <>
-                          <div className="p-0 md:p-8 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
+                          <div className="p-0 xl:px-8 xl:mt-6 mt-4 w-full rounded-md  border-gray-200 shadow-sm">
                             <div className="">
-                              <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-medium ">
+                              <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-semibold ">
                                 {e.nama_depan} {e.nama_belakang}
                               </div>
                               <div className="grid grid-cols-2 md:grid-cols-4">
@@ -552,7 +554,7 @@ export default function Pembayaran() {
                         </>
                       ))
                     : ""}
-                  <div className="p-2 md:p-8 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
+                  <div className="p-2 xl:px-10 xl:mt-6 mt-4 w-full">
                     <div className="mt-4">
                       <div className="text-xs text-black font-medium  flex justify-between">
                         <div>
@@ -572,7 +574,7 @@ export default function Pembayaran() {
                           {toRupiah(hasilBooking && hasilBooking.nominalAdmin)}
                         </div>
                       </div>
-                      <div className="mt-8 mb-4 pt-2 border-t border-gray-200 text-sm text-black font-medium  flex justify-between">
+                      <div className="mt-8 mb-4 pt-2 border-t border-gray-200 text-sm text-black font-semibold  flex justify-between">
                         <div>Total Harga</div>
                         <div>
                           Rp.{" "}

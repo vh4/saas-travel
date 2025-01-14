@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { AiOutlineCheckCircle } from "react-icons/ai";
+import { AiOutlineCheckCircle, AiOutlineClockCircle } from "react-icons/ai";
 import { RxCrossCircled } from "react-icons/rx";
 import {
   MdHorizontalRule,
   MdOutlineAirlineSeatReclineExtra,
 } from "react-icons/md";
-import { IoIosArrowDropright } from "react-icons/io";
+import { IoIosArrowDropright, IoMdCheckmarkCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import "./SeatMap.css";
 import { Modal, Placeholder, Button } from "rsuite";
@@ -849,31 +849,32 @@ export default function Konfirmasi() {
           {/* header kai flow */}
           <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
-              <AiOutlineCheckCircle className="text-black" size={20} />
-              <div className="hidden xl:flex text-black">
-                Detail pesanan
+              <IoMdCheckmarkCircle className="text-green-500" size={20} />
+              <div className="hidden xl:flex text-green-500">
+                  Detail pesanan
               </div>
             </div>
             <div>
               <MdHorizontalRule
                 size={20}
-                className="hidden xl:flex text-black"
+                className="hidden xl:flex "
               />
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
-              <div className="hidden xl:flex text-blue-500 font-medium ">
+              <AiOutlineClockCircle size={20} className="" />
+              <div className="hidden xl:flex font-medium ">
                 Konfirmasi pesanan
               </div>
             </div>
             <div>
               <MdHorizontalRule
                 size={20}
-                className="text-black hidden xl:flex"
+                className=" hidden xl:flex"
               />
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
-              <RxCrossCircled size={20} className="text-black" />
-              <div className="hidden xl:block text-black">
+              <RxCrossCircled size={20} className="" />
+              <div className="hidden xl:block ">
                 Pembayaran tiket
               </div>
             </div>
@@ -1025,7 +1026,7 @@ export default function Konfirmasi() {
                   {passengers.infants && passengers.infants.length > 0
                     ? passengers.infants.map((e, i) => (
                         <>
-                          <div className="p-2 mt-4 w-full rounded-md border-b xlborder xl:border-gray-200 xl:shadow-sm">
+                          <div className="p-2 mt-4 w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
                             <div className="mt-2">
                               <div className="px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
                                 {e.name}
@@ -1078,7 +1079,7 @@ export default function Konfirmasi() {
                   <div className="text-sm xl:text-sm font-bold text-black mt-12">
                     <p>PRICE DETAILT</p>
                   </div>
-                  <div className="p-2 mt-4 w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
+                  <div className="p-2 mt-4 w-full rounded-md border-b xl:border xl:border-gray-200">
                     <div className="p-4">
                       <div className="text-xs text-black font-medium  flex justify-between">
                         <div>

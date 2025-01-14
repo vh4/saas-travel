@@ -29,6 +29,7 @@ import Skeleton from "react-loading-skeleton";
 import { useDispatch, useSelector } from "react-redux";
 import { callbackFetchData } from "../../features/callBackSlice";
 import { setDataBookPesawat, setisOkBalance } from "../../features/createSlice";
+import { AiOutlineClockCircle } from "react-icons/ai";
 
 export default function BookingPesawat() {
 
@@ -61,6 +62,11 @@ export default function BookingPesawat() {
   const [isDatePickerOpenAdult, setIsDatePickerOpenAdult] = useState(null);
   const [isDatePickerOpenChild, setIsDatePickerOpenChild] = useState(null);
   const [isDatePickerOpenInfant, setIsDatePickerOpenInfant] = useState(null);
+
+
+  const [isDatePickerOpenAdultExpiredDate, setIsDatePickerOpenAdultExpiredDate] = useState(null);
+  const [isDatePickerOpenChildExpiredDate, setIsDatePickerOpenChildExpiredDate] = useState(null);
+  const [isDatePickerOpenInfantExpiredDate, setIsDatePickerOpenInfantExpiredDate] = useState(null);
 
   const [email, setEmail] = useState();
   const [hp, setHp] = useState();
@@ -99,8 +105,6 @@ export default function BookingPesawat() {
   ];
 
   const columns = [
-    Table.SELECTION_COLUMN,
-    Table.EXPAND_COLUMN,
     {
       title: "Nama",
       dataIndex: "name",
@@ -167,9 +171,13 @@ export default function BookingPesawat() {
           const TotalChild = parseInt(dataDetailForBooking.child) || 0;
           const TotalInfant = parseInt(dataDetailForBooking.infant) || 0; //
 
-          setIsDatePickerOpenAdult(Array(TotalAdult.length).fill(false));
-          setIsDatePickerOpenChild(Array(TotalChild.length).fill(false));
-          setIsDatePickerOpenInfant(Array(TotalInfant.length).fill(false));
+          setIsDatePickerOpenAdult(Array(TotalAdult).fill(false));
+          setIsDatePickerOpenChild(Array(TotalChild).fill(false));
+          setIsDatePickerOpenInfant(Array(TotalInfant).fill(false));
+
+          setIsDatePickerOpenAdultExpiredDate(Array(TotalAdult).fill(false));
+          setIsDatePickerOpenChildExpiredDate(Array(TotalChild).fill(false));
+          setIsDatePickerOpenInfantExpiredDate(Array(TotalInfant).fill(false));
 
           SetTotalAdult(TotalAdult);
           setTotalChild(TotalChild);
@@ -823,6 +831,7 @@ export default function BookingPesawat() {
             onOk={handleOkListPenumpang} 
             onCancel={handleCancelListPenumpang}
             maskClosable={false}
+            footer={false}
             >
               {
                 loadingExistingPenumpang  && (
@@ -849,10 +858,12 @@ export default function BookingPesawat() {
                           />
                       </div>
                      <Table
-                        rowSelection={{
-                          type: "radio",
-                          onChange: handleRowSelectionChange,
-                        }}
+                      onRow={(record) => ({
+                        onClick: () => {
+                          handleRowSelectionChange([record.key], [record]); // Trigger selection manually
+                        },
+                        style:{cursor: 'pointer'}
+                      })}
                         expandable={{
                           expandedRowRender: (record) => (
                             <>
@@ -889,19 +900,20 @@ export default function BookingPesawat() {
             {/* header  flow */}
             <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-4 items-center">
               <div className="hidden xl:flex space-x-2 items-center">
-                <div className="hidden xl:flex text-blue-500 font-medium ">
+                <AiOutlineClockCircle size={20} className="" />
+                <div className="hidden xl:flex font-medium ">
                   Detail pesanan
                 </div>
               </div>
               <div>
                 <MdHorizontalRule
                   size={20}
-                  className="hidden xl:flex text-black"
+                  className="hidden xl:flex "
                 />
               </div>
               <div className="hidden xl:flex space-x-2 items-center">
-                <RxCrossCircled size={20} className="text-black" />
-                <div className="hidden xl:block text-black">
+                <RxCrossCircled size={20} className="" />
+                <div className="hidden xl:block ">
                   Pembayaran tiket
                 </div>
               </div>
@@ -1533,14 +1545,14 @@ export default function BookingPesawat() {
                                             disabledDate={
                                               disabledDateExpiredDate
                                             }
-                                            open={isDatePickerOpenAdult[i]} // Pass the state to the open prop
+                                            open={isDatePickerOpenAdultExpiredDate[i]} // Pass the state to the open prop
                                             // inputReadOnly={true}
                                             onOpenChange={(status) => {
                                               const newOpenState = [
-                                                ...isDatePickerOpenAdult,
+                                                ...isDatePickerOpenAdultExpiredDate,
                                               ]; // Create a copy of the array
                                               newOpenState[i] = status; // Update the state for the specific index
-                                              setIsDatePickerOpenAdult(
+                                              setIsDatePickerOpenAdultExpiredDate(
                                                 newOpenState
                                               ); // Set the updated array as the new state
                                             }}
@@ -2034,14 +2046,14 @@ export default function BookingPesawat() {
                                             disabledDate={
                                               disabledDateExpiredDate
                                             }
-                                            open={isDatePickerOpenChild[i]} // Pass the state to the open prop
+                                            open={isDatePickerOpenChildExpiredDate[i]} // Pass the state to the open prop
                                             // inputReadOnly={true}
                                             onOpenChange={(status) => {
                                               const newOpenState = [
-                                                ...isDatePickerOpenChild,
+                                                ...isDatePickerOpenChildExpiredDate,
                                               ]; // Create a copy of the array
                                               newOpenState[i] = status; // Update the state for the specific index
-                                              setIsDatePickerOpenChild(
+                                              setIsDatePickerOpenChildExpiredDate(
                                                 newOpenState
                                               ); // Set the updated array as the new state
                                             }}
@@ -2290,14 +2302,14 @@ export default function BookingPesawat() {
                                           "birthdate"
                                         )}
                                         disabledDate={disabledDate}
-                                        open={isDatePickerOpenInfant[i]} // Pass the state to the open prop
+                                        open={isDatePickerOpenInfantExpiredDate[i]} // Pass the state to the open prop
                                         // inputReadOnly={true}
                                         onOpenChange={(status) => {
                                           const newOpenState = [
-                                            ...isDatePickerOpenInfant,
+                                            ...isDatePickerOpenInfantExpiredDate,
                                           ]; // Create a copy of the array
                                           newOpenState[i] = status; // Update the state for the specific index
-                                          setIsDatePickerOpenInfant(
+                                          setIsDatePickerOpenInfantExpiredDate(
                                             newOpenState
                                           ); // Set the updated array as the new state
                                         }}
