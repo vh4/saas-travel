@@ -339,12 +339,13 @@ Router.post('/app/history_idpel', async function(req, res) {
 
         const {
             data
-        } = await axios.post(`https://rajabiller.fastpay.co.id/transaksi/api_json.php`, {
+        } = await axios.post(`https://api.rajabiller.com/transaksi/api_json.php`, {
             method: "history_idpel",
             uid: uid,
             pin: pin,
             produk: type,
-            username: username
+            username: username,
+            merchant:""
         });
 
         logger.info(`Response /app/history_idpel: ${JSON.stringify(data)}`);
