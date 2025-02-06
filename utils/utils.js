@@ -333,7 +333,7 @@ module.exports = {
                         return {
                             rc:'00',
                             rd:'success',
-                            ...data
+                            data:data
                         }
 
                     } else {
