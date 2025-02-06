@@ -317,6 +317,7 @@ Router.post('/app/history_idpel', async function(req, res) {
     try {
 
         const username = req.session['v_uname'];
+        const merchant = req.session['v_merchant'] === "" || req.session['v_merchant'] === undefined || req.session['v_merchant'] === null ? "" : req.session['v_merchant'];
         const jwtDecodedResponse = await jwtDecoded(token);
 
         if (jwtDecodedResponse == undefined || jwtDecodedResponse == null || jwtDecodedResponse?.trim() == '') {
@@ -346,7 +347,7 @@ Router.post('/app/history_idpel', async function(req, res) {
             pin: pin,
             produk: type,
             username: username,
-            merchant:""
+            merchant:merchant
         });
 
         logger.info(`Response /app/history_idpel: ${JSON.stringify(data)}`);
