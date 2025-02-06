@@ -299,13 +299,51 @@ module.exports = {
                 parts[1],
                 parts.slice(2).join("."),
             ];
+
+  
         
             if (splitResponse[0] === "ok" && splitResponse[1] === id_transaksi) {
-                return {
-                    rc: "00",
-                    rd: "Success",
-                    data: getResponseGlobal.data,
-                };
+
+                if(send_format?.toUpperCase() === 'JSON'){
+                    return {
+                        rc: "00",
+                        rd: "Success",
+                        data: getResponseGlobal.data,
+                    };
+                }else{
+                    
+                    //regex for otomax 
+                    const regex = /Username:(.*?),Merchant:(.*?),Total komisi:Rp(.*?),Komisi mitra:Rp(.*?),Komisi merchant:Rp(.*?),Saldo terpotong mitra:Rp(.*?),Saldo terpotong merchant:Rp(.*?)$/;
+                    const match = getResponseGlobal.data.match(regex);
+
+                    if (match) {
+
+                        const data = {
+                            username: match[1],
+                            merchant: match[2],
+                            total_komisi: parseInt(match[3], 10),
+                            komisi_mitra: parseInt(match[4], 10),
+                            komisi_merchant: parseInt(match[5], 10),
+                            saldo_terpotong_mitra: parseInt(match[6], 10),
+                            saldo_terpotong_merchant: parseInt(match[7], 10)
+                        };
+                        
+                        return {
+                            rc:'00',
+                            rd:'success',
+                            ...data
+                        }
+
+                    } else {
+                        return {
+                            rc: "13",
+                            rd: "Invalid regex otomax!",
+                            data: getResponseGlobal.data,
+                        };
+                    }
+
+                }
+
             }
         
             return {

@@ -163,21 +163,22 @@ Router.post('/app/redirect', async function(req, res) {
 
 
 Router.post('/app/sign_in', async function(req, res) {
-    const {
-        username,
-        password,
-        token
-    } = req.body;
-    const captcha_keys = '6LdGRpEoAAAAAAUGROG0BOUf1vl0uXUErtLl-knf';
 
-    logger.info(`Request /app/sign_in: ${JSON.stringify(req.body)}`);
-    logger.info(`Request HIT API RAJABILLER JSON: ${JSON.stringify({
-    username: username,
-    method: "rajabiller.login_travel",
-    token:token,
-    info: JSON.stringify(getInfoClientAll(req)),
-    from: 'Web Travel Auth'
-  })}`);
+    const {
+            username,
+            password,
+            token
+        } = req.body;
+        const captcha_keys = '6LdGRpEoAAAAAAUGROG0BOUf1vl0uXUErtLl-knf';
+
+        logger.info(`Request /app/sign_in: ${JSON.stringify(req.body)}`);
+        logger.info(`Request HIT API RAJABILLER JSON: ${JSON.stringify({
+        username: username,
+        method: "rajabiller.login_travel",
+        token:token,
+        info: JSON.stringify(getInfoClientAll(req)),
+        from: 'Web Travel Auth'
+    })}`);
 
     try {
 
@@ -553,6 +554,58 @@ Router.post('/app/transaction_book_list', async function(req, res) {
             rd: 'Internal Server Error.'
         });
 
+    }
+});
+
+
+Router.post('/app/transaction_book_list/all', async (req, res) => {
+    try {
+        const { token } = req.body;
+
+        if (!token) {
+            return res.status(400).json({
+                rc: '01',
+                rd: 'Invalid request parameters. Token, startDate, and endDate are required.',
+            });
+        }
+
+        const merchart = req.session['v_merchant'];
+        const username = req.session['v_uname'];
+
+        let formattedUsername = username;
+        if (merchart) {
+            formattedUsername += `#${merchart}`;
+        }
+
+        const urls = `${process.env.URL_HIT}/app/transaction_book_list`;
+        const products = ['PESAWAT','KERETA','PELNI'];
+
+        logger.info(`Request /app/transaction_book_list/all from [USERNAME]: ${req.session['v_uname']}, [MERCHANT]: ${req.session['v_merchant']}`);
+
+        const [pesawat, kereta, pelni] = await Promise.all(
+            products.map(product => axios.post(urls, { token, product:product, username: formattedUsername }).then(response => response.data).catch(error => {
+                logger.error(`Error fetching data from ${urls}: ${error.message}`);
+                return null; 
+            }))
+        );
+
+        const responseData = {
+            kereta: kereta || {},
+            pesawat: pesawat || {},
+            pelni: pelni || {},
+            rc: '00',
+            rd: 'Success.',
+        };
+
+        logger.info(`Response /app/transaction_book_list/all: ${JSON.stringify(responseData)}`);
+
+        return res.status(200).json(responseData);
+    } catch (error) {
+        logger.error(`Unexpected Error /app/transaction_book_list/all: ${error.message}`);
+        return res.status(500).json({
+            rc: '68',
+            rd: 'Internal Server Error.',
+        });
     }
 });
 
