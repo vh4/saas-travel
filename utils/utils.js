@@ -327,6 +327,8 @@ module.exports = {
                             saldo_terpotong_mitra: parseInt(match[6], 10),
                             saldo_terpotong_merchant: parseInt(match[7], 10)
                         };
+
+                        logger.info(`[REGEX DATA (axiosSendCallback)] id_transaksi => ${id_transaksi} =  ${JSON.stringify(data)}`);
                         
                         return {
                             rc:'00',
