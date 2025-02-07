@@ -16,49 +16,54 @@ const Router = express.Router();
 require('dotenv').config()
 
 const hardcodeKereta = {
-    "trxid": "3095045099",
-    "rc": "00",
-    "status": "Sukses",
-    "produk": "BAYAR WKAI",
-    "kereta": "KUTOJAYA SELATAN (259)",
-    "class": "EKO",
-    "tgl_berangkat": "2023-11-14",
-    "jam": "10:49:00-17:08:00",
-    "tujuan": "GOMBONG-KIARACONDONG",
-    "tagihan": "124000",
-    "adm": "7500",
-    "total_bayar": "131500",
-    "waktu_trx": "2023-11-14",
-    "url_etiket": "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=3095045099",
-    "url_struk": "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=3095045099",
-    "kode_booking": "WHV6X77",
-    "username": "userlogin",
-    "merchant": "",
-    "total_komisi": "7250",
-    "komisi_mitra": "4250",
-    "komisi_merchant": "3000",
-    "saldo_terpotong_mitra": "124250",
-    "saldo_terpotong_merchant": "128500",
-    "data_penumpang": [
-      {
-        "nama": "MUHADI",
-        "kursi": "EKO-3/17B",
-        "telepon": "089629782291",
-        "nomor_identitas": "3305032512990004"
-      },
-      {
-        "nama": "TITI SRI WAHYUNI",
-        "kursi": "EKO-3/17C",
-        "telepon": "0896297822911",
-        "nomor_identitas": "3305044809990005"
-      },
-      {
-        "nama": "EARLYTA ARSYIFA SALSABIL",
-        "kursi": "",
-        "telepon": "",
-        "nomor_identitas": "3305035104230001"
-      }
-    ]
+    "json":{
+        "trxid": "3095045099",
+        "rc": "00",
+        "status": "Sukses",
+        "produk": "BAYAR WKAI",
+        "kereta": "KUTOJAYA SELATAN (259)",
+        "class": "EKO",
+        "tgl_berangkat": "2023-11-14",
+        "jam": "10:49:00-17:08:00",
+        "tujuan": "GOMBONG-KIARACONDONG",
+        "tagihan": "124000",
+        "adm": "7500",
+        "total_bayar": "131500",
+        "waktu_trx": "2023-11-14",
+        "url_etiket": "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=3095045099",
+        "url_struk": "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=3095045099",
+        "kode_booking": "WHV6X77",
+        "username": "userlogin",
+        "merchant": "",
+        "total_komisi": "7250",
+        "komisi_mitra": "4250",
+        "komisi_merchant": "3000",
+        "saldo_terpotong_mitra": "124250",
+        "saldo_terpotong_merchant": "128500",
+        "data_penumpang": [
+          {
+            "nama": "MUHADI",
+            "kursi": "EKO-3/17B",
+            "telepon": "089629782291",
+            "nomor_identitas": "3305032512990004"
+          },
+          {
+            "nama": "TITI SRI WAHYUNI",
+            "kursi": "EKO-3/17C",
+            "telepon": "0896297822911",
+            "nomor_identitas": "3305044809990005"
+          },
+          {
+            "nama": "EARLYTA ARSYIFA SALSABIL",
+            "kursi": "",
+            "telepon": "",
+            "nomor_identitas": "3305035104230001"
+          }
+        ]
+    },
+
+    "text": "Trxid:3095045111,RC:00,Status:Sukses,Produk:BAYAR WKAI,Data penumpang:nama:MUHADI,kursi:EKO-3/17B#nama:TITI SRI WAHYUNI,kursi:EKO-3/17C#nama:EARLYTA ARSYIFA SALSABIL,kursi:n/a,Kereta:KUTOJAYA SELATAN (259),Class:EKO,Tgl berangkat:2023-11-11,Jam:10:49:00-17:08:00,Tujuan:GOMBONG-KIARACONDONG,Tagihan:Rp124000,Adm:Rp7500,Total bayar:Rp131500,Waktu trx:2023-11-14,Url etiket:https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=3095045111,Url struk:https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=3095045111,Kode booking:WHV6X77,Username:userlogin,Merchant:"
+
   }
 
 Router.post('/train/station', async function(req, res) { // Menambahkan async
@@ -376,7 +381,15 @@ Router.post('/train/fare', AuthLogin, async function(req, res) { // Menambahkan 
 });
 
 Router.post('/train/payment', AuthLogin, async (req, res) => {
-    await handlePayment(req, res, 'train', 'bayarkereta', hardcodeKereta, 'WKAI');
+
+    const send_format = JSON.parse(req.session['khusus_merchant'])?.data1;
+    await handlePayment(
+        req, 
+        res, 
+        'train', 
+        'bayarkereta',
+        send_format?.toUpperCase() === 'TEXT' ? hardcodeKereta.text : hardcodeKereta.json, 
+        'WKAI');
 });
 
 module.exports = Router;

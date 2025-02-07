@@ -13,50 +13,53 @@ const {
 } = require('../utils/utils.js');
 require('dotenv').config()
 const hardcodePesawat = {
-    "trxid": "199512506",
-    "rc": "00",
-    "status": "Sukses",
-    "produk": "BAYAR TPJT",
-    "maskapai": "Super Air Jet",
-    "kode_maskapai": "IU659",
-    "sub_class": "Y",
-    "tgl_berangkat": "Rabu, 15 November 2023",
-    "jam_berangkat": "13:30",
-    "tgl_tiba": "Rabu, 15 November 2023",
-    "jam_tiba": "14:25",
-    "durasi": "0 jam 55 menit",
-    "tujuan": "Samarinda (AAP)-Yogyakarta (YIA)",
-    "tagihan": "3169000",
-    "adm": "0",
-    "total_bayar": "3169000",
-    "waktu_trx": "2023-11-14 11:48:53",
-    "url_etiket": "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=199512506",
-    "url_struk": "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=199512506",
-    "kode_booking": "ABOWSD",
-    "username": "userlogin",
-    "merchant": "",
-    "total_komisi": "19000",
-    "komisi_mitra": "9500",
-    "komisi_merchant": "9500",
-    "saldo_terpotong_mitra": "3169000",
-    "saldo_terpotong_merchant": "3169000",
-    "data_penumpang": [{
-            "status": "DEWASA",
-            "nama": "AGUS SURATNO SURATNO",
-            "title": "MR",
-            "nik": "3402161903710002",
-            "tgl_lahir": "03/19/1971",
-            "no_hp": "081392891155"
-        },
-        {
-            "status": "DEWASA",
-            "nama": "KASIDI KASIDI",
-            "title": "MR",
-            "nik": "3402102707780002",
-            "tgl_lahir": "07/27/1978",
-            "no_hp": ""
-        }
-    ]
+    "json":{
+        "trxid": "199512506",
+        "rc": "00",
+        "status": "Sukses",
+        "produk": "BAYAR TPJT",
+        "maskapai": "Super Air Jet",
+        "kode_maskapai": "IU659",
+        "sub_class": "Y",
+        "tgl_berangkat": "Rabu, 15 November 2023",
+        "jam_berangkat": "13:30",
+        "tgl_tiba": "Rabu, 15 November 2023",
+        "jam_tiba": "14:25",
+        "durasi": "0 jam 55 menit",
+        "tujuan": "Samarinda (AAP)-Yogyakarta (YIA)",
+        "tagihan": "3169000",
+        "adm": "0",
+        "total_bayar": "3169000",
+        "waktu_trx": "2023-11-14 11:48:53",
+        "url_etiket": "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=199512506",
+        "url_struk": "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=199512506",
+        "kode_booking": "ABOWSD",
+        "username": "userlogin",
+        "merchant": "",
+        "total_komisi": "19000",
+        "komisi_mitra": "9500",
+        "komisi_merchant": "9500",
+        "saldo_terpotong_mitra": "3169000",
+        "saldo_terpotong_merchant": "3169000",
+        "data_penumpang": [{
+                "status": "DEWASA",
+                "nama": "AGUS SURATNO SURATNO",
+                "title": "MR",
+                "nik": "3402161903710002",
+                "tgl_lahir": "03/19/1971",
+                "no_hp": "081392891155"
+            },
+            {
+                "status": "DEWASA",
+                "nama": "KASIDI KASIDI",
+                "title": "MR",
+                "nik": "3402102707780002",
+                "tgl_lahir": "07/27/1978",
+                "no_hp": ""
+            }
+        ]
+    },
+    "text":"Trxid:199512111,RC:00,Status:Sukses,Produk:BAYAR TPJT,Data penumpang:MR.AGUS SURATNO SURATNO;ttl:03/19/1971;nik:3402161903710002#MR.KASIDI KASIDI;ttl:07/27/1978;nik:3402102707780002,Maskapai:Super Air Jet,Kode maskapai:IU659,Sub class:Y,Tgl berangkat:Rabu, 15 November 2023,Jam berangkat:13:30,Tgl tiba:Rabu, 15 November 2023,Jam tiba:14:25,Durasi:0 jam 55 menit,Tujuan:Samarinda (AAP)-Yogyakarta (YIA),Tagihan:Rp3169000,Adm:Rp0,Total bayar:Rp3169000,Waktu trx:2023-11-14 11:48:53,Url etiket:https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=199512111,Url struk:https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=199512111,Kode Booking:ABOWSD,Username:userlogin,Merchant:,Total komisi:Rp19000,Komisi mitra:Rp9500,Komisi merchant:Rp9500,Saldo terpotong mitra:Rp3169000,Saldo terpotong merchant:Rp3169000"
 }
 
 const Router = express.Router();
@@ -279,7 +282,16 @@ Router.post('/plane/callback', AuthLogin, async function(req, res) { // Menambah
 
 
 Router.post('/flight/payment', AuthLogin, async (req, res) => {
-    await handlePayment(req, res, 'flight', 'bayarpesawat', hardcodePesawat, 'PESAWAT');
+
+    const send_format = JSON.parse(req.session['khusus_merchant'])?.data1;
+    await handlePayment(
+        req, 
+        res, 
+        'flight', 
+        'bayarpesawat', 
+        send_format?.toUpperCase() === 'TEXT' ? hardcodePesawat.text : hardcodePesawat.json, 
+        'PESAWAT');
+        
 });
 
 

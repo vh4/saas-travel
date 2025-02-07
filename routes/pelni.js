@@ -12,45 +12,48 @@ const {
 require('dotenv').config()
 const Router = express.Router();
 const hardcodepelni = {
-    "trxid": "3096161201",
-    "rc": "00",
-    "status": "Sukses",
-    "produk": "BAYAR SHPPELNI",
-    "nama_kapal": "KM.TATAMAILAU",
-    "sub_class": "E",
-    "tgl_berangkat": "Rabu,22 November 2023 ",
-    "jam_berangkat": "06:00",
-    "tujuan": "TUAL-TIMIKA",
-    "tgl_tiba": "Kamis,23 November 2023 ",
-    "jam_tiba": "11:00",
-    "tagihan": "263000",
-    "adm": "20000",
-    "total_bayar": "283000",
-    "waktu_trx": "2023-11-14 16:19:07",
-    "kode_booking": "BLJ6FM",
-    "url_etiket": "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=3096161201",
-    "url_struk": "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=3096161201",
-    "username": "userlogin",
-    "merchant": "",
-    "total_komisi": "8500",
-    "komisi_mitra": "5000",
-    "komisi_merchant": "3500",
-    "saldo_terpotong_mitra": "274500",
-    "saldo_terpotong_merchant": "279500",
-    "data_penumpang": [
-      {
-        "nama": "TURIKATI SANMAS",
-        "tgl_lahir": "1986-04-21",
-        "nik": "",
-        "kabin": "5/5072-1"
-      },
-      {
-        "nama": "NAZWA HAIRUL NISA",
-        "tgl_lahir": "2022-12-25",
-        "nik": "8102036104860003",
-        "kabin": "n/a"
-      }
-    ]
+    "json":{
+        "trxid": "3096161201",
+        "rc": "00",
+        "status": "Sukses",
+        "produk": "BAYAR SHPPELNI",
+        "nama_kapal": "KM.TATAMAILAU",
+        "sub_class": "E",
+        "tgl_berangkat": "Rabu,22 November 2023 ",
+        "jam_berangkat": "06:00",
+        "tujuan": "TUAL-TIMIKA",
+        "tgl_tiba": "Kamis,23 November 2023 ",
+        "jam_tiba": "11:00",
+        "tagihan": "263000",
+        "adm": "20000",
+        "total_bayar": "283000",
+        "waktu_trx": "2023-11-14 16:19:07",
+        "kode_booking": "BLJ6FM",
+        "url_etiket": "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=3096161201",
+        "url_struk": "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=3096161201",
+        "username": "userlogin",
+        "merchant": "",
+        "total_komisi": "8500",
+        "komisi_mitra": "5000",
+        "komisi_merchant": "3500",
+        "saldo_terpotong_mitra": "274500",
+        "saldo_terpotong_merchant": "279500",
+        "data_penumpang": [
+          {
+            "nama": "TURIKATI SANMAS",
+            "tgl_lahir": "1986-04-21",
+            "nik": "",
+            "kabin": "5/5072-1"
+          },
+          {
+            "nama": "NAZWA HAIRUL NISA",
+            "tgl_lahir": "2022-12-25",
+            "nik": "8102036104860003",
+            "kabin": "n/a"
+          }
+        ]
+    },
+    "text":"Trxid:3096161201,RC:00,Status:Sukses,Produk:CEK SHPPELNI,Data penumpang:nama:TURIKATI SANMAS;tl:1986-04-21;nik:;kabin:5/5072-1#nama:NAZWA HAIRUL NISA;tl:2022-12-25;nik:8102036104860003;kabin:n/a,Nama kapal:KM.TATAMAILAU,Sub class:E,Tgl berangkat:Rabu,22 November 2023 ,Jam berangkat:06:00,Tujuan:TUAL-TIMIKA,Tgl tiba:Kamis,23 November 2023 ,Jam tiba:11:00,Tagihan:Rp263000,Adm:Rp20000,Total bayar:Rp283000,Waktu trx:2023-11-14 15:10:07,Url etiket:,Url struk:,Kode booking:,Username:userlogin,Merchant:"
   }
 
 async function makeAxiosPost(url, data) {
@@ -256,7 +259,16 @@ Router.post('/pelni/book_info', AuthLogin, async (req, res) => {
 });
 
 Router.post('/pelni/payment', AuthLogin, async (req, res) => {
-    await handlePayment(req, res, 'pelni', 'bayarkapal', hardcodepelni, 'SHPPELNI');
+
+    const send_format = JSON.parse(req.session['khusus_merchant'])?.data1;
+    await handlePayment(
+        req, 
+        res, 
+        'pelni', 
+        'bayarkapal', 
+        send_format?.toUpperCase() === 'TEXT' ? hardcodepelni.text : hardcodepelni.json, 
+        'SHPPELNI');
+
 });
 
 module.exports = Router;
