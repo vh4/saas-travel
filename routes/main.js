@@ -579,7 +579,7 @@ Router.post('/app/transaction_book_list/all', async (req, res) => {
         }
 
         const urls = `${process.env.URL_HIT}/app/transaction_book_list`;
-        const products = ['PESAWAT','KERETA','PELNI'];
+        const products = ['PESAWAT','KERETA','KAPAL'];
 
         logger.info(`Request /app/transaction_book_list/all from [USERNAME]: ${req.session['v_uname']}, [MERCHANT]: ${req.session['v_merchant']}`);
 
