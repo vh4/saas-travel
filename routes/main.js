@@ -561,7 +561,7 @@ Router.post('/app/transaction_book_list', async function(req, res) {
 
 Router.post('/app/transaction_book_list/all', async (req, res) => {
     try {
-        const { token } = req.body;
+        const { token, jenis } = req.body;
 
         if (!token) {
             return res.status(400).json({
@@ -578,7 +578,7 @@ Router.post('/app/transaction_book_list/all', async (req, res) => {
             formattedUsername += `#${merchart}`;
         }
 
-        const urls = `${process.env.URL_HIT}/app/transaction_book_list`;
+        const urls =  `${process.env.URL_HIT}/app/${jenis === 'transaksi' ? 'transaction_list' : 'transaction_book_list'}`;
         const products = ['PESAWAT','KERETA','KAPAL'];
 
         logger.info(`Request /app/transaction_book_list/all from [USERNAME]: ${req.session['v_uname']}, [MERCHANT]: ${req.session['v_merchant']}`);
