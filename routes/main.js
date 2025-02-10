@@ -138,10 +138,10 @@ Router.post('/app/redirect', async function(req, res) {
                 req.session['v_uname'] = splitlogin[0] || '';
                 logger.info(`INSERTING TOKEN TO SESSION: ${JSON.stringify(data.token)}`);
 
-            }
+                logger.info(`Response /app/redirect: ${JSON.stringify(data)}`);
+                return res.send(data);
 
-            logger.info(`Response /app/redirect: ${JSON.stringify(data)}`);
-            return res.send(data);
+            }
         // } else {
 
         //     return res.send({
@@ -152,6 +152,7 @@ Router.post('/app/redirect', async function(req, res) {
         // }
 
     } catch (error) {
+        console.log(error);
         logger.error(`Error /app/redirect: ${error.message}`);
         return res.status(200).send({
             rc: '68',
