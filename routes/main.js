@@ -71,7 +71,7 @@ Router.post('/app/redirect', async function(req, res) {
             //4. check is valid in via rajabiller.com
             if (data.rc === '00') {
 
-                if (merchant !== null && merchant !== undefined && url != '') {
+                // if (merchant !== null && merchant !== undefined && url != '') {
 
                     // Define session data for merchant
                     const merchantSessionData = {
@@ -84,7 +84,7 @@ Router.post('/app/redirect', async function(req, res) {
                     req.session['khusus_merchant'] = JSON.stringify(merchantSessionData);
 
                     // Log the merchant session insertion
-                    logger.info(`[PREMIUM] INSERTING req.session['khusus_merchant'] TO SESSION: ${JSON.stringify(merchantSessionData)}`);
+                    logger.info(`[PREMIUM] INSERTING req.session['khusus_merchant'] TO SESSION /app/redirect: ${JSON.stringify(merchantSessionData)}`);
                     req.session['v_merchant'] = merchant;
                     req.session['id_outlet'] = data.id_outlet;
                     logger.info(`INSERTING req.session['v_merchant'] TO SESSION: ${merchant}`);
@@ -142,14 +142,14 @@ Router.post('/app/redirect', async function(req, res) {
 
             logger.info(`Response /app/redirect: ${JSON.stringify(data)}`);
             return res.send(data);
-        } else {
+        // } else {
 
-            return res.send({
-                rc: '03',
-                rd: 'Login failed.'
-            });
+        //     return res.send({
+        //         rc: '03',
+        //         rd: 'Login failed.'
+        //     });
 
-        }
+        // }
 
     } catch (error) {
         logger.error(`Error /app/redirect: ${error.message}`);
@@ -214,9 +214,34 @@ Router.post('/app/sign_in', async function(req, res) {
                 req.session['v_session'] = data.token;
                 req.session['v_uname'] = username;
                 req.session['expired_session'] = expired;
+
+                const url = response.data.url;
+                
+                //menqambahkan merchant
+                const merchantSessionData = {
+                    data1: response.data['data1'],
+                    data2: response.data['data2'],
+                    url: url
+                };
+
+                logger.info(`[PREMIUM] INSERTING req.session['khusus_merchant'] TO SESSION /app/login: ${JSON.stringify(merchantSessionData)}`);
+                req.session['v_merchant'] = '';
                 req.session['id_outlet'] = data.id_outlet;
 
+                // Update session with merchant data
+                req.session['khusus_merchant'] = JSON.stringify(merchantSessionData);
+
+
                 logger.info(`INSERTING TOKEN TO SESSION: ${JSON.stringify(data.token)}`);
+                const jwtDecodedResponse = await jwtDecoded(data.token);            
+                if (jwtDecodedResponse == undefined || jwtDecodedResponse == null || jwtDecodedResponse?.trim() == '') {
+                    return res.send({
+                        rc: '03',
+                        rd: 'gagal login!'
+                    });
+                }
+                req.session['v_session_uid_pin'] = jwtDecodedResponse;
+
 
             }
 

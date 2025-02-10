@@ -108,13 +108,13 @@ async function axiosSendCallbackPayment(req, method, id_transaksi, type = '') {
 
 }
 
-async function processCallbackSaldoTerpotong(urlCallback, requestData, uid, ip) {
+async function processCallbackSaldoTerpotong(urlCallback, requestData, uid, ip, trx_id = null) {
 	logger.info(`REQUEST KIRIM KE-2 SENT CALLBACK TO MERCHANT (processCallbackSaldoTerpotong): ${JSON.stringify(requestData)}`);
-	await log_request(requestData.trxid, ip, uid, requestData.trxid, `REQUEST CALLBACK KE-2 => ${JSON.stringify(requestData)}`);
+	await log_request(trx_id, ip, uid, trx_id, `REQUEST CALLBACK KE-2 => ${JSON.stringify(requestData)}`);
 
 	const response = await axios.post(urlCallback, requestData);
 	logger.info(`RESPONSE KIRIM KE-2 SENT CALLBACK TO MERCHANT (processCallbackSaldoTerpotong): ${JSON.stringify(response.data)}`);
-	await log_response(requestData.trxid, ip, uid, requestData.trxid, `RESPONSE CALLBACK KE-2 => ${JSON.stringify(response.data)}`);
+	await log_response(trx_id, ip, uid, trx_id, `RESPONSE CALLBACK KE-2 => ${JSON.stringify(response.data)}`);
 
 	return response.data;
 }
@@ -142,7 +142,7 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
 	}
 
 
-	const responseMitra = await processCallbackSaldoTerpotong(urlCallback, requestCallbackSaldoTerpotong, uid, req.ip);
+	const responseMitra = await processCallbackSaldoTerpotong(urlCallback, requestCallbackSaldoTerpotong, uid, req.ip, data.transactionId);
 	let parts = responseMitra.split(".") || [];
 
 	if (parts.length < 3) {
@@ -259,12 +259,12 @@ module.exports = {
 
 		try {
 
-			if (!req.session['v_session_uid_pin']) {
-				return {
-					rc: '99',
-					rd: 'Youre login via username and password.'
-				};
-			}
+			// if (!req.session['v_session_uid_pin']) {
+			// 	return {
+			// 		rc: '99',
+			// 		rd: 'Youre login via username and password.'
+			// 	};
+			// }
 
 			//getting data from session
 			const uidpin = req.session['v_session_uid_pin'].split('|') || [];
@@ -308,34 +308,34 @@ module.exports = {
 
 			}
 
-			logger.info(`[REQUEST KIRIM KE-1 SENT CALLBACK TO MERCHANT (axiosSendCallback)] [${type}] URL ${urlCallback} : ${JSON.stringify(getResponseGlobal.data)}`);
-			await log_request(id_transaksi, req.ip, uid, id_transaksi, `REQUEST CALLBACK KE-1 => ${JSON.stringify(getResponseGlobal.data)}`);
+			// logger.info(`[REQUEST KIRIM KE-1 SENT CALLBACK TO MERCHANT (axiosSendCallback)] [${type}] URL ${urlCallback} : ${JSON.stringify(getResponseGlobal.data)}`);
+			// await log_request(id_transaksi, req.ip, uid, id_transaksi, `REQUEST CALLBACK KE-1 => ${JSON.stringify(getResponseGlobal.data)}`);
 
-			const sendCallbackTomerchant = await axios.post(
-				urlCallback,
-				getResponseGlobal.data || null
-			);
-			logger.info(`[RESPONSE KIRIM KE-1 SENT CALLBACK TO MERCHANT (axiosSendCallback)] [${type}] URL ${urlCallback}: ${JSON.stringify(sendCallbackTomerchant.data)}`);
-			await log_response(id_transaksi, req.ip, uid, id_transaksi, `RESPONSE CALLBACK KE-1 => ${JSON.stringify(sendCallbackTomerchant.data)}`);
+			// const sendCallbackTomerchant = await axios.post(
+			// 	urlCallback,
+			// 	getResponseGlobal.data || null
+			// );
+			// logger.info(`[RESPONSE KIRIM KE-1 SENT CALLBACK TO MERCHANT (axiosSendCallback)] [${type}] URL ${urlCallback}: ${JSON.stringify(sendCallbackTomerchant.data)}`);
+			// await log_response(id_transaksi, req.ip, uid, id_transaksi, `RESPONSE CALLBACK KE-1 => ${JSON.stringify(sendCallbackTomerchant.data)}`);
 
-			const response_mitra = sendCallbackTomerchant.data;
-			let parts = response_mitra.split(".") || [];
+			// const response_mitra = sendCallbackTomerchant.data;
+			// let parts = response_mitra.split(".") || [];
 
-			if (parts.length < 3) {
-				return {
-					rc: "13",
-					rd: "Invalid format callback!",
-					data: getResponseGlobal.data,
-				};
-			}
+			// if (parts.length < 3) {
+			// 	return {
+			// 		rc: "13",
+			// 		rd: "Invalid format callback!",
+			// 		data: getResponseGlobal.data,
+			// 	};
+			// }
 
-			const splitResponse = [
-				parts[0],
-				parts[1],
-				parts.slice(2).join("."),
-			];
+			// const splitResponse = [
+			// 	parts[0],
+			// 	parts[1],
+			// 	parts.slice(2).join("."),
+			// ];
 
-			if (splitResponse[0] === "ok" && splitResponse[1] === id_transaksi) {
+			// if (splitResponse[0] === "ok" && splitResponse[1] === id_transaksi) {
 
 				if (send_format?.toUpperCase() === 'JSON') {
 					return {
@@ -379,12 +379,12 @@ module.exports = {
 
 				}
 
-			}
+			// }
 
-			return {
-				rc: "13",
-				rd: splitResponse[2],
-			};
+			// return {
+			// 	rc: "13",
+			// 	rd: splitResponse[2],
+			// };
 
 
 		} catch (error) {
