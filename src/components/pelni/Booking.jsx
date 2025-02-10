@@ -360,7 +360,7 @@ export default function BookingPelni() {
         dispatch(setisOkBalancePelni(allowPayment));
 
         //set data callback
-        // dispatch(callbackFetchData({ type: 'pelni', id_transaksi:idtrx  }));
+        dispatch(callbackFetchData({ type: 'pelni', id_transaksi:idtrx  }));
           
         if (response.data.callback === null) {
           navigate(`/pelni/payment`);

@@ -527,7 +527,7 @@ export default function Konfirmasi() {
       dispatch(setisOkBalanceKereta(allowPayment));
 
       //set data callback
-      // dispatch(callbackFetchData({ type: 'train', id_transaksi:idtrx  }));
+      dispatch(callbackFetchData({ type: 'train', id_transaksi:idtrx  }));
 
       setIsLoading(false);
       navigate({

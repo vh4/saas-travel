@@ -71,7 +71,7 @@ export default function ProfileMobile() {
             </a>
 
             {/* List Penumpang */}
-            <a href="/idpel_history" className="block">
+            <a href="/transaksi/history_idpel" className="block">
               <div className="p-3 flex items-center justify-between border-t cursor-pointer hover:bg-gray-200 transition-all duration-200 rounded-lg">
                 <div className="flex items-center space-x-2">
                   <PiListChecksFill size={24} className="text-blue-500" />

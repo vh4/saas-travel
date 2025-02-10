@@ -71,9 +71,8 @@ export default function ListPesawat({ data, remainingPesawat }) {
 
             {/* Footer */}
             <Box
+              className="bg-indigo-100 text-indigo-500"
               sx={{
-                backgroundColor: "#9981ff",
-                color: "white",
                 textAlign: "center",
                 paddingY: "16px",
                 borderBottomLeftRadius: "30px",

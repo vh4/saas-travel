@@ -9,6 +9,7 @@ const initialState = {
   rd:null,
   username: null,
   merchant: null,
+  mid:null,
   total_komisi: null,
   komisi_mitra: null,
   komisi_merchant: null,
@@ -35,6 +36,7 @@ const callbackFetchData = createAsyncThunk(
         isOk: true,
         rc: response.data.rc,
         rd:response.data.rd,
+        mid:mid,
         username: data.username,
         merchant: data.merchant,
         total_komisi: data.total_komisi,
@@ -78,6 +80,7 @@ export const callbackSlice = createSlice({
         state.isOk = action.payload.isOk;
         if(action.payload.isOk == true){
           state.username = action.payload.username;
+          state.mid = action.payload.mid;
           state.merchant = action.payload.merchant;
           state.total_komisi = action.payload.total_komisi;
           state.komisi_mitra = action.payload.komisi_mitra;

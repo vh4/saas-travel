@@ -82,9 +82,8 @@ import {
   
 			  {/* Footer */}
 			  <Box
+			  className="text-indigo-500 bg-indigo-100"
 				sx={{
-				  backgroundColor: "#9981ff",
-				  color: "white",
 				  textAlign: "center",
 				  paddingY: "16px",
 				  borderBottomLeftRadius: "30px",

@@ -1,9 +1,9 @@
-import { SwipeableDrawer, Box, Divider } from "@mui/material";
+import { SwipeableDrawer, Box, Divider, Button } from "@mui/material";
 import * as React from "react";
 import PropTypes from "prop-types";
 import { styled } from "@mui/material/styles";
 import { grey } from "@mui/material/colors";
-import { PiChairDuotone } from "react-icons/pi";
+import { PiChairDuotone, PiDownloadSimple } from "react-icons/pi";
 import { Typography } from "antd";
 import { toRupiah } from "../../../helpers/rupiah";
 
@@ -102,6 +102,22 @@ export default function DetailKereta({ data, openDetail, toggleDrawerDetail }) {
                     {toRupiah(parseInt(data.nominal) + parseInt(data.nominal_admin))}
                   </div>
                 </div>
+              </div>
+              <div className="min-w-full mt-4">
+                <a
+                  href={`https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=${data.id_transaksi}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
+                >
+                  <Button 
+                    variant="outlined" 
+                    fullWidth 
+                    startIcon={<PiDownloadSimple size={20} />}
+                  >
+                    Download
+                  </Button>
+                </a>
               </div>
             </div>
           </div>
