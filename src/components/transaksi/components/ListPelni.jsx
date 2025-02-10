@@ -7,6 +7,7 @@ import * as React from "react";
 import { FaShip } from "react-icons/fa";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import DetailPelni from "./DetailPelni";
+import { PiDownloadSimple } from "react-icons/pi";
 
 export default function ListPelni({ data }) {
 	// State untuk mengontrol drawer detail per kapal
@@ -69,6 +70,20 @@ export default function ListPelni({ data }) {
 								<div>{e.destination}</div>
 							</div>
 						</div>
+
+
+					{/* Button Download */}
+					<div className="px-5 flex items-center justify-end">
+					<a
+						href={`https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=${e.id_transaksi}`}
+						target="_blank"
+						rel="noopener noreferrer"
+						onClick={(event) => event.stopPropagation()} // Menghentikan event bubbling ke parent
+						className="cursor-pointer"
+					>
+						<PiDownloadSimple size={20} className="text-blue-500" />
+					</a>
+					</div>
 
 						{/* Harga */}
 						{/* <div className="px-6 pb-4 mt-4">
