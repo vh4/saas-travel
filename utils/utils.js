@@ -149,7 +149,6 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
 		return {
 			rc: "13",
 			rd: "Invalid format callback!",
-			data: getResponseGlobal.data,
 		};
 	}
 
