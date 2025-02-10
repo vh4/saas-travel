@@ -81,7 +81,7 @@ export default function Search() {
     return () => document.body.removeEventListener("click", closeFilter);
   }, []);
 
-  const [valHargaRange, setHargaRange] = useState([0, 100000000]);
+  const [valHargaRange, setHargaRange] = useState([0, 30000000]);
   const handleWaktuFilterChange = (e) => {
     let newWktuFilter = waktuFilter;
 
@@ -342,12 +342,14 @@ export default function Search() {
       });
     })
     .filter((flight, i) => {
-      return flight.classes[0].some((harga) => {
-        if (harga.price === undefined) {
+      return flight.classes.some((harga) => {
+
+        const price = flight.classes.reduce((sum, item) => sum + item[0].price, 0);
+        if (price === undefined) {
           return false; // Skip if price is undefined
         }
         return (
-          valHargaRange[0] <= harga.price && harga.price <= valHargaRange[1]
+          valHargaRange[0] <= price && price <= valHargaRange[1]
         );
       });
     })
@@ -362,15 +364,14 @@ export default function Search() {
         return true; // Both transit and non-transit flights
       }
     })
-
     .sort((a, b) => {
       if (HargaTerendahTinggiPlane === 1) {
-        const priceA = Math.min(...a.classes[0].map((x) => x.price));
-        const priceB = Math.min(...b.classes[0].map((x) => x.price));
+        const priceA = Math.min(...a.classes.reduce((sum, item) => sum + item[0].price, 0));
+        const priceB = Math.min(...b.classes.reduce((sum, item) => sum + item[0].price, 0));
         return priceA - priceB;
       } else if (HargaTerendahTinggiPlane === 2) {
-        const priceA = Math.max(...a.classes[0].map((x) => x.price));
-        const priceB = Math.max(...b.classes[0].map((x) => x.price));
+        const priceA = Math.max(...a.classes.reduce((sum, item) => sum + item[0].price, 0));
+        const priceB = Math.max(...b.classes.reduce((sum, item) => sum + item[0].price, 0));
         return priceB - priceA;
       }
     });
@@ -563,7 +564,7 @@ export default function Search() {
           onChange={hargraRangeChange}
           value={valHargaRange}
           min={0}
-          max={100000000}
+          max={30000000}
         />
       </div>
     </Popover>
@@ -840,7 +841,7 @@ export default function Search() {
                                 parseInt(infant)
                               ? "bg-white "
                               : "bg-gray-100 "
-                          }  border-b border-t xl:border xl:border-gray-200 rounded-md xl:shadow-sm hover:border hover:border-gray-100 transition-transform transform hover:scale-105`}
+                          }  border-b-2 border-t-2 xl:border xl:border-gray-200 rounded-md xl:shadow-sm hover:border hover:border-gray-100 transition-transform transform hover:scale-105`}
                         >
                           {/* desktop cari */}
                           <div className="hidden xl:block w-full text-black ">
@@ -912,7 +913,12 @@ export default function Search() {
                               </div>
                               <div className="">
                                 <h1 className="mt-4 xl:mt-0 text-sm font-medium  text-black">
-                                  Rp.{toRupiah(e.classes[0][0].price)}
+                                  {console.log(e.classes)}
+                                  {
+                                      e.isTransit === true
+                                          ? (<>Rp. {toRupiah(e.classes.reduce((sum, item) => sum + item[0].price, 0))}</>)
+                                          : (<>Rp. {toRupiah(e.classes[0][0].price)}</>)
+                                  }
                                 </h1>
                                 <small className="text-red-500">
                                   {e.classes[0][0].availability} seat(s) left
@@ -1319,7 +1325,7 @@ export default function Search() {
                                               <div className="pl-1">
                                                 {" "}
                                                 Rp.
-                                                {toRupiah(z[0].price * adult)}
+                                                {toRupiah(e.classes.reduce((sum, item) => sum + item[0].price, 0) * adult)}
                                               </div>
                                             </div>
                                             {child > 0 ? (
@@ -1382,7 +1388,7 @@ export default function Search() {
                                           {" "}
                                           Rp.
                                           {toRupiah(
-                                            e.classes[0][0].price * adult
+                                            e.classes.reduce((sum, item) => sum + item[0].price, 0) * adult
                                           )}
                                         </div>
                                       </div>
@@ -1514,7 +1520,11 @@ export default function Search() {
                                 </div>
                                 <div className="mt-4 mb-2">
                                   <div className="text-md font-medium  text-black">
-                                    Rp.{toRupiah(e.classes[0][0].price)} /{" "}
+                                    {
+                                        e.isTransit === true
+                                            ? (<>Rp. {toRupiah(e.classes.reduce((sum, item) => sum + item[0].price, 0))}</>)
+                                            : (<>Rp. {toRupiah(e.classes[0][0].price)}</>)
+                                    }
                                     <small className="text-[12px]">
                                       {e.isTransit === true
                                         ? `${e.classes.length - 1}x Transit`
@@ -1861,7 +1871,7 @@ export default function Search() {
                                                       {" "}
                                                       Rp.
                                                       {toRupiah(
-                                                        z[0].price * adult
+                                                        e.classes.reduce((sum, item) => sum + item[0].price, 0) * adult
                                                       )}
                                                     </div>
                                                   </div>
@@ -1928,7 +1938,7 @@ export default function Search() {
                                                 {" "}
                                                 Rp.
                                                 {toRupiah(
-                                                  e.classes[0][0].price * adult
+                                                  e.classes.reduce((sum, item) => sum + item[0].price, 0) * adult
                                                 )}
                                               </div>
                                             </div>

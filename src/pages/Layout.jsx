@@ -8,10 +8,11 @@ import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import { NavContext } from "../App";
 import Footer from "./partials/Footer";
-import { AiOutlineAppstore, AiOutlineHome } from "react-icons/ai";
-import { MdOutlineHistory } from "react-icons/md";
-// import { HiUser } from "react-icons/hi";
-// import { BsFillBookmarkStarFill } from "react-icons/bs";
+import { BsBookmarkCheckFill } from "react-icons/bs";
+import { CiBookmarkCheck, CiGrid42, CiSettings } from "react-icons/ci";
+import { HiOutlineTicket, HiTicket } from "react-icons/hi2";
+import { HiViewGridAdd } from "react-icons/hi";
+import { IoMdSettings } from "react-icons/io";
 
 export default function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState("block");
@@ -23,19 +24,18 @@ export default function Layout({ children }) {
         <div className="">
           <Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
         </div>
-
         <div>
           <main>{children}</main>
         </div>
-        <div className="relative block md:hidden z-10 shadow-lg">
+        <div className="relative block md:hidden z-10 shadow-xl">
           <Box
             sx={{ width: "100%", position: "fixed", bottom: 0 }}
             elevation={3}
           >
             <BottomNavigation
               sx={{ display: "flex", justifyContent: "around" }}
-              showLabels
               value={nav.isActive}
+              showLabels={false}
               onChange={(event, newValue) => {
                 setNav({
                   type: "NAVIGATION",
@@ -44,35 +44,25 @@ export default function Layout({ children }) {
               }}
             >
               <BottomNavigationAction
-                to="/"
-                label="Home"
-                component={Link}
-                icon={<AiOutlineHome size={20} />}
-              />
-              {/* <BottomNavigationAction
-              to="/booking/pesawat"
               component={Link}
-              label="Booking"
-              icon={<BsFillBookmarkStarFill size={18} />}
-            /> */}
-              {/* <BottomNavigationAction
-                to="/transaksi/pesawat"
-                component={Link}
-                label="Transaksi"
-                icon={<AiOutlineAppstore size={20} />}
-              /> */}
-               <BottomNavigationAction
-                to="/transaksi/history_idpel"
-                component={Link}
-                label="List Penumpang"
-                icon={<MdOutlineHistory size={20} />}
+              to='/'
+              icon={nav.isActive === 0 ?  <HiViewGridAdd className={"bg-blue-500 text-white p-1 rounded-full"} size={26} /> : <CiGrid42 size={26} />}
               />
-              {/* <BottomNavigationAction
-              to="/profile/view"
+              <BottomNavigationAction
               component={Link}
-              label="Akun saya"
-              icon={<HiUser size={22} />}
-            /> */}
+              to='/booking'
+              icon={nav.isActive === 1 ? <BsBookmarkCheckFill className={"bg-blue-500 text-white p-1 rounded-full"} size={26} /> : <CiBookmarkCheck size={26}/>}
+            />
+            <BottomNavigationAction
+              to='/transaksi'
+              component={Link}
+              icon={nav.isActive === 2 ? <HiTicket className={"bg-blue-500 text-white p-1 rounded-full"} size={26} /> : <HiOutlineTicket size={26} />}
+            />
+             <BottomNavigationAction
+              component={Link}
+              to='/profile'
+              icon={nav.isActive === 3 ?  <IoMdSettings className={"bg-blue-500 text-white p-1 rounded-full"} size={26} /> : <CiSettings size={26} />}
+            />
             </BottomNavigation>
           </Box>
           {/* footer */}

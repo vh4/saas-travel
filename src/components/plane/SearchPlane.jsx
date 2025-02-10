@@ -865,55 +865,35 @@ function Plane() {
                       </Button>
                     </Tooltip>
                   </div>
-                  <div className="mt-2 w-full col col-span-1 md:col-span-2">
-                    <div className="w-full flex items-center">
-                      <div>
-                        <div className="w-full m-2 xl:m-0 pr-4 xl:pr-0">
-                          <small className="block mb-2 text-black">
-                            Kota Asal
-                          </small>
+                  <div className="mt-2 w-full col-span-1 md:col-span-2">
+                    <div className="w-full flex flex-col xl:flex-row items-center xl:px-0 gap-0">
+                      {/* Kota Asal */}
+                      <div className="w-full max-w-full">
+                        <div className="m-2 xl:m-0 pr-0 xl:pr-0">
+                          <small className="block mb-2 text-black">Kota Asal</small>
                           <Autocomplete
                             classes={classes}
-                            className="mt-1.5"
+                            className="mt-1.5 w-full"
                             id="asynchronous-demo"
                             disableClearable
                             PopperComponent={PopperMy}
                             open={openBerangka}
                             hiddenLabel={true}
-                            onOpen={() => {
-                              SetopenBerangka(true);
-                            }}
-                            onClose={() => {
-                              SetopenBerangka(false);
-                            }}
+                            onOpen={() => SetopenBerangka(true)}
+                            onClose={() => SetopenBerangka(false)}
                             renderTags={(value, getTagProps) => (
                               <div style={{ width: "90%" }}>
                                 {value.map((option, index) => (
-                                  <Chip
-                                    variant="outlined"
-                                    label={option}
-                                    {...getTagProps({ index })}
-                                  />
+                                  <Chip variant="outlined" label={option} {...getTagProps({ index })} />
                                 ))}
                               </div>
                             )}
-                            isOptionEqualToValue={(option, value) =>
-                              option.title === value.title
-                            }
-                            getOptionLabel={(option) =>
-                              option.bandara +
-                              " - " +
-                              option.name +
-                              " - " +
-                              option.code
-                            }
+                            isOptionEqualToValue={(option, value) => option.title === value.title}
+                            getOptionLabel={(option) => `${option.bandara} - ${option.name} - ${option.code}`}
                             options={pesawatData}
                             value={keberangkatan}
                             onChange={(event, newValue) => {
-                              if (
-                                newValue == tujuan ||
-                                newValue?.code == tujuan?.code
-                              ) {
+                              if (newValue == tujuan || newValue?.code == tujuan?.code) {
                                 errorBerangkat();
                                 setKeberangkatan(keberangkatan);
                               } else {
@@ -926,20 +906,13 @@ function Plane() {
                                 {...params}
                                 InputProps={{
                                   ...params.InputProps,
-                                  startAdornment: (
-                                    <FaPlaneDeparture className="text-gray-400" />
-                                  ),
+                                  startAdornment: <FaPlaneDeparture className="text-gray-400" />,
                                   placeholder: "Asal",
                                   endAdornment: (
-                                    <React.Fragment>
-                                      {loadingBerangkat ? (
-                                        <CircularProgress
-                                          color="inherit"
-                                          size={20}
-                                        />
-                                      ) : null}
+                                    <>
+                                      {loadingBerangkat ? <CircularProgress color="inherit" size={20} /> : null}
                                       {params.InputProps.endAdornment}
-                                    </React.Fragment>
+                                    </>
                                   ),
                                 }}
                               />
@@ -947,58 +920,41 @@ function Plane() {
                           />
                         </div>
                       </div>
+
+                      {/* Tombol Swap */}
                       <div
                         onClick={changeStatiun}
-                        className="cursor-pointer mt-6 flex justify-center items-center bg-blue-500 rounded-full p-1"
-                      >
-                        <AiOutlineSwap className="text-white" size={24} />
+                        className="w-8 h-8 cursor-pointer flex justify-center mt-2 xl:mt-6 items-center bg-blue-500 rounded-full p-1 flex-shrink-0"
+                        >
+                        <AiOutlineSwap className="text-white w-6 h-6" />
                       </div>
-                      <div>
-                        <div className="w-full m-2 xl:m-0 pr-4 xl:pr-0">
-                          <small className="block mb-2 text-black">
-                            Kota Tujuan
-                          </small>
+
+                      {/* Kota Tujuan */}
+                      <div className="w-full max-w-sm">
+                        <div className="m-2 xl:m-0 pr-0 xl:pr-0">
+                          <small className="block mb-2 text-black">Kota Tujuan</small>
                           <Autocomplete
                             classes={classes}
-                            className="mt-1.5"
+                            className="mt-1.5 w-full"
                             PopperComponent={PopperMy}
                             id="asynchronous-demo"
                             open={openTujuan}
                             hiddenLabel={true}
-                            onOpen={() => {
-                              setOpenTujuan(true);
-                            }}
-                            onClose={() => {
-                              setOpenTujuan(false);
-                            }}
+                            onOpen={() => setOpenTujuan(true)}
+                            onClose={() => setOpenTujuan(false)}
                             renderTags={(value, getTagProps) => (
                               <div style={{ width: "90%" }}>
                                 {value.map((option, index) => (
-                                  <Chip
-                                    variant="outlined"
-                                    label={option}
-                                    {...getTagProps({ index })}
-                                  />
+                                  <Chip variant="outlined" label={option} {...getTagProps({ index })} />
                                 ))}
                               </div>
                             )}
-                            isOptionEqualToValue={(option, value) =>
-                              option.title === value.title
-                            }
-                            getOptionLabel={(option) =>
-                              option.bandara +
-                              " - " +
-                              option.name +
-                              " - " +
-                              option.code
-                            }
+                            isOptionEqualToValue={(option, value) => option.title === value.title}
+                            getOptionLabel={(option) => `${option.bandara} - ${option.name} - ${option.code}`}
                             options={pesawatData}
                             value={tujuan}
                             onChange={(event, newValue) => {
-                              if (
-                                keberangkatan == newValue ||
-                                keberangkatan?.code == newValue?.code
-                              ) {
+                              if (keberangkatan == newValue || keberangkatan?.code == newValue?.code) {
                                 errorTujuan();
                                 setTujuan(tujuan);
                               } else {
@@ -1011,20 +967,13 @@ function Plane() {
                                 {...params}
                                 InputProps={{
                                   ...params.InputProps,
-                                  startAdornment: (
-                                    <FaPlaneArrival className="text-gray-400" />
-                                  ),
+                                  startAdornment: <FaPlaneArrival className="text-gray-400" />,
                                   placeholder: "Tujuan",
                                   endAdornment: (
-                                    <React.Fragment>
-                                      {loadingTujuan ? (
-                                        <CircularProgress
-                                          color="inherit"
-                                          size={20}
-                                        />
-                                      ) : null}
+                                    <>
+                                      {loadingTujuan ? <CircularProgress color="inherit" size={20} /> : null}
                                       {params.InputProps.endAdornment}
-                                    </React.Fragment>
+                                    </>
                                   ),
                                 }}
                               />

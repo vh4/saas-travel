@@ -296,6 +296,21 @@ export const parseDate = (x) => {
   return tanggalbozqu;
 };
 
+export function formatDate(inputDate) {
+  // Pastikan input memiliki 8 digit
+  if (!/^\d{8}$/.test(inputDate)) return "Format tanggal tidak valid";
+
+  const year = inputDate.substring(0, 4);
+  const month = inputDate.substring(4, 6);
+  const day = inputDate.substring(6, 8);
+
+  // Buat objek Date
+  const dateObj = new Date(`${year}-${month}-${day}`);
+
+  // Format tanggal ke dalam bahasa Indonesia
+  return new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric" }).format(dateObj);
+}
+
 export const remainingTime = (targetDate) => {
   let currentDate = new Date();
   let timeDifference = new Date(targetDate) - currentDate;
@@ -317,6 +332,30 @@ export const remainingTime = (targetDate) => {
     }
   } else {
     return ` ${formattedHours} jam ${formattedMinutes} menit ${formattedSeconds} detik`;
+  }
+};
+
+export const remainingTimeAllBook = (targetDate) => {
+  let currentDate = new Date();
+  let timeDifference = new Date(targetDate) - currentDate;
+
+  let hours = Math.floor(timeDifference / (1000 * 60 * 60));
+  let minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+  let seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+  // Tambahkan padding 0 jika hours, minutes, atau seconds < 10
+  const formattedHours = hours.toString().padStart(2, "0");
+  const formattedMinutes = minutes.toString().padStart(2, "0");
+  const formattedSeconds = seconds.toString().padStart(2, "0");
+
+  if (hours === 0) {
+    if (minutes === 0) {
+      return ` 00:00:${formattedSeconds}`;
+    } else {
+      return ` 00:${formattedMinutes}:${formattedSeconds}`;
+    }
+  } else {
+    return ` ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
   }
 };
 

@@ -41,6 +41,21 @@ export default function SideBarMobile({nameMenu, setNameMenu}) {
                             )}
                         </li>
                     )}  
+
+                    {(isLoading || type === 'auth' || type === 'kereta') && (
+                        <li>
+                            {isLoading ? (
+                                <Skeleton height={50} width={60} />
+                                ) : (
+                                    <div onClick={() => setNameMenu('kereta')} className={`mt-4 block center cursor-pointer items-center text-sm font-bold text-gray-900 ${ nameMenu === 'kereta' ? 'border-b-2 border-blue-500' : ''}`}>
+                                        <div className='bg-gray-100 mx-4 py-3 flex justify-center rounded-xl'>
+                                        <IoTrainOutline className='text-orange-500' size={24} />
+                                    </div>
+                                    <span className="block text-xs text-center font-normal mt-4 flex-1 whitespace-nowrap text-[15px] text-black">Kereta Api</span>
+                                </div>
+                            )}
+                        </li>
+                    )}              
                     {(isLoading || type === 'auth' || type === 'pelni') && (
                         <li>
                             {isLoading ? (
@@ -55,25 +70,10 @@ export default function SideBarMobile({nameMenu, setNameMenu}) {
                             )}
                         </li>
                     )}
-
-                    {(isLoading || type === 'auth' || type === 'kereta') && (
-                        <li>
-                            {isLoading ? (
-                                <Skeleton height={50} width={60} />
-                            ) : (
-                                <div onClick={() => setNameMenu('kereta')} className={`mt-4 block center cursor-pointer items-center text-sm font-bold text-gray-900 ${ nameMenu === 'kereta' ? 'border-b-2 border-blue-500' : ''}`}>
-                                    <div className='bg-gray-100 mx-4 py-3 flex justify-center rounded-xl'>
-                                        <IoTrainOutline className='text-orange-500' size={24} />
-                                    </div>
-                                    <span className="block text-xs text-center font-normal mt-4 flex-1 whitespace-nowrap text-[15px] text-black">Kereta Api</span>
-                                </div>
-                            )}
-                        </li>
-                    )}              
                     {/* <li>                
                         <div onClick={() => setNameMenu('dlu')} className={`mt-4 block center cursor-pointer items-center text-sm font-bold text-gray-900 ${ nameMenu === 'dlu' ? 'border-b-2 border-blue-500' : ''}`}>
                             <div className='bg-gray-100 mx-4 py-3 flex justify-center rounded-xl'>
-                                <IoBoatSharp className='text-green-500' size={24} />
+                            <IoBoatSharp className='text-green-500' size={24} />
                             </div>
                             <span className="block text-xs text-center font-normal mt-4 flex-1 whitespace-nowrap text-[15px] text-black">Dlu</span>
                         </div>

@@ -636,7 +636,7 @@ export default function BookingPesawat() {
         dispatch(setisOkBalance(allowPayment));
 
         //set data callback
-        dispatch(callbackFetchData({ type: 'plane', id_transaksi:idtrx  }));
+        // dispatch(callbackFetchData({ type: 'plane', id_transaksi:idtrx  }));
         setIsLoading(false);
 
         if (bookingResponse.data.callback === null) { //loloskan aja njir

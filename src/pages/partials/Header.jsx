@@ -69,7 +69,7 @@ export default function Header() {
         ease: "power2.inOut",
         backgroundColor: "#ffff",
         color: "#0f172a",
-        borderBottom: "1px solid #d1d5db",
+        // borderBottom: "1px solid #d1d5db",
       });
       setCustom(true);
     }
@@ -315,10 +315,10 @@ export default function Header() {
         ref={navRef}
         style={{
           backgroundColor:
-            customLayout?.color?.primary?.background || "#0f172a",
+          customLayout?.color?.primary?.background || "#0f172a",
           color: customLayout?.color?.primary?.font_color || "#ffff",
         }}
-        className="px-2 sm:px-4 py-2 xl:py-4 block sticky top-0 w-full z-50 left-0"
+        className="px-2 sm:px-4 py-0 xl:py-4"
       >
         {contextHolder}
         <div className="container mx-auto">
@@ -336,9 +336,9 @@ export default function Header() {
                     ? "#0f172a"
                     : customLayout?.color?.primary?.font_color || "#ffff",
                 }}
-                className="judul ml-4 text-xl xl:text-2xl font-extrabold no-underline cursor-pointer"
+                className="mobile-judul m-4 xl:m-0 text-2xl font-extrabold no-underline cursor-pointer"
               >
-                {customLayout?.header?.logo ?? ""}
+                {customLayout?.header?.logo ?? "-"}
               </div>
               {/* </Link> */}
             </div>
@@ -577,38 +577,39 @@ export default function Header() {
               </>
               {/* Button */}
               {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
-                <button
-                  data-collapse-toggle="navbar-sticky"
-                  type="button"
-                  style={{
-                    color: custom
-                      ? "#0f172a"
-                      : customLayout?.color?.primary?.font_color || "#ffff",
-                    borderRadius: "0.5rem",
-                    padding: "1rem 1rem",
-                    fontSize: "0.875rem",
-                  }}
-                  className="md:mr-0 inline-flex items-center md:hidden focus:outline-none"
-                  aria-controls="navbar-sticky"
-                  aria-expanded="false"
-                >
-                  <span className="sr-only">Open main menu</span>
-                  <button onClick={() => setIsDrawerOpen(true)}>
-                    <svg
-                      className="w-6 h-6"
-                      aria-hidden="true"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                  </button>
-                </button>
+                // <button
+                //   data-collapse-toggle="navbar-sticky"
+                //   type="button"
+                //   style={{
+                //     color: custom
+                //       ? "#0f172a"
+                //       : customLayout?.color?.primary?.font_color || "#ffff",
+                //     borderRadius: "0.5rem",
+                //     padding: "1rem 1rem",
+                //     fontSize: "0.875rem",
+                //   }}
+                //   className="md:mr-0 inline-flex items-center md:hidden focus:outline-none"
+                //   aria-controls="navbar-sticky"
+                //   aria-expanded="false"
+                // >
+                //   <span className="sr-only">Open main menu</span>
+                //   <button onClick={() => setIsDrawerOpen(true)}>
+                //     <svg
+                //       className="w-6 h-6"
+                //       aria-hidden="true"
+                //       fill="currentColor"
+                //       viewBox="0 0 20 20"
+                //       xmlns="http://www.w3.org/2000/svg"
+                //     >
+                //       <path
+                //         fill-rule="evenodd"
+                //         d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                //         clip-rule="evenodd"
+                //       ></path>
+                //     </svg>
+                //   </button>
+                // </button>
+                <></>
               ) : (
                 <>
                   <div className="pr-4 py-3">

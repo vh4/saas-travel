@@ -27,7 +27,7 @@ export default function MainPage() {
 
   const type = useSelector((state) => state.type.data.type);
   const isLoading = useSelector((state) => state.type.isLoading);
-  const location = useLocation();
+  // const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -114,7 +114,7 @@ export default function MainPage() {
           style={{
             backgroundColor: customLayout?.color?.secondary?.background || "#0f172a",
           }}
-          className="rounded-b-[40px] pb-12 xl:pb-20 xl:mb-0 xl:rounded-b-[120px]"
+          className="rounded-b-[40px] pb-12 xl:pb-20 xl:mb-0 xl:rounded-b-[120px] -mt-4 xl:mt-0"
         >
           <div className="hidden md:block xl:block 2xl:hidden py-4 md:py-8 relative z-10 container mx-auto">
             <CarouselsTablet />

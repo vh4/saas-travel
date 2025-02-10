@@ -3,11 +3,11 @@ import { Link, useLocation, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { IoGridOutline } from "react-icons/io5";
 import { IoAirplaneOutline, IoBoatOutline } from "react-icons/io5";
-import { MdOutlineHistory } from "react-icons/md";
 import { BsTrainFront } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchDataType } from "../../../../features/dataTypeSlice";
 import Skeleton from "react-loading-skeleton";
+import { CiBoxList } from "react-icons/ci";
 
 export default function SidebarUser({ pathSidebar }) {
   const [dropdownTransaksi, setDropdownTransaksi] = useState(false);
@@ -15,9 +15,6 @@ export default function SidebarUser({ pathSidebar }) {
   const dispatch = useDispatch();
   const type = useSelector((state) => state.type.data.type);
   const isLoading = useSelector((state) => state.type.isLoading);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const urlForLogin = window.location.pathname;
-
   const location = useLocation();
   // Get the last segment of the path
   let lastSegment = location.pathname.split("/").filter(Boolean).pop();
@@ -63,10 +60,10 @@ export default function SidebarUser({ pathSidebar }) {
 
   return (
     <aside
-      className="mt-8 hidden md:block w-full md:w-full xl:w-72 border-r "
+      className="mt-6  hidden md:block w-full md:w-full xl:w-72 border-r "
       aria-label="Sidebar"
     >
-      <div className="px-8 py-4 flex space-x-4 items-center text-black">
+      <div className="px-8 py-2 flex space-x-4 items-center text-black">
         <IoGridOutline size={20} className="text-black" />
         <div>List Transaksi</div>
       </div>
@@ -164,7 +161,7 @@ export default function SidebarUser({ pathSidebar }) {
           )} 
 
           <div className="border-b"></div>
-          <li className="block pt-4">
+          <li className="block">
             <Link to="/transaksi/history_idpel">
               <div
                 onClick={(e) =>
@@ -179,9 +176,9 @@ export default function SidebarUser({ pathSidebar }) {
                 } flex justify-between cursor-pointer items-center p-2 text-base font-normal text-black  hover:border-l-4 border-cyan-500 `}
               >
                 <div className="flex items-center">
-                  <MdOutlineHistory className="text-black" size={18} />
+                  <CiBoxList className="text-black" size={18} />
                   <span className="flex-1 ml-3 whitespace-nowrap text-sm">
-                    Data Penumpang
+                    List Penumpang
                   </span>
                 </div>
               </div>

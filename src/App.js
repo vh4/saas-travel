@@ -41,6 +41,10 @@ import HistoryIdpel from "./pages/transaksi/HistoryIdpel";
 import { Provider } from "react-redux";
 import store from "./features/createSlice";
 import Unauthorized from "./pages/partials/Unauthorized";
+import BookingAllPage from "./pages/booking/AllBooking";
+import ProfileMobile from "./pages/profile/ProfileMobile";
+import TransaksiKapal from "./pages/transaksi/TransaksiPelni";
+import TransaksiAllPage from "./pages/transaksi/TransaksiAll";
 
 export const TiketContext = createContext();
 export const NavContext = createContext();
@@ -184,6 +188,10 @@ function App() {
                   <Route path="/transaksi/pesawat" element={<TransaksiPesawat />}></Route>
                   <Route path="/transaksi/pelni" element={<TransaksiPelni />}></Route>
                   <Route path="/transaksi/history_idpel" element={<HistoryIdpel />}></Route>
+                  <Route path="/booking" element={<BookingAllPage />}></Route>
+                  <Route path="/transaksi" element={<TransaksiAllPage />}></Route>
+                  <Route path="/profile" element={<ProfileMobile />}></Route>
+
                   {/* <Route path="/transaksi/dlu" element={<TransaksiDlu />}></Route> */}
 
                   {/* <Route path="/booking/kai" element={<BookingKaiList />}></Route> */}

@@ -1,5 +1,6 @@
 @import "rsuite/dist/rsuite.css";
 @import url('https://fonts.googleapis.com/css2?family=Baskervville+SC&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baskervville+SC&family=Lilita+One&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,6 +9,19 @@
 /* Your global styles or in the same component where the InputNumber is used */
 .hide-dropdown-icon .rs-input-number-dropdown-toggle {
   display: none !important;
+}
+
+.mobile-judul {
+  font-family: "Baskervville SC", serif;
+  font-weight: 600;
+  font-style: normal;
+  font-optical-sizing: auto;
+}
+
+.mobile-judul2 {
+  font-family: "Lilita One", serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .judul {

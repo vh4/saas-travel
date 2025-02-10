@@ -63,8 +63,8 @@ export default function CarouselsMobile(props) {
           color: customLayout?.color?.secondary?.font_color || "#ffff",
         }}
       >
-        <div className="font-semibold text-sm">Hai traveller,</div>
-        <div className="text-xs mt-6">
+        {/* <div className="font-semibold text-sm">Hai traveller,</div> */}
+        <div className="text-xs mt-2">
           {Array.isArray(customLayout?.wording?.secondary?.desktop) &&
           customLayout?.wording?.secondary?.mobile
             ? customLayout?.wording?.secondary?.mobile

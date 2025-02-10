@@ -10,10 +10,11 @@ import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import { NavContext } from "../App";
-import { AiOutlineAppstore, AiOutlineHome } from "react-icons/ai";
-import { MdOutlineHistory } from "react-icons/md";
-// import { HiUser } from "react-icons/hi";
-// import { BsFillBookmarkStarFill } from "react-icons/bs";
+import { BsBookmarkCheckFill } from "react-icons/bs";
+import { CiBookmarkCheck, CiGrid42, CiSettings } from "react-icons/ci";
+import { HiOutlineTicket, HiTicket } from "react-icons/hi2";
+import { HiViewGridAdd } from "react-icons/hi";
+import { IoMdSettings } from "react-icons/io";
 
 
 export default function LayoutUser({ children }) {
@@ -29,8 +30,9 @@ export default function LayoutUser({ children }) {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
-
+      <div className="hidden xl:block">
+          <Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
+      </div>
       <div className="flex-grow md:flex relative ml-0 md:ml-16 xl:ml-0 2xl:ml-0 mt-4 md:mt-0 md:justify-center">
         {token === null || token === undefined ? (
           <></>
@@ -53,52 +55,43 @@ export default function LayoutUser({ children }) {
         </div>
       </div>
       <div className="text-black block md:hidden z-10 bg-white shadow-lg">
-        <Box sx={{ width: "100%", position: "fixed", bottom: 0 }}>
-          <BottomNavigation
-            sx={{ display: "flex", justifyContent: "around" }}
-            showLabels
-            value={nav.isActive}
-            onChange={(event, newValue) => {
-              setNav({
-                type: "NAVIGATION",
-                isActive: newValue,
-              });
-            }}
+          <Box
+            sx={{ width: "100%", position: "fixed", bottom: 0 }}
+            elevation={3}
           >
-            <BottomNavigationAction
-              to="/"
-              label="Home"
-              component={Link}
-              className="text-black"
-              icon={<AiOutlineHome className="text-black" size={20} />}
-            />
-            {/* <BottomNavigationAction
-              to="/booking/pesawat"
-              component={Link}
-              label="Booking"
-              icon={<BsFillBookmarkStarFill size={18} />}
-            /> */}
-            {/* <BottomNavigationAction
-              to="/transaksi/pesawat"
-              className="text-black"
-              component={Link}
-              label="Transaksi"
-              icon={<AiOutlineAppstore className="text-black" size={20} />}
-            /> */}
+            <BottomNavigation
+              sx={{ display: "flex", justifyContent: "around" }}
+              value={nav.isActive}
+              showLabels={false}
+              onChange={(event, newValue) => {
+                setNav({
+                  type: "NAVIGATION",
+                  isActive: newValue,
+                });
+              }}
+            >
               <BottomNavigationAction
-                to="/transaksi/history_idpel"
-                component={Link}
-                label="List Penumpang"
-                icon={<MdOutlineHistory size={20} />}
-              />
-            {/* <BottomNavigationAction
-              to="/profile/view"
               component={Link}
-              label="Akun saya"
-              icon={<HiUser size={22} />}
-            /> */}
-          </BottomNavigation>
-        </Box>
+              to='/'
+              icon={nav.isActive === 0 ?  <HiViewGridAdd className={"bg-blue-500 text-white p-1 rounded-full"} size={26} /> : <CiGrid42 size={26} />}
+              />
+              <BottomNavigationAction
+              component={Link}
+              to='/booking'
+              icon={nav.isActive === 1 ? <BsBookmarkCheckFill className={"bg-blue-500 text-white p-1 rounded-full"} size={26} /> : <CiBookmarkCheck size={26}/>}
+            />
+            <BottomNavigationAction
+              to='/transaksi'
+              component={Link}
+              icon={nav.isActive === 2 ? <HiTicket className={"bg-blue-500 text-white p-1 rounded-full"} size={26} /> : <HiOutlineTicket size={26} />}
+            />
+             <BottomNavigationAction
+              to='/profile'
+              component={Link}
+              icon={nav.isActive === 3 ?  <IoMdSettings className={"bg-blue-500 text-white p-1 rounded-full"} size={26} /> : <CiSettings size={26} />}
+            />
+            </BottomNavigation>
+          </Box>
       </div>
       {/* <Footer/> */}
       {/* <footer className="hidden md:block border-t text-sm text-black py-6">

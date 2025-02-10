@@ -593,7 +593,7 @@ export default function Pembayaran() {
                 <div className="sidebar hidden xl:block w-full xl:w-2/3 2xl:w-1/2">
                   <div className="py-2 rounded-md border-b border-gray-200 shadow-sm">
                       <div className="mt-4">
-                        {isOk == false || isCurrentBalance == false ? (
+                        {/* {isOk == false || isCurrentBalance == false ? (
                           <>
                             <div className="mt-4">
                             {status !== '68' && status !== '99' ? 
@@ -608,7 +608,7 @@ export default function Pembayaran() {
                               }
                             </div>
                           </>
-                        ) : ''}
+                        ) : ''} */}
                       </div>
                     <div className="px-4 py-2">
                       {/* <div className="text-black text-xs">Booking ID</div> */}
@@ -699,10 +699,10 @@ export default function Pembayaran() {
                       banner
                     />
                   </div>
-                {callbackBoolean == true ? (
+                {/* {callbackBoolean == true ? ( */}
                   <div className="hidden xl:block mt-2 py-2 rounded-md border-t border-gray-200 shadow-sm">
                       <>
-                        {isOk == true && isCurrentBalance == true ? (
+                        {/* {isOk == true && isCurrentBalance == true ? ( */}
                           <>
                             <div className="px-8 md:px-4 py-4 text-sm text-black">
                               Tekan tombol dibawah ini untuk melanjutkan proses
@@ -710,7 +710,8 @@ export default function Pembayaran() {
                             </div>
                             <div className="flex justify-center">
                               <Button
-                              onClick={isOk && isCurrentBalance && showModal}                        
+                              // onClick={isOk && isCurrentBalance && showModal}   
+                              onClick={showModal}                                             
                               size="large"
                                 key="submit"
                                 type="primary"
@@ -722,18 +723,18 @@ export default function Pembayaran() {
                             </div>
                             {isSimulated === 1 ? (<Alert className="mt-4" message="Don't worry, clicking the 'Bayar' will not affect your balance." banner/>) : ''}
                           </>
-                        ) : ''}
+                        {/* ) : ''} */}
                       </>
                   </div>
-                  ) : (
+                  {/* ) : ( */}
                     <>
                     </>
-                  )}
+                  {/* )} */}
                 </div>
-              {callbackBoolean == true ? (
+              {/* {callbackBoolean == true ? ( */}
                 <div className="block xl:hidden mt-8 py-2 rounded-md">
                     <>
-                    {isOk == true && isCurrentBalance == true ? (
+                    {/* {isOk == true && isCurrentBalance == true ? ( */}
                       <>
                         <div className="flex justify-center">
                           <Button
@@ -749,9 +750,9 @@ export default function Pembayaran() {
                         </div>
                         {isSimulated === 1 ? (<Alert className="mt-4" message="Don't worry, clicking the 'Bayar' will not affect your balance." banner/>) : ''}
                       </>
-                    ) : ''}
+                     {/* ) : ''} */}
                     </>
-                    {isOk == false || isCurrentBalance == false ? (
+                    {/* {isOk == false || isCurrentBalance == false ? (
                       <>
                         <div className="mt-4">
                             {status !== '68' && status !== '99' ? 
@@ -766,9 +767,9 @@ export default function Pembayaran() {
                               }
                         </div>
                       </>
-                    ) : ''}
+                    ) : ''} */}
                 </div>
-              ) : (
+              {/* ) : ( */}
                 <>
                   {/* <div className="px-8 py-4 text-sm text-black">
                     Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
@@ -787,7 +788,7 @@ export default function Pembayaran() {
                       </Button>
                     </div>                      */}
                 </>
-              )}
+               {/* )} */}
               </div>
             </>
           )}

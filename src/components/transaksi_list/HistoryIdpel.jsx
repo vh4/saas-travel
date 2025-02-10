@@ -146,7 +146,7 @@ export default function ViewHistoryIdpel({ path }) {
           </div>
         ) : (
           <>
-            <div className="block mt-12">
+            <div className="block mt-4">
               <div className="select">
                 <Select
                   showSearch

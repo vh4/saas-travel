@@ -544,7 +544,7 @@ function Pelni() {
               <div className="block xl:flex justify-between mx-0 xl:mx-6">
                 <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 gap-6 xl:gap-0">
                   <div className="mt-2 w-full col col-span-1 md:col-span-2">
-                    <div className="w-full flex items-center">
+                  <div className="w-full flex flex-col xl:flex-row items-center px-2 xl:px-0">
                       <div className="w-full m-2 xl:m-0 xl:pr-0">
                         <small className="block mb-2 text-black">
                           Pelabuhan Asal
@@ -618,11 +618,11 @@ function Pelni() {
                         />
                       </div>
                       <div
-                        onClick={changeStatiun}
-                        className="cursor-pointer mt-6 flex justify-center items-center bg-blue-500 rounded-full p-1"
-                      >
-                        <AiOutlineSwap className="text-white" size={24} />
-                      </div>
+                          onClick={changeStatiun}
+                              className="w-8 h-8 cursor-pointer flex justify-center mt-2 xl:mt-6 items-center bg-blue-500 rounded-full p-1 flex-shrink-0"
+                              >
+                              <AiOutlineSwap className="text-white w-10 h-10" />
+                          </div>
                       <div className="w-full m-2 xl:m-0 xl:pr-0">
                         <small className="mb-2 text-black">
                           Pelabuhan Tujuan
