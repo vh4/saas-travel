@@ -540,7 +540,7 @@ export default function BookingPesawat() {
         end_child.push(
           `CHD;${
             item.gender
-          };${item.nama_depan.toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${
+          };${item.nama_depan};${item.nama_belakang};${dateString};${
             item.idNumber
           };${item?.kewenegaraan ? item?.kewenegaraan : "ID"};${
             item?.issuingpassport ? item?.issuingpassport : "ID"
@@ -559,7 +559,7 @@ export default function BookingPesawat() {
         end_infant.push(
           `INF;${
             item.gender
-          };${item.nama_depan.toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${
+          };${item.nama_depan};${item.nama_belakang};${dateString};${
             item.idNumber
           };${item?.kewenegaraan ? item?.kewenegaraan : "ID"};${
             item?.issuingpassport ? item?.issuingpassport : "ID"
@@ -579,7 +579,7 @@ export default function BookingPesawat() {
         end_adult.push(
           `ADT;${
             item.gender
-          };${item.nama_depan.toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${
+          };${item.nama_depan};${item.nama_belakang};${dateString};${
             item.idNumber
           };::${item.nomor};::${item.nomor};;;;${item.email};1;${
             item?.kewenegaraan ? item?.kewenegaraan : "ID"
