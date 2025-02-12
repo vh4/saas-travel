@@ -67,7 +67,7 @@ app.get('/travel/holidays', async (req, res) => {
     try {
         const response = await axios.get('https://www.googleapis.com/calendar/v3/calendars/id.indonesian.official%23holiday%40group.v.calendar.google.com/events', {
             params: {
-                key: 'AIzaSyDvmiGaeS47xTleSsWyLX3APlDUUOF5igQ',
+                key: 'AIzaSyATvgMqQlROTng1kAiBWZ6gyQ7EN1OsGzI',
                 ctz: 'Asia%2FJakarta'
             }, //
         });
