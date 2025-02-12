@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Routes, useLocation, useNavigate} from "react-rou
 import TransaksiKai from "./pages/transaksi/TransaksiKai";
 import TransaksiPesawat from "./pages/transaksi/TransaksiPesawat";
 import TransaksiPelni from "./pages/transaksi/TransaksiPelni";
-import TransaksiDlu from "./pages/transaksi/TransaksiDlu";
 
 // import BookingKaiList from "./pages/booking/KaiBooking";
 // import BookingPesawatList from "./pages/booking/PesawatBooking";
@@ -43,7 +42,6 @@ import store from "./features/createSlice";
 import Unauthorized from "./pages/partials/Unauthorized";
 import BookingAllPage from "./pages/booking/AllBooking";
 import ProfileMobile from "./pages/profile/ProfileMobile";
-import TransaksiKapal from "./pages/transaksi/TransaksiPelni";
 import TransaksiAllPage from "./pages/transaksi/TransaksiAll";
 
 export const TiketContext = createContext();
@@ -52,20 +50,6 @@ export const LogoutContent = createContext();
 export const LoginContent = createContext();
 export const HolidaysContext = createContext();
 export const CustomLayout = createContext();
-
-const NormalizeRoute = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-
- useEffect(() => {
-    const path = location.pathname.replace(/\/\/+/g, '/');
-    if (location.pathname !== path) {
-      navigate(path, { replace: true });
-    }
-  }, [location, navigate]);
-
-  return null;
-};
 
 function App() {
 
