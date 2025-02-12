@@ -10,11 +10,12 @@ import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import { NavContext } from "../App";
-import { BsBookmarkCheckFill } from "react-icons/bs";
+import { BsBookmarkCheckFill, BsTicket } from "react-icons/bs";
 import { CiBookmarkCheck, CiGrid42, CiSettings } from "react-icons/ci";
 import { HiOutlineTicket, HiTicket } from "react-icons/hi2";
 import { HiViewGridAdd } from "react-icons/hi";
 import { IoMdSettings } from "react-icons/io";
+import { PiTicketThin } from "react-icons/pi";
 
 
 export default function LayoutUser({ children }) {
@@ -83,7 +84,7 @@ export default function LayoutUser({ children }) {
             <BottomNavigationAction
               to='/transaksi'
               component={Link}
-              icon={nav.isActive === 2 ? <HiTicket className={"bg-blue-500 text-white p-1 rounded-full"} size={26} /> : <HiOutlineTicket size={26} />}
+              icon={nav.isActive === 2 ? <HiTicket className={"bg-blue-500 text-white p-1 rounded-full"} size={26} /> : <PiTicketThin size={26} />}
             />
              <BottomNavigationAction
               to='/profile'

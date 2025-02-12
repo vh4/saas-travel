@@ -1,8 +1,8 @@
 import React from "react";
-import { CiBookmarkCheck } from "react-icons/ci";
+import { CiBookmarkCheck, CiCircleList } from "react-icons/ci";
 import { HiOutlineTicket } from "react-icons/hi";
 import { IoIosArrowForward } from "react-icons/io";
-import { PiListChecksFill } from "react-icons/pi";
+import { PiListChecksFill, PiTicketThin } from "react-icons/pi";
 
 export default function ProfileMobile() {
   return (
@@ -63,7 +63,7 @@ export default function ProfileMobile() {
             <a href="/transaksi" className="block">
               <div className="p-3 flex items-center justify-between border-t cursor-pointer hover:bg-gray-200 transition-all duration-200 rounded-lg">
                 <div className="flex items-center space-x-2">
-                  <HiOutlineTicket size={24} className="text-blue-500" />
+                  <PiTicketThin size={24} className="text-blue-500" />
                   <span className="text-sm text-gray-900">E-Ticket</span>
                 </div>
                 <IoIosArrowForward size={24} className="text-gray-600" />
@@ -74,7 +74,7 @@ export default function ProfileMobile() {
             <a href="/transaksi/history_idpel" className="block">
               <div className="p-3 flex items-center justify-between border-t cursor-pointer hover:bg-gray-200 transition-all duration-200 rounded-lg">
                 <div className="flex items-center space-x-2">
-                  <PiListChecksFill size={24} className="text-blue-500" />
+                  <CiCircleList size={24} className="text-blue-500" />
                   <span className="text-sm text-gray-900">List Penumpang</span>
                 </div>
                 <IoIosArrowForward size={24} className="text-gray-600" />
