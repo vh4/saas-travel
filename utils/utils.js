@@ -181,9 +181,9 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
 			} : null
 		};
 	} else {
-		logger.info(`Requests HIT API TRAVEL (Development): ${JSON.stringify(data)}`);
-		const response = await axios.post(`${process.env.URL_HIT}/${type}/payment`, data);
-		logger.info(`Response HIT API TRAVEL (Development): ${JSON.stringify(response.data)}`);
+		// logger.info(`Requests HIT API TRAVEL (Development): ${JSON.stringify(data)}`);
+		// const response = await axios.post(`${process.env.URL_HIT}/${type}/payment`, data);
+		// logger.info(`Response HIT API TRAVEL (Development): ${JSON.stringify(response.data)}`);
 
 		// Kirim callback payment dengan hardcode
 		logger.info(`REQUEST KIRIM KE-3 SENT CALLBACK TO MERCHANT  DEVEL (axiosSendCallbackPayment): ${JSON.stringify(hardcodeCallback)}`);
