@@ -841,7 +841,7 @@ export default function Search() {
                                 parseInt(infant)
                               ? "bg-white "
                               : "bg-gray-100 "
-                          }  border-b-2 border-t-2 xl:border xl:border-gray-200 rounded-md xl:shadow-sm hover:border hover:border-gray-100 transition-transform transform hover:scale-105`}
+                          }  border-b-2 xl:border xl:border-gray-200 rounded-md xl:shadow-sm hover:border hover:border-gray-100 transition-transform transform hover:scale-105`}
                         >
                           {/* desktop cari */}
                           <div className="hidden xl:block w-full text-black ">

@@ -1,13 +1,13 @@
 import * as React from "react";
+import { Drawer, Popper, SwipeableDrawer, createTheme, Button as ButtonMui } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
 import { Box, Chip } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
-import { Popper } from "@mui/material";
 import { IoBoatSharp } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, createSearchParams } from "react-router-dom";
 import onClickOutside from "react-onclickoutside";
 import { InputGroup } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
@@ -22,6 +22,7 @@ import { parseTanggalPelniMonth } from "../../helpers/date";
 import { CiCalendarDate } from "react-icons/ci";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { makeStyles } from "@mui/styles";
+
 
 
 function Pelni() {
@@ -77,7 +78,18 @@ function Pelni() {
   const loadingBerangkat = openBerangka && pelniData.length === 0;
   const loadingTujuan = openTujuan && pelniData.length === 0;
   const [messageApi, contextHolder] = message.useMessage();
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const toggleDrawer = (newOpen, cancel = false, type="cancel") => () => {
+    setOpenDrawer(newOpen);
+    if(type ==='simpan'){
+        setLaki(lakiTemp)
+        setWanita(wanitaTemp)
+    }
+    else if(type ==='buka'){
+      setLakiTemp(laki)
+      setWanitaTemp(wanita)
+  }
+  };
   
   const useStylesDate = makeStyles({
     hideCalendarHeader: {
@@ -180,6 +192,10 @@ function Pelni() {
 
   const [laki, setLaki] = React.useState(lakiCookie);
   const [wanita, setWanita] = React.useState(wanitaCookie);
+
+  const [lakiTemp, setLakiTemp] = React.useState(laki);
+  const [wanitaTemp, setWanitaTemp] = React.useState(wanita);
+
 
   const [keberangkatan, setKeberangkatan] = React.useState(depa);
   const [tujuan, setTujuan] = React.useState(arri);
@@ -304,45 +320,46 @@ function Pelni() {
 
   function plusLaki(e) {
     e.preventDefault();
-    if (laki >= 4) {
-      setLaki(4);
+    if (lakiTemp >= 4) {
+      setLakiTemp(4);
     } else {
-      setLaki(parseInt(laki) + 1);
+      setLakiTemp(parseInt(lakiTemp) + 1);
     }
   }
 
   function minusLaki(e) {
     e.preventDefault();
-    if(wanita > 0 && laki > 0){
-      setLaki(parseInt(laki) - 1);
-    }if(wanita > 0 && laki >= 0){
-      setLaki(0);
+    if(wanitaTemp > 0 && lakiTemp > 0){
+      setLakiTemp(parseInt(lakiTemp) - 1);
+    }if(wanitaTemp > 0 && lakiTemp >= 0){
+      setLakiTemp(0);
     }else{
-      setLaki(1);
+      setLakiTemp(1);
     }
     
   }
 
   function plusWanita(e) {
     e.preventDefault();
-    if (wanita >= 4) {
-      setWanita(4);
+    if (wanitaTemp >= 4) {
+      setWanitaTemp(4);
     } else {
-      setWanita(parseInt(wanita) + 1);
+      setWanitaTemp(parseInt(wanitaTemp) + 1);
     }
   }
 
   function minusWanita(e) {
     e.preventDefault();
 
-    if (wanita <= 0) {
-      setWanita(0);
-    }else if (laki <= 0) {
-      setWanita(1);
+    if (wanitaTemp <= 0) {
+      setWanitaTemp(0);
+    }else if (lakiTemp <= 0) {
+      setWanitaTemp(1);
     }  else {
-      setWanita(parseInt(wanita) - 1);
+      setWanitaTemp(parseInt(wanitaTemp) - 1);
     }
   }
+
 
   function addLeadingZero(num) {
     if (num < 10) {
@@ -719,83 +736,51 @@ function Pelni() {
                     </button>
                   </FormControl>
 
-                  <FormControl sx={{ m: 1, minWidth: 120 }}>
-                    <small className="mb-2 text-black text-center">
-                      Total Penumpang
-                    </small>
-                    <div className="hidden md:block w-full">
-                      <TextField
-                        onClick={handleClick}
-                        sx={{ input: { cursor: "pointer" } }}
-                        variant="outlined"
-                        size="small"
-                        classes={classes}
-                        id="outlined-basic"
-                        value={`${parseInt(laki) + parseInt(wanita)} Penumpang`}
-                      />
-                    </div>
-                    <Button
-                      className="w-full block md:hidden text-black"
-                      size="large"
-                      onClick={handleClick}
+                  <FormControl sx={{ m: 1, minWidth: 130 }}>
+                    <small className="mb-2 text-black">Total Penumpang</small>
+                    <div className="hidden md:block"></div>
+                    <button
+                      type="button"
+                      className="border py-[11px] customButtonStyle w-full block text-black -mx-1.5"
+                      onClick={toggleDrawer(true, false, "buka")}
                     >
                       {`${parseInt(laki) + parseInt(wanita)} Penumpang`}
-                    </Button>
-                    <div
-                      id="basic-menu"
-                      className={`${anchorEl} relative md:absolute top-0 md:top-20 md:z-10 grid w-full md:w-auto px-8 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}
-                    >
-                      <div className="w-full md:w-48 block md:mx-0">
-                        <div className="mt-4 w-full items-center text-black">
-                          <div className="text-sm text-center header-number mb-4">
-                            <p>Laki-laki ({"≥"} 2 thn)</p>
-                          </div>
-                          <InputGroup>
-                            <InputGroup.Button onClick={minusLaki}>
-                              -
-                            </InputGroup.Button>
-                            <input
-                              type={"number"}
-                              className={
-                                "block text-center w-full focus:outline-0 selection:border-blue-500"
-                              }
-                              value={laki}
-                              onChange={setLaki}
-                              min={0}
-                              max={4}
-                              readOnly
-                            />
-                            <InputGroup.Button onClick={plusLaki}>
-                              +
-                            </InputGroup.Button>
-                          </InputGroup>
-                        </div>
-                        <div className="mt-4 mb-8 w-full items-center text-black">
-                          <div className="text-sm text-center header-number mb-4">
-                            <p>Perempuan ({"≥"} 2 thn)</p>
-                          </div>
-                          <InputGroup>
-                            <InputGroup.Button onClick={minusWanita}>
-                              -
-                            </InputGroup.Button>
-                            <input
-                              type={"number"}
-                              className={
-                                "block text-center w-full focus:outline-0 selection:border-blue-500"
-                              }
-                              value={wanita}
-                              onChange={setWanita}
-                              min={0}
-                              max={4}
-                              readOnly
-                            />
-                            <InputGroup.Button onClick={plusWanita}>
-                              +
-                            </InputGroup.Button>
-                          </InputGroup>
+                    </button>
+                    <SwipeableDrawer anchor="bottom" PaperProps={{ sx: { borderTopLeftRadius: 30, borderTopRightRadius: 30 } }} open={openDrawer} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
+                      <div className="p-4 mt-2 xl:container xl:px-64">
+                        
+                        <h2 className="text-lg font-semibold py-4">Pilih Jumlah Penumpang</h2>
+                        {[{ label: "LAKI-LAKI", age: "(≥ 2 thn)", value: lakiTemp, setValue: setLakiTemp, min: 0, max:4, plus:plusLaki, minus:minusLaki },
+                          { label: "WANITA",age: "(<2 thn)", value: wanitaTemp, setValue: setWanitaTemp, min: 0, max:4, plus:plusWanita, minus:minusWanita }]
+                          .map(({ label, age, value, setValue, min, max, plus, minus }) => (
+                            <div key={label} className="mt-4 px-4 py-1">
+                              <div className="grid grid-cols-12">
+                                <div className="col-span-8">
+                                  <div className="flex items-center space-x-2">
+                                    <div className="font-bold text-gray-800">{label}</div>
+                                    <div className="text-xs text-gray-400">{age}</div>
+                                  </div>
+                                </div>
+                                <div className="col-span-4">
+                                  <InputGroup>
+                                    <InputGroup.Button onClick={minus}>-</InputGroup.Button>
+                                    <input type="number" min={min} max={max} className="block text-center w-full focus:outline-0" value={value} readOnly />
+                                    <InputGroup.Button className="bg-gray-300 text-black hover:bg-blue-500 hover:text-white" onClick={plus}>+</InputGroup.Button>
+                                  </InputGroup>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        <div className="flex justify-end space-x-2 my-8 px-4">
+                          <ButtonMui className="w-32" variant="outlined" color="secondary" onClick={toggleDrawer(false)}>
+                            Cancel
+                          </ButtonMui>
+                          <ButtonMui className="w-52" variant="contained"  onClick={toggleDrawer(false, true, "simpan")}>
+                            Simpan
+                          </ButtonMui>
                         </div>
                       </div>
-                    </div>
+                    </SwipeableDrawer>
                   </FormControl>
                 </div>
                 <div className="w-full xl:w-1/4 flex justify-end xl:justify-start mt-8 py-0.5">

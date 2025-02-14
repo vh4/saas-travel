@@ -1,13 +1,13 @@
 import * as React from "react";
+import { Drawer, Popper, SwipeableDrawer, createTheme, Button as ButtonMui } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { Box, Chip } from "@mui/material";
+import { Box, Chip, Slide } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
-import { Popper } from "@mui/material";
 import { FaTrain } from "react-icons/fa";
 import { useNavigate, createSearchParams } from "react-router-dom";
 import onClickOutside from "react-onclickoutside";
@@ -125,10 +125,22 @@ function KAI() {
   const [openBerangka, SetopenBerangka] = React.useState(false);
   const [openTujuan, setOpenTujuan] = React.useState(false);
 
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const toggleDrawer = (newOpen, cancel = false, type="cancel") => () => {
+    setOpenDrawer(newOpen);
+    if(type ==='simpan'){
+        setadult(adultTemp)
+        setinfant(infantTemp)
+    }
+    else if(type ==='buka'){
+      setadultTemp(adult)
+      setinfantTemp(infant)
+  }
+  };
+
   const loadingBerangkat = openBerangka && kaiData.length === 0;
   const loadingTujuan = openTujuan && kaiData.length === 0;
   const [messageApi, contextHolder] = message.useMessage();
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const currentDate = dayjs();
   const aheadDate = dayjs().add(3, "months");
 
@@ -275,6 +287,10 @@ function KAI() {
   const [adult, setadult] = React.useState(adultCookie);
   const [infant, setinfant] = React.useState(infantCookie);
 
+  const [adultTemp, setadultTemp] = React.useState(adult);
+  const [infantTemp, setinfantTemp] = React.useState(infant);
+
+
   const [anchorEl, setAnchorEl] = React.useState("hidden");
   const handleClick = () => {
     anchorEl === "hidden" ? setAnchorEl("grid") : setAnchorEl("hidden");
@@ -381,23 +397,23 @@ function KAI() {
   function plusAdult(e) {
     e.preventDefault();
     
-    if (adult >= 4) {
-      setadult(4);
+    if (adultTemp >= 4) {
+      setadultTemp(4);
     } else {
-      setadult(parseInt(adult) + 1);
+      setadultTemp(parseInt(adultTemp) + 1);
     }
   }
 
   function minusAdult(e) {
     e.preventDefault();
 
-    if((adult <= infant)){
-      setadult(parseInt(adult))
+    if((adultTemp <= infantTemp)){
+      setadultTemp(parseInt(adultTemp))
     }else{      
-      if (adult < 1 || adult === 1) {
-        setadult(1);
+      if (adultTemp < 1 || adultTemp === 1) {
+        setadultTemp(1);
       } else {
-        setadult(parseInt(adult) - 1);
+        setadultTemp(parseInt(adultTemp) - 1);
       }
     }
 
@@ -406,13 +422,13 @@ function KAI() {
   function plusInfant(e) {
     e.preventDefault();
 
-    if(adult <= infant){
-      setinfant(parseInt(infant));
+    if(adultTemp <= infantTemp){
+      setinfantTemp(parseInt(infantTemp));
     }else{
-      if (infant >= 4) {
-        setinfant(4);
+      if (infantTemp >= 4) {
+        setinfantTemp(4);
       } else {
-        setinfant(parseInt(infant) + 1);
+        setinfantTemp(parseInt(infantTemp) + 1);
       }
     }
 
@@ -421,10 +437,10 @@ function KAI() {
   function minusInfant(e) {
     e.preventDefault();
 
-    if (infant < 0 || infant === 0) {
-      setinfant(0);
+    if (infantTemp < 0 || infantTemp === 0) {
+      setinfantTemp(0);
     } else {
-      setinfant(parseInt(infant) - 1);
+      setinfantTemp(parseInt(infantTemp) - 1);
     }
   }
 
@@ -880,46 +896,51 @@ function KAI() {
                     </button>
                   </FormControl>
 
-                  <FormControl sx={{ m: 1, minWidth: 120 }}>
-                    <small className="mb-2 text-black">
-                      Total Penumpang
-                    </small>
-                    <div className="hidden md:block w-full">
-                    </div>
-                    <button type="button" className="border py-[11px] customButtonStyle w-full block text-black -mx-1.5" onClick={handleClick}>
+                  <FormControl sx={{ m: 1, minWidth: 130 }}>
+                    <small className="mb-2 text-black">Total Penumpang</small>
+                    <div className="hidden md:block"></div>
+                    <button
+                      type="button"
+                      className="border py-[11px] customButtonStyle w-full block text-black -mx-1.5"
+                      onClick={toggleDrawer(true, false, "buka")}
+                    >
                       {`${parseInt(adult) + parseInt(infant)} Penumpang`}
                     </button>
-                    <div
-                      id="basic-menu"
-                      className={`${anchorEl} relative md:absolute top-0 md:top-20 md:z-10 grid w-full md:w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg shadow-md `}
-                    >
-                      <div className="w-full md:w-48 block md:mx-0">
-                        <div className="mt-4 w-full items-center text-black">
-                          <div className="w-full items-center text-black">
-                          <div className="text-sm text-center header-number mb-4">
-                            <p>Adult (≥ 3 thn)</p>
-                          </div>
-                          <InputGroup>
-                            <InputGroup.Button onClick={minusAdult}>-</InputGroup.Button>
-                            <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={adult} onChange={setadult} min={1} max={4} readOnly/>
-                            <InputGroup.Button onClick={plusAdult}>+</InputGroup.Button>
-                          </InputGroup>
-                        </div>
-                        </div>
-                        <div className="mt-4 w-full items-center text-black">
-                          <div className="mt-4 w-full items-center text-black">
-                          <div className="text-sm text-center header-number mb-4">
-                            <p>Infant ({`<`} 3 thn) </p>
-                          </div>
-                          <InputGroup>
-                            <InputGroup.Button onClick={minusInfant}>-</InputGroup.Button>
-                            <input type={"number"} className={'block text-center w-full focus:outline-0 selection:border-blue-500'} value={infant} onChange={setinfant} min={0} max={4} readOnly/>
-                            <InputGroup.Button onClick={plusInfant}>+</InputGroup.Button>
-                          </InputGroup>
-                        </div>
+                    <SwipeableDrawer anchor="bottom" PaperProps={{ sx: { borderTopLeftRadius: 30, borderTopRightRadius: 30 } }} open={openDrawer} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
+                      <div className="p-4 mt-2 xl:container xl:px-64">
+                        
+                        <h2 className="text-lg font-semibold py-4">Pilih Jumlah Penumpang</h2>
+                        {[{ label: "ADULT", age: "(≥ 3 thn)", value: adultTemp, setValue: setadultTemp, min: 1, max:4, plus:plusAdult, minus:minusAdult },
+                          { label: "INFANT",age: "(<3 thn)", value: infantTemp, setValue: setinfantTemp, min: 0, max:4, plus:plusInfant, minus:minusInfant }]
+                          .map(({ label, age, value, setValue, min, max, plus, minus }) => (
+                            <div key={label} className="mt-4 px-4 py-1">
+                              <div className="grid grid-cols-12">
+                                <div className="col-span-8">
+                                  <div className="flex items-center space-x-2">
+                                    <div className="font-bold text-gray-800">{label}</div>
+                                    <div className="text-xs text-gray-400">{age}</div>
+                                  </div>
+                                </div>
+                                <div className="col-span-4">
+                                  <InputGroup>
+                                    <InputGroup.Button onClick={minus}>-</InputGroup.Button>
+                                    <input type="number" min={min} max={max} className="block text-center w-full focus:outline-0" value={value} readOnly />
+                                    <InputGroup.Button className="bg-gray-300 text-black hover:bg-blue-500 hover:text-white" onClick={plus}>+</InputGroup.Button>
+                                  </InputGroup>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        <div className="flex justify-end space-x-2 my-8 px-4">
+                          <ButtonMui className="w-32" variant="outlined" color="secondary" onClick={toggleDrawer(false)}>
+                            Cancel
+                          </ButtonMui>
+                          <ButtonMui className="w-52" variant="contained"  onClick={toggleDrawer(false, true, "simpan")}>
+                            Simpan
+                          </ButtonMui>
                         </div>
                       </div>
-                    </div>
+                    </SwipeableDrawer>
                   </FormControl>
                 </div>
                 <div className="w-full xl:w-1/4 flex justify-end xl:justify-start mt-8 py-0.5">

@@ -925,9 +925,9 @@ export default function Search() {
                             e.seats[0].availability > 0 &&
                             parseInt(adult) + parseInt(infant) <
                               e.seats[0].availability
-                              ? "bg-white"
-                              : "bg-gray-200"
-                          } border-b border-t xl:border xl:border-gray-200 xl:rounded-lg xl:shadow-sm  hover:border transition-transform transform hover:scale-105`}
+                              ? "bg-white" 
+                              : "bg-gray-50"
+                          } border-b xl:border xl:border-gray-200 xl:rounded-lg xl:shadow-sm  hover:border transition-transform transform hover:scale-105`}
                         >
                           {/* desktop cari */}
 
@@ -1017,12 +1017,18 @@ export default function Search() {
                                   ? bookingHandlerDetail(e.trainNumber)
                                   : " "
                               }
-                              className="cursor-pointer block xl:hidden w-full text-black"
+                              className={`cursor-pointer block xl:hidden w-full
+                                ${e.seats[0].availability > 0 &&
+                                parseInt(adult) + parseInt(infant) <
+                                  e.seats[0].availability
+                                  ? "text-black" 
+                                  : "text-slate-400 "}
+                              `}
                             >
                               <div className="mt-4 px-4 md:px-4 xl:px-0 2xl:px-4 grid grid-cols-1 xl:grid-cols-7">
                                 <div className="flex justify-between">
                                   <div className="col-span-1 xl:col-span-2">
-                                    <h1 className="text-xs font-medium ">
+                                    <h1 className="text-xs font-bold ">
                                       {e.trainName}
                                     </h1>
                                     <small>
@@ -1035,18 +1041,18 @@ export default function Search() {
                                     </small>
                                   </div>
                                   <div className="text-right">
-                                    <h1 className="text-xs font-medium  text-black">
+                                    <h1 className="text-xs font-medium">
                                       Rp. {toRupiah(e.seats[0].priceAdult)}
                                     </h1>
                                     <small className="text-red-500">
-                                      {e.seats[0].availability} set(s)
+                                      {/* Available */}
                                     </small>
                                     <small className="text-red-500">
                                       {e.seats[0].availability > 0 &&
                                       parseInt(adult) + parseInt(infant) <
                                         e.seats[0].availability
                                         ? ""
-                                        : ". (Tiket Habis)"}
+                                        : "Tiket Habis"}
                                     </small>
                                   </div>
                                 </div>
@@ -1056,16 +1062,16 @@ export default function Search() {
                                       <h1 className="mt-10 xl:mt-0 text-xs font-medium ">
                                         {e.departureTime}
                                       </h1>
-                                      <small className="text-black">
+                                      <small className="">
                                         {origin}
                                       </small>
                                     </div>
                                     <div className="w-full mt-12 px-4 border-b-2"></div>
                                     <div className="text-xs">
-                                      <div className="text-xs mt-10 xl:mt-0 text-black">
+                                      <div className="text-xs mt-10 xl:mt-0 ">
                                         {e.duration}
                                       </div>
-                                      <small className="text-black">
+                                      <small className="">
                                         Langsung
                                       </small>
                                     </div>
@@ -1074,7 +1080,7 @@ export default function Search() {
                                       <h1 className="mt-10 xl:mt-0 text-xs font-medium ">
                                         {e.arrivalTime}
                                       </h1>
-                                      <small className="text-black">
+                                      <small className="">
                                         {destination}
                                       </small>
                                     </div>

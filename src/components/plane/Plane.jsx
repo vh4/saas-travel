@@ -1,4 +1,4 @@
-import { Popper, Slide, createTheme } from "@mui/material";
+import { Drawer, Popper, Slide, SwipeableDrawer, createTheme, Button as ButtonMui } from "@mui/material";
 import * as React from "react";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
@@ -61,11 +61,25 @@ function Plane() {
 
   const [anchorEl, setAnchorEl] = React.useState("hidden");
 
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const toggleDrawer = (newOpen, cancel = false, type="cancel") => () => {
+    setOpenDrawer(newOpen);
+    if(type ==='simpan'){
+        setadult(adultTemp)
+        setChild(childTemp)
+        setinfant(infantTemp)
+    }
+    else if(type ==='buka'){
+      setadultTemp(adult)
+      setChildTemp(child)
+      setinfantTemp(infant)
+  }
+  };
+
   const [open, setOpen] = React.useState(false);
   const [size, setSize] = React.useState();
   const [loadingModal, setLoadingModal] = React.useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [openDate, setOpenDate] = React.useState(false);
   const handleOpenDate = () => setOpenDate(true);
   const handleCloseDate = () => {
@@ -320,6 +334,11 @@ function Plane() {
   const [infant, setinfant] = React.useState(infantCookie);
   const [child, setChild] = React.useState(childCookie);
 
+  const [adultTemp, setadultTemp] = React.useState(adult);
+  const [infantTemp, setinfantTemp] = React.useState(infant);
+  const [childTemp, setChildTemp] = React.useState(child);
+
+
   const i = 0;
 
   const useStyles = makeStyles((theme) => ({
@@ -435,23 +454,23 @@ function Plane() {
 
   function plusAdult(e) {
     e.preventDefault();
-    if (adult >= 7) {
-      setadult(7);
+    if (adultTemp >= 7) {
+      setadultTemp(7);
     } else {
-      setadult(parseInt(adult) + 1);
+      setadultTemp(parseInt(adultTemp) + 1);
     }
   }
 
   function minusAdult(e) {
     e.preventDefault();
 
-    if (adult <= infant || adult <= child) {
-      setadult(parseInt(adult));
+    if (adultTemp <= infantTemp || adultTemp <= childTemp) {
+      setadultTemp(parseInt(adultTemp));
     } else {
-      if (adult < 1 || adult === 1) {
-        setadult(1);
+      if (adultTemp < 1 || adultTemp === 1) {
+        setadultTemp(1);
       } else {
-        setadult(parseInt(adult) - 1);
+        setadultTemp(parseInt(adultTemp) - 1);
       }
     }
   }
@@ -459,13 +478,13 @@ function Plane() {
   function plusInfant(e) {
     e.preventDefault();
 
-    if (adult <= infant) {
-      setinfant(parseInt(infant));
+    if (adultTemp <= infantTemp) {
+      setinfantTemp(parseInt(infantTemp));
     } else {
-      if (infant >= 7) {
-        setinfant(7);
+      if (infantTemp >= 7) {
+        setinfantTemp(7);
       } else {
-        setinfant(parseInt(infant) + 1);
+        setinfantTemp(parseInt(infantTemp) + 1);
       }
     }
   }
@@ -473,22 +492,22 @@ function Plane() {
   function minusInfant(e) {
     e.preventDefault();
 
-    if (infant < 0 || infant === 0) {
-      setinfant(0);
+    if (infantTemp < 0 || infantTemp === 0) {
+      setinfantTemp(0);
     } else {
-      setinfant(parseInt(infant) - 1);
+      setinfantTemp(parseInt(infantTemp) - 1);
     }
   }
 
   function plusChild(e) {
-    if (adult <= child) {
-      setChild(infant(child));
+    if (adultTemp <= childTemp) {
+      setChild(infantTemp(childTemp));
     } else {
       e.preventDefault();
-      if (child >= 7) {
-        setChild(7);
+      if (childTemp >= 7) {
+        setChildTemp(7);
       } else {
-        setChild(parseInt(child) + 1);
+        setChildTemp(parseInt(childTemp) + 1);
       }
     }
   }
@@ -496,10 +515,10 @@ function Plane() {
   function minusChild(e) {
     e.preventDefault();
 
-    if (child < 0 || child === 0) {
-      setChild(0);
+    if (childTemp < 0 || childTemp === 0) {
+      setChildTemp(0);
     } else {
-      setChild(parseInt(child) - 1);
+      setChildTemp(parseInt(childTemp) - 1);
     }
   }
 
@@ -991,98 +1010,52 @@ function Plane() {
                       </div>
                     </button>
                   </FormControl>
-
                   <FormControl sx={{ m: 1, minWidth: 130 }}>
                     <small className="mb-2 text-black">Total Penumpang</small>
                     <div className="hidden md:block"></div>
                     <button
                       type="button"
                       className="border py-[11px] customButtonStyle w-full block text-black -mx-1.5"
-                      onClick={handleClick}
+                      onClick={toggleDrawer(true, false, "buka")}
                     >
-                      {`${
-                        parseInt(adult) + parseInt(infant) + parseInt(child)
-                      } Penumpang`}
+                      {`${parseInt(adult) + parseInt(infant) + parseInt(child)} Penumpang`}
                     </button>
-                    <div
-                      id="basic-menu"
-                      className={`${anchorEl} relative md:absolute top-0 md:z-10 grid w-full md:w-auto px-8 py-4 text-sm bg-white border border-gray-100 rounded-lg`}
-                    >
-                      <div className="w-full md:w-48 block md:mx-0">
-                        <div className="w-full items-center text-black">
-                          <div className="text-sm text-center header-number mb-4">
-                            <p>Adult (12 thn keatas)</p>
-                          </div>
-                          <InputGroup>
-                            <InputGroup.Button onClick={minusAdult}>
-                              -
-                            </InputGroup.Button>
-                            <input
-                              type={"number"}
-                              className={
-                                "block text-center w-full focus:outline-0 selection:border-blue-500"
-                              }
-                              value={adult}
-                              onChange={setadult}
-                              min={1}
-                              max={7}
-                              readOnly
-                            />
-                            <InputGroup.Button onClick={plusAdult}>
-                              +
-                            </InputGroup.Button>
-                          </InputGroup>
-                        </div>
-                        <div className="mt-4 mb-4 w-full items-center text-black">
-                          <div className="text-sm text-center header-number mb-4">
-                            <p>Child (2 - 11 thn)</p>
-                          </div>
-                          <InputGroup>
-                            <InputGroup.Button onClick={minusChild}>
-                              -
-                            </InputGroup.Button>
-                            <input
-                              type={"number"}
-                              className={
-                                "block text-center w-full focus:outline-0 selection:border-blue-500"
-                              }
-                              value={child}
-                              onChange={setChild}
-                              min={0}
-                              max={7}
-                              readOnly
-                            />
-                            <InputGroup.Button onClick={plusChild}>
-                              +
-                            </InputGroup.Button>
-                          </InputGroup>
-                        </div>
-                        <div className="mt-4 w-full items-center text-black">
-                          <div className="text-sm text-center header-number mb-4">
-                            <p>Infant (dibawah 2 thn)</p>
-                          </div>
-                          <InputGroup>
-                            <InputGroup.Button onClick={minusInfant}>
-                              -
-                            </InputGroup.Button>
-                            <input
-                              type={"number"}
-                              className={
-                                "block text-center w-full focus:outline-0 selection:border-blue-500"
-                              }
-                              value={infant}
-                              onChange={setinfant}
-                              min={0}
-                              max={7}
-                              readOnly
-                            />
-                            <InputGroup.Button onClick={plusInfant}>
-                              +
-                            </InputGroup.Button>
-                          </InputGroup>
+                    <SwipeableDrawer anchor="bottom" PaperProps={{ sx: { borderTopLeftRadius: 30, borderTopRightRadius: 30 } }} open={openDrawer} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
+                      <div className="p-4 mt-2 xl:container xl:px-64">
+                        
+                        <h2 className="text-lg font-semibold py-4">Pilih Jumlah Penumpang</h2>
+                        {[{ label: "ADULT", age: "(12 thn keatas)", value: adultTemp, setValue: setadultTemp, min: 1, max:7, plus:plusAdult, minus:minusAdult },
+                          { label: "CHILD", age: "(2 - 11 thn)", value: childTemp, setValue: setChildTemp, min: 0, max:7, plus:plusChild, minus:minusChild },
+                          { label: "INFANT", age: "(dibawah 2 thn)", value: infantTemp, setValue: setinfantTemp, min: 0, max:7, plus:plusInfant, minus:minusInfant }]
+                          .map(({ label, age, value, setValue, min, max, plus, minus }) => (
+                            <div key={label} className="mt-4 px-4 py-1">
+                              <div className="grid grid-cols-12">
+                                <div className="col-span-8">
+                                  <div className="flex items-center space-x-2">
+                                    <div className="font-bold text-gray-800">{label}</div>
+                                    <div className="text-xs text-gray-400">{age}</div>
+                                  </div>
+                                </div>
+                                <div className="col-span-4">
+                                  <InputGroup>
+                                    <InputGroup.Button onClick={minus}>-</InputGroup.Button>
+                                    <input type="number" min={min} max={max} className="block text-center w-full focus:outline-0" value={value} readOnly />
+                                    <InputGroup.Button className="bg-gray-300 text-black hover:bg-blue-500 hover:text-white" onClick={plus}>+</InputGroup.Button>
+                                  </InputGroup>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        <div className="flex justify-end space-x-2 my-8 px-4">
+                          <ButtonMui className="w-32" variant="outlined" color="secondary" onClick={toggleDrawer(false)}>
+                            Cancel
+                          </ButtonMui>
+                          <ButtonMui className="w-52" variant="contained"  onClick={toggleDrawer(false, true, "simpan")}>
+                            Simpan
+                          </ButtonMui>
                         </div>
                       </div>
-                    </div>
+                    </SwipeableDrawer>
                   </FormControl>
                 </div>
                 <div className="w-full xl:w-1/4 flex justify-end xl:justify-start mt-8 py-0.5">
