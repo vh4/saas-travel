@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IoAirplaneOutline, IoBoatOutline, IoTrainOutline } from 'react-icons/io5';
+import { IoAirplaneOutline, IoBoatOutline, IoBoatSharp, IoTrainOutline } from 'react-icons/io5';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { fetchDataType } from '../../../../features/dataTypeSlice';
 import { useSearchParams } from 'react-router-dom';
+import { RiShip2Line } from 'react-icons/ri';
+import axios from 'axios';
 
 export default function Sidebar({ nameMenu, setNameMenu }) {
     const dispatch = useDispatch();
@@ -12,13 +14,27 @@ export default function Sidebar({ nameMenu, setNameMenu }) {
     const isLoading = useSelector((state) => state.type.isLoading);
     const [searchParams, setSearchParams] = useSearchParams();
     const urlForLogin = window.location.pathname;
+    
+    const [whitelistDLU, setWhiteListdlu] = useState(0);
+
+    async function fetchDLUWhiteList(){
+        const {data} = await axios.get(
+            `${process.env.REACT_APP_HOST_API}/travel/dlu_whitelist`,
+        );
+
+        setWhiteListdlu(data.type)
+        
+    }
+
     useEffect(() => {
 
         if(urlForLogin === "/" && searchParams.size == 0){
             dispatch(fetchDataType());
         }
 
-    }, [dispatch, type]); //
+        fetchDLUWhiteList();
+
+    }, [dispatch, type, whitelistDLU]); //
 
     return (
         <aside className="w-full" aria-label="Sidebar">
@@ -62,6 +78,20 @@ export default function Sidebar({ nameMenu, setNameMenu }) {
                                     className={`flex cursor-pointer px-4 ${nameMenu === 'pelni' ? 'border-b-2 border-blue-500' : ''} items-center p-2 text-base font-normal text-gray-900 hover:border-blue-500 hover:border-b-2`}>
                                     <IoBoatOutline className="text-black" size={20} />
                                     <span className="flex-1 ml-3 whitespace-nowrap text-[15px] text-black">Pelni Kapal</span>
+                                </div>
+                            )}
+                        </li>
+                    )}
+                    { (whitelistDLU === 1) && (
+                        <li>
+                            {isLoading ? (
+                                <Skeleton height={30} width={100} />
+                            ) : (
+                                <div
+                                    onClick={() => setNameMenu('dlu')}
+                                    className={`flex cursor-pointer px-4 ${nameMenu === 'dlu' ? 'border-b-2 border-blue-500' : ''} items-center p-2 text-base font-normal text-gray-900 hover:border-blue-500 hover:border-b-2`}>
+                                    <RiShip2Line className="text-black" size={20} />
+                                    <span className="flex-1 ml-3 whitespace-nowrap text-[15px] text-black">Dlu Kapal</span>
                                 </div>
                             )}
                         </li>

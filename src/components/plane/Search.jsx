@@ -36,6 +36,7 @@ import { Popover, Whisper } from "rsuite";
 import { useDispatch } from "react-redux";
 import { setDataSearchPesawat } from "../../features/createSlice";
 import { IoIosArrowDown } from "react-icons/io";
+import SearchDrawerMobile from "./components/SearchDrawerMobile";
 // import { CiRollingSuitcase } from "react-icons/ci";
 
 export default function Search() {
@@ -64,6 +65,11 @@ export default function Search() {
 
   const [uuids, setuuid] = useState(null);
   const dispatch = useDispatch();
+
+  const [openDrawer, setOpenDrawer] = useState(null);
+	const toggleDrawer = (index) => () => {
+		setOpenDrawer(openDrawer === index ? null : index);
+	};
 
   useEffect(() => {
     const closeFilter = (e) => {
@@ -712,6 +718,7 @@ export default function Search() {
             </div>
             <div></div>
           </div>
+
           <div className="flex justify-between mt-0 md:mt-6">
             <div className="relative flex items-center space-x-2 text-black text-xs font-medium ">
               <div className="hidden md:block">FILTER : </div>
@@ -1426,6 +1433,12 @@ export default function Search() {
                           {/* end desktop detail harga */}
 
                           {/* mobile cari */}
+                          {/* search drawer */}
+                            <SearchDrawerMobile
+                            openDetail={toggleDrawer === index}
+                            toggleDrawerDetail={toggleDrawer(index)}
+                            data={e}
+                            />
                           <div className="">
                             <div className="cursor-pointer block xl:hidden w-full text-black">
                               <div
@@ -1444,7 +1457,7 @@ export default function Search() {
                                   <div className="flex space-x-2 items-center">
                                     <img
                                       src={e.airlineIcon}
-                                      width={20}
+                                      width={30}
                                       alt="image.png"
                                     />
                                     <h1 className="text-black text-xs font-medium ">
@@ -1452,25 +1465,30 @@ export default function Search() {
                                     </h1>
                                   </div>
                                   <div
-                                    className="flex space-x-2 items-center"
+                                    className="flex items-center px-2 py-1.5 rounded-lg bg-gray-100"
                                     onClick={(event) => {
                                       event.stopPropagation();
-
-                                      detailTiket == `open-${index}`
-                                        ? setDetailTiket(`close-${index}`)
-                                        : setDetailTiket(`open-${index}`);
+                                      toggleDrawer(index);
                                     }}
+                                    // onClick={(event) => {
+                                      
+                                    //   event.stopPropagation();
+
+                                    //   detailTiket == `open-${index}`
+                                    //     ? setDetailTiket(`close-${index}`)
+                                    //     : setDetailTiket(`open-${index}`);
+                                    // }}
                                   >
-                                    <IoIosArrowDown size={20} />
-                                    <div className="text-xs cursor-pointer font-medium ">
+                                    <IoIosArrowDown size={20} className="text-gray-400" />
+                                    {/* <div className="text-xs cursor-pointer font-medium ">
                                       Detail
-                                    </div>
+                                    </div> */}
                                   </div>
                                 </div>
                                 <div className="flex justify-start mt-6">
                                   <div class="w-full grid grid-cols-7 gap-4">
                                     <div className="col-span-2 text-[12px]">
-                                      <div className="">
+                                      <div className="font-bold">
                                         <span>{e.detailTitle[0].depart}</span>
                                       </div>
                                       <small className="">
@@ -1485,13 +1503,18 @@ export default function Search() {
                                           <div className="text-black">
                                             {e.duration}
                                           </div>
+                                          <small className="text-[12px]">
+                                      {e.isTransit === true
+                                        ? `${e.classes.length - 1}x Transit`
+                                        : "Langsung"}
+                                    </small>
                                         </div>
                                         <div className="w-full px-1 border-b-2"></div>
                                       </div>
                                     </div>
                                     <div className="col-span-2 text-[12px]">
                                       <div className="col-span-2 text-[12px]">
-                                        <div className="">
+                                        <div className="font-bold">
                                           <span>
                                             {
                                               e.detailTitle[
@@ -1518,21 +1541,16 @@ export default function Search() {
                                     </div>
                                   </div>
                                 </div>
-                                <div className="mt-4 mb-2">
-                                  <div className="text-md font-medium  text-black">
+                                <div className="mt-6 mb-2 flex justify-between">
+                                  <div className="text-md font-bold  text-black mt-1">
                                     {
                                         e.isTransit === true
                                             ? (<>Rp. {toRupiah(e.classes.reduce((sum, item) => sum + item[0].price, 0))}</>)
                                             : (<>Rp. {toRupiah(e.classes[0][0].price)}</>)
-                                    }
-                                    <small className="text-[12px]">
-                                      {e.isTransit === true
-                                        ? `${e.classes.length - 1}x Transit`
-                                        : "Langsung"}
-                                    </small>
+                                    } <span className="text-xs text-gray-400"> / org</span>
                                   </div>
-                                  <small className="text-red-500">
-                                    {e.classes[0][0].availability} seat(s)
+                                  <small className="bg-blue-100 px-2 py-1.5 text-blue-500 text-xs rounded-full">
+                                      Gratis Biaya Layanan
                                   </small>
                                 </div>
                                 {detailTiket == `open-${index}` ? (

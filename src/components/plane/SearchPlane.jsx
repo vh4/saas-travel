@@ -30,6 +30,8 @@ import { CiCalendarDate } from "react-icons/ci";
 import { DateCalendar, DayCalendarSkeleton } from "@mui/x-date-pickers";
 import { Calendar } from 'react-multi-date-picker';
 import 'dayjs/locale/id'; // mengimpor locale Bahasa Indonesia
+import MaskapaiMobile from "./components/MaskapaiMobile";
+import { LuUsers } from "react-icons/lu";
 
 
 dayjs.locale('id'); // mengatur locale global ke Bahasa Indonesia
@@ -868,10 +870,10 @@ function Plane() {
               <div className="w-64 xl:w-48 mx-0"></div>
               <div className="block xl:flex justify-between">
                 <div
-                  className={`grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-2`}
+                  className={`grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-2 mx-0 xl:mx-4`}
                 >
                   <div class="w-full mt-1.5 pl-2 md:pl-0 mx-0">
-                    <small className="mb-2 text-black">Pilih Maskapai</small>
+                    <small className="mb-2 text-black hidden xl:block">Pilih Maskapai</small>
                     <Tooltip>
                       <Button
                         onClick={() => handleOpen("lg")}
@@ -885,7 +887,8 @@ function Plane() {
                       </Button>
                     </Tooltip>
                   </div>
-                  <div className="mt-2 w-full col-span-1 md:col-span-2">
+                  {/* web maskapai */}
+                  <div className="mt-2 w-full col-span-1 md:col-span-2 hidden xl:block">
                     <div className="w-full flex flex-col xl:flex-row items-center xl:px-0 gap-0">
                       {/* Kota Asal */}
                       <div className="w-full max-w-full">
@@ -1003,31 +1006,47 @@ function Plane() {
                       </div>
                     </div>
                   </div>
+
+                  {/* mobile maskapai */}
+                  <div className="block xl:hidden">
+                    <MaskapaiMobile
+                      pesawatData={pesawatStasiun.data || []}
+                      keberangkatan={keberangkatan}     
+                      setKeberangkatan={setKeberangkatan}
+                      setTujuan={setTujuan}
+                      tujuan={tujuan}
+                      changeStatiun={changeStatiun}
+                    />
+                  </div>
+
                   <FormControl sx={{ m: 1, minWidth: 160 }}>
-                    <small className="mb-2 text-black">Tanggal Berangkat</small>
+                    <small className="mb-2 text-black hidden xl:block">Tanggal Berangkat</small>
                     <button
                       type="button"
                       className="border py-[10px] customButtonStyle w-full block text-black"
                       onClick={handleOpenDate}
                     >
-                      <div className="flex justify-between px-2 items-center">
+                      <div className="flex space-x-2 px-2 items-center">
+                        <CiCalendarDate size={22} className="text-gray-400" />
                         <div>
                           {`${parseTanggalPelni(tanggalKeberangkatan)} `}
                         </div>
-                        <CiCalendarDate size={22} className="text-gray-400" />
                       </div>
                     </button>
                   </FormControl>
                   <FormControl sx={{ m: 1, minWidth: 130 }}>
-                    <small className="mb-2 text-black">Total Penumpang</small>
+                    <small className="mb-2 text-black hidden xl:block">Total Penumpang</small>
                     <div className="hidden md:block"></div>
-                    <button
-                      type="button"
-                      className="border py-[11px] customButtonStyle w-full block text-black -mx-1.5"
+                    {/* customButtonStyle */}
+                    <div
+                      className="cursor-pointer border py-[11px] px-2 w-full text-black flex items-center space-x-2"
                       onClick={toggleDrawer(true, false, "buka")}
                     >
-                      {`${parseInt(adult) + parseInt(infant) + parseInt(child)} Penumpang`}
-                    </button>
+                        <LuUsers size={21} className="text-gray-400"  />
+                      <div>
+                        {`${parseInt(adult) + parseInt(infant) + parseInt(child)} Penumpang`}                          
+                      </div>
+                    </div>
                     <SwipeableDrawer anchor="bottom" PaperProps={{ sx: { borderTopLeftRadius: 30, borderTopRightRadius: 30 } }} open={openDrawer} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
                       <div className="p-4 mt-2 xl:container xl:px-64">
                         

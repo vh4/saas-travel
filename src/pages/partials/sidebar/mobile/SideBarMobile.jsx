@@ -1,10 +1,11 @@
-import {IoAirplaneOutline, IoBoatOutline, IoTrainOutline} from 'react-icons/io5'
-import React, { useEffect } from 'react';
+import {IoAirplaneOutline, IoBoatOutline, IoBoatSharp, IoTrainOutline} from 'react-icons/io5'
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { fetchDataType } from '../../../../features/dataTypeSlice';
 import { useSearchParams } from 'react-router-dom';
+import axios from 'axios';
 
 export default function SideBarMobile({nameMenu, setNameMenu}) {
 
@@ -13,11 +14,24 @@ export default function SideBarMobile({nameMenu, setNameMenu}) {
     const isLoading = useSelector((state) => state.type.isLoading);
     const [searchParams, setSearchParams] = useSearchParams();
     const urlForLogin = window.location.pathname;
+    const [whitelistDLU, setWhiteListdlu] = useState(0);
+
+    async function fetchDLUWhiteList(){
+        const {data} = await axios.get(
+            `${process.env.REACT_APP_HOST_API}/travel/dlu_whitelist`,
+        );
+
+        setWhiteListdlu(data.type)
+        
+    }
+
     useEffect(() => {
 
         if(urlForLogin === "/" && searchParams.size == 0){
             dispatch(fetchDataType());
         }
+
+        fetchDLUWhiteList();
 
     }, [dispatch]);
 
@@ -70,14 +84,18 @@ export default function SideBarMobile({nameMenu, setNameMenu}) {
                             )}
                         </li>
                     )}
-                    {/* <li>                
-                        <div onClick={() => setNameMenu('dlu')} className={`mt-4 block center cursor-pointer items-center text-sm font-bold text-gray-900 ${ nameMenu === 'dlu' ? 'border-b-2 border-blue-500' : ''}`}>
-                            <div className='bg-gray-100 mx-4 py-3 flex justify-center rounded-xl'>
-                            <IoBoatSharp className='text-green-500' size={24} />
+                    {
+                     (whitelistDLU === 1) && (
+                        <li>                
+                            <div onClick={() => setNameMenu('dlu')} className={`mt-4 block center cursor-pointer items-center text-sm font-bold text-gray-900 ${ nameMenu === 'dlu' ? 'border-b-2 border-blue-500' : ''}`}>
+                                <div className='bg-gray-100 mx-4 py-3 flex justify-center rounded-xl'>
+                                <IoBoatSharp className='text-green-500' size={24} />
+                                </div>
+                                <span className="block text-xs text-center font-normal mt-4 flex-1 whitespace-nowrap text-[15px] text-black">Dlu</span>
                             </div>
-                            <span className="block text-xs text-center font-normal mt-4 flex-1 whitespace-nowrap text-[15px] text-black">Dlu</span>
-                        </div>
-                    </li>  */}
+                        </li> 
+                     )
+                    }
                 </ul>
             </div>
         </aside>
