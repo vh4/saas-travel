@@ -6,7 +6,7 @@ const {
     getInfoClientAll,
     jwtDecoded
 } = require('../utils/utils.js');
-const { WhitelistDevelByIdOutlet } = require('../model/global.js');
+const { WhitelistDevelByIdOutlet, WhitelistDLU } = require('../model/global.js');
 // const {
 //     WhiteListtravelFunction,
 //     IsSimulatetravelFunction
@@ -661,7 +661,6 @@ Router.post('/is_whitelist', async function(req, res) {
 
 });
 
-
 Router.get('/is_type', async function(req, res) {
 
     const types = req.session['type'];
@@ -680,6 +679,31 @@ Router.get('/is_type', async function(req, res) {
         rc: '00',
         rd: 'success',
         type: types
+    })
+
+
+});
+
+Router.get('/dlu_whitelist', async function(req, res) {
+
+    const id_outlet = req.session['id_outlet'];
+    const data = await WhitelistDLU();
+    const arr = data.split(",") || [];
+
+    if (!arr.includes(id_outlet)) {
+
+        return res.status(401).json({
+            rc: '03',
+            rd: 'Not permitted!',
+            type:0
+        })
+
+    }
+
+    return res.status(200).json({
+        rc: '00',
+        rd: 'success',
+        type: 1
     })
 
 

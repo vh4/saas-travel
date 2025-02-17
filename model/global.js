@@ -29,6 +29,23 @@ const WhitelistDevelByIdOutlet = async (idoutlet, produk) => {
     }
 }
 
+const WhitelistDLU = async () => {
+    try {
+
+        const {
+            rows
+        } = await pool.query("select * from global_data_h2h gdhh where kunci = 'outlet_allow_saas_dlu'");
+
+        if (rows && rows.length > 0) {
+            return rows[0].nilai;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        return null;
+    }
+}
+
 
 const log_request = async (id_log, ip_src, id_outlet, mid, raw_message) => {
     const date_request = moment().format("YYYY-MM-DD");
@@ -99,5 +116,6 @@ const log_response = async (id_log, ip_src, id_outlet, mid, raw_message) => {
 module.exports = {
     WhitelistDevelByIdOutlet,
     log_request,
-    log_response
+    log_response,
+    WhitelistDLU
 }
