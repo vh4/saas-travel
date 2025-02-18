@@ -121,7 +121,7 @@ async function processCallbackSaldoTerpotong(urlCallback, requestData, uid, ip, 
 
 
 
-async function processPayment(req, data, uid, isProd, method, type, hardcodeCallback) {
+async function processPayment(req, data, uid, isProd, method, type, hardcodeCallback, hardCodePayment) {
 
 	//data merchant
 	const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
@@ -194,7 +194,8 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
 		logger.info(`RESPONSE KIRIM KE-3 SENT CALLBACK TO MERCHANT DEVEL (axiosSendCallbackPayment): ${JSON.stringify(responseCallbackDevel.data)}`);
 		await log_response(data.transactionId, req.ip, uid, data.transactionId, `RESPONSE CALLBACK KE-3 DEVEL => ${JSON.stringify(responseCallbackDevel.data)}`);
 
-		return response.data;
+		//response ke frontend
+		return hardCodePayment;
 	}
 }
 
@@ -465,7 +466,7 @@ module.exports = {
 	//     }
 	// },
 
-	handlePayment: async function(req, res, type, method, hardcodeCallback, whitelistKey) {
+	handlePayment: async function(req, res, type, method, hardcodeCallback, whitelistKey, hardCodePayment) {
 		try {
 			const data = req.body;
 
@@ -481,7 +482,7 @@ module.exports = {
 			const uid = uidpin[0] || null;
 
 			const isProd = await WhitelistDevelByIdOutlet(uid, whitelistKey);
-			const response = await processPayment(req, data, uid, isProd, method, type, hardcodeCallback);
+			const response = await processPayment(req, data, uid, isProd, method, type, hardcodeCallback, hardCodePayment);
 
 			return res.send(response);
 		} catch (error) {

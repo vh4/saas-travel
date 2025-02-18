@@ -56,6 +56,21 @@ const hardcodepelni = {
     "text":"Trxid:3096161201,RC:00,Status:Sukses,Produk:CEK SHPPELNI,Data penumpang:nama:TURIKATI SANMAS;tl:1986-04-21;nik:;kabin:5/5072-1#nama:NAZWA HAIRUL NISA;tl:2022-12-25;nik:8102036104860003;kabin:n/a,Nama kapal:KM.TATAMAILAU,Sub class:E,Tgl berangkat:Rabu,22 November 2023 ,Jam berangkat:06:00,Tujuan:TUAL-TIMIKA,Tgl tiba:Kamis,23 November 2023 ,Jam tiba:11:00,Tagihan:Rp263000,Adm:Rp20000,Total bayar:Rp283000,Waktu trx:2023-11-14 15:10:07,Url etiket:,Url struk:,Kode booking:,Username:userlogin,Merchant:"
   }
 
+const hardCodePayment = {
+    "data": {
+      "transaction_id": "3096161201",
+      "url_etiket": "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=3096161201",
+      "url_image": "https://rajabiller.fastpay.co.id/travel/app/generate_image_etiket?id_transaksi=3096161201",
+      "url_struk": "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=3096161201",
+      "komisi": null
+    },
+    "rc": "00",
+    "rd": "Simulate Succes",
+    "mid": "4226666215",
+    "invoking": "Payment Train",
+    "processingTime": "0.038840055465698 Second"
+  }
+  
 async function makeAxiosPost(url, data) {
     try {
         const response = await axios.post(url, data);
@@ -267,7 +282,9 @@ Router.post('/pelni/payment', AuthLogin, async (req, res) => {
         'pelni', 
         'bayarkapal', 
         send_format?.toUpperCase() === 'TEXT' ? hardcodepelni.text : hardcodepelni.json, 
-        'SHPPELNI');
+        'SHPPELNI',
+        hardCodePayment
+        );
 
 });
 

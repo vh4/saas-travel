@@ -62,6 +62,23 @@ const hardcodePesawat = {
     "text":"Trxid:199512111,RC:00,Status:Sukses,Produk:BAYAR TPJT,Data penumpang:MR.AGUS SURATNO SURATNO;ttl:03/19/1971;nik:3402161903710002#MR.KASIDI KASIDI;ttl:07/27/1978;nik:3402102707780002,Maskapai:Super Air Jet,Kode maskapai:IU659,Sub class:Y,Tgl berangkat:Rabu, 15 November 2023,Jam berangkat:13:30,Tgl tiba:Rabu, 15 November 2023,Jam tiba:14:25,Durasi:0 jam 55 menit,Tujuan:Samarinda (AAP)-Yogyakarta (YIA),Tagihan:Rp3169000,Adm:Rp0,Total bayar:Rp3169000,Waktu trx:2023-11-14 11:48:53,Url etiket:https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=199512111,Url struk:https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=199512111,Kode Booking:ABOWSD,Username:userlogin,Merchant:,Total komisi:Rp19000,Komisi mitra:Rp9500,Komisi merchant:Rp9500,Saldo terpotong mitra:Rp3169000,Saldo terpotong merchant:Rp3169000"
 }
 
+
+const hardCodePayment = {
+    "data": {
+      "transaction_id": "199512506",
+      "url_etiket": "https://rajabiller.fastpay.co.id/travel/app/generate_etiket?id_transaksi=199512506",
+      "url_image": "https://rajabiller.fastpay.co.id/travel/app/generate_image_etiket?id_transaksi=199512506",
+      "url_struk": "https://rajabiller.fastpay.co.id/travel/app/generate_struk?id_transaksi=199512506",
+      "komisi": null,
+      "nominal": "1547526"
+    },
+    "rc": "00",
+    "rd": "Simulate Success",
+    "mid": null,
+    "invoking": "Payment Flight",
+    "processingTime": "0.030354022979736 Second"
+}
+
 const Router = express.Router();
 
 Router.post('/flight/search', async function(req, res) {
@@ -290,7 +307,9 @@ Router.post('/flight/payment', AuthLogin, async (req, res) => {
         'flight', 
         'bayarpesawat', 
         send_format?.toUpperCase() === 'TEXT' ? hardcodePesawat.text : hardcodePesawat.json, 
-        'PESAWAT');
+        'PESAWAT',
+        hardCodePayment
+        );
         
 });
 
