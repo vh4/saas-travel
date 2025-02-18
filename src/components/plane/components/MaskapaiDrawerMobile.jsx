@@ -68,7 +68,7 @@ const MaskapaiDrawerMobile = ({ openDrawer, toggleDrawer, pesawatData, setKebera
           <h4>Pilih Bandara</h4>
         </div>
         <div className="p-4 text-lg">
-			<form className="flex items-center">
+			      <form className="flex items-center">
               <div className="relative w-full rounded-2xl">
                 <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                   <BsSearch className="text-blue-500" size={20} />

@@ -19,8 +19,7 @@ import TimelineDot from "@mui/lab/TimelineDot";
 import TimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
 import { IoMdTimer } from "react-icons/io";
 import SearchPlane from "./SearchPlane";
-import { Progress } from "rsuite";
-import { Space, Spin } from "antd";
+import { Flex, Progress, Space, Spin } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
 import { parseTanggal } from "../../helpers/date";
 import { MdManageSearch, MdOutlineLuggage, MdSort } from "react-icons/md";
@@ -37,7 +36,11 @@ import { useDispatch } from "react-redux";
 import { setDataSearchPesawat } from "../../features/createSlice";
 import { IoIosArrowDown } from "react-icons/io";
 import SearchDrawerMobile from "./components/SearchDrawerMobile";
-// import { CiRollingSuitcase } from "react-icons/ci";
+import { SlArrowLeft } from "react-icons/sl";
+import { BsSortDown } from "react-icons/bs";
+import { LiaSlidersHSolid } from "react-icons/lia";
+import { TbListSearch } from "react-icons/tb";
+import FilterMobilePlane from "./components/FilterMobilePlane";
 
 export default function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -331,7 +334,7 @@ export default function Search() {
     }
   };
 
-  const filteredData = dataSearch
+  let filteredData = dataSearch
     .filter((d, i) => {
       if (selectedTime.length === 0) {
         return true;
@@ -371,15 +374,10 @@ export default function Search() {
       }
     })
     .sort((a, b) => {
-      if (HargaTerendahTinggiPlane === 1) {
-        const priceA = Math.min(...a.classes.reduce((sum, item) => sum + item[0].price, 0));
-        const priceB = Math.min(...b.classes.reduce((sum, item) => sum + item[0].price, 0));
-        return priceA - priceB;
-      } else if (HargaTerendahTinggiPlane === 2) {
-        const priceA = Math.max(...a.classes.reduce((sum, item) => sum + item[0].price, 0));
-        const priceB = Math.max(...b.classes.reduce((sum, item) => sum + item[0].price, 0));
-        return priceB - priceA;
-      }
+      const priceA = a.classes.reduce((sum, item) => sum + (item[0]?.price || 0), 0);
+      const priceB = b.classes.reduce((sum, item) => sum + (item[0]?.price || 0), 0);
+      
+      return HargaTerendahTinggiPlane === 2 ? priceB - priceA : priceA - priceB;
     });
 
   const SortingPopoOverPlane = (
@@ -675,42 +673,42 @@ export default function Search() {
         </>
       ) : (
         <>
-          <div className="hidden md:block judul-search text-black">
+          <div className="hidden xl:block judul-search text-black">
             PILIH JADWAL
           </div>
-          <div className="mt-4 md:mt-8">
-            <div className="block md:flex justify-between">
-              <div className="flex items-center justify-center space-x-3 xl:space-x-4 text-center md:text-left">
-                <small className="hidden md:block text-xs text-black">
+          <div className="mt-4 xl:mt-8">
+            <div className="block xl:flex justify-between">
+              <div className="flex items-center justify-center space-x-3 xl:space-x-4 text-center xl:text-left">
+                <small className="hidden xl:block text-xs text-black">
                   {departureName} ({departure})
                 </small>
-                <div className="hidden md:block bg-blue-500 p-1 rounded-full">
+                <div className="hidden xl:block bg-blue-500 p-1 rounded-full">
                   <IoArrowForwardOutline
                     className=" text-xs text-white"
                     size={16}
                   />
                 </div>
-                <small className="hidden md:block text-xs text-black">
+                <small className="hidden xl:block text-xs text-black">
                   {arrivalName} ({arrival})
                 </small>
-                <div className="hidden md:block text-black">|</div>
-                <small className="hidden md:block text-xs text-black">
+                <div className="hidden xl:block text-black">|</div>
+                <small className="hidden xl:block text-xs text-black">
                   {tanggal_keberangkatan}
                 </small>
-                <div className="hidden md:block text-black">|</div>
-                <small className="hidden md:block text-xs text-black">
+                <div className="hidden xl:block text-black">|</div>
+                <small className="hidden xl:block text-xs text-black">
                   {parseInt(adult) + parseInt(child) + parseInt(infant)}{" "}
                   Penumpang
                 </small>
               </div>
-              <div className="hidden md:flex mt-4 md:mt-0 space-x-4 md:mr-0 justify-center md:justify-end">
-                <Link to="/" className="hidden md:flex space-x-2 items-center">
-                  <IoArrowBackOutline className="text-black" size={16} />
+              <div className="hidden xl:flex mt-4 xl:mt-0 space-x-4 xl:mr-0 justify-center xl:justify-end">
+                <Link to="/" className="hidden xl:flex space-x-2 items-center">
+                  <SlArrowLeft className="text-black" size={16} />
                   <div className="text-black text-xs">Kembali</div>
                 </Link>
                 <button
                   onClick={() => setUbahPencarian((prev) => !prev)}
-                  className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs "
+                  className="block border p-2 px-4 xl:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs "
                 >
                   Ubah Pencarian
                 </button>
@@ -719,9 +717,10 @@ export default function Search() {
             <div></div>
           </div>
 
-          <div className="flex justify-between mt-0 md:mt-6">
-            <div className="relative flex items-center space-x-2 text-black text-xs font-medium ">
-              <div className="hidden md:block">FILTER : </div>
+          {/* desktop */}
+          <div className="hidden xl:flex justify-between mt-0 xl:mt-6">
+            <div className="flex items-center space-x-2 text-black text-xs font-medium ">
+              <div className="hidden xl:block">FILTER : </div>
               <Whisper
                 placement="top"
                 trigger="active"
@@ -729,7 +728,7 @@ export default function Search() {
                 speaker={hargaPopoOver}
                 placement="bottomStart"
               >
-                <button className="text-black block border rounded-full py-2 px-4 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium ">
+                <button className="text-black block border rounded-full py-2 px-4 xl:px-4 focus:ring-1 focus:ring-gray-300 font-medium ">
                   HARGA
                 </button>
               </Whisper>
@@ -740,7 +739,7 @@ export default function Search() {
                 speaker={waktuPopoOver}
                 placement="bottomStart"
               >
-                <button className="text-black block border rounded-full py-2 px-4 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium ">
+                <button className="text-black block border rounded-full py-2 px-4 xl:px-4 focus:ring-1 focus:ring-gray-300 font-medium ">
                   WAKTU
                 </button>
               </Whisper>
@@ -751,13 +750,13 @@ export default function Search() {
                 speaker={transitPopoOver}
                 placement="bottomStart"
               >
-                <button className="text-black block border rounded-full py-2 px-4 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium ">
+                <button className="text-black block border rounded-full py-2 px-4 xl:px-4 focus:ring-1 focus:ring-gray-300 font-medium ">
                   TRANSIT
                 </button>
               </Whisper>
             </div>
             <div className="flex space-x-2.5 items-center">
-              <div className="flex md:hidden space-x-4 md:mr-0 justify-center md:justify-end">
+              <div className="flex xl:hidden space-x-4 xl:mr-0 justify-center xl:justify-end">
                 <div
                   onClick={() => setUbahPencarian((prev) => !prev)}
                   className="cursor-pointer"
@@ -765,7 +764,7 @@ export default function Search() {
                   <IoSearchCircle size={28} className="text-blue-500" />
                 </div>
                 {/* <button
-                    className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs "
+                    className="block border p-2 px-4 xl:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs "
                   >
                     Ubah Pencarian
                   </button> */}
@@ -779,40 +778,58 @@ export default function Search() {
                   placement="bottomEnd"
                 >
                   <div>
-                    <MdSort className="text-blue-500 md:text-black" size={28} />
+                    <MdSort className="text-blue-500 xl:text-black" size={28} />
                   </div>
                 </Whisper>
               </div>
             </div>
           </div>
+         
+          {/* mobile */}
+          <div className="w-full flex xl:hidden justify-center">
+            <FilterMobilePlane 
+            	langsung={langsung} setLangsung={setLangsung} transit={transit} setTransit={setTransit}
+              waktuFilter={waktuFilter} handleWaktuFilterChange={handleWaktuFilterChange}
+              valHargaRange={valHargaRange} 
+              hargraRangeChange={hargraRangeChange}
+              HargaTerendahTinggiPlane={HargaTerendahTinggiPlane} 
+              setHargaTerendahTinggiPlane={setHargaTerendahTinggiPlane} 
+            />
+          </div>
+
           {ubahPencarian ? (
             <div className="mt-8">
               <SearchPlane />
             </div>
           ) : null}
           {percent === 0 || percent === 100 ? null : (
-            <div className="mt-4">
-              <Progress.Line
-                percent={percent}
-                status="active"
-                showInfo={false}
-              />
-              <div className="mt-4 mb-8 md:mb-0">
-                <Spin tip="Loading">
-                  <div className="content" />
+            <div className="w-full mt-0 xl:mt-4 z-40">
+              <Flex gap="small" className="z-50" vertical>
+                <Progress
+                  className="z-50"
+                  percent={percent}
+                  percentPosition={{
+                    align: 'center',
+                    type: 'inner',
+                  }}
+                />
+              </Flex>
+              <div className="hidden xl:block mt-0 xl:mt-4 mb-8 xl:mb-0 w-full">
+                <Spin>
+                  <div className="content w-full" />
                 </Spin>
               </div>
             </div>
           )}
 
-          {/* <div className="mt-4 flex md:hidden space-x-4 md:mr-0 justify-center md:justify-end">
+          {/* <div className="mt-4 flex xl:hidden space-x-4 xl:mr-0 justify-center xl:justify-end">
                 <div 
                   onClick={() => setUbahPencarian((prev) => !prev)}                
                   className="cursor-pointer">
                   <MdManageSearch size={32} />
                 </div>
                 <button
-                  className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs "
+                  className="block border p-2 px-4 xl:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs "
                 >
                   Ubah Pencarian
                 </button>
@@ -820,7 +837,7 @@ export default function Search() {
           <div>
             {isLoading ? (
               skeleton.map(() => (
-                <div className="row mt-2 md:mt-8 w-full p-2 pr-0">
+                <div className="row mt-2 xl:mt-8 w-full p-2 pr-0">
                   <Box sx={{ width: "100%" }}>
                     <Skeleton />
                     <Skeleton />
@@ -831,7 +848,7 @@ export default function Search() {
                 </div>
               ))
             ) : notFound !== true && dataSearch.length != 0 ? (
-              <div className="row mb-24 w-full p-2 pr-0">
+              <div className="row mb-0 xl:mb-24 w-full p-2 pr-0 -mt-8 xl:mt-0">
                 {filteredData.map(
                   (
                     e,
@@ -840,7 +857,7 @@ export default function Search() {
                     <>
                       {e.classes[0][0].price !== 0 ? (
                         <div
-                          class={`mt-2 md:mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${
+                          class={`mt-0 xl:mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${
                             e.classes[0][0].availability > 0 &&
                             e.classes[0][0].availability >=
                               parseInt(child) +
@@ -852,7 +869,7 @@ export default function Search() {
                         >
                           {/* desktop cari */}
                           <div className="hidden xl:block w-full text-black ">
-                            <div className="px-4 md:px-8 xl:px-0 2xl:px-8 mt-4 grid grid-cols-1 xl:grid-cols-7 gap-4">
+                            <div className="px-4 xl:px-0 2xl:px-8 mt-4 grid grid-cols-1 xl:grid-cols-7 gap-4">
                               <div className="col-span-1">
                                 <h1 className="text-black text-sm font-medium ">
                                   {e.airlineName}{" "}
@@ -920,7 +937,6 @@ export default function Search() {
                               </div>
                               <div className="">
                                 <h1 className="mt-4 xl:mt-0 text-sm font-medium  text-black">
-                                  {console.log(e.classes)}
                                   {
                                       e.isTransit === true
                                           ? (<>Rp. {toRupiah(e.classes.reduce((sum, item) => sum + item[0].price, 0))}</>)
@@ -955,7 +971,7 @@ export default function Search() {
                                       class={`${
                                         isLoadingPilihTiket == "true-" + index
                                           ? "py-6 xl:px-16"
-                                          : "py-3.5 px-10 md:px-10 xl:px-12 2xl:px-14"
+                                          : "py-3.5 px-10 xl:px-12 2xl:px-14"
                                       } relative xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-2 rounded-md focus:outline-none focus:ring-blue-500/50 font-medium text-sm  text-center inline-flex items-center  mr-2 mb-2`}
                                     >
                                       {isLoadingPilihTiket ==
@@ -1435,9 +1451,14 @@ export default function Search() {
                           {/* mobile cari */}
                           {/* search drawer */}
                             <SearchDrawerMobile
-                            openDetail={toggleDrawer === index}
+                            openDetail={openDrawer === index}
                             toggleDrawerDetail={toggleDrawer(index)}
                             data={e}
+                            infant={infant}
+                            child={child}
+                            adult={adult}
+                            detailTiket={detailTiket}
+                            index={index}
                             />
                           <div className="">
                             <div className="cursor-pointer block xl:hidden w-full text-black">
@@ -1460,7 +1481,7 @@ export default function Search() {
                                       width={30}
                                       alt="image.png"
                                     />
-                                    <h1 className="text-black text-xs font-medium ">
+                                    <h1 className="text-black text-xs font-bold">
                                       {e.airlineName}
                                     </h1>
                                   </div>
@@ -1468,7 +1489,7 @@ export default function Search() {
                                     className="flex items-center px-2 py-1.5 rounded-lg bg-gray-100"
                                     onClick={(event) => {
                                       event.stopPropagation();
-                                      toggleDrawer(index);
+                                      setOpenDrawer(openDrawer === index ? null : index);
                                     }}
                                     // onClick={(event) => {
                                       
@@ -1505,7 +1526,7 @@ export default function Search() {
                                           </div>
                                           <small className="text-[12px]">
                                       {e.isTransit === true
-                                        ? `${e.classes.length - 1}x Transit`
+                                        ? `Transit`
                                         : "Langsung"}
                                     </small>
                                         </div>
@@ -1553,445 +1574,6 @@ export default function Search() {
                                       Gratis Biaya Layanan
                                   </small>
                                 </div>
-                                {detailTiket == `open-${index}` ? (
-                                  <>
-                                    {e.isTransit === true ? (
-                                      e.classes.map((x, i) => (
-                                        <div className="p-4 flex justify-between items-center mt-6 border-t xl:hidden">
-                                          <div className="">
-                                            <div className="">
-                                              <div className="text-black text-xs font-medium ">
-                                                {x[0].departureTime}
-                                              </div>
-                                              <div className="text-black text-xs">
-                                                {parseTanggal(
-                                                  x[0].departureDate
-                                                )}
-                                              </div>
-                                            </div>
-                                            <div className="mt-4 text-black">
-                                              <Timeline
-                                                sx={{
-                                                  [`& .${timelineItemClasses.root}:before`]:
-                                                    {
-                                                      flex: 0,
-                                                      padding: 0,
-                                                      borderColor: "black",
-                                                    },
-                                                }}
-                                              >
-                                                <TimelineItem>
-                                                  <TimelineSeparator>
-                                                    <TimelineDot />
-                                                    <TimelineConnector />
-                                                  </TimelineSeparator>
-                                                  <TimelineContent
-                                                    sx={{
-                                                      py: "16px",
-                                                      px: 2,
-                                                      color: "black",
-                                                    }}
-                                                  >
-                                                    <Typography
-                                                      sx={{
-                                                        fontSize: 12,
-                                                        color: "black",
-                                                      }}
-                                                      component="span"
-                                                    >
-                                                      {x[0].departure}
-                                                    </Typography>
-                                                    <Typography
-                                                      sx={{
-                                                        fontSize: 12,
-                                                        color: "black",
-                                                      }}
-                                                    >
-                                                      {x[0].departureName}
-                                                    </Typography>
-                                                  </TimelineContent>
-                                                </TimelineItem>
-                                                <TimelineItem>
-                                                  <TimelineDot
-                                                    sx={{
-                                                      backgroundColor: "orange",
-                                                    }}
-                                                  >
-                                                    <IoMdTimer />
-                                                  </TimelineDot>
-                                                  <TimelineContent
-                                                    sx={{
-                                                      py: "12px",
-                                                      px: 2,
-                                                      color: "black",
-                                                    }}
-                                                  >
-                                                    <Typography
-                                                      sx={{
-                                                        fontSize: 12,
-                                                        color: "black",
-                                                      }}
-                                                      component="span"
-                                                    >
-                                                      {x[0].duration}
-                                                    </Typography>
-                                                  </TimelineContent>
-                                                </TimelineItem>
-                                                <TimelineItem>
-                                                  <TimelineSeparator>
-                                                    <TimelineConnector />
-                                                    <TimelineDot />
-                                                  </TimelineSeparator>
-                                                  <TimelineContent
-                                                    sx={{
-                                                      px: 2,
-                                                      color: "black",
-                                                    }}
-                                                  >
-                                                    <Typography
-                                                      sx={{
-                                                        fontSize: 12,
-                                                        color: "black",
-                                                      }}
-                                                      component="span"
-                                                    >
-                                                      {x[0].arrival}
-                                                    </Typography>
-                                                    <Typography
-                                                      sx={{
-                                                        fontSize: 12,
-                                                        color: "black",
-                                                      }}
-                                                    >
-                                                      {x[0].arrivalName}
-                                                    </Typography>
-                                                  </TimelineContent>
-                                                </TimelineItem>
-                                              </Timeline>
-                                            </div>
-                                            <div className="">
-                                              <div className="text-xs ">
-                                                {x[0].arrivalTime}
-                                              </div>
-                                              <div className="text-xs">
-                                                {parseTanggal(x[0].arrivalDate)}
-                                              </div>
-                                            </div>
-                                          </div>
-                                          {/* <div className="mt-4 text-black">
-                                          <div className="items-center">
-                                            <div>
-                                              <CiRollingSuitcase size={32} />
-                                            </div>
-                                            <div className="text-xs">
-                                              <div>
-                                                Berat Bagasi maks.{" "}
-                                                <span className="font-normal ">
-                                                  20 kg
-                                                </span>
-                                              </div>
-                                              <div className="mt-1">
-                                                Jika {">"} 20 kg akan dikenakan
-                                                biaya.
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div> */}
-                                        </div>
-                                      ))
-                                    ) : (
-                                      <div className="flex justify-between items-center p-4 mt-6 border-t xl:hidden">
-                                        <div>
-                                          <div className="">
-                                            <div className="text-xs font-medium ">
-                                              {e.classes[0][0].departureTime}
-                                            </div>
-                                            <div className="text-xs">
-                                              {parseTanggal(
-                                                e.classes[0][0].departureDate
-                                              )}
-                                            </div>
-                                          </div>
-                                          <div className="mt-4">
-                                            <Timeline
-                                              sx={{
-                                                [`& .${timelineItemClasses.root}:before`]:
-                                                  {
-                                                    flex: 0,
-                                                    padding: 0,
-                                                    borderColor: "black",
-                                                  },
-                                              }}
-                                            >
-                                              <TimelineItem>
-                                                <TimelineSeparator>
-                                                  <TimelineDot />
-                                                  <TimelineConnector />
-                                                </TimelineSeparator>
-                                                <TimelineContent
-                                                  sx={{
-                                                    py: "16px",
-                                                    px: 2,
-                                                    color: "black",
-                                                  }}
-                                                >
-                                                  <Typography
-                                                    sx={{
-                                                      fontSize: 12,
-                                                      color: "black",
-                                                    }}
-                                                    component="span"
-                                                  >
-                                                    {e.classes[0][0].departure}
-                                                  </Typography>
-                                                  <Typography
-                                                    sx={{
-                                                      fontSize: 12,
-                                                      color: "black",
-                                                    }}
-                                                  >
-                                                    {
-                                                      e.classes[0][0]
-                                                        .departureName
-                                                    }
-                                                  </Typography>
-                                                </TimelineContent>
-                                              </TimelineItem>
-                                              <TimelineItem>
-                                                <TimelineDot
-                                                  sx={{
-                                                    backgroundColor: "orange",
-                                                  }}
-                                                >
-                                                  <IoMdTimer />
-                                                </TimelineDot>
-                                                <TimelineContent
-                                                  sx={{
-                                                    py: "12px",
-                                                    px: 2,
-                                                    color: "black",
-                                                  }}
-                                                >
-                                                  <Typography
-                                                    sx={{
-                                                      fontSize: 12,
-                                                      color: "black",
-                                                    }}
-                                                    component="span"
-                                                  >
-                                                    {e.classes[0][0].duration}
-                                                  </Typography>
-                                                </TimelineContent>
-                                              </TimelineItem>
-                                              <TimelineItem>
-                                                <TimelineSeparator>
-                                                  <TimelineConnector />
-                                                  <TimelineDot />
-                                                </TimelineSeparator>
-                                                <TimelineContent
-                                                  sx={{ px: 2, color: "black" }}
-                                                >
-                                                  <Typography
-                                                    sx={{
-                                                      fontSize: 12,
-                                                      color: "black",
-                                                    }}
-                                                    component="span"
-                                                  >
-                                                    {e.classes[0][0].arrival}
-                                                  </Typography>
-                                                  <Typography
-                                                    sx={{
-                                                      fontSize: 12,
-                                                      color: "black",
-                                                    }}
-                                                  >
-                                                    {
-                                                      e.classes[0][0]
-                                                        .arrivalName
-                                                    }
-                                                  </Typography>
-                                                </TimelineContent>
-                                              </TimelineItem>
-                                            </Timeline>
-                                            <div className="block mt-4">
-                                              <div className="text-xs font-normal ">
-                                                {e.classes[0][0].arrivalTime}
-                                              </div>
-                                              <div className="text-xs">
-                                                {parseTanggal(
-                                                  e.classes[0][0].arrivalDate
-                                                )}
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                        {/* 
-                                      <div className="mt-4 text-black">
-                                        <div className="items-center">
-                                          <div>
-                                            <CiRollingSuitcase size={32} />
-                                          </div>
-                                          <div className="text-xs">
-                                            <div>
-                                              Berat Bagasi maks.{" "}
-                                              <span className="font-normal ">
-                                                20 kg
-                                              </span>
-                                            </div>
-                                            <div className="mt-1">
-                                              Jika {">"} 20 kg akan dikenakan
-                                              biaya.
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div> */}
-                                      </div>
-                                    )}
-                                  </>
-                                ) : null}
-
-                                {/* mobile detail harga */}
-                                {detailTiket == `open-${index}` ? (
-                                  <>
-                                    {e.isTransit === true ? (
-                                      <>
-                                        {e.classes.map((z, w) => (
-                                          <>
-                                            <div className="p-4 flex space-x-4 justify-between items-start mt-6 border-t xl:hidden">
-                                              <div className="mt-8">
-                                                <div className="text-xs font-normal ">
-                                                  {e.detailTitle[w].flightName}{" "}
-                                                </div>
-                                                <div className="text-xs">
-                                                  {e.detailTitle[w].flightCode}
-                                                </div>
-                                                <div>
-                                                  <img
-                                                    src={
-                                                      e.detailTitle[w]
-                                                        .flightIcon
-                                                    }
-                                                    width={60}
-                                                    alt="image.png"
-                                                  />
-                                                </div>
-                                              </div>
-                                              <div className="mt-8">
-                                                <div className="text-xs text-black">
-                                                  <div className="">
-                                                    <div className="text-xs">
-                                                      {" "}
-                                                      Harga Tiket Adult ({adult}
-                                                      x){" "}
-                                                    </div>
-                                                    <div className="text-xs">
-                                                      {" "}
-                                                      Rp.
-                                                      {toRupiah(
-                                                        e.classes.reduce((sum, item) => sum + item[0].price, 0) * adult
-                                                      )}
-                                                    </div>
-                                                  </div>
-                                                  {child > 0 ? (
-                                                    <div className="mt-4">
-                                                      <div className="text-xs">
-                                                        {" "}
-                                                        Harga Tiket Child (
-                                                        {child}
-                                                        x){" "}
-                                                      </div>
-                                                      <div>
-                                                        {" "}
-                                                        Tergantung jenis
-                                                        maskapai yang dipilih.
-                                                      </div>
-                                                    </div>
-                                                  ) : null}
-                                                  {infant > 0 ? (
-                                                    <div className="mt-4">
-                                                      <div className="text-xs">
-                                                        Harga Tiket Infant (
-                                                        {infant}x){" "}
-                                                      </div>
-                                                      <div className="text-xs">
-                                                        Tergantung jenis
-                                                        maskapai yang dipilih.
-                                                      </div>
-                                                    </div>
-                                                  ) : null}
-                                                </div>
-                                              </div>
-                                            </div>
-                                          </>
-                                        ))}
-                                      </>
-                                    ) : (
-                                      <div className="text-black p-4 flex space-x-4 justify-between items-start mt-6 border-t xl:hidden">
-                                        <div className="mt-4">
-                                          <div className="text-black text-xs font-medium ">
-                                            {e.airlineName}{" "}
-                                          </div>
-                                          <div className="text-black text-xs">
-                                            {e.classes[0][0].flightCode}
-                                          </div>
-                                          <div>
-                                            <img
-                                              src={e.airlineIcon}
-                                              width={60}
-                                              alt="image.png"
-                                            />
-                                          </div>
-                                        </div>
-                                        <div className="mt-4">
-                                          <div className="text-xs text-black">
-                                            <div className="">
-                                              <div className="text-xs">
-                                                {" "}
-                                                Harga Tiket Adult ({
-                                                  adult
-                                                }x){" "}
-                                              </div>
-                                              <div>
-                                                {" "}
-                                                Rp.
-                                                {toRupiah(
-                                                  e.classes.reduce((sum, item) => sum + item[0].price, 0) * adult
-                                                )}
-                                              </div>
-                                            </div>
-                                            {child > 0 ? (
-                                              <div className="mt-4">
-                                                <div className="text-xs">
-                                                  {" "}
-                                                  Harga Tiket Child ({
-                                                    child
-                                                  }x){" "}
-                                                </div>
-                                                <div>
-                                                  {" "}
-                                                  Tergantung jenis maskapai yang
-                                                  dipilih.
-                                                </div>
-                                              </div>
-                                            ) : null}
-                                            {infant > 0 ? (
-                                              <div className="mt-4">
-                                                <div className="text-xs">
-                                                  Harga Tiket Infant ({infant}x){" "}
-                                                </div>
-                                                <div className="text-xs">
-                                                  Tergantung jenis maskapai yang
-                                                  dipilih.
-                                                </div>
-                                              </div>
-                                            ) : null}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    )}
-                                  </>
-                                ) : null}
                               </div>
                             </div>
                           </div>
@@ -2006,14 +1588,14 @@ export default function Search() {
                 <div className="flex justify-center items-center">
                   <img
                     src={"/nodata.jpg"}
-                    className="w-[200px] md:w-[300px]"
+                    className="w-[200px] xl:w-[300px]"
                     alt="No data"
                   />
                 </div>
                 <div className="flex justify-center w-full text-black">
                   <div className="text-black text-center">
                     <div>
-                      <div className="text-sm md:text-md font-medium">
+                      <div className="text-sm xl:text-md font-medium">
                         Maaf, sepertinya pada rute ini masih belum dibuka
                         kembali.
                       </div>

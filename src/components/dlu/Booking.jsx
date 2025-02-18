@@ -2086,7 +2086,7 @@ export default function BookingDLU() {
                         type="primary"
                         className="bg-blue-500 mx-2 font-medium"
                       >
-                        Lanjut ke Pembayaran
+                        Booking Sekarang
                       </Button>
                     </div>
                   </Form>

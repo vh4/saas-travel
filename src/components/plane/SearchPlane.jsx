@@ -639,54 +639,58 @@ function Plane() {
   return (
     <>
       {contextHolder}
-      <Modal size={size} open={open} onClose={handleClose}>
-        <Modal.Header>
-          <Modal.Title>Pilih Maskapai</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {loadingModal === true ? (
-            <>
+      <ModalMui
+        open={open}
+        onClose={handleClose}
+        sx={{ zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
+        <Box
+          sx={{
+            bgcolor: "background.paper",
+            p: 4,
+            borderRadius: 3,
+            maxWidth: 900,
+            width: "100%",
+            mx: "auto",
+            mt: 10,
+          }}
+        >
+          <h6>Pilih Maskapai</h6>
+          <Box>
+            {loadingModal === true ? (
               <Placeholder.Paragraph />
-            </>
-          ) : (
-            <>
-              <div className="container">
-                <div className="grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-0 md:gap-6">
-                  <div className="">
-                    <Checkbox
-                      className="block -ml-2.5 md:-ml-0"
-                      checked={isSelectAll}
-                      onChange={toggleSelectAll}
-                    >
-                      Select All
-                    </Checkbox>
-                  </div>
-                  {Object.keys(djremix).map((key) => (
-                    <div className="col-2" key={key}>
-                      <CheckboxGroup
-                        value={selectedOptions}
-                        onChange={handleCheckboxChange}
-                      >
-                        <Checkbox value={key}>{djremix[key]}</Checkbox>
-                      </CheckboxGroup>
-                    </div>
-                  ))}
+            ) : (
+              <div className="container mt-6">
+              <div className="grid grid-cols-1 xl:grid-cols-4 gap-0 xl:gap-4">
+                <div className="">
+                  <Checkbox
+                    className="block -ml-2.5"
+                    checked={isSelectAll}
+                    onChange={toggleSelectAll}
+                  >
+                    Select All
+                  </Checkbox>
                 </div>
+                {Object.keys(djremix).map((key) => (
+                  <div className="col-2" key={key}>
+                    <CheckboxGroup
+                      value={selectedOptions}
+                      onChange={handleCheckboxChange}
+                    >
+                      <Checkbox value={key}>{djremix[key]}</Checkbox>
+                    </CheckboxGroup>
+                  </div>
+                ))}
               </div>
-            </>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <div className="flex space-x-4 justify-end">
-            <Button onClick={handleClose} appearance="subtle">
-              Cancel
-            </Button>
-            <Button onClick={handleClose} appearance="primary">
-              Ok
-            </Button>
-          </div>
-        </Modal.Footer>
-      </Modal>
+            </div>
+            )}
+          </Box>
+          <Box className="flex space-x-4 mt-4 mb-12 justify-end ">
+            <Button onClick={handleClose} variant="outlined" className="">Cancel</Button>
+            <Button onClick={handleClose} variant="contained" sx={{ ml: 8 }}>Ok</Button>
+          </Box>
+        </Box>
+      </ModalMui>
 
       {/* desktop */}
       <ModalMui

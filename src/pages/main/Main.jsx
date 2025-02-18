@@ -50,6 +50,9 @@ export default function MainPage() {
         } else if (window.location.pathname == '/pesawat') {
           params = "pesawat";
         }
+        else if (window.location.pathname == '/dlu') {
+          params = "dlu";
+        }
 
         if (list.includes(window.location.pathname) && searchParams.get("auth")) {
 

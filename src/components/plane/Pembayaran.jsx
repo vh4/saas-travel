@@ -6,6 +6,8 @@ import { MdHorizontalRule } from "react-icons/md";
 import { BsArrowRightShort } from "react-icons/bs";
 import { Button, message, Alert, Modal } from "antd";
 import {
+  formatDate,
+  parseTanggal,
   remainingTime,
   parseTanggal as tanggalParse,
 } from "../../helpers/date";
@@ -20,6 +22,7 @@ import Tiket from "./Tiket";
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { useSelector } from "react-redux";
 import { IoMdCheckmarkCircle } from "react-icons/io";
+import { Box } from "@mui/material";
 
 export default function Pembayaran() {
   const { Paragraph } = Typography;
@@ -342,15 +345,14 @@ export default function Pembayaran() {
                 Detail pesanan
               </div>
             </div>
-            <div>
+            <div className=" hidden xl:flex">
               <MdHorizontalRule
                 size={20}
-                className=" hidden xl:flex"
               />
             </div>
-            <div className="flex space-x-2 items-center">
+            <div className="hidden xl:flex font-medium space-x-2 items-center">
               <AiOutlineClockCircle size={20} className="" />
-              <div className="hidden xl:flex  font-medium ">
+              <div className="font-medium ">
                 Pembayaran tiket
               </div>
             </div>
@@ -377,60 +379,104 @@ export default function Pembayaran() {
           ) : (
             <>
               <div className="block xl:flex xl:justify-around mb-24 xl:space-x-4">
-                <div className="block xl:hidden">
+                {/* <div className="block xl:hidden">
                   <Alert
                     message={`Expired Booking : ${remainingBookTime}`}
                     banner
                   />
-                </div>
+                </div> */}
                 {/* mobile sidebar */}
                 <div className="text-black block xl:hidden sidebar w-full xl:w-1/2">
-                  <div className="mt-2 py-2 md:py-4 rounded-md border-b border-gray-200 shadow-sm">
-                    <div className="px-2 py-2 mb-4">
+                  <div className="py-2 xl:py-4 rounded-md border-b border-gray-200 shadow-sm -mt-4 xl:mt-0">
+                    <Box 
+                        className="border shadow px-6 py-8"
+                        sx={{
+                          // textAlign: "center",
+                          // paddingY: "16px",
+                          // borderBottomLeftRadius: "30px",
+                          // borderBottomRightRadius: "30px",
+                          // cursor: "pointer",
+                        }}
+                        >
+                    <div className="flex justify-between items-center">
                       {/* <div className="text-black text-xs">Booking ID</div> */}
-                      <div className="text-black text-sm">
+                      <div className="text-black text-sm -mt-1">
                         Transaksi ID
                       </div>
-                      <div className="mt-2 font-medium  text-blue-500 text-[18px]">
+                      <div className="mt-2 font-bold  text-blue-500 text-[18px]">
                         {/* {hasilBooking && hasilBooking.bookingCode} */}
-                        <Paragraph copyable>
+                        <Paragraph copyable className="">
                           {hasilBooking && hasilBooking.transactionId}
                         </Paragraph>
                       </div>
-                      <div className="text-grapy-500 text-xs">
-
-                        Gunakan kode bayar ini sebagai nomor tujuan pada menu
-                        pembayaran di aplikasi.
-                      </div>
                     </div>
-                    <div className="p-2 border-t">
+                    <div className="text-grapy-500 text-xs">
+
+                      Gunakan kode bayar ini sebagai nomor tujuan pada menu
+                      pembayaran di aplikasi.
+                    </div>
+                    </Box>
+                    <div className="p-4">
                       {dataDetail &&
-                        dataDetail.map((dataDetail) => (
+                        dataDetail.map((dataDetail, i) => (
                           <>
-                            <div className="mt-4 mb-4 flex items-center space-x-2">
-                              <div>
-                                <img
-                                  src={dataDetail.airlineIcon}
-                                  width={50}
-                                  alt="logo.png"
-                                />
+                            <div className="flex items-center space-x-2 py-2">
+                              <div className="flex justify-between items-center">
+                                <div className="flex space-x-2 items-center">
+                                  <div className="text-xs text-black">
+                                    <div className="font-semibold">{dataDetail.airlineName}</div>
+                                  </div>
+                                  <img
+                                    src={dataDetail.airlineIcon}
+                                    width={30}
+                                    alt="logo.png"
+                                  />
+                                </div>
                               </div>
-                              <div className="text-xs text-black">
-                                <div className="font-semibold">{dataDetail.airline}</div>
-                                <div>{dataDetail.airlineName}</div>
+                            </div>
+                            <div className="w-full py-2">
+                              <div className="flex justify-between items-center">
+                                <div className="flex space-x-2 items-center">
+                                  <div className="text-xs text-black">
+                                    <small className="text-xs text-gray-400">Asal</small>
+                                    <div className="font-semibold">{dataDetail.departureName}</div>
+                                  </div>
+                                </div>
+                                <div className="text-xs text-gray-400">
+                                {parseTanggal(dataDetail.departureDate)} {" "}{dataDetail.departureTime}
+                                </div>
                               </div>
                             </div>
-                            <div className="flex items-center space-x-2 mt-1 text-xs text-black font-medium ">
-                              <div>{dataDetail.departureName}</div>{" "}
-                              <BsArrowRightShort />{" "}
-                              <div>{dataDetail.arrivalName}</div>
+                            <div className="w-full py-2">
+                              <div className="flex justify-between items-center">
+                                <div className="flex space-x-2 items-center">
+                                  <div className="text-xs text-black">
+                                    <small className="text-xs text-gray-400">Tujuan</small>
+                                    <div className="font-semibold">{dataDetail.arrivalName}</div>
+                                  </div>
+                                </div>
+                                <div className="text-xs text-gray-400">
+                                  {parseTanggal(dataDetail.arrivalDate)} {" "}
+                                  {dataDetail.arrivalTime}
+                                </div>
+                              </div>
                             </div>
-                            <div className="mt-3 text-xs text-black">
-                              {tanggalParse(dataDetail.departureDate)}
-                            </div>
-                            <div className="mt-1 text-xs text-black">
-                              {dataDetail.departureTime} -{" "}
-                              {dataDetail.arrivalTime}
+                            <div className="w-full py-2">
+                              <div className="flex justify-between items-center">
+                                <div className="flex space-x-2 items-center">
+                                  <div className="text-xs text-black">
+                                    <small className="text-xs text-gray-400">Kode Booking</small>
+                                    <div className="font-semibold">{hasilBooking.bookingCode}</div>
+                                  </div>
+                                </div>
+                                  <div className="block xl:hidden">
+                                    <Alert
+                                      className="text-xs text-gray-500"
+                                      message={`${remainingBookTime}`}
+                                      banner
+                                    />
+                                </div>
+                              </div>
                             </div>
                           </>
                         ))}
@@ -438,7 +484,9 @@ export default function Pembayaran() {
                   </div>
                 </div>
 
-                <div className="mt-4 w-full mx-0 2xl:mx-4">
+                {/* desktop */}
+                <div className="mt-4 w-full mx-0 2xl:mx-4 hidden xl:block">
+                  
                   {/* adult */}
                   {dataDetailPassenger && dataDetailPassenger.adults.length > 0
                     ? dataDetailPassenger.adults.map((e, i) => (

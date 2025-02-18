@@ -913,7 +913,7 @@ export default function BookingKaiTransit() {
                         type="primary"
                         className="bg-blue-500 mx-2 font-semibold"
                       >
-                        Lanjut ke Konfirmasi
+                        Booking Sekarang
                       </Button>
                     </div>
                   </Form>

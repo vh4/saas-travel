@@ -1117,7 +1117,7 @@ export default function BookingPesawat() {
                     {adult[0].map((e, i) => (
                       <>
                         <div>
-                          <div className="Booking mt-8 mb-4 xl:mt-12 ml-2 xl:ml-0">
+                          <div className="Booking mt-8 mb-0 xl:mb-4 xl:mt-12 ml-2 xl:ml-0">
                             <h1 className="text-sm text-black">
                               ADULT PASSENGER
                             </h1>
@@ -1358,7 +1358,7 @@ export default function BookingPesawat() {
                                       />
                                     </Form.Item>
                                     <small className="block -mt-4 text-gray-400">
-                                      Contoh: dd/mm/yyyy
+                                      Contoh: yyyy/mm/dd
                                     </small>
                                   </div>
                                   <div className="w-full">
@@ -1559,7 +1559,7 @@ export default function BookingPesawat() {
                                           />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
-                                          Contoh: dd/mm/yyyy
+                                          Contoh: yyyy/mm/dd
                                         </small>
                                       </div>
                                     </div>
@@ -1586,7 +1586,7 @@ export default function BookingPesawat() {
                           {/* Detailt */}
                           <div className="flex space-x-12">
                             {/* form detailt kontal */}
-                            <div className="w-full mt-4 xl:mt-0 border-b xl:border xl:border-gray-200 xl:shadow-sm col-span-1 xl:col-span-1">
+                            <div className="w-full mt-0 border-b xl:border xl:border-gray-200 xl:shadow-sm col-span-1 xl:col-span-1">
                               <div className="">
                                 <div className="p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8">
                                   {/* mobile & desktop Nama*/}
@@ -1860,7 +1860,7 @@ export default function BookingPesawat() {
                                       />
                                     </Form.Item>
                                     <small className="block -mt-4 text-gray-400">
-                                      Contoh: dd/mm/yyyy
+                                      Contoh: yyyy/mm/dd
                                     </small>
                                   </div>
                                   <div className="w-full">
@@ -2060,7 +2060,7 @@ export default function BookingPesawat() {
                                           />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
-                                          Contoh: dd/mm/yyyy
+                                          Contoh: yyyy/mm/dd
                                         </small>
                                       </div>
                                     </div>
@@ -2087,7 +2087,7 @@ export default function BookingPesawat() {
                           {/* Detailt */}
                           <div className="flex space-x-12">
                             {/* form detailt kontal */}
-                            <div className="w-full mt-4 xl:mt-0 border-b xl:border xl:border-gray-200 xl:shadow-sm col-span-1 xl:col-span-1">
+                            <div className="w-full mt-0 border-b xl:border xl:border-gray-200 xl:shadow-sm col-span-1 xl:col-span-1">
                               <div className="">
                                 <div className="p-4 xl:p-8 form block xl:flex space-x-2 xl:space-x-8">
                                   {/* mobile & desktop Nama*/}
@@ -2316,7 +2316,7 @@ export default function BookingPesawat() {
                                       />
                                     </Form.Item>
                                     <small className="block -mt-4 text-gray-400">
-                                      Contoh: dd/mm/yyyy
+                                      Contoh: yyyy/mm/dd
                                     </small>
                                   </div>
                                   <div className="w-full">
@@ -2517,7 +2517,7 @@ export default function BookingPesawat() {
                                           />
                                         </Form.Item>
                                         <small className="block -mt-4 text-gray-400">
-                                          Contoh: dd/mm/yyyy
+                                          Contoh: yyyy/mm/dd
                                         </small>
                                       </div>
                                     </div>
