@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@fontsource/roboto": "^4.5.8",
     "@mui/lab": "^5.0.0-alpha.116",
     "@mui/material": "^5.11.5",
@@ -16,7 +18,7 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.12.8",
     "axios": "^1.2.1",
-    "caniuse-lite": "^1.0.30001561",
+    "caniuse-lite": "^1.0.30001700",
     "dayjs": "^1.11.7",
     "dotenv": "^16.0.3",
     "gsap": "^3.12.5",
