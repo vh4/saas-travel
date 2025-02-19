@@ -483,7 +483,7 @@ export default function Header() {
                           color: custom
                             ? "#0f172a"
                             : customLayout?.color?.primary?.font_color ||
-                              "#ffff",
+                              "#0f172a",
                           padding: "0 2rem",
                         }}
                       >

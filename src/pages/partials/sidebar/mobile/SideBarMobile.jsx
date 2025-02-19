@@ -16,14 +16,14 @@ export default function SideBarMobile({nameMenu, setNameMenu}) {
     const urlForLogin = window.location.pathname;
     const [whitelistDLU, setWhiteListdlu] = useState(0);
 
-    async function fetchDLUWhiteList(){
-        const {data} = await axios.get(
-            `${process.env.REACT_APP_HOST_API}/travel/dlu_whitelist`,
-        );
-
-        setWhiteListdlu(data.type)
-        
-    }
+    async function fetchDLUWhiteList() {
+        try {
+          const { data } = await axios.get(`${process.env.REACT_APP_HOST_API}/travel/dlu_whitelist`);
+          setWhiteListdlu(data.type);
+        } catch (error) {
+          console.error("Error fetching DLU WhiteList:", error);
+        }
+      }
 
     useEffect(() => {
 
