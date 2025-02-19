@@ -11,7 +11,7 @@ export default function Booking(){
     return(
         <>
             <div className="block md:hidden">
-                <HeaderTemplateMobile>
+                <HeaderTemplateMobile type={'booking'}>
                     <div className="container">
                         <div className="w-full px-4"> 
                             {/* menu fitur  */}

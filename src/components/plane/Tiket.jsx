@@ -10,7 +10,7 @@ export default function Tiket({data}){
     return(
         <>
         {/* header kai flow */}
-        <div className='hidden md:block bg-white border-b rounded-lg p-4 md:p-8 lg:p-6 max-w-4xl mx-auto relative'>
+        <div className='hidden xl:block bg-white border-b rounded-lg p-4 xl:p-8 lg:p-6 max-w-4xl mx-auto relative'>
             <div className='flex text-black justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center'>
                 <div className='flex space-x-2 items-center'>
                     <IoMdCheckmarkCircle className="text-green-500" size={20} />
@@ -43,7 +43,7 @@ export default function Tiket({data}){
             <MdVerified size={32} className="text-green-400 absolute right-6 top-4" />
         </div>
 
-        <div className="bg-white text-black border-b rounded-lg p-4 md:p-8 lg:p-12 max-w-4xl mx-auto my-8">
+        <div className="bg-white text-black border-b rounded-lg px-4 xl:p-8 max-w-4xl mx-auto my-4 xl:my-8">
             <header className="flex justify-between items-center border-b pb-4">
                 <h1 className="font-medium text-2xl">Invoice</h1>
                 <div>
@@ -54,14 +54,14 @@ export default function Tiket({data}){
             
             <div className="mt-8">
                 <h2 className="font-medium text-xl mb-8">Payment Details</h2>
-                <div className="grid grid-cols-2 gap-y-6 md:gap-y-4 text-sm">
+                <div className="grid grid-cols-2 gap-y-6 xl:gap-y-4 text-sm">
                     <p>Type of Payment:</p>
                     <p className="font-medium">TUNAI</p>
                     <p>Phone Number:</p>
                     <p className="font-medium">{data.nomor_hp_booking}</p>
                     <p>Transaction ID:</p>
                     <p className="font-medium">{data.id_transaksi}</p>
-                    <p className="hidden md:block pt-2 border-t border-gray-200 col-span-full"></p> {/* Divider */}
+                    <p className="hidden xl:block pt-2 border-t border-gray-200 col-span-full"></p> {/* Divider */}
                     <p>Total Paid:</p>
                     <p className="font-medium">{data.total_dibayar}</p>
                 </div>

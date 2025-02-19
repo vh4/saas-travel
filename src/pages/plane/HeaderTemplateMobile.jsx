@@ -1,7 +1,10 @@
 import React from "react";
 import { BsArrowLeft } from "react-icons/bs";
+import { TiketContext } from "../../App";
 
-export default function HeaderTemplateMobile({ children }) {
+export default function HeaderTemplateMobile({ children, type }) {
+
+  const { pay, dispatch } = React.useContext(TiketContext);
   return (
     <div className="flex flex-col min-h-screen">
       <div>
@@ -22,14 +25,14 @@ export default function HeaderTemplateMobile({ children }) {
               </div>
               <div className="block min-w-[30px] min-h-[2px] bg-gray-300 text-white"></div>
               <div className="flex space-x-2 items-center flex-shrink-0">
-                <div className="py-0.5 px-2 bg-gray-500 text-white text-xs rounded-full">
+                <div className={`py-0.5 px-2 ${type == 'bayar' ? 'bg-blue-500' : 'bg-gray-500'}  text-white text-xs rounded-full`}>
                   2
                 </div>
                 <div className="text-xs">Bayar</div>
               </div>
               <div className="block min-w-[30px] min-h-[2px] bg-gray-300"></div>
               <div className="flex space-x-2 items-center flex-shrink-0">
-                <div className="py-0.5 px-2 bg-gray-500 text-white text-xs rounded-full">
+                <div className={`py-0.5 px-2 ${pay.isPayed === true ? 'bg-blue-500' : 'bg-gray-500'}  text-white text-xs rounded-full`}>
                   3
                 </div>
                 <div className="text-xs">Selesai</div>

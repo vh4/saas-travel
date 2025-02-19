@@ -12,7 +12,7 @@ export default function Pembayaran(){
     return(
         <>
             <div className="block md:hidden">
-                <HeaderTemplateMobile>
+                <HeaderTemplateMobile type={'bayar'}>
                     <div className="container">
                         <div className="w-full px-4"> 
                             {/* menu fitur  */}

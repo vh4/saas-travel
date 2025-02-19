@@ -23,6 +23,8 @@ import { ExclamationCircleFilled } from '@ant-design/icons';
 import { useSelector } from "react-redux";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import { Box } from "@mui/material";
+import DetailPassengersDrawer from "./components/DetailPassengersDrawer";
+import { TiketContext } from "../../App";
 
 export default function Pembayaran() {
   const { Paragraph } = Typography;
@@ -75,19 +77,26 @@ export default function Pembayaran() {
     });
   }
 
-  const isOk = useSelector((state) => state.callback.isOk);
+  // const isOk = useSelector((state) => state.callback.isOk);
   const callback = useSelector((state) => state.callback);
 
-  const status = useSelector((state) => state.callback.rc);
-  const keterangan = useSelector((state) => state.callback.rd);
+  // const status = useSelector((state) => state.callback.rc);
+  // const keterangan = useSelector((state) => state.callback.rd);
 
   const bookPesawat = useSelector((state) => state.bookpesawat.bookData);
-  const isCurrentBalance = useSelector((state) => state.bookpesawat.isOkBalance);
+  // const isCurrentBalance = useSelector((state) => state.bookpesawat.isOkBalance);
   const dataSearch = useSelector((state) => state.bookpesawat.searchData);
 
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
+
+  const [openDrawer, setOpenDrawer] = useState(null);
+  const { pay, dispatch } = React.useContext(TiketContext);
+
+  const toggleDrawer = (type) => {
+    setOpenDrawer(type);
+  };
 
   useEffect(() => {
     if (token === null || token === undefined) {
@@ -259,6 +268,12 @@ export default function Pembayaran() {
       }
 
       setispay(true);
+      dispatch({
+        type: "PAY_FLIGHT",
+        // payload:{
+        //   isPayed:true
+        // }
+      });
       setHasilbayar(params);
       
       setIsLoading(false);
@@ -387,9 +402,9 @@ export default function Pembayaran() {
                 </div> */}
                 {/* mobile sidebar */}
                 <div className="text-black block xl:hidden sidebar w-full xl:w-1/2">
-                  <div className="py-2 xl:py-4 rounded-md border-b border-gray-200 shadow-sm -mt-4 xl:mt-0">
+                  <div className="py-2 xl:py-4 -mt-4 xl:mt-0">
                     <Box 
-                        className="border shadow px-6 py-8"
+                        className="border shadow px-6 py-6 rounded-xl"
                         sx={{
                           // textAlign: "center",
                           // paddingY: "16px",
@@ -398,9 +413,9 @@ export default function Pembayaran() {
                           // cursor: "pointer",
                         }}
                         >
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center -mt-2">
                       {/* <div className="text-black text-xs">Booking ID</div> */}
-                      <div className="text-black text-sm -mt-1">
+                      <div className="text-black text-sm -mt-1.5">
                         Transaksi ID
                       </div>
                       <div className="mt-2 font-bold  text-blue-500 text-[18px]">
@@ -482,7 +497,79 @@ export default function Pembayaran() {
                         ))}
                     </div>
                   </div>
+                    <div className="py-2">
+                      <div className="w-full px-4">
+                        <div className="flex justify-between items-center border-b border-gray-200 shadow-sm py-4">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-gray-500">
+                              <small className="text-xs text-gray-400">Data Penumpang</small>
+                              <div className="my-1">{TotalAdult > 0 && TotalAdult + ' Dewasa'} {TotalAdult > 0 && ', ' +TotalChild + ' Anak'} {TotalAdult > 0 && ', ' +TotalInfant + ' Bayi'}</div>
+                            </div>
+                          </div>
+                          <div onClick={() => {toggleDrawer(true)}} className="cursor-pointer text-xs text-blue-400">
+                            Detail
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="py-2 xl:py-4 xl:mt-0">
+                      <div className="w-full px-4">
+                        <div className="flex justify-between items-center">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-gray-500">
+                              <div >Total Harga</div>
+                            </div>
+                          </div>
+                          <div className="text-xs">
+                          Rp.{" "}
+                          {toRupiah(dataDetailForBooking && dataDetailForBooking?.priceTotal || '-')}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="py-2 xl:py-4 xl:mt-0">
+                      <div className="w-full px-4">
+                        <div className="flex justify-between items-center border-b border-gray-200 shadow-sm pb-4">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-gray-500">
+                              <div >Biaya Admin</div>
+                            </div>
+                            </div>
+                          </div>
+                          <div className="text-xs">
+                          Rp.{" "}
+                          {toRupiah(hasilBooking && hasilBooking.nominalAdmin)}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="py-2 xl:py-4 xl:mt-0">
+                      <div className="w-full px-4">
+                        <div className="flex justify-between items-center">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-gray-500">
+                              <div >Total Bayar</div>
+                            </div>
+                            </div>
+                          </div>
+                          <div className="text-xs">
+                          Rp.{" "}
+                          {toRupiah(
+                            parseInt(dataDetailForBooking && dataDetailForBooking?.priceTotal || 0) +
+                              parseInt(
+                                hasilBooking && hasilBooking.nominalAdmin
+                              )
+                          )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                 </div>
+
+                {/* mobile detail */}
+                <DetailPassengersDrawer dataDetailPassenger={dataDetailPassenger} openDrawer={openDrawer} toggleDrawer={toggleDrawer} />              
 
                 {/* desktop */}
                 <div className="mt-4 w-full mx-0 2xl:mx-4 hidden xl:block">
@@ -491,7 +578,7 @@ export default function Pembayaran() {
                   {dataDetailPassenger && dataDetailPassenger.adults.length > 0
                     ? dataDetailPassenger.adults.map((e, i) => (
                         <>
-                          <div className="p-0 xl:px-8 xl:mt-6 mt-4 w-full rounded-md  border-gray-200 shadow-sm">
+                          <div className="p-0 xl:px-8 xl:mt-6 mt-4 w-full">
                             <div className="">
                               <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-semibold">
                                 {e.nama_depan} {e.nama_belakang}
@@ -541,7 +628,7 @@ export default function Pembayaran() {
                   dataDetailPassenger.children.length > 0
                     ? dataDetailPassenger.children.map((e, i) => (
                         <>
-                          <div className="p-0 xl:px-8 xl:mt-6 mt-4 w-full rounded-md  border-gray-200 shadow-sm">
+                          <div className="p-0 xl:px-8 xl:mt-6 mt-4 w-full">
                             <div className="">
                               <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-semibold">
                                 {e.nama_depan} {e.nama_belakang}
@@ -574,7 +661,7 @@ export default function Pembayaran() {
                   {dataDetailPassenger && dataDetailPassenger.infants.length > 0
                     ? dataDetailPassenger.infants.map((e, i) => (
                         <>
-                          <div className="p-0 xl:px-8 xl:mt-6 mt-4 w-full rounded-md  border-gray-200 shadow-sm">
+                          <div className="p-0 xl:px-8 xl:mt-6 mt-4 w-full">
                             <div className="">
                               <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-semibold ">
                                 {e.nama_depan} {e.nama_belakang}
@@ -602,9 +689,9 @@ export default function Pembayaran() {
                         </>
                       ))
                     : ""}
-                  <div className="p-2 xl:px-10 xl:mt-6 mt-4 w-full">
-                    <div className="mt-4">
-                      <div className="text-xs text-black font-medium  flex justify-between">
+                  <div className="p-2 px-10 mt-4 w-full">
+                    <div>
+                      <div className="text-xs text-black font-medium  flex justify-between border-t pt-4">
                         <div>
                           {dataDetail && dataDetail.airlineName}{" "}
                           {TotalAdult > 0 ? `(Adults) x${TotalAdult}` : ""}{" "}
@@ -622,7 +709,7 @@ export default function Pembayaran() {
                           {toRupiah(hasilBooking && hasilBooking.nominalAdmin)}
                         </div>
                       </div>
-                      <div className="mt-8 mb-4 pt-2 border-t border-gray-200 text-sm text-black font-semibold  flex justify-between">
+                      <div className="mt-4 mb-4 pt-2 border-t border-gray-200 text-sm text-black font-semibold  flex justify-between">
                         <div>Total Harga</div>
                         <div>
                           Rp.{" "}
@@ -780,23 +867,23 @@ export default function Pembayaran() {
                   {/* )} */}
                 </div>
               {/* {callbackBoolean == true ? ( */}
-                <div className="block xl:hidden mt-8 py-2 rounded-md">
+                <div className="block xl:hidden mt-2 py-4 rounded-md">
                     <>
                     {/* {isOk == true && isCurrentBalance == true ? ( */}
                       <>
-                        <div className="flex justify-center">
+                        <div className="min-w-full flex justify-center">
                           <Button
                             onClick={showModal}                        
                             size="large"
                             key="submit"
                             type="primary"
-                            className="bg-blue-500 mx-2 font-semibold mt-4"
+                            className="w-full bg-blue-500 mx-2 font-semibold mt-4"
                             loading={isLoading}
                           >
                             Bayar Sekarang
                           </Button>
                         </div>
-                        {isSimulated === 1 ? (<Alert className="mt-4" message="Don't worry, clicking the 'Bayar' will not affect your balance." banner/>) : ''}
+                        {isSimulated === 1 ? (<Alert className="mt-4" message="Clicking 'Bayar' will not affect your balance." banner/>) : ''}
                       </>
                      {/* ) : ''} */}
                     </>
