@@ -1,15 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { AiOutlineHome } from "react-icons/ai";
-import { BsArrowRightShort, BsFilterCircle, BsSearch } from "react-icons/bs";
-import { PiTrainLight } from "react-icons/pi";
+import {  BsSearch } from "react-icons/bs";
 import axios from "axios";
-import { Placeholder } from "rsuite";
-import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import { Button, Modal, message } from "antd";
-import { toRupiah } from "../../helpers/rupiah";
-import { remainingTime } from "../../helpers/date";
+import { message } from "antd";
 import Page500 from "../components/500";
-import { Input } from "@mui/material";
 import { CiFilter } from "react-icons/ci";
 import ListKereta from "./components/ListKereta";
 import SwipeableEdgeDrawer from "./components/Filter"

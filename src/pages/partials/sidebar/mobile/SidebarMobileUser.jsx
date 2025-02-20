@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,
@@ -22,10 +22,6 @@ export default function SidebarMobileUser() {
   const dispatch = useDispatch();
   const type = useSelector((state) => state.type.data.type);
   const isLoading = useSelector((state) => state.type.isLoading);
-  
-  const [searchParams, setSearchParams] = useSearchParams();
-  const urlForLogin = window.location.pathname;
-
   const location = useLocation();
   // Get the last segment of the path
   let lastSegment = location.pathname.split("/").filter(Boolean).pop();

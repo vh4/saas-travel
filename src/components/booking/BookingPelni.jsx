@@ -8,7 +8,6 @@ import { remainingTime } from "../../helpers/date";
 import Page500 from "../components/500";
 import { IoBoatSharp } from "react-icons/io5";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import { Placeholder } from "rsuite";
 
 export default function ViewBooking({ path }) {
   const [data, setData] = useState([]);
@@ -319,9 +318,6 @@ export default function ViewBooking({ path }) {
             </div>
           ) : (
             <>
-              <div className="mt-2">
-                <Placeholder.Paragraph />
-              </div>
             </>
           )}
         </Modal>

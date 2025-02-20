@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation, useSearchParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { IoGridOutline } from "react-icons/io5";
 import { IoAirplaneOutline, IoBoatOutline } from "react-icons/io5";

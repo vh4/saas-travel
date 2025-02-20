@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlineHome } from "react-icons/ai";
 import { BsArrowRightShort } from "react-icons/bs";
 import { MdOutlineTrain } from "react-icons/md";
 import axios from "axios";
-import { Placeholder } from "rsuite";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import { Button, Modal, message } from "antd";
+import { Modal, message } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
 import { remainingTime } from "../../helpers/date";
 import Page500 from "../components/500";
@@ -356,9 +355,6 @@ export default function ViewBooking({ path }) {
           </div>
         ) : (
           <>
-            <div className="mt-2">
-              <Placeholder.Paragraph />
-            </div>
           </>
         )}
       </Modal>

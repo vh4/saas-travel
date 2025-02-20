@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { BsArrowRightShort } from "react-icons/bs";
 import { MdOutlineTrain } from "react-icons/md";
 import axios from "axios";
-import { Placeholder } from "rsuite";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { Modal, message } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
@@ -443,9 +442,6 @@ export default function ViewBooking({ path }) {
           </div>
         ) : (
           <>
-            <div className="mt-2">
-              <Placeholder.Paragraph />
-            </div>
           </>
         )}
       </Modal>

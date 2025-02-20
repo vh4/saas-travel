@@ -4,9 +4,7 @@ import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { ImAirplane } from "react-icons/im";
 import axios from "axios";
 import { Modal } from "antd";
-import { Placeholder } from "rsuite";
 import { BsArrowRightShort } from "react-icons/bs";
-// import { message } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
 import { remainingTime } from "../../helpers/date";
 import Page500 from "../components/500";
@@ -378,9 +376,9 @@ export default function ViewBooking({ path }) {
             </div>
           ) : (
             <>
-              <div className="mt-2">
+              {/* <div className="mt-2">
                 <Placeholder.Paragraph />
-              </div>
+              </div> */}
             </>
           )}
         </Modal>

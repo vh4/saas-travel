@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Whisper } from "rsuite";
 import { BsSortDown } from "react-icons/bs";
 import { LiaSlidersHSolid } from "react-icons/lia";
 import { TbListSearch } from "react-icons/tb";

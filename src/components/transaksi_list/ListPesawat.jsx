@@ -7,7 +7,6 @@ import { toRupiah } from "../../helpers/rupiah";
 import Page500 from "../components/500";
 import { Modal } from "antd";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import { Placeholder } from "rsuite";
 import { CiBoxList, CiCircleMore, CiTimer } from "react-icons/ci";
 import { HiOutlinePrinter } from "react-icons/hi2";
 import { useSearchParams } from "react-router-dom";
@@ -465,9 +464,6 @@ export default function ViewTransaksi({ path }) {
           </div>
         ) : (
           <>
-            <div className="mt-2">
-              <Placeholder.Paragraph />
-            </div>
           </>
         )}
       </Modal>

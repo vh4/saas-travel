@@ -3,7 +3,6 @@ import { AiOutlineHome } from "react-icons/ai";
 import { BsArrowRightShort, BsFilterCircle, BsSearch } from "react-icons/bs";
 import { PiTrainLight } from "react-icons/pi";
 import axios from "axios";
-import { Placeholder } from "rsuite";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { Button, Modal, message } from "antd";
 import { toRupiah } from "../../helpers/rupiah";

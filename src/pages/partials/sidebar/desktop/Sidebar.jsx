@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IoAirplaneOutline, IoBoatOutline, IoBoatSharp, IoTrainOutline } from 'react-icons/io5';
+import { IoAirplaneOutline, IoBoatOutline, IoTrainOutline } from 'react-icons/io5';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { fetchDataType } from '../../../../features/dataTypeSlice';

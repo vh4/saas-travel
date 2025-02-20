@@ -22,7 +22,7 @@ import Page500 from "../components/500";
 import Page400 from "../components/400";
 import ManyRequest from "../components/Manyrequest";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import { IoArrowForwardOutline } from "react-icons/io5";
+import { IoArrowForwardOutline, IoPricetagOutline } from "react-icons/io5";
 import { CiBoxList, CiSearch } from "react-icons/ci";
 import Select from "react-select";
 import Skeleton from "react-loading-skeleton";
@@ -2546,14 +2546,6 @@ export default function BookingPesawat() {
 
                   {/* sidebra desktop*/}
                   <div className="w-full md:w-2/3 2xl:w-1/2 md:mt-8">
-                      <div className="mb-4 p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-black-500 border-b-gray-100">
-                        <div className="text-gry-400 text-sm ">
-                        Harga
-                      </div>
-                      <small className="text-sm text-black font-bold">
-                        Rp. {toRupiah(dataDetailForBooking.priceTotal)}
-                      </small>
-                    </div>
                     {dataDetail &&
                       dataDetail.map((dataDetail) => (
                         <>
@@ -2635,6 +2627,15 @@ export default function BookingPesawat() {
                           </div>
                         </>
                       ))}
+                      <div className="mb-4 p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-black-500 border-b-gray-100">
+                        <div className="text-gry-400 text-sm ">
+                          <IoPricetagOutline size={18} />
+                          <div>Harga</div>
+                      </div>
+                      <small className="text-sm text-black font-bold">
+                        Rp. {toRupiah(dataDetailForBooking.priceTotal)}
+                      </small>
+                    </div>
                   </div>
                 </div>
               </>

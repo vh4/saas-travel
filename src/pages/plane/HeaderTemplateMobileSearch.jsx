@@ -1,8 +1,6 @@
 import React from "react";
-import { IoArrowBack, IoArrowForwardCircle } from "react-icons/io5";
 import { useSearchParams } from "react-router-dom";
 import { parseTanggal } from "../../helpers/date";
-import {TfiArrowCircleLeft} from 'react-icons/tfi'
 import { SlArrowRight } from "react-icons/sl";
 import { BsArrowLeft } from "react-icons/bs";
 

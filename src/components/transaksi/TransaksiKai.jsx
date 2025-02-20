@@ -6,7 +6,6 @@ import axios from "axios";
 import { toRupiah } from "../../helpers/rupiah";
 import Page500 from "../components/500";
 import { message, Modal } from "antd";
-import { Placeholder } from "rsuite";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 
 export default function ViewTransaksi({ path }) {
@@ -282,9 +281,6 @@ export default function ViewTransaksi({ path }) {
           </div>
         ) : (
           <>
-            <div className="mt-2">
-              <Placeholder.Paragraph />
-            </div>
           </>
         )}
       </Modal>
