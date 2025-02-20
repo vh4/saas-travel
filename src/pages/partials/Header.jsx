@@ -175,20 +175,24 @@ export default function Header() {
   }
 
   const expiredDateTime = async () => {
-    const response = await axios.post(
-      `${process.env.REACT_APP_HOST_API}/travel/refresh-date`,
-      {
-        token: JSON.parse(
-          localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-        ),
-      }
-    );
-
-    if (response.data.data && response.data.data.rc == "00") {
-      localStorage.setItem(
-        "expired_date",
-        response.data.data.data.expired_date
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/travel/refresh-date`,
+        {
+          token: JSON.parse(
+            localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+          ),
+        }
       );
+  
+      if (response.data.data && response.data.data.rc == "00") {
+        localStorage.setItem(
+          "expired_date",
+          response.data.data.data.expired_date
+        );
+      }
+    } catch (error) {
+        console.log(error);
     }
   };
 

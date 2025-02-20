@@ -534,18 +534,25 @@ function Plane() {
     }
   }
 
-  async function getPesawatDataStasiun() {
-    const response = await axios.post(
-      `${process.env.REACT_APP_HOST_API}/travel/flight/airport`,
-      {
-        token: JSON.parse(
-          localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-        ),
-        product: "PESAWAT",
-      }
-    );
 
-    setpesawatStasiun(response.data);
+  async function getPesawatDataStasiun() {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/travel/flight/airport`,
+        {
+          token: JSON.parse(
+            localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+          ),
+          product: "PESAWAT",
+        }
+      );
+  
+      setpesawatStasiun(response.data);
+
+    } catch (error) {
+      setpesawatStasiun([]);
+      console.log(error);
+    }
   }
 
   async function handlerCariPesawat(e) {
