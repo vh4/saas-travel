@@ -587,7 +587,7 @@ export default function BookingPelni() {
                   <div className="flex space-x-2 items-center">
                     <ExclamationCircleFilled className="text-orange-500 text-xl" />
                     <div className="text-bold text-xl text-orange-500">
-                      Are you sure?
+                      Apakah anda yakin ??
                     </div>
                   </div>
                 </>

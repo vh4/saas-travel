@@ -943,8 +943,9 @@ export default function Search() {
                                           : (<>Rp. {toRupiah(e.classes[0][0].price)}</>)
                                   }
                                 </h1>
-                                <small className="text-red-500">
-                                  {e.classes[0][0].availability} seat(s) left
+                                <small className="text-gray-500">
+                                  Available
+                                  {/* {e.classes[0][0].availability} seat(s) left
                                   {e.classes[0][0].availability > 0 &&
                                   e.classes[0][0].availability >=
                                     parseInt(child) +
@@ -953,7 +954,7 @@ export default function Search() {
                                     ""
                                   ) : (
                                     <span> (Tiket Habis)</span>
-                                  )}
+                                  )} */}
                                 </small>
                               </div>
                               <div className="flex justify-center col-span-1">

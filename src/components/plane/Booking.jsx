@@ -790,7 +790,7 @@ export default function BookingPesawat() {
                   <div className="flex space-x-2 items-center">
                     <ExclamationCircleFilled className="text-orange-500 text-xl" />
                     <div className="text-bold text-xl text-orange-500">
-                      Are you sure?
+                      Apakah anda yakin ??
                     </div>
                   </div>
                 </>
@@ -1019,7 +1019,18 @@ export default function BookingPesawat() {
                       </div>
                     </div>
                   ))}
-                <div className=" w-full mb-24 block xl:flex xl:space-x-10">
+                  {/* for mobile */}
+                  <div className="flex xl:hidden justify-between items-center mb-4 border-b px-2 py-4">
+                    <div className="flex space-x-2 items-center text-gry-400 text-sm ">
+                      <IoPricetagOutline className="text-gray-500" size={18} />
+                      <div className="text-gray-500">Harga Fare</div>
+                  </div>
+                  <small className="text-sm text-blue-500 font-bold">
+                    Rp. {toRupiah(dataDetailForBooking.priceTotal)}
+                  </small>
+                </div>
+
+                <div className="w-full mb-24 block xl:flex xl:space-x-10">
                   {/* detail passengger Pesawat*/}
                   <Form
                     form={form}
@@ -2531,15 +2542,15 @@ export default function BookingPesawat() {
                       </>
                     ))}
 
-                    <div className="flex justify-end mr-2 mt-8">
+                    <div className="w-full xl:w-auto flex justify-end mr-2 mt-8">
                       <Button
                         htmlType="submit"
                         size="large"
                         key="submit"
                         type="primary"
-                        className="bg-blue-500 mx-2 font-medium"
+                        className="bg-blue-500 mx-2 font-medium w-full xl:w-auto"
                       >
-                        Lanjut ke Pembayaran
+                        Booking Sekarang
                       </Button>
                     </div>
                   </Form>
@@ -2627,12 +2638,13 @@ export default function BookingPesawat() {
                           </div>
                         </>
                       ))}
-                      <div className="mb-4 p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-black-500 border-b-gray-100">
-                        <div className="text-gry-400 text-sm ">
-                          <IoPricetagOutline size={18} />
-                          <div>Harga</div>
+                      {/* for desktop */}
+                      <div className="hidden xl:flex justify-between items-center mb-4 px-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-black-500 border-b-gray-100">
+                        <div className="flex space-x-2 items-center text-gry-400 text-sm ">
+                          <IoPricetagOutline className="text-gray-500" size={18} />
+                          <div className="text-gray-500">Harga Fare</div>
                       </div>
-                      <small className="text-sm text-black font-bold">
+                      <small className="text-lg text-blue-500 font-bold">
                         Rp. {toRupiah(dataDetailForBooking.priceTotal)}
                       </small>
                     </div>

@@ -7,6 +7,7 @@ import Slider from "@mui/material/Slider";
 import { Space } from "antd";
 import {Radio} from "antd";
 import SearchPlane from "../SearchPlane";
+import { IoCloseCircle, IoCloseOutline } from "react-icons/io5";
 
 const StyledBox = styled("div")(({ theme }) => ({
   backgroundColor: "#fff",
@@ -34,8 +35,14 @@ const FilterMobilePlaneDrawer = ({ openDrawer, toggleDrawer, langsung, setLangsu
       <StyledBox sx={{ right: 0, left: 0, paddingTop: 0 }}>
         <Puller sx={{ marginTop: 2 }} />
       </StyledBox>
-      <div className="px-4 mt-2 xl:container xl:px-64">
-        <div className="p-4">
+      <div className="px-4 mt-8">
+        {/* <div className="header">
+        <div className="px-2 text-lg font-bold flex justify-between items-center">
+          <h6></h6>
+          <div onClick={() => toggleDrawer(false)} className="cursor-pointer"><IoCloseCircle size={28} className="text-red-500" /></div>
+        </div>
+        </div> */}
+        <div className="px-4">
         <div className="py-4 text-lg font-bold">
           <h6>Filter Transtit</h6>
         </div>

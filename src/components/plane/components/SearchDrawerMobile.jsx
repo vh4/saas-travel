@@ -13,6 +13,7 @@ import TimelineContent from "@mui/lab/TimelineContent/TimelineContent";
 import { parseTanggal } from "../../../helpers/date";
 import Timeline from "@mui/lab/Timeline/Timeline";
 import { IoMdTimer } from "react-icons/io";
+import { IoCloseOutline } from "react-icons/io5";
 
 const StyledBox = styled("div")(({ theme }) => ({
   backgroundColor: "#fff",
@@ -44,9 +45,12 @@ export default function SearchDrawerMobile({ data, openDetail, toggleDrawerDetai
         <Puller sx={{ marginTop: 2 }} />
       </StyledBox>
       <StyledBox sx={{ py: 2, pt: 6, px: 2, height: "100%", overflow: "auto" }}>
-	  	<div className="text-lg font-bold">
-          <h4>Detail Penerbangan</h4>
-        </div>
+			<div className="header mt-4">
+			<div className="px-4 text-lg font-bold flex justify-between items-center">
+				<h6>Detail Penerbangan</h6>
+				<div onClick={() => toggleDrawerDetail(false)} className="cursor-pointer"><IoCloseOutline size={22} className="text-gray-900" /></div>
+			</div>
+			</div>
 			<>
 			{e.isTransit === true ? (
 				e.classes.map((x, i) => (
