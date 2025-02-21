@@ -7,7 +7,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Popper } from "@mui/material";
 import { IoBoatSharp } from "react-icons/io5";
-import onClickOutside from "react-onclickoutside";
 import { makeStyles } from "@mui/styles";
 import { InputGroup } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
@@ -1223,8 +1222,4 @@ function DLU() {
   );
 }
 
-const clickOutsideConfig = {
-  handleClickOutside: () => DLU.handleClickOutside,
-};
-
-export default onClickOutside(DLU, clickOutsideConfig);
+export default DLU

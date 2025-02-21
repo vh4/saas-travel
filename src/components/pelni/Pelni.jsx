@@ -8,7 +8,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import { IoBoatSharp } from "react-icons/io5";
 import { useNavigate, createSearchParams } from "react-router-dom";
-import onClickOutside from "react-onclickoutside";
 import { InputGroup } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
 import { Button,  message } from "antd";
@@ -798,8 +797,4 @@ function Pelni() {
   );
 }
 
-const clickOutsideConfig = {
-  handleClickOutside: () => Pelni.handleClickOutside,
-};
-
-export default onClickOutside(Pelni, clickOutsideConfig);
+export default Pelni
