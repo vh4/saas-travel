@@ -19,12 +19,13 @@ import Page400 from "../components/400";
 import ManyRequest from "../components/Manyrequest";
 import BookingLoading from "../components/trainskeleton/booking";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import { IoArrowForwardOutline } from "react-icons/io5";
+import { IoArrowForwardOutline, IoPricetagOutline } from "react-icons/io5";
 import { CiBoxList, CiSearch } from "react-icons/ci";
 import Skeleton from "react-loading-skeleton";
 import { useDispatch, useSelector } from "react-redux";
 import { setDataBookKereta } from "../../features/createSlice";
 import { AiOutlineClockCircle } from "react-icons/ai";
+import { toRupiah } from "../../helpers/rupiah";
 
 export default function BookingKai() {
   const [api, contextHolder] = notification.useNotification();
@@ -452,7 +453,7 @@ export default function BookingKai() {
                 <div className="flex space-x-2 items-center">
                   <ExclamationCircleFilled className="text-orange-500 text-xl" />
                   <div className="text-bold text-xl text-orange-500">
-                    Apakah anda yakin ??
+                    Apakah anda yakin?
                   </div>
                 </div>
               </>
@@ -527,7 +528,6 @@ export default function BookingKai() {
                     expandable={{
                       expandedRowRender: (record) => (
                         <>
-                        {console.log(record)}
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-8">
                             <div className="my-2">
                               <p style={{ margin: 0 }} className="text-xs">
@@ -708,6 +708,16 @@ export default function BookingKai() {
                         </ol>
                       </div>
                     </div>
+                    {/* for mobile */}
+                    <div className="flex xl:hidden justify-between items-center mb-4 border-b px-2 py-4">
+                      <div className="flex space-x-2 items-center text-gry-400 text-sm ">
+                        <IoPricetagOutline className="text-gray-500" size={18} />
+                        <div className="text-gray-500">Harga Fare</div>
+                    </div>
+                    <small className="text-sm font-medium">
+                      Rp. {toRupiah(dataBookingTrain[0]?.seats[0]?.priceAdult || 0)}
+                    </small>
+                  </div>
                   </>
                 )}
 
@@ -831,7 +841,7 @@ export default function BookingKai() {
                                         </div>
                                       </div>
                                     </div>
-                                    <div className="mb-8">
+                                    <div className="mb-4 xl:mb-8">
                                       <div className="py-0 px-0 xl:px-8 block xl:grid xl:grid-cols-2 xl:gap-8">
                                         {/* desktop nomor hp */}
                                         <div className="w-full px-4 xl:px-0 mt-2 xl:mt-0">
@@ -1201,13 +1211,13 @@ export default function BookingKai() {
                       </>
                     )}
 
-                    <div className="flex justify-end mr-2 mt-8">
+                    <div className="w-full xl:w-auto flex justify-end mr-2 mt-0 xl:mt-8">
                       <Button
                         htmlType="submit"
                         size="large"
                         key="submit"
                         type="primary"
-                        className="bg-blue-500 mx-2 font-semibold"
+                        className="bg-blue-500 mx-2 font-medium w-full xl:w-auto"
                       >
                         Booking Sekarang
                       </Button>
@@ -1320,7 +1330,17 @@ export default function BookingKai() {
                             </ol>
                           </div>
                         </div>
+                        <div className="hidden xl:flex mt-4 justify-between items-center mb-4 px-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-black-500 border-b-gray-100">
+                          <div className="flex space-x-2 items-center text-gry-400 text-sm ">
+                            <IoPricetagOutline className="text-gray-500" size={18} />
+                            <div className="text-gray-500">Harga Fare</div>
+                        </div>
+                        <small className="text-sm font-medium">
+                          Rp. {toRupiah(dataBookingTrain[0]?.seats[0]?.priceAdult || 0)}
+                        </small>
                       </div>
+                      </div>
+
                     </>
                   )}
                 </div>

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { FaPlaneArrival, FaPlaneDeparture } from "react-icons/fa";
-import MaskapaiDrawerMobile from "./MaskapaiDrawerMobile";
+import KeretaDrawerMobile from "./KeretaDrawerMobile";
 import { RiArrowUpDownLine } from "react-icons/ri";
 
-const MaskapaiMobile = ({pesawatData, keberangkatan, tujuan, setKeberangkatan, setTujuan, changeStatiun}) => {
+const KeretaMobile = ({kaiData, keberangkatan, tujuan, setKeberangkatan, setTujuan, changeStatiun}) => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [type, setType] = useState(null);
   const toggleDrawer = (newOpen) => {
@@ -32,7 +32,7 @@ const MaskapaiMobile = ({pesawatData, keberangkatan, tujuan, setKeberangkatan, s
           >
             <div className="flex items-center space-x-2">
               <FaPlaneDeparture className="text-gray-400" />
-              <span className="text-sm text-gray-900">{keberangkatan ? keberangkatan.bandara : "Keberangkatan"}</span>
+              <span className="text-sm text-gray-900">{keberangkatan ? keberangkatan.nama_stasiun : "Keberangkatan"}</span>
             </div>
           </div>
         </div>
@@ -46,19 +46,19 @@ const MaskapaiMobile = ({pesawatData, keberangkatan, tujuan, setKeberangkatan, s
           >
             <div className="flex items-center space-x-2">
               <FaPlaneArrival className="text-gray-400" />
-              <span className="text-sm text-gray-900">{tujuan ? tujuan.bandara : "Tujuan"}</span>
+              <span className="text-sm text-gray-900">{tujuan ? tujuan.nama_stasiun : "Tujuan"}</span>
             </div>
           </div>
         </div>
       </ul>
       </div>
-      <MaskapaiDrawerMobile 
-	  type={type}
-	  setKeberangkatan={setKeberangkatan}
-	  setTujuan={setTujuan}
-	  pesawatData={pesawatData} keberangkatan={keberangkatan} tujuan={tujuan} openDrawer={openDrawer} toggleDrawer={toggleDrawer} />
-    </div>
+      <KeretaDrawerMobile 
+        type={type}
+        setKeberangkatan={setKeberangkatan}
+        setTujuan={setTujuan}
+        kaiData={kaiData} keberangkatan={keberangkatan} tujuan={tujuan} openDrawer={openDrawer} toggleDrawer={toggleDrawer} />
+        </div>
   );
 };
 
-export default MaskapaiMobile;
+export default KeretaMobile;

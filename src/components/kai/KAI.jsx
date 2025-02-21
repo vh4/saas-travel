@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Drawer, Popper, SwipeableDrawer, createTheme, Button as ButtonMui } from "@mui/material";
+import { Popper, SwipeableDrawer, Button as ButtonMui } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
@@ -10,7 +10,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import { FaTrain } from "react-icons/fa";
 import { useNavigate, createSearchParams } from "react-router-dom";
-import onClickOutside from "react-onclickoutside";
 import { makeStyles } from "@mui/styles";
 import { Button, message } from "antd";
 import Cookies from "js-cookie";
@@ -27,6 +26,8 @@ import { DateCalendar, DayCalendarSkeleton } from "@mui/x-date-pickers";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay/PickersDay";
 import { Calendar } from 'react-multi-date-picker';
 import 'dayjs/locale/id'; // mengimpor locale Bahasa Indonesia
+import KeretaMobile from "./components/KeretaMobile";
+import { LuUsers } from "react-icons/lu";
 
 dayjs.locale('id'); // mengatur locale global ke Bahasa Indonesia
 
@@ -58,7 +59,7 @@ function KAI() {
   };
 
 
-  const { holidays, dispatchHolidays } = React.useContext(HolidaysContext);
+  const { holidays } = React.useContext(HolidaysContext);
 
 
   const useStyles = makeStyles((theme) => ({
@@ -210,7 +211,7 @@ function KAI() {
   const errorBerangkat = () => {
     messageApi.open({
       type: 'error',
-      content: 'Kota Asal tidak boleh sama dengan Kota Tujuan.',
+      content: 'Dari tidak boleh sama dengan Tujuan.',
       duration: 10, // Durasi pesan 5 detik
       top: '50%', // Posisi pesan di tengah layar
       className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
@@ -221,7 +222,7 @@ function KAI() {
   const errorTujuan = () => {
     messageApi.open({
       type: 'error',
-      content: 'Kota Tujuan tidak boleh sama dengan Kota Asal.',
+      content: 'Tujuan tidak boleh sama dengan Dari.',
       duration: 10, // Durasi pesan 5 detik
       top: '50%', // Posisi pesan di tengah layar
       className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
@@ -311,18 +312,9 @@ function KAI() {
   const [adult, setadult] = React.useState(adultCookie);
   const [infant, setinfant] = React.useState(infantCookie);
 
-
   const [adultTemp, setadultTemp] = React.useState(adult);
   const [infantTemp, setinfantTemp] = React.useState(infant);
-
   const [anchorEl, setAnchorEl] = React.useState("hidden");
-  const handleClick = () => {
-    anchorEl === "hidden" ? setAnchorEl("grid") : setAnchorEl("hidden");
-  };
-
-  KAI.handleClickOutside = () => {
-    setAnchorEl("hidden");
-  };
 
   React.useEffect(() => {
     getKAIdata();
@@ -501,13 +493,13 @@ function KAI() {
       setLoading(false);
 
       if(keberangkatan === null && tujuan === null){
-        messageCustomError('Pilih Kota Asal & Kota Tujuan.')
+        messageCustomError('Pilih Dari & Tujuan.')
       }
       else if(keberangkatan === null){
-        messageCustomError('Pilih Kota Asal.')
+        messageCustomError('Pilih Dari.')
         
       }else if(tujuan === null){
-        messageCustomError('Pilih Kota Tujuan.')
+        messageCustomError('Pilih Tujuan.')
 
       }else{
 
@@ -558,160 +550,78 @@ function KAI() {
     <>
     {contextHolder}
     <div className="flex justify-center row bg-white border-t border-gray-200 w-full pr-0">
-      {/* desktop */}
-      <ModalMui
-        className="hidden md:block"
-        open={openDate}
-        onClose={handleCloseDate}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        {/* desktop */}
-        <Box sx={styleDesktop}>
-          <div className="flex justify-between">
-            <div className="grid grid-rows-3 grid-flow-col mt-4">
-              <div
-                style={{
-                  fontFamily: "Roboto, Helvetica, Arial, sans-serif",
-                  fontWeight: 400,
-                  fontSize: "0.75rem",
-                  lineHeight: 2.66,
-                  letterSpacing: "0.08333em",
-                  color: "rgba(0, 0, 0, 0.6)",
-                }}
-              >
-                PILIH TANGGAL
-              </div>
-              <div className=" flex justify-center">
-                <div className="pl-4 text-gray-400">
-                  <h3>{dayjs(tanggal).format("ddd")},</h3>
-                  <h3>
-                    {dayjs(tanggal).format("MMM")}{" "}
-                    {dayjs(tanggal).format("DD")}
-                  </h3>
-                </div>
-              </div>
-              <div className="flex justify-center">
-                <CiCalendarDate size={60} className="text-gray-400" />
-              </div>
-            </div>
-            <div>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <Calendar
-                  value={tanggal}
-                  onChange={(e) => {setTanggal(dayjs(e)); handleCloseDate()}}
-                  onMonthChange={(newViewDate) => {
-                    setCurrentViewDateDesktop(dayjs(newViewDate).format('YYYY-MM'));
-                  }}
-                  format={"YYYY/MM/DD"}
-                  numberOfMonths={2}
-                  mapDays={({ date }) => {
-                    const dayjsDate = dayjs(date);
-            
-                    const isSunday = dayjsDate.day() === 0;
-                    const isHoliday = holidays.some(holiday => dayjsDate.format("YYYY-MM-DD") === holiday.start);
-            
-                    if (isSunday || isHoliday) {
-                      return {
-                        className: "specialDay",
-                        style: { color: "red", boxShadow: "none" }, // Sesuaikan dengan kebutuhan
-                        title: isHoliday ? holidays.find(holiday => dayjsDate.format("YYYY-MM-DD") === holiday.start).summary : "Sunday",
-                      };
-                    }
-                  }}
-                  minDate={currentDate.toDate()}
-                  maxDate={aheadDate.toDate()}
-                />
-              </LocalizationProvider>
-            </div>
-          </div>
-          <div
-            style={{ overflowX: "scroll", display: "flex", gap: "8px" }}
-            className="hidennscroll mt-2 z-50"
-          >
-            {findHolidayDescriptionsForMonthDesktop(currentViewDateDesktop)?.map(
-              (e, index) => (
+          {/* desktop */}
+          <ModalMui
+          className="hidden md:block"
+          open={openDate}
+          onClose={handleCloseDate}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          {/* desktop */}
+          <Box sx={styleDesktop}>
+            <div className="flex justify-between">
+              <div className="grid grid-rows-3 grid-flow-col mt-4">
                 <div
-                  key={index}
-                  className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50"
+                  style={{
+                    fontFamily: "Roboto, Helvetica, Arial, sans-serif",
+                    fontWeight: 400,
+                    fontSize: "0.75rem",
+                    lineHeight: 2.66,
+                    letterSpacing: "0.08333em",
+                    color: "rgba(0, 0, 0, 0.6)",
+                  }}
                 >
-                  <Typography
-                    variant="caption"
-                    display="block"
-                    style={{ fontSize: "10px" }}
-                  >
-                    <span className="text-red-500">{dayjs(e.start).format("DD MMM")}</span>. {e.summary}
-                  </Typography>
+                  PILIH TANGGAL
                 </div>
-              )
-            )}
-          </div>
-        </Box>
-        {/* mobile */}
-      </ModalMui>
-
-        {/* mobile */}
-        <ModalMui
-        className="block md:hidden"
-        open={openDate}
-        onClose={handleCloseDate}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        closeAfterTransition // Menutup modal setelah transisi selesai
-        TransitionComponent={Slide} // Menggunakan Slide sebagai komponen transisi
-        TransitionProps={{ direction: "up" }} // Animasi slide dari bawah ke atas
-      >
-        <Box sx={styleMobile}>
-          <div className="">
-            <div className="mt-4 pl-6">
-              <div className="flex space-x-4 items-center">
-                <div className="flex justify-start">
-                  <div className="text-gray-400">
-                    <h5>
-                      {dayjs(tanggal).format("ddd")},{" "}
+                <div className=" flex justify-center">
+                  <div className="pl-4 text-gray-400">
+                    <h3>{dayjs(tanggal).format("ddd")},</h3>
+                    <h3>
                       {dayjs(tanggal).format("MMM")}{" "}
                       {dayjs(tanggal).format("DD")}
-                    </h5>
+                    </h3>
                   </div>
                 </div>
-                <div className="">
-                  <CiCalendarDate size={32} className="text-gray-400" />
+                <div className="flex justify-center">
+                  <CiCalendarDate size={60} className="text-gray-400" />
                 </div>
               </div>
+              <div>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Calendar
+                    value={tanggal}
+                    onChange={(e) => {setTanggal(dayjs(e)); handleCloseDate()}}
+                    onMonthChange={(newViewDate) => {
+                      setCurrentViewDateDesktop(dayjs(newViewDate).format('YYYY-MM'));
+                    }}
+                    format={"YYYY/MM/DD"}
+                    numberOfMonths={2}
+                    mapDays={({ date }) => {
+                      const dayjsDate = dayjs(date);
+              
+                      const isSunday = dayjsDate.day() === 0;
+                      const isHoliday = holidays.some(holiday => dayjsDate.format("YYYY-MM-DD") === holiday.start);
+              
+                      if (isSunday || isHoliday) {
+                        return {
+                          className: "specialDay",
+                          style: { color: "red", boxShadow: "none" }, // Sesuaikan dengan kebutuhan
+                          title: isHoliday ? holidays.find(holiday => dayjsDate.format("YYYY-MM-DD") === holiday.start).summary : "Sunday",
+                        };
+                      }
+                    }}
+                    minDate={currentDate.toDate()}
+                    maxDate={aheadDate.toDate()}
+                  />
+                </LocalizationProvider>
+              </div>
             </div>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateCalendar
-                value={tanggal}
-                shouldDisableDate={(current) => {
-                  const currentDate = dayjs();
-                  const aheadDate = dayjs().add(6, "months");
-                  return (
-                    current &&
-                    (current < currentDate.startOf("day") ||
-                      current > aheadDate)
-                  );
-                }}
-                onChange={(newValue) => {
-                  setTanggal(newValue);
-                  handleCloseDate();
-                }}
-                onMonthChange={(newViewDate) => {
-                  setCurrentViewDate(newViewDate);
-                }}
-                renderLoading={() => <DayCalendarSkeleton />}
-                slots={{
-                  day: CustomDay,
-                }}
-                slotProps={{
-                  day: {},
-                }}
-              />
-            </LocalizationProvider>
             <div
               style={{ overflowX: "scroll", display: "flex", gap: "8px" }}
               className="hidennscroll mt-2 z-50"
             >
-              {findHolidayDescriptionsForMonth(currentViewDate)?.map(
+              {findHolidayDescriptionsForMonthDesktop(currentViewDateDesktop)?.map(
                 (e, index) => (
                   <div
                     key={index}
@@ -722,27 +632,112 @@ function KAI() {
                       display="block"
                       style={{ fontSize: "10px" }}
                     >
-                    <span className="text-red-500">{dayjs(e.start).format("DD MMM")}</span>. {e.summary}
+                      <span className="text-red-500">{dayjs(e.start).format("DD MMM")}</span>. {e.summary}
                     </Typography>
                   </div>
                 )
               )}
             </div>
-          </div>
-        </Box>
-        {/* mobile */}
-      </ModalMui>
+          </Box>
+          {/* mobile */}
+          </ModalMui>
+
+          {/* mobile */}
+          <ModalMui
+          className="block md:hidden"
+          open={openDate}
+          onClose={handleCloseDate}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          closeAfterTransition // Menutup modal setelah transisi selesai
+          TransitionComponent={Slide} // Menggunakan Slide sebagai komponen transisi
+          TransitionProps={{ direction: "up" }} // Animasi slide dari bawah ke atas
+        >
+          <Box sx={styleMobile}>
+            <div className="">
+              <div className="mt-4 pl-6">
+                <div className="flex space-x-4 items-center">
+                  <div className="flex justify-start">
+                    <div className="text-gray-400">
+                      <h5>
+                        {dayjs(tanggal).format("ddd")},{" "}
+                        {dayjs(tanggal).format("MMM")}{" "}
+                        {dayjs(tanggal).format("DD")}
+                      </h5>
+                    </div>
+                  </div>
+                  <div className="">
+                    <CiCalendarDate size={32} className="text-gray-400" />
+                  </div>
+                </div>
+              </div>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateCalendar
+                  value={tanggal}
+                  shouldDisableDate={(current) => {
+                    const currentDate = dayjs();
+                    const aheadDate = dayjs().add(6, "months");
+                    return (
+                      current &&
+                      (current < currentDate.startOf("day") ||
+                        current > aheadDate)
+                    );
+                  }}
+                  onChange={(newValue) => {
+                    setTanggal(newValue);
+                    handleCloseDate();
+                  }}
+                  onMonthChange={(newViewDate) => {
+                    setCurrentViewDate(newViewDate);
+                  }}
+                  renderLoading={() => <DayCalendarSkeleton />}
+                  slots={{
+                    day: CustomDay,
+                  }}
+                  slotProps={{
+                    day: {},
+                  }}
+                />
+              </LocalizationProvider>
+              <div
+                style={{ overflowX: "scroll", display: "flex", gap: "8px" }}
+                className="hidennscroll mt-2 z-50"
+              >
+                {findHolidayDescriptionsForMonth(currentViewDate)?.map(
+                  (e, index) => (
+                    <div
+                      key={index}
+                      className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50"
+                    >
+                      <Typography
+                        variant="caption"
+                        display="block"
+                        style={{ fontSize: "10px" }}
+                      >
+                      <span className="text-red-500">{dayjs(e.start).format("DD MMM")}</span>. {e.summary}
+                      </Typography>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          </Box>
+          {/* mobile */}
+          </ModalMui>
+
         <div class="w-full px-4 py-4 rounded-lg shadow-xs">
           <form className="w-full">
             <>
               <div className="block xl:flex justify-between mx-0 xl:mx-6">
-                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 gap-6 xl:gap-0">
-                  <div className="mt-2 w-full col col-span-1 md:col-span-2">
+                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 gap-2 xl:gap-0">
+
+                  {/* desktop pencarian asal dan tujuan*/}
+                  <div className="mt-2 w-full col col-span-1 md:col-span-2 hidden xl:block">
                     <div className="w-full flex flex-col xl:flex-row items-center px-2 xl:px-0">
                         <div
                             className="w-full m-2 xl:m-0 xl:pr-0"
                         >
-                            <small className="block mb-2 text-black">Kota Asal</small>
+                            <small className="block mb-2 text-black">Dari</small>
                             <Autocomplete
                             classes={classes}
                             className="mt-1.5"
@@ -797,7 +792,7 @@ function KAI() {
                                     startAdornment: (
                                     <FaTrain className="text-gray-400" />
                                     ),
-                                    placeholder: "Kota Asal",
+                                    placeholder: "Dari",
                                     endAdornment: (
                                     <React.Fragment>
                                         {loadingBerangkat ? (
@@ -820,7 +815,7 @@ function KAI() {
                         <div
                           className="w-full m-2 xl:m-0 xl:pr-0"
                         >
-                            <small className="mb-2 text-black">Kota Tujuan</small>
+                            <small className="mb-2 text-black">Tujuan</small>
                             <Autocomplete
                             classes={classes}
                             className="mt-1.5"
@@ -875,7 +870,7 @@ function KAI() {
                                     startAdornment: (
                                     <FaTrain className="text-gray-400" />
                                     ),
-                                    placeholder: "Kota Asal",
+                                    placeholder: "Dari",
                                     endAdornment: (
                                     <React.Fragment>
                                         {loadingTujuan ? (
@@ -891,6 +886,20 @@ function KAI() {
                         </div>
                     </div>
                   </div>
+
+                  {/* mobile pencarian asal dan tujuan */}
+                  <div className="block xl:hidden">
+                    <KeretaMobile 
+                      kaiData={kai.data || []}
+                      keberangkatan={keberangkatan}     
+                      setKeberangkatan={setKeberangkatan}
+                      setTujuan={setTujuan}
+                      tujuan={tujuan}
+                      changeStatiun={changeStatiun}
+                    />
+                  </div>
+
+                  {/* desktop  dan mobile tanggal */}
                   <FormControl sx={{ m: 1, minWidth: 160 }}>
                     <small className="mb-2 text-black">
                       Tanggal Berangkat
@@ -906,17 +915,20 @@ function KAI() {
                       </div>
                     </button>
                   </FormControl>
-
+                  
+                  {/* desktop pencarian penumpang */}
                   <FormControl sx={{ m: 1, minWidth: 130 }}>
                     <small className="mb-2 text-black">Total Penumpang</small>
                     <div className="hidden md:block"></div>
-                    <button
-                      type="button"
-                      className="border py-[11px] customButtonStyle w-full block text-black -mx-1.5"
+                    <div
+                      className="cursor-pointer border py-[10px] rounded-md px-2 w-full text-black flex items-center space-x-2"
                       onClick={toggleDrawer(true, false, "buka")}
                     >
-                      {`${parseInt(adult) + parseInt(infant)} Penumpang`}
-                    </button>
+                        <LuUsers size={21} className="text-gray-400"  />
+                      <div>
+                        {`${parseInt(adult) + parseInt(infant)} Penumpang`}                          
+                      </div>
+                    </div>
                     <SwipeableDrawer anchor="bottom" PaperProps={{ sx: { borderTopLeftRadius: 30, borderTopRightRadius: 30 } }} open={openDrawer} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
                       <div className="p-4 mt-2 xl:container xl:px-64">
                         
@@ -976,8 +988,4 @@ function KAI() {
   );
 }
 
-const clickOutsideConfig = {
-  handleClickOutside: () => KAI.handleClickOutside,
-};
-
-export default onClickOutside(KAI, clickOutsideConfig);
+export default KAI

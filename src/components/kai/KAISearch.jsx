@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Drawer, Popper, SwipeableDrawer, createTheme, Button as ButtonMui } from "@mui/material";
+import { Popper, SwipeableDrawer, Button as ButtonMui } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
@@ -9,8 +9,7 @@ import { Box, Chip, Slide } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import { FaTrain } from "react-icons/fa";
-import { useNavigate, createSearchParams } from "react-router-dom";
-import onClickOutside from "react-onclickoutside";
+import { useNavigate } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { Button, message } from "antd";
 import Cookies from "js-cookie";
@@ -27,6 +26,8 @@ import { DateCalendar, DayCalendarSkeleton } from "@mui/x-date-pickers";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay/PickersDay";
 import { Calendar } from 'react-multi-date-picker';
 import 'dayjs/locale/id'; // mengimpor locale Bahasa Indonesia
+import KeretaMobile from "./components/KeretaMobile";
+import { LuUsers } from "react-icons/lu";
 
 
 dayjs.locale('id'); // mengatur locale global ke Bahasa Indonesia
@@ -59,7 +60,7 @@ function KAI() {
   };
 
 
-  const { holidays, dispatchHolidays } = React.useContext(HolidaysContext);
+  const { holidays } = React.useContext(HolidaysContext);
 
 
   const useStyles = makeStyles((theme) => ({
@@ -120,8 +121,6 @@ function KAI() {
 
   const [kaiData, setKAIData] = React.useState([]);
 
-  const i = 0;
-
   const [openBerangka, SetopenBerangka] = React.useState(false);
   const [openTujuan, setOpenTujuan] = React.useState(false);
 
@@ -163,6 +162,29 @@ function KAI() {
     return holidaysInMonth.map((holiday) => holiday);
   };
 
+  const findHolidayDescriptionsForMonthDesktop = (date) => {
+    const startDate = dayjs(date);
+    const monthStart = startDate.month();
+    const year = startDate.year();
+  
+    // Tambahkan 1 bulan ke startDate untuk mendapatkan bulan kedua dalam rentang
+    const endDate = startDate.add(1, 'month');
+    const monthEnd = endDate.month();
+  
+    const holidaysInMonth = holidays.filter(
+      (holiday) => {
+        const holidayMonth = dayjs(holiday.start).month();
+        const holidayYear = dayjs(holiday.start).year();
+  
+        // Cek jika liburan berada dalam rentang dua bulan dan tahun yang sama
+        return ((holidayMonth === monthStart || holidayMonth === monthEnd) && holidayYear === year);
+      }
+    );
+  
+    return holidaysInMonth;
+    
+  };
+
   function CustomDay(props) {
     const { day, outsideCurrentMonth, ...other } = props;
 
@@ -186,7 +208,7 @@ function KAI() {
   const errorBerangkat = () => {
     messageApi.open({
       type: 'error',
-      content: 'Kota Asal tidak boleh sama dengan Kota Tujuan.',
+      content: 'Dari tidak boleh sama dengan Tujuan.',
       duration: 10, // Durasi pesan 5 detik
       top: '50%', // Posisi pesan di tengah layar
       className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
@@ -197,7 +219,7 @@ function KAI() {
   const errorTujuan = () => {
     messageApi.open({
       type: 'error',
-      content: 'Kota Tujuan tidak boleh sama dengan Kota Asal.',
+      content: 'Tujuan tidak boleh sama dengan Dari.',
       duration: 10, // Durasi pesan 5 detik
       top: '50%', // Posisi pesan di tengah layar
       className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
@@ -289,17 +311,10 @@ function KAI() {
 
   const [adultTemp, setadultTemp] = React.useState(adult);
   const [infantTemp, setinfantTemp] = React.useState(infant);
+  const [currentViewDateDesktop, setCurrentViewDateDesktop] = useState(dayjs().format('YYYY-MM'));
 
 
   const [anchorEl, setAnchorEl] = React.useState("hidden");
-  const handleClick = () => {
-    anchorEl === "hidden" ? setAnchorEl("grid") : setAnchorEl("hidden");
-  };
-
-  KAI.handleClickOutside = () => {
-    setAnchorEl("hidden");
-  };
-
   React.useEffect(() => {
     getKAIdata();
   }, []);
@@ -477,13 +492,13 @@ function KAI() {
       setLoading(false);
 
       if(keberangkatan === null && tujuan === null){
-        messageCustomError('Pilih Kota Asal & Kota Tujuan.')
+        messageCustomError('Pilih Dari & Tujuan.')
       }
       else if(keberangkatan === null){
-        messageCustomError('Pilih Kota Asal.')
+        messageCustomError('Pilih Dari.')
         
       }else if(tujuan === null){
-        messageCustomError('Pilih Kota Tujuan.')
+        messageCustomError('Pilih Tujuan.')
 
       }else{
 
@@ -540,9 +555,8 @@ function KAI() {
     <>
     {contextHolder}
     <div className="flex justify-center row bg-white border-t border-gray-200 w-full pr-0">
-      {/* desktop */}
-        {/* desktop */}
-        <ModalMui
+          {/* desktop */}
+          <ModalMui
           className="hidden md:block"
           open={openDate}
           onClose={handleCloseDate}
@@ -580,28 +594,31 @@ function KAI() {
               </div>
               <div>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <Calendar
-                  value={tanggal}
-                  onChange={(e) => {setTanggal(dayjs(e)); handleCloseDate()}}
-                  format={"YYYY/MM/DD"}
-                  numberOfMonths={2}
-                  mapDays={({ date }) => {
-                    const dayjsDate = dayjs(date);
-            
-                    const isSunday = dayjsDate.day() === 0;
-                    const isHoliday = holidays.some(holiday => dayjsDate.format("YYYY-MM-DD") === holiday.start);
-            
-                    if (isSunday || isHoliday) {
-                      return {
-                        className: "specialDay",
-                        style: { color: "red", boxShadow: "none" }, // Sesuaikan dengan kebutuhan
-                        title: isHoliday ? holidays.find(holiday => dayjsDate.format("YYYY-MM-DD") === holiday.start).summary : "Sunday",
-                      };
-                    }
-                  }}
-                  minDate={currentDate.toDate()}
-                  maxDate={aheadDate.toDate()}
-                />
+                  <Calendar
+                    value={tanggal}
+                    onChange={(e) => {setTanggal(dayjs(e)); handleCloseDate()}}
+                    onMonthChange={(newViewDate) => {
+                      setCurrentViewDateDesktop(dayjs(newViewDate).format('YYYY-MM'));
+                    }}
+                    format={"YYYY/MM/DD"}
+                    numberOfMonths={2}
+                    mapDays={({ date }) => {
+                      const dayjsDate = dayjs(date);
+              
+                      const isSunday = dayjsDate.day() === 0;
+                      const isHoliday = holidays.some(holiday => dayjsDate.format("YYYY-MM-DD") === holiday.start);
+              
+                      if (isSunday || isHoliday) {
+                        return {
+                          className: "specialDay",
+                          style: { color: "red", boxShadow: "none" }, // Sesuaikan dengan kebutuhan
+                          title: isHoliday ? holidays.find(holiday => dayjsDate.format("YYYY-MM-DD") === holiday.start).summary : "Sunday",
+                        };
+                      }
+                    }}
+                    minDate={currentDate.toDate()}
+                    maxDate={aheadDate.toDate()}
+                  />
                 </LocalizationProvider>
               </div>
             </div>
@@ -609,7 +626,7 @@ function KAI() {
               style={{ overflowX: "scroll", display: "flex", gap: "8px" }}
               className="hidennscroll mt-2 z-50"
             >
-              {findHolidayDescriptionsForMonth(currentViewDate)?.map(
+              {findHolidayDescriptionsForMonthDesktop(currentViewDateDesktop)?.map(
                 (e, index) => (
                   <div
                     key={index}
@@ -620,7 +637,7 @@ function KAI() {
                       display="block"
                       style={{ fontSize: "10px" }}
                     >
-                      {dayjs(e.start).format("DD")}.{e.summary}
+                      <span className="text-red-500">{dayjs(e.start).format("DD MMM")}</span>. {e.summary}
                     </Typography>
                   </div>
                 )
@@ -628,31 +645,22 @@ function KAI() {
             </div>
           </Box>
           {/* mobile */}
-        </ModalMui>
+          </ModalMui>
 
-        {/* mobile */}
-        <ModalMui
+          {/* mobile */}
+          <ModalMui
           className="block md:hidden"
           open={openDate}
           onClose={handleCloseDate}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
+          closeAfterTransition // Menutup modal setelah transisi selesai
+          TransitionComponent={Slide} // Menggunakan Slide sebagai komponen transisi
+          TransitionProps={{ direction: "up" }} // Animasi slide dari bawah ke atas
         >
           <Box sx={styleMobile}>
             <div className="">
-              <div className="my-4  pl-4">
-                <div
-                  style={{
-                    fontFamily: "Roboto, Helvetica, Arial, sans-serif",
-                    fontWeight: 400,
-                    fontSize: "0.75rem",
-                    lineHeight: 2.66,
-                    letterSpacing: "0.08333em",
-                    color: "rgba(0, 0, 0, 0.6)",
-                  }}
-                >
-                  PILIH TANGGAL
-                </div>
+              <div className="mt-4 pl-6">
                 <div className="flex space-x-4 items-center">
                   <div className="flex justify-start">
                     <div className="text-gray-400">
@@ -673,7 +681,7 @@ function KAI() {
                   value={tanggal}
                   shouldDisableDate={(current) => {
                     const currentDate = dayjs();
-                    const aheadDate = dayjs().add(3, "months");
+                    const aheadDate = dayjs().add(6, "months");
                     return (
                       current &&
                       (current < currentDate.startOf("day") ||
@@ -696,42 +704,45 @@ function KAI() {
                   }}
                 />
               </LocalizationProvider>
-            </div>
-            <div
-              style={{ overflowX: "scroll", display: "flex", gap: "8px" }}
-              className="hidennscroll mt-2 z-50"
-            >
-              {findHolidayDescriptionsForMonth(currentViewDate)?.map(
-                (e, index) => (
-                  <div
-                    key={index}
-                    className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50"
-                  >
-                    <Typography
-                      variant="caption"
-                      display="block"
-                      style={{ fontSize: "10px" }}
+              <div
+                style={{ overflowX: "scroll", display: "flex", gap: "8px" }}
+                className="hidennscroll mt-2 z-50"
+              >
+                {findHolidayDescriptionsForMonth(currentViewDate)?.map(
+                  (e, index) => (
+                    <div
+                      key={index}
+                      className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50"
                     >
-                      {dayjs(e.start).format("DD")}.{e.summary}
-                    </Typography>
-                  </div>
-                )
-              )}
+                      <Typography
+                        variant="caption"
+                        display="block"
+                        style={{ fontSize: "10px" }}
+                      >
+                      <span className="text-red-500">{dayjs(e.start).format("DD MMM")}</span>. {e.summary}
+                      </Typography>
+                    </div>
+                  )
+                )}
+              </div>
             </div>
           </Box>
           {/* mobile */}
-        </ModalMui>
+          </ModalMui>
+
         <div class="w-full px-4 py-4 rounded-lg shadow-xs">
           <form className="w-full">
             <>
               <div className="block xl:flex justify-between mx-0 xl:mx-6">
-                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 gap-6 xl:gap-0">
-                <div className="mt-2 w-full col col-span-1 md:col-span-2">
+                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 gap-2 xl:gap-0">
+
+                  {/* desktop pencarian asal dan tujuan*/}
+                  <div className="mt-2 w-full col col-span-1 md:col-span-2 hidden xl:block">
                     <div className="w-full flex flex-col xl:flex-row items-center px-2 xl:px-0">
                         <div
                             className="w-full m-2 xl:m-0 xl:pr-0"
                         >
-                            <small className="block mb-2 text-black">Kota Asal</small>
+                            <small className="block mb-2 text-black">Dari</small>
                             <Autocomplete
                             classes={classes}
                             className="mt-1.5"
@@ -786,7 +797,7 @@ function KAI() {
                                     startAdornment: (
                                     <FaTrain className="text-gray-400" />
                                     ),
-                                    placeholder: "Kota Asal",
+                                    placeholder: "Dari",
                                     endAdornment: (
                                     <React.Fragment>
                                         {loadingBerangkat ? (
@@ -800,16 +811,16 @@ function KAI() {
                             )}
                             />
                         </div>
-                        <div
-                            onClick={changeStatiun}
-                            className="w-8 h-8 cursor-pointer flex justify-center mt-2 xl:mt-6 items-center bg-blue-500 rounded-full p-1 flex-shrink-0"
-                            >
+                          <div
+                              onClick={changeStatiun}
+                              className="w-8 h-8 cursor-pointer flex justify-center mt-2 xl:mt-6 items-center bg-blue-500 rounded-full p-1 flex-shrink-0"
+                              >
                               <AiOutlineSwap className="text-white w-10 h-10" />
                           </div>
                         <div
                           className="w-full m-2 xl:m-0 xl:pr-0"
                         >
-                            <small className="mb-2 text-black">Kota Tujuan</small>
+                            <small className="mb-2 text-black">Tujuan</small>
                             <Autocomplete
                             classes={classes}
                             className="mt-1.5"
@@ -864,7 +875,7 @@ function KAI() {
                                     startAdornment: (
                                     <FaTrain className="text-gray-400" />
                                     ),
-                                    placeholder: "Kota Asal",
+                                    placeholder: "Dari",
                                     endAdornment: (
                                     <React.Fragment>
                                         {loadingTujuan ? (
@@ -880,6 +891,20 @@ function KAI() {
                         </div>
                     </div>
                   </div>
+
+                  {/* mobile pencarian asal dan tujuan */}
+                  <div className="block xl:hidden">
+                    <KeretaMobile
+                      kaiData={kai.data || []}
+                      keberangkatan={keberangkatan}     
+                      setKeberangkatan={setKeberangkatan}
+                      setTujuan={setTujuan}
+                      tujuan={tujuan}
+                      changeStatiun={changeStatiun}
+                    />
+                  </div>
+
+                  {/* desktop  dan mobile tanggal */}
                   <FormControl sx={{ m: 1, minWidth: 160 }}>
                     <small className="mb-2 text-black">
                       Tanggal Berangkat
@@ -895,17 +920,20 @@ function KAI() {
                       </div>
                     </button>
                   </FormControl>
-
+                  
+                  {/* desktop pencarian penumpang */}
                   <FormControl sx={{ m: 1, minWidth: 130 }}>
                     <small className="mb-2 text-black">Total Penumpang</small>
                     <div className="hidden md:block"></div>
-                    <button
-                      type="button"
-                      className="border py-[11px] customButtonStyle w-full block text-black -mx-1.5"
+                    <div
+                      className="cursor-pointer border py-[10px] rounded-md px-2 w-full text-black flex items-center space-x-2"
                       onClick={toggleDrawer(true, false, "buka")}
                     >
-                      {`${parseInt(adult) + parseInt(infant)} Penumpang`}
-                    </button>
+                        <LuUsers size={21} className="text-gray-400"  />
+                      <div>
+                        {`${parseInt(adult) + parseInt(infant)} Penumpang`}                          
+                      </div>
+                    </div>
                     <SwipeableDrawer anchor="bottom" PaperProps={{ sx: { borderTopLeftRadius: 30, borderTopRightRadius: 30 } }} open={openDrawer} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
                       <div className="p-4 mt-2 xl:container xl:px-64">
                         
@@ -965,8 +993,4 @@ function KAI() {
   );
 }
 
-const clickOutsideConfig = {
-  handleClickOutside: () => KAI.handleClickOutside,
-};
-
-export default onClickOutside(KAI, clickOutsideConfig);
+export default KAI

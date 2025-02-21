@@ -1,4 +1,4 @@
-import { Drawer, Popper, Slide, SwipeableDrawer, createTheme, Button as ButtonMui } from "@mui/material";
+import { Popper, Slide, SwipeableDrawer, Button as ButtonMui } from "@mui/material";
 import * as React from "react";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
@@ -7,8 +7,6 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { FaPlaneDeparture, FaPlaneArrival } from "react-icons/fa";
 import { Chip, Box } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
-import onClickOutside from "react-onclickoutside";
-import { useNavigate } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import { Button, message, Tooltip } from "antd";
 import Cookies from "js-cookie";
@@ -30,7 +28,7 @@ import { CiCalendarDate } from "react-icons/ci";
 import { DateCalendar, DayCalendarSkeleton } from "@mui/x-date-pickers";
 import { Calendar } from 'react-multi-date-picker';
 import 'dayjs/locale/id'; // mengimpor locale Bahasa Indonesia
-import MaskapaiMobile from "./components/MaskapaiMobile";
+import MaskapaiMobile from "../plane/components/MaskapaiMobile";
 import { LuUsers } from "react-icons/lu";
 
 
@@ -157,7 +155,7 @@ function Plane() {
   const errorBerangkat = () => {
     messageApi.open({
       type: "error",
-      content: "Kota Asal tidak boleh sama dengan Kota Tujuan.",
+      content: "Dari tidak boleh sama dengan Tujuan.",
       duration: 10, // Durasi pesan 5 detik
       top: "50%", // Posisi pesan di tengah layar
       className: "custom-message", // Tambahkan kelas CSS kustom jika diperlukan
@@ -167,7 +165,7 @@ function Plane() {
   const errorTujuan = () => {
     messageApi.open({
       type: "error",
-      content: "Kota Tujuan tidak boleh sama dengan Kota Asal.",
+      content: "Tujuan tidak boleh sama dengan Dari.",
       duration: 10, // Durasi pesan 5 detik
       top: "50%", // Posisi pesan di tengah layar
       className: "custom-message", // Tambahkan kelas CSS kustom jika diperlukan
@@ -232,17 +230,6 @@ function Plane() {
     }, 1000);
   };
   const handleClose = () => setOpen(false);
-
-  const handleClick = () => {
-    anchorEl === "hidden" ? setAnchorEl("grid") : setAnchorEl("hidden");
-  };
-
-  Plane.handleClickOutside = () => {
-    setAnchorEl("hidden");
-  };
-
-  const navigate = useNavigate();
-
   const [isLoading, setLoading] = React.useState(false);
   const [pulang, setPulang] = React.useState(false);
   const [pesawatStasiun, setpesawatStasiun] = React.useState({});
@@ -340,9 +327,6 @@ function Plane() {
   const [adultTemp, setadultTemp] = React.useState(adult);
   const [infantTemp, setinfantTemp] = React.useState(infant);
   const [childTemp, setChildTemp] = React.useState(child);
-
-
-  const i = 0;
 
   const useStyles = makeStyles((theme) => ({
     inputRoot: {
@@ -588,11 +572,11 @@ function Plane() {
       setLoading(false);
 
       if (keberangkatan === null && tujuan === null) {
-        messageCustomError("Pilih Kota Asal & Kota Tujuan.");
+        messageCustomError("Pilih Dari & Tujuan.");
       } else if (keberangkatan === null) {
-        messageCustomError("Pilih Kota Asal.");
+        messageCustomError("Pilih Dari.");
       } else if (tujuan === null) {
-        messageCustomError("Pilih Kota Tujuan.");
+        messageCustomError("Pilih Tujuan.");
       } else {
         const params = {
           departure: keberangkatan.code,
@@ -646,58 +630,54 @@ function Plane() {
   return (
     <>
       {contextHolder}
-      <ModalMui
-        open={open}
-        onClose={handleClose}
-        sx={{ zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center" }}
-      >
-        <Box
-          sx={{
-            bgcolor: "background.paper",
-            p: 4,
-            borderRadius: 3,
-            maxWidth: 900,
-            width: "100%",
-            mx: "auto",
-            mt: 10,
-          }}
-        >
-          <h6>Pilih Maskapai</h6>
-          <Box>
-            {loadingModal === true ? (
+      <Modal size={size} open={open} onClose={handleClose}>
+        <Modal.Header>
+          <Modal.Title>Pilih Maskapai</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {loadingModal === true ? (
+            <>
               <Placeholder.Paragraph />
-            ) : (
-              <div className="container mt-6">
-              <div className="grid grid-cols-1 xl:grid-cols-4 gap-0 xl:gap-4">
-                <div className="">
-                  <Checkbox
-                    className="block -ml-2.5"
-                    checked={isSelectAll}
-                    onChange={toggleSelectAll}
-                  >
-                    Select All
-                  </Checkbox>
-                </div>
-                {Object.keys(djremix).map((key) => (
-                  <div className="col-2" key={key}>
-                    <CheckboxGroup
-                      value={selectedOptions}
-                      onChange={handleCheckboxChange}
+            </>
+          ) : (
+            <>
+              <div className="container">
+                <div className="grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-0 md:gap-6">
+                  <div className="">
+                    <Checkbox
+                      className="block -ml-2.5 md:-ml-0"
+                      checked={isSelectAll}
+                      onChange={toggleSelectAll}
                     >
-                      <Checkbox value={key}>{djremix[key]}</Checkbox>
-                    </CheckboxGroup>
+                      Select All
+                    </Checkbox>
                   </div>
-                ))}
+                  {Object.keys(djremix).map((key) => (
+                    <div className="col-2" key={key}>
+                      <CheckboxGroup
+                        value={selectedOptions}
+                        onChange={handleCheckboxChange}
+                      >
+                        <Checkbox value={key}>{djremix[key]}</Checkbox>
+                      </CheckboxGroup>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-            )}
-          </Box>
-          <Box className="flex space-x-4 mt-4 mb-12 justify-end ">
-            <Button onClick={handleClose} variant="outlined" className="">Cancel</Button>
-            <Button onClick={handleClose} variant="contained" sx={{ ml: 8 }}>Ok</Button>
-          </Box>
-        </Box>
-      </ModalMui>
+            </>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="flex space-x-4 justify-end">
+            <Button onClick={handleClose} appearance="subtle">
+              Cancel
+            </Button>
+            <Button onClick={handleClose} appearance="primary">
+              Ok
+            </Button>
+          </div>
+        </Modal.Footer>
+      </Modal>
 
       {/* desktop */}
       <ModalMui
@@ -901,10 +881,10 @@ function Plane() {
                   {/* web maskapai */}
                   <div className="mt-2 w-full col-span-1 md:col-span-2 hidden xl:block">
                     <div className="w-full flex flex-col xl:flex-row items-center xl:px-0 gap-0">
-                      {/* Kota Asal */}
+                      {/* Dari */}
                       <div className="w-full max-w-full">
                         <div className="m-2 xl:m-0 pr-0 xl:pr-0">
-                          <small className="block mb-2 text-black">Kota Asal</small>
+                          <small className="block mb-2 text-black">Dari</small>
                           <Autocomplete
                             classes={classes}
                             className="mt-1.5 w-full"
@@ -963,10 +943,10 @@ function Plane() {
                         <AiOutlineSwap className="text-white w-6 h-6" />
                       </div>
 
-                      {/* Kota Tujuan */}
+                      {/* Tujuan */}
                       <div className="w-full max-w-sm">
                         <div className="m-2 xl:m-0 pr-0 xl:pr-0">
-                          <small className="block mb-2 text-black">Kota Tujuan</small>
+                          <small className="block mb-2 text-black">Tujuan</small>
                           <Autocomplete
                             classes={classes}
                             className="mt-1.5 w-full"
@@ -1020,7 +1000,7 @@ function Plane() {
 
                   {/* mobile maskapai */}
                   <div className="block xl:hidden">
-                    <MaskapaiMobile
+                    <MaskapaiMobile 
                       pesawatData={pesawatStasiun.data || []}
                       keberangkatan={keberangkatan}     
                       setKeberangkatan={setKeberangkatan}
@@ -1031,7 +1011,7 @@ function Plane() {
                   </div>
 
                   <FormControl sx={{ m: 1, minWidth: 160 }}>
-                    <small className="mb-2 text-black hidden xl:block">Tanggal Berangkat</small>
+                    <small className="mb-2 text-black">Tanggal Berangkat</small>
                     <button
                       type="button"
                       className="border py-[10px] customButtonStyle w-full block text-black"
@@ -1046,7 +1026,7 @@ function Plane() {
                     </button>
                   </FormControl>
                   <FormControl sx={{ m: 1, minWidth: 130 }}>
-                    <small className="mb-2 text-black hidden xl:block">Total Penumpang</small>
+                    <small className="mb-2 text-black">Total Penumpang</small>
                     <div className="hidden md:block"></div>
                     {/* customButtonStyle */}
                     <div
@@ -1118,8 +1098,4 @@ function Plane() {
   );
 }
 
-const clickOutsideConfig = {
-  handleClickOutside: () => Plane.handleClickOutside,
-};
-
-export default onClickOutside(Plane, clickOutsideConfig);
+export default Plane

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { AiOutlineCheckCircle, AiOutlineClockCircle } from "react-icons/ai";
+import { AiOutlineClockCircle } from "react-icons/ai";
 import { MdHorizontalRule } from "react-icons/md";
 import { Alert, Button as ButtonAnt, Modal } from "antd";
 import { notification } from "antd";
@@ -16,6 +16,9 @@ import Tiket from "./Tiket";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { IoMdCheckmarkCircle } from "react-icons/io";
+import { Box } from "@mui/material";
+import { TiketContext } from "../../App";
+import DetailPassengersDrawer from "./components/DetailPassengersDrawer";
 
 export default function Pembayaran() {
   const isOk = useSelector((state) => state.callback.isOk);
@@ -64,6 +67,14 @@ export default function Pembayaran() {
   const [hasilbayar, setHasilbayar] = useState(null);
 
   const [open, setOpen] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(null);
+  const { pay, dispatch } = React.useContext(TiketContext);
+
+  const toggleDrawer = (type) => {
+    setOpenDrawer(type);
+  };
+
+
   const showModal = () => {
     setOpen(true);
   };
@@ -277,6 +288,12 @@ export default function Pembayaran() {
         ),
       };
       setispay(true);
+      dispatch({
+        type: "PAY_TRAIN",
+        // payload:{
+        //   isPayed:true
+        // }
+      });
       setHasilbayar(params);
     } else {
       setTimeout(() => {
@@ -316,7 +333,7 @@ export default function Pembayaran() {
                 <div className="flex space-x-2 items-center">
                   <ExclamationCircleFilled className="text-orange-500 text-xl" />
                   <div className="text-bold text-xl text-orange-500">
-                    Apakah anda yakin ??
+                    Apakah anda yakin?
                   </div>
                 </div>
               </>
@@ -396,43 +413,173 @@ export default function Pembayaran() {
                 </div>
                 {/* mobile sidebar */}
                 <div className="block xl:hidden sidebar w-full xl:w-2/3 2xl:w-1/2">
-                  <div className="mt-2 py-2 md:py-4 rounded-md border-b border-gray-200 shadow-sm">
-                    <div className="px-4 py-2">
+                <div className="py-2 xl:py-4 mt-2 xl:mt-0">
+                    <Box
+                        className="border shadow px-6 py-6 rounded-xl"
+                        sx={{
+                          // textAlign: "center",
+                          // paddingY: "16px",
+                          // borderBottomLeftRadius: "30px",
+                          // borderBottomRightRadius: "30px",
+                          // cursor: "pointer",
+                        }}
+                        >
+                    <div className="flex justify-between items-center -mt-2">
                       {/* <div className="text-black text-xs">Booking ID</div> */}
-                      <div className="text-black font-medium  text-sm">
+                      <div className="text-black text-sm -mt-1.5">
                         Transaksi ID
                       </div>
-
-                      <div className="mt-2 font-medium  text-blue-500 text-[18px]">
+                      <div className="mt-2 font-bold  text-blue-500 text-[18px]">
                         {/* {hasilBooking && hasilBooking.bookingCode} */}
-                        <Paragraph copyable>
+                        <Paragraph copyable className="">
                           {hasilBooking && hasilBooking.transactionId}
                         </Paragraph>
                       </div>
-                      <div className="text-grapy-500 text-xs">
-                        Gunakan kode bayar ini sebagai nomor tujuan pada menu
-                        pembayaran di aplikasi.
-                      </div>
                     </div>
-                    <div className="p-4 border-t">
-                      <div className="text-xs text-black">
-                        {dataBookingTrain[0].trainName}
-                      </div>
-                      <div className="mt-1 text-xs text-black font-medium ">
-                        {dataDetailTrain[0].berangkat_nama_kota} -{" "}
-                        {dataDetailTrain[0].tujuan_nama_kota}
-                      </div>
-                      <div className="mt-3 text-xs text-black">
-                        {parseTanggal(dataBookingTrain[0].departureDate)}
-                      </div>
-                      <div className="mt-1 text-xs text-black">
-                        {dataBookingTrain[0].departureTime} -{" "}
-                        {dataBookingTrain[0].arrivalTime}
-                      </div>
+                    <div className="text-grapy-500 text-xs">
+
+                      Gunakan kode bayar ini sebagai nomor tujuan pada menu
+                      pembayaran di aplikasi.
+                    </div>
+                    </Box>
+                    <div className="p-4">
+                            <div className="flex items-center space-x-2 py-2">
+                              <div className="flex justify-between items-center">
+                                <div className="flex space-x-2 items-center">
+                                  <div className="text-xs text-black">
+                                    <div className="font-semibold">{dataBookingTrain[0].trainName}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="w-full py-2">
+                              <div className="flex justify-between items-center">
+                                <div className="flex space-x-2 items-center">
+                                  <div className="text-xs text-black">
+                                    <small className="text-xs text-gray-400">Asal</small>
+                                    <div className="font-semibold">
+                                    {dataDetailTrain[0]?.berangkat_nama_kota?.charAt(0) + dataDetailTrain[0]?.berangkat_nama_kota?.slice(1)?.toLowerCase()} {" "} ({dataDetailTrain[0]?.berangkat_id_station}) 
+                                      </div>
+                                  </div>
+                                </div>
+                                <div className="text-xs text-gray-400">
+                                {parseTanggal(parseTanggal(dataBookingTrain[0].departureDate))} {" "}{dataBookingTrain[0].departureTime}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="w-full py-2">
+                              <div className="flex justify-between items-center">
+                                <div className="flex space-x-2 items-center">
+                                  <div className="text-xs text-black">
+                                    <small className="text-xs text-gray-400">Tujuan</small>
+                                    <div className="font-semibold">
+                                      {dataDetailTrain[0]?.tujuan_nama_kota?.charAt(0) + dataDetailTrain[0]?.tujuan_nama_kota?.slice(1)?.toLowerCase()} ({dataDetailTrain[0]?.tujuan_id_station}) 
+                                      </div>
+                                  </div>
+                                </div>
+                                <div className="text-xs text-gray-400">
+                                  {parseTanggal(dataBookingTrain[0].arrivalDate)} {" "}
+                                  {dataBookingTrain[0].arrivalTime}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="w-full py-2">
+                              <div className="flex justify-between items-center">
+                                <div className="flex space-x-2 items-center">
+                                  <div className="text-xs text-black">
+                                    <small className="text-xs text-gray-400">Kode Booking</small>
+                                    <div className="font-semibold">{hasilBooking.bookingCode}</div>
+                                  </div>
+                                </div>
+                                  <div className="block xl:hidden">
+                                    <Alert
+                                      className="text-xs text-gray-500"
+                                      message={`${remainingBookTime}`}
+                                      banner
+                                    />
+                                </div>
+                              </div>
+                            </div>
+          
                     </div>
                   </div>
+                    <div className="py-2">
+                      <div className="w-full px-4">
+                        <div className="flex justify-between items-center border-b border-gray-200 shadow-sm py-4">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-gray-500">
+                              <small className="text-xs text-gray-400">Data Penumpang</small>
+                              <div className="my-1">{TotalAdult > 0 && TotalAdult + ' Dewasa'}  {TotalAdult > 0 && ', ' +TotalInfant + ' Bayi'}</div>
+                            </div>
+                          </div>
+                          <div onClick={() => {toggleDrawer(true)}} className="cursor-pointer text-xs text-blue-400">
+                            Detail
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="py-2 xl:py-4 xl:mt-0">
+                      <div className="w-full px-4">
+                        <div className="flex justify-between items-center">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-gray-500">
+                              <div >Total Harga</div>
+                            </div>
+                          </div>
+                          <div className="text-xs">
+                          Rp.{" "}
+                          {toRupiah(hasilBooking && hasilBooking?.normalSales || '-')}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="py-2 xl:py-4 xl:mt-0">
+                      <div className="w-full px-4">
+                        <div className="flex justify-between items-center border-b border-gray-200 shadow-sm pb-4">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-gray-500">
+                              <div >Biaya Admin</div>
+                            </div>
+                            </div>
+                          </div>
+                          <div className="text-xs">
+                          Rp.{" "}
+                          {toRupiah(hasilBooking && hasilBooking.nominalAdmin)}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="py-2 xl:py-4 xl:mt-0">
+                      <div className="w-full px-4">
+                        <div className="flex justify-between items-center">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-gray-500">
+                              <div >Total Bayar</div>
+                            </div>
+                            </div>
+                          </div>
+                          <div className="text-xs">
+                          Rp.{" "}
+                          {toRupiah(
+                            parseInt(hasilBooking && hasilBooking?.normalSales || 0) +
+                              parseInt(
+                                hasilBooking && hasilBooking.nominalAdmin
+                              )
+                          )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                 </div>
-                <div className="mt-4 w-full mx-0 2xl:mx-4">
+
+               {/* mobile detail */}
+               <DetailPassengersDrawer passengers={passengers} hasilBooking={hasilBooking} openDrawer={openDrawer} toggleDrawer={toggleDrawer} />              
+
+
+                <div className="mt-4 w-full mx-0 2xl:mx-4 hidden xl:block">
                   {/* adult */}
                   {passengers.adults.length > 0
                     ? passengers.adults.map((e, i) => (
@@ -677,7 +824,7 @@ export default function Pembayaran() {
                     <div className="hidden xl:block mt-2 py-4 rounded-md border-t border-gray-200 shadow-sm">
                       {/* {isOk == true && isCurrentBalance == true ? ( */}
                         <>
-                          <div className="px-8 md:px-4 py-4 text-sm text-black">
+                          <div className="px-8 md:px-4 py-4 text-sm text-black w-full xl:w-auto">
                             Tekan tombol dibawah ini untuk melanjutkan proses
                             transaksi.
                           </div>
@@ -724,19 +871,19 @@ export default function Pembayaran() {
                     <>
                       {/* {isOk == true && isCurrentBalance == true ? ( */}
                         <>
-                          <div className="flex justify-center">
+                          <div className="flex justify-center w-full xl:w-auto">
                             <ButtonAnt
                               onClick={showModal}
                               size="large"
                               key="submit"
                               type="primary"
-                              className="bg-blue-500 mx-2 font-semibold"
+                              className="bg-blue-500 mx-2 font-semibold w-full xl:w-auto"
                               loading={isLoading}
                             >
                               Bayar Sekarang
                             </ButtonAnt>
                           </div>
-                          {isSimulated === 1 ? (<Alert className="mt-4" message="Don't worry, clicking the 'Bayar' will not affect your balance." banner/>) : ''}
+                          {isSimulated === 1 ? (<Alert className="mt-4" message="Clicking 'Bayar' will not affect your balance." banner/>) : ''}
                         </>
                       {/* ) : ''} */}
                     </>

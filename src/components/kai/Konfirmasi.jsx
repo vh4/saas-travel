@@ -23,6 +23,8 @@ import moment from 'moment';
 import { useDispatch, useSelector } from "react-redux";
 import { callbackFetchData } from "../../features/callBackSlice";
 import { setDataBookKereta, setisOkBalanceKereta } from "../../features/createSlice";
+import { Box } from "@mui/material";
+import DetailPassengersDrawer from "./components/DetailPassengersDrawer";
 
 const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCount, setSelectedCount, setgerbongsamawajib, gerbongsamawajib,  selectedCheckboxes, setSelectedCheckboxes}) => {
   
@@ -173,10 +175,10 @@ seats.forEach((seat) => {
   // }, [limit, selectedCount, selectedCheckboxes]);
 
   return (
-    <div className="flex space-x-0 md:space-x-2 justify-center">
+    <div className="flex space-x-0 xl:space-x-2 justify-center">
       <div className="">
       {Array.from({ length: rowCount }, (_, index) => (
-        <div className="block py-2 pl-0 md:pl-4">
+        <div className="block py-2 pl-0 xl:pl-4">
           <div class="select-none w-4 h-10 font-medium  rounded-lg">
           <div key={index} class="py-2 text-center text-black">
             {index + 1}.
@@ -185,7 +187,7 @@ seats.forEach((seat) => {
         </div>
         ))}
       </div>
-      <div className="grid grid-rows-10 grid-cols-4 md:grid-cols-5">
+      <div className="grid grid-rows-10 grid-cols-4 xl:grid-cols-5">
         {seats.map((seat, i) => {
           const { row, column, class: seatClass, isFilled } = seat;
           return (
@@ -346,6 +348,11 @@ export default function Konfirmasi() {
   
   const [expiredBookTime, setExpiredBookTime] = useState(null);
 
+  const [openDrawer, setOpenDrawer] = useState(null);
+  const toggleDrawer = (type) => {
+    setOpenDrawer(type);
+  };
+
   useEffect(() => {
     if (token === null || token === undefined) {
       setErr(true);
@@ -487,12 +494,10 @@ export default function Konfirmasi() {
     }
   }
 
-  async function handlerPilihKursi(e) {
-    e.preventDefault();
+  async function handlerPilihKursi() {
     setDataSeats([]); //untuk reset data.
     gantigerbong(0) // untuk reset data pindah gerbong.
     setChangeSet(JSON.parse(changeStateKetikaGagalTidakUpdate));  // untuk reset data ketika sudah di pilih kursinya, tapi keluar lagi..
-
     
     setOpen(true);
     const response = await axios.post(
@@ -540,7 +545,19 @@ export default function Konfirmasi() {
   const handlerPindahKursi = async (e) => {
     e.preventDefault();
   
-    const changeStateFix = JSON.parse(JSON.stringify(changeState)); // Create a deep copy
+    const changeStateFix = changeState; // Create a deep copy
+
+    //validasi wagon number
+    for(const train of changeState[0]){
+        if(train.type !== 'infant'){
+          if(changeStateFix[0][0]["wagonNumber"] !== train.wagonNumber){
+            failedNotification('Gerbong harus sama.')
+            setOpen(true);
+            return null;
+          }
+        }
+    }
+
     
     let wagonNumber = changeStateFix[0][0]["wagonNumber"];
     let className = changeStateFix[0][0]["class"];
@@ -548,12 +565,12 @@ export default function Konfirmasi() {
     setisLoadingPindahKursi(true);
     setgerbongsamawajib(0);
 
-    changeStateFix[0].forEach((item) => {
-      delete item.name;
-      delete item.checkbox;
-      delete item.class;
-      delete item.wagonNumber;
-    });
+    // changeStateFix[0].forEach((item) => {
+    //   delete item.name;
+    //   delete item.checkbox;
+    //   delete item.class;
+    //   delete item.wagonNumber;
+    // });
 
     let gantiKursiFix = {
       productCode: "WKAI",
@@ -567,9 +584,9 @@ export default function Konfirmasi() {
   
     gantiKursiFix.seats = gantiKursiFix.seats.filter((seat) => seat.type !== "infant");
   
-    gantiKursiFix.seats.forEach((item) => {
-      delete item.type;
-    });
+    // gantiKursiFix.seats.forEach((item) => {
+    //   delete item.type;
+    // });
   
     const hasilBookingDataCopyDeep = JSON.parse(JSON.stringify(hasilBooking));
     const hasilBookingData = {...hasilBookingDataCopyDeep};
@@ -622,7 +639,6 @@ export default function Konfirmasi() {
     }
 
     setOpen(false);
-    await handlerPilihKursi();
   };
 
   const [backdrop, setBackdrop] = React.useState('static');
@@ -659,6 +675,7 @@ export default function Konfirmasi() {
         </>
       ) : (
         <>
+         {/* change seats */}
           <Modal size="md" backdrop={backdrop} keyboard={false} open={open} onClose={handleClose}>
             <Modal.Header>
               <Modal.Title>
@@ -687,7 +704,7 @@ export default function Konfirmasi() {
                       {/*body*/}
                       <div className="relative flex-auto">
                         <div className="">
-                          <div className="grid w-full grid-cols-1 md:grid-cols-3">
+                          <div className="grid w-full grid-cols-1 xl:grid-cols-3">
                             {/* sidebar seats Kai */}
                             <div className="text-start">
                               {changeState[0].map((e, i) => (
@@ -722,7 +739,7 @@ export default function Konfirmasi() {
                                 </>
                               ))}
                               
-                              <div className="mt-4 md:mt-4 ml-2">
+                              <div className="mt-4 xl:mt-4 ml-2">
                                 <div className="flex space-x-2 items-center mt-2 ">
                                   <label
                                     class={`select-none block py-1.5 items-center cursor-pointer`}
@@ -755,7 +772,7 @@ export default function Konfirmasi() {
                             <div className="col-span-2 w-full h-[540px]">
                               <div className="flex justify-center mb-8 mt-4">
                                 <>
-                                  <div className="w-full mx-0 md:mx-8 text-center">
+                                  <div className="w-full mx-0 xl:mx-8 text-center">
                                     <label
                                       for="underline_select"
                                       class="sr-only"
@@ -844,7 +861,7 @@ export default function Konfirmasi() {
               </div>
             </Modal.Footer>
           </Modal>
-          {/* end show modal */}
+
 
           {/* header kai flow */}
           <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
@@ -889,12 +906,14 @@ export default function Konfirmasi() {
             </>
           ) : (
             <>
-              <div className="block xl:flex xl:justify-around mb-24 md:space-x-4">
-                <div className="block md:hidden mb-4 xl:mb-0">
+              <div className="block xl:flex xl:justify-around mb-24 xl:space-x-4">
+                <div className="block xl:hidden mb-4 xl:mb-0">
                   <Alert message={`Expired Booking : ${remainingBookTime}`} banner />
                 </div>
-                <div className="w-full mx-0 2xl:mx-4">
-                  <div className="mt-2 md:mt-8 w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
+
+               {/* desktop and mobile sidebar*/}
+                <div className="w-full mx-0 2xl:mx-4 ">
+                  <div className="mt-2 xl:mt-8 w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
                     <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                       <div className="text-black font-medium  ">
                         Keberangkatan kereta
@@ -960,6 +979,140 @@ export default function Konfirmasi() {
                       </ol>
                     </div>
                   </div>
+                  
+                  {/* mobile sidebar */}
+                  <div className="mt-4 block xl:hidden">
+                    <Box
+                        className="border-b px-4 py-4 "
+                        sx={{
+                          // textAlign: "center",
+                          // paddingY: "16px",
+                          // borderBottomLeftRadius: "30px",
+                          // borderBottomRightRadius: "30px",
+                          // cursor: "pointer",
+                        }}
+                        >
+                    <div className="flex justify-between items-center -mt-2">
+                      {/* <div className="text-black text-xs">Booking ID</div> */}
+                      <div className="text-black text-sm -mt-1.5">
+                        Transaksi ID
+                      </div>
+                      <div className="mt-2 font-bold  text-blue-500 text-[18px]">
+                        {/* {hasilBooking && hasilBooking.bookingCode} */}
+                        <Paragraph copyable className="">
+                          {hasilBooking && hasilBooking.transactionId}
+                        </Paragraph>
+                      </div>
+                    </div>
+                    <div className="text-gray-500 text-xs">
+
+                      Gunakan kode bayar ini sebagai nomor tujuan pada menu
+                      pembayaran di aplikasi.
+                    </div>
+                    </Box>
+                    <button onClick={handlerPilihKursi} className="block w-full">
+                    <div className="mt-2 border-b border-gray-200 shadow-sm  hover:bg-gray-100">
+                      <div className="flex items-center justify-between space-x-2 p-4 pr-2 xl:pr-4">
+                        <div className="flex space-x-2 items-center">
+                          <div>
+                            <MdOutlineAirlineSeatReclineExtra
+                              size={28}
+                              className="text-blue-500"
+                            />
+                          </div>
+                          <div className="block text-black text-sm">
+                            <div className="text-sm font-medium ">
+                              Pindah Kursi
+                            </div>
+                            <small>available seats</small>
+                          </div>
+                        </div>
+                        <div>
+                          <IoIosArrowDropright
+                            size={28}
+                            className="text-blue-500"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                    <div className="py-2">
+                      <div className="w-full px-4">
+                        <div className="flex justify-between items-center border-b border-gray-200 shadow-sm py-4">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-gray-500">
+                              <small className="text-xs text-gray-400">Data Penumpang</small>
+                              <div className="my-1">{TotalAdult > 0 && TotalAdult + ' Dewasa'} {TotalAdult > 0 && ', ' +TotalInfant + ' Bayi'}</div>
+                            </div>
+                          </div>
+                          <div onClick={() => {toggleDrawer(true)}} className="cursor-pointer text-xs text-blue-400">
+                            Detail
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="py-2 xl:py-4 xl:mt-0">
+                      <div className="w-full px-4">
+                        <div className="flex justify-between items-center">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-gray-500">
+                              <div >Total Harga</div>
+                            </div>
+                          </div>
+                          <div className="text-xs">
+                          Rp.{" "}
+                          {toRupiah(hasilBooking && hasilBooking?.normalSales || '-')}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="py-2 xl:py-4 xl:mt-0">
+                      <div className="w-full px-4">
+                        <div className="flex justify-between items-center border-b border-gray-200 shadow-sm pb-4">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-gray-500">
+                              <div >Biaya Admin</div>
+                            </div>
+                            </div>
+                          </div>
+                          <div className="text-xs">
+                          Rp.{" "}
+                          {toRupiah(hasilBooking && hasilBooking.nominalAdmin)}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="py-2 xl:py-4 xl:mt-0">
+                      <div className="w-full px-4">
+                        <div className="flex justify-between items-center">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-gray-500">
+                              <div >Total Bayar</div>
+                            </div>
+                            </div>
+                          </div>
+                          <div className="text-xs">
+                          Rp.{" "}
+                          {toRupiah(
+                            parseInt(hasilBooking && hasilBooking?.normalSales || 0) +
+                              parseInt(
+                                hasilBooking && hasilBooking.nominalAdmin
+                              )
+                          )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                {/* mobile detail */}
+                <DetailPassengersDrawer passengers={passengers} hasilBooking={hasilBooking} openDrawer={openDrawer} toggleDrawer={toggleDrawer} />              
+
+
+                  {/* for desktop adult, infant*/}
+                  <div className="hidden xl:block">
                   {/* adult */}
                   {passengers.adults && passengers.adults.length > 0 ? (
                     <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
@@ -976,18 +1129,18 @@ export default function Konfirmasi() {
                               <div className="px-2 xl:px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
                                 {e.name}
                               </div>
-                              <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
-                                <div className="px-2 md:px-4 py-2 text-xs">
+                              <div className="mt-2 grid grid-cols-2 xl:grid-cols-4">
+                                <div className="px-2 xl:px-4 py-2 text-xs">
                                   <div className="text-black font-medium ">NIK</div>
                                   <div className="mt-2 text-black text-xs">
                                     {e.idNumber}
                                   </div>
                                 </div>
-                                <div className="px-2 md:px-4 py-2 text-xs">
+                                <div className="px-2 xl:px-4 py-2 text-xs">
                                   <div className="text-black ">Nomor HP</div>
                                   <div className="mt-2 text-black text-xs">{e.phone}</div>
                                 </div>
-                                <div className="px-2 md:px-4 py-2 text-xs">
+                                <div className="px-2 xl:px-4 py-2 text-xs">
                                   <div className="text-black  font-medium ">Kursi</div>
                                   <div className="mt-2 text-black text-xs">
                                     {hasilBooking !== null
@@ -1031,7 +1184,7 @@ export default function Konfirmasi() {
                               <div className="px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
                                 {e.name}
                               </div>
-                              <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
+                              <div className="mt-2 grid grid-cols-2 xl:grid-cols-4">
                                 <div className="px-4 py-2 text-xs">
                                   <div className="text-black font-medium ">NIK</div>
                                   <div className="mt-2 text-black text-xs">
@@ -1075,7 +1228,8 @@ export default function Konfirmasi() {
                           </div>
                         </>
                       ))
-                    : ""}
+                  : ""}
+
                   <div className="text-sm xl:text-sm font-bold text-black mt-12">
                     <p>PRICE DETAILT</p>
                   </div>
@@ -1118,22 +1272,26 @@ export default function Konfirmasi() {
                       </div>
                     </div>
                   </div>
-                  <div className="flex justify-end">
+                  </div>
+                 {/* end desktop */}
+
+                  <div className="flex justify-end w-full xl:w-auto">
                     <ButtonAnt
                       onClick={handlerKonfirmasi}
                       size="large"
                       key="submit"
                       type="primary"
-                      className="bg-blue-500 mx-2 font-semibold mt-4"
+                      className="bg-blue-500 mx-2 font-semibold mt-8 xl:mt-4 w-full xl:w-auto"
                       loading={isLoading}
                     >
                       Lanjut ke Pembayaran
                     </ButtonAnt>
                   </div>
                 </div>
+
                 {/* desktop sidebar */}
-                <div className="sidebar w-full xl:w-2/3 2xl:w-1/2">
-                  <div className="mt-2 md:mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
+                <div className="sidebar w-full xl:w-2/3 2xl:w-1/2 hidden xl:block">
+                  <div className="mt-2 xl:mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
                     <div className="flex items-center justify-between py-2 px-4">
                       {/* <div className="text-black text-sm">Booking ID</div> */}
                       <div className="-mt-4  text-black text-sm">Transaksi ID</div>
@@ -1172,7 +1330,7 @@ export default function Konfirmasi() {
                       </div>
                     </div>
                   </button>
-                  <div className="hidden md:block mt-2">
+                  <div className="hidden xl:block mt-2">
                     <Alert message={`Expired Booking : ${remainingBookTime}`} banner />
                   </div>
                   <div></div>

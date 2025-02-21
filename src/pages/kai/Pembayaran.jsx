@@ -11,7 +11,7 @@ export default function Pembayaran(){
     return(
         <>
             <div className="block md:hidden">
-                <HeaderTemplateMobilDetailBooking>
+                <HeaderTemplateMobilDetailBooking type={'bayar'}>
                     <div className="container">
                         <div className="w-full px-4"> 
                             {/* menu fitur  */}

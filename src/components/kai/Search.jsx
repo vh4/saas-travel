@@ -29,6 +29,7 @@ import { v4 as uuidv4 } from "uuid";
 import { MdSort } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { setDataSearchKereta } from "../../features/createSlice";
+import FilterMobileKereta from "./components/FilterMobileKereta";
 
 export default function Search() {
 
@@ -794,7 +795,9 @@ export default function Search() {
                 </button>
               </div>
             </div>
-            <div className="flex justify-between mt-0 md:mt-6">
+            
+            {/* desktop filter */}
+            <div className="hidden xl:flex justify-between mt-0 md:mt-6">
               <div className="relative flex items-center space-x-2 text-black text-xs font-medium ">
                 <Whisper
                   placement="top"
@@ -876,16 +879,17 @@ export default function Search() {
                 <KAISearch />
               </div>
             ) : null}
-            {/* <div className="mt-4">
-              <div className="mt-0 md:mt-0 flex md:hidden space-x-4 md:mr-0 justify-center md:justify-end">
-                <button
-                  onClick={() => setUbahPencarian((prev) => !prev)}
-                  className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs "
-                >
-                  Ubah Pencarian
-                </button>
-              </div>
-            </div> */}
+ 
+          </div>
+          {/* mobile filter */}
+          <div className="w-full flex xl:hidden justify-center">
+            <FilterMobileKereta
+              waktuFilter={waktuFilter} handleWaktuFilterChange={handleWaktuFilterChange}
+              valHargaRange={valHargaRange} 
+              hargraRangeChange={hargraRangeChange}
+              HargaTerendahTinggi={HargaTerendahTinggi} 
+              setHargaTerendahTinggi={setHargaTerendahTinggi} 
+            />
           </div>
           {/* <div className="mt-4 flex justify-center md:hidden">
             <Radio.Group
@@ -915,7 +919,7 @@ export default function Search() {
                     </div>
                   ))
                 ) : notFound !== true && filteredData.length !== 0 ? (
-                  <div className="row mb-24 w-full p-2">
+                  <div className="row mb-4 xl:mb-24 w-full p-2 -mt-10 xl:mt-0">
                     {filteredData.map(
                       (
                         e //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
@@ -927,7 +931,7 @@ export default function Search() {
                               e.seats[0].availability
                               ? "bg-white" 
                               : "bg-gray-50"
-                          } border-b xl:border xl:border-gray-200 xl:rounded-lg xl:shadow-sm  hover:border transition-transform transform hover:scale-105`}
+                          } border-b xl:border xl:border-gray-200 xl:rounded-lg xl:shadow-sm xl:hover:border-gray-300 xl:transition-transform xl:hover:scale-105`}
                         >
                           {/* desktop cari */}
 
@@ -935,7 +939,7 @@ export default function Search() {
                             <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                               <div className="col-span-1 xl:col-span-2">
                                 <h1 className="text-sm font-medium ">
-                                  {e.trainName}{" "}
+                                {e?.trainName?.charAt(0) + e?.trainName?.slice(1)?.toLowerCase()}
                                 </h1>
                                 <small>
                                   {e.seats[0].grade === "E"
@@ -975,15 +979,34 @@ export default function Search() {
                                 <h1 className="mt-4 xl:mt-0 text-sm font-medium  text-black">
                                   Rp.{toRupiah(e.seats[0].priceAdult)}
                                 </h1>
-                                <small className="text-red-500">
-                                  {e.seats[0].availability} set(s) left
-                                </small>
+                                {e.seats[0].availability > 0 &&
+                                  parseInt(adult) + parseInt(infant) <
+                                    e.seats[0].availability
+                                    ? 
+                                    (
+                                      <div>
+                                        {
+                                        e.seats[0].availability > 50 ?
+                                          (
+                                            <small>
+                                              Available
+                                            </small>
+                                          ) :
+                                          (
+                                            <small className="text-red-500">
+                                              {e.seats[0].availability} set(s) left
+                                            </small>
+                                          )
+                                        }
+                                      </div>
+                                    )
+                                    : null}
                                 <small className="text-red-500">
                                   {e.seats[0].availability > 0 &&
                                   parseInt(adult) + parseInt(infant) <
                                     e.seats[0].availability
                                     ? ""
-                                    : ". (Tiket Habis)"}
+                                    : "Tiket Habis"}
                                 </small>
                               </div>
                               <div>
@@ -1025,12 +1048,15 @@ export default function Search() {
                                   : "text-slate-400 "}
                               `}
                             >
-                              <div className="mt-4 px-4 md:px-4 xl:px-0 2xl:px-4 grid grid-cols-1 xl:grid-cols-7">
-                                <div className="flex justify-between">
-                                  <div className="col-span-1 xl:col-span-2">
-                                    <h1 className="text-xs font-bold ">
-                                      {e.trainName}
-                                    </h1>
+                              <div className="bg-white max-w-md">
+                                  <div className="flex justify-between">
+                                    <div>
+                                      <h1 className={`${
+                                        e.seats[0].availability > 0 &&
+                                        parseInt(adult) + parseInt(infant) <
+                                          e.seats[0].availability ? 'text-black' : 'text-gray-400 '
+                                      } font-bold text-sm`}>{e?.trainName?.charAt(0) + e?.trainName?.slice(1)?.toLowerCase()}</h1>
+                                      <p className="text-gray-500 text-xs">
                                     <small>
                                       {e.seats[0].grade === "E"
                                         ? "Eksekutif"
@@ -1038,55 +1064,65 @@ export default function Search() {
                                         ? "Bisnis"
                                         : "Ekonomi"}{" "}
                                       Class ({e.seats[0].class})
-                                    </small>
-                                  </div>
-                                  <div className="text-right">
-                                    <h1 className="text-xs font-medium">
-                                      Rp. {toRupiah(e.seats[0].priceAdult)}
-                                    </h1>
-                                    <small className="text-red-500">
-                                      {/* Available */}
-                                    </small>
-                                    <small className="text-red-500">
-                                      {e.seats[0].availability > 0 &&
-                                      parseInt(adult) + parseInt(infant) <
-                                        e.seats[0].availability
-                                        ? ""
-                                        : "Tiket Habis"}
-                                    </small>
-                                  </div>
-                                </div>
-                                <div className="flex justify-start">
-                                  <div className="flex space-x-2 items-start">
-                                    <div>
-                                      <h1 className="mt-10 xl:mt-0 text-xs font-medium ">
-                                        {e.departureTime}
-                                      </h1>
-                                      <small className="">
-                                        {origin}
-                                      </small>
+                                    </small></p>
                                     </div>
-                                    <div className="w-full mt-12 px-4 border-b-2"></div>
-                                    <div className="text-xs">
-                                      <div className="text-xs mt-10 xl:mt-0 ">
-                                        {e.duration}
+                                    <div className="text-right">
+                                    {e.seats[0].availability > 0 &&
+                                  parseInt(adult) + parseInt(infant) <
+                                    e.seats[0].availability
+                                    ? 
+                                    (
+                                      <div>
+                                        {
+                                        e.seats[0].availability > 50 ?
+                                          (
+                                            <small className="text-gray-500">
+                                              Available
+                                            </small>
+                                          ) :
+                                          (
+                                            <small className="text-gray-500">
+                                              {e.seats[0].availability} set(s) left
+                                            </small>
+                                          )
+                                        }
                                       </div>
-                                      <small className="">
-                                        Langsung
-                                      </small>
-                                    </div>
-                                    <div className="w-full mt-12 px-4 border-b-2"></div>
-                                    <div>
-                                      <h1 className="mt-10 xl:mt-0 text-xs font-medium ">
-                                        {e.arrivalTime}
-                                      </h1>
-                                      <small className="">
-                                        {destination}
+                                    )
+                                    : null}
+                                  <small className="text-red-500">
+                                  {e.seats[0].availability > 0 &&
+                                  parseInt(adult) + parseInt(infant) <
+                                    e.seats[0].availability
+                                    ? ""
+                                    : "Tiket Habis"}
                                       </small>
                                     </div>
                                   </div>
+
+                                  <div className="mt-4 flex items-center space-x-4">
+                                    <div className="flex flex-col items-center">
+                                      <div className="w-4 h-4 border-2 border-blue-500 rounded-full"></div>
+                                      <div className="border-l-2 border-dashed border-gray-300 h-8"></div>
+                                      <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
+                                    </div>
+                                    <div className="flex-1">
+                                      <div>
+                                        <p className="text-sm font-medium">{e.departureTime}<span className="font-bold"></span></p>
+                                        <p className="text-xs text-gray-500">{e.duration}</p>
+                                      </div>
+                                      <div className="mt-1">
+                                        <p className="text-sm font-medium">{e.arrivalTime}<span className="font-bold"></span></p>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div className="mt-5 flex justify-between items-center">
+                                    <p className="text-sm font-semibold"> Rp. {toRupiah(e.seats[0].priceAdult)} <span className="text-sm text-gray-400">/org</span></p>
+                                    <span className="bg-blue-500 text-white text-xs font-medium px-3 py-1 rounded-full">
+                                      Langsung
+                                    </span>
+                                  </div>
                                 </div>
-                              </div>
                             </div>
                           </div>
                         </div>

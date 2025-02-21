@@ -790,7 +790,7 @@ export default function BookingPesawat() {
                   <div className="flex space-x-2 items-center">
                     <ExclamationCircleFilled className="text-orange-500 text-xl" />
                     <div className="text-bold text-xl text-orange-500">
-                      Apakah anda yakin ??
+                      Apakah anda yakin?
                     </div>
                   </div>
                 </>
@@ -1025,7 +1025,7 @@ export default function BookingPesawat() {
                       <IoPricetagOutline className="text-gray-500" size={18} />
                       <div className="text-gray-500">Harga Fare</div>
                   </div>
-                  <small className="text-sm text-blue-500 font-bold">
+                  <small className="text-sm font-medium">
                     Rp. {toRupiah(dataDetailForBooking.priceTotal)}
                   </small>
                 </div>
@@ -2644,7 +2644,7 @@ export default function BookingPesawat() {
                           <IoPricetagOutline className="text-gray-500" size={18} />
                           <div className="text-gray-500">Harga Fare</div>
                       </div>
-                      <small className="text-lg text-blue-500 font-bold">
+                      <small className="text-sm font-medium">
                         Rp. {toRupiah(dataDetailForBooking.priceTotal)}
                       </small>
                     </div>

@@ -171,7 +171,6 @@ export default function ViewBooking({ path }) {
                 <div className="text-xs">Deskripsi</div>
               </div>
               {/* desktop */}
-              {console.log(byrdata)}
               <div className="p-4 w-full hidden xl:gap-4 lg:grid lg:grid-cols-10">
                 <div className="col-span-2">
                   <div className="text-xs">{byrdata.nama_kapal} </div>

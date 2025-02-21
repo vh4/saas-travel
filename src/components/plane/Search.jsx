@@ -5,7 +5,6 @@ import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import {
-  IoArrowBackOutline,
   IoArrowForwardOutline,
   IoSearchCircle,
 } from "react-icons/io5";
@@ -22,7 +21,7 @@ import SearchPlane from "./SearchPlane";
 import { Flex, Progress, Space, Spin } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
 import { parseTanggal } from "../../helpers/date";
-import { MdManageSearch, MdOutlineLuggage, MdSort } from "react-icons/md";
+import { MdSort } from "react-icons/md";
 import { notification, Radio } from "antd";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
@@ -37,9 +36,6 @@ import { setDataSearchPesawat } from "../../features/createSlice";
 import { IoIosArrowDown } from "react-icons/io";
 import SearchDrawerMobile from "./components/SearchDrawerMobile";
 import { SlArrowLeft } from "react-icons/sl";
-import { BsSortDown } from "react-icons/bs";
-import { LiaSlidersHSolid } from "react-icons/lia";
-import { TbListSearch } from "react-icons/tb";
 import FilterMobilePlane from "./components/FilterMobilePlane";
 
 export default function Search() {
@@ -717,7 +713,7 @@ export default function Search() {
             <div></div>
           </div>
 
-          {/* desktop */}
+          {/* desktop filter*/}
           <div className="hidden xl:flex justify-between mt-0 xl:mt-6">
             <div className="flex items-center space-x-2 text-black text-xs font-medium ">
               <div className="hidden xl:block">FILTER : </div>
@@ -785,7 +781,7 @@ export default function Search() {
             </div>
           </div>
          
-          {/* mobile */}
+          {/* mobile filter*/}
           <div className="w-full flex xl:hidden justify-center">
             <FilterMobilePlane 
             	langsung={langsung} setLangsung={setLangsung} transit={transit} setTransit={setTransit}
@@ -865,7 +861,7 @@ export default function Search() {
                                 parseInt(infant)
                               ? "bg-white "
                               : "bg-gray-100 "
-                          }  border-b-2 xl:border xl:border-gray-200 rounded-md xl:shadow-sm hover:border hover:border-gray-100 transition-transform transform hover:scale-105`}
+                          }  border-b xl:border xl:border-gray-200 rounded-none xl:rounded-md xl:shadow-sm hover:border hover:border-gray-100 transition-transform transform hover:scale-105`}
                         >
                           {/* desktop cari */}
                           <div className="hidden xl:block w-full text-black ">
