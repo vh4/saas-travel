@@ -65,7 +65,7 @@ Router.post('/app/redirect', async function(req, res) {
             const url = response.data.url;
             const expired = new Date(new Date().getTime() + (parseInt(process.env.EXPIRED_SESSION) || 594800000));
             data.expired_date = expired;
-            data.username = splitlogin[0];
+            data.username = data.username; //splitlogin[0];
             data['is_header_name_and_toast'] = false;
 
             //4. check is valid in via rajabiller.com
@@ -135,7 +135,7 @@ Router.post('/app/redirect', async function(req, res) {
 
                 req.session['v_session'] = data.token;
                 req.session['expired_session'] = expired;
-                req.session['v_uname'] = splitlogin[0] || '';
+                req.session['v_uname'] = data.username || ''; //splitlogin[0] || '';
                 logger.info(`INSERTING TOKEN TO SESSION: ${JSON.stringify(data.token)}`);
 
                 logger.info(`Response /app/redirect: ${JSON.stringify(data)}`);
@@ -174,12 +174,12 @@ Router.post('/app/sign_in', async function(req, res) {
 
         logger.info(`Request /app/sign_in: ${JSON.stringify(req.body)}`);
         logger.info(`Request HIT API RAJABILLER JSON: ${JSON.stringify({
-        username: username,
-        method: "rajabiller.login_travel",
-        token:token,
-        info: JSON.stringify(getInfoClientAll(req)),
-        from: 'Web Travel Auth'
-    })}`);
+            username: username,
+            method: "rajabiller.login_travel",
+            token:token,
+            info: JSON.stringify(getInfoClientAll(req)),
+            from: 'Web Travel Auth'
+        })}`);
 
     try {
 
@@ -213,7 +213,7 @@ Router.post('/app/sign_in', async function(req, res) {
 
             if (data.rc == '00') {
                 req.session['v_session'] = data.token;
-                req.session['v_uname'] = username;
+                req.session['v_uname'] = data.username; //username
                 req.session['expired_session'] = expired;
 
                 const url = response.data.url;
@@ -358,12 +358,12 @@ Router.post('/app/history_idpel', async function(req, res) {
         const pin = splitUidPin[1];
 
         logger.info(`Request /app/history_idpel: ${JSON.stringify({
-      method:"history_idpel",
-      uid:uid,
-      pin:'-----',
-      produk:type,
-      username:username
-    })}`);
+            method:"history_idpel",
+            uid:uid,
+            pin:'-----',
+            produk:type,
+            username:username
+        })}`);
 
         const {
             data
@@ -555,12 +555,12 @@ Router.post('/app/transaction_book_list', async function(req, res) {
         }
 
         logger.info(`Request /app/transaction_book_list: ${JSON.stringify({
-        token: token,
-        product: product,
-        startDate,
-        endDate,
-        ...requests
-      })}`);
+            token: token,
+            product: product,
+            startDate,
+            endDate,
+            ...requests
+        })}`);
 
         const {
             data
