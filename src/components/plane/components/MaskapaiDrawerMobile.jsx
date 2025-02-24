@@ -12,7 +12,7 @@ const MaskapaiDrawerMobile = ({ openDrawer, toggleDrawer, pesawatData, setKebera
   const errorBerangkat = () => {
     messageApi.open({
       type: "error",
-      content: "Kota Asal tidak boleh sama dengan Kota Tujuan.",
+      content: "Dari tidak boleh sama dengan Tujuan.",
       duration: 10,
       top: "50%",
       className: "custom-message",
@@ -22,7 +22,7 @@ const MaskapaiDrawerMobile = ({ openDrawer, toggleDrawer, pesawatData, setKebera
   const errorTujuan = () => {
     messageApi.open({
       type: "error",
-      content: "Kota Tujuan tidak boleh sama dengan Kota Asal.",
+      content: "Tujuan tidak boleh sama dengan Dari.",
       duration: 10,
       top: "50%",
       className: "custom-message",

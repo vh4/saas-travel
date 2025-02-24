@@ -16,7 +16,7 @@ import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 import TimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
-import { IoMdTimer } from "react-icons/io";
+import { IoIosMore, IoMdTimer } from "react-icons/io";
 import SearchPlane from "./SearchPlane";
 import { Flex, Progress, Space, Spin } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
@@ -1483,7 +1483,7 @@ export default function Search() {
                                     </h1>
                                   </div>
                                   <div
-                                    className="flex items-center px-2 py-1.5 rounded-lg bg-gray-100"
+                                    className="flex items-center px-4 py-1 rounded-full bg-gray-100"
                                     onClick={(event) => {
                                       event.stopPropagation();
                                       setOpenDrawer(openDrawer === index ? null : index);
@@ -1497,7 +1497,7 @@ export default function Search() {
                                     //     : setDetailTiket(`open-${index}`);
                                     // }}
                                   >
-                                    <IoIosArrowDown size={20} className="text-gray-400" />
+                                    <IoIosMore size={20} className="text-black" />
                                     {/* <div className="text-xs cursor-pointer font-medium ">
                                       Detail
                                     </div> */}

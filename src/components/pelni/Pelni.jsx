@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Drawer, Popper, SwipeableDrawer, createTheme, Button as ButtonMui } from "@mui/material";
+import { Drawer, Popper, SwipeableDrawer, Button as ButtonMui } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
@@ -21,6 +21,8 @@ import { parseTanggalPelniMonth } from "../../helpers/date";
 import { CiCalendarDate } from "react-icons/ci";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { makeStyles } from "@mui/styles";
+import PelniMobile from "./components/PelniMobile";
+import { LuUsers } from "react-icons/lu";
 
 
 function Pelni() {
@@ -104,7 +106,7 @@ function Pelni() {
   const errorBerangkat = () => {
     messageApi.open({
       type: "error",
-      content: "Pelabuhan Asal tidak boleh sama dengan Pelabuhan Tujuan.",
+      content: "Dari tidak boleh sama dengan Tujuan.",
       duration: 10, // Durasi pesan 5 detik
       top: "50%", // Posisi pesan di tengah layar
       className: "custom-message", // Tambahkan kelas CSS kustom jika diperlukan
@@ -114,7 +116,7 @@ function Pelni() {
   const errorTujuan = () => {
     messageApi.open({
       type: "error",
-      content: "Pelabuhan Tujuan tidak boleh sama dengan Pelabuhan Asal.",
+      content: "Tujuan tidak boleh sama dengan Dari.",
       duration: 10, // Durasi pesan 5 detik
       top: "50%", // Posisi pesan di tengah layar
       className: "custom-message", // Tambahkan kelas CSS kustom jika diperlukan
@@ -198,8 +200,6 @@ function Pelni() {
 
   const [keberangkatan, setKeberangkatan] = React.useState(depa);
   const [tujuan, setTujuan] = React.useState(arri);
-
-  const i = 0;
 
   const useStyles = makeStyles((theme) => ({
     inputRoot: {
@@ -359,25 +359,23 @@ function Pelni() {
     }
   }
 
-  function addLeadingZero(num) {
-    if (num < 10) {
-      return "0" + num;
-    } else {
-      return "" + num;
-    }
-  }
-
   async function getPelnitDataStasiun() {
-    const response = await axios.post(
-      `${process.env.REACT_APP_HOST_API}/travel/pelni/get_origin`,
-      {
-        token: JSON.parse(
-          localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-        ),
-      }
-    );
+    try {
 
-    setpelniStasiun(response.data);
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/travel/pelni/get_origin`,
+        {
+          token: JSON.parse(
+            localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+          ),
+        }
+      );
+  
+      setpelniStasiun(response.data);
+      
+    }catch (error) {
+        setpelniStasiun([]);
+    }
   }
 
   function handleSubmitPelni(e) {
@@ -403,11 +401,11 @@ function Pelni() {
       setLoading(false);
 
       if (keberangkatan === null && tujuan === null) {
-        messageCustomError("Pilih Pelabuhan Asal & Pelabuhan Tujuan.");
+        messageCustomError("Pilih Dari & Tujuan.");
       } else if (keberangkatan === null) {
-        messageCustomError("Pilih Pelabuhan Asal.");
+        messageCustomError("Pilih Dari.");
       } else if (tujuan === null) {
-        messageCustomError("Pilih Pelabuhan Tujuan.");
+        messageCustomError("Pilih Tujuan.");
       } else {
         const params = {
           origin: keberangkatan.CODE,
@@ -444,10 +442,6 @@ function Pelni() {
   const changeStatiun = () => {
     setKeberangkatan(tujuan);
     setTujuan(keberangkatan);
-  };
-
-  const disabledDate = (current) => {
-    return current && current < dayjs().endOf("day");
   };
 
   return (
@@ -557,12 +551,14 @@ function Pelni() {
           <form className="w-full">
             <>
               <div className="block xl:flex justify-between mx-0 xl:mx-6">
-                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 gap-6 xl:gap-0">
-                  <div className="mt-2 w-full col col-span-1 md:col-span-2">
+                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 gap-2 xl:gap-0">
+
+                  {/* desktop pencarian asal dan tujuan*/}
+                  <div className="mt-2 w-full col col-span-1 md:col-span-2 hidden xl:block">
                   <div className="w-full flex flex-col xl:flex-row items-center px-2 xl:px-0">
                       <div className="w-full m-2 xl:m-0 xl:pr-0">
                         <small className="block mb-2 text-black">
-                          Pelabuhan Asal
+                          Dari
                         </small>
                         <Autocomplete
                           classes={classes}
@@ -640,7 +636,7 @@ function Pelni() {
                           </div>
                       <div className="w-full m-2 xl:m-0 xl:pr-0">
                         <small className="mb-2 text-black">
-                          Pelabuhan Tujuan
+                          Tujuan
                         </small>
                         <Autocomplete
                           classes={classes}
@@ -712,9 +708,22 @@ function Pelni() {
                       </div>
                     </div>
                   </div>
+
+                  {/* mobile pencarian asal dan tujuan*/}
+                  <div className="block xl:hidden">
+                    <PelniMobile
+                      pelniData={pelniStasiun.data || []}
+                      keberangkatan={keberangkatan}     
+                      setKeberangkatan={setKeberangkatan}
+                      setTujuan={setTujuan}
+                      tujuan={tujuan}
+                      changeStatiun={changeStatiun}
+                    />
+                  </div>
+
                   <FormControl sx={{ m: 1, minWidth: 160 }}>
                     <small className="mb-2 text-black">
-                      Tanggal Range
+                      Tanggal
                     </small>
                     <button type="button" className="border py-[10px] customButtonStyle w-full block text-black" onClick={handleOpenDate}>
                       <div className="flex justify-between mx-4 items-center">
@@ -731,13 +740,15 @@ function Pelni() {
                   <FormControl sx={{ m: 1, minWidth: 130 }}>
                     <small className="mb-2 text-black">Total Penumpang</small>
                     <div className="hidden md:block"></div>
-                    <button
-                      type="button"
-                      className="border py-[11px] customButtonStyle w-full block text-black -mx-1.5"
+                    <div
+                      className="cursor-pointer border py-[10px] rounded-md px-2 w-full text-black flex items-center space-x-2"
                       onClick={toggleDrawer(true, false, "buka")}
                     >
-                      {`${parseInt(laki) + parseInt(wanita)} Penumpang`}
-                    </button>
+                        <LuUsers size={21} className="text-gray-400"  />
+                      <div>
+                      {`${parseInt(laki) + parseInt(wanita)} Penumpang`}                         
+                      </div>
+                    </div>
                     <SwipeableDrawer anchor="bottom" PaperProps={{ sx: { borderTopLeftRadius: 30, borderTopRightRadius: 30 } }} open={openDrawer} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
                       <div className="p-4 mt-2 xl:container xl:px-64">
                         

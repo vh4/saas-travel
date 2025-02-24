@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Drawer, Popper, SwipeableDrawer, createTheme, Button as ButtonMui } from "@mui/material";
+import { Drawer, Popper, SwipeableDrawer, Button as ButtonMui } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
@@ -7,7 +7,7 @@ import { Box, Chip } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete from "@mui/material/Autocomplete";
 import { IoBoatSharp } from "react-icons/io5";
-import { useNavigate, createSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { InputGroup } from "rsuite";
 import "rsuite/dist/rsuite.min.css";
 import { Button,  message } from "antd";
@@ -21,6 +21,8 @@ import { parseTanggalPelniMonth } from "../../helpers/date";
 import { CiCalendarDate } from "react-icons/ci";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { makeStyles } from "@mui/styles";
+import PelniMobile from "./components/PelniMobile";
+import { LuUsers } from "react-icons/lu";
 
 
 
@@ -199,8 +201,6 @@ function Pelni() {
   const [keberangkatan, setKeberangkatan] = React.useState(depa);
   const [tujuan, setTujuan] = React.useState(arri);
 
-  const i = 0;
-
   const useStyles = makeStyles((theme) => ({
     inputRoot: {
       color: "black",
@@ -359,15 +359,6 @@ function Pelni() {
     }
   }
 
-
-  function addLeadingZero(num) {
-    if (num < 10) {
-      return "0" + num;
-    } else {
-      return "" + num;
-    }
-  }
-
   async function getPelnitDataStasiun() {
     const response = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/pelni/get_origin`,
@@ -451,10 +442,6 @@ function Pelni() {
   const changeStatiun = () => {
     setKeberangkatan(tujuan);
     setTujuan(keberangkatan);
-  };
-
-  const disabledDate = (current) => {
-    return current && current < dayjs().endOf("day");
   };
 
   return (
@@ -564,12 +551,14 @@ function Pelni() {
           <form className="w-full">
             <>
               <div className="block xl:flex justify-between mx-0 xl:mx-6">
-                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 gap-6 xl:gap-0">
-                  <div className="mt-2 w-full col col-span-1 md:col-span-2">
+                <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 gap-2 xl:gap-0">
+
+                  {/* desktop pencarian asal dan tujuan*/}
+                  <div className="mt-2 w-full col col-span-1 md:col-span-2 hidden xl:block">
                   <div className="w-full flex flex-col xl:flex-row items-center px-2 xl:px-0">
                       <div className="w-full m-2 xl:m-0 xl:pr-0">
                         <small className="block mb-2 text-black">
-                          Pelabuhan Asal
+                          Dari
                         </small>
                         <Autocomplete
                           classes={classes}
@@ -640,14 +629,14 @@ function Pelni() {
                         />
                       </div>
                       <div
-                              onClick={changeStatiun}
+                          onClick={changeStatiun}
                               className="w-8 h-8 cursor-pointer flex justify-center mt-2 xl:mt-6 items-center bg-blue-500 rounded-full p-1 flex-shrink-0"
                               >
                               <AiOutlineSwap className="text-white w-10 h-10" />
                           </div>
                       <div className="w-full m-2 xl:m-0 xl:pr-0">
                         <small className="mb-2 text-black">
-                          Pelabuhan Tujuan
+                          Tujuan
                         </small>
                         <Autocomplete
                           classes={classes}
@@ -719,9 +708,22 @@ function Pelni() {
                       </div>
                     </div>
                   </div>
+
+                  {/* mobile pencarian asal dan tujuan*/}
+                  <div className="block xl:hidden">
+                    <PelniMobile
+                      pelniData={pelniStasiun.data || []}
+                      keberangkatan={keberangkatan}     
+                      setKeberangkatan={setKeberangkatan}
+                      setTujuan={setTujuan}
+                      tujuan={tujuan}
+                      changeStatiun={changeStatiun}
+                    />
+                  </div>
+
                   <FormControl sx={{ m: 1, minWidth: 160 }}>
                     <small className="mb-2 text-black">
-                      Tanggal Range
+                      Tanggal
                     </small>
                     <button type="button" className="border py-[10px] customButtonStyle w-full block text-black" onClick={handleOpenDate}>
                       <div className="flex justify-between mx-4 items-center">
@@ -738,13 +740,15 @@ function Pelni() {
                   <FormControl sx={{ m: 1, minWidth: 130 }}>
                     <small className="mb-2 text-black">Total Penumpang</small>
                     <div className="hidden md:block"></div>
-                    <button
-                      type="button"
-                      className="border py-[11px] customButtonStyle w-full block text-black -mx-1.5"
+                    <div
+                      className="cursor-pointer border py-[10px] rounded-md px-2 w-full text-black flex items-center space-x-2"
                       onClick={toggleDrawer(true, false, "buka")}
                     >
-                      {`${parseInt(laki) + parseInt(wanita)} Penumpang`}
-                    </button>
+                        <LuUsers size={21} className="text-gray-400"  />
+                      <div>
+                      {`${parseInt(laki) + parseInt(wanita)} Penumpang`}                         
+                      </div>
+                    </div>
                     <SwipeableDrawer anchor="bottom" PaperProps={{ sx: { borderTopLeftRadius: 30, borderTopRightRadius: 30 } }} open={openDrawer} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
                       <div className="p-4 mt-2 xl:container xl:px-64">
                         

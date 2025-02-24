@@ -1011,7 +1011,7 @@ export default function Konfirmasi() {
                     </div>
                     </Box>
                     <button onClick={handlerPilihKursi} className="block w-full">
-                    <div className="mt-2 border-b border-gray-200 shadow-sm  hover:bg-gray-100">
+                    <div className="mt-2 border-b border-gray-200 hover:bg-gray-100">
                       <div className="flex items-center justify-between space-x-2 p-4 pr-2 xl:pr-4">
                         <div className="flex space-x-2 items-center">
                           <div>
@@ -1038,7 +1038,7 @@ export default function Konfirmasi() {
                   </button>
                     <div className="py-2">
                       <div className="w-full px-4">
-                        <div className="flex justify-between items-center border-b border-gray-200 shadow-sm py-4">
+                        <div className="flex justify-between items-center border-b border-gray-200 py-4">
                           <div className="flex space-x-2 items-center">
                             <div className="text-xs text-gray-500">
                               <small className="text-xs text-gray-400">Data Penumpang</small>
@@ -1068,7 +1068,7 @@ export default function Konfirmasi() {
                     </div>
                     <div className="py-2 xl:py-4 xl:mt-0">
                       <div className="w-full px-4">
-                        <div className="flex justify-between items-center border-b border-gray-200 shadow-sm pb-4">
+                        <div className="flex justify-between items-center border-b border-gray-200 pb-4">
                           <div className="flex space-x-2 items-center">
                             <div className="text-xs text-gray-500">
                             <div className="text-xs text-gray-500">

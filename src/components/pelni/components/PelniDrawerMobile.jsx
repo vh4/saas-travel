@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 import { BsSearch } from "react-icons/bs";
 import { FaPlaneDeparture } from "react-icons/fa";
 import { message } from "antd";
-import { PiTrainLight } from "react-icons/pi";
+import { RiShipLine } from "react-icons/ri";
 
-const KeretaDrawerMobile = ({ openDrawer, toggleDrawer, kaiData, setKeberangkatan, setTujuan, keberangkatan, tujuan, type }) => {
+const PelniDrawerMobile = ({ openDrawer, toggleDrawer, pelniData, setKeberangkatan, setTujuan, keberangkatan, tujuan, type }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -30,23 +30,21 @@ const KeretaDrawerMobile = ({ openDrawer, toggleDrawer, kaiData, setKeberangkata
     });
   };
   
-  const filteredData = kaiData.filter(e =>
-    e.id_stasiun.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    e.nama_kota.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    e.nama_stasiun.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredData = pelniData.filter(e =>
+    e.NAME.toLowerCase().includes(searchTerm.toLowerCase())
   );
   
-  const popularAirports = kaiData.filter(e => ["BD", "SGU", "PSE", "GMR"].includes(e.id_stasiun));
+  const popularAirports = pelniData.filter(e => ["946", "144", "431"].includes(e.CODE)) ;
   
   const handleSelect = (selected) => {
     if (type === "keberangkatan") {
-      if (tujuan && selected.id_stasiun === tujuan.id_stasiun) {
+      if (tujuan && selected.CODE === tujuan.CODE) {
         errorBerangkat();
         return;
       }
       setKeberangkatan(selected);
     } else if (type === "tujuan") {
-      if (keberangkatan && selected.id_stasiun === keberangkatan.id_stasiun) {
+      if (keberangkatan && selected.CODE === keberangkatan.CODE) {
         errorTujuan();
         return;
       }
@@ -66,7 +64,8 @@ const KeretaDrawerMobile = ({ openDrawer, toggleDrawer, kaiData, setKeberangkata
       {contextHolder}
       <div className="p-4 mt-2 xl:container xl:px-64">
         <div className="p-4 text-lg font-bold">
-          <h4>Pilih Stasiun</h4>
+          <h4>Pilih Pelabuhan</h4>
+          {/* xx */}
         </div>
         <div className="p-4 text-lg">
 			      <form className="flex items-center">
@@ -83,17 +82,16 @@ const KeretaDrawerMobile = ({ openDrawer, toggleDrawer, kaiData, setKeberangkata
                 />
               </div>
             </form>
-          <div className="py-4 font-bold">Stasiun Populer</div>
+          <div className="py-4 font-bold">Pelabuhan Populer</div>
           {popularAirports.map((e, i) => (
             <div key={i} className="card mt-2 mb-6" onClick={() => handleSelect(e)}>
               <div className="title flex space-x-4 items-start cursor-pointer">
-                <PiTrainLight size={22} className="text-gray-400 mt-2" />
+                <RiShipLine size={22} className="text-gray-400 mt-2" />
                 <div className="w-full">
                   <div className="flex justify-between items-center">
-                    <div className="font-bold text-sm">{e.nama_stasiun}</div>
-                    <div className="py-2 px-4 bg-gray-100 text-xs">{e.id_stasiun}</div>
+                    <div className="font-bold text-sm">{e.NAME}</div>
                   </div>
-                  <div className="mt-2 text-xs">{e.nama_kota}</div>
+                  <div className="mt-2 text-xs">{e.NAME}</div>
                 </div>
               </div>
             </div>
@@ -102,13 +100,12 @@ const KeretaDrawerMobile = ({ openDrawer, toggleDrawer, kaiData, setKeberangkata
           {filteredData.map((e, i) => (
             <div key={i} className="card mt-2 mb-6" onClick={() => handleSelect(e)}>
               <div className="title flex space-x-4 items-start cursor-pointer">
-                <PiTrainLight size={22} className="text-gray-400 mt-2" />
+                <RiShipLine size={22} className="text-gray-400 mt-2" />
                 <div className="w-full">
                   <div className="flex justify-between items-center">
-                    <div className="font-bold text-sm">{e.nama_stasiun}</div>
-                    <div className="py-2 px-4 bg-gray-100 text-xs">{e.id_stasiun}</div>
+                    <div className="font-bold text-sm">{e.NAME}</div>
                   </div>
-                  <div className="mt-2 text-xs">{e.nama_kota}</div>
+                  <div className="mt-2 text-xs">{e.NAME}</div>
                 </div>
               </div>
             </div>
@@ -119,10 +116,10 @@ const KeretaDrawerMobile = ({ openDrawer, toggleDrawer, kaiData, setKeberangkata
   );
 };
 
-KeretaDrawerMobile.propTypes = {
+PelniDrawerMobile.propTypes = {
   openDrawer: PropTypes.bool.isRequired,
   toggleDrawer: PropTypes.func.isRequired,
-  kaiData: PropTypes.array.isRequired,
+  pelniData: PropTypes.array.isRequired,
   setKeberangkatan: PropTypes.func.isRequired,
   setTujuan: PropTypes.func.isRequired,
   keberangkatan: PropTypes.object,
@@ -130,4 +127,4 @@ KeretaDrawerMobile.propTypes = {
   type: PropTypes.string.isRequired,
 };
 
-export default KeretaDrawerMobile;
+export default PelniDrawerMobile;

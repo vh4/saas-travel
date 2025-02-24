@@ -1521,13 +1521,13 @@ export default function BookingPelni() {
                         </>
                       ))}
 
-                    <div className="flex justify-end mr-2 mt-8">
+                    <div className="flex justify-end mr-2 mt-8 w-full xl:w-auto">
                       <Button
                         htmlType="submit"
                         size="large"
                         key="submit"
                         type="primary"
-                        className="bg-blue-500 mx-2 font-semibold"
+                        className="bg-blue-500 mx-2 font-semibold w-full xl:w-auto"
                       >
                         Booking Sekarang
                       </Button>

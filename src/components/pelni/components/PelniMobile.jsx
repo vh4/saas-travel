@@ -1,9 +1,9 @@
 import { useState } from "react";
-import KeretaDrawerMobile from "./KeretaDrawerMobile";
-import { RiArrowUpDownLine } from "react-icons/ri";
-import { PiTrainLight } from 'react-icons/pi';
+import { FaPlaneArrival, FaPlaneDeparture } from "react-icons/fa";
+import { RiArrowUpDownLine, RiShipLine } from "react-icons/ri";
+import PelniDrawerMobile from "./PelniDrawerMobile";
 
-const KeretaMobile = ({kaiData, keberangkatan, tujuan, setKeberangkatan, setTujuan, changeStatiun}) => {
+const PelniMobile = ({pelniData, keberangkatan, tujuan, setKeberangkatan, setTujuan, changeStatiun}) => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [type, setType] = useState(null);
   const toggleDrawer = (newOpen) => {
@@ -31,8 +31,8 @@ const KeretaMobile = ({kaiData, keberangkatan, tujuan, setKeberangkatan, setTuju
             className="py-2 px-1 flex items-center justify-between cursor-pointer rounded-lg"
           >
             <div className="flex items-center space-x-2">
-              <PiTrainLight className="text-gray-400" />
-              <span className="text-sm text-gray-900">{keberangkatan ? keberangkatan.nama_stasiun : "Keberangkatan"}</span>
+              <RiShipLine className="text-gray-400" />
+              <span className="text-sm text-gray-900">{keberangkatan ? keberangkatan.NAME : "Keberangkatan"}</span>
             </div>
           </div>
         </div>
@@ -45,20 +45,20 @@ const KeretaMobile = ({kaiData, keberangkatan, tujuan, setKeberangkatan, setTuju
             className="pt-4 px-1 flex items-center justify-between border-t cursor-pointer rounded-lg"
           >
             <div className="flex items-center space-x-2">
-              <PiTrainLight className="text-gray-400" />
-              <span className="text-sm text-gray-900">{tujuan ? tujuan.nama_stasiun : "Tujuan"}</span>
+              <RiShipLine className="text-gray-400" />
+              <span className="text-sm text-gray-900">{tujuan ? tujuan.NAME : "Tujuan"}</span>
             </div>
           </div>
         </div>
       </ul>
       </div>
-      <KeretaDrawerMobile 
+      <PelniDrawerMobile
         type={type}
         setKeberangkatan={setKeberangkatan}
         setTujuan={setTujuan}
-        kaiData={kaiData} keberangkatan={keberangkatan} tujuan={tujuan} openDrawer={openDrawer} toggleDrawer={toggleDrawer} />
+        pelniData={pelniData} keberangkatan={keberangkatan} tujuan={tujuan} openDrawer={openDrawer} toggleDrawer={toggleDrawer} />
         </div>
   );
 };
 
-export default KeretaMobile;
+export default PelniMobile;

@@ -499,7 +499,7 @@ export default function Pembayaran() {
                   </div>
                     <div className="py-2">
                       <div className="w-full px-4">
-                        <div className="flex justify-between items-center border-b border-gray-200 shadow-sm py-4">
+                        <div className="flex justify-between items-center border-b border-gray-200 py-4">
                           <div className="flex space-x-2 items-center">
                             <div className="text-xs text-gray-500">
                               <small className="text-xs text-gray-400">Data Penumpang</small>
@@ -529,7 +529,7 @@ export default function Pembayaran() {
                     </div>
                     <div className="py-2 xl:py-4 xl:mt-0">
                       <div className="w-full px-4">
-                        <div className="flex justify-between items-center border-b border-gray-200 shadow-sm pb-4">
+                        <div className="flex justify-between items-center border-b border-gray-200 pb-4">
                           <div className="flex space-x-2 items-center">
                             <div className="text-xs text-gray-500">
                             <div className="text-xs text-gray-500">
