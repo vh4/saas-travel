@@ -83,7 +83,6 @@ export default function ListPesawat({ data }) {
 						onClick={(event) => event.stopPropagation()} // Menghentikan event bubbling ke parent
 						className="cursor-pointer"
 					>
-						<PiDownloadSimple size={20} className="text-blue-500" />
 					</a>
 					</div>
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { AiOutlineCheckCircle, AiOutlineClockCircle } from "react-icons/ai";
+import { AiOutlineClockCircle } from "react-icons/ai";
 import { MdHorizontalRule } from "react-icons/md";
 import { Button as ButtonAnt, Alert, Modal } from "antd";
 import { notification } from "antd";
@@ -17,6 +17,9 @@ import Tiket from "./Tiket";
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { useSelector } from "react-redux";
 import { IoMdCheckmarkCircle } from "react-icons/io";
+import { Box } from "@mui/material";
+import { TiketContext } from "../../App";
+import DetailPassengersDrawer from "./components/DetailPassengersDrawer";
 
 export default function Pembayaran() {
   const isOk = useSelector((state) => state.callback.isOk);
@@ -53,6 +56,15 @@ export default function Pembayaran() {
   const [isSimulated, setisSimulate] = useState(0);
   const [err, setErr] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(null);
+  const { pay, dispatch } = React.useContext(TiketContext);
+
+  const toggleDrawer = (type) => {
+    setOpenDrawer(type);
+  };
+
+
+  
   const showModal = () => {
     setOpen(true);
   };
@@ -224,6 +236,12 @@ export default function Pembayaran() {
         ),
       }
       
+      dispatch({
+        type: "PAY_PELNI",
+        // payload:{
+        //   isPayed:true
+        // }
+      });
 
       setispay(true);
       setHasilbayar(params);
@@ -340,58 +358,178 @@ export default function Pembayaran() {
             </>
           ) : (
             <>
-              <div className="block xl:flex xl:justify-around mb-24 xl:space-x-4">
-                <div className="block xl:hidden">
-                  <Alert
-                    message={`Expired Booking : ${remainingBookTime}`}
-                    banner
-                  />
-                </div>
+              <div className="block xl:flex xl:justify-around mb-0 xl:space-x-4 -mt-8 xl:mt-0">
                 {/* mobile sidebar */}
                 <div className="block xl:hidden sidebar w-full xl:w-2/3 2xl:w-1/2">
-                  <div className="mt-2 py-2 md:py-4 rounded-md border-b border-gray-200 shadow-sm">
-                    <div className="px-4 py-2 mb-4">
-                      {/* <div className="text-black text-xs">Status Booking</div> */}
-                      <div className="text-black text-sm font-semibold">
+                <div className="py-2 xl:py-4 mt-2 xl:mt-0">
+                    <Box
+                        className="border shadow px-6 py-6 rounded-xl"
+                        sx={{
+                          // textAlign: "center",
+                          // paddingY: "16px",
+                          // borderBottomLeftRadius: "30px",
+                          // borderBottomRightRadius: "30px",
+                          // cursor: "pointer",
+                        }}
+                        >
+                    <div className="flex justify-between items-center -mt-2">
+                      {/* <div className="text-black text-xs">Booking ID</div> */}
+                      <div className="text-black text-sm -mt-1.5">
                         Transaksi ID
                       </div>
-                      <div className="mt-2 font-medium  text-blue-500 text-[18px]">
-                        <Paragraph copyable>
+                      <div className="mt-2 font-bold  text-blue-500 text-[18px]">
+                        {/* {hasilBooking && hasilBooking.bookingCode} */}
+                        <Paragraph copyable className="">
                           {book && book.transactionId}
                         </Paragraph>
                       </div>
-                      <div className="text-grapy-500 text-xs">
-                        Gunakan kode bayar ini sebagai nomor tujuan pada menu
-                        pembayaran di aplikasi.
-                      </div>
                     </div>
-                    <div className="p-4 border-t">
-                      <div className="mt-3 text-xs text-black">
-                        {book.SHIP_NAME}
-                      </div>
-                      <div className="flex space-x-4">
-                        <div className="mt-1 text-xs text-black font-medium ">
-                          {passengers.pelabuhan_asal}
-                        </div>
-                        <IoArrowForwardOutline
-                          className="text-black"
-                          size={18}
-                        />
-                        <div className="mt-1 text-xs text-black font-medium ">
-                          {passengers.pelabuhan_tujuan}
-                        </div>
-                      </div>
-                      <div className="mt-3 text-xs text-black">
-                        {parseTanggal(passengers.departureDate)} -{" "}
-                        {parseTanggal(book.arrivalDate)}
-                      </div>
-                      <div className="mt-1 text-xs text-black">
-                        {book.departureTime} - {book.arrivalTime}
-                      </div>
+                    <div className="text-grapy-500 text-xs">
+
+                      Gunakan kode bayar ini sebagai nomor tujuan pada menu
+                      pembayaran di aplikasi.
+                    </div>
+                    </Box>
+                    <div className="p-4">
+                            <div className="flex items-center space-x-2 py-2">
+                              <div className="flex justify-between items-center">
+                                <div className="flex space-x-2 items-center">
+                                  <div className="text-xs text-black">
+                                    <div className="font-semibold">{book.SHIP_NAME}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="w-full py-2">
+                              <div className="flex justify-between items-center">
+                                <div className="flex space-x-2 items-center">
+                                  <div className="text-xs text-black">
+                                    <small className="text-xs text-gray-400">Asal</small>
+                                    <div className="font-semibold">
+                                    {passengers?.pelabuhan_asal?.charAt(0) + passengers?.pelabuhan_tujuan?.slice(1)?.toLowerCase()} {" "}
+                                      </div>
+                                  </div>
+                                </div>
+                                <div className="text-xs text-gray-400">
+                                {parseTanggal(parseTanggal(passengers.departureDate))} {" "}{book.departureTime}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="w-full py-2">
+                              <div className="flex justify-between items-center">
+                                <div className="flex space-x-2 items-center">
+                                  <div className="text-xs text-black">
+                                    <small className="text-xs text-gray-400">Tujuan</small>
+                                    <div className="font-semibold">
+                                      {passengers?.pelabuhan_tujuan.charAt(0) + passengers?.pelabuhan_tujuan?.slice(1)?.toLowerCase()}
+                                      </div>
+                                  </div>
+                                </div>
+                                <div className="text-xs text-gray-400">
+                                  {parseTanggal(book.arrivalDate)} {" "}
+                                  {book.arrivalTime}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="w-full py-2">
+                              <div className="flex justify-between items-center">
+                                <div className="flex space-x-2 items-center">
+                                  <div className="text-xs text-black">
+                                    <small className="text-xs text-gray-400">Kode Booking</small>
+                                    <div className="font-semibold">-</div>
+                                  </div>
+                                </div>
+                                  <div className="block xl:hidden">
+                                    <Alert
+                                      className="text-xs text-gray-500"
+                                      message={`${remainingBookTime}`}
+                                      banner
+                                    />
+                                </div>
+                              </div>
+                            </div>
+          
                     </div>
                   </div>
+                    <div className="py-2">
+                      <div className="w-full px-4">
+                        <div className="flex justify-between items-center border-b border-gray-200 py-4">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-gray-500">
+                              <small className="text-xs text-gray-400">Data Penumpang</small>
+                              <div className="my-1">{TotalAdult > 0 && TotalAdult + ' Dewasa'}  {TotalAdult > 0 && ', ' +TotalInfant + ' Bayi'}</div>
+                            </div>
+                          </div>
+                          <div onClick={() => {toggleDrawer(true)}} className="cursor-pointer text-xs text-blue-400">
+                            Detail
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="py-2 xl:py-4 xl:mt-0">
+                      <div className="w-full px-4">
+                        <div className="flex justify-between items-center">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-gray-500">
+                              <div >Total Harga</div>
+                            </div>
+                          </div>
+                          <div className="text-xs">
+                          Rp.{" "}
+                          {toRupiah(book && book?.normalSales || '-')}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="py-2 xl:py-4 xl:mt-0">
+                      <div className="w-full px-4">
+                        <div className="flex justify-between items-center border-b border-gray-200 pb-4">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-gray-500">
+                              <div >Biaya Admin</div>
+                            </div>
+                            </div>
+                          </div>
+                          <div className="text-xs">
+                          Rp.{" "}
+                          {toRupiah(book && book.nominal_admin)}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="py-2 xl:py-4 xl:mt-0">
+                      <div className="w-full px-4">
+                        <div className="flex justify-between items-center">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-gray-500">
+                              <div >Total Bayar</div>
+                            </div>
+                            </div>
+                          </div>
+                          <div className="text-xs">
+                          Rp.{" "}
+                          {toRupiah(
+                            parseInt(book && book?.normalSales || 0) +
+                              parseInt(
+                                book && book?.nominal_admin
+                              )
+                          )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                 </div>
-                <div className="mt-4 w-full mx-0 2xl:mx-4">
+
+                <DetailPassengersDrawer
+                bookInfo={bookInfo} 
+                passengers={passengers.passengers || []} hasilBooking={book} openDrawer={openDrawer} toggleDrawer={toggleDrawer}
+                />
+
+                {/* desktop adult infant */}
+                <div className="mt-4 w-full mx-0 2xl:mx-4 hidden xl:block">
                   {/* adult and infant */}
                   {bookInfo.PAX_LIST.length > 0
                     ? bookInfo.PAX_LIST.map((e, i) => (
@@ -449,6 +587,7 @@ export default function Pembayaran() {
                         </>
                       ))
                     : ""}
+
                   <div className="p-2 xl:px-8 xl:mt-6 mt-4 w-full">
                     <div className="p-2">
                       <div className="text-xs text-black font-medium  flex justify-between">
@@ -487,8 +626,8 @@ export default function Pembayaran() {
                       </div>
                     </div>
                   </div>
-
                 </div>
+
                 {/* desktop sidebar */}
                 <div className="hidden xl:block sidebar w-full xl:w-2/3 2xl:w-1/2">
                   <div className="py-2 rounded-md border-b border-gray-200 shadow-sm">
@@ -611,7 +750,7 @@ export default function Pembayaran() {
                 {/* )} */}
                 </div>
               {/* {callbackBoolean == true ? ( */}
-                <div className="block xl:hidden mt-4 py-4 rounded-md border border-gray-200 shadow-sm">
+                <div className="block xl:hidden w-full mt-4 py-4 rounded-md border border-gray-200 shadow-sm">
                     <>
                     {/* {isOk == true && isCurrentBalance == true ? ( */}
                       <>
@@ -621,13 +760,13 @@ export default function Pembayaran() {
                             size="large"
                             key="submit"
                             type="primary"
-                            className="bg-blue-500 mx-2 font-semibold mt-4"
+                            className="bg-blue-500 mx-2 font-semibold mt-4 w-full"
                             loading={isLoading}
                           >
                             Bayar Sekarang
                           </ButtonAnt>
                         </div>
-                        {isSimulated === 1 ? (<Alert className="mt-4" message="Don't worry, clicking the 'Bayar' will not affect your balance." banner/>) : ''}
+                        {isSimulated === 1 ? (<Alert className="mt-4" message="Click 'Bayar' will not affect your balance." banner/>) : ''}
                       </>
                     {/* ) : ''} */}
                     </>

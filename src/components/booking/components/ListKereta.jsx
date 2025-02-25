@@ -28,7 +28,7 @@ import {
 			  {/* Header */}
 			  <div className="header px-6 py-4">
 				<div className="flex items-center space-x-2">
-				  <BsFillTrainFrontFill className="text-gray-500" />
+				 <img src="/kai.png" width={25} />
 				  <h1 className="text-sm font-bold mt-2">{e.nama_kereta}</h1>
 				</div>
 				<div className="flex items-center space-x-2 mt-2">

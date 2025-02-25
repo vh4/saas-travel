@@ -97,6 +97,9 @@ function App() {
         case 'PAY_TRAIN': return {
           isPayed: true,
         }
+        case 'PAY_PELNI': return {
+          isPayed: true,
+        }
         case 'PAY_FLIGHT': return {
           isPayed: true,
         }

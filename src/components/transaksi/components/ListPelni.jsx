@@ -50,7 +50,7 @@ export default function ListPelni({ data }) {
 						{/* Informasi Kapal */}
 						<div className="header px-6 py-4">
 							<div className="flex items-center space-x-2">
-								<FaShip className="text-gray-500" size={20} />
+								<img src="/pelni.svg" width={18} />
 								<h1 className="text-sm font-bold mt-2">{e.nama_kapal}</h1>
 							</div>
 							<div className="flex items-center space-x-2 mt-2">
@@ -81,7 +81,6 @@ export default function ListPelni({ data }) {
 						onClick={(event) => event.stopPropagation()} // Menghentikan event bubbling ke parent
 						className="cursor-pointer"
 					>
-						<PiDownloadSimple size={20} className="text-blue-500" />
 					</a>
 					</div>
 

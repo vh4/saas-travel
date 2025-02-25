@@ -404,13 +404,7 @@ export default function Pembayaran() {
             </>
           ) : (
             <>
-              <div className="block xl:flex xl:justify-around mb-24 xl:space-x-4">
-                <div className="block xl:hidden">
-                  <Alert
-                    message={`Expired Booking : ${remainingBookTime}`}
-                    banner
-                  />
-                </div>
+              <div className="block xl:flex xl:justify-around mb-24 xl:space-x-4 -mt-8 xl:mt-0">
                 {/* mobile sidebar */}
                 <div className="block xl:hidden sidebar w-full xl:w-2/3 2xl:w-1/2">
                 <div className="py-2 xl:py-4 mt-2 xl:mt-0">

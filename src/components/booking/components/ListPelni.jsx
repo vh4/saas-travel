@@ -25,7 +25,7 @@ export default function ListPelni({ data, remainingPelni }) {
             {/* Header */}
             <div className="header px-6 py-4">
               <div className="flex items-center space-x-2">
-                <FaShip className="text-gray-500" size={20} />
+                <img src="/pelni.svg" width={18} />
                 <h1 className="text-sm font-bold mt-2">{e.nama_kapal}</h1>
               </div>
               <div className="flex items-center space-x-2 mt-2">
