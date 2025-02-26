@@ -18,7 +18,7 @@ export default function HeaderTemplateMobileSearch({ children }) {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div>
+      <div className="w-full fixed z-50 bg-white border-b border-gray-200">
         <div className="block md:hidden">
           <div className="flex items-center w-full text-black px-4 py-2">
             <div className="mr-auto" onClick={() => window.history.back()}>
@@ -42,7 +42,7 @@ export default function HeaderTemplateMobileSearch({ children }) {
           </div>
         </div>
       </div>
-      <div className="flex-grow">
+      <div className="flex-grow mt-16">
         <div className="container mx-auto px-0 xl:px-32">
           <main>{children}</main>
         </div>
