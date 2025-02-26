@@ -21,7 +21,7 @@ import SearchPlane from "./SearchPlane";
 import { Flex, Progress, Space, Spin } from "antd";
 import { toRupiah } from "../../helpers/rupiah";
 import { parseTanggal } from "../../helpers/date";
-import { MdSort } from "react-icons/md";
+import { MdArrowForwardIos, MdSort } from "react-icons/md";
 import { notification, Radio } from "antd";
 import Page500 from "../components/500";
 import Page400 from "../components/400";
@@ -1482,6 +1482,7 @@ export default function Search() {
                                       {e.airlineName}
                                     </h1>
                                   </div>
+                                  <div className="flex space-x-2 items-center">
                                   <div
                                     className="flex items-center px-4 py-1 rounded-full bg-gray-100"
                                     onClick={(event) => {
@@ -1501,6 +1502,8 @@ export default function Search() {
                                     {/* <div className="text-xs cursor-pointer font-medium ">
                                       Detail
                                     </div> */}
+                                  </div>
+                                    <MdArrowForwardIos size={20} className="text-black" />
                                   </div>
                                 </div>
                                 <div className="flex justify-start mt-6">

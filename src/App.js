@@ -16,9 +16,9 @@ import SearchPelni from "./pages/pelni/Search";
 import BookingPelni from "./pages/pelni/Booking";
 import PaymentPelni from "./pages/pelni/Pembayaran";
 
-// import SearchDlu from "./pages/dlu/Search";
-// import BookingDlu from "./pages/dlu/Booking"
-// import Pembayaran from "./pages/dlu/Pembayaran"
+import SearchDlu from "./pages/dlu/Search";
+import BookingDlu from "./pages/dlu/Booking"
+import Pembayaran from "./pages/dlu/Pembayaran"
 
 import BookingKai from "./pages/kai/Booking";
 import KonfirmasiKai from "./pages/kai/Konfirmasi";
@@ -158,9 +158,9 @@ function App() {
                   <Route path="/pelni/search" element={< SearchPelni/>}></Route>
                   <Route path="/pelni/booking/" element={< BookingPelni/>}></Route>
                   <Route path="/pelni/payment/" element={< PaymentPelni/>}></Route>
-                  {/* <Route path="/dlu/search" element={< SearchDlu/>}></Route> */}
-                  {/* <Route path="/dlu/booking/:id" element={< BookingDlu/>}></Route> */}
-                  {/* <Route path="/dlu/payment/:id" element={< Pembayaran/>}></Route> */}
+                  <Route path="/dlu/search" element={< SearchDlu/>}></Route>
+                  <Route path="/dlu/booking/:id" element={< BookingDlu/>}></Route>
+                  <Route path="/dlu/payment/:id" element={< Pembayaran/>}></Route>
                   <Route path="/flight/booking/" element={< BookingPesawat/>}></Route>
                   <Route path="/flight/payment/" element={< PembayaranPesawat/>}></Route>
                   {/* <Route path="/flight/tiket-pesawat" element={< TiketPesawat/>}></Route> */}

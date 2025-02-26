@@ -26,7 +26,7 @@ import Page400 from "../components/400";
 import { Radio, Space, notification } from "antd";
 import { Popover, Whisper } from "rsuite";
 import { v4 as uuidv4 } from "uuid";
-import { MdSort } from "react-icons/md";
+import { MdArrowForwardIos, MdSort } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { setDataSearchKereta } from "../../features/createSlice";
 import FilterMobileKereta from "./components/FilterMobileKereta";
@@ -1066,7 +1066,7 @@ export default function Search() {
                                       Class ({e.seats[0].class})
                                     </small></p>
                                     </div>
-                                    <div className="text-right">
+                                    <div className="text-right flex space-x-2 items-center">
                                     {e.seats[0].availability > 0 &&
                                   parseInt(adult) + parseInt(infant) <
                                     e.seats[0].availability
@@ -1096,6 +1096,7 @@ export default function Search() {
                                     ? ""
                                     : "Tiket Habis"}
                                       </small>
+                                      <MdArrowForwardIos size={20} className="text-black" />
                                     </div>
                                   </div>
 

@@ -23,6 +23,7 @@ import { SlArrowDown, SlArrowLeft } from "react-icons/sl";
 import { IoIosArrowDown, IoIosMore } from "react-icons/io";
 import SearchDrawerMobile from "./components/SearchDrawerMobile";
 import FilterMobilePelni from "./components/FilterMobilePelni";
+import { MdArrowForwardIos } from "react-icons/md";
 
 export default function Search() {
 
@@ -670,7 +671,8 @@ export default function Search() {
                                                   }}
                                                 >
                                                   <IoIosMore size={20} className="text-gray-400" />
-                                                </div>                                              
+                                                </div>  
+                                                <MdArrowForwardIos size={20} className="text-black" />                                            
                                             </div>
                                           </div>
                                           {/* search drawer */}

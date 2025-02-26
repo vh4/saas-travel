@@ -184,10 +184,12 @@ export default function BookingPesawat() {
           setTotalChild(TotalChild);
           setTotalInfant(TotalInfant);
 
+          // note => nama depan dan nama belakang digabung jadi nama depan
+
           const AdultArr = Array.from({ length: TotalAdult }, () => ({
             gender: "MR",
             nama_depan: "broowww",
-            nama_belakang: "",
+            // nama_belakang: "", 
             birthdate: getCurrentDate(),
             idNumber: "",
           }));
@@ -195,14 +197,14 @@ export default function BookingPesawat() {
           const InfantArr = Array.from({ length: TotalInfant }, () => ({
             gender: "MR",
             nama_depan: "",
-            nama_belakang: "",
+            // nama_belakang: "",
             birthdate: getCurrentDate(),
           }));
 
           const ChildArr = Array.from({ length: TotalChild }, () => ({
             gender: "MR",
             nama_depan: "",
-            nama_belakang: "",
+            // nama_belakang: "",
             birthdate: getCurrentDate(),
             idNumber: "",
           }));
@@ -259,6 +261,7 @@ export default function BookingPesawat() {
       parsing.data = parsing.data.map((x, i) => ({
         ...x,
         name: x.nama_depan + ' ' +  x.nama_belakang,
+        // name: x.nama_depan,
         }))
 
       setExistingPenumpang(parsing.data);
@@ -315,15 +318,15 @@ export default function BookingPesawat() {
         ]);
       }
   
-      adultCategory[indexPreviousPenumpang.index]['nama_depan'] = selectedPassenger.nama_depan;
-      adultCategory[indexPreviousPenumpang.index]['nama_belakang'] = selectedPassenger.nama_belakang;
+      adultCategory[indexPreviousPenumpang.index]['nama_depan'] = selectedPassenger.nama_depan +  " " + selectedPassenger.nama_belakang;
+      // adultCategory[indexPreviousPenumpang.index]['nama_belakang'] = selectedPassenger.nama_belakang;
       adultCategory[indexPreviousPenumpang.index]['idNumber'] = selectedPassenger.nik;
   
       setAdult([adultCategory]);
 
       form.setFields([
-        { name: [`namadepanAdult${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_depan },
-        { name: [`namabelakangAdult${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_belakang },
+        { name: [`namadepanAdult${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_depan +  " " + selectedPassenger.nama_belakang },
+        // { name: [`namabelakangAdult${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_belakang },
         { name: [`nikAdult${indexPreviousPenumpang.index}`], value: selectedPassenger.nik },
       ]);
 
@@ -355,15 +358,15 @@ export default function BookingPesawat() {
           ]);
         }
 
-        childCategory[indexPreviousPenumpang.index]['nama_depan'] = selectedPassenger.nama_depan;
-        childCategory[indexPreviousPenumpang.index]['nama_belakang'] = selectedPassenger.nama_belakang;
+        childCategory[indexPreviousPenumpang.index]['nama_depan'] = selectedPassenger.nama_depan +  " " + selectedPassenger.nama_belakang;
+        // childCategory[indexPreviousPenumpang.index]['nama_belakang'] = selectedPassenger.nama_belakang;
         childCategory[indexPreviousPenumpang.index]['idNumber'] = selectedPassenger.nik;
 
         setChild([childCategory]);
 
         form.setFields([
-          { name: [`namadepanChild${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_depan },
-          { name: [`namabelakangChild${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_belakang },
+          { name: [`namadepanChild${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_depan +  " " + selectedPassenger.nama_belakang },
+          // { name: [`namabelakangChild${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_belakang },
           { name: [`noktpChild${indexPreviousPenumpang.index}`], value: selectedPassenger.nik },
         ]);
 
@@ -394,15 +397,15 @@ export default function BookingPesawat() {
           ]);
         }
         
-        infantCategory[indexPreviousPenumpang.index]['nama_depan'] = selectedPassenger.nama_depan;
-        infantCategory[indexPreviousPenumpang.index]['nama_belakang'] = selectedPassenger.nama_belakang;
+        infantCategory[indexPreviousPenumpang.index]['nama_depan'] = selectedPassenger.nama_depan +  " " + selectedPassenger.nama_belakang;
+        // infantCategory[indexPreviousPenumpang.index]['nama_belakang'] = selectedPassenger.nama_belakang;
         infantCategory[indexPreviousPenumpang.index]['idNumber'] = selectedPassenger.nik;
 
         setInfant([infantCategory]);
 
         form.setFields([
-          { name: [`infantnamadepan${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_depan },
-          { name: [`infantnamabelakang${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_belakang },
+          { name: [`infantnamadepan${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_depan +  " " + selectedPassenger.nama_belakang },
+          // { name: [`infantnamabelakang${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_belakang },
           { name: [`infantktp${indexPreviousPenumpang.index}`], value: selectedPassenger.nik },
         ]);
 
@@ -538,10 +541,14 @@ export default function BookingPesawat() {
 
         //"CHD;".$child_title.";".$child_firstname.";".$child_lastname.";".$child_birthdate.";".$child_no_passport.";".$child_nationality.";".$child_issueby.";".$child_expdate.";".$child_issuedate.";".$child_issueby.";".$child_baggage
 
+        const full_name = item.nama_depan ? item.nama_depan.split(" ") : [];
+        const namaDepanFinal = full_name.length > 0 ? full_name[0] : "";
+        const namaBelakangFinal = full_name.length > 1 ? full_name.slice(1).join(" ") : "";        
+
         end_child.push(
           `CHD;${
             item.gender
-          };${item.nama_depan};${item.nama_belakang};${dateString};${
+          };${namaDepanFinal};${namaBelakangFinal};${dateString};${
             item.idNumber
           };${item?.kewenegaraan ? item?.kewenegaraan : "ID"};${
             item?.issuingpassport ? item?.issuingpassport : "ID"
@@ -557,10 +564,15 @@ export default function BookingPesawat() {
           date.getDate().toString().padStart(2, "0") +
           "/" +
           date.getFullYear();
+
+        const full_name = item.nama_depan ? item.nama_depan.split(" ") : [];
+        const namaDepanFinal = full_name.length > 0 ? full_name[0] : "";
+        const namaBelakangFinal = full_name.length > 1 ? full_name.slice(1).join(" ") : "";        
+
         end_infant.push(
           `INF;${
             item.gender
-          };${item.nama_depan};${item.nama_belakang};${dateString};${
+          };${namaDepanFinal};${namaBelakangFinal};${dateString};${
             item.idNumber
           };${item?.kewenegaraan ? item?.kewenegaraan : "ID"};${
             item?.issuingpassport ? item?.issuingpassport : "ID"
@@ -576,11 +588,16 @@ export default function BookingPesawat() {
           date.getDate().toString().padStart(2, "0") +
           "/" +
           date.getFullYear();
+
+          const full_name = item.nama_depan ? item.nama_depan.split(" ") : [];
+          const namaDepanFinal = full_name.length > 0 ? full_name[0] : "";
+          const namaBelakangFinal = full_name.length > 1 ? full_name.slice(1).join(" ") : "";          
+          
         // end_adult.push(`ADT;${item.gender};${item.nama_depan.split(" ")[0].toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${item.idNumber};::${item.nomor};::${item.nomor};;;;${item.email};KTP;ID;ID;;;;`);
         end_adult.push(
           `ADT;${
             item.gender
-          };${item.nama_depan};${item.nama_belakang};${dateString};${
+          };${namaDepanFinal};${namaBelakangFinal};${dateString};${
             item.idNumber
           };::${item.nomor};::${item.nomor};;;;${item.email};1;${
             item?.kewenegaraan ? item?.kewenegaraan : "ID"
@@ -1278,7 +1295,7 @@ export default function BookingPesawat() {
                                           />
                                         </Form.Item>
                                       </div>
-                                      <div className="w-full">
+                                      {/* <div className="w-full">
                                         <div className="text-black text-sm">
                                           Nama Belakang
                                         </div>
@@ -1322,7 +1339,7 @@ export default function BookingPesawat() {
                                             id="default-input"
                                           />
                                         </Form.Item>
-                                      </div>
+                                      </div> */}
                                     </div>
                                   </div>
                                 </div>
@@ -1758,7 +1775,7 @@ export default function BookingPesawat() {
                                           />
                                         </Form.Item>
                                       </div>
-                                      <div className="w-full">
+                                      {/* <div className="w-full">
                                         <div className="text-black text-sm">
                                           Nama Belakang
                                         </div>
@@ -1824,7 +1841,7 @@ export default function BookingPesawat() {
                                             ]}
                                           />
                                         </Form.Item>
-                                      </div>
+                                      </div> */}
                                     </div>
                                   </div>
                                 </div>
@@ -2237,7 +2254,7 @@ export default function BookingPesawat() {
                                           />
                                         </Form.Item>
                                       </div>
-                                      <div className="w-full">
+                                      {/* <div className="w-full">
                                         <div className="text-black text-sm">
                                           Nama Belakang
                                         </div>
@@ -2281,7 +2298,7 @@ export default function BookingPesawat() {
                                             id="default-input"
                                           />
                                         </Form.Item>
-                                      </div>
+                                      </div> */}
                                     </div>
                                   </div>
                                 </div>
