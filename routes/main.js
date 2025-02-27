@@ -587,7 +587,11 @@ Router.post('/app/transaction_book_list', async function(req, res) {
 
 Router.post('/app/transaction_book_list/all', async (req, res) => {
     try {
-        const { token, jenis } = req.body;
+        
+        const { token, jenis, select, cari } = req.body;
+        const merchant = req.session['v_merchant'];
+
+        console.log({ token, jenis, select, cari });
 
         if (!token) {
             return res.status(400).json({
@@ -598,6 +602,21 @@ Router.post('/app/transaction_book_list/all', async (req, res) => {
 
         const merchart = req.session['v_merchant'];
         const username = req.session['v_uname'];
+
+        let paramsType = {}
+
+        if(!merchant){
+            if(select === 'phone'){
+                paramsType = {
+                    no_hp:cari
+                }
+            }else if(select === 'name'){
+                paramsType = {
+                    nama:cari
+                }
+            }
+        }
+        
 
         let formattedUsername = username;
         if (merchart) {
@@ -610,7 +629,7 @@ Router.post('/app/transaction_book_list/all', async (req, res) => {
         logger.info(`Request /app/transaction_book_list/all from [USERNAME]: ${req.session['v_uname']}, [MERCHANT]: ${req.session['v_merchant']}`);
 
         const [pesawat, kereta, pelni] = await Promise.all(
-            products.map(product => axios.post(urls, { token, product:product, username: formattedUsername }).then(response => response.data).catch(error => {
+            products.map(product => axios.post(urls, { token, product:product, username: formattedUsername, ...paramsType }).then(response => response.data).catch(error => {
                 logger.error(`Error fetching data from ${urls}: ${error.message}`);
                 return null; 
             }))
