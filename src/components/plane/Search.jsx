@@ -939,19 +939,23 @@ export default function Search() {
                                           : (<>Rp. {toRupiah(e.classes[0][0].price)}</>)
                                   }
                                 </h1>
-                                <small className="text-gray-500">
-                                  Available
-                                  {/* {e.classes[0][0].availability} seat(s) left
-                                  {e.classes[0][0].availability > 0 &&
+                                {
+                                  e.classes[0][0].availability > 0 &&
                                   e.classes[0][0].availability >=
                                     parseInt(child) +
                                       parseInt(adult) +
                                       parseInt(infant) ? (
-                                    ""
-                                  ) : (
-                                    <span> (Tiket Habis)</span>
-                                  )} */}
-                                </small>
+                                        <>
+                                          <small className="text-gray-500">
+                                            Available
+                                          </small>   
+                                        </>
+                                      ) : (
+                                          <small className="text-gray-500">
+                                            Habis
+                                          </small>   
+                                      )
+                                }
                               </div>
                               <div className="flex justify-center col-span-1">
                                 {e.classes[0][0].availability > 0 &&
@@ -1504,6 +1508,22 @@ export default function Search() {
                                     </div> */}
                                   </div>
                                     <MdArrowForwardIos size={20} className="text-black" />
+                                    <div>
+                                    {
+                                  e.classes[0][0].availability > 0 &&
+                                  e.classes[0][0].availability >=
+                                    parseInt(child) +
+                                      parseInt(adult) +
+                                      parseInt(infant) ? (
+                                        <>
+                                        </>
+                                      ) : (
+                                          <small className="text-gray-500">
+                                            Habis
+                                          </small>   
+                                      )
+                                }
+                                    </div>
                                   </div>
                                 </div>
                                 <div className="flex justify-start mt-6">

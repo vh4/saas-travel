@@ -1,25 +1,134 @@
 import React, { useState, useEffect, useRef } from "react";
-import {  BsSearch } from "react-icons/bs";
+import { BsSearch } from "react-icons/bs";
 import axios from "axios";
-import { message } from "antd";
+import { Input, Select, Space, message } from "antd";
 import Page500 from "../components/500";
 import { CiFilter } from "react-icons/ci";
 import ListKereta from "./components/ListKereta";
-import SwipeableEdgeDrawer from "./components/Filter"
+import SwipeableEdgeDrawer from "./components/Filter";
 import ListPesawat from "./components/ListPesawat";
 import ListPelni from "./components/ListPelni";
 
+const WithoutMerchant = ({
+  searchQuery,
+  searchType,
+  handleSearchChange,
+  handleSearchTypeChange,
+  handleSearchSubmit,
+}) => {
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Mencegah reload halaman
+    handleSearchSubmit(); // Panggil fungsi pencarian
+  };
+
+  const options = [
+    {
+      value:'phone',
+      label:'Nomor HP'
+    },
+    {
+      value:'name',
+      label:'Nama'
+    }
+  ]
+
+  return (
+    <div className="mt-5">
+      <div className="w-full">
+        {/* Header */}
+        <div className="w-full flex items-center">
+          <form className="max-w-full mx-auto" onSubmit={handleSubmit}>
+            <div className="flex w-full rounded-lg overflow-hidden">
+              
+              {/* Select Dropdown */}
+
+              <Space.Compact>
+                <Select 
+                size="large"
+                value={searchType}
+                onChange={handleSearchTypeChange}
+                options={options} />
+                <Input 
+                size="large"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                defaultValue="Searching for.." />
+              </Space.Compact>
+
+              {/* Search Button */}
+              <button
+                type="submit"
+                className="px-3 text-gray-500 hover:text-blue-600 transition-all duration-200 ease-in-out"
+              >
+                <svg
+                  className="w-5 h-5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const WithMerchant = ({ searchQuery, handleSearchChange, toggleDrawer }) => {
+  return (
+    <div className="mt-2">
+      <div className="w-full">
+        {/* headear */}
+        <div className="w-full grid grid-cols-12 gap-1 items-center">
+          {/* Ikon di sebelah kanan dengan ukuran besar */}
+          <div className="col-span-10">
+            <form className="flex items-center">
+              <div className="relative w-full rounded-2xl">
+                <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                  <BsSearch className="text-blue-500" size={20} />
+                </div>
+                <input
+                  type="text"
+                  className="bg-gray-100 border rounded-2xl border-gray-100 text-sm focus:ring-gray-100 focus:border-gray-100 outline-none block w-full pl-10 p-2.5"
+                  placeholder="Cari berdasarkan asal atau tujuan"
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                />
+              </div>
+            </form>
+          </div>
+          <div className="col-span-2 flex justify-end cursor-pointer">
+            <CiFilter
+              onClick={toggleDrawer(true)}
+              size={24}
+              className="w-6 h-6 text-gray-500"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function BookingAll({ path }) {
+  const [dataTransport, setDataTransport] = useState({
+    kereta: [],
+    pesawat: [],
+    pelni: [],
+  });
 
-    const [dataTransport, setDataTransport] = useState({
-        kereta: [],
-        pesawat: [],
-        pelni: []
-    });
-
-	//drawer filter
-	const [open, setOpen] = React.useState(false);
+  //drawer filter
+  const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = useState("Semua"); // Default: Semua
   const [filteredData, setFilteredData] = useState({
     kereta: [],
@@ -27,228 +136,262 @@ export default function BookingAll({ path }) {
     pelni: [],
   });
 
+  const toggleDrawer = (newOpen) => () => setOpen(newOpen);
 
-	const toggleDrawer = (newOpen) => () => setOpen(newOpen);
+  // State untuk loading & error
+  const [state, setState] = useState({
+    isLoading: false,
+    err: false,
+    errPage: false,
+  });
 
-    // State untuk loading & error
-    const [state, setState] = useState({
-        isLoading: false,
-        err: false,
-        errPage: false,
-    });
+  // State untuk waktu tersisa
+  const [remainingTimes, setRemainingTimes] = useState({
+    kereta: [],
+    pesawat: [],
+    pelni: [],
+  });
 
-    // State untuk waktu tersisa
-    const [remainingTimes, setRemainingTimes] = useState({
-        kereta: [],
-        pesawat: [],
-        pelni: []
-    });
+  // Refs untuk interval
+  const intervalRefs = {
+    kereta: useRef(null),
+    pesawat: useRef(null),
+    pelni: useRef(null),
+  };
 
-    // Refs untuk interval
-    const intervalRefs = {
-        kereta: useRef(null),
-        pesawat: useRef(null),
-        pelni: useRef(null)
-    };
+  const token = JSON.parse(
+    localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+  );
 
-	const token = JSON.parse(
-		localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-	);
-	
-	useEffect(() => {
-		if (token === undefined || token === null) {
-            setState(prev => ({ ...prev, err: true }));
-		}
-	}, [token]);
+  useEffect(() => {
+    if (token === undefined || token === null) {
+      setState((prev) => ({ ...prev, err: true }));
+    }
+  }, [token]);
 
-    // Notifikasi
-    const [messageApi, contextHolder] = message.useMessage();
-    
-    const success = () => {
-        messageApi.open({
-            type: "success",
-            content: "Pembayaran anda berhasil, silahkan check tiket anda di menu transaksi.",
-            duration: 7
-        });
-    };
+  // Notifikasi
+  const [messageApi, contextHolder] = message.useMessage();
+  const [isMerchant, setIsMerchant] = useState(false);
 
-    const gagal = (rd) => {
-        messageApi.open({
-            type: "error",
-            content: `Failed, ${rd.charAt(0).toUpperCase() + rd.slice(1).toLowerCase()}`,
-            duration: 7
-        });
-    };
+  useEffect(() => {
+    const getTransaksiList = async () => {
 
-    // Fetch transaksi
-    useEffect(() => {
-        const getTransaksiList = async () => {
-            setState(prev => ({ ...prev, isLoading: true }));
+      setState((prev) => ({ ...prev, isLoading: true }));
 
-            try {
-                const { data } = await axios.post(
-                    `${process.env.REACT_APP_HOST_API}/travel/app/transaction_book_list/all`,
-                    { token }
-                );
+      try {
+        const responseMerchant = await axios.post(
+          `${process.env.REACT_APP_HOST_API}/travel/is_merchant`,
+          {
+            token: JSON.parse(
+              localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ||
+                "null"
+            ),
+          }
+        );
+        
 
-                // Cek error pada response
-                const errStatus = ["kereta", "pesawat", "pelni"].some(type =>
-                    data[type]?.rc !== "00" && data[type]?.rc !== "33"
-                );
+        if (responseMerchant.data.rc === "00") {
 
-                if (errStatus) setState(prev => ({ ...prev, errPage: true }));
+          setIsMerchant(true);
 
-                setDataTransport({
-                    kereta: data.kereta?.data || [],
-                    pesawat: data.pesawat?.data || [],
-                    pelni: data.pelni?.data || []
-                });
+          const { data } = await axios.post(
+            `${process.env.REACT_APP_HOST_API}/travel/app/transaction_book_list/all`,
+            { token }
+          );
 
-                setFilteredData({
-                  kereta: data.kereta?.data || [],
-                  pesawat: data.pesawat?.data || [],
-                  pelni: data.pelni?.data || [],
-                }); // Default: Semua data ditampilkan
+          const errStatus = ["kereta", "pesawat", "pelni"].some(
+            (type) => data[type]?.rc !== "00" && data[type]?.rc !== "33"
+          );
 
-            } catch (error) {
-                setState(prev => ({ ...prev, errPage: true }));
-            } finally {
-                setState(prev => ({ ...prev, isLoading: false }));
-            }
-        };
-
-        getTransaksiList();
-    }, []);
-
-
-	useEffect(() => {
-		if (dataTransport['kereta'].length > 0) {
-		  const y = [];
-	
-		  dataTransport['kereta'].forEach((x, i) => {
-			const res = x?.expiredDate;
-			y.push(res);
-		  });
-	
-		  setRemainingTimes(
-			prev => ({
-				...prev,
-				kereta:y
-			})
-		  );
-		}
-	  }, [dataTransport]);
-
-
-	  useEffect(() => {
-		if (dataTransport['pesawat'].length > 0) {
-		  const y = [];
-	
-		  dataTransport['pesawat'].forEach((x, i) => {
-			const res = x?.expiredDate;
-			y.push(res);
-		  });
-	
-		  setRemainingTimes(
-			prev => ({
-				...prev,
-				pesawat:y
-			})
-		  );
-		}
-	  }, [dataTransport]);
-
-
-	  useEffect(() => {
-		if (dataTransport['pelni'].length > 0) {
-		  const y = [];
-	
-		  dataTransport['pelni'].forEach((x, i) => {
-			const res = x?.expiredDate;
-			y.push(res);
-		  });
-	
-		  setRemainingTimes(
-			prev => ({
-				...prev,
-				pelni:y
-			})
-		  );
-		}
-	  }, [dataTransport]);
-
-	  useEffect(() => {
-		const remainingFetch = (type) => {
-			if (dataTransport[type]?.length > 0) {
-				const y = [];
-				for(const params of dataTransport[type]){
-					const res = params?.expiredDate;
-					y.push(res);
-				}
-	
-				setRemainingTimes((prev) => ({
-					...prev,
-					[type]: y,
-				}));
-			}
-		};
-	
-		["kereta", "pesawat", "pelni"].forEach(remainingFetch);
-	}, [dataTransport]);
-	
-    // Update remaining time
-    useEffect(() => {
-        const updateRemainingTimes = (type) => {
-            if (dataTransport[type].length > 0) {
-                intervalRefs[type].current = setInterval(() => {
-                    setRemainingTimes(prev => ({
-                        ...prev,
-                        [type]: prev[type].map(time => {
-                            const targetTime = new Date(time).getTime();
-                            const now = new Date().getTime();
-                            return targetTime > now ? targetTime - 1000 : 0;
-                        })
-                    }));
-                }, 1000);
-            }
-        };
-
-        ["kereta", "pesawat", "pelni"].forEach(type => {
-            updateRemainingTimes(type);
-        });
-
-        return () => {
-            ["kereta", "pesawat", "pelni"].forEach(type => {
-                if (intervalRefs[type].current) {
-                    clearInterval(intervalRefs[type].current);
-                }
+          if (errStatus) {
+            setState((prev) => ({ ...prev, errPage: true }));
+          } else {
+            setDataTransport({
+              kereta: data.kereta?.data || [],
+              pesawat: data.pesawat?.data || [],
+              pelni: data.pelni?.data || [],
             });
-        };
-    }, [dataTransport]);
 
+            setFilteredData({
+              kereta: data.kereta?.data || [],
+              pesawat: data.pesawat?.data || [],
+              pelni: data.pelni?.data || [],
+            });
+          }
 
-    useEffect(() => {
-      let newFilteredData = { kereta: [], pesawat: [], pelni: [] };
-  
-      if (selectedValue === "Semua") {
-        newFilteredData = { ...dataTransport };
-      } else {
-        newFilteredData = {
-          kereta: selectedValue === "kereta" ? dataTransport.kereta : [],
-          pesawat: selectedValue === "pesawat" ? dataTransport.pesawat : [],
-          pelni: selectedValue === "pelni" ? dataTransport.pelni : [],
-        };
+        }
+
+      } catch (error) {
+        setState((prev) => ({ ...prev, errPage: true }));
       }
-  
-      setFilteredData(newFilteredData);
-    }, [selectedValue, dataTransport]);
 
+      setState((prev) => ({ ...prev, isLoading: false }));
+    };
+
+    Promise.all([getTransaksiList()]).finally(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (dataTransport["kereta"].length > 0) {
+      const y = [];
+
+      dataTransport["kereta"].forEach((x, i) => {
+        const res = x?.expiredDate;
+        y.push(res);
+      });
+
+      setRemainingTimes((prev) => ({
+        ...prev,
+        kereta: y,
+      }));
+    }
+  }, [dataTransport]);
+
+  useEffect(() => {
+    if (dataTransport["pesawat"].length > 0) {
+      const y = [];
+
+      dataTransport["pesawat"].forEach((x, i) => {
+        const res = x?.expiredDate;
+        y.push(res);
+      });
+
+      setRemainingTimes((prev) => ({
+        ...prev,
+        pesawat: y,
+      }));
+    }
+  }, [dataTransport]);
+
+  useEffect(() => {
+    if (dataTransport["pelni"].length > 0) {
+      const y = [];
+
+      dataTransport["pelni"].forEach((x, i) => {
+        const res = x?.expiredDate;
+        y.push(res);
+      });
+
+      setRemainingTimes((prev) => ({
+        ...prev,
+        pelni: y,
+      }));
+    }
+  }, [dataTransport]);
+
+  useEffect(() => {
+    const remainingFetch = (type) => {
+      if (dataTransport[type]?.length > 0) {
+        const y = [];
+        for (const params of dataTransport[type]) {
+          const res = params?.expiredDate;
+          y.push(res);
+        }
+
+        setRemainingTimes((prev) => ({
+          ...prev,
+          [type]: y,
+        }));
+      }
+    };
+
+    ["kereta", "pesawat", "pelni"].forEach(remainingFetch);
+  }, [dataTransport]);
+
+  // Update remaining time
+  useEffect(() => {
+    const updateRemainingTimes = (type) => {
+      if (dataTransport[type].length > 0) {
+        intervalRefs[type].current = setInterval(() => {
+          setRemainingTimes((prev) => ({
+            ...prev,
+            [type]: prev[type].map((time) => {
+              const targetTime = new Date(time).getTime();
+              const now = new Date().getTime();
+              return targetTime > now ? targetTime - 1000 : 0;
+            }),
+          }));
+        }, 1000);
+      }
+    };
+
+    ["kereta", "pesawat", "pelni"].forEach((type) => {
+      updateRemainingTimes(type);
+    });
+
+    return () => {
+      ["kereta", "pesawat", "pelni"].forEach((type) => {
+        if (intervalRefs[type].current) {
+          clearInterval(intervalRefs[type].current);
+        }
+      });
+    };
+  }, [dataTransport]);
+
+  useEffect(() => {
+    let newFilteredData = { kereta: [], pesawat: [], pelni: [] };
+
+    if (selectedValue === "Semua") {
+      newFilteredData = { ...dataTransport };
+    } else {
+      newFilteredData = {
+        kereta: selectedValue === "kereta" ? dataTransport.kereta : [],
+        pesawat: selectedValue === "pesawat" ? dataTransport.pesawat : [],
+        pelni: selectedValue === "pelni" ? dataTransport.pelni : [],
+      };
+    }
+
+    setFilteredData(newFilteredData);
+  }, [selectedValue, dataTransport]);
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchQueryNonMerchant, setSearchQueryNonMerchant] = useState("");
 
-     // Handle perubahan input pencarian
+  const [searchType, setSearchType] = useState("phone")
+  const handleSearchTypeChange = (event) =>{
+    setSearchType(event);
+  }
+
+  const handleSearchChangeNonMerchant = (event) => {
+    setSearchQueryNonMerchant(event.target.value);
+  };
+
+
+  const handleSearchSubmit = async () => {
+
+    try {
+
+      setState((prev) => ({ ...prev, isLoading: true }));
+
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/travel/app/transaction_book_list/all`,
+        { token, select:searchType, cari:searchQueryNonMerchant}
+      );
+
+      setDataTransport({
+        kereta: data.kereta?.data || [],
+        pesawat: data.pesawat?.data || [],
+        pelni: data.pelni?.data || [],
+      });
+
+      setFilteredData({
+        kereta: data.kereta?.data || [],
+        pesawat: data.pesawat?.data || [],
+        pelni: data.pelni?.data || [],
+      });
+
+      setState((prev) => ({ ...prev, isLoading: false }));
+      
+    } catch (error) {
+      console.log(error);
+      setState((prev) => ({ ...prev, isLoading: false }));
+    }
+
+  }
+
+  // Handle perubahan input pencarian
   const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value.toLowerCase());
+    setSearchQuery(event.target.value);
   };
 
   const filteredKereta = filteredData.kereta.filter(
@@ -269,7 +412,6 @@ export default function BookingAll({ path }) {
       item.destination.toLowerCase().includes(searchQuery)
   );
 
-
   const handleFilterChange = (filter) => {
     setSelectedValue(filter);
 
@@ -283,7 +425,6 @@ export default function BookingAll({ path }) {
       });
     }
   };
-
 
   return (
     <>
@@ -300,95 +441,80 @@ export default function BookingAll({ path }) {
           </>
         ) : (
           <>
-            <div className="mt-2">
-              <div className="w-full">
-				{/* headear */}
-				<div className="w-full grid grid-cols-12 gap-1 items-center">
-					
-					{/* Ikon di sebelah kanan dengan ukuran besar */}
-          <div className="col-span-10">
-                    <form className="flex items-center">
-                      <div className="relative w-full rounded-2xl">
-                        <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                          <BsSearch className="text-blue-500" size={20} />
-                        </div>
-                        <input
-                          type="text"
-                          className="bg-gray-100 border rounded-2xl border-gray-100 text-sm focus:ring-gray-100 focus:border-gray-100 outline-none block w-full pl-10 p-2.5"
-                          placeholder="Cari berdasarkan asal atau tujuan"
-                          value={searchQuery}
-                          onChange={handleSearchChange}
-                        />
-                      </div>
-                    </form>
-                  </div>
-                  <div className="col-span-2 flex justify-end cursor-pointer">
-						<CiFilter 
-						onClick={toggleDrawer(true)}
-						size={24} className="w-6 h-6 text-gray-500" />
-					</div>
-				</div>
-
-              </div>
-            </div>
-
-            {state.isLoading === false ? (
-				<>
-        {(filteredKereta.length === 0 &&  filteredPesawat.length === 0 && filteredPelni.length === 0) && (
-          <>
-            <div className="flex justify-center items-center mt-12">
-            <div className="text-center">
-              <img
-                className="block mx-auto"
-                width={220}
-                src="/emptyy.png"
-                alt="empty.png"
+            {isMerchant ? (
+              <WithMerchant
+                searchQuery={searchQuery}
+                handleSearchChange={handleSearchChange}
+                toggleDrawer={toggleDrawer}
               />
-              <div className="text-black font-medium text-center">
-                Data Tidak Ditemukan
-              </div>
-              <div className="mt-2 text-center text-black text-xs">
-                Maaf, History Data Booking tidak ditemukan. Lakukan
-                Booking terlebih dahulu.
-              </div>
-            </div>
-          </div>
-          </>
-        )}
-					<ListKereta 
-					data={filteredKereta} 
-					remainingKereta={remainingTimes.kereta}
-					open={open}
-					setOpen={setOpen}
-					toggleDrawer={toggleDrawer}
-					setSelectedValue={setSelectedValue}
-					selectedValue={selectedValue}
-					/>
-          <ListPesawat
-					data={filteredPesawat} 
-					remainingPesawat={remainingTimes.pesawat}
-					open={open}
-					setOpen={setOpen}
-					toggleDrawer={toggleDrawer}
-					setSelectedValue={setSelectedValue}
-					selectedValue={selectedValue}
-					/>
-          <ListPelni
-					data={filteredPelni} 
-					remainingPelni={remainingTimes.pelni}
-					open={open}
-					setOpen={setOpen}
-					toggleDrawer={toggleDrawer}
-					setSelectedValue={setSelectedValue}
-					selectedValue={selectedValue}
-					/>
-          <SwipeableEdgeDrawer
-          open={open}
-          toggleDrawer={toggleDrawer} 
-          selectedValue={selectedValue} 
-          setSelectedValue={setSelectedValue} 
-		  />
-				</>
+            ) : (
+              <WithoutMerchant
+                searchQuery={searchQueryNonMerchant}
+                handleSearchChange={handleSearchChangeNonMerchant}
+                searchType={searchType}
+                handleSearchTypeChange={handleSearchTypeChange}
+                handleSearchSubmit={handleSearchSubmit}
+              />
+            )}
+            {state.isLoading === false ? (
+              <>
+
+                {filteredKereta.length === 0 &&
+                  filteredPesawat.length === 0 &&
+                  filteredPelni.length === 0 && (
+                    <>
+                      <div className="flex justify-center items-center mt-12">
+                        <div className="text-center">
+                          <img
+                            className="block mx-auto"
+                            width={220}
+                            src="/emptyy.png"
+                            alt="empty.png"
+                          />
+                          <div className="text-black font-medium text-center">
+                            Tidak Ditemukan.
+                          </div>
+                          <div className="mt-2 text-center text-black text-xs">
+                           Silakan cari atau lakukan booking ulang.
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                <ListKereta
+                  data={filteredKereta}
+                  remainingKereta={remainingTimes.kereta}
+                  open={open}
+                  setOpen={setOpen}
+                  toggleDrawer={toggleDrawer}
+                  setSelectedValue={setSelectedValue}
+                  selectedValue={selectedValue}
+                />
+                <ListPesawat
+                  data={filteredPesawat}
+                  remainingPesawat={remainingTimes.pesawat}
+                  open={open}
+                  setOpen={setOpen}
+                  toggleDrawer={toggleDrawer}
+                  setSelectedValue={setSelectedValue}
+                  selectedValue={selectedValue}
+                />
+                <ListPelni
+                  data={filteredPelni}
+                  remainingPelni={remainingTimes.pelni}
+                  open={open}
+                  setOpen={setOpen}
+                  toggleDrawer={toggleDrawer}
+                  setSelectedValue={setSelectedValue}
+                  selectedValue={selectedValue}
+                />
+                <SwipeableEdgeDrawer
+                  open={open}
+                  toggleDrawer={toggleDrawer}
+                  selectedValue={selectedValue}
+                  setSelectedValue={setSelectedValue}
+                />
+              </>
             ) : (
               <>
                 <div className="w-full mt-12 flex justify-center items-center">
