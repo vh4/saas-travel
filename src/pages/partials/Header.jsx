@@ -151,22 +151,30 @@ export default function Header() {
   }, [expiredDate]);
 
   const userProfile = async () => {
-    const response = await axios.post(
-      `${process.env.REACT_APP_HOST_API}/travel/app/account`,
-      {
-        token: JSON.parse(
-          localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-        ),
-      }
-    );
-    if (response.data && response.data.rc == "00") {
-      setUsr(response.data.data);
-      localStorage.setItem(
-        "v_",
-        JSON.stringify({
-          namaPemilik: response.data.data.namaPemilik,
-        })
+    try {
+
+      const response = await axios.post(
+        `${process.env.REACT_APP_HOST_API}/travel/app/account`,
+        {
+          token: JSON.parse(
+            localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+          ),
+        }
       );
+      if (response.data && response.data.rc == "00") {
+        setUsr(response.data.data);
+        localStorage.setItem(
+          "v_",
+          JSON.stringify({
+            namaPemilik: response.data.data.namaPemilik,
+          })
+        );
+      }
+      
+    } catch (error) {
+
+      console.log(error);
+      
     }
   };
 
@@ -340,7 +348,7 @@ export default function Header() {
                     ? "#0f172a"
                     : customLayout?.color?.primary?.font_color || "#ffff",
                 }}
-                className="mobile-judul m-4 xl:m-0 text-2xl font-extrabold no-underline cursor-pointer"
+                className="hidden xl:block mobile-judul m-4 xl:m-0 text-2xl font-extrabold no-underline cursor-pointer"
               >
                 {customLayout?.header?.logo ?? "-"}
               </div>
@@ -462,7 +470,7 @@ export default function Header() {
                         ? "#0f172a"
                         : customLayout?.color?.primary?.font_color || "#ffff",
                     }}
-                    className="hidden md:flex space-x-4 items-center"
+                    className="hidden xl:flex space-x-4 items-center"
                   >
                     <div
                       className="flex space-x-2 items-center cursor-pointer hover:text-blue-500"
@@ -616,7 +624,7 @@ export default function Header() {
                 <></>
               ) : (
                 <>
-                  <div className="pr-4 py-3">
+                  {/* <div className="pr-4 py-3">
                     <Button
                       className="flex items-center px-8 py-4  md:hidden"
                       style={{
@@ -628,7 +636,7 @@ export default function Header() {
                     >
                       Login
                     </Button>
-                  </div>
+                  </div> */}
                 </>
               )}
             </div>

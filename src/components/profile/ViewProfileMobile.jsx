@@ -17,9 +17,9 @@ export default function ProfileMobile() {
         }}
       >
         <img
-          src="/background-remove.png"
+          src="/back.jpg"
           alt="Profile Background"
-          className="w-full object-cover -mt-10"
+          className="w-full object-cover "
         />
       </div>
 

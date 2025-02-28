@@ -115,21 +115,22 @@ export default function MainPage() {
       <div className="w-full">
         <div
           style={{
-            backgroundColor: customLayout?.color?.secondary?.background || "#0f172a",
+            // backgroundColor: customLayout?.color?.secondary?.background || "#0f172a",
           }}
-          className="rounded-b-[40px] pb-12 xl:pb-20 xl:mb-0 xl:rounded-b-[120px] -mt-4 xl:mt-0"
+          className="pb-0 xl:pb-20 xl:mb-0 xl:rounded-b-[120px] -mt-4 xl:mt-0"
         >
-          <div className="hidden md:block xl:block 2xl:hidden py-4 md:py-8 relative z-10 container mx-auto">
+          <div className=""><img className="" src="/menu2.jpeg" /></div>
+          <div className="hidden md:block xl:block 2xl:hidden py-0 md:py-8 relative z-10 container mx-auto">
             <CarouselsTablet />
           </div>
-          <div className="block md:hidden py-4 md:py-8 relative z-10 container mx-auto">
-            <CarouselsMobile />
+          <div className="block md:hidden py-0 md:py-8 relative z-10 container mx-auto">
+            {/* <CarouselsMobile />  hidden dulu*/} 
           </div>
-          <div className="hidden 2xl:block py-4 md:py-8 relative z-10 container mx-auto">
+          <div className="hidden 2xl:block py-0 md:py-8 relative z-10 container mx-auto">
             <Carousels />
           </div>
         </div>
-        <div className="-mt-[102px] xl:-mt-24">
+        <div className="-mt-[110px] xl:-mt-24">
           <div className="relative container mx-auto mb-6">
             <div className="-mt-4 md:mt-0 z-10 xl:bg-white mx-0 lg:mx-12 xl:mx-32 2xl:mx-36 md:border md:rounded-md md:shadow-lg">
               <div className="block md:flex xl:flex 2xl:flex justify-start">

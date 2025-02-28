@@ -856,7 +856,7 @@ function Plane() {
                 <div
                   className={`grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-2 mx-0 xl:mx-4`}
                 >
-                  <div class="w-full mt-1.5 pl-2 md:pl-0 mx-0">
+                  {/* <div class="w-full mt-1.5 pl-2 md:pl-0 mx-0">
                     <small className="mb-2 text-black hidden xl:block">Pilih Maskapai</small>
                     <Tooltip>
                       <Button
@@ -870,7 +870,7 @@ function Plane() {
                         List Maskapai
                       </Button>
                     </Tooltip>
-                  </div>
+                  </div> */}
                   {/* web maskapai */}
                   <div className="mt-2 w-full col-span-1 md:col-span-2 hidden xl:block">
                     <div className="w-full flex flex-col xl:flex-row items-center xl:px-0 gap-0">
