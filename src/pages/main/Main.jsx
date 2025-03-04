@@ -115,11 +115,11 @@ export default function MainPage() {
       <div className="w-full">
         <div
           style={{
-            // backgroundColor: customLayout?.color?.secondary?.background || "#0f172a",
+            backgroundColor: customLayout?.color?.secondary?.background || "#0f172a",
           }}
           className="pb-0 xl:pb-20 xl:mb-0 xl:rounded-b-[120px] -mt-4 xl:mt-0"
         >
-          <div className=""><img className="" src="/menu2.jpeg" /></div>
+          <div className="block xl:hidden"><img className="" src="/menu2.jpeg" /></div>
           <div className="hidden md:block xl:block 2xl:hidden py-0 md:py-8 relative z-10 container mx-auto">
             <CarouselsTablet />
           </div>
@@ -130,8 +130,8 @@ export default function MainPage() {
             <Carousels />
           </div>
         </div>
-        <div className="-mt-[110px] xl:-mt-24">
-          <div className="relative container mx-auto mb-6">
+        <div className="-mt-[130px] xl:-mt-24">
+          <div className="relative container mx-auto mb-0 xl:mb-6">
             <div className="-mt-4 md:mt-0 z-10 xl:bg-white mx-0 lg:mx-12 xl:mx-32 2xl:mx-36 md:border md:rounded-md md:shadow-lg">
               <div className="block md:flex xl:flex 2xl:flex justify-start">
                 <div className="hidden md:flex justify-start px-10">
