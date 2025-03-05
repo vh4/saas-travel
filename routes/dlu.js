@@ -46,7 +46,6 @@ Router.post('/ship/search', async (req, res) => {
     logger.info(`Request ${process.env.URL_HIT}/ship/search: ${JSON.stringify(data)}`);
     try {
         const response = await axios.post(`${process.env.URL_HIT}/ship/search`, data);
-        console.log(response.data)
         logger.info(`Response ${process.env.URL_HIT}/ship/search: ${JSON.stringify(response.data)}`);
 
         return res.send(response.data);
@@ -64,7 +63,6 @@ Router.post('/ship/fare', async (req, res) => {
     logger.info(`Request ${process.env.URL_HIT}/ship/fare: ${JSON.stringify(data)}`);
     try {
         const response = await axios.post(`${process.env.URL_HIT}/ship/fare`, data);
-        console.log(response.data)
         logger.info(`Response ${process.env.URL_HIT}/ship/fare: ${JSON.stringify(response.data)}`);
 
         return res.send(response.data);

@@ -591,8 +591,6 @@ Router.post('/app/transaction_book_list/all', async (req, res) => {
         const { token, jenis, select, cari } = req.body;
         const merchant = req.session['v_merchant'];
 
-        console.log({ token, jenis, select, cari });
-
         if (!token) {
             return res.status(400).json({
                 rc: '01',

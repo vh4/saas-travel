@@ -21,7 +21,7 @@ function parseOtomax(data) {
 		const firstUpperCaseDiKey = key.charAt(0).toUpperCase() + key.slice(1);
 		const keyFinal = firstUpperCaseDiKey.split('_').join(" ");
 
-		if (typeof value === 'number') {
+		if (typeof value === 'number' && (key !== 'trxid')) {
 			resp.push(`${keyFinal}:Rp${value}`);
 		} else {
 			resp.push(`${keyFinal}:${value}`);
@@ -158,7 +158,7 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
 		parts.slice(2).join("."),
 	];
 
-	if (splitResponse[0] !== 'okpayment' || splitResponse[1] !== data.transactionId) {
+	if (splitResponse[0] !== 'okpayment' || parseInt(splitResponse[1]) !== parseInt(data.transactionId)) {
 		return {
 			rc: '13',
 			rd: splitResponse[2]
