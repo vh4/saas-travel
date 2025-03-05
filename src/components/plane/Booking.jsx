@@ -732,10 +732,7 @@ export default function BookingPesawat() {
     );
 
     const TenYearsAgo = dayjs(dayBook).subtract(12, "year");
-
-    // const endOfMonth = TenYearsAgo.endOf("month");
-    // const endOfDays = endOfMonth.subtract(1, "day");
-
+    
     return current && current > TenYearsAgo;
   };
 
@@ -746,11 +743,6 @@ export default function BookingPesawat() {
     );
     const twoYearsAgo = dayjs(dayBook).subtract(2, "year");
     const TenYearsAgo = dayjs(dayBook).subtract(12, "year");
-
-    // const startOfMonth = TenYearsAgo.endOf("month");
-    // const endOfDays = startOfMonth.subtract(1, "day");
-    // const endOfMonth = twoYearsAgo.endOf("month");
-    // const endOfMonth = twoYearsAgo.subtract(1, "day");
     const startOfMonth = TenYearsAgo.subtract(1, "day");
 
     return current && (current < startOfMonth || current > twoYearsAgo);
@@ -1252,7 +1244,7 @@ export default function BookingPesawat() {
                                     <div className="w-full grid grid-cols-1 gap-2">
                                       <div className="w-full">
                                         <div className="text-black text-sm">
-                                          Nama Depan
+                                          Nama Lengkap
                                         </div>
                                         <Form.Item
                                           required={true}
@@ -1262,22 +1254,22 @@ export default function BookingPesawat() {
                                             {
                                               required: true,
                                               message:
-                                                "Nama Depan tidak boleh kosong.",
+                                                "Nama Lengkap tidak boleh kosong.",
                                             },
                                             {
                                               min: 3,
                                               message:
-                                                "Nama Depan minimal 3 karakter.",
+                                                "Nama Lengkap minimal 3 karakter.",
                                             },
                                             {
                                               max: 25,
                                               message:
-                                                "Nama Depan maksimal 25 karakter.",
+                                                "Nama Lengkap maksimal 25 karakter.",
                                             },
                                             {
                                               pattern: /^[A-Za-z\s]+$/,
                                               message:
-                                                "Nama Depan hanya boleh terdiri dari huruf alfabet.",
+                                                "Nama Lengkap hanya boleh terdiri dari huruf alfabet.",
                                             },
                                           ]}
                                         >
@@ -1290,7 +1282,7 @@ export default function BookingPesawat() {
                                               "nama_depan"
                                             )}
                                             type="text"
-                                            placeholder="Nama Depan"
+                                            placeholder="Nama Lengkap"
                                             id="default-input"
                                           />
                                         </Form.Item>
@@ -1707,10 +1699,10 @@ export default function BookingPesawat() {
                                       </FormControl>
                                     </div>
                                     </div>
-                                    <div className="w-full grid grid-cols-2 gap-2">
+                                    <div className="w-full grid grid-cols-1 gap-2">
                                       <div className="w-full">
                                         <div className="text-black text-sm">
-                                          Nama Depan
+                                          Nama Lengkap
                                         </div>
                                         <Form.Item
                                           required={true}
@@ -1720,22 +1712,22 @@ export default function BookingPesawat() {
                                             {
                                               required: true,
                                               message:
-                                                "Nama Depan tidak boleh kosong.",
+                                                "Nama Lengkap tidak boleh kosong.",
                                             },
                                             {
                                               min: 3,
                                               message:
-                                                "Nama Depan minimal 3 karakter.",
+                                                "Nama Lengkap minimal 3 karakter.",
                                             },
                                             {
                                               max: 25,
                                               message:
-                                                "Nama Depan maksimal 25 karakter.",
+                                                "Nama Lengkap maksimal 25 karakter.",
                                             },
                                             {
                                               pattern: /^[A-Za-z\s]+$/,
                                               message:
-                                                "Nama Depan hanya boleh terdiri dari huruf alfabet.",
+                                                "Nama Lengkap hanya boleh terdiri dari huruf alfabet.",
                                             },
                                           ]}
                                         >
@@ -1748,28 +1740,28 @@ export default function BookingPesawat() {
                                               "nama_depan"
                                             )}
                                             type="text"
-                                            placeholder="Nama Depan"
+                                            placeholder="Nama Lengkap"
                                             id="default-input"
                                             rules={[
                                               {
                                                 required: true,
                                                 message:
-                                                  "Nama Depan tidak boleh kosong.",
+                                                  "Nama Lengkap tidak boleh kosong.",
                                               },
                                               {
                                                 min: 3,
                                                 message:
-                                                  "Nama Depan minimal 3 karakter.",
+                                                  "Nama Lengkap minimal 3 karakter.",
                                               },
                                               {
                                                 max: 25,
                                                 message:
-                                                  "Nama Depan maksimal 25 karakter.",
+                                                  "Nama Lengkap maksimal 25 karakter.",
                                               },
                                               {
                                                 pattern: /^[A-Za-z\s]+$/,
                                                 message:
-                                                  "Nama Depan hanya boleh terdiri dari huruf alfabet.",
+                                                  "Nama Lengkap hanya boleh terdiri dari huruf alfabet.",
                                               },
                                             ]}
                                           />
@@ -2208,10 +2200,10 @@ export default function BookingPesawat() {
                                       </FormControl>
                                     </div>
                                     </div>
-                                    <div className="w-full grid grid-cols-2 gap-2">
+                                    <div className="w-full grid grid-cols-1 gap-2">
                                       <div className="w-full">
                                         <div className="text-black text-sm">
-                                          Nama Depan
+                                          Nama Lengkap
                                         </div>
                                         <Form.Item
                                           required={true}
@@ -2221,22 +2213,22 @@ export default function BookingPesawat() {
                                             {
                                               required: true,
                                               message:
-                                                "Nama Depan tidak boleh kosong.",
+                                                "Nama Lengkap tidak boleh kosong.",
                                             },
                                             {
                                               min: 3,
                                               message:
-                                                "Nama Depan minimal 3 karakter.",
+                                                "Nama Lengkap minimal 3 karakter.",
                                             },
                                             {
                                               max: 25,
                                               message:
-                                                "Nama Depan maksimal 25 karakter.",
+                                                "Nama Lengkap maksimal 25 karakter.",
                                             },
                                             {
                                               pattern: /^[A-Za-z\s]+$/,
                                               message:
-                                                "Nama Depan hanya boleh terdiri dari huruf alfabet.",
+                                                "Nama Lengkap hanya boleh terdiri dari huruf alfabet.",
                                             },
                                           ]}
                                         >
@@ -2249,7 +2241,7 @@ export default function BookingPesawat() {
                                               "nama_depan"
                                             )}
                                             type="text"
-                                            placeholder="Nama Depan"
+                                            placeholder="Nama Lengkap"
                                             id="default-input"
                                           />
                                         </Form.Item>

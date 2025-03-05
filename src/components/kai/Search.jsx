@@ -930,7 +930,7 @@ export default function Search() {
                             parseInt(adult) + parseInt(infant) <
                               e.seats[0].availability
                               ? "bg-white" 
-                              : "bg-gray-50"
+                              : "bg-white xl:bg-gray-50"
                           } border-b xl:border xl:border-gray-200 xl:rounded-lg xl:shadow-sm xl:hover:border-gray-300 xl:transition-transform xl:hover:scale-105`}
                         >
                           {/* desktop cari */}

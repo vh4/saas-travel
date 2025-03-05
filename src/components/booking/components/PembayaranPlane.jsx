@@ -1,44 +1,37 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { AiOutlineCheckCircle, AiOutlineClockCircle } from "react-icons/ai";
-// import { RxCrossCircled } from "react-icons/rx";
+import { AiOutlineClockCircle } from "react-icons/ai";
 import { MdHorizontalRule } from "react-icons/md";
 import { BsArrowRightShort } from "react-icons/bs";
 import { Button, message, Alert, Modal } from "antd";
 import {
-  parseTanggal,
   remainingTime,
-  parseTanggal as tanggalParse,
-} from "../../helpers/date";
-import { toRupiah } from "../../helpers/rupiah";
-import Page500 from "../components/500";
-import Page400 from "../components/400";
-import BayarLoading from "../components/planeskeleton/bayar";
+} from "../../../helpers/date";
+import { toRupiah } from "../../../helpers/rupiah";
+import Page500 from "../../components/500";
+import Page400 from "../../components/400";
+import BayarLoading from "../../components/planeskeleton/bayar";
 import { Typography } from "antd";
-import moment from "moment";
-import PageExpired from "../components/Expired";
-import Tiket from "./Tiket";
+import Tiket from "../../../components/plane/Tiket";
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { useSelector } from "react-redux";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import { Box } from "@mui/material";
-import DetailPassengersDrawer from "./components/DetailPassengersDrawer";
-import { TiketContext } from "../../App";
-import { cekIsMerchant, cekWhiteListUsername } from "../../helpers/api_global";
+import { TiketContext } from "../../../App";
+import { cekIsMerchant, cekWhiteListUsername } from "../../../helpers/api_global";
+import PageExpired from "../../components/Expired";
+import moment from "moment";
+import DetailPassengersDrawerPlane from "./DetailPassengersDrawerPlane";
 
-export default function Pembayaran() {
+export default function PembayaranPlane() {
   const { Paragraph } = Typography;
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const [messageApi, contextHolder] = message.useMessage();
-
   const [isLoading, setIsLoading] = useState(false);
 
-  const [dataDetail, setdataDetail] = useState(null);
-  const [dataDetailPassenger, setdataDetailPassenger] = useState(null);
-  const [hasilBooking, sethasilBooking] = useState(null);
   const [dataDetailForBooking, setdataDetailForBooking] = useState(null);
 
   const [TotalAdult, setTotalAdult] = useState(0);
@@ -64,7 +57,6 @@ export default function Pembayaran() {
     setOpen(false);
   };
 
-
   function gagal(rd) {
     messageApi.open({
       type: "error",
@@ -77,16 +69,8 @@ export default function Pembayaran() {
     });
   }
 
-  // const isOk = useSelector((state) => state.callback.isOk);
   const callback = useSelector((state) => state.callback);
-
-  // const status = useSelector((state) => state.callback.rc);
-  // const keterangan = useSelector((state) => state.callback.rd);
-
-  const bookPesawat = useSelector((state) => state.bookpesawat.bookData);
-  // const isCurrentBalance = useSelector((state) => state.bookpesawat.isOkBalance);
-  const dataSearch = useSelector((state) => state.bookpesawat.searchData);
-
+  let bookPesawatData = useSelector((state) => state.bookpesawat.bookDataLanjutBayar);
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
@@ -103,54 +87,55 @@ export default function Pembayaran() {
       setErr(true);
     }
 
-    Promise.all([getInfoBooking(), getSearchFlightInfo(), cekIsMerchant(token), cekWhiteListUsername(token)])
-      .then(([getInfoBooking, getSearchFlightInfo, cekIsMerchant, cekWhiteListUsername]) => {
-        const dataDetail = getSearchFlightInfo._flight;
-        const dataDetailPassenger = getInfoBooking._DetailPassenger;
-        const hasilBooking = getInfoBooking._Bookingflight;
-        const dataDetailForBooking = getSearchFlightInfo._flight_forBooking;
+    Promise.all([getInfoBooking(), cekIsMerchant(token), cekWhiteListUsername(token)])
+      .then(([getInfoBookingParse, cekIsMerchant, cekWhiteListUsername]) => {
         const isSimulate = cekWhiteListUsername?.is_simulate || 0;
+		const getInfoBooking = { ...getInfoBookingParse };
 
-        setisSimulate(isSimulate)
+		setisSimulate(isSimulate);
+		
+		if (cekIsMerchant.data.rc === "00") {
+			setcallbackBoolean(true);
+		}
+		
+		if (getInfoBooking?.expiredDate) {
+			getInfoBooking.expiredDate = moment(getInfoBooking.expiredDate, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm");
+			setExpiredBookTime(
+				getInfoBooking.expiredDate || moment().add(1, "hours")
+			);
+		}
+		
+		const { adult, child, infant } = getInfoBooking.penumpang.reduce(
+			(counts, { status }) => {
+				const key = status.toUpperCase();
+				if (key === "DEWASA") counts.adult++;
+				if (key === "ANAK") counts.child++;
+				if (key === "BAYI") counts.infant++;
+				return counts;
+			},
+			{ adult: 0, child: 0, infant: 0 }
+		);
+	
+		setTotalAdult(adult);
+		setTotalChild(child);
+		setTotalInfant(infant);
 
-        if (cekIsMerchant.data.rc == "00") {
-          setcallbackBoolean(true);
-        }
-
-        if (getInfoBooking) {
-          setdataDetailPassenger(dataDetailPassenger);
-          sethasilBooking(hasilBooking);
-          setExpiredBookTime(
-            hasilBooking.timeLimitYMD || moment().add(1, "hours")
-          );
-        } else {
-          setErrPage(true);
-        }
-
-        if (getSearchFlightInfo) {
-          setdataDetail(dataDetail);
-          setdataDetailForBooking(dataDetailForBooking);
-
-          setTotalAdult(dataDetail[0].adult);
-          setTotalChild(dataDetail[0].child);
-          setTotalInfant(dataDetail[0].infant);
-        } else {
-          setErrPage(true);
-        }
-
-        // Set booking expiration flag
         if (
-          hasilBooking &&
-          new Date(hasilBooking.timeLimitYMD).getTime() < new Date().getTime()
+			getInfoBooking &&
+          new Date(getInfoBooking.expiredDate).getTime() < new Date().getTime()
         ) {
           setIsBookingExpired(true);
         } else {
           setIsBookingExpired(false);
         }
 
+		setdataDetailForBooking(getInfoBooking);
+
         setTimeout(() => {
           setIsLoadingPage(false);
         }, 1000);
+
+
       })
       .catch(() => {
         setIsLoadingPage(false);
@@ -167,8 +152,8 @@ export default function Pembayaran() {
       setremainingBookTime(remainingTime(expiredBookTime));
 
       if (
-        hasilBooking &&
-        new Date(hasilBooking.timeLimitYMD).getTime() < new Date().getTime()
+        getInfoBooking &&
+        new Date(getInfoBooking.expiredDate).getTime() < new Date().getTime()
       ) { 
         setIsBookingExpired(true);
       } else {
@@ -181,16 +166,7 @@ export default function Pembayaran() {
 
   async function getInfoBooking() {
     try {
-      const response = bookPesawat;
-      return response;
-    } catch (error) {
-      return null;
-    }
-  }
-
-  async function getSearchFlightInfo() {
-    try {
-      const response = dataSearch;
+      const response = bookPesawatData;
       return response;
     } catch (error) {
       return null;
@@ -204,15 +180,14 @@ export default function Pembayaran() {
     const response = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/flight/payment`,
       {
-        airline: dataDetailForBooking.airline,
-        transactionId: hasilBooking.transactionId,
-        nominal:hasilBooking.nominal,
-        nominal_admin:hasilBooking.nominalAdmin,
-        bookingCode: hasilBooking.bookingCode,
+        airline: dataDetailForBooking.nama_maskapai,
+        transactionId: dataDetailForBooking.id_transaksi,
+        nominal:dataDetailForBooking.nominal,
+        nominal_admin:dataDetailForBooking.nominal_admin,
+        bookingCode: dataDetailForBooking.kode_booking,
         simulateSuccess: isSimulated, //
-        paymentCode: hasilBooking.paymentCode,
+        paymentCode: "",
         token: token,
-        //cal;back
         username: callback.username,
         merchant: callback.merchant,
         total_komisi: callback.total_komisi,
@@ -225,15 +200,15 @@ export default function Pembayaran() {
 
     if (response.data.rc === "00") {
       const params = {
-        airline: dataDetail?.airline,
-        booking_id: hasilBooking?.bookingCode,
-        nomor_hp_booking: dataDetailPassenger?.adults[0].nomor,
+        airline: dataDetailForBooking?.nama_maskapai,
+        booking_id: dataDetailForBooking?.bookingCode,
+        nomor_hp_booking: dataDetailForBooking?.penumpang[0].no_hp,
         id_transaksi: response.data.data?.transaction_id,
-        nominal_admin: hasilBooking?.nominalAdmin,
+        nominal_admin: dataDetailForBooking?.nominal_admin,
         url_etiket: response.data.data?.url_etiket,
         nominal_sales: response.data.data?.nominal,
         total_dibayar: toRupiah(
-          parseInt(response.data.data?.nominal) + parseInt(hasilBooking.nominalAdmin)
+          parseInt(response.data.data?.nominal) + parseInt(dataDetailForBooking.nominal_admin)
         ),
       }
 
@@ -254,6 +229,7 @@ export default function Pembayaran() {
         gagal(response.data.rd);
       }, 1000);
     }
+	
   }
 
   return (
@@ -381,7 +357,7 @@ export default function Pembayaran() {
                       <div className="mt-2 font-bold  text-blue-500 text-[18px]">
                         {/* {hasilBooking && hasilBooking.bookingCode} */}
                         <Paragraph copyable className="">
-                          {hasilBooking && hasilBooking.transactionId}
+                          {dataDetailForBooking && dataDetailForBooking.id_transaksi}
                         </Paragraph>
                       </div>
                     </div>
@@ -392,17 +368,15 @@ export default function Pembayaran() {
                     </div>
                     </Box>
                     <div className="p-4">
-                      {dataDetail &&
-                        dataDetail.map((dataDetail, i) => (
                           <>
                             <div className="flex items-center space-x-2 py-2">
                               <div className="flex justify-between items-center">
                                 <div className="flex space-x-2 items-center">
                                   <div className="text-xs text-black">
-                                    <div className="font-semibold">{dataDetail.airlineName}</div>
+                                    <div className="font-semibold">{dataDetailForBooking.nama_maskapai}</div>
                                   </div>
                                   <img
-                                    src={dataDetail.airlineIcon}
+                                    src={dataDetailForBooking.airlineIcon}
                                     width={30}
                                     alt="logo.png"
                                   />
@@ -414,11 +388,11 @@ export default function Pembayaran() {
                                 <div className="flex space-x-2 items-center">
                                   <div className="text-xs text-black">
                                     <small className="text-xs text-gray-400">Asal</small>
-                                    <div className="font-semibold">{dataDetail.departureName}</div>
+                                    <div className="font-semibold">{dataDetailForBooking.origin}</div>
                                   </div>
                                 </div>
                                 <div className="text-xs text-gray-400">
-                                {parseTanggal(dataDetail.departureDate)} {" "}{dataDetail.departureTime}
+                                {dataDetailForBooking.tanggal_keberangkatan} {" "}{dataDetailForBooking.jam_keberangkatan}
                                 </div>
                               </div>
                             </div>
@@ -427,12 +401,12 @@ export default function Pembayaran() {
                                 <div className="flex space-x-2 items-center">
                                   <div className="text-xs text-black">
                                     <small className="text-xs text-gray-400">Tujuan</small>
-                                    <div className="font-semibold">{dataDetail.arrivalName}</div>
+                                    <div className="font-semibold">{dataDetailForBooking.destination}</div>
                                   </div>
                                 </div>
                                 <div className="text-xs text-gray-400">
-                                  {parseTanggal(dataDetail.arrivalDate)} {" "}
-                                  {dataDetail.arrivalTime}
+                                  {dataDetailForBooking.tanggal_kedatangan} {" "}
+                                  {dataDetailForBooking.jam_kedatangan}
                                 </div>
                               </div>
                             </div>
@@ -441,7 +415,7 @@ export default function Pembayaran() {
                                 <div className="flex space-x-2 items-center">
                                   <div className="text-xs text-black">
                                     <small className="text-xs text-gray-400">Kode Booking</small>
-                                    <div className="font-semibold">{hasilBooking.bookingCode}</div>
+                                    <div className="font-semibold">{dataDetailForBooking.kode_booking}</div>
                                   </div>
                                 </div>
                                   <div className="block xl:hidden">
@@ -454,7 +428,6 @@ export default function Pembayaran() {
                               </div>
                             </div>
                           </>
-                        ))}
                     </div>
                   </div>
                     <div className="py-2">
@@ -482,7 +455,7 @@ export default function Pembayaran() {
                           </div>
                           <div className="text-xs">
                           Rp.{" "}
-                          {toRupiah(dataDetailForBooking && dataDetailForBooking?.priceTotal || '-')}
+                          	{toRupiah(dataDetailForBooking && dataDetailForBooking?.nominal || '-')}
                           </div>
                         </div>
                       </div>
@@ -499,7 +472,7 @@ export default function Pembayaran() {
                           </div>
                           <div className="text-xs">
                           Rp.{" "}
-                          {toRupiah(hasilBooking && hasilBooking.nominalAdmin)}
+                          {dataDetailForBooking && dataDetailForBooking.nominal_admin}
                           </div>
                         </div>
                       </div>
@@ -517,9 +490,9 @@ export default function Pembayaran() {
                           <div className="text-xs">
                           Rp.{" "}
                           {toRupiah(
-                            parseInt(dataDetailForBooking && dataDetailForBooking?.priceTotal || 0) +
+                            parseInt(dataDetailForBooking && dataDetailForBooking?.nominal) +
                               parseInt(
-                                hasilBooking && hasilBooking.nominalAdmin
+                                dataDetailForBooking && dataDetailForBooking.nominal_admin
                               )
                           )}
                           </div>
@@ -529,35 +502,27 @@ export default function Pembayaran() {
                 </div>
 
                 {/* mobile detail */}
-                <DetailPassengersDrawer dataDetailPassenger={dataDetailPassenger} openDrawer={openDrawer} toggleDrawer={toggleDrawer} />              
+                <DetailPassengersDrawerPlane dataDetailPassenger={dataDetailForBooking} openDrawer={openDrawer} toggleDrawer={toggleDrawer} />              
 
                 {/* desktop */}
                 <div className="mt-4 w-full mx-0 2xl:mx-4 hidden xl:block">
                   
                   {/* adult */}
-                  {dataDetailPassenger && dataDetailPassenger.adults.length > 0
-                    ? dataDetailPassenger.adults.map((e, i) => (
+                  {dataDetailForBooking && dataDetailForBooking.penumpang.length > 0
+                    ? dataDetailForBooking.penumpang.map((e, i) => (
                         <>
                           <div className="p-0 xl:px-8 xl:mt-6 mt-4 w-full">
                             <div className="">
                               <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-semibold">
-                                {e.nama_depan} {e.nama_belakang}
+                                {e.nama}
                               </div>
-                              <div className="grid grid-cols-1 md:grid-cols-4 mt-2 gap-4 md:gap-6">
+                              <div className="grid grid-cols-1 md:grid-cols-4 mt-2 gap-4 xl:gap-6">
                                 <div className="px-2 py-2 text-xs">
                                   <div className="text-black font-medium">
                                     NIK
                                   </div>
                                   <div className="mt-2 text-black">
-                                    {e.idNumber}
-                                  </div>
-                                </div>
-                                <div className="px-2 py-2 text-xs">
-                                  <div className="text-black font-medium">
-                                    Email
-                                  </div>
-                                  <div className="mt-2 text-black">
-                                    {e.email}
+                                    {e.nik}
                                   </div>
                                 </div>
                                 <div className="px-2 py-2 text-xs">
@@ -565,7 +530,7 @@ export default function Pembayaran() {
                                     Nomor HP
                                   </div>
                                   <div className="mt-2 text-black">
-                                    {e.nomor}
+                                    {e.status.toUpperCase() == 'DEWASA' ? e.no_hp : '-'}
                                   </div>
                                 </div>
                                 <div className="px-2 py-2 text-xs">
@@ -573,7 +538,7 @@ export default function Pembayaran() {
                                     Tanggal Lahir
                                   </div>
                                   <div className="mt-2 text-black">
-                                    {e.birthdate}
+                                    {e.tgl_lahir}
                                   </div>
                                 </div>
                               </div>
@@ -583,90 +548,25 @@ export default function Pembayaran() {
                       ))
                     : ""}
 
-                  {/* Childs */}
-                  {dataDetailPassenger &&
-                  dataDetailPassenger.children.length > 0
-                    ? dataDetailPassenger.children.map((e, i) => (
-                        <>
-                          <div className="p-0 xl:px-8 xl:mt-6 mt-4 w-full">
-                            <div className="">
-                              <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-semibold">
-                                {e.nama_depan} {e.nama_belakang}
-                              </div>
-                              <div className="grid grid-cols-2 md:grid-cols-4">
-                                <div className="px-2 py-2 text-xs">
-                                  <div className="text-black font-medium ">
-                                    NIK/ No.Ktp
-                                  </div>
-                                  <div className="mt-2 text-black">
-                                    {e.idNumber}
-                                  </div>
-                                </div>
-                                <div className="px-2 py-2 text-xs">
-                                  <div className="text-black font-medium ">
-                                    Tanggal Lahir
-                                  </div>
-                                  <div className="mt-2 text-black">
-                                    {e.birthdate}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      ))
-                    : ""}
-
-                  {/* infants */}
-                  {dataDetailPassenger && dataDetailPassenger.infants.length > 0
-                    ? dataDetailPassenger.infants.map((e, i) => (
-                        <>
-                          <div className="p-0 xl:px-8 xl:mt-6 mt-4 w-full">
-                            <div className="">
-                              <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-semibold ">
-                                {e.nama_depan} {e.nama_belakang}
-                              </div>
-                              <div className="grid grid-cols-2 md:grid-cols-4">
-                                <div className="px-2 py-2 text-xs">
-                                  <div className="text-black font-medium ">
-                                    NIK/ No.Ktp
-                                  </div>
-                                  <div className="mt-2 text-black">
-                                    {e.idNumber}
-                                  </div>
-                                </div>
-                                <div className="px-2 py-2 text-xs">
-                                  <div className="text-black font-medium ">
-                                    Tanggal Lahir
-                                  </div>
-                                  <div className="mt-2 text-black">
-                                    {e.birthdate}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      ))
-                    : ""}
+					
                   <div className="p-2 px-10 mt-4 w-full">
                     <div>
                       <div className="text-xs text-black font-medium  flex justify-between border-t pt-4">
                         <div>
-                          {dataDetail && dataDetail.airlineName}{" "}
+                          {dataDetailForBooking && dataDetailForBooking.nama_maskapai}{" "}
                           {TotalAdult > 0 ? `(Adults) x${TotalAdult}` : ""}{" "}
                           {TotalChild > 0 ? `(Childen) x${TotalChild}` : ""}{" "}
                           {TotalInfant > 0 ? `(Infants) x${TotalInfant}` : ""}
                         </div>
                         <div>
-                          Rp. {toRupiah(dataDetailForBooking && dataDetailForBooking?.priceTotal || '-')}
+                          Rp. {toRupiah(dataDetailForBooking && dataDetailForBooking?.nominal || '-')}
                         </div>
                       </div>
                       <div className="mt-4 text-xs text-black font-medium  flex justify-between">
                         <div>Biaya Admin (Fee)</div>
                         <div>
                           Rp.{" "}
-                          {toRupiah(hasilBooking && hasilBooking.nominalAdmin)}
+                          {toRupiah(dataDetailForBooking && dataDetailForBooking.nominal_admin)}
                         </div>
                       </div>
                       <div className="mt-4 mb-4 pt-2 border-t border-gray-200 text-sm text-black font-semibold  flex justify-between">
@@ -674,9 +574,9 @@ export default function Pembayaran() {
                         <div>
                           Rp.{" "}
                           {toRupiah(
-                            parseInt(dataDetailForBooking && dataDetailForBooking?.priceTotal || 0) +
+                            parseInt(dataDetailForBooking && dataDetailForBooking?.nominal || 0) +
                               parseInt(
-                                hasilBooking && hasilBooking.nominalAdmin
+                                dataDetailForBooking && dataDetailForBooking.nominal_admin
                               )
                           )}
                         </div>
@@ -685,7 +585,7 @@ export default function Pembayaran() {
                   </div>
                 </div>
                 {/* desktop sidebar */}
-                <div className="sidebar hidden xl:block w-full xl:w-2/3 2xl:w-1/2">
+                <div className="px-8sidebar hidden xl:block w-full xl:w-2/3 2xl:w-1/2">
                   <div className="py-2 rounded-md border-b border-gray-200 shadow-sm">
                       <div className="mt-4">
                         {/* {isOk == false || isCurrentBalance == false ? (
@@ -711,7 +611,7 @@ export default function Pembayaran() {
                       <div className="mt-1  font-medium  text-blue-500 text-[18px]">
                         {/* {hasilBooking && hasilBooking.bookingCode} */}
                         <Paragraph copyable>
-                          {hasilBooking && hasilBooking.transactionId}
+                          {dataDetailForBooking && dataDetailForBooking.id_transaksi}
                         </Paragraph>
                       </div>
                       <div className="text-grapy-500 text-xs">
@@ -723,68 +623,34 @@ export default function Pembayaran() {
                       <div className="text-xs text-black">
                         PESAWAT DESCRIPTION
                       </div>
-                      {dataDetail &&
-                        dataDetail.map((dataDetail) => (
                           <>
                             <div className="mt-2 mb-2 flex items-center space-x-2">
                               <div>
                                 <img
-                                  src={dataDetail.airlineIcon}
+                                  src={dataDetailForBooking.airlineIcon}
                                   width={50}
                                   alt="logo.png"
                                 />
                               </div>
                               <div className="mt-3 md:mt-4 text-xs text-black">
-                                <div className="font-semibold">{dataDetail.airline}</div>
-                                <div>{dataDetail.airlineName}</div>
+                                <div className="font-semibold">{dataDetailForBooking.kode_maskapai}</div>
+                                <div>{dataDetailForBooking.nama_maskapai}</div>
                               </div>
                             </div>
                             <div className="flex items-center space-x-2 mt-1 md:mt-4 text-xs text-black font-medium ">
-                              <div>{dataDetail.departureName}</div>{" "}
+                              <div>{dataDetailForBooking.origin}</div>{" "}
                               <BsArrowRightShort />{" "}
-                              <div>{dataDetail.arrivalName}</div>
+                              <div>{dataDetailForBooking.destination}</div>
                             </div>
                             <div className="mt-3 md:mt-4 text-xs text-black">
-                              {tanggalParse(dataDetail.departureDate)}
+                              {dataDetailForBooking.tanggal_kedatangan}
                             </div>
                             <div className="mt-1 md:mt-2 text-xs text-black">
-                              {dataDetail.departureTime} -{" "}
-                              {dataDetail.arrivalTime}
+                              {dataDetailForBooking.jam_keberangkatan} -{" "}
+                              {dataDetailForBooking.jam_kedatangan}
                             </div>
                           </>
-                        ))}
                     </div>
-                    <div className="p-4 border-t">
-                      <div className="text-xs text-black">
-                        LIST PASSENGERS
-                      </div>
-                      {dataDetailPassenger.adults &&
-                        dataDetailPassenger.adults.length > 0 &&
-                        dataDetailPassenger.adults.map((e, i) => (
-                          <div className="mt-3 text-xs text-black font-medium ">
-                            {e.nama_depan} {e.nama_belakang} (Adult)
-                          </div>
-                        ))}
-                      {dataDetailPassenger.children &&
-                        dataDetailPassenger.children.length > 0 &&
-                        dataDetailPassenger.children.map((e, i) => (
-                          <div className="mt-3 text-xs text-black font-medium ">
-                            {e.nama_depan} {e.nama_belakang} (Children)
-                          </div>
-                        ))}
-                      {dataDetailPassenger.infants &&
-                        dataDetailPassenger.infants.length > 0 &&
-                        dataDetailPassenger.infants.map((e, i) => (
-                          <div className="mt-3 text-xs text-black font-medium ">
-                            {e.nama_depan} {e.nama_belakang} (Infants)
-                          </div>
-                        ))}
-                    </div>
-                    {/* <div className="p-4 border-t">
-                            <div>
-                                < Timer />
-                            </div>
-                        </div> */}
                   </div>
 
                   {/* desktop payment button */}
@@ -866,22 +732,6 @@ export default function Pembayaran() {
                 </div>
               {/* ) : ( */}
                 <>
-                  {/* <div className="px-8 py-4 text-sm text-black">
-                    Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
-                    </div>
-                    <div className="flex justify-center">
-                      <Button
-                        onClick={handlerPembayaran}
-                        size="large"
-                        key="submit"
-                        type="primary"
-                        className="bg-blue-500 mx-2 font-semibold mt-4"
-                        loading={isLoading}
-                        disabled
-                      >
-                        Langsung Bayar
-                      </Button>
-                    </div>                      */}
                 </>
                {/* )} */}
               </div>

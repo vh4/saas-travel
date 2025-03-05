@@ -1,12 +1,17 @@
 import { SwipeableDrawer, Box, Divider } from "@mui/material";
 import * as React from "react";
+import {useState} from 'react';
 import PropTypes from "prop-types";
 import { styled } from "@mui/material/styles";
 import { grey } from "@mui/material/colors";
-import { Typography } from "antd";
+import { Button, Typography, message } from "antd";
 import { toRupiah } from "../../../helpers/rupiah";
 import { FaPlaneDeparture } from "react-icons/fa";
 import { CiCalendarDate } from "react-icons/ci";
+import { callbackFetchData } from "../../../features/callBackSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
+import { setBookDataLanjutBayar, setDataSearchPesawat } from "../../../features/createSlice";
 
 const StyledBox = styled("div")(({ theme }) => ({
   backgroundColor: "#fff",
@@ -24,6 +29,24 @@ const Puller = styled("div")(({ theme }) => ({
 
 export default function DetailPesawat({ data, openDetail, toggleDrawerDetail }) {
   const { Paragraph } = Typography;
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleDetail = async () => {
+      setIsLoading(true)
+      try {
+         dispatch(callbackFetchData({ type: 'plane', id_transaksi:data.id_transaksi  }));
+         dispatch(setBookDataLanjutBayar(data));
+      } catch (error) {
+        console.log(error)
+      }
+      setIsLoading(true)
+      navigate({
+        pathname: `/flight/detail/payment`,
+      });
+
+  };
 
   return (
     <SwipeableDrawer
@@ -100,6 +123,20 @@ export default function DetailPesawat({ data, openDetail, toggleDrawerDetail }) 
                 </div>
               </div>
             </div>
+          </div>
+          <div className="mt-4">
+              <div className="flex justify-center w-full">
+                <Button
+                  onClick={handleDetail}                                             
+                  size="large"
+                  key="submit"
+                  type="primary"
+                  className="bg-blue-500 px-12 font-semibold w-full"
+                  loading={isLoading}
+                >
+                  Lanjut Bayar
+                </Button>
+              </div>
           </div>
         </div>
       </StyledBox>

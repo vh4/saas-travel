@@ -17,7 +17,7 @@ const store = configureStore({
 
 export const { setType, setLoading } = authSlice.actions;
 export const { setOk, setLoadingCallback } = callbackSlice.actions;
-export const { setDataBookPesawat, setisOkBalance, setDataSearchPesawat } = bookPesawatSlice.actions;
+export const { setDataBookPesawat, setisOkBalance, setDataSearchPesawat, setBookDataLanjutBayar } = bookPesawatSlice.actions;
 export const { setDataBookKereta, setisOkBalanceKereta, setDataSearchKereta } = bookKeretaSlice.actions;
 export const { setDataBookPelni, setisOkBalancePelni, setDataSearchPelni} = bookPelniSlice.actions;
 

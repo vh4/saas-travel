@@ -525,7 +525,7 @@ export default function Search() {
                                 class={`mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${
                                   e.fares[i]["M_available"] == "0" &&
                                   e.fares[i]["F_available"] == "0"
-                                    ? "bg-gray-200"
+                                    ? "bg-white xl:bg-gray-200"
                                     : "bg-white"
                                 } border-b xl:border xl:border-gray-200 xl:rounded-lg xl:shadow-sm  xl:hover:border transition-transform transform hover:scale-105`}
                               >
