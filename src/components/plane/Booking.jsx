@@ -33,7 +33,6 @@ import { AiOutlineClockCircle } from "react-icons/ai";
 import { toRupiah } from "../../helpers/rupiah";
 
 export default function BookingPesawat() {
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -64,10 +63,18 @@ export default function BookingPesawat() {
   const [isDatePickerOpenChild, setIsDatePickerOpenChild] = useState(null);
   const [isDatePickerOpenInfant, setIsDatePickerOpenInfant] = useState(null);
 
-
-  const [isDatePickerOpenAdultExpiredDate, setIsDatePickerOpenAdultExpiredDate] = useState(null);
-  const [isDatePickerOpenChildExpiredDate, setIsDatePickerOpenChildExpiredDate] = useState(null);
-  const [isDatePickerOpenInfantExpiredDate, setIsDatePickerOpenInfantExpiredDate] = useState(null);
+  const [
+    isDatePickerOpenAdultExpiredDate,
+    setIsDatePickerOpenAdultExpiredDate,
+  ] = useState(null);
+  const [
+    isDatePickerOpenChildExpiredDate,
+    setIsDatePickerOpenChildExpiredDate,
+  ] = useState(null);
+  const [
+    isDatePickerOpenInfantExpiredDate,
+    setIsDatePickerOpenInfantExpiredDate,
+  ] = useState(null);
 
   const [email, setEmail] = useState();
   const [hp, setHp] = useState();
@@ -116,7 +123,6 @@ export default function BookingPesawat() {
       dataIndex: "tipe",
       key: "tipe",
     },
-
   ];
 
   const [api, contextHolder] = notification.useNotification();
@@ -189,7 +195,7 @@ export default function BookingPesawat() {
           const AdultArr = Array.from({ length: TotalAdult }, () => ({
             gender: "MR",
             nama_depan: "broowww",
-            // nama_belakang: "", 
+            // nama_belakang: "",
             birthdate: getCurrentDate(),
             idNumber: "",
           }));
@@ -240,7 +246,7 @@ export default function BookingPesawat() {
   const [originalPenumpang, setOriginalPenumpang] = useState([]); // Data awal
   const [loadingExistingPenumpang, setLoadingExistingPenumpang] =
     useState(false);
-  
+
   const previousDataPenumpang = async () => {
     try {
       setLoadingExistingPenumpang(true);
@@ -260,9 +266,9 @@ export default function BookingPesawat() {
 
       parsing.data = parsing.data.map((x, i) => ({
         ...x,
-        name: x.nama_depan + ' ' +  x.nama_belakang,
+        name: x.nama_depan + " " + x.nama_belakang,
         // name: x.nama_depan,
-        }))
+      }));
 
       setExistingPenumpang(parsing.data);
       setOriginalPenumpang(parsing.data);
@@ -276,9 +282,12 @@ export default function BookingPesawat() {
 
   const [isModalOpenListPenumpang, setIsModalListOpenPenumpang] =
     useState(false);
-  const [indexPreviousPenumpang, setIndexPreviousPenumpang] = useState({ index: 0, type: "adult" });
+  const [indexPreviousPenumpang, setIndexPreviousPenumpang] = useState({
+    index: 0,
+    type: "adult",
+  });
   const [selectedPassenger, setSelectedPassenger] = useState(null); // State untuk menyimpan data yang dipilih
-  
+
   const showModalListPenumpang = (i, type) => {
     previousDataPenumpang();
     setIndexPreviousPenumpang({ index: i, type });
@@ -291,48 +300,54 @@ export default function BookingPesawat() {
 
   const handleOkListPenumpang = (selectedPassenger) => {
     if (selectedPassenger) {
+      if (indexPreviousPenumpang.type === "adult") {
+        const adultCategory = adult[0];
 
-      if (indexPreviousPenumpang.type === 'adult') {
+        const birthDate = dayjs(selectedPassenger.ttl, "YYYY/MM/DD");
+        if (!disabledDateAdult(birthDate)) {
+          // If birthDate is valid, set it in the form
+          form.setFields([
+            {
+              name: [`tanggalAdult${indexPreviousPenumpang.index}`],
+              value: birthDate,
+            },
+          ]);
 
-      const adultCategory = adult[0];
+          adultCategory[indexPreviousPenumpang.index]["birthdate"] =
+            selectedPassenger.ttl;
+        } else {
+          // If birthDate is not valid, clear the field
+          form.setFields([
+            {
+              name: [`tanggalAdult${indexPreviousPenumpang.index}`],
+              value: null,
+            },
+          ]);
+        }
 
-      const birthDate = dayjs(selectedPassenger.ttl, "YYYY/MM/DD");
-      if (!disabledDateAdult(birthDate)) {
-        // If birthDate is valid, set it in the form
+        adultCategory[indexPreviousPenumpang.index]["nama_depan"] =
+          selectedPassenger.nama_depan + " " + selectedPassenger.nama_belakang;
+        // adultCategory[indexPreviousPenumpang.index]['nama_belakang'] = selectedPassenger.nama_belakang;
+        adultCategory[indexPreviousPenumpang.index]["idNumber"] =
+          selectedPassenger.nik;
+
+        setAdult([adultCategory]);
+
         form.setFields([
           {
-            name: [`tanggalAdult${indexPreviousPenumpang.index}`],
-            value: birthDate,
+            name: [`namadepanAdult${indexPreviousPenumpang.index}`],
+            value:
+              selectedPassenger.nama_depan +
+              " " +
+              selectedPassenger.nama_belakang,
           },
-        ]);
-
-        adultCategory[indexPreviousPenumpang.index]['birthdate'] = selectedPassenger.ttl
-
-      } else {
-        // If birthDate is not valid, clear the field
-        form.setFields([
+          // { name: [`namabelakangAdult${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_belakang },
           {
-            name: [`tanggalAdult${indexPreviousPenumpang.index}`],
-            value: null,
+            name: [`nikAdult${indexPreviousPenumpang.index}`],
+            value: selectedPassenger.nik,
           },
         ]);
-      }
-  
-      adultCategory[indexPreviousPenumpang.index]['nama_depan'] = selectedPassenger.nama_depan +  " " + selectedPassenger.nama_belakang;
-      // adultCategory[indexPreviousPenumpang.index]['nama_belakang'] = selectedPassenger.nama_belakang;
-      adultCategory[indexPreviousPenumpang.index]['idNumber'] = selectedPassenger.nik;
-  
-      setAdult([adultCategory]);
-
-      form.setFields([
-        { name: [`namadepanAdult${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_depan +  " " + selectedPassenger.nama_belakang },
-        // { name: [`namabelakangAdult${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_belakang },
-        { name: [`nikAdult${indexPreviousPenumpang.index}`], value: selectedPassenger.nik },
-      ]);
-
-      } else if (indexPreviousPenumpang.type === 'child') {
-
-
+      } else if (indexPreviousPenumpang.type === "child") {
         const childCategory = child[0];
 
         const birthDate = dayjs(selectedPassenger.ttl, "YYYY/MM/DD");
@@ -345,9 +360,9 @@ export default function BookingPesawat() {
               value: birthDate,
             },
           ]);
-  
-          childCategory[indexPreviousPenumpang.index]['birthdate'] = selectedPassenger.ttl
-  
+
+          childCategory[indexPreviousPenumpang.index]["birthdate"] =
+            selectedPassenger.ttl;
         } else {
           // If birthDate is not valid, clear the field
           form.setFields([
@@ -358,21 +373,29 @@ export default function BookingPesawat() {
           ]);
         }
 
-        childCategory[indexPreviousPenumpang.index]['nama_depan'] = selectedPassenger.nama_depan +  " " + selectedPassenger.nama_belakang;
+        childCategory[indexPreviousPenumpang.index]["nama_depan"] =
+          selectedPassenger.nama_depan + " " + selectedPassenger.nama_belakang;
         // childCategory[indexPreviousPenumpang.index]['nama_belakang'] = selectedPassenger.nama_belakang;
-        childCategory[indexPreviousPenumpang.index]['idNumber'] = selectedPassenger.nik;
+        childCategory[indexPreviousPenumpang.index]["idNumber"] =
+          selectedPassenger.nik;
 
         setChild([childCategory]);
 
         form.setFields([
-          { name: [`namadepanChild${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_depan +  " " + selectedPassenger.nama_belakang },
+          {
+            name: [`namadepanChild${indexPreviousPenumpang.index}`],
+            value:
+              selectedPassenger.nama_depan +
+              " " +
+              selectedPassenger.nama_belakang,
+          },
           // { name: [`namabelakangChild${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_belakang },
-          { name: [`noktpChild${indexPreviousPenumpang.index}`], value: selectedPassenger.nik },
+          {
+            name: [`noktpChild${indexPreviousPenumpang.index}`],
+            value: selectedPassenger.nik,
+          },
         ]);
-
-
-      } else if (indexPreviousPenumpang.type === 'infant') {
-
+      } else if (indexPreviousPenumpang.type === "infant") {
         const infantCategory = infant[0];
 
         const birthDate = dayjs(selectedPassenger.ttl, "YYYY/MM/DD");
@@ -384,9 +407,9 @@ export default function BookingPesawat() {
               value: birthDate,
             },
           ]);
-  
-          infantCategory[indexPreviousPenumpang.index]['birthdate'] = selectedPassenger.ttl
-  
+
+          infantCategory[indexPreviousPenumpang.index]["birthdate"] =
+            selectedPassenger.ttl;
         } else {
           // If birthDate is not valid, clear the field
           form.setFields([
@@ -396,35 +419,42 @@ export default function BookingPesawat() {
             },
           ]);
         }
-        
-        infantCategory[indexPreviousPenumpang.index]['nama_depan'] = selectedPassenger.nama_depan +  " " + selectedPassenger.nama_belakang;
+
+        infantCategory[indexPreviousPenumpang.index]["nama_depan"] =
+          selectedPassenger.nama_depan + " " + selectedPassenger.nama_belakang;
         // infantCategory[indexPreviousPenumpang.index]['nama_belakang'] = selectedPassenger.nama_belakang;
-        infantCategory[indexPreviousPenumpang.index]['idNumber'] = selectedPassenger.nik;
+        infantCategory[indexPreviousPenumpang.index]["idNumber"] =
+          selectedPassenger.nik;
 
         setInfant([infantCategory]);
 
         form.setFields([
-          { name: [`infantnamadepan${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_depan +  " " + selectedPassenger.nama_belakang },
+          {
+            name: [`infantnamadepan${indexPreviousPenumpang.index}`],
+            value:
+              selectedPassenger.nama_depan +
+              " " +
+              selectedPassenger.nama_belakang,
+          },
           // { name: [`infantnamabelakang${indexPreviousPenumpang.index}`], value: selectedPassenger.nama_belakang },
-          { name: [`infantktp${indexPreviousPenumpang.index}`], value: selectedPassenger.nik },
+          {
+            name: [`infantktp${indexPreviousPenumpang.index}`],
+            value: selectedPassenger.nik,
+          },
         ]);
-
-
       }
     }
-  
+
     setIsModalListOpenPenumpang(false);
   };
-  
+
   const handleRowSelectionChange = (selectedRowKeys, selectedRows) => {
     if (selectedRows.length > 0) {
       const selectedPassenger = selectedRows[0];
       setSelectedPassenger(selectedPassenger);
-      handleOkListPenumpang(selectedPassenger); 
+      handleOkListPenumpang(selectedPassenger);
     }
   };
-
-  
 
   /* end of list penumpang */
 
@@ -543,7 +573,8 @@ export default function BookingPesawat() {
 
         const full_name = item.nama_depan ? item.nama_depan.split(" ") : [];
         const namaDepanFinal = full_name.length > 0 ? full_name[0] : "";
-        const namaBelakangFinal = full_name.length > 1 ? full_name.slice(1).join(" ") : "";        
+        const namaBelakangFinal =
+          full_name.length > 1 ? full_name.slice(1).join(" ") : "";
 
         end_child.push(
           `CHD;${
@@ -567,7 +598,8 @@ export default function BookingPesawat() {
 
         const full_name = item.nama_depan ? item.nama_depan.split(" ") : [];
         const namaDepanFinal = full_name.length > 0 ? full_name[0] : "";
-        const namaBelakangFinal = full_name.length > 1 ? full_name.slice(1).join(" ") : "";        
+        const namaBelakangFinal =
+          full_name.length > 1 ? full_name.slice(1).join(" ") : "";
 
         end_infant.push(
           `INF;${
@@ -589,10 +621,11 @@ export default function BookingPesawat() {
           "/" +
           date.getFullYear();
 
-          const full_name = item.nama_depan ? item.nama_depan.split(" ") : [];
-          const namaDepanFinal = full_name.length > 0 ? full_name[0] : "";
-          const namaBelakangFinal = full_name.length > 1 ? full_name.slice(1).join(" ") : "";          
-          
+        const full_name = item.nama_depan ? item.nama_depan.split(" ") : [];
+        const namaDepanFinal = full_name.length > 0 ? full_name[0] : "";
+        const namaBelakangFinal =
+          full_name.length > 1 ? full_name.slice(1).join(" ") : "";
+
         // end_adult.push(`ADT;${item.gender};${item.nama_depan.split(" ")[0].toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${item.idNumber};::${item.nomor};::${item.nomor};;;;${item.email};KTP;ID;ID;;;;`);
         end_adult.push(
           `ADT;${
@@ -637,7 +670,6 @@ export default function BookingPesawat() {
       );
 
       if (bookingResponse.data.rc === "00") {
-
         const idtrx = bookingResponse.data.data.transactionId;
         const allowPayment = bookingResponse.data.data.is_allowed_pay;
         const data = {
@@ -646,18 +678,19 @@ export default function BookingPesawat() {
             children: child[0],
             infants: infant[0],
           },
-          _Bookingflight: bookingResponse.data.data
-        }
+          _Bookingflight: bookingResponse.data.data,
+        };
 
         //set booking data
         dispatch(setDataBookPesawat(data));
         dispatch(setisOkBalance(allowPayment));
 
         //set data callback
-        dispatch(callbackFetchData({ type: 'plane', id_transaksi:idtrx  }));
+        dispatch(callbackFetchData({ type: "plane", id_transaksi: idtrx }));
         setIsLoading(false);
 
-        if (bookingResponse.data.callback === null) { //loloskan aja njir
+        if (bookingResponse.data.callback === null) {
+          //loloskan aja njir
           navigate({
             pathname: `/flight/payment`,
           });
@@ -732,7 +765,7 @@ export default function BookingPesawat() {
     );
 
     const TenYearsAgo = dayjs(dayBook).subtract(12, "year");
-    
+
     return current && current > TenYearsAgo;
   };
 
@@ -837,75 +870,76 @@ export default function BookingPesawat() {
 
             {/* modal for list penumpang */}
             <Modal
-            open={isModalOpenListPenumpang} 
-            onOk={handleOkListPenumpang} 
-            onCancel={handleCancelListPenumpang}
-            maskClosable={false}
-            footer={false}
+              open={isModalOpenListPenumpang}
+              onOk={handleOkListPenumpang}
+              onCancel={handleCancelListPenumpang}
+              maskClosable={false}
+              footer={false}
             >
-              {
-                loadingExistingPenumpang  && (
-                  <>
-                  <Skeleton width={'100%'} height={12} />
-                  <Skeleton width={'80%'} height={12} />
-                  <Skeleton width={'100%'} height={12} />
-                  <Skeleton width={'80%'} height={12} />
-                  <Skeleton width={'100%'} height={12} />
-                  </>
-                )
-              }
-              {
-                loadingExistingPenumpang == false && (
-                 <>
-                     <div>
-                        <div className="w-full flex justify-end mt-6">
-                          <Input
-                            className="w-1/2 mt-2 mb-4"
-                            prefix={<CiSearch />}
-                            placeholder="Searching...."
-                            onChange={(e) => searchIdpelHistory(e.target.value)}
-                            size="middle"
-                          />
-                      </div>
-                     <Table
+              {loadingExistingPenumpang && (
+                <>
+                  <Skeleton width={"100%"} height={12} />
+                  <Skeleton width={"80%"} height={12} />
+                  <Skeleton width={"100%"} height={12} />
+                  <Skeleton width={"80%"} height={12} />
+                  <Skeleton width={"100%"} height={12} />
+                </>
+              )}
+              {loadingExistingPenumpang == false && (
+                <>
+                  <div>
+                    <div className="w-full flex justify-end mt-6">
+                      <Input
+                        className="w-1/2 mt-2 mb-4"
+                        prefix={<CiSearch />}
+                        placeholder="Searching...."
+                        onChange={(e) => searchIdpelHistory(e.target.value)}
+                        size="middle"
+                      />
+                    </div>
+                    <Table
                       onRow={(record) => ({
                         onClick: () => {
                           handleRowSelectionChange([record.key], [record]); // Trigger selection manually
                         },
-                        style:{cursor: 'pointer'}
+                        style: { cursor: "pointer" },
                       })}
-                        expandable={{
-                          expandedRowRender: (record) => (
-                            <>
-                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-8">
-                                  <div className="my-2">
-                                    <p style={{ margin: 0 }} className="text-xs">
-                                      <strong>NIK:</strong> {record.nik}
-                                    </p>
+                      expandable={{
+                        expandedRowRender: (record) => (
+                          <>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-8">
+                              <div className="my-2">
+                                <p style={{ margin: 0 }} className="text-xs">
+                                  <strong>NIK:</strong> {record.nik}
+                                </p>
+                              </div>
+                              <div className="my-2">
+                                <p style={{ margin: 0 }} className="text-xs">
+                                  <strong>Nomor HP:</strong>
+                                  <div>
+                                    {record.hp && record.hp !== ""
+                                      ? record.hp
+                                      : "-"}
                                   </div>
-                                  <div className="my-2">
-                                    <p style={{ margin: 0 }} className="text-xs">
-                                      <strong>Nomor HP:</strong>
-                                      <div>{record.hp && record.hp !== '' ? record.hp : '-'}</div>
-                                    </p>
-                                  </div>
-                                  <div className="my-2">
-                                    <p style={{ margin: 0 }}  className="text-xs">
-                                      <strong>Tanggal Lahir:</strong> {dayjs(record.ttl).format("DD/MM/YYYY")}
-                                    </p>
-                                  </div>
-                                </div>
-                            </>
-                          ),
-                        }}
-                        columns={columns}
-                        dataSource={existingPenumpang}
-                        pagination={{pageSize:5}}
-                      />
-                      </div>
-                 </>
-                )
-              }
+                                </p>
+                              </div>
+                              <div className="my-2">
+                                <p style={{ margin: 0 }} className="text-xs">
+                                  <strong>Tanggal Lahir:</strong>{" "}
+                                  {dayjs(record.ttl).format("DD/MM/YYYY")}
+                                </p>
+                              </div>
+                            </div>
+                          </>
+                        ),
+                      }}
+                      columns={columns}
+                      dataSource={existingPenumpang}
+                      pagination={{ pageSize: 5 }}
+                    />
+                  </div>
+                </>
+              )}
             </Modal>
             {/* header  flow */}
             <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-4 items-center">
@@ -916,16 +950,11 @@ export default function BookingPesawat() {
                 </div>
               </div>
               <div>
-                <MdHorizontalRule
-                  size={20}
-                  className="hidden xl:flex "
-                />
+                <MdHorizontalRule size={20} className="hidden xl:flex " />
               </div>
               <div className="hidden xl:flex space-x-2 items-center">
                 <RxCrossCircled size={20} className="" />
-                <div className="hidden xl:block ">
-                  Pembayaran tiket
-                </div>
+                <div className="hidden xl:block ">Pembayaran tiket</div>
               </div>
               {/* <div>
                 <MdHorizontalRule
@@ -1028,11 +1057,11 @@ export default function BookingPesawat() {
                       </div>
                     </div>
                   ))}
-                  {/* for mobile */}
-                  <div className="flex xl:hidden justify-between items-center mb-4 border-b px-2 py-4">
-                    <div className="flex space-x-2 items-center text-gry-400 text-sm ">
-                      <IoPricetagOutline className="text-gray-500" size={18} />
-                      <div className="text-gray-500">Harga Fare</div>
+                {/* for mobile */}
+                <div className="flex xl:hidden justify-between items-center mb-4 border-b px-2 py-4">
+                  <div className="flex space-x-2 items-center text-gry-400 text-sm ">
+                    <IoPricetagOutline className="text-gray-500" size={18} />
+                    <div className="text-gray-500">Harga Fare</div>
                   </div>
                   <small className="text-sm font-medium">
                     Rp. {toRupiah(dataDetailForBooking.priceTotal)}
@@ -1159,7 +1188,7 @@ export default function BookingPesawat() {
                                     </div>
                                     <div className="flex items-center space-x-4">
                                       <Popover
-                                       className="hidden xl:block"
+                                        className="hidden xl:block"
                                         placement="topLeft"
                                         content={
                                           <>
@@ -1203,7 +1232,7 @@ export default function BookingPesawat() {
                                     </div>
                                     <div className="flex items-center space-x-4 pb-4">
                                       <Popover
-                                       className="block xl:hidden"
+                                        className="block xl:hidden"
                                         placement="topLeft"
                                         content={
                                           <>
@@ -1223,24 +1252,24 @@ export default function BookingPesawat() {
                                           <CiBoxList size={22} />
                                         </div>
                                       </Popover>
-                                    <div className="block xl:hidden">
-                                      <FormControl
-                                        sx={{ marginTop: 2, marginBottom: 2 }}
-                                        fullWidth
-                                      >
-                                        <SelectAnt
-                                          style={{ width: 120 }}
-                                          options={data}
-                                          value={e.gender}
-                                          size="large"
-                                          onChange={handleAdultsubCatagoryChange(
-                                            i,
-                                            "gender"
-                                          )}
-                                        />
-                                      </FormControl>
+                                      <div className="block xl:hidden">
+                                        <FormControl
+                                          sx={{ marginTop: 2, marginBottom: 2 }}
+                                          fullWidth
+                                        >
+                                          <SelectAnt
+                                            style={{ width: 120 }}
+                                            options={data}
+                                            value={e.gender}
+                                            size="large"
+                                            onChange={handleAdultsubCatagoryChange(
+                                              i,
+                                              "gender"
+                                            )}
+                                          />
+                                        </FormControl>
+                                      </div>
                                     </div>
-                                  </div>
                                     <div className="w-full grid grid-cols-1 gap-2">
                                       <div className="w-full">
                                         <div className="text-black text-sm">
@@ -1566,7 +1595,11 @@ export default function BookingPesawat() {
                                             disabledDate={
                                               disabledDateExpiredDate
                                             }
-                                            open={isDatePickerOpenAdultExpiredDate[i]} // Pass the state to the open prop
+                                            open={
+                                              isDatePickerOpenAdultExpiredDate[
+                                                i
+                                              ]
+                                            } // Pass the state to the open prop
                                             // inputReadOnly={true}
                                             onOpenChange={(status) => {
                                               const newOpenState = [
@@ -1617,7 +1650,7 @@ export default function BookingPesawat() {
                                     </div>
                                     <div className="flex items-center space-x-4">
                                       <Popover
-                                        className="hidden xl:block"                                      
+                                        className="hidden xl:block"
                                         placement="topLeft"
                                         content={
                                           <>
@@ -1637,31 +1670,31 @@ export default function BookingPesawat() {
                                           <CiBoxList size={22} />
                                         </div>
                                       </Popover>
-                                    <div className="hidden xl:block">
-                                      <FormControl
-                                        sx={{
-                                          marginTop: 2,
-                                          marginBottom: 2,
-                                          maxWidth: 120,
-                                        }}
-                                        fullWidth
-                                      >
-                                        <SelectAnt
-                                          style={{ width: 120 }}
-                                          options={dataInfChld}
-                                          value={e.gender}
-                                          size="large"
-                                          onChange={handleChildsubCatagoryChange(
-                                            i,
-                                            "gender"
-                                          )}
-                                        />
-                                      </FormControl>
-                                    </div>
+                                      <div className="hidden xl:block">
+                                        <FormControl
+                                          sx={{
+                                            marginTop: 2,
+                                            marginBottom: 2,
+                                            maxWidth: 120,
+                                          }}
+                                          fullWidth
+                                        >
+                                          <SelectAnt
+                                            style={{ width: 120 }}
+                                            options={dataInfChld}
+                                            value={e.gender}
+                                            size="large"
+                                            onChange={handleChildsubCatagoryChange(
+                                              i,
+                                              "gender"
+                                            )}
+                                          />
+                                        </FormControl>
+                                      </div>
                                     </div>
                                     <div className="flex items-center space-x-4 pb-4">
                                       <Popover
-                                       className="block xl:hidden"
+                                        className="block xl:hidden"
                                         placement="topLeft"
                                         content={
                                           <>
@@ -1681,23 +1714,23 @@ export default function BookingPesawat() {
                                           <CiBoxList size={22} />
                                         </div>
                                       </Popover>
-                                    <div className="block xl:hidden">
-                                      <FormControl
-                                        sx={{ marginTop: 2, marginBottom: 2 }}
-                                        fullWidth
-                                      >
-                                        <SelectAnt
-                                          style={{ width: 120 }}
-                                          options={dataInfChld}
-                                          value={e.gender}
-                                          size="large"
-                                          onChange={handleChildsubCatagoryChange(
-                                            i,
-                                            "gender"
-                                          )}
-                                        />
-                                      </FormControl>
-                                    </div>
+                                      <div className="block xl:hidden">
+                                        <FormControl
+                                          sx={{ marginTop: 2, marginBottom: 2 }}
+                                          fullWidth
+                                        >
+                                          <SelectAnt
+                                            style={{ width: 120 }}
+                                            options={dataInfChld}
+                                            value={e.gender}
+                                            size="large"
+                                            onChange={handleChildsubCatagoryChange(
+                                              i,
+                                              "gender"
+                                            )}
+                                          />
+                                        </FormControl>
+                                      </div>
                                     </div>
                                     <div className="w-full grid grid-cols-1 gap-2">
                                       <div className="w-full">
@@ -1856,7 +1889,6 @@ export default function BookingPesawat() {
                                         },
                                       ]}
                                     >
-    
                                       <DatePicker
                                         size="large"
                                         className="w-full"
@@ -2067,7 +2099,11 @@ export default function BookingPesawat() {
                                             disabledDate={
                                               disabledDateExpiredDate
                                             }
-                                            open={isDatePickerOpenChildExpiredDate[i]} // Pass the state to the open prop
+                                            open={
+                                              isDatePickerOpenChildExpiredDate[
+                                                i
+                                              ]
+                                            } // Pass the state to the open prop
                                             // inputReadOnly={true}
                                             onOpenChange={(status) => {
                                               const newOpenState = [
@@ -2118,7 +2154,7 @@ export default function BookingPesawat() {
                                     </div>
                                     <div className="flex items-center space-x-4">
                                       <Popover
-                                        className="hidden xl:block"                                      
+                                        className="hidden xl:block"
                                         placement="topLeft"
                                         content={
                                           <>
@@ -2139,30 +2175,30 @@ export default function BookingPesawat() {
                                         </div>
                                       </Popover>
                                       <div className="hidden xl:block">
-                                      <FormControl
-                                        sx={{
-                                          marginTop: 2,
-                                          marginBottom: 2,
-                                          maxWidth: 120,
-                                        }}
-                                        fullWidth
-                                      >
-                                        <SelectAnt
-                                          style={{ width: 120 }}
-                                          options={dataInfChld}
-                                          value={e.gender}
-                                          size="large"
-                                          onChange={handleInfantsubCatagoryChange(
-                                            i,
-                                            "gender"
-                                          )}
-                                        />
-                                      </FormControl>
+                                        <FormControl
+                                          sx={{
+                                            marginTop: 2,
+                                            marginBottom: 2,
+                                            maxWidth: 120,
+                                          }}
+                                          fullWidth
+                                        >
+                                          <SelectAnt
+                                            style={{ width: 120 }}
+                                            options={dataInfChld}
+                                            value={e.gender}
+                                            size="large"
+                                            onChange={handleInfantsubCatagoryChange(
+                                              i,
+                                              "gender"
+                                            )}
+                                          />
+                                        </FormControl>
                                       </div>
                                     </div>
                                     <div className="flex items-center space-x-4 pb-4">
                                       <Popover
-                                        className="block xl:hidden"                                      
+                                        className="block xl:hidden"
                                         placement="topLeft"
                                         content={
                                           <>
@@ -2182,23 +2218,23 @@ export default function BookingPesawat() {
                                           <CiBoxList size={22} />
                                         </div>
                                       </Popover>
-                                    <div className="block xl:hidden">
-                                      <FormControl
-                                        sx={{ marginTop: 2, marginBottom: 2 }}
-                                        fullWidth
-                                      >
-                                        <SelectAnt
-                                          style={{ width: 120 }}
-                                          options={dataInfChld}
-                                          value={e.gender}
-                                          size="large"
-                                          onChange={handleInfantsubCatagoryChange(
-                                            i,
-                                            "gender"
-                                          )}
-                                        />
-                                      </FormControl>
-                                    </div>
+                                      <div className="block xl:hidden">
+                                        <FormControl
+                                          sx={{ marginTop: 2, marginBottom: 2 }}
+                                          fullWidth
+                                        >
+                                          <SelectAnt
+                                            style={{ width: 120 }}
+                                            options={dataInfChld}
+                                            value={e.gender}
+                                            size="large"
+                                            onChange={handleInfantsubCatagoryChange(
+                                              i,
+                                              "gender"
+                                            )}
+                                          />
+                                        </FormControl>
+                                      </div>
                                     </div>
                                     <div className="w-full grid grid-cols-1 gap-2">
                                       <div className="w-full">
@@ -2323,7 +2359,9 @@ export default function BookingPesawat() {
                                           "birthdate"
                                         )}
                                         disabledDate={disabledDate}
-                                        open={isDatePickerOpenInfantExpiredDate[i]} // Pass the state to the open prop
+                                        open={
+                                          isDatePickerOpenInfantExpiredDate[i]
+                                        } // Pass the state to the open prop
                                         // inputReadOnly={true}
                                         onOpenChange={(status) => {
                                           const newOpenState = [
@@ -2647,11 +2685,14 @@ export default function BookingPesawat() {
                           </div>
                         </>
                       ))}
-                      {/* for desktop */}
-                      <div className="hidden xl:flex justify-between items-center mb-4 px-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-black-500 border-b-gray-100">
-                        <div className="flex space-x-2 items-center text-gry-400 text-sm ">
-                          <IoPricetagOutline className="text-gray-500" size={18} />
-                          <div className="text-gray-500">Harga Fare</div>
+                    {/* for desktop */}
+                    <div className="hidden xl:flex justify-between items-center mb-4 px-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-black-500 border-b-gray-100">
+                      <div className="flex space-x-2 items-center text-gry-400 text-sm ">
+                        <IoPricetagOutline
+                          className="text-gray-500"
+                          size={18}
+                        />
+                        <div className="text-gray-500">Harga Fare</div>
                       </div>
                       <small className="text-sm font-medium">
                         Rp. {toRupiah(dataDetailForBooking.priceTotal)}

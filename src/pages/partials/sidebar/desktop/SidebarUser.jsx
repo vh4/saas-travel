@@ -18,12 +18,10 @@ export default function SidebarUser({ pathSidebar }) {
   const location = useLocation();
   // Get the last segment of the path
   let lastSegment = location.pathname.split("/").filter(Boolean).pop();
-      lastSegment = lastSegment == 'kai' ? 'kereta' : lastSegment;
+  lastSegment = lastSegment == "kai" ? "kereta" : lastSegment;
 
   useEffect(() => {
-
     dispatch(fetchDataType());
-
   }, [dispatch, type]); //
 
   const user =
@@ -69,96 +67,95 @@ export default function SidebarUser({ pathSidebar }) {
       </div>
       <div className="flex mb-8 justify-start overflow-y-auto py-4 rounded  h-full ">
         <ul className="px-8 md:mt-0 space-y-2 relative">
-        
-        {(isLoading || type === 'auth' || type === 'pesawat') && (
-          <li className="">
-            {isLoading ? (
+          {(isLoading || type === "auth" || type === "pesawat") && (
+            <li className="">
+              {isLoading ? (
                 <Skeleton height={20} width={150} />
-            ) : (
-              <Link to="/transaksi/pesawat">
-              <div
-                onClick={(e) =>
-                  dropdownTransaksi === true
-                    ? setDropdownTransaksi(false)
-                    : setDropdownTransaksi(true)
-                }
-                className={`${
-                  pathSidebar === "/transaksi/pesawat"
-                    ? "border-l-4 border-cyan-500"
-                    : ""
-                } flex justify-between cursor-pointer items-center p-2 text-base font-normal text-black  hover:border-l-4 border-cyan-500 `}
-              >
-                <div className="flex items-center">
-                  <IoAirplaneOutline className="text-back" size={20} />
-                  <span className="flex-1 ml-3 whitespace-nowrap text-sm">
-                    Pesawat
-                  </span>
-                </div>
-              </div>
-            </Link>
-            )}
-          </li>
-          )}  
+              ) : (
+                <Link to="/transaksi/pesawat">
+                  <div
+                    onClick={(e) =>
+                      dropdownTransaksi === true
+                        ? setDropdownTransaksi(false)
+                        : setDropdownTransaksi(true)
+                    }
+                    className={`${
+                      pathSidebar === "/transaksi/pesawat"
+                        ? "border-l-4 border-cyan-500"
+                        : ""
+                    } flex justify-between cursor-pointer items-center p-2 text-base font-normal text-black  hover:border-l-4 border-cyan-500 `}
+                  >
+                    <div className="flex items-center">
+                      <IoAirplaneOutline className="text-back" size={20} />
+                      <span className="flex-1 ml-3 whitespace-nowrap text-sm">
+                        Pesawat
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              )}
+            </li>
+          )}
 
-          {(isLoading || type === 'auth' || type === 'kereta') && (
-          <li className="">
-          {isLoading ? (
+          {(isLoading || type === "auth" || type === "kereta") && (
+            <li className="">
+              {isLoading ? (
                 <Skeleton height={20} width={150} />
-            ) : (
-              <Link to="/transaksi/kai">
-              <div
-                onClick={(e) =>
-                  dropdownTransaksi === true
-                    ? setDropdownTransaksi(false)
-                    : setDropdownTransaksi(true)
-                }
-                className={`${
-                  pathSidebar === "/transaksi/kai"
-                    ? "border-l-4 border-cyan-500"
-                    : ""
-                } flex justify-between cursor-pointer items-center p-2 text-base font-normal text-black  hover:border-l-4 border-cyan-500 `}
-              >
-                <div className="flex items-center">
-                  <BsTrainFront className="text-black" size={20} />
-                  <span className="flex-1 ml-3 whitespace-nowrap text-sm">
-                    Kereta
-                  </span>
-                </div>
-              </div>
-            </Link>
-            )}
-          </li>
-          )} 
+              ) : (
+                <Link to="/transaksi/kai">
+                  <div
+                    onClick={(e) =>
+                      dropdownTransaksi === true
+                        ? setDropdownTransaksi(false)
+                        : setDropdownTransaksi(true)
+                    }
+                    className={`${
+                      pathSidebar === "/transaksi/kai"
+                        ? "border-l-4 border-cyan-500"
+                        : ""
+                    } flex justify-between cursor-pointer items-center p-2 text-base font-normal text-black  hover:border-l-4 border-cyan-500 `}
+                  >
+                    <div className="flex items-center">
+                      <BsTrainFront className="text-black" size={20} />
+                      <span className="flex-1 ml-3 whitespace-nowrap text-sm">
+                        Kereta
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              )}
+            </li>
+          )}
 
-          {(isLoading || type === 'auth' || type === 'pelni') && (
-          <li className="">
-            {isLoading ? (
+          {(isLoading || type === "auth" || type === "pelni") && (
+            <li className="">
+              {isLoading ? (
                 <Skeleton height={20} width={150} />
-            ) : (
-              <Link to="/transaksi/pelni">
-              <div
-                onClick={(e) =>
-                  dropdownTransaksi === true
-                    ? setDropdownTransaksi(false)
-                    : setDropdownTransaksi(true)
-                }
-                className={`${
-                  pathSidebar === "/transaksi/pelni"
-                    ? "border-l-4 border-cyan-500"
-                    : ""
-                } flex justify-between cursor-pointer items-center p-2 text-base font-normal text-black  hover:border-l-4 border-cyan-500 `}
-              >
-                <div className="flex items-center">
-                  <IoBoatOutline className="text-black" size={20} />
-                  <span className="flex-1 ml-3 whitespace-nowrap text-sm">
-                    Kapal Pelni
-                  </span>
-                </div>
-              </div>
-            </Link>
-            )}
-          </li>
-          )} 
+              ) : (
+                <Link to="/transaksi/pelni">
+                  <div
+                    onClick={(e) =>
+                      dropdownTransaksi === true
+                        ? setDropdownTransaksi(false)
+                        : setDropdownTransaksi(true)
+                    }
+                    className={`${
+                      pathSidebar === "/transaksi/pelni"
+                        ? "border-l-4 border-cyan-500"
+                        : ""
+                    } flex justify-between cursor-pointer items-center p-2 text-base font-normal text-black  hover:border-l-4 border-cyan-500 `}
+                  >
+                    <div className="flex items-center">
+                      <IoBoatOutline className="text-black" size={20} />
+                      <span className="flex-1 ml-3 whitespace-nowrap text-sm">
+                        Kapal Pelni
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              )}
+            </li>
+          )}
 
           <div className="border-b"></div>
           <li className="block">

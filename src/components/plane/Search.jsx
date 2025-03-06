@@ -4,10 +4,7 @@ import axios from "axios";
 import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import {
-  IoArrowForwardOutline,
-  IoSearchCircle,
-} from "react-icons/io5";
+import { IoArrowForwardOutline, IoSearchCircle } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import Timeline from "@mui/lab/Timeline";
@@ -66,9 +63,9 @@ export default function Search() {
   const dispatch = useDispatch();
 
   const [openDrawer, setOpenDrawer] = useState(null);
-	const toggleDrawer = (index) => () => {
-		setOpenDrawer(openDrawer === index ? null : index);
-	};
+  const toggleDrawer = (index) => () => {
+    setOpenDrawer(openDrawer === index ? null : index);
+  };
 
   useEffect(() => {
     const closeFilter = (e) => {
@@ -348,14 +345,14 @@ export default function Search() {
     })
     .filter((flight, i) => {
       return flight.classes.some((harga) => {
-
-        const price = flight.classes.reduce((sum, item) => sum + item[0].price, 0);
+        const price = flight.classes.reduce(
+          (sum, item) => sum + item[0].price,
+          0
+        );
         if (price === undefined) {
           return false; // Skip if price is undefined
         }
-        return (
-          valHargaRange[0] <= price && price <= valHargaRange[1]
-        );
+        return valHargaRange[0] <= price && price <= valHargaRange[1];
       });
     })
     .filter((flight, i) => {
@@ -370,9 +367,15 @@ export default function Search() {
       }
     })
     .sort((a, b) => {
-      const priceA = a.classes.reduce((sum, item) => sum + (item[0]?.price || 0), 0);
-      const priceB = b.classes.reduce((sum, item) => sum + (item[0]?.price || 0), 0);
-      
+      const priceA = a.classes.reduce(
+        (sum, item) => sum + (item[0]?.price || 0),
+        0
+      );
+      const priceB = b.classes.reduce(
+        (sum, item) => sum + (item[0]?.price || 0),
+        0
+      );
+
       return HargaTerendahTinggiPlane === 2 ? priceB - priceA : priceA - priceB;
     });
 
@@ -780,16 +783,20 @@ export default function Search() {
               </div>
             </div>
           </div>
-         
+
           {/* mobile filter*/}
           <div className="w-full flex xl:hidden justify-center">
-            <FilterMobilePlane 
-            	langsung={langsung} setLangsung={setLangsung} transit={transit} setTransit={setTransit}
-              waktuFilter={waktuFilter} handleWaktuFilterChange={handleWaktuFilterChange}
-              valHargaRange={valHargaRange} 
+            <FilterMobilePlane
+              langsung={langsung}
+              setLangsung={setLangsung}
+              transit={transit}
+              setTransit={setTransit}
+              waktuFilter={waktuFilter}
+              handleWaktuFilterChange={handleWaktuFilterChange}
+              valHargaRange={valHargaRange}
               hargraRangeChange={hargraRangeChange}
-              HargaTerendahTinggiPlane={HargaTerendahTinggiPlane} 
-              setHargaTerendahTinggiPlane={setHargaTerendahTinggiPlane} 
+              HargaTerendahTinggiPlane={HargaTerendahTinggiPlane}
+              setHargaTerendahTinggiPlane={setHargaTerendahTinggiPlane}
             />
           </div>
 
@@ -805,8 +812,8 @@ export default function Search() {
                   className="z-50"
                   percent={percent}
                   percentPosition={{
-                    align: 'center',
-                    type: 'inner',
+                    align: "center",
+                    type: "inner",
                   }}
                 />
               </Flex>
@@ -854,11 +861,12 @@ export default function Search() {
                       {e.classes[0][0].price !== 0 ? (
                         <div
                           class={`mt-0 xl:mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${
-                            e.classes[0][0].availability > 0 &&
-                            e.classes[0][0].availability >=
-                              parseInt(child) +
-                                parseInt(adult) +
-                                parseInt(infant)
+                            e.airlineCode === "TPMV" ||
+                            (e.classes[0][0].availability > 0 &&
+                              e.classes[0][0].availability >=
+                                parseInt(child) +
+                                  parseInt(adult) +
+                                  parseInt(infant))
                               ? "bg-white "
                               : "bg-gray-100 "
                           }  border-b xl:border xl:border-gray-200 rounded-none xl:rounded-md xl:shadow-sm hover:border hover:border-gray-100 transition-transform transform hover:scale-105`}
@@ -933,36 +941,42 @@ export default function Search() {
                               </div>
                               <div className="">
                                 <h1 className="mt-4 xl:mt-0 text-sm font-medium  text-black">
-                                  {
-                                      e.isTransit === true
-                                          ? (<>Rp. {toRupiah(e.classes.reduce((sum, item) => sum + item[0].price, 0))}</>)
-                                          : (<>Rp. {toRupiah(e.classes[0][0].price)}</>)
-                                  }
+                                  {e.isTransit === true ? (
+                                    <>
+                                      Rp.{" "}
+                                      {toRupiah(
+                                        e.classes.reduce(
+                                          (sum, item) => sum + item[0].price,
+                                          0
+                                        )
+                                      )}
+                                    </>
+                                  ) : (
+                                    <>Rp. {toRupiah(e.classes[0][0].price)}</>
+                                  )}
                                 </h1>
-                                {
-                                  e.classes[0][0].availability > 0 &&
+                                {e.airlineCode === "TPMV" ||
+                                (e.classes[0][0].availability > 0 &&
                                   e.classes[0][0].availability >=
                                     parseInt(child) +
                                       parseInt(adult) +
-                                      parseInt(infant) ? (
-                                        <>
-                                          <small className="text-gray-500">
-                                            Available
-                                          </small>   
-                                        </>
-                                      ) : (
-                                          <small className="text-gray-500">
-                                            Habis
-                                          </small>   
-                                      )
-                                }
+                                      parseInt(infant)) ? (
+                                  <>
+                                    <small className="text-gray-500">
+                                      Available
+                                    </small>
+                                  </>
+                                ) : (
+                                  <small className="text-gray-500">Habis</small>
+                                )}
                               </div>
                               <div className="flex justify-center col-span-1">
-                                {e.classes[0][0].availability > 0 &&
-                                e.classes[0][0].availability >=
-                                  parseInt(child) +
-                                    parseInt(adult) +
-                                    parseInt(infant) ? (
+                                {e.airlineCode === "TPMV" ||
+                                (e.classes[0][0].availability > 0 &&
+                                  e.classes[0][0].availability >=
+                                    parseInt(child) +
+                                      parseInt(adult) +
+                                      parseInt(infant)) ? (
                                   <div>
                                     <button
                                       type="button"
@@ -1349,7 +1363,13 @@ export default function Search() {
                                               <div className="pl-1">
                                                 {" "}
                                                 Rp.
-                                                {toRupiah(e.classes.reduce((sum, item) => sum + item[0].price, 0) * adult)}
+                                                {toRupiah(
+                                                  e.classes.reduce(
+                                                    (sum, item) =>
+                                                      sum + item[0].price,
+                                                    0
+                                                  ) * adult
+                                                )}
                                               </div>
                                             </div>
                                             {child > 0 ? (
@@ -1412,7 +1432,11 @@ export default function Search() {
                                           {" "}
                                           Rp.
                                           {toRupiah(
-                                            e.classes.reduce((sum, item) => sum + item[0].price, 0) * adult
+                                            e.classes.reduce(
+                                              (sum, item) =>
+                                                sum + item[0].price,
+                                              0
+                                            ) * adult
                                           )}
                                         </div>
                                       </div>
@@ -1451,7 +1475,7 @@ export default function Search() {
 
                           {/* mobile cari */}
                           {/* search drawer */}
-                            <SearchDrawerMobile
+                          <SearchDrawerMobile
                             openDetail={openDrawer === index}
                             toggleDrawerDetail={toggleDrawer(index)}
                             data={e}
@@ -1460,18 +1484,19 @@ export default function Search() {
                             adult={adult}
                             detailTiket={detailTiket}
                             index={index}
-                            />
+                          />
                           <div className="">
                             <div className="cursor-pointer block xl:hidden w-full text-black">
                               <div
                                 type="button"
                                 onClick={(f) => {
-                                  e.classes[0][0].availability > 0 &&
-                                    e.classes[0][0].availability >=
-                                      parseInt(child) +
-                                        parseInt(adult) +
-                                        parseInt(infant) &&
-                                    bookingHandlerDetail(index);
+                                  e.airlineCode === "TPMV" ||
+                                    (e.classes[0][0].availability > 0 &&
+                                      e.classes[0][0].availability >=
+                                        parseInt(child) +
+                                          parseInt(adult) +
+                                          parseInt(infant) &&
+                                      bookingHandlerDetail(index));
                                 }}
                                 className="text-black px-2 mt-4 grid grid-cols-1"
                               >
@@ -1487,42 +1512,48 @@ export default function Search() {
                                     </h1>
                                   </div>
                                   <div className="flex space-x-2 items-center">
-                                  <div
-                                    className="flex items-center px-4 py-1 rounded-full bg-gray-100"
-                                    onClick={(event) => {
-                                      event.stopPropagation();
-                                      setOpenDrawer(openDrawer === index ? null : index);
-                                    }}
-                                    // onClick={(event) => {
-                                      
-                                    //   event.stopPropagation();
+                                    <div
+                                      className="flex items-center px-4 py-1 rounded-full bg-gray-100"
+                                      onClick={(event) => {
+                                        event.stopPropagation();
+                                        setOpenDrawer(
+                                          openDrawer === index ? null : index
+                                        );
+                                      }}
+                                      // onClick={(event) => {
 
-                                    //   detailTiket == `open-${index}`
-                                    //     ? setDetailTiket(`close-${index}`)
-                                    //     : setDetailTiket(`open-${index}`);
-                                    // }}
-                                  >
-                                    <IoIosMore size={20} className="text-black" />
-                                    {/* <div className="text-xs cursor-pointer font-medium ">
+                                      //   event.stopPropagation();
+
+                                      //   detailTiket == `open-${index}`
+                                      //     ? setDetailTiket(`close-${index}`)
+                                      //     : setDetailTiket(`open-${index}`);
+                                      // }}
+                                    >
+                                      <IoIosMore
+                                        size={20}
+                                        className="text-black"
+                                      />
+                                      {/* <div className="text-xs cursor-pointer font-medium ">
                                       Detail
                                     </div> */}
-                                  </div>
-                                    <MdArrowForwardIos size={20} className="text-black" />
+                                    </div>
+                                    <MdArrowForwardIos
+                                      size={20}
+                                      className="text-black"
+                                    />
                                     <div>
-                                    {
-                                  e.classes[0][0].availability > 0 &&
-                                  e.classes[0][0].availability >=
-                                    parseInt(child) +
-                                      parseInt(adult) +
-                                      parseInt(infant) ? (
-                                        <>
-                                        </>
+                                      {e.airlineCode === "TPMV" ||
+                                      (e.classes[0][0].availability > 0 &&
+                                        e.classes[0][0].availability >=
+                                          parseInt(child) +
+                                            parseInt(adult) +
+                                            parseInt(infant)) ? (
+                                        <></>
                                       ) : (
-                                          <small className="text-gray-500">
-                                            Habis
-                                          </small>   
-                                      )
-                                }
+                                        <small className="text-gray-500">
+                                          Habis
+                                        </small>
+                                      )}
                                     </div>
                                   </div>
                                 </div>
@@ -1545,10 +1576,10 @@ export default function Search() {
                                             {e.duration}
                                           </div>
                                           <small className="text-[12px]">
-                                      {e.isTransit === true
-                                        ? `Transit`
-                                        : "Langsung"}
-                                    </small>
+                                            {e.isTransit === true
+                                              ? `Transit`
+                                              : "Langsung"}
+                                          </small>
                                         </div>
                                         <div className="w-full px-1 border-b-2"></div>
                                       </div>
@@ -1584,14 +1615,26 @@ export default function Search() {
                                 </div>
                                 <div className="mt-6 mb-2 flex justify-between">
                                   <div className="text-md font-bold  text-black mt-1">
-                                    {
-                                        e.isTransit === true
-                                            ? (<>Rp. {toRupiah(e.classes.reduce((sum, item) => sum + item[0].price, 0))}</>)
-                                            : (<>Rp. {toRupiah(e.classes[0][0].price)}</>)
-                                    } <span className="text-xs text-gray-400"> / org</span>
+                                    {e.isTransit === true ? (
+                                      <>
+                                        Rp.{" "}
+                                        {toRupiah(
+                                          e.classes.reduce(
+                                            (sum, item) => sum + item[0].price,
+                                            0
+                                          )
+                                        )}
+                                      </>
+                                    ) : (
+                                      <>Rp. {toRupiah(e.classes[0][0].price)}</>
+                                    )}{" "}
+                                    <span className="text-xs text-gray-400">
+                                      {" "}
+                                      / org
+                                    </span>
                                   </div>
                                   <small className="bg-blue-100 px-2 py-1.5 text-blue-500 text-xs rounded-full">
-                                      Gratis Biaya Layanan
+                                    Gratis Biaya Layanan
                                   </small>
                                 </div>
                               </div>

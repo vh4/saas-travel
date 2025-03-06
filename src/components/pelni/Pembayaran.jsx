@@ -14,7 +14,7 @@ import { IoArrowForwardOutline } from "react-icons/io5";
 import moment from "moment";
 import PageExpired from "../components/Expired";
 import Tiket from "./Tiket";
-import { ExclamationCircleFilled } from '@ant-design/icons';
+import { ExclamationCircleFilled } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import { Box } from "@mui/material";
@@ -29,7 +29,9 @@ export default function Pembayaran() {
 
   const callback = useSelector((state) => state.callback);
   const bookPelni = useSelector((state) => state.bookpelni.bookDataPelni);
-  const isCurrentBalance = useSelector((state) => state.bookpelni.isOkBalancePelni);
+  const isCurrentBalance = useSelector(
+    (state) => state.bookpelni.isOkBalancePelni
+  );
   const { Paragraph } = Typography;
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
@@ -63,8 +65,6 @@ export default function Pembayaran() {
     setOpenDrawer(type);
   };
 
-
-  
   const showModal = () => {
     setOpen(true);
   };
@@ -89,7 +89,7 @@ export default function Pembayaran() {
         }
 
         const isSimulate = cekWhiteListUsername?.is_simulate || 0;
-        setisSimulate(isSimulate)
+        setisSimulate(isSimulate);
 
         if (bookResponse.data.rc === "00") {
           setBook(bookResponse.data.data);
@@ -142,7 +142,6 @@ export default function Pembayaran() {
 
       if (book && new Date(book.payLimit).getTime() < new Date().getTime()) {
         setIsBookingExpired(true);
-
       } else {
         setIsBookingExpired(false);
       }
@@ -177,13 +176,13 @@ export default function Pembayaran() {
   async function cekWhiteListUsername() {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_HOST_API}/travel/is_whitelist`, {
-          produk: 'SHPPELNI'
+        `${process.env.REACT_APP_HOST_API}/travel/is_whitelist`,
+        {
+          produk: "SHPPELNI",
         }
       );
-      
-      return response.data;
 
+      return response.data;
     } catch (error) {
       throw error;
     }
@@ -207,8 +206,8 @@ export default function Pembayaran() {
       {
         paymentCode: book?.paymentCode,
         transactionId: book?.transactionId,
-        nominal:book?.normalSales,
-        nominal_admin:book?.nominal_admin,
+        nominal: book?.normalSales,
+        nominal_admin: book?.nominal_admin,
         simulateSuccess: isSimulated, //
         token: token,
         //cal;back
@@ -220,7 +219,6 @@ export default function Pembayaran() {
         saldo_terpotong_mitra: callback.saldo_terpotong_mitra,
         saldo_terpotong_merchant: callback.saldo_terpotong_merchant,
       }
-      
     );
 
     if (response.data.rc === "00") {
@@ -234,8 +232,8 @@ export default function Pembayaran() {
         total_dibayar: toRupiah(
           parseInt(book.normalSales) + parseInt(book.nominal_admin)
         ),
-      }
-      
+      };
+
       dispatch({
         type: "PAY_PELNI",
         // payload:{
@@ -246,7 +244,6 @@ export default function Pembayaran() {
       setispay(true);
       setHasilbayar(params);
       setLoading(false);
-
     } else {
       setTimeout(() => {
         setLoading(false);
@@ -254,7 +251,7 @@ export default function Pembayaran() {
       }, 1000);
     }
   }
-  
+
   return (
     <>
       {contextHolder}
@@ -271,39 +268,38 @@ export default function Pembayaran() {
         <>
           <PageExpired />
         </>
-      ) :
-      ispay == true ? 
-      (
-      <>
-        <Tiket data={hasilbayar} />
-      </>)
-      
-      : (
+      ) : ispay == true ? (
+        <>
+          <Tiket data={hasilbayar} />
+        </>
+      ) : (
         <>
           {/* header kai flow */}
           <Modal
-              title={
-                (<>
-                  <div className="flex space-x-2 items-center">
-                      <ExclamationCircleFilled className="text-orange-500 text-xl" />
-                      <div className="text-bold text-xl text-orange-500">Apakah anda yakin?</div>
+            title={
+              <>
+                <div className="flex space-x-2 items-center">
+                  <ExclamationCircleFilled className="text-orange-500 text-xl" />
+                  <div className="text-bold text-xl text-orange-500">
+                    Apakah anda yakin?
                   </div>
-                </>)
-              }
-              open={open}
-              onOk={hideModal}
-              onCancel={hideModal}
-              okText="Cancel"
-              cancelText="Submit"
-              maskClosable={false}
-              footer={
-                <>
+                </div>
+              </>
+            }
+            open={open}
+            onOk={hideModal}
+            onCancel={hideModal}
+            okText="Cancel"
+            cancelText="Submit"
+            maskClosable={false}
+            footer={
+              <>
                 <div className="blok mt-8">
                   <div className="flex justify-end space-x-2">
-                  <ButtonAnt key="back" onClick={hideModal}>
-                    Cancel
-                  </ButtonAnt>
-                  <ButtonAnt
+                    <ButtonAnt key="back" onClick={hideModal}>
+                      Cancel
+                    </ButtonAnt>
+                    <ButtonAnt
                       htmlType="submit"
                       key="submit"
                       type="primary"
@@ -316,11 +312,11 @@ export default function Pembayaran() {
                   </div>
                 </div>
               </>
-              }
-            >
-              <p>Apakah Anda yakin ingin melakukan pembayaran ?</p>
-            </Modal>
-          <div className="px-0 md:px-12 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
+            }
+          >
+            <p>Apakah Anda yakin ingin melakukan pembayaran ?</p>
+          </Modal>
+          <div className="px-0 xl:px-12 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
               <IoMdCheckmarkCircle className="text-green-500" size={20} />
               <div className="hidden xl:flex text-green-500">
@@ -335,9 +331,7 @@ export default function Pembayaran() {
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
               <AiOutlineClockCircle size={20} className="" />
-              <div className="hidden xl:block ">
-                Pembayaran tiket
-              </div>
+              <div className="hidden xl:block ">Pembayaran tiket</div>
             </div>
             {/* <div>
               <MdHorizontalRule
@@ -361,171 +355,197 @@ export default function Pembayaran() {
               <div className="block xl:flex xl:justify-around mb-0 xl:space-x-4 -mt-8 xl:mt-0">
                 {/* mobile sidebar */}
                 <div className="block xl:hidden sidebar w-full xl:w-2/3 2xl:w-1/2">
-                <div className="py-2 xl:py-4 mt-2 xl:mt-0">
+                  <div className="py-2 xl:py-4 mt-2 xl:mt-0">
                     <Box
-                        className="border shadow px-6 py-6 rounded-xl"
-                        sx={{
+                      className="border shadow px-6 py-6 rounded-xl"
+                      sx={
+                        {
                           // textAlign: "center",
                           // paddingY: "16px",
                           // borderBottomLeftRadius: "30px",
                           // borderBottomRightRadius: "30px",
                           // cursor: "pointer",
-                        }}
-                        >
-                    <div className="flex justify-between items-center -mt-2">
-                      {/* <div className="text-black text-xs">Booking ID</div> */}
-                      <div className="text-black text-sm -mt-1.5">
-                        Transaksi ID
+                        }
+                      }
+                    >
+                      <div className="flex justify-between items-center -mt-2">
+                        {/* <div className="text-black text-xs">Booking ID</div> */}
+                        <div className="text-black text-sm -mt-1.5">
+                          Transaksi ID
+                        </div>
+                        <div className="mt-2 font-bold  text-blue-500 text-[18px]">
+                          {/* {hasilBooking && hasilBooking.bookingCode} */}
+                          <Paragraph copyable className="">
+                            {book && book.transactionId}
+                          </Paragraph>
+                        </div>
                       </div>
-                      <div className="mt-2 font-bold  text-blue-500 text-[18px]">
-                        {/* {hasilBooking && hasilBooking.bookingCode} */}
-                        <Paragraph copyable className="">
-                          {book && book.transactionId}
-                        </Paragraph>
+                      <div className="text-grapy-500 text-xs">
+                        Gunakan kode bayar ini sebagai nomor tujuan pada menu
+                        pembayaran di aplikasi.
                       </div>
-                    </div>
-                    <div className="text-grapy-500 text-xs">
-
-                      Gunakan kode bayar ini sebagai nomor tujuan pada menu
-                      pembayaran di aplikasi.
-                    </div>
                     </Box>
                     <div className="p-4">
-                            <div className="flex items-center space-x-2 py-2">
-                              <div className="flex justify-between items-center">
-                                <div className="flex space-x-2 items-center">
-                                  <div className="text-xs text-black">
-                                    <div className="font-semibold">{book.SHIP_NAME}</div>
-                                  </div>
-                                </div>
+                      <div className="flex items-center space-x-2 py-2">
+                        <div className="flex justify-between items-center">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-black">
+                              <div className="font-semibold">
+                                {book.SHIP_NAME}
                               </div>
                             </div>
-                            <div className="w-full py-2">
-                              <div className="flex justify-between items-center">
-                                <div className="flex space-x-2 items-center">
-                                  <div className="text-xs text-black">
-                                    <small className="text-xs text-gray-400">Asal</small>
-                                    <div className="font-semibold">
-                                    {passengers?.pelabuhan_asal?.charAt(0) + passengers?.pelabuhan_tujuan?.slice(1)?.toLowerCase()} {" "}
-                                      </div>
-                                  </div>
-                                </div>
-                                <div className="text-xs text-gray-400">
-                                {parseTanggal(parseTanggal(passengers.departureDate))} {" "}{book.departureTime}
-                                </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-full py-2">
+                        <div className="flex justify-between items-center">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-black">
+                              <small className="text-xs text-gray-400">
+                                Asal
+                              </small>
+                              <div className="font-semibold">
+                                {passengers?.pelabuhan_asal?.charAt(0) +
+                                  passengers?.pelabuhan_tujuan
+                                    ?.slice(1)
+                                    ?.toLowerCase()}{" "}
                               </div>
                             </div>
-                            <div className="w-full py-2">
-                              <div className="flex justify-between items-center">
-                                <div className="flex space-x-2 items-center">
-                                  <div className="text-xs text-black">
-                                    <small className="text-xs text-gray-400">Tujuan</small>
-                                    <div className="font-semibold">
-                                      {passengers?.pelabuhan_tujuan.charAt(0) + passengers?.pelabuhan_tujuan?.slice(1)?.toLowerCase()}
-                                      </div>
-                                  </div>
-                                </div>
-                                <div className="text-xs text-gray-400">
-                                  {parseTanggal(book.arrivalDate)} {" "}
-                                  {book.arrivalTime}
-                                </div>
+                          </div>
+                          <div className="text-xs text-gray-400">
+                            {parseTanggal(
+                              parseTanggal(passengers.departureDate)
+                            )}{" "}
+                            {book.departureTime}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-full py-2">
+                        <div className="flex justify-between items-center">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-black">
+                              <small className="text-xs text-gray-400">
+                                Tujuan
+                              </small>
+                              <div className="font-semibold">
+                                {passengers?.pelabuhan_tujuan.charAt(0) +
+                                  passengers?.pelabuhan_tujuan
+                                    ?.slice(1)
+                                    ?.toLowerCase()}
                               </div>
                             </div>
-                            <div className="w-full py-2">
-                              <div className="flex justify-between items-center">
-                                <div className="flex space-x-2 items-center">
-                                  <div className="text-xs text-black">
-                                    <small className="text-xs text-gray-400">Kode Booking</small>
-                                    <div className="font-semibold">-</div>
-                                  </div>
-                                </div>
-                                  <div className="block xl:hidden">
-                                    <Alert
-                                      className="text-xs text-gray-500"
-                                      message={`${remainingBookTime}`}
-                                      banner
-                                    />
-                                </div>
+                          </div>
+                          <div className="text-xs text-gray-400">
+                            {parseTanggal(book.arrivalDate)} {book.arrivalTime}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-full py-2">
+                        <div className="flex justify-between items-center">
+                          <div className="flex space-x-2 items-center">
+                            <div className="text-xs text-black">
+                              <small className="text-xs text-gray-400">
+                                Kode Booking
+                              </small>
+                              <div className="font-semibold">
+                                {book.bookingCode}
                               </div>
                             </div>
-          
+                          </div>
+                          <div className="block xl:hidden">
+                            <Alert
+                              className="text-xs text-gray-500"
+                              message={`${remainingBookTime}`}
+                              banner
+                            />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                    <div className="py-2">
-                      <div className="w-full px-4">
-                        <div className="flex justify-between items-center border-b border-gray-200 py-4">
-                          <div className="flex space-x-2 items-center">
-                            <div className="text-xs text-gray-500">
-                              <small className="text-xs text-gray-400">Data Penumpang</small>
-                              <div className="my-1">{TotalAdult > 0 && TotalAdult + ' Dewasa'}  {TotalAdult > 0 && ', ' +TotalInfant + ' Bayi'}</div>
+                  <div className="py-2">
+                    <div className="w-full px-4">
+                      <div className="flex justify-between items-center border-b border-gray-200 py-4">
+                        <div className="flex space-x-2 items-center">
+                          <div className="text-xs text-gray-500">
+                            <small className="text-xs text-gray-400">
+                              Data Penumpang
+                            </small>
+                            <div className="my-1">
+                              {TotalAdult > 0 && TotalAdult + " Dewasa"}{" "}
+                              {TotalAdult > 0 && ", " + TotalInfant + " Bayi"}
                             </div>
                           </div>
-                          <div onClick={() => {toggleDrawer(true)}} className="cursor-pointer text-xs text-blue-400">
-                            Detail
-                          </div>
+                        </div>
+                        <div
+                          onClick={() => {
+                            toggleDrawer(true);
+                          }}
+                          className="cursor-pointer text-xs text-blue-400"
+                        >
+                          Detail
                         </div>
                       </div>
                     </div>
-                    <div className="py-2 xl:py-4 xl:mt-0">
-                      <div className="w-full px-4">
-                        <div className="flex justify-between items-center">
-                          <div className="flex space-x-2 items-center">
-                            <div className="text-xs text-gray-500">
-                              <div >Total Harga</div>
-                            </div>
+                  </div>
+                  <div className="py-2 xl:py-4 xl:mt-0">
+                    <div className="w-full px-4">
+                      <div className="flex justify-between items-center">
+                        <div className="flex space-x-2 items-center">
+                          <div className="text-xs text-gray-500">
+                            <div>Total Harga</div>
                           </div>
-                          <div className="text-xs">
-                          Rp.{" "}
-                          {toRupiah(book && book?.normalSales || '-')}
-                          </div>
+                        </div>
+                        <div className="text-xs">
+                          Rp. {toRupiah((book && book?.normalSales) || "-")}
                         </div>
                       </div>
                     </div>
-                    <div className="py-2 xl:py-4 xl:mt-0">
-                      <div className="w-full px-4">
-                        <div className="flex justify-between items-center border-b border-gray-200 pb-4">
-                          <div className="flex space-x-2 items-center">
+                  </div>
+                  <div className="py-2 xl:py-4 xl:mt-0">
+                    <div className="w-full px-4">
+                      <div className="flex justify-between items-center border-b border-gray-200 pb-4">
+                        <div className="flex space-x-2 items-center">
+                          <div className="text-xs text-gray-500">
                             <div className="text-xs text-gray-500">
-                            <div className="text-xs text-gray-500">
-                              <div >Biaya Admin</div>
-                            </div>
+                              <div>Biaya Admin</div>
                             </div>
                           </div>
-                          <div className="text-xs">
-                          Rp.{" "}
-                          {toRupiah(book && book.nominal_admin)}
-                          </div>
+                        </div>
+                        <div className="text-xs">
+                          Rp. {toRupiah(book && book.nominal_admin)}
                         </div>
                       </div>
                     </div>
-                    <div className="py-2 xl:py-4 xl:mt-0">
-                      <div className="w-full px-4">
-                        <div className="flex justify-between items-center">
-                          <div className="flex space-x-2 items-center">
+                  </div>
+                  <div className="py-2 xl:py-4 xl:mt-0">
+                    <div className="w-full px-4">
+                      <div className="flex justify-between items-center">
+                        <div className="flex space-x-2 items-center">
+                          <div className="text-xs text-gray-500">
                             <div className="text-xs text-gray-500">
-                            <div className="text-xs text-gray-500">
-                              <div >Total Bayar</div>
-                            </div>
+                              <div>Total Bayar</div>
                             </div>
                           </div>
-                          <div className="text-xs">
+                        </div>
+                        <div className="text-xs">
                           Rp.{" "}
                           {toRupiah(
-                            parseInt(book && book?.normalSales || 0) +
-                              parseInt(
-                                book && book?.nominal_admin
-                              )
+                            parseInt((book && book?.normalSales) || 0) +
+                              parseInt(book && book?.nominal_admin)
                           )}
-                          </div>
                         </div>
                       </div>
                     </div>
-
+                  </div>
                 </div>
 
                 <DetailPassengersDrawer
-                bookInfo={bookInfo} 
-                passengers={passengers.passengers || []} hasilBooking={book} openDrawer={openDrawer} toggleDrawer={toggleDrawer}
+                  bookInfo={bookInfo}
+                  passengers={passengers.passengers || []}
+                  hasilBooking={book}
+                  openDrawer={openDrawer}
+                  toggleDrawer={toggleDrawer}
                 />
 
                 {/* desktop adult infant */}
@@ -536,15 +556,15 @@ export default function Pembayaran() {
                         <>
                           <div className="p-2 xl:px-8 xl:mt-6 mt-4 w-full rounded-md border-gray-200 shadow-sm">
                             <div className="">
-                              <div className="px-2 py-4 md:py-2 text-black border-b border-gray-200 text-xs font-semibold ">
+                              <div className="px-2 py-4 xl:py-2 text-black border-b border-gray-200 text-xs font-semibold ">
                                 {bookInfo.PAX_LIST[i][0]} (
                                 {bookInfo.PAX_LIST[i][6] == "N/A"
                                   ? "INFANT"
                                   : "ADULT"}
                                 )
                               </div>
-                              <div className="mt-2 md:mt-4 grid grid-cols-2 md:grid-cols-4">
-                                {/* <div className="px-2 md:px-4 py-2 text-sm">
+                              <div className="mt-2 xl:mt-4 grid grid-cols-2 xl:grid-cols-4">
+                                {/* <div className="px-2 xl:px-4 py-2 text-sm">
                                           <div className="text-black">NIK</div>
                                           <div className="font-bold text-xs text-black">{bookInfo.PAX_LIST[i][1]}</div>
                                       </div> */}
@@ -600,13 +620,7 @@ export default function Pembayaran() {
                       </div>
                       <div className="mt-4 text-xs text-black font-medium  flex justify-between">
                         <div>Biaya Admin (Fee) x{TotalAdult + TotalInfant}</div>
-                        <div>
-                          Rp.{" "}
-                          {book &&
-                            toRupiah(
-                              book.nominal_admin
-                            )}
-                        </div>
+                        <div>Rp. {book && toRupiah(book.nominal_admin)}</div>
                       </div>
                       <div className="mt-4 text-xs text-black font-medium  flex justify-between">
                         <div>Diskon (Rp.)</div>
@@ -631,8 +645,8 @@ export default function Pembayaran() {
                 {/* desktop sidebar */}
                 <div className="hidden xl:block sidebar w-full xl:w-2/3 2xl:w-1/2">
                   <div className="py-2 rounded-md border-b border-gray-200 shadow-sm">
-                      <div className="mt-4">
-                        {/* {isOk == false || isCurrentBalance == false ? (
+                    <div className="mt-4">
+                      {/* {isOk == false || isCurrentBalance == false ? (
                           <>
                             <div className="mt-4">
                             {status !== '68' && status !== '99' ? 
@@ -662,22 +676,22 @@ export default function Pembayaran() {
                         pembayaran di aplikasi.
                       </div>
                     </div>
-                    <div className="p-4 border-t md:0 mt-2">
+                    <div className="p-4 border-t xl:0 mt-2">
                       <div className="text-xs text-black">
                         PELNI DESCRIPTION
                       </div>
-                      <div className="mt-3 md:mt-4 text-xs text-black">
+                      <div className="mt-3 xl:mt-4 text-xs text-black">
                         {book.SHIP_NAME}
                       </div>
                       <div className="flex space-x-4">
-                        <div className="mt-1 md:mt-2 text-xs text-black font-medium ">
+                        <div className="mt-1 xl:mt-2 text-xs text-black font-medium ">
                           {passengers.pelabuhan_asal}
                         </div>
                         <IoArrowForwardOutline
-                          className="text-black mt-0 md:mt-2"
+                          className="text-black mt-0 xl:mt-2"
                           size={18}
                         />
-                        <div className="mt-1 md:mt-2 text-xs text-black font-medium ">
+                        <div className="mt-1 xl:mt-2 text-xs text-black font-medium ">
                           {passengers.pelabuhan_tujuan}
                         </div>
                       </div>
@@ -690,9 +704,7 @@ export default function Pembayaran() {
                       </div>
                     </div>
                     <div className="p-4 border-t">
-                      <div className="text-xs text-black">
-                        LIST PASSENGERS
-                      </div>
+                      <div className="text-xs text-black">LIST PASSENGERS</div>
                       {passengers.passengers.adults &&
                       passengers.passengers.adults.length > 0
                         ? passengers.passengers.adults.map((e, i) => (
@@ -717,19 +729,19 @@ export default function Pembayaran() {
                       banner
                     />
                   </div>
-                {/* {callbackBoolean == true ? ( */}
+                  {/* {callbackBoolean == true ? ( */}
                   <div className="hidden xl:block mt-2 py-2 rounded-md border-t border-gray-200 shadow-sm">
-                  <>
-                    {/* {isOk == true && isCurrentBalance == true ? ( */}
+                    <>
+                      {/* {isOk == true && isCurrentBalance == true ? ( */}
                       <>
-                        <div className="px-8 md:px-4 py-4 text-sm text-black">
+                        <div className="px-8 xl:px-4 py-4 text-sm text-black">
                           Tekan tombol dibawah ini untuk melanjutkan proses
                           transaksi.
                         </div>
                         <div className="flex justify-center">
                           <ButtonAnt
-                            // onClick={isOk && isCurrentBalance && showModal} 
-                            onClick={showModal}                                               
+                            // onClick={isOk && isCurrentBalance && showModal}
+                            onClick={showModal}
                             size="large"
                             key="submit"
                             type="primary"
@@ -739,38 +751,53 @@ export default function Pembayaran() {
                             Bayar Sekarang
                           </ButtonAnt>
                         </div>
-                        {isSimulated === 1 ? (<Alert className="mt-4" message="Don't worry, clicking the 'Bayar' will not affect your balance." banner/>) : ''}
+                        {isSimulated === 1 ? (
+                          <Alert
+                            className="mt-4"
+                            message="Don't worry, clicking the 'Bayar' will not affect your balance."
+                            banner
+                          />
+                        ) : (
+                          ""
+                        )}
                       </>
-                    {/* ) : ''} */}
-                  </>
-              </div>
-                {/* ) : ( */}
-                  <>
-                  </>
-                {/* )} */}
-                </div>
-              {/* {callbackBoolean == true ? ( */}
-                <div className="block xl:hidden w-full mt-4 py-4 rounded-md border border-gray-200 shadow-sm">
-                    <>
-                    {/* {isOk == true && isCurrentBalance == true ? ( */}
-                      <>
-                        <div className="flex justify-center">
-                          <ButtonAnt
-                            onClick={showModal}                        
-                            size="large"
-                            key="submit"
-                            type="primary"
-                            className="bg-blue-500 mx-2 font-semibold mt-4 w-full"
-                            loading={isLoading}
-                          >
-                            Bayar Sekarang
-                          </ButtonAnt>
-                        </div>
-                        {isSimulated === 1 ? (<Alert className="mt-4" message="Click 'Bayar' will not affect your balance." banner/>) : ''}
-                      </>
-                    {/* ) : ''} */}
+                      {/* ) : ''} */}
                     </>
-                    {/* {isOk == false || isCurrentBalance == false ? (
+                  </div>
+                  {/* ) : ( */}
+                  <></>
+                  {/* )} */}
+                </div>
+                {/* {callbackBoolean == true ? ( */}
+                <div className="block xl:hidden w-full mt-4 py-4 rounded-md border border-gray-200 shadow-sm">
+                  <>
+                    {/* {isOk == true && isCurrentBalance == true ? ( */}
+                    <>
+                      <div className="flex justify-center">
+                        <ButtonAnt
+                          onClick={showModal}
+                          size="large"
+                          key="submit"
+                          type="primary"
+                          className="bg-blue-500 mx-2 font-semibold mt-4 w-full"
+                          loading={isLoading}
+                        >
+                          Bayar Sekarang
+                        </ButtonAnt>
+                      </div>
+                      {isSimulated === 1 ? (
+                        <Alert
+                          className="mt-4"
+                          message="Click 'Bayar' will not affect your balance."
+                          banner
+                        />
+                      ) : (
+                        ""
+                      )}
+                    </>
+                    {/* ) : ''} */}
+                  </>
+                  {/* {isOk == false || isCurrentBalance == false ? (
                       <>
                         <div className="mt-4">
                             {status !== '68' && status !== '99' ? 
@@ -787,7 +814,7 @@ export default function Pembayaran() {
                       </>
                     ) : ''} */}
                 </div>
-              {/* ) : ( */}
+                {/* ) : ( */}
                 <>
                   {/* <div className="px-8 py-4 text-sm text-black">
                     Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
@@ -806,7 +833,7 @@ export default function Pembayaran() {
                       </ButtonAnt>
                     </div>                      */}
                 </>
-              {/* )} */}
+                {/* )} */}
               </div>
             </>
           )}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Router, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import dayjs from "dayjs";
 import Layout from "../Layout";
@@ -11,7 +11,6 @@ import KAI from "../../components/kai/KAI";
 import Pelni from "../../components/pelni/Pelni";
 import DLU from "../../components/dlu/DLU";
 import Carousels from "../../components/carousel/Carousel";
-import CarouselsMobile from "../../components/carousel/CarouselMobile";
 import CarouselsTablet from "../../components/carousel/CarouselTablet";
 import {  notification, Skeleton as SkeletonAntMobile } from "antd";
 import { fetchDataType } from "../../features/dataTypeSlice";
@@ -120,24 +119,24 @@ export default function MainPage() {
           className="pb-0 xl:pb-20 xl:mb-0 xl:rounded-b-[120px] -mt-4 xl:mt-0"
         >
           <div className="block xl:hidden"><img className="" src="/menu2.jpeg" /></div>
-          <div className="hidden md:block xl:block 2xl:hidden py-0 md:py-8 relative z-10 container mx-auto">
+          <div className="hidden xl:block  2xl:hidden py-0 xl:py-8 relative z-10 container mx-auto">
             <CarouselsTablet />
           </div>
-          <div className="block md:hidden py-0 md:py-8 relative z-10 container mx-auto">
+          <div className="block xl:hidden py-0 xl:py-8 relative z-10 container mx-auto">
             {/* <CarouselsMobile />  hidden dulu*/} 
           </div>
-          <div className="hidden 2xl:block py-0 md:py-8 relative z-10 container mx-auto">
+          <div className="hidden 2xl:block py-0 xl:py-8 relative z-10 container mx-auto">
             <Carousels />
           </div>
         </div>
         <div className="-mt-[130px] xl:-mt-24">
           <div className="relative container mx-auto mb-0 xl:mb-6">
-            <div className="-mt-4 md:mt-0 z-10 xl:bg-white mx-0 lg:mx-12 xl:mx-32 2xl:mx-36 md:border md:rounded-md md:shadow-lg">
-              <div className="block md:flex xl:flex 2xl:flex justify-start">
-                <div className="hidden md:flex justify-start px-10">
+            <div className="-mt-4 xl:mt-0 z-10 xl:bg-white mx-0 lg:mx-12 xl:mx-32 2xl:mx-36 xl:border xl:rounded-md xl:shadow-lg">
+              <div className="block xl:flex 2xl:flex justify-start">
+                <div className="hidden xl:flex justify-start px-10">
                   <Sidebar nameMenu={nameMenu} setNameMenu={setNameMenu} />
                 </div>
-                <div className="block md:hidden">
+                <div className="block xl:hidden">
                   <SideBarMobile nameMenu={nameMenu} setNameMenu={setNameMenu} />
                 </div>
               </div>

@@ -10,9 +10,9 @@ import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
 import { NavContext } from "../App";
-import { BsBookmarkCheckFill, BsTicket } from "react-icons/bs";
+import { BsBookmarkCheckFill } from "react-icons/bs";
 import { CiBookmarkCheck, CiGrid42, CiSettings } from "react-icons/ci";
-import { HiOutlineTicket, HiTicket } from "react-icons/hi2";
+import { HiTicket } from "react-icons/hi2";
 import { HiViewGridAdd } from "react-icons/hi";
 import { IoMdSettings } from "react-icons/io";
 import { PiTicketThin } from "react-icons/pi";
@@ -34,12 +34,12 @@ export default function LayoutUser({ children }) {
       <div className="hidden xl:block">
           <Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
       </div>
-      <div className="flex-grow md:flex relative ml-0 md:ml-16 xl:ml-0 2xl:ml-0 mt-4 md:mt-0 md:justify-center">
+      <div className="flex-grow xl:flex relative ml-0 xl:ml-16 xl:ml-0 2xl:ml-0 mt-4 xl:mt-0 xl:justify-center">
         {token === null || token === undefined ? (
           <></>
         ) : (
           <div
-            className={`${sidebarOpen} w-full md:w-1/2 xl:w-auto 2xl:w-auto md:block xl:block 2xl:block`}
+            className={`${sidebarOpen} w-full xl:w-1/2 xl:w-auto 2xl:w-auto xl:block xl:block 2xl:block`}
           >
             <Sidebar pathSidebar={pathSidebar} />
           </div>
@@ -55,7 +55,7 @@ export default function LayoutUser({ children }) {
           <main className="">{children}</main>
         </div>
       </div>
-      <div className="text-black block md:hidden z-10 bg-white shadow-lg">
+      <div className="text-black block xl:hidden z-10 bg-white shadow-lg">
           <Box
             sx={{ width: "100%", position: "fixed", bottom: 0 }}
             elevation={3}
@@ -95,7 +95,7 @@ export default function LayoutUser({ children }) {
           </Box>
       </div>
       {/* <Footer/> */}
-      {/* <footer className="hidden md:block border-t text-sm text-black py-6">
+      {/* <footer className="hidden xl:block border-t text-sm text-black py-6">
         <div className="container mx-auto">
           <p className="text-center">
           © 2015-2023 rajabiller.com. All rights reserved.

@@ -19,16 +19,19 @@ import Page500 from "../components/500";
 import BookingLoading from "../components/pelniskeleton/booking";
 import ManyRequest from "../components/Manyrequest";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import { IoArrowForwardOutline } from "react-icons/io5";
+import { IoArrowForwardOutline, IoPricetagOutline } from "react-icons/io5";
 import Skeleton from "react-loading-skeleton";
 import { CiBoxList, CiSearch } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
-import { setDataBookPelni, setisOkBalancePelni } from "../../features/createSlice";
+import {
+  setDataBookPelni,
+  setisOkBalancePelni,
+} from "../../features/createSlice";
 import { callbackFetchData } from "../../features/callBackSlice";
 import { AiOutlineClockCircle } from "react-icons/ai";
+import { toRupiah } from "../../helpers/rupiah";
 
 export default function BookingPelni() {
-  
   const dataSearch = useSelector((state) => state.bookpelni.searchDataPelni);
   const dispatch = useDispatch();
 
@@ -325,13 +328,11 @@ export default function BookingPelni() {
 
     if (response.data.rc !== "00") {
       if (response.data.rc === "11") {
-
         setIsLoading(false);
         setmanyRequestBook(true);
       }
       failedNotification(response.data.rd);
     } else {
-
       const data = response.data.data;
       const infobooking = await axios.post(
         `${process.env.REACT_APP_HOST_API}/travel/pelni/book_info`,
@@ -344,7 +345,6 @@ export default function BookingPelni() {
         failedNotification(infobooking.data.rd);
         setIsLoading(false);
       } else {
-
         const idtrx = data.transactionId;
         const allowPayment = data.is_allowed_pay;
         const resps = {
@@ -354,23 +354,22 @@ export default function BookingPelni() {
           transactionId: data.transactionId,
           book: response,
           infobooking: infobooking,
-        }
+        };
 
         dispatch(setDataBookPelni(resps));
         dispatch(setisOkBalancePelni(allowPayment));
 
         //set data callback
-        dispatch(callbackFetchData({ type: 'pelni', id_transaksi:idtrx  }));
-          
+        dispatch(callbackFetchData({ type: "pelni", id_transaksi: idtrx }));
+
         if (response.data.callback === null) {
           navigate(`/pelni/payment`);
-          
-        } else { //loloskan aja njir
+        } else {
+          //loloskan aja njir
           navigate(`/pelni/payment`);
         }
 
         setIsLoading(false);
-
       }
     }
 
@@ -518,10 +517,9 @@ export default function BookingPelni() {
     if (selectedRows.length > 0) {
       const selectedPassenger = selectedRows[0];
       setSelectedPassenger(selectedPassenger);
-      handleOkListPenumpang(selectedPassenger); 
+      handleOkListPenumpang(selectedPassenger);
     }
   };
-
 
   const disabledDate = (current, e, i) => {
     const twoYearsAgo = dayjs().subtract(2, "year");
@@ -644,25 +642,25 @@ export default function BookingPelni() {
                 <>
                   <div>
                     <div className="w-full flex justify-end mt-6">
-                          <Input
-                            className="w-1/2 mt-2 mb-4"
-                            prefix={<CiSearch />}
-                            placeholder="Searching...."
-                            onChange={(e) => searchIdpelHistory(e.target.value)}
-                            size="middle"
-                          />
-                      </div>
+                      <Input
+                        className="w-1/2 mt-2 mb-4"
+                        prefix={<CiSearch />}
+                        placeholder="Searching...."
+                        onChange={(e) => searchIdpelHistory(e.target.value)}
+                        size="middle"
+                      />
+                    </div>
                     <Table
                       onRow={(record) => ({
                         onClick: () => {
                           handleRowSelectionChange([record.key], [record]); // Trigger selection manually
                         },
-                        style:{cursor: 'pointer'}
+                        style: { cursor: "pointer" },
                       })}
                       expandable={{
                         expandedRowRender: (record) => (
                           <>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-8">
+                            <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 ml-8">
                               <div className="my-2">
                                 <p style={{ margin: 0 }} className="text-xs">
                                   <strong>NIK:</strong> {record.nik}
@@ -671,7 +669,11 @@ export default function BookingPelni() {
                               <div className="my-2">
                                 <p style={{ margin: 0 }} className="text-xs">
                                   <strong>Nomor HP:</strong>
-                                  <div>{record.hp && record.hp !== "" ? record.hp : "-"}</div>
+                                  <div>
+                                    {record.hp && record.hp !== ""
+                                      ? record.hp
+                                      : "-"}
+                                  </div>
                                 </p>
                               </div>
                               <div className="my-2">
@@ -680,7 +682,7 @@ export default function BookingPelni() {
                                   {dayjs(record.ttl).format("DD/MM/YYYY")}
                                 </p>
                               </div>
-                            </div> 
+                            </div>
                           </>
                         ),
                       }}
@@ -696,22 +698,17 @@ export default function BookingPelni() {
 
             <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
               <div className="hidden xl:flex space-x-2 items-center ">
-              <AiOutlineClockCircle size={20} className="" />
-              <div className="hidden xl:flex font-medium ">
-                Detail pesanan
-              </div>
+                <AiOutlineClockCircle size={20} className="" />
+                <div className="hidden xl:flex font-medium ">
+                  Detail pesanan
+                </div>
               </div>
               <div>
-                <MdHorizontalRule
-                  size={20}
-                  className="hidden xl:flex "
-                />
+                <MdHorizontalRule size={20} className="hidden xl:flex " />
               </div>
               <div className="hidden xl:flex space-x-2 items-center">
                 <RxCrossCircled size={20} className="" />
-                <div className="hidden xl:block ">
-                  Pembayaran tiket
-                </div>
+                <div className="hidden xl:block ">Pembayaran tiket</div>
               </div>
               {/* <div>
             <MdHorizontalRule
@@ -733,8 +730,8 @@ export default function BookingPelni() {
               </>
             ) : (
               <>
-                {/* sidebar mobile kai*/}
-                <div className="mt-0 md:mt-8 block xl:hidden w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
+                {/* sidebar mobile pelni*/}
+                <div className="mt-0 xl:mt-8 block xl:hidden w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
                   <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                     <div className="text-black font-medium ">
                       Keberangkatan Kapal
@@ -799,6 +796,25 @@ export default function BookingPelni() {
                       </li>
                     </ol>
                   </div>
+                </div>
+                {/* for mobile */}
+                <div className="flex xl:hidden justify-between items-center mb-4 border-b px-2 py-4">
+                  <div className="flex space-x-2 items-center text-gry-400 text-sm ">
+                    <IoPricetagOutline className="text-gray-500" size={18} />
+                    <div className="text-gray-500">Harga Dewasa</div>
+                  </div>
+                  <small className="text-sm font-medium">
+                    Rp. {toRupiah(dataDetailPelni.harga_dewasa)}
+                  </small>
+                </div>
+                <div className="flex xl:hidden justify-between items-center mb-4 border-b px-2 py-4">
+                  <div className="flex space-x-2 items-center text-gry-400 text-sm ">
+                    <IoPricetagOutline className="text-gray-500" size={18} />
+                    <div className="text-gray-500">Harga Infant</div>
+                  </div>
+                  <small className="text-sm font-medium">
+                    Rp. {toRupiah(dataDetailPelni.harga_infant)}
+                  </small>
                 </div>
                 <div className="w-full mb-24 block xl:flex xl:space-x-10">
                   {/* detail passengger kai*/}
@@ -1534,7 +1550,7 @@ export default function BookingPelni() {
                     </div>
                   </Form>
                   {/* sidebar desktop*/}
-                  <div className="w-full md:w-2/3 2xl:w-1/2 xl:mt-12">
+                  <div className="w-full xl:w-2/3 2xl:w-1/2 xl:mt-12">
                     <div className="hidden xl:block rounded-md border border-gray-200 shadow-sm">
                       <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                         <div className="text-black text-sm font-medium ">
@@ -1610,6 +1626,31 @@ export default function BookingPelni() {
                           </li>
                         </ol>
                       </div>
+                    </div>
+                    {/* for desktop */}
+                    <div className="mt-4 hidden xl:flex justify-between items-center mb-4 px-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-black-500 border-b-gray-100">
+                      <div className="flex space-x-2 items-center text-gry-400 text-sm ">
+                        <IoPricetagOutline
+                          className="text-gray-500"
+                          size={18}
+                        />
+                        <div className="text-gray-500">Harga Dewasa</div>
+                      </div>
+                      <small className="text-sm font-medium">
+                        Rp. {toRupiah(dataDetailPelni.harga_dewasa)}
+                      </small>
+                    </div>
+                    <div className="hidden xl:flex justify-between items-center mb-4 px-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-black-500 border-b-gray-100">
+                      <div className="flex space-x-2 items-center text-gry-400 text-sm ">
+                        <IoPricetagOutline
+                          className="text-gray-500"
+                          size={18}
+                        />
+                        <div className="text-gray-500">Harga Infant</div>
+                      </div>
+                      <small className="text-sm font-medium">
+                        Rp. {toRupiah(dataDetailPelni.harga_infant)}
+                      </small>
                     </div>
                   </div>
                 </div>

@@ -28,7 +28,7 @@ export default function Layout({ children }) {
         <div>
           <main>{children}</main>
         </div>
-        <div className="relative block md:hidden z-10 shadow-xl">
+        <div className="relative block xl:hidden z-10 shadow-xl">
           <Box
             sx={{ width: "100%", position: "fixed", bottom: 0 }}
             elevation={3}

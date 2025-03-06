@@ -10,13 +10,6 @@ export default function BookingLayout({ children }) {
           <main>{children}</main>
         </div>
       </div>
-      {/* <footer className="border-t text-sm text-black py-6">
-        <div className="container mx-auto">
-          <p className="text-center">
-            © 2015-2023 rajabiller.com. All rights reserved.
-          </p>
-        </div>
-      </footer> */}
     </div>
   );
 }

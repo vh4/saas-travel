@@ -11,7 +11,7 @@ export default function LanjutPembayaran(){
 
     return(
         <>
-            <div className="block md:hidden">
+            <div className="block xl:hidden">
                 <HeaderTemplateMobile type={'lanjut_bayar'}>
                     <div className="container">
                         <div className="w-full px-4"> 

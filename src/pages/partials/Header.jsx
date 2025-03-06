@@ -42,7 +42,6 @@ export default function Header() {
 
   const type = useSelector((state) => state.type.data.type);
 
-
   const onReset = () => {
     form.resetFields();
   };
@@ -53,7 +52,7 @@ export default function Header() {
     : "";
 
   const [custom, setCustom] = useState(false);
-  const list = ['/', '/pesawat', '/kereta', '/pelni']
+  const list = ["/", "/pesawat", "/kereta", "/pelni"];
 
   useEffect(() => {
     if (list.includes(location.pathname)) {
@@ -152,7 +151,6 @@ export default function Header() {
 
   const userProfile = async () => {
     try {
-
       const response = await axios.post(
         `${process.env.REACT_APP_HOST_API}/travel/app/account`,
         {
@@ -170,11 +168,8 @@ export default function Header() {
           })
         );
       }
-      
     } catch (error) {
-
       console.log(error);
-      
     }
   };
 
@@ -192,7 +187,7 @@ export default function Header() {
           ),
         }
       );
-  
+
       if (response.data.data && response.data.data.rc == "00") {
         localStorage.setItem(
           "expired_date",
@@ -200,7 +195,7 @@ export default function Header() {
         );
       }
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
   };
 
@@ -327,7 +322,7 @@ export default function Header() {
         ref={navRef}
         style={{
           backgroundColor:
-          customLayout?.color?.primary?.background || "#0f172a",
+            customLayout?.color?.primary?.background || "#0f172a",
           color: customLayout?.color?.primary?.font_color || "#ffff",
         }}
         className="px-2 sm:px-4 py-0 xl:py-4"
@@ -336,8 +331,8 @@ export default function Header() {
         <div className="container mx-auto">
           <div
             className={`flex justify-between items-center ${
-              localStorage.getItem("hdrs_c") == "false" && "py-0 md:py-2"
-            } -mx-2 md:-mx-10 lg:-mx-0 -px-0 md:px-8 xl:px-24 no-underline`}
+              localStorage.getItem("hdrs_c") == "false" && "py-0 xl:py-2"
+            } -mx-2 -px-0 xl:px-24 no-underline`}
           >
             <div className="">
               {/* <Link to="/" className="flex items-center cursor-pointer no-underline"> */}
@@ -366,7 +361,7 @@ export default function Header() {
                         ? "#0f172a"
                         : customLayout?.color?.primary?.font_color || "#ffff",
                     }}
-                    className="hidden md:flex cursor-pointer space-x-2 text-sm items-center"
+                    className="hidden xl:flex cursor-pointer space-x-2 text-sm items-center"
                   >
                     <AiOutlineHome
                       style={{
@@ -393,13 +388,19 @@ export default function Header() {
               {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
                 <div>
                   <Link
-                    to={`/transaksi/${type == 'auth' ? 'pesawat' : type == 'kereta' ? 'kai' : type}`}
+                    to={`/transaksi/${
+                      type == "auth"
+                        ? "pesawat"
+                        : type == "kereta"
+                        ? "kai"
+                        : type
+                    }`}
                     style={{
                       color: custom
                         ? "#0f172a"
                         : customLayout?.color?.primary?.font_color || "#ffff",
                     }}
-                    className="hidden md:flex cursor-pointer space-x-2 text-sm items-center"
+                    className="hidden xl:flex cursor-pointer space-x-2 text-sm items-center"
                   >
                     <AiOutlineAppstore
                       style={{
@@ -430,7 +431,7 @@ export default function Header() {
                     style={{
                       color: custom ? '#0f172a' : customLayout?.color?.primary?.font_color || '#ffff',
                     }}
-                    className="hidden md:flex cursor-pointer space-x-2 text-sm items-center"
+                    className="hidden xl:flex cursor-pointer space-x-2 text-sm items-center"
                   >
                     <BsClockHistory
                       style={{
@@ -452,7 +453,7 @@ export default function Header() {
               {/* {localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API) ? (
                 <Link
                   to="/booking/pesawat"
-                  className="hidden md:flex  cursor-pointer space-x-2 text-sm items-center text-black"
+                  className="hidden xl:flex  cursor-pointer space-x-2 text-sm items-center text-black"
                 >
                   <FaListAlt className="text-red-500" size={18} />
                   <div className="text-[15px] text-black">Booking</div>
@@ -509,7 +510,7 @@ export default function Header() {
                       color:
                         customLayout?.color?.primary?.font_color || "#ffff",
                     }}
-                    className="hidden relative group space-x-2 md:cursor-pointer font-medium rounded-lg text-sm px-5 md:px-2 md:inline-flex group-hover:block items-end ml-2 mb-2"
+                    className="hidden relative group space-x-2 xl:cursor-pointer font-medium rounded-lg text-sm px-5 xl:px-2 xl:inline-flex group-hover:block items-end ml-2 mb-2"
                   >
                     {localStorage.getItem("hdrs_c") != "false" && (
                       <>
@@ -600,7 +601,7 @@ export default function Header() {
                 //     padding: "1rem 1rem",
                 //     fontSize: "0.875rem",
                 //   }}
-                //   className="md:mr-0 inline-flex items-center md:hidden focus:outline-none"
+                //   className="xl:mr-0 inline-flex items-center xl:hidden focus:outline-none"
                 //   aria-controls="navbar-sticky"
                 //   aria-expanded="false"
                 // >
@@ -626,7 +627,7 @@ export default function Header() {
                 <>
                   {/* <div className="pr-4 py-3">
                     <Button
-                      className="flex items-center px-8 py-4  md:hidden"
+                      className="flex items-center px-8 py-4  xl:hidden"
                       style={{
                         color: custom
                           ? "#0f172a"
@@ -652,7 +653,7 @@ export default function Header() {
               closable={true}
               onClose={onCloseDrawer}
               visible={isDrawerOpen}
-              bodyStyle={customStyle} 
+              bodyStyle={customStyle}
             >
               <div style={{ textAlign: "center" }}>
                 <Avatar size={64} icon={<UserOutlined />} />

@@ -1,4 +1,9 @@
-import { Popper, Slide, SwipeableDrawer, Button as ButtonMui } from "@mui/material";
+import {
+  Popper,
+  Slide,
+  SwipeableDrawer,
+  Button as ButtonMui,
+} from "@mui/material";
 import * as React from "react";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
@@ -12,7 +17,6 @@ import { Button, message, Tooltip } from "antd";
 import Cookies from "js-cookie";
 import { Modal, Placeholder } from "rsuite";
 import { CheckboxGroup, Checkbox } from "rsuite";
-import { SearchOutlined } from "@ant-design/icons";
 import { AiOutlineSwap } from "react-icons/ai";
 import { InputGroup } from "rsuite";
 import dayjs from "dayjs";
@@ -26,13 +30,12 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { HolidaysContext } from "../../App";
 import { CiCalendarDate } from "react-icons/ci";
 import { DateCalendar, DayCalendarSkeleton } from "@mui/x-date-pickers";
-import { Calendar } from 'react-multi-date-picker';
-import 'dayjs/locale/id'; // mengimpor locale Bahasa Indonesia
+import { Calendar } from "react-multi-date-picker";
+import "dayjs/locale/id"; // mengimpor locale Bahasa Indonesia
 import MaskapaiMobile from "../plane/components/MaskapaiMobile";
 import { LuUsers } from "react-icons/lu";
 
-
-dayjs.locale('id'); // mengatur locale global ke Bahasa Indonesia
+dayjs.locale("id"); // mengatur locale global ke Bahasa Indonesia
 
 function Plane() {
   const styleDesktop = {
@@ -51,7 +54,7 @@ function Plane() {
     position: "absolute",
     left: "50%",
     top: "50%",
-    borderRadius:5,
+    borderRadius: 5,
     width: 350,
     bgcolor: "background.paper",
     transform: "translate(-50%, -50%)",
@@ -63,19 +66,20 @@ function Plane() {
   const [anchorEl, setAnchorEl] = React.useState("hidden");
 
   const [openDrawer, setOpenDrawer] = useState(false);
-  const toggleDrawer = (newOpen, cancel = false, type="cancel") => () => {
-    setOpenDrawer(newOpen);
-    if(type ==='simpan'){
-        setadult(adultTemp)
-        setChild(childTemp)
-        setinfant(infantTemp)
-    }
-    else if(type ==='buka'){
-      setadultTemp(adult)
-      setChildTemp(child)
-      setinfantTemp(infant)
-  }
-  };
+  const toggleDrawer =
+    (newOpen, cancel = false, type = "cancel") =>
+    () => {
+      setOpenDrawer(newOpen);
+      if (type === "simpan") {
+        setadult(adultTemp);
+        setChild(childTemp);
+        setinfant(infantTemp);
+      } else if (type === "buka") {
+        setadultTemp(adult);
+        setChildTemp(child);
+        setinfantTemp(infant);
+      }
+    };
 
   const [open, setOpen] = React.useState(false);
   const [size, setSize] = React.useState();
@@ -91,7 +95,6 @@ function Plane() {
   const currentDate = dayjs();
   const aheadDate = dayjs().add(5 * 12, "months");
 
-
   const findHolidayDescriptionsForMonth = (date) => {
     const month = date.month(); // Bulan dari tanggal yang sedang dilihat
     const year = date.year(); // Bulan dari tanggal yang sedang dilihat
@@ -104,31 +107,31 @@ function Plane() {
     return holidaysInMonth.map((holiday) => holiday);
   };
 
-
-  const [currentViewDateDesktop, setCurrentViewDateDesktop] = useState(dayjs().format('YYYY-MM'));
-
+  const [currentViewDateDesktop, setCurrentViewDateDesktop] = useState(
+    dayjs().format("YYYY-MM")
+  );
 
   const findHolidayDescriptionsForMonthDesktop = (date) => {
     const startDate = dayjs(date);
     const monthStart = startDate.month();
     const year = startDate.year();
-  
+
     // Tambahkan 1 bulan ke startDate untuk mendapatkan bulan kedua dalam rentang
-    const endDate = startDate.add(1, 'month');
+    const endDate = startDate.add(1, "month");
     const monthEnd = endDate.month();
-  
-    const holidaysInMonth = holidays.filter(
-      (holiday) => {
-        const holidayMonth = dayjs(holiday.start).month();
-        const holidayYear = dayjs(holiday.start).year();
-  
-        // Cek jika liburan berada dalam rentang dua bulan dan tahun yang sama
-        return ((holidayMonth === monthStart || holidayMonth === monthEnd) && holidayYear === year);
-      }
-    );
-  
+
+    const holidaysInMonth = holidays.filter((holiday) => {
+      const holidayMonth = dayjs(holiday.start).month();
+      const holidayYear = dayjs(holiday.start).year();
+
+      // Cek jika liburan berada dalam rentang dua bulan dan tahun yang sama
+      return (
+        (holidayMonth === monthStart || holidayMonth === monthEnd) &&
+        holidayYear === year
+      );
+    });
+
     return holidaysInMonth;
-    
   };
 
   function CustomDay(props) {
@@ -439,7 +442,6 @@ function Plane() {
     );
   };
 
-  
   function plusAdult(e) {
     e.preventDefault();
     if (adultTemp >= 7) {
@@ -508,7 +510,7 @@ function Plane() {
     } else {
       setChildTemp(parseInt(childTemp) - 1);
     }
-  } 
+  }
 
   function addLeadingZero(num) {
     if (num < 10) {
@@ -517,7 +519,6 @@ function Plane() {
       return "" + num;
     }
   }
-
 
   async function getPesawatDataStasiun() {
     try {
@@ -530,9 +531,8 @@ function Plane() {
           product: "PESAWAT",
         }
       );
-  
-      setpesawatStasiun(response.data);
 
+      setpesawatStasiun(response.data);
     } catch (error) {
       setpesawatStasiun([]);
       console.log(error);
@@ -616,8 +616,6 @@ function Plane() {
         }
 
         window.location = `/flight/search?${str}`;
-        
-        
       }
     }, 1000);
   }
@@ -642,10 +640,10 @@ function Plane() {
           ) : (
             <>
               <div className="container">
-                <div className="grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-0 md:gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-0 xl:gap-6">
                   <div className="">
                     <Checkbox
-                      className="block -ml-2.5 md:-ml-0"
+                      className="block -ml-2.5 xl:-ml-0"
                       checked={isSelectAll}
                       onChange={toggleSelectAll}
                     >
@@ -681,7 +679,7 @@ function Plane() {
 
       {/* desktop */}
       <ModalMui
-        className="hidden md:block"
+        className="hidden xl:block"
         open={openDate}
         onClose={handleCloseDate}
         aria-labelledby="modal-modal-title"
@@ -720,23 +718,36 @@ function Plane() {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <Calendar
                   value={tanggalKeberangkatan}
-                  onChange={(e) => {setTanggalKeberangkatan(dayjs(e)); handleCloseDate()}}
+                  onChange={(e) => {
+                    setTanggalKeberangkatan(dayjs(e));
+                    handleCloseDate();
+                  }}
                   onMonthChange={(newViewDate) => {
-                    setCurrentViewDateDesktop(dayjs(newViewDate).format('YYYY-MM'));
+                    setCurrentViewDateDesktop(
+                      dayjs(newViewDate).format("YYYY-MM")
+                    );
                   }}
                   format={"YYYY/MM/DD"}
                   numberOfMonths={2}
                   mapDays={({ date }) => {
                     const dayjsDate = dayjs(date);
-            
+
                     const isSunday = dayjsDate.day() === 0;
-                    const isHoliday = holidays.some(holiday => dayjsDate.format("YYYY-MM-DD") === holiday.start);
-            
+                    const isHoliday = holidays.some(
+                      (holiday) =>
+                        dayjsDate.format("YYYY-MM-DD") === holiday.start
+                    );
+
                     if (isSunday || isHoliday) {
                       return {
                         className: "specialDay",
                         style: { color: "red", boxShadow: "none" }, // Sesuaikan dengan kebutuhan
-                        title: isHoliday ? holidays.find(holiday => dayjsDate.format("YYYY-MM-DD") === holiday.start).summary : "Sunday",
+                        title: isHoliday
+                          ? holidays.find(
+                              (holiday) =>
+                                dayjsDate.format("YYYY-MM-DD") === holiday.start
+                            ).summary
+                          : "Sunday",
                       };
                     }
                   }}
@@ -750,22 +761,25 @@ function Plane() {
             style={{ overflowX: "scroll", display: "flex", gap: "8px" }}
             className="hidennscroll mt-2 z-50"
           >
-            {findHolidayDescriptionsForMonthDesktop(currentViewDateDesktop)?.map(
-              (e, index) => (
-                <div
-                  key={index}
-                  className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50"
+            {findHolidayDescriptionsForMonthDesktop(
+              currentViewDateDesktop
+            )?.map((e, index) => (
+              <div
+                key={index}
+                className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50"
+              >
+                <Typography
+                  variant="caption"
+                  display="block"
+                  style={{ fontSize: "10px" }}
                 >
-                  <Typography
-                    variant="caption"
-                    display="block"
-                    style={{ fontSize: "10px" }}
-                  >
-                    <span className="text-red-500">{dayjs(e.start).format("DD MMM")}</span>. {e.summary}
-                  </Typography>
-                </div>
-              )
-            )}
+                  <span className="text-red-500">
+                    {dayjs(e.start).format("DD MMM")}
+                  </span>
+                  . {e.summary}
+                </Typography>
+              </div>
+            ))}
           </div>
         </Box>
         {/* mobile */}
@@ -773,7 +787,7 @@ function Plane() {
 
       {/* mobile */}
       <ModalMui
-        className="block md:hidden"
+        className="block xl:hidden"
         open={openDate}
         onClose={handleCloseDate}
         aria-labelledby="modal-modal-title"
@@ -843,7 +857,10 @@ function Plane() {
                       display="block"
                       style={{ fontSize: "10px" }}
                     >
-                    <span className="text-red-500">{dayjs(e.start).format("DD MMM")}</span>. {e.summary}
+                      <span className="text-red-500">
+                        {dayjs(e.start).format("DD MMM")}
+                      </span>
+                      . {e.summary}
                     </Typography>
                   </div>
                 )
@@ -861,9 +878,9 @@ function Plane() {
               <div className="w-64 xl:w-48 mx-0"></div>
               <div className="block xl:flex justify-between">
                 <div
-                  className={`grid grid-cols-1 lg:grid-cols-5 xl:grid-cols-5 gap-2 mx-0 xl:mx-4`}
+                  className={`grid grid-cols-1 xl:grid-cols-4 gap-2 mx-0 xl:mx-4`}
                 >
-                  <div class="w-full mt-1.5 pl-2 md:pl-0 mx-0">
+                  {/* <div class="w-full mt-1.5 pl-2 xl:pl-0 mx-0">
                     <small className="mb-2 text-black hidden xl:block">Pilih Maskapai</small>
                     <Tooltip>
                       <Button
@@ -877,9 +894,9 @@ function Plane() {
                         List Maskapai
                       </Button>
                     </Tooltip>
-                  </div>
+                  </div> */}
                   {/* web maskapai */}
-                  <div className="mt-2 w-full col-span-1 md:col-span-2 hidden xl:block">
+                  <div className="mt-2 w-full col-span-1 xl:col-span-2 hidden xl:block">
                     <div className="w-full flex flex-col xl:flex-row items-center xl:px-0 gap-0">
                       {/* Dari */}
                       <div className="w-full max-w-full">
@@ -898,16 +915,27 @@ function Plane() {
                             renderTags={(value, getTagProps) => (
                               <div style={{ width: "90%" }}>
                                 {value.map((option, index) => (
-                                  <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                                  <Chip
+                                    variant="outlined"
+                                    label={option}
+                                    {...getTagProps({ index })}
+                                  />
                                 ))}
                               </div>
                             )}
-                            isOptionEqualToValue={(option, value) => option.title === value.title}
-                            getOptionLabel={(option) => `${option.bandara} - ${option.name} - ${option.code}`}
+                            isOptionEqualToValue={(option, value) =>
+                              option.title === value.title
+                            }
+                            getOptionLabel={(option) =>
+                              `${option.bandara} - ${option.name} - ${option.code}`
+                            }
                             options={pesawatData}
                             value={keberangkatan}
                             onChange={(event, newValue) => {
-                              if (newValue == tujuan || newValue?.code == tujuan?.code) {
+                              if (
+                                newValue == tujuan ||
+                                newValue?.code == tujuan?.code
+                              ) {
                                 errorBerangkat();
                                 setKeberangkatan(keberangkatan);
                               } else {
@@ -920,11 +948,18 @@ function Plane() {
                                 {...params}
                                 InputProps={{
                                   ...params.InputProps,
-                                  startAdornment: <FaPlaneDeparture className="text-gray-400" />,
+                                  startAdornment: (
+                                    <FaPlaneDeparture className="text-gray-400" />
+                                  ),
                                   placeholder: "Asal",
                                   endAdornment: (
                                     <>
-                                      {loadingBerangkat ? <CircularProgress color="inherit" size={20} /> : null}
+                                      {loadingBerangkat ? (
+                                        <CircularProgress
+                                          color="inherit"
+                                          size={20}
+                                        />
+                                      ) : null}
                                       {params.InputProps.endAdornment}
                                     </>
                                   ),
@@ -939,14 +974,16 @@ function Plane() {
                       <div
                         onClick={changeStatiun}
                         className="w-8 h-8 cursor-pointer flex justify-center mt-2 xl:mt-6 items-center bg-blue-500 rounded-full p-1 flex-shrink-0"
-                        >
+                      >
                         <AiOutlineSwap className="text-white w-6 h-6" />
                       </div>
 
                       {/* Tujuan */}
                       <div className="w-full max-w-sm">
                         <div className="m-2 xl:m-0 pr-0 xl:pr-0">
-                          <small className="block mb-2 text-black">Tujuan</small>
+                          <small className="block mb-2 text-black">
+                            Tujuan
+                          </small>
                           <Autocomplete
                             classes={classes}
                             className="mt-1.5 w-full"
@@ -959,16 +996,27 @@ function Plane() {
                             renderTags={(value, getTagProps) => (
                               <div style={{ width: "90%" }}>
                                 {value.map((option, index) => (
-                                  <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                                  <Chip
+                                    variant="outlined"
+                                    label={option}
+                                    {...getTagProps({ index })}
+                                  />
                                 ))}
                               </div>
                             )}
-                            isOptionEqualToValue={(option, value) => option.title === value.title}
-                            getOptionLabel={(option) => `${option.bandara} - ${option.name} - ${option.code}`}
+                            isOptionEqualToValue={(option, value) =>
+                              option.title === value.title
+                            }
+                            getOptionLabel={(option) =>
+                              `${option.bandara} - ${option.name} - ${option.code}`
+                            }
                             options={pesawatData}
                             value={tujuan}
                             onChange={(event, newValue) => {
-                              if (keberangkatan == newValue || keberangkatan?.code == newValue?.code) {
+                              if (
+                                keberangkatan == newValue ||
+                                keberangkatan?.code == newValue?.code
+                              ) {
                                 errorTujuan();
                                 setTujuan(tujuan);
                               } else {
@@ -981,11 +1029,18 @@ function Plane() {
                                 {...params}
                                 InputProps={{
                                   ...params.InputProps,
-                                  startAdornment: <FaPlaneArrival className="text-gray-400" />,
+                                  startAdornment: (
+                                    <FaPlaneArrival className="text-gray-400" />
+                                  ),
                                   placeholder: "Tujuan",
                                   endAdornment: (
                                     <>
-                                      {loadingTujuan ? <CircularProgress color="inherit" size={20} /> : null}
+                                      {loadingTujuan ? (
+                                        <CircularProgress
+                                          color="inherit"
+                                          size={20}
+                                        />
+                                      ) : null}
                                       {params.InputProps.endAdornment}
                                     </>
                                   ),
@@ -1000,9 +1055,9 @@ function Plane() {
 
                   {/* mobile maskapai */}
                   <div className="block xl:hidden">
-                    <MaskapaiMobile 
+                    <MaskapaiMobile
                       pesawatData={pesawatStasiun.data || []}
-                      keberangkatan={keberangkatan}     
+                      keberangkatan={keberangkatan}
                       setKeberangkatan={setKeberangkatan}
                       setTujuan={setTujuan}
                       tujuan={tujuan}
@@ -1027,48 +1082,128 @@ function Plane() {
                   </FormControl>
                   <FormControl sx={{ m: 1, minWidth: 130 }}>
                     <small className="mb-2 text-black">Total Penumpang</small>
-                    <div className="hidden md:block"></div>
+                    <div className="hidden xl:block"></div>
                     {/* customButtonStyle */}
                     <div
                       className="cursor-pointer border py-[11px] px-2 w-full text-black flex items-center space-x-2"
                       onClick={toggleDrawer(true, false, "buka")}
                     >
-                        <LuUsers size={21} className="text-gray-400"  />
+                      <LuUsers size={21} className="text-gray-400" />
                       <div>
-                        {`${parseInt(adult) + parseInt(infant) + parseInt(child)} Penumpang`}                          
+                        {`${
+                          parseInt(adult) + parseInt(infant) + parseInt(child)
+                        } Penumpang`}
                       </div>
                     </div>
-                    <SwipeableDrawer anchor="bottom" PaperProps={{ sx: { borderTopLeftRadius: 30, borderTopRightRadius: 30 } }} open={openDrawer} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
+                    <SwipeableDrawer
+                      anchor="bottom"
+                      PaperProps={{
+                        sx: {
+                          borderTopLeftRadius: 30,
+                          borderTopRightRadius: 30,
+                        },
+                      }}
+                      open={openDrawer}
+                      onClose={toggleDrawer(false)}
+                      onOpen={toggleDrawer(true)}
+                    >
                       <div className="p-4 mt-2 xl:container xl:px-64">
-                        
-                        <h2 className="text-lg font-semibold py-4">Pilih Jumlah Penumpang</h2>
-                        {[{ label: "ADULT", age: "(12 thn keatas)", value: adultTemp, setValue: setadultTemp, min: 1, max:7, plus:plusAdult, minus:minusAdult },
-                          { label: "CHILD", age: "(2 - 11 thn)", value: childTemp, setValue: setChildTemp, min: 0, max:7, plus:plusChild, minus:minusChild },
-                          { label: "INFANT", age: "(dibawah 2 thn)", value: infantTemp, setValue: setinfantTemp, min: 0, max:7, plus:plusInfant, minus:minusInfant }]
-                          .map(({ label, age, value, setValue, min, max, plus, minus }) => (
+                        <h2 className="text-lg font-semibold py-4">
+                          Pilih Jumlah Penumpang
+                        </h2>
+                        {[
+                          {
+                            label: "ADULT",
+                            age: "(12 thn keatas)",
+                            value: adultTemp,
+                            setValue: setadultTemp,
+                            min: 1,
+                            max: 7,
+                            plus: plusAdult,
+                            minus: minusAdult,
+                          },
+                          {
+                            label: "CHILD",
+                            age: "(2 - 11 thn)",
+                            value: childTemp,
+                            setValue: setChildTemp,
+                            min: 0,
+                            max: 7,
+                            plus: plusChild,
+                            minus: minusChild,
+                          },
+                          {
+                            label: "INFANT",
+                            age: "(dibawah 2 thn)",
+                            value: infantTemp,
+                            setValue: setinfantTemp,
+                            min: 0,
+                            max: 7,
+                            plus: plusInfant,
+                            minus: minusInfant,
+                          },
+                        ].map(
+                          ({
+                            label,
+                            age,
+                            value,
+                            setValue,
+                            min,
+                            max,
+                            plus,
+                            minus,
+                          }) => (
                             <div key={label} className="mt-4 px-4 py-1">
                               <div className="grid grid-cols-12">
                                 <div className="col-span-8">
                                   <div className="flex items-center space-x-2">
-                                    <div className="font-bold text-gray-800">{label}</div>
-                                    <div className="text-xs text-gray-400">{age}</div>
+                                    <div className="font-bold text-gray-800">
+                                      {label}
+                                    </div>
+                                    <div className="text-xs text-gray-400">
+                                      {age}
+                                    </div>
                                   </div>
                                 </div>
                                 <div className="col-span-4">
                                   <InputGroup>
-                                    <InputGroup.Button onClick={minus}>-</InputGroup.Button>
-                                    <input type="number" min={min} max={max} className="block text-center w-full focus:outline-0" value={value} readOnly />
-                                    <InputGroup.Button className="bg-gray-300 text-black hover:bg-blue-500 hover:text-white" onClick={plus}>+</InputGroup.Button>
+                                    <InputGroup.Button onClick={minus}>
+                                      -
+                                    </InputGroup.Button>
+                                    <input
+                                      type="number"
+                                      min={min}
+                                      max={max}
+                                      className="block text-center w-full focus:outline-0"
+                                      value={value}
+                                      readOnly
+                                    />
+                                    <InputGroup.Button
+                                      className="bg-gray-300 text-black hover:bg-blue-500 hover:text-white"
+                                      onClick={plus}
+                                    >
+                                      +
+                                    </InputGroup.Button>
                                   </InputGroup>
                                 </div>
                               </div>
                             </div>
-                          ))}
+                          )
+                        )}
                         <div className="flex justify-end space-x-2 my-8 px-4">
-                          <ButtonMui className="w-32" variant="outlined" color="secondary" onClick={toggleDrawer(false)}>
+                          <ButtonMui
+                            className="w-32"
+                            variant="outlined"
+                            color="secondary"
+                            onClick={toggleDrawer(false)}
+                          >
                             Cancel
                           </ButtonMui>
-                          <ButtonMui className="w-52" variant="contained"  onClick={toggleDrawer(false, true, "simpan")}>
+                          <ButtonMui
+                            className="w-52"
+                            variant="contained"
+                            onClick={toggleDrawer(false, true, "simpan")}
+                          >
                             Simpan
                           </ButtonMui>
                         </div>
@@ -1082,7 +1217,7 @@ function Plane() {
                     size="large"
                     key="submit"
                     type="primary"
-                    className="bg-blue-500 mx-2 md:mx-0 font-semibold"
+                    className="bg-blue-500 mx-2 xl:mx-0 font-semibold"
                     loading={isLoading}
                     onClick={handlerCariPesawat}
                   >
@@ -1098,4 +1233,4 @@ function Plane() {
   );
 }
 
-export default Plane
+export default Plane;

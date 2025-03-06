@@ -25,13 +25,11 @@ export default function SidebarMobileUser() {
   const location = useLocation();
   // Get the last segment of the path
   let lastSegment = location.pathname.split("/").filter(Boolean).pop();
-      lastSegment = lastSegment == 'kai' ? 'kereta' : lastSegment;
+  lastSegment = lastSegment == "kai" ? "kereta" : lastSegment;
 
   useEffect(() => {
-
-        dispatch(fetchDataType());
-    
-      }, [dispatch, type]); //
+    dispatch(fetchDataType());
+  }, [dispatch, type]); //
 
   const suksesLogout = () => {
     api["success"]({

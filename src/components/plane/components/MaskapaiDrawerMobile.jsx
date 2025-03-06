@@ -1,11 +1,20 @@
 import { useState } from "react";
-import { Button, SwipeableDrawer } from "@mui/material";
+import { SwipeableDrawer } from "@mui/material";
 import PropTypes from "prop-types";
 import { BsSearch } from "react-icons/bs";
 import { FaPlaneDeparture } from "react-icons/fa";
 import { message } from "antd";
 
-const MaskapaiDrawerMobile = ({ openDrawer, toggleDrawer, pesawatData, setKeberangkatan, setTujuan, keberangkatan, tujuan, type }) => {
+const MaskapaiDrawerMobile = ({
+  openDrawer,
+  toggleDrawer,
+  pesawatData,
+  setKeberangkatan,
+  setTujuan,
+  keberangkatan,
+  tujuan,
+  type,
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -28,15 +37,18 @@ const MaskapaiDrawerMobile = ({ openDrawer, toggleDrawer, pesawatData, setKebera
       className: "custom-message",
     });
   };
-  
-  const filteredData = pesawatData.filter(e =>
-    e.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    e.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    e.bandara.toLowerCase().includes(searchTerm.toLowerCase())
+
+  const filteredData = pesawatData.filter(
+    (e) =>
+      e.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      e.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      e.bandara.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
-  const popularAirports = pesawatData.filter(e => ["CGK", "SUB", "DPS"].includes(e.code));
-  
+
+  const popularAirports = pesawatData.filter((e) =>
+    ["CGK", "SUB", "DPS"].includes(e.code)
+  );
+
   const handleSelect = (selected) => {
     if (type === "keberangkatan") {
       if (tujuan && selected.code === tujuan.code) {
@@ -53,7 +65,7 @@ const MaskapaiDrawerMobile = ({ openDrawer, toggleDrawer, pesawatData, setKebera
     }
     toggleDrawer(false);
   };
-  
+
   return (
     <SwipeableDrawer
       anchor="bottom"
@@ -68,29 +80,35 @@ const MaskapaiDrawerMobile = ({ openDrawer, toggleDrawer, pesawatData, setKebera
           <h4>Pilih Bandara</h4>
         </div>
         <div className="p-4 text-lg">
-			      <form className="flex items-center">
-              <div className="relative w-full rounded-2xl">
-                <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                  <BsSearch className="text-blue-500" size={20} />
-                </div>
-                <input
-                  type="text"
-                  className="bg-gray-100 border rounded-2xl border-gray-100 text-sm focus:ring-gray-100 focus:border-gray-100 outline-none block w-full pl-10 p-2.5"
-                  placeholder="Input nama bandara"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
+          <form className="flex items-center">
+            <div className="relative w-full rounded-2xl">
+              <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                <BsSearch className="text-blue-500" size={20} />
               </div>
-            </form>
+              <input
+                type="text"
+                className="bg-gray-100 border rounded-2xl border-gray-100 text-sm focus:ring-gray-100 focus:border-gray-100 outline-none block w-full pl-10 p-2.5"
+                placeholder="Input nama bandara"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </form>
           <div className="py-4 font-bold">Bandara Populer</div>
           {popularAirports.map((e, i) => (
-            <div key={i} className="card mt-2 mb-6" onClick={() => handleSelect(e)}>
+            <div
+              key={i}
+              className="card mt-2 mb-6"
+              onClick={() => handleSelect(e)}
+            >
               <div className="title flex space-x-4 items-start cursor-pointer">
                 <FaPlaneDeparture size={22} className="text-gray-400 mt-2" />
                 <div className="w-full">
                   <div className="flex justify-between items-center">
                     <div className="font-bold text-sm">{e.bandara}</div>
-                    <div className="py-2 px-4 bg-gray-100 text-xs">{e.code}</div>
+                    <div className="py-2 px-4 bg-gray-100 text-xs">
+                      {e.code}
+                    </div>
                   </div>
                   <div className="mt-2 text-xs">{e.name}</div>
                 </div>
@@ -99,13 +117,19 @@ const MaskapaiDrawerMobile = ({ openDrawer, toggleDrawer, pesawatData, setKebera
           ))}
           <div className="py-4 font-bold">Semua bandara</div>
           {filteredData.map((e, i) => (
-            <div key={i} className="card mt-2 mb-6" onClick={() => handleSelect(e)}>
+            <div
+              key={i}
+              className="card mt-2 mb-6"
+              onClick={() => handleSelect(e)}
+            >
               <div className="title flex space-x-4 items-start cursor-pointer">
                 <FaPlaneDeparture size={22} className="text-gray-400 mt-2" />
                 <div className="w-full">
                   <div className="flex justify-between items-center">
                     <div className="font-bold text-sm">{e.bandara}</div>
-                    <div className="py-2 px-4 bg-gray-100 text-xs">{e.code}</div>
+                    <div className="py-2 px-4 bg-gray-100 text-xs">
+                      {e.code}
+                    </div>
                   </div>
                   <div className="mt-2 text-xs">{e.name}</div>
                 </div>
