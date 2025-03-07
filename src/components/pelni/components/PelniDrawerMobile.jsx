@@ -111,7 +111,7 @@ const PelniDrawerMobile = ({
               </div>
             </div>
           ))}
-          <div className="py-4 font-bold">Semua Stasiub</div>
+          <div className="py-4 font-bold">Semua Stasiun</div>
           {filteredData.map((e, i) => (
             <div
               key={i}
