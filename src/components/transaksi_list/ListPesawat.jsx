@@ -577,7 +577,7 @@ export default function ViewTransaksi({ path }) {
                                     </div>
                                     <div className="flex space-x-2 items-center">
                                       <a
-                                        onClick={() => handleDetail(e, i)}
+                                        onClick={() => handleDetail(e)}
                                         className="cursor-pointer text-black text-xs hover:text-black"
                                       >
                                         Lanjut Bayar
