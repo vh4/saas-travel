@@ -21,9 +21,7 @@ import { PiTicketThin } from "react-icons/pi";
 export default function LayoutUser({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState("block");
   const location = useLocation();
-
   const { nav, setNav } = useContext(NavContext);
-
   const pathSidebar = location.pathname.toString();
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
@@ -31,16 +29,17 @@ export default function LayoutUser({ children }) {
 
   return (
     <div className="flex flex-col min-h-screen">
+      {/* Header */}
       <div className="hidden xl:block">
-          <Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
+        <Header toogleSidebar={setSidebarOpen} valueSidebar={sidebarOpen} />
       </div>
-      <div className="flex-grow xl:flex relative ml-0 xl:ml-16 xl:ml-0 2xl:ml-0 mt-4 xl:mt-0 xl:justify-center">
+
+      {/* Main Content */}
+      <div className="flex-grow xl:flex relative ml-0 mt-4 xl:mt-0 xl:justify-center w-full">
         {token === null || token === undefined ? (
           <></>
         ) : (
-          <div
-            className={`${sidebarOpen} w-full xl:w-1/2 xl:w-auto 2xl:w-auto xl:block xl:block 2xl:block`}
-          >
+          <div className={`${sidebarOpen} w-full xl:w-auto 2xl:w-auto xl:block`}>
             <Sidebar pathSidebar={pathSidebar} />
           </div>
         )}
@@ -48,60 +47,75 @@ export default function LayoutUser({ children }) {
         <div
           className={
             sidebarOpen === "block"
-              ? `container  px-0 w-full xl:w-1/2`
-              : "container px-0 w-full xl:w-1/2"
+              ? `w-full xl:w-1/2`
+              : "w-full xl:w-1/2"
           }
         >
-          <main className="">{children}</main>
+          <main className="w-full">{children}</main>
         </div>
       </div>
+
+      {/* Bottom Navigation */}
       <div className="text-black block xl:hidden z-10 bg-white shadow-lg">
-          <Box
-            sx={{ width: "100%", position: "fixed", bottom: 0 }}
-            elevation={3}
+        <Box sx={{ width: "100%", position: "fixed", bottom: 0 }} elevation={3}>
+          <BottomNavigation
+            sx={{ display: "flex", justifyContent: "around" }}
+            value={nav.isActive}
+            showLabels={false}
+            onChange={(event, newValue) => {
+              setNav({
+                type: "NAVIGATION",
+                isActive: newValue,
+              });
+            }}
           >
-            <BottomNavigation
-              sx={{ display: "flex", justifyContent: "around" }}
-              value={nav.isActive}
-              showLabels={false}
-              onChange={(event, newValue) => {
-                setNav({
-                  type: "NAVIGATION",
-                  isActive: newValue,
-                });
-              }}
-            >
-              <BottomNavigationAction
+            <BottomNavigationAction
               component={Link}
-              to='/'
-              icon={nav.isActive === 0 ?  <HiViewGridAdd className={"bg-blue-500 text-white p-1 rounded-full"} size={26} /> : <CiGrid42 size={26} />}
-              />
-              <BottomNavigationAction
-              component={Link}
-              to='/booking'
-              icon={nav.isActive === 1 ? <BsBookmarkCheckFill className={"bg-blue-500 text-white p-1 rounded-full"} size={26} /> : <CiBookmarkCheck size={26}/>}
+              to="/"
+              icon={
+                nav.isActive === 0 ? (
+                  <HiViewGridAdd className="bg-blue-500 text-white p-1 rounded-full" size={26} />
+                ) : (
+                  <CiGrid42 size={26} />
+                )
+              }
             />
             <BottomNavigationAction
-              to='/transaksi'
               component={Link}
-              icon={nav.isActive === 2 ? <HiTicket className={"bg-blue-500 text-white p-1 rounded-full"} size={26} /> : <PiTicketThin size={26} />}
+              to="/booking"
+              icon={
+                nav.isActive === 1 ? (
+                  <BsBookmarkCheckFill className="bg-blue-500 text-white p-1 rounded-full" size={26} />
+                ) : (
+                  <CiBookmarkCheck size={26} />
+                )
+              }
             />
-             <BottomNavigationAction
-              to='/profile'
+            <BottomNavigationAction
               component={Link}
-              icon={nav.isActive === 3 ?  <IoMdSettings className={"bg-blue-500 text-white p-1 rounded-full"} size={26} /> : <CiSettings size={26} />}
+              to="/transaksi"
+              icon={
+                nav.isActive === 2 ? (
+                  <HiTicket className="bg-blue-500 text-white p-1 rounded-full" size={26} />
+                ) : (
+                  <PiTicketThin size={26} />
+                )
+              }
             />
-            </BottomNavigation>
-          </Box>
+            <BottomNavigationAction
+              component={Link}
+              to="/profile"
+              icon={
+                nav.isActive === 3 ? (
+                  <IoMdSettings className="bg-blue-500 text-white p-1 rounded-full" size={26} />
+                ) : (
+                  <CiSettings size={26} />
+                )
+              }
+            />
+          </BottomNavigation>
+        </Box>
       </div>
-      {/* <Footer/> */}
-      {/* <footer className="hidden xl:block border-t text-sm text-black py-6">
-        <div className="container mx-auto">
-          <p className="text-center">
-          © 2015-2023 rajabiller.com. All rights reserved.
-          </p>
-        </div>
-      </footer> */}
     </div>
   );
 }

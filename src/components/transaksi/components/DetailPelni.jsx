@@ -5,7 +5,6 @@ import { styled } from "@mui/material/styles";
 import { grey } from "@mui/material/colors";
 import { Typography } from "antd";
 import { toRupiah } from "../../../helpers/rupiah";
-import { FaShip } from "react-icons/fa";
 import { PiDownloadSimple } from "react-icons/pi";
 
 const StyledBox = styled("div")(({ theme }) => ({
@@ -61,7 +60,10 @@ export default function DetailPelni({ data, openDetail, toggleDrawerDetail }) {
                   <div className="title font-bold">{penumpang.nama}</div>
                 </div>
               </div>
-              <Divider component="div" sx={{ width: "100%", display: "block" }} />
+              <Divider
+                component="div"
+                sx={{ width: "100%", display: "block" }}
+              />
             </React.Fragment>
           ))}
         </div>
@@ -84,7 +86,9 @@ export default function DetailPelni({ data, openDetail, toggleDrawerDetail }) {
                   <div>Total Harga</div>
                   <div>
                     Rp.{" "}
-                    {toRupiah(parseInt(data.nominal) + parseInt(data.nominal_admin))}
+                    {toRupiah(
+                      parseInt(data.nominal) + parseInt(data.nominal_admin)
+                    )}
                   </div>
                 </div>
               </div>
@@ -96,8 +100,8 @@ export default function DetailPelni({ data, openDetail, toggleDrawerDetail }) {
                   className="block"
                 >
                   <Button
-                    variant="outlined" 
-                    fullWidth 
+                    variant="outlined"
+                    fullWidth
                     startIcon={<PiDownloadSimple size={20} />}
                   >
                     Download

@@ -2,15 +2,20 @@ import { useState } from "react";
 import { BsSortDown } from "react-icons/bs";
 import { LiaSlidersHSolid } from "react-icons/lia";
 import { TbListSearch } from "react-icons/tb";
-import { FilterMobileKeretaDrawer, SortMobileKeretaDrawer, SearchMobileKeretaDrawer } from "./FilterMobileKeretaDrawer";
+import {
+  FilterMobileKeretaDrawer,
+  SortMobileKeretaDrawer,
+  SearchMobileKeretaDrawer,
+} from "./FilterMobileKeretaDrawer";
 
-export default function FilterMobileKereta(
-	{
-		waktuFilter, handleWaktuFilterChange,
-		valHargaRange, hargraRangeChange,
-		HargaTerendahTinggi, setHargaTerendahTinggi 
-	}
-) {
+export default function FilterMobileKereta({
+  waktuFilter,
+  handleWaktuFilterChange,
+  valHargaRange,
+  hargraRangeChange,
+  HargaTerendahTinggi,
+  setHargaTerendahTinggi,
+}) {
   const [openDrawer, setOpenDrawer] = useState(null);
 
   const toggleDrawer = (type) => {
@@ -27,13 +32,19 @@ export default function FilterMobileKereta(
               <div className="text-black text-sm">Sort</div>
             </div>
           </div>
-          <div className="cursor-pointer" onClick={() => toggleDrawer("filter")}>
+          <div
+            className="cursor-pointer"
+            onClick={() => toggleDrawer("filter")}
+          >
             <div className="flex space-x-2 items-center">
               <LiaSlidersHSolid className="text-black" size={18} />
               <div className="text-black text-sm">Filter</div>
             </div>
           </div>
-          <div className="cursor-pointer" onClick={() => toggleDrawer("search")}>
+          <div
+            className="cursor-pointer"
+            onClick={() => toggleDrawer("search")}
+          >
             <div className="flex space-x-2 items-center">
               <TbListSearch className="text-black" size={18} />
               <div className="text-black text-sm">Search</div>
@@ -42,15 +53,23 @@ export default function FilterMobileKereta(
         </div>
       </div>
       <FilterMobileKeretaDrawer
-	  waktuFilter={waktuFilter} handleWaktuFilterChange={handleWaktuFilterChange}
-	  valHargaRange={valHargaRange} 
-	  hargraRangeChange={hargraRangeChange}
-	  openDrawer={openDrawer === "filter"} toggleDrawer={() => setOpenDrawer(null)} />
-      <SortMobileKeretaDrawer 
-	  HargaTerendahTinggi={HargaTerendahTinggi} 
-	  setHargaTerendahTinggi={setHargaTerendahTinggi} 
-	  openDrawer={openDrawer === "sort"} toggleDrawer={() => setOpenDrawer(null)} />
-      <SearchMobileKeretaDrawer openDrawer={openDrawer === "search"} toggleDrawer={() => setOpenDrawer(null)} />
+        waktuFilter={waktuFilter}
+        handleWaktuFilterChange={handleWaktuFilterChange}
+        valHargaRange={valHargaRange}
+        hargraRangeChange={hargraRangeChange}
+        openDrawer={openDrawer === "filter"}
+        toggleDrawer={() => setOpenDrawer(null)}
+      />
+      <SortMobileKeretaDrawer
+        HargaTerendahTinggi={HargaTerendahTinggi}
+        setHargaTerendahTinggi={setHargaTerendahTinggi}
+        openDrawer={openDrawer === "sort"}
+        toggleDrawer={() => setOpenDrawer(null)}
+      />
+      <SearchMobileKeretaDrawer
+        openDrawer={openDrawer === "search"}
+        toggleDrawer={() => setOpenDrawer(null)}
+      />
     </div>
   );
 }

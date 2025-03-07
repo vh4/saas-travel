@@ -10,7 +10,6 @@ export default function ListPelni({ data, remainingPelni }) {
 
   const toggleDrawerDetail = (index) => () => {
     setOpenDetailIndex(openDetailIndex === index ? null : index);
-
   };
 
   return (
@@ -72,7 +71,7 @@ export default function ListPelni({ data, remainingPelni }) {
 
             {/* Footer */}
             <Box
-            	className="text-indigo-500 bg-indigo-100"
+              className="text-indigo-500 bg-indigo-100"
               sx={{
                 textAlign: "center",
                 paddingY: "16px",
@@ -81,7 +80,13 @@ export default function ListPelni({ data, remainingPelni }) {
                 cursor: "pointer",
               }}
             >
-              <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <div className="flex items-center space-x-2 justify-center w-full px-4 font-semibold">
                   <div className="">Sisa Waktu Pembayaran</div>
                   <div className="">

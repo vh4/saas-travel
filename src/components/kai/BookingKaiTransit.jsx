@@ -206,36 +206,34 @@ export default function BookingKaiTransit() {
     const listPassenger = [];
 
     dataDetailTrain.forEach((e) => {
-      listPassenger.push(
-        {
-          productCode: "WKAI",
-          origin: e.berangkat_id_station,
-          destination: e.tujuan_id_station,
-          date: e.departureDate,
-          trainNumber: parseInt(e.trainNumber),
-          grade: e.seats[0].grade,
-          class: e.seats[0].class,
-          adult: TotalAdult,
-          infant: TotalInfant,
-          trainName: e.trainName,
-          departureStation: e.stasiunBerangkat,
-          departureTime: e.departureTime,
-          arrivalStation: e.stasiunTujuan,
-          arrivalTime: e.arrivalTime,
-          priceAdult: parseInt(e.seats[0].priceAdult),
-          priceInfant: "-",
-          passengers: {
-            adults: adult[0],
-            infants: TotalInfant > 0 ? infant[0] : [],
-          },
-        }
-      )
+      listPassenger.push({
+        productCode: "WKAI",
+        origin: e.berangkat_id_station,
+        destination: e.tujuan_id_station,
+        date: e.departureDate,
+        trainNumber: parseInt(e.trainNumber),
+        grade: e.seats[0].grade,
+        class: e.seats[0].class,
+        adult: TotalAdult,
+        infant: TotalInfant,
+        trainName: e.trainName,
+        departureStation: e.stasiunBerangkat,
+        departureTime: e.departureTime,
+        arrivalStation: e.stasiunTujuan,
+        arrivalTime: e.arrivalTime,
+        priceAdult: parseInt(e.seats[0].priceAdult),
+        priceInfant: "-",
+        passengers: {
+          adults: adult[0],
+          infants: TotalInfant > 0 ? infant[0] : [],
+        },
+      });
     });
 
     const response = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/train/book`,
       {
-        data:listPassenger,
+        data: listPassenger,
         token: JSON.parse(
           localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
         ),
@@ -250,9 +248,7 @@ export default function BookingKaiTransit() {
         setIsLoading(false);
         failedNotification(response.data.rd);
       }
-
     } else {
-      
       const hasilDataBooking = response.data.data;
 
       localStorage.setItem(
@@ -382,9 +378,7 @@ export default function BookingKaiTransit() {
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
               <RxCrossCircled size={20} className="text-black" />
-              <div className="hidden xl:block text-black">
-                Pembayaran tiket
-              </div>
+              <div className="hidden xl:block text-black">Pembayaran tiket</div>
             </div>
           </div>
           <div className="xl:mt-0">
@@ -403,7 +397,7 @@ export default function BookingKaiTransit() {
                     {/* sidebar mobile kai*/}
                     {dataDetailTrain.map((e, i) => (
                       <>
-                        <div className="mt-0 md:mt-8 mb-2 md:mb-0 block xl:hidden w-full rounded-md border border-gray-200 shadow-sm">
+                        <div className="mt-0 xl:mt-8 mb-2 xl:mb-0 block xl:hidden w-full rounded-md border border-gray-200 shadow-sm">
                           <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                             <div className="text-black font-medium ">
                               Keberangkatan kereta
@@ -499,7 +493,7 @@ export default function BookingKaiTransit() {
                           adult[0].map((e, i) => (
                             <>
                               <div>
-                                <div className="Booking ml-2 md:ml-0 mt-8 mb-4 xl:mt-4">
+                                <div className="Booking ml-2 xl:ml-0 mt-8 mb-4 xl:mt-4">
                                   <h1 className="text-sm font-medium  text-black">
                                     ADULT PASSENGER
                                   </h1>
@@ -712,7 +706,7 @@ export default function BookingKaiTransit() {
                           infant[0].map((e, i) => (
                             <>
                               <div>
-                                <div className="Booking ml-2  md:ml-0 mt-8 mb-4 xl:mt-12">
+                                <div className="Booking ml-2  xl:ml-0 mt-8 mb-4 xl:mt-12">
                                   <h1 className="xl:text-sm font-medium  text-black text-sm">
                                     INFANT PASSENGER
                                   </h1>

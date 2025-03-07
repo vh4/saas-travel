@@ -58,7 +58,7 @@ export default function SidebarUser({ pathSidebar }) {
 
   return (
     <aside
-      className="mt-6  hidden md:block w-full md:w-full xl:w-72 border-r "
+      className="mt-6  hidden xl:block w-full xl:w-72 border-r "
       aria-label="Sidebar"
     >
       <div className="px-8 py-2 flex space-x-4 items-center text-black">
@@ -66,7 +66,7 @@ export default function SidebarUser({ pathSidebar }) {
         <div>List Transaksi</div>
       </div>
       <div className="flex mb-8 justify-start overflow-y-auto py-4 rounded  h-full ">
-        <ul className="px-8 md:mt-0 space-y-2 relative">
+        <ul className="px-8 xl:mt-0 space-y-2 relative">
           {(isLoading || type === "auth" || type === "pesawat") && (
             <li className="">
               {isLoading ? (

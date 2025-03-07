@@ -882,7 +882,7 @@ function Plane() {
                     <small className="mb-2 text-black hidden xl:block">Pilih Maskapai</small>
                     <Tooltip>
                       <Button
-                        onClick={() => handleOpen("lg")}
+                        onClick={() => handleOpen("xl")}
                         size="large"
                         type="default"
                         shape="default" // Use 'default' shape for no rounding

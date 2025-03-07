@@ -16,7 +16,7 @@ import BayarLoading from "../components/trainskeleton/bayar";
 import { Typography } from "antd";
 import moment from "moment";
 import TiketTransit from "./TiketTransit";
-import { ExclamationCircleFilled } from '@ant-design/icons';
+import { ExclamationCircleFilled } from "@ant-design/icons";
 
 export default function Pembayaran() {
   const navigate = useNavigate();
@@ -85,13 +85,18 @@ export default function Pembayaran() {
       setErr(true);
     }
 
-    Promise.all([getDataTrain(), getHasilBooking(), cekCallbakIsMitra(), cekWhiteListUsername()])
+    Promise.all([
+      getDataTrain(),
+      getHasilBooking(),
+      cekCallbakIsMitra(),
+      cekWhiteListUsername(),
+    ])
       .then(
         ([
           ResponsegetDataTrain,
           ResponsegetHasilBooking,
           cekCallbakIsMitra,
-          cekWhiteListUsername
+          cekWhiteListUsername,
         ]) => {
           if (cekCallbakIsMitra.data.rc == "00") {
             setcallbackBoolean(true);
@@ -102,9 +107,8 @@ export default function Pembayaran() {
           const isWhiteList = cekWhiteListUsername?.is_whitelist || 0;
           const isSimulate = cekWhiteListUsername?.is_simulate || 0;
 
-          setWhiteList(isWhiteList);  
-          setisSimulate(isSimulate)
-
+          setWhiteList(isWhiteList);
+          setisSimulate(isSimulate);
 
           if (ResponsegetDataTrain) {
             const dataTrainDetail = ResponsegetDataTrain.train_detail;
@@ -209,7 +213,6 @@ export default function Pembayaran() {
 
         localStorage.removeItem(`data:k-train-transit/${uuid_train_data}`);
         localStorage.removeItem(`data:k-book-transit/${uuid_book}`);
-
       } else {
         setIsBookingExpired(false);
       }
@@ -259,9 +262,8 @@ export default function Pembayaran() {
       const response = await axios.get(
         `${process.env.REACT_APP_HOST_API}/travel/is_whitelist`
       );
-      
-      return response.data;
 
+      return response.data;
     } catch (error) {
       throw error;
     }
@@ -273,36 +275,33 @@ export default function Pembayaran() {
 
     const data = [];
 
-    hasilBooking.map(e => {
-
+    hasilBooking.map((e) => {
       const params = {
-          productCode: "WKAI",
-          bookingCode: e.bookingCode,
-          transactionId: e.transactionId,
-          nominal: e.normalSales,
-          nominal_admin: e.nominalAdmin,
-          discount: e.discount,
-          simulateSuccess: isSimulated,
-          pay_type: "TUNAI",
-          token: JSON.parse(
-            localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-          ),
-      }
+        productCode: "WKAI",
+        bookingCode: e.bookingCode,
+        transactionId: e.transactionId,
+        nominal: e.normalSales,
+        nominal_admin: e.nominalAdmin,
+        discount: e.discount,
+        simulateSuccess: isSimulated,
+        pay_type: "TUNAI",
+        token: JSON.parse(
+          localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
+        ),
+      };
 
       data.push(params);
-
-    })
+    });
 
     const response = await axios.post(
-      `${process.env.REACT_APP_HOST_API}/travel/train/payment-transit`, data
+      `${process.env.REACT_APP_HOST_API}/travel/train/payment-transit`,
+      data
     );
 
     if (response?.data[0].rc == "00" && response?.data[1].rc == "00") {
-
       const paydata = [];
 
       response.data?.map(async (e, i) => {
-
         const params = {
           booking_id: hasilBooking[i].bookingCode,
           tipe_pembayaran: "TUNAI",
@@ -317,11 +316,10 @@ export default function Pembayaran() {
               parseInt(hasilBooking[i].discount) +
               parseInt(hasilBooking[i].nominalAdmin)
           ),
-        }
+        };
 
         paydata.push(params);
-        
-      })    
+      });
 
       // dispatch({
       //   type: "PAY_TRAIN",
@@ -336,25 +334,21 @@ export default function Pembayaran() {
       //   });
       // }, 100);
 
-            
       setispay(true);
       setHasilbayar(paydata);
-      
+
       setIsLoading(false);
-      
+
       // localStorage.removeItem(`data:k-train-transit/${uuid_train_data}`);
       // localStorage.removeItem(`data:k-book-transit/${uuid_book}`);
-      
-
     } else {
       setTimeout(() => {
         failedNotification(response.data.rd);
         setIsLoading(false);
       }, 100);
     }
-  
-    setIsLoading(false);
 
+    setIsLoading(false);
   }
 
   async function handleCallbackSubmit(e) {
@@ -383,11 +377,9 @@ export default function Pembayaran() {
 
         if (response.data.rc == "00") {
           navigate("/");
-          
+
           localStorage.removeItem(`data:k-train-transit/${uuid_train_data}`);
           localStorage.removeItem(`data:k-book-transit/${uuid_book}`);
-
-          
         } else {
           failedNotification(response.data.rd);
         }
@@ -415,40 +407,37 @@ export default function Pembayaran() {
         <>
           <PageExpired />
         </>
-      ) : 
-            
-      ispay == true ? 
-      (
-      <>
-        <TiketTransit dataArr={hasilbayar} />
-      </>)
-      :
-
-      (
+      ) : ispay == true ? (
         <>
-            <Modal
-              title={
-                (<>
-                  <div className="flex space-x-2 items-center">
-                      <ExclamationCircleFilled className="text-orange-500 text-xl" />
-                      <div className="text-bold text-xl text-orange-500">Apakah anda yakin?</div>
+          <TiketTransit dataArr={hasilbayar} />
+        </>
+      ) : (
+        <>
+          <Modal
+            title={
+              <>
+                <div className="flex space-x-2 items-center">
+                  <ExclamationCircleFilled className="text-orange-500 text-xl" />
+                  <div className="text-bold text-xl text-orange-500">
+                    Apakah anda yakin?
                   </div>
-                </>)
-              }
-              open={open}
-              onOk={hideModal}
-              onCancel={hideModal}
-              okText="Cancel"
-              cancelText="Submit"
-              maskClosable={false}
-              footer={
-                <>
+                </div>
+              </>
+            }
+            open={open}
+            onOk={hideModal}
+            onCancel={hideModal}
+            okText="Cancel"
+            cancelText="Submit"
+            maskClosable={false}
+            footer={
+              <>
                 <div className="blok mt-8">
                   <div className="flex justify-end space-x-2">
-                  <ButtonAnt key="back" onClick={hideModal}>
-                    Cancel
-                  </ButtonAnt>
-                  <ButtonAnt
+                    <ButtonAnt key="back" onClick={hideModal}>
+                      Cancel
+                    </ButtonAnt>
+                    <ButtonAnt
                       htmlType="submit"
                       key="submit"
                       type="primary"
@@ -461,12 +450,12 @@ export default function Pembayaran() {
                   </div>
                 </div>
               </>
-              }
-            >
-              <p>Apakah Anda yakin ingin melakukan pembayaran ?</p>
-            </Modal>
+            }
+          >
+            <p>Apakah Anda yakin ingin melakukan pembayaran ?</p>
+          </Modal>
           {/* header kai flow */}
-          <div className="px-0 md:px-8 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
+          <div className="px-0 xl:px-8 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
               <AiOutlineCheckCircle className="text-black" size={20} />
               <div className="hidden xl:flex text-black">Detail pesanan</div>
@@ -502,7 +491,7 @@ export default function Pembayaran() {
           ) : (
             <>
               <div className="block xl:flex xl:justify-around mb-24 xl:space-x-4">
-                <div className="block md:hidden">
+                <div className="block xl:hidden">
                   <Alert
                     message={`Expired Booking : ${remainingBookTime}`}
                     banner
@@ -548,17 +537,17 @@ export default function Pembayaran() {
                     </>
                   ))}
                 </div>
-                <div className="mt-4 md:mt-8 w-full mx-0 2xl:mx-4">
-                {/* adult */}
+                <div className="mt-4 xl:mt-8 w-full mx-0 2xl:mx-4">
+                  {/* adult */}
                   {passengers.adults && passengers.adults.length > 0 ? (
-                    <div className="text-sm xl:text-sm font-bold text-black mt-8 md:mt-4 mx-2 md:mx-4">
+                    <div className="text-sm xl:text-sm font-bold text-black mt-8 xl:mt-4 mx-2 xl:mx-4">
                       <p>ADULT PASSENGERS</p>
                     </div>
                   ) : (
                     ""
-                )}
+                  )}
 
-                {dataDetailTrain &&
+                  {dataDetailTrain &&
                     passengers.adults &&
                     passengers.adults.length > 0 &&
                     dataDetailTrain.map((k, l) => (
@@ -572,8 +561,8 @@ export default function Pembayaran() {
                             ? passengers.adults.map((e, i) => (
                                 <>
                                   <div className="p-2 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
-                                    <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
-                                      <div className="px-2 md:px-4 py-2 text-xs">
+                                    <div className="mt-2 grid grid-cols-2 xl:grid-cols-4">
+                                      <div className="px-2 xl:px-4 py-2 text-xs">
                                         <div className="text-black font-medium ">
                                           Nama
                                         </div>
@@ -581,7 +570,7 @@ export default function Pembayaran() {
                                           {e.name}
                                         </div>
                                       </div>
-                                      <div className="px-2 md:px-4 py-2 text-xs">
+                                      <div className="px-2 xl:px-4 py-2 text-xs">
                                         <div className="text-black font-medium ">
                                           NIK
                                         </div>
@@ -589,7 +578,7 @@ export default function Pembayaran() {
                                           {e.idNumber}
                                         </div>
                                       </div>
-                                      <div className="px-2 md:px-4 py-2 text-xs">
+                                      <div className="px-2 xl:px-4 py-2 text-xs">
                                         <div className="text-black  font-medium ">
                                           Nomor HP
                                         </div>
@@ -597,7 +586,7 @@ export default function Pembayaran() {
                                           {e.phone}
                                         </div>
                                       </div>
-                                      <div className="px-2 md:px-4 py-2 text-xs">
+                                      <div className="px-2 xl:px-4 py-2 text-xs">
                                         <div className="text-black  font-medium ">
                                           Kursi
                                         </div>
@@ -624,7 +613,7 @@ export default function Pembayaran() {
                                         </div>
                                       </div>
                                     </div>
-                                    </div>
+                                  </div>
                                 </>
                               ))
                             : ""}
@@ -634,29 +623,29 @@ export default function Pembayaran() {
 
                   {/* infants */}
                   {passengers.infants && passengers.infants.length > 0 ? (
-                    <div className="text-sm xl:text-sm font-bold text-black mt-8 md:mt-4 mx-0 md:mx-4">
+                    <div className="text-sm xl:text-sm font-bold text-black mt-8 xl:mt-4 mx-0 xl:mx-4">
                       <p>INFANTS PASSENGERS</p>
                     </div>
                   ) : (
                     ""
-                )}
+                  )}
 
-                   {dataDetailTrain &&
+                  {dataDetailTrain &&
                     passengers.infants &&
                     passengers.infants.length > 0 &&
                     dataDetailTrain.map((k, l) => (
                       <>
-                         <div className="p-2">
+                        <div className="p-2">
                           <div className="flex space-x-2 items-center px-2 py-2 text-black border-b border-gray-200 text-sm font-medium ">
                             <MdOutlineTrain className="text-black" size={22} />
                             <p>{k.trainName}</p>
-                          </div>  
-                            {passengers.infants && passengers.infants.length > 0
-                              ? passengers.infants.map((e, i) => (
-                                  <>
+                          </div>
+                          {passengers.infants && passengers.infants.length > 0
+                            ? passengers.infants.map((e, i) => (
+                                <>
                                   <div className="p-2 mt-4 w-full rounded-md border-b border-gray-200 shadow-sm">
-                                    <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
-                                      <div className="px-2 md:px-4 py-2 text-xs">
+                                    <div className="mt-2 grid grid-cols-2 xl:grid-cols-4">
+                                      <div className="px-2 xl:px-4 py-2 text-xs">
                                         <div className="text-black font-medium ">
                                           Nama
                                         </div>
@@ -664,7 +653,7 @@ export default function Pembayaran() {
                                           {e.name}
                                         </div>
                                       </div>
-                                      <div className="px-2 md:px-4 py-2 text-xs">
+                                      <div className="px-2 xl:px-4 py-2 text-xs">
                                         <div className="text-black font-medium ">
                                           NIK
                                         </div>
@@ -672,7 +661,7 @@ export default function Pembayaran() {
                                           {e.idNumber}
                                         </div>
                                       </div>
-                                      <div className="px-2 md:px-4 py-2 text-xs">
+                                      <div className="px-2 xl:px-4 py-2 text-xs">
                                         <div className="text-black  font-medium ">
                                           Tanggal Lahir
                                         </div>
@@ -709,10 +698,10 @@ export default function Pembayaran() {
                                         </div>
                                       </div>
                                     </div>
-                                    </div>
-                                  </>
-                                ))
-                              : ""}
+                                  </div>
+                                </>
+                              ))
+                            : ""}
                         </div>
                       </>
                     ))}
@@ -837,7 +826,7 @@ export default function Pembayaran() {
                       </div>
                     </>
                   ))}
-                  <div className="hidden md:block mt-2">
+                  <div className="hidden xl:block mt-2">
                     <Alert
                       message={`Expired Booking : ${remainingBookTime}`}
                       banner
@@ -846,14 +835,16 @@ export default function Pembayaran() {
                   {callbackBoolean == true ? (
                     <div className="mt-2 py-4 rounded-md border-t border-gray-200 shadow-sm">
                       <>
-                        <div className="px-8 md:px-4 py-4 text-sm text-black">
+                        <div className="px-8 xl:px-4 py-4 text-sm text-black">
                           Tekan tombol dibawah ini untuk melanjutkan proses
                           transaksi.
                         </div>
                         <div className="flex justify-center">
                           <ButtonAnt
-                          onClick={whiteList == 1 ? showModal : handleCallbackSubmit}  
-                          size="large"
+                            onClick={
+                              whiteList == 1 ? showModal : handleCallbackSubmit
+                            }
+                            size="large"
                             key="submit"
                             type="primary"
                             className="bg-blue-500 px-8 font-semibold"
@@ -873,7 +864,9 @@ export default function Pembayaran() {
                     <>
                       <div className="flex justify-center">
                         <ButtonAnt
-                          onClick={whiteList == 1 ? showModal : handleCallbackSubmit}  
+                          onClick={
+                            whiteList == 1 ? showModal : handleCallbackSubmit
+                          }
                           size="large"
                           key="submit"
                           type="primary"

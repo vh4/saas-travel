@@ -308,7 +308,11 @@ export function formatDate(inputDate) {
   const dateObj = new Date(`${year}-${month}-${day}`);
 
   // Format tanggal ke dalam bahasa Indonesia
-  return new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric" }).format(dateObj);
+  return new Intl.DateTimeFormat("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(dateObj);
 }
 
 export const remainingTime = (targetDate) => {
@@ -371,12 +375,18 @@ function addLeadingZero(num) {
 }
 
 export const calculateTotalDurationTransit = (trains) => {
-  if (trains.length === 0) return '0 jam 0 menit';
+  if (trains.length === 0) return "0 jam 0 menit";
 
   const firstTrain = trains[0];
-  const firstDeparture = moment(`${firstTrain.departureDate} ${firstTrain.departureTime}`, 'YYYY-MM-DD HH:mm');
+  const firstDeparture = moment(
+    `${firstTrain.departureDate} ${firstTrain.departureTime}`,
+    "YYYY-MM-DD HH:mm"
+  );
   const lastTrain = trains[trains.length - 1];
-  const lastArrival = moment(`${lastTrain.arrivalDate} ${lastTrain.arrivalTime}`, 'YYYY-MM-DD HH:mm');
+  const lastArrival = moment(
+    `${lastTrain.arrivalDate} ${lastTrain.arrivalTime}`,
+    "YYYY-MM-DD HH:mm"
+  );
   const duration = moment.duration(lastArrival.diff(firstDeparture));
   const hours = duration.hours();
   const minutes = duration.minutes();
@@ -384,17 +394,28 @@ export const calculateTotalDurationTransit = (trains) => {
   return `${hours}j ${minutes}m`;
 };
 
-
 export function convertDateToIndonesian(dateString) {
+  const days = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "Mei",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Okt",
+    "Nov",
+    "Des",
+  ];
+  const [datePart, timePart, timeZone] = dateString.split(" ");
+  let date = new Date(datePart + "T" + timePart + "Z");
 
-  const days = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Des'];
-  const [datePart, timePart, timeZone] = dateString.split(' ');
-  let date = new Date(datePart + 'T' + timePart + 'Z');
-  
-  if (timeZone === 'WITA') {
+  if (timeZone === "WITA") {
     date.setHours(date.getHours() + 8);
-  } else if (timeZone === 'WIB') {
+  } else if (timeZone === "WIB") {
     date.setHours(date.getHours() + 7);
   }
 
@@ -403,15 +424,12 @@ export function convertDateToIndonesian(dateString) {
   const monthName = months[date.getMonth()];
   const year = date.getFullYear();
   return `${dayName}, ${dateNumber} ${monthName} ${year} (${timeZone})`;
-
 }
 
 export function extractTimeWithTimeZone(dateString) {
-
-  const parts = dateString.split(' ');
+  const parts = dateString.split(" ");
   const timePart = parts[1];
-  const timeZone = parts[2]; 
+  const timeZone = parts[2];
 
   return `${timePart} (${timeZone})`;
-
 }

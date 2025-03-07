@@ -18,28 +18,41 @@ import Page500 from "../components/500";
 import Page400 from "../components/400";
 import PageExpired from "../components/Expired";
 import KonfirmasiLoading from "../components/trainskeleton/konfirmasi";
-import {Typography } from 'antd';
-import moment from 'moment';
+import { Typography } from "antd";
+import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { callbackFetchData } from "../../features/callBackSlice";
-import { setDataBookKereta, setisOkBalanceKereta } from "../../features/createSlice";
+import {
+  setDataBookKereta,
+  setisOkBalanceKereta,
+} from "../../features/createSlice";
 import { Box } from "@mui/material";
 import DetailPassengersDrawer from "./components/DetailPassengersDrawer";
 
-const SeatMap = ({ seats, changeState, setChangeSet, clickSeatsData, selectedCount, setSelectedCount, setgerbongsamawajib, gerbongsamawajib,  selectedCheckboxes, setSelectedCheckboxes}) => {
-  
-const groupColumnCounts = {};
-const rowCount = Math.max(...seats.map((seat) => seat.row));
+const SeatMap = ({
+  seats,
+  changeState,
+  setChangeSet,
+  clickSeatsData,
+  selectedCount,
+  setSelectedCount,
+  setgerbongsamawajib,
+  gerbongsamawajib,
+  selectedCheckboxes,
+  setSelectedCheckboxes,
+}) => {
+  const groupColumnCounts = {};
+  const rowCount = Math.max(...seats.map((seat) => seat.row));
 
-seats.forEach((seat) => {
-  const groupKey = `${seat.groupColumn}-${seat.row}`;
-  if (!groupColumnCounts[groupKey]) {
-    groupColumnCounts[groupKey] = 0;
-  }
-  if (seat.isFilled === 0) {
-    groupColumnCounts[groupKey]++;
-  }
-});
+  seats.forEach((seat) => {
+    const groupKey = `${seat.groupColumn}-${seat.row}`;
+    if (!groupColumnCounts[groupKey]) {
+      groupColumnCounts[groupKey] = 0;
+    }
+    if (seat.isFilled === 0) {
+      groupColumnCounts[groupKey]++;
+    }
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -59,13 +72,11 @@ seats.forEach((seat) => {
 
   const limit = limitFunction();
   const handleOnChange = (e, row, cols, seats) => {
-
     if (e.target.checked) {
-      
       if (selectedCount < limit) {
         setSelectedCount(selectedCount + 1);
         setgerbongsamawajib(gerbongsamawajib + 1);
-        
+
         const handlersetSelectedCheckboxes = (prevSelectedCheckboxes) => {
           if (
             prevSelectedCheckboxes.includes(
@@ -82,58 +93,12 @@ seats.forEach((seat) => {
               `${row}-${cols}-${parseInt(clickSeatsData) + 1}`,
             ];
           }
-        }
-
-          setSelectedCheckboxes(handlersetSelectedCheckboxes(selectedCheckboxes));
-
-          const changeStateData = changeState[0];
-          const tolong = handlersetSelectedCheckboxes(selectedCheckboxes);
-
-          const splittingSeat = tolong[selectedCount].split("-");
-          changeStateData[selectedCount].row = parseInt(splittingSeat[0]);
-          changeStateData[selectedCount].type = "adult";
-          changeStateData[selectedCount].column = splittingSeat[1];
-          changeStateData[selectedCount].wagonNumber = parseInt(splittingSeat[2]);
-
-          setChangeSet([changeStateData]);
-
-        }
-    else {
-          alert('Melebihi jumlah penumpang.')
-          e.target.checked = false;
-        }
-      } else {
-        setSelectedCount(selectedCount - 1);
-        setgerbongsamawajib(gerbongsamawajib - 1);
-
-        const updateSelectedCheckboxes = (prevSelectedCheckboxes, row, cols, clickSeatsData) => {
-          if (
-            prevSelectedCheckboxes.includes(
-              `${row}-${cols}-${parseInt(clickSeatsData) + 1}`
-            )
-          ) {
-            return prevSelectedCheckboxes.filter(
-              (checkbox) =>
-                checkbox !== `${row}-${cols}-${parseInt(clickSeatsData) + 1}`
-            );
-          } else {
-            return [
-              ...prevSelectedCheckboxes,
-              `${row}-${cols}-${parseInt(clickSeatsData) + 1}`,
-            ];
-          }
         };
-        
-        const tolong = updateSelectedCheckboxes(
-          selectedCheckboxes,
-          row,
-          cols,
-          clickSeatsData
-        );
-        
-        setSelectedCheckboxes(tolong);
+
+        setSelectedCheckboxes(handlersetSelectedCheckboxes(selectedCheckboxes));
 
         const changeStateData = changeState[0];
+        const tolong = handlersetSelectedCheckboxes(selectedCheckboxes);
 
         const splittingSeat = tolong[selectedCount].split("-");
         changeStateData[selectedCount].row = parseInt(splittingSeat[0]);
@@ -142,11 +107,57 @@ seats.forEach((seat) => {
         changeStateData[selectedCount].wagonNumber = parseInt(splittingSeat[2]);
 
         setChangeSet([changeStateData]);
-        
-
+      } else {
+        alert("Melebihi jumlah penumpang.");
+        e.target.checked = false;
       }
-  };
+    } else {
+      setSelectedCount(selectedCount - 1);
+      setgerbongsamawajib(gerbongsamawajib - 1);
 
+      const updateSelectedCheckboxes = (
+        prevSelectedCheckboxes,
+        row,
+        cols,
+        clickSeatsData
+      ) => {
+        if (
+          prevSelectedCheckboxes.includes(
+            `${row}-${cols}-${parseInt(clickSeatsData) + 1}`
+          )
+        ) {
+          return prevSelectedCheckboxes.filter(
+            (checkbox) =>
+              checkbox !== `${row}-${cols}-${parseInt(clickSeatsData) + 1}`
+          );
+        } else {
+          return [
+            ...prevSelectedCheckboxes,
+            `${row}-${cols}-${parseInt(clickSeatsData) + 1}`,
+          ];
+        }
+      };
+
+      const tolong = updateSelectedCheckboxes(
+        selectedCheckboxes,
+        row,
+        cols,
+        clickSeatsData
+      );
+
+      setSelectedCheckboxes(tolong);
+
+      const changeStateData = changeState[0];
+
+      const splittingSeat = tolong[selectedCount].split("-");
+      changeStateData[selectedCount].row = parseInt(splittingSeat[0]);
+      changeStateData[selectedCount].type = "adult";
+      changeStateData[selectedCount].column = splittingSeat[1];
+      changeStateData[selectedCount].wagonNumber = parseInt(splittingSeat[2]);
+
+      setChangeSet([changeStateData]);
+    }
+  };
 
   // useEffect(() => {
   //   let changeStateData = changeState[0];
@@ -166,7 +177,7 @@ seats.forEach((seat) => {
   //         setSelectedCount(0);
   //         setgerbongsamawajib(gerbongsamawajib - 1);
   //         alert("Mohon maaf, pilih gerbong yang sama !");
-  //       } 
+  //       }
   //     }
 
   //     setChangeSet([changeStateData]);
@@ -177,14 +188,14 @@ seats.forEach((seat) => {
   return (
     <div className="flex space-x-0 xl:space-x-2 justify-center">
       <div className="">
-      {Array.from({ length: rowCount }, (_, index) => (
-        <div className="block py-2 pl-0 xl:pl-4">
-          <div class="select-none w-4 h-10 font-medium  rounded-lg">
-          <div key={index} class="py-2 text-center text-black">
-            {index + 1}.
+        {Array.from({ length: rowCount }, (_, index) => (
+          <div className="block py-2 pl-0 xl:pl-4">
+            <div class="select-none w-4 h-10 font-medium  rounded-lg">
+              <div key={index} class="py-2 text-center text-black">
+                {index + 1}.
+              </div>
+            </div>
           </div>
-        </div>
-        </div>
         ))}
       </div>
       <div className="grid grid-rows-10 grid-cols-4 xl:grid-cols-5">
@@ -276,7 +287,6 @@ seats.forEach((seat) => {
 };
 
 export default function Konfirmasi() {
-
   const [api, contextHolder] = notification.useNotification();
   const { Paragraph } = Typography;
   const [selectedCount, setSelectedCount] = useState(0);
@@ -295,7 +305,7 @@ export default function Konfirmasi() {
         rd.toLowerCase().charAt(0).toUpperCase() +
         rd.slice(1).toLowerCase() +
         "",
-        duration: 7,
+      duration: 7,
     });
   };
 
@@ -315,7 +325,8 @@ export default function Konfirmasi() {
   const [dataDetailTrain, setdataDetailTrain] = useState(null);
 
   const [hasilBooking, setHasilBooking] = useState(null);
-  const [hasilBookingTriggerResetGagal, sethasilBookingTriggerResetGagal] = useState(null);
+  const [hasilBookingTriggerResetGagal, sethasilBookingTriggerResetGagal] =
+    useState(null);
 
   const [passengers, setPassengers] = useState(null);
   const [tanggal_keberangkatan_kereta, settanggal_keberangkatan_kereta] =
@@ -340,12 +351,19 @@ export default function Konfirmasi() {
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
 
   const [changeState, setChangeSet] = useState({}); //change seats.
-  const [changeStateKetikaGagalTidakUpdate, setchangeStateKetikaGagalTidakUpdate] = useState({}); //change seats.
+  const [
+    changeStateKetikaGagalTidakUpdate,
+    setchangeStateKetikaGagalTidakUpdate,
+  ] = useState({}); //change seats.
   const [gerbongsamawajib, setgerbongsamawajib] = useState(0);
 
   const [open, setOpen] = React.useState(false);
-  const handleClose = () => {setOpen(false);setSelectedCount(0); setgerbongsamawajib(0)};
-  
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedCount(0);
+    setgerbongsamawajib(0);
+  };
+
   const [expiredBookTime, setExpiredBookTime] = useState(null);
 
   const [openDrawer, setOpenDrawer] = useState(null);
@@ -382,12 +400,16 @@ export default function Konfirmasi() {
         }
 
         if (ResponsegetHasilBooking) {
-
           setHasilBooking(ResponsegetHasilBooking.hasil_book);
-          setExpiredBookTime(ResponsegetHasilBooking.hasil_book.timeLimit || moment().add(1, 'hours'))
-          
+          setExpiredBookTime(
+            ResponsegetHasilBooking.hasil_book.timeLimit ||
+              moment().add(1, "hours")
+          );
+
           //mengatasi ketika mencopy variable hasilBooking, state nya ikut update.
-          sethasilBookingTriggerResetGagal(JSON.stringify(ResponsegetHasilBooking.hasil_book))
+          sethasilBookingTriggerResetGagal(
+            JSON.stringify(ResponsegetHasilBooking.hasil_book)
+          );
 
           setPassengers(ResponsegetHasilBooking.passengers);
 
@@ -412,7 +434,9 @@ export default function Konfirmasi() {
 
           setChangeSet([initialChanges]);
           //mengatasi ketika mencopy variable setChangeSet, state nya ikut update.
-          setchangeStateKetikaGagalTidakUpdate(JSON.stringify([initialChanges]))
+          setchangeStateKetikaGagalTidakUpdate(
+            JSON.stringify([initialChanges])
+          );
           setTotalAdult(passengers.adults.length);
           //   setTotalChild(passengers.children ? passengers.children.length : 0);
           setTotalInfant(passengers.infants.length);
@@ -422,11 +446,10 @@ export default function Konfirmasi() {
 
         if (
           ResponsegetHasilBooking.hasil_book &&
-          new Date(ResponsegetHasilBooking.hasil_book.timeLimit).getTime() < new Date().getTime()
+          new Date(ResponsegetHasilBooking.hasil_book.timeLimit).getTime() <
+            new Date().getTime()
         ) {
-
           setIsBookingExpired(true);
-
         } else {
           setIsBookingExpired(false);
         }
@@ -451,8 +474,9 @@ export default function Konfirmasi() {
     }
   }, [token]);
 
-
-  const [remainingBookTime, setremainingBookTime] = useState(remainingTime(expiredBookTime));
+  const [remainingBookTime, setremainingBookTime] = useState(
+    remainingTime(expiredBookTime)
+  );
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -462,24 +486,19 @@ export default function Konfirmasi() {
         hasilBooking &&
         new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()
       ) {
-        
         setIsBookingExpired(true);
-
       } else {
         setIsBookingExpired(false);
       }
-
     }, 500);
-  
+
     return () => clearInterval(intervalId);
   }, [expiredBookTime]);
-  
 
   async function getDataTrain() {
     try {
       const response = dataSearch;
       return response;
-
     } catch (error) {
       return null;
     }
@@ -496,9 +515,9 @@ export default function Konfirmasi() {
 
   async function handlerPilihKursi() {
     setDataSeats([]); //untuk reset data.
-    gantigerbong(0) // untuk reset data pindah gerbong.
-    setChangeSet(JSON.parse(changeStateKetikaGagalTidakUpdate));  // untuk reset data ketika sudah di pilih kursinya, tapi keluar lagi..
-    
+    gantigerbong(0); // untuk reset data pindah gerbong.
+    setChangeSet(JSON.parse(changeStateKetikaGagalTidakUpdate)); // untuk reset data ketika sudah di pilih kursinya, tapi keluar lagi..
+
     setOpen(true);
     const response = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/train/get_seat_layout`,
@@ -517,48 +536,42 @@ export default function Konfirmasi() {
         setDataSeats(response.data);
       }
     }
-
-    
   }
 
   const handlerKonfirmasi = async (e) => {
-
     setIsLoading(true);
 
-      const idtrx = hasilBooking.transactionId;
-      const allowPayment = hasilBooking.is_allowed_pay;
+    const idtrx = hasilBooking.transactionId;
+    const allowPayment = hasilBooking.is_allowed_pay;
 
-      //set booking data
-      dispatch(setisOkBalanceKereta(allowPayment));
+    //set booking data
+    dispatch(setisOkBalanceKereta(allowPayment));
 
-      //set data callback
-      dispatch(callbackFetchData({ type: 'train', id_transaksi:idtrx  }));
+    //set data callback
+    dispatch(callbackFetchData({ type: "train", id_transaksi: idtrx }));
 
-      setIsLoading(false);
-      navigate({
-        pathname: `/train/bayar`,
-      });
-    
-  };  
-
+    setIsLoading(false);
+    navigate({
+      pathname: `/train/bayar`,
+    });
+  };
 
   const handlerPindahKursi = async (e) => {
     e.preventDefault();
-  
+
     const changeStateFix = changeState; // Create a deep copy
 
     //validasi wagon number
-    for(const train of changeState[0]){
-        if(train.type !== 'infant'){
-          if(changeStateFix[0][0]["wagonNumber"] !== train.wagonNumber){
-            failedNotification('Gerbong harus sama.')
-            setOpen(true);
-            return null;
-          }
+    for (const train of changeState[0]) {
+      if (train.type !== "infant") {
+        if (changeStateFix[0][0]["wagonNumber"] !== train.wagonNumber) {
+          failedNotification("Gerbong harus sama.");
+          setOpen(true);
+          return null;
         }
+      }
     }
 
-    
     let wagonNumber = changeStateFix[0][0]["wagonNumber"];
     let className = changeStateFix[0][0]["class"];
 
@@ -581,25 +594,29 @@ export default function Konfirmasi() {
       seats: changeStateFix[0],
       token: token,
     };
-  
-    gantiKursiFix.seats = gantiKursiFix.seats.filter((seat) => seat.type !== "infant");
-  
+
+    gantiKursiFix.seats = gantiKursiFix.seats.filter(
+      (seat) => seat.type !== "infant"
+    );
+
     // gantiKursiFix.seats.forEach((item) => {
     //   delete item.type;
     // });
-  
+
     const hasilBookingDataCopyDeep = JSON.parse(JSON.stringify(hasilBooking));
-    const hasilBookingData = {...hasilBookingDataCopyDeep};
+    const hasilBookingData = { ...hasilBookingDataCopyDeep };
     setSelectedCount(0);
-  
+
     for (var i = 0; i < changeStateFix[0].length; i++) {
-      if (gantiKursiFix.seats[i] !== undefined && gantiKursiFix.seats[i] !== null) {
+      if (
+        gantiKursiFix.seats[i] !== undefined &&
+        gantiKursiFix.seats[i] !== null
+      ) {
         hasilBookingData.seats[i][1] = wagonNumber;
         hasilBookingData.seats[i][2] = gantiKursiFix.seats[i].row.toString();
         hasilBookingData.seats[i][3] = gantiKursiFix.seats[i].column;
       }
     }
-
 
     const response = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/train/change_seat`,
@@ -609,23 +626,20 @@ export default function Konfirmasi() {
     const idtrx = response.data.transactionId;
 
     if (response.data.rc == "00") {
-      
-      hasilBookingData['transactionId'] = idtrx;
+      hasilBookingData["transactionId"] = idtrx;
 
       const data = {
         passengers: passengers,
         hasil_book: hasilBookingData,
-      }
+      };
 
       dispatch(setDataBookKereta(data));
-
 
       setisLoadingPindahKursi(false);
       successNotification();
       setHasilBooking(hasilBookingData);
 
-      setchangeStateKetikaGagalTidakUpdate(JSON.stringify(changeState))
-
+      setchangeStateKetikaGagalTidakUpdate(JSON.stringify(changeState));
     } else if (response.data.rc === "55") {
       setChangeSet(JSON.parse(changeStateKetikaGagalTidakUpdate));
       setHasilBooking((prev) => prev);
@@ -641,19 +655,17 @@ export default function Konfirmasi() {
     setOpen(false);
   };
 
-  const [backdrop, setBackdrop] = React.useState('static');
-  function gantigerbong(value){
-
-    setSelectedCount(0); 
-    setgerbongsamawajib(0); 
-    setClickSeats(value); 
+  const [backdrop, setBackdrop] = React.useState("static");
+  function gantigerbong(value) {
+    setSelectedCount(0);
+    setgerbongsamawajib(0);
+    setClickSeats(value);
     setSelectedCheckboxes([]);
 
     const checkboxInputs = document.querySelectorAll('input[type="checkbox"]');
     checkboxInputs.forEach((input) => {
       input.checked = false;
     });
-
   }
 
   return (
@@ -675,26 +687,23 @@ export default function Konfirmasi() {
         </>
       ) : (
         <>
-         {/* change seats */}
-          <Modal size="md" backdrop={backdrop} keyboard={false} open={open} onClose={handleClose}>
+          {/* change seats */}
+          <Modal
+            size="md"
+            backdrop={backdrop}
+            keyboard={false}
+            open={open}
+            onClose={handleClose}
+          >
             <Modal.Header>
               <Modal.Title>
-                <div className="text-black font-medium  mt-2 mb-2">Pindah Kursi</div>
-                <small>
-                  tekan tombol warna biru untuk ganti kursi.
-                </small>
-                {/* <Alert
-                  className="mt-4"
-                  message="Notification!"
-                  description={(<><div className="text-xs">Pilih kursi hanya dalam satu gerbong yang sama.</div></>)}
-                  type="info"
-                  showIcon
-                  closable
-                /> */}
+                <div className="text-black font-medium  mt-2 mb-2">
+                  Pindah Kursi
+                </div>
+                <small>tekan tombol warna biru untuk ganti kursi.</small>
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-
               {dataSeats.data !== undefined ? (
                 <>
                   <div className="flex flex-col w-full bg-white outline-none focus:outline-none">
@@ -716,7 +725,6 @@ export default function Konfirmasi() {
                                           {i + 1}
                                         </div>
                                         <div>
-                                          
                                           <div className="font-medium mt-2">
                                             {e.name}
                                           </div>
@@ -738,14 +746,16 @@ export default function Konfirmasi() {
                                   )}
                                 </>
                               ))}
-                              
+
                               <div className="mt-4 xl:mt-4 ml-2">
                                 <div className="flex space-x-2 items-center mt-2 ">
                                   <label
                                     class={`select-none block py-1.5 items-center cursor-pointer`}
                                   >
                                     <div class="w-8 text-white-500 text-white h-8 bg-gray-500 rounded-lg">
-                                      <div class="flex justify-center py-1.5">X</div>
+                                      <div class="flex justify-center py-1.5">
+                                        X
+                                      </div>
                                     </div>
                                   </label>
                                   <div className="text-md text-black font-medium ">
@@ -756,15 +766,17 @@ export default function Konfirmasi() {
                                   <label
                                     class={`select-none block py-1.5 items-center cursor-pointer`}
                                   >
-                                    <div class="w-8 text-white-500 h-8 bg-blue-500 rounded-lg">
-                                    </div>
+                                    <div class="w-8 text-white-500 h-8 bg-blue-500 rounded-lg"></div>
                                   </label>
                                   <div className="text-md text-black font-medium ">
                                     Seats available.
                                   </div>
                                 </div>
                                 <div className="flex space-x-2 items-center mt-2">
-                                    <Alert message="Only supported at the same gate." banner/>
+                                  <Alert
+                                    message="Only supported at the same gate."
+                                    banner
+                                  />
                                 </div>
                               </div>
                             </div>
@@ -780,22 +792,31 @@ export default function Konfirmasi() {
                                       Underline select
                                     </label>
                                     <Select
-                                        onChange={(value) => {gantigerbong(value)}}
-                                        id="underline_select"
-                                        style={{ width: '100%' }}
-                                        defaultValue={0}
-                                      >
-                                        {dataSeats !== undefined && dataSeats !== null ? (
-                                          dataSeats.data.map((data, i) => (
-                                            <Select.Option key={i} value={i}>
-                                              {data.wagonCode === "EKO" ? "Ekonomi" :
-                                              data.wagonCode === "EKS" ? "Eksekutif" : "Bisnis"} {data.wagonNumber}
-                                            </Select.Option>
-                                          ))
-                                        ) : (
-                                          <Select.Option value="empty">Data kosong</Select.Option>
-                                        )}
-                                      </Select>
+                                      onChange={(value) => {
+                                        gantigerbong(value);
+                                      }}
+                                      id="underline_select"
+                                      style={{ width: "100%" }}
+                                      defaultValue={0}
+                                    >
+                                      {dataSeats !== undefined &&
+                                      dataSeats !== null ? (
+                                        dataSeats.data.map((data, i) => (
+                                          <Select.Option key={i} value={i}>
+                                            {data.wagonCode === "EKO"
+                                              ? "Ekonomi"
+                                              : data.wagonCode === "EKS"
+                                              ? "Eksekutif"
+                                              : "Bisnis"}{" "}
+                                            {data.wagonNumber}
+                                          </Select.Option>
+                                        ))
+                                      ) : (
+                                        <Select.Option value="empty">
+                                          Data kosong
+                                        </Select.Option>
+                                      )}
+                                    </Select>
                                   </div>
                                 </>
                               </div>
@@ -813,7 +834,9 @@ export default function Konfirmasi() {
                                       clickSeatsData={clickSeats}
                                       seats={dataSeats.data[clickSeats].layout}
                                       selectedCheckboxes={selectedCheckboxes}
-                                      setSelectedCheckboxes={setSelectedCheckboxes}
+                                      setSelectedCheckboxes={
+                                        setSelectedCheckboxes
+                                      }
                                     />
                                   </>
                                 )}
@@ -862,20 +885,16 @@ export default function Konfirmasi() {
             </Modal.Footer>
           </Modal>
 
-
           {/* header kai flow */}
           <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
               <IoMdCheckmarkCircle className="text-green-500" size={20} />
               <div className="hidden xl:flex text-green-500">
-                  Detail pesanan
+                Detail pesanan
               </div>
             </div>
             <div>
-              <MdHorizontalRule
-                size={20}
-                className="hidden xl:flex "
-              />
+              <MdHorizontalRule size={20} className="hidden xl:flex " />
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
               <AiOutlineClockCircle size={20} className="" />
@@ -884,16 +903,11 @@ export default function Konfirmasi() {
               </div>
             </div>
             <div>
-              <MdHorizontalRule
-                size={20}
-                className=" hidden xl:flex"
-              />
+              <MdHorizontalRule size={20} className=" hidden xl:flex" />
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
               <RxCrossCircled size={20} className="" />
-              <div className="hidden xl:block ">
-                Pembayaran tiket
-              </div>
+              <div className="hidden xl:block ">Pembayaran tiket</div>
             </div>
           </div>
 
@@ -908,10 +922,13 @@ export default function Konfirmasi() {
             <>
               <div className="block xl:flex xl:justify-around mb-24 xl:space-x-4">
                 <div className="block xl:hidden mb-4 xl:mb-0">
-                  <Alert message={`Expired Booking : ${remainingBookTime}`} banner />
+                  <Alert
+                    message={`Expired Booking : ${remainingBookTime}`}
+                    banner
+                  />
                 </div>
 
-               {/* desktop and mobile sidebar*/}
+                {/* desktop and mobile sidebar*/}
                 <div className="w-full mx-0 2xl:mx-4 ">
                   <div className="mt-2 xl:mt-8 w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
                     <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
@@ -979,73 +996,78 @@ export default function Konfirmasi() {
                       </ol>
                     </div>
                   </div>
-                  
+
                   {/* mobile sidebar */}
                   <div className="mt-4 block xl:hidden">
                     <Box
-                        className="border-b px-4 py-4 "
-                        sx={{
-                          // textAlign: "center",
-                          // paddingY: "16px",
-                          // borderBottomLeftRadius: "30px",
-                          // borderBottomRightRadius: "30px",
-                          // cursor: "pointer",
-                        }}
-                        >
-                    <div className="flex justify-between items-center -mt-2">
-                      {/* <div className="text-black text-xs">Booking ID</div> */}
-                      <div className="text-black text-sm -mt-1.5">
-                        Transaksi ID
+                      className="border-b px-4 py-4 "
+                    >
+                      <div className="flex justify-between items-center -mt-2">
+                        {/* <div className="text-black text-xs">Booking ID</div> */}
+                        <div className="text-black text-sm -mt-1.5">
+                          Transaksi ID
+                        </div>
+                        <div className="mt-2 font-bold  text-blue-500 text-[18px]">
+                          {/* {hasilBooking && hasilBooking.bookingCode} */}
+                          <Paragraph copyable className="">
+                            {hasilBooking && hasilBooking.transactionId}
+                          </Paragraph>
+                        </div>
                       </div>
-                      <div className="mt-2 font-bold  text-blue-500 text-[18px]">
-                        {/* {hasilBooking && hasilBooking.bookingCode} */}
-                        <Paragraph copyable className="">
-                          {hasilBooking && hasilBooking.transactionId}
-                        </Paragraph>
+                      <div className="text-gray-500 text-xs">
+                        Gunakan kode bayar ini sebagai nomor tujuan pada menu
+                        pembayaran di aplikasi.
                       </div>
-                    </div>
-                    <div className="text-gray-500 text-xs">
-
-                      Gunakan kode bayar ini sebagai nomor tujuan pada menu
-                      pembayaran di aplikasi.
-                    </div>
                     </Box>
-                    <button onClick={handlerPilihKursi} className="block w-full">
-                    <div className="mt-2 border-b border-gray-200 hover:bg-gray-100">
-                      <div className="flex items-center justify-between space-x-2 p-4 pr-2 xl:pr-4">
-                        <div className="flex space-x-2 items-center">
+                    <button
+                      onClick={handlerPilihKursi}
+                      className="block w-full"
+                    >
+                      <div className="mt-2 border-b border-gray-200 hover:bg-gray-100">
+                        <div className="flex items-center justify-between space-x-2 p-4 pr-2 xl:pr-4">
+                          <div className="flex space-x-2 items-center">
+                            <div>
+                              <MdOutlineAirlineSeatReclineExtra
+                                size={28}
+                                className="text-blue-500"
+                              />
+                            </div>
+                            <div className="block text-black text-sm">
+                              <div className="text-sm font-medium ">
+                                Pindah Kursi
+                              </div>
+                              <small>available seats</small>
+                            </div>
+                          </div>
                           <div>
-                            <MdOutlineAirlineSeatReclineExtra
+                            <IoIosArrowDropright
                               size={28}
                               className="text-blue-500"
                             />
                           </div>
-                          <div className="block text-black text-sm">
-                            <div className="text-sm font-medium ">
-                              Pindah Kursi
-                            </div>
-                            <small>available seats</small>
-                          </div>
-                        </div>
-                        <div>
-                          <IoIosArrowDropright
-                            size={28}
-                            className="text-blue-500"
-                          />
                         </div>
                       </div>
-                    </div>
-                  </button>
+                    </button>
                     <div className="py-2">
                       <div className="w-full px-4">
                         <div className="flex justify-between items-center border-b border-gray-200 py-4">
                           <div className="flex space-x-2 items-center">
                             <div className="text-xs text-gray-500">
-                              <small className="text-xs text-gray-400">Data Penumpang</small>
-                              <div className="my-1">{TotalAdult > 0 && TotalAdult + ' Dewasa'} {TotalAdult > 0 && ', ' +TotalInfant + ' Bayi'}</div>
+                              <small className="text-xs text-gray-400">
+                                Data Penumpang
+                              </small>
+                              <div className="my-1">
+                                {TotalAdult > 0 && TotalAdult + " Dewasa"}{" "}
+                                {TotalAdult > 0 && ", " + TotalInfant + " Bayi"}
+                              </div>
                             </div>
                           </div>
-                          <div onClick={() => {toggleDrawer(true)}} className="cursor-pointer text-xs text-blue-400">
+                          <div
+                            onClick={() => {
+                              toggleDrawer(true);
+                            }}
+                            className="cursor-pointer text-xs text-blue-400"
+                          >
                             Detail
                           </div>
                         </div>
@@ -1056,12 +1078,14 @@ export default function Konfirmasi() {
                         <div className="flex justify-between items-center">
                           <div className="flex space-x-2 items-center">
                             <div className="text-xs text-gray-500">
-                              <div >Total Harga</div>
+                              <div>Total Harga</div>
                             </div>
                           </div>
                           <div className="text-xs">
-                          Rp.{" "}
-                          {toRupiah(hasilBooking && hasilBooking?.normalSales || '-')}
+                            Rp.{" "}
+                            {toRupiah(
+                              (hasilBooking && hasilBooking?.normalSales) || "-"
+                            )}
                           </div>
                         </div>
                       </div>
@@ -1071,14 +1095,16 @@ export default function Konfirmasi() {
                         <div className="flex justify-between items-center border-b border-gray-200 pb-4">
                           <div className="flex space-x-2 items-center">
                             <div className="text-xs text-gray-500">
-                            <div className="text-xs text-gray-500">
-                              <div >Biaya Admin</div>
-                            </div>
+                              <div className="text-xs text-gray-500">
+                                <div>Biaya Admin</div>
+                              </div>
                             </div>
                           </div>
                           <div className="text-xs">
-                          Rp.{" "}
-                          {toRupiah(hasilBooking && hasilBooking.nominalAdmin)}
+                            Rp.{" "}
+                            {toRupiah(
+                              hasilBooking && hasilBooking.nominalAdmin
+                            )}
                           </div>
                         </div>
                       </div>
@@ -1088,192 +1114,199 @@ export default function Konfirmasi() {
                         <div className="flex justify-between items-center">
                           <div className="flex space-x-2 items-center">
                             <div className="text-xs text-gray-500">
-                            <div className="text-xs text-gray-500">
-                              <div >Total Bayar</div>
-                            </div>
+                              <div className="text-xs text-gray-500">
+                                <div>Total Bayar</div>
+                              </div>
                             </div>
                           </div>
                           <div className="text-xs">
-                          Rp.{" "}
-                          {toRupiah(
-                            parseInt(hasilBooking && hasilBooking?.normalSales || 0) +
+                            Rp.{" "}
+                            {toRupiah(
                               parseInt(
-                                hasilBooking && hasilBooking.nominalAdmin
-                              )
-                          )}
+                                (hasilBooking && hasilBooking?.normalSales) || 0
+                              ) +
+                                parseInt(
+                                  hasilBooking && hasilBooking.nominalAdmin
+                                )
+                            )}
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                {/* mobile detail */}
-                <DetailPassengersDrawer passengers={passengers} hasilBooking={hasilBooking} openDrawer={openDrawer} toggleDrawer={toggleDrawer} />              
-
+                  {/* mobile detail */}
+                  <DetailPassengersDrawer
+                    passengers={passengers}
+                    hasilBooking={hasilBooking}
+                    openDrawer={openDrawer}
+                    toggleDrawer={toggleDrawer}
+                  />
 
                   {/* for desktop adult, infant*/}
                   <div className="hidden xl:block">
-                  {/* adult */}
-                  {passengers.adults && passengers.adults.length > 0 ? (
-                    <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
-                      <p>ADULT PASSENGERS</p>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                  {passengers.adults && passengers.adults.length > 0
-                    ? passengers.adults.map((e, i) => (
-                        <>
-                          <div className="p-2 mt-4 w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
-                            <div className="p-2">
-                              <div className="px-2 xl:px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
-                                {e.name}
-                              </div>
-                              <div className="mt-2 grid grid-cols-2 xl:grid-cols-4">
-                                <div className="px-2 xl:px-4 py-2 text-xs">
-                                  <div className="text-black font-medium ">NIK</div>
-                                  <div className="mt-2 text-black text-xs">
-                                    {e.idNumber}
+                    {/* adult */}
+                    {passengers.adults && passengers.adults.length > 0 ? (
+                      <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
+                        <p>ADULT PASSENGERS</p>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                    {passengers.adults && passengers.adults.length > 0
+                      ? passengers.adults.map((e, i) => (
+                          <>
+                            <div className="p-2 mt-4 w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
+                              <div className="p-2">
+                                <div className="px-2 xl:px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
+                                  {e.name}
+                                </div>
+                                <div className="mt-2 grid grid-cols-2 xl:grid-cols-4">
+                                  <div className="px-2 xl:px-4 py-2 text-xs">
+                                    <div className="text-black font-medium ">
+                                      NIK
+                                    </div>
+                                    <div className="mt-2 text-black text-xs">
+                                      {e.idNumber}
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="px-2 xl:px-4 py-2 text-xs">
-                                  <div className="text-black ">Nomor HP</div>
-                                  <div className="mt-2 text-black text-xs">{e.phone}</div>
-                                </div>
-                                <div className="px-2 xl:px-4 py-2 text-xs">
-                                  <div className="text-black  font-medium ">Kursi</div>
-                                  <div className="mt-2 text-black text-xs">
-                                    {hasilBooking !== null
-                                      ? hasilBooking.seats[i][0] === "EKO"
-                                        ? "Ekonomi"
-                                        : hasilBooking.seats[i][0] === "BIS"
-                                        ? "Bisnis"
-                                        : "Eksekutif"
-                                      : ""}{" "}
-                                    {hasilBooking !== null
-                                      ? hasilBooking.seats[i][1]
-                                      : ""}{" "}
-                                    -{" "}
-                                    {hasilBooking
-                                      ? hasilBooking.seats[i][2]
-                                      : ""}
-                                    {hasilBooking !== null
-                                      ? hasilBooking.seats[i][3]
-                                      : ""}
+                                  <div className="px-2 xl:px-4 py-2 text-xs">
+                                    <div className="text-black ">Nomor HP</div>
+                                    <div className="mt-2 text-black text-xs">
+                                      {e.phone}
+                                    </div>
+                                  </div>
+                                  <div className="px-2 xl:px-4 py-2 text-xs">
+                                    <div className="text-black  font-medium ">
+                                      Kursi
+                                    </div>
+                                    <div className="mt-2 text-black text-xs">
+                                      {hasilBooking !== null
+                                        ? hasilBooking.seats[i][0] === "EKO"
+                                          ? "Ekonomi"
+                                          : hasilBooking.seats[i][0] === "BIS"
+                                          ? "Bisnis"
+                                          : "Eksekutif"
+                                        : ""}{" "}
+                                      {hasilBooking !== null
+                                        ? hasilBooking.seats[i][1]
+                                        : ""}{" "}
+                                      -{" "}
+                                      {hasilBooking
+                                        ? hasilBooking.seats[i][2]
+                                        : ""}
+                                      {hasilBooking !== null
+                                        ? hasilBooking.seats[i][3]
+                                        : ""}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </>
-                      ))
-                    : ""}
-                  {/* infants */}
-                  {passengers.infants && passengers.infants.length > 0 ? (
-                    <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
-                      <p>INFANTS PASSENGERS</p>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                  {passengers.infants && passengers.infants.length > 0
-                    ? passengers.infants.map((e, i) => (
-                        <>
-                          <div className="p-2 mt-4 w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
-                            <div className="mt-2">
-                              <div className="px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
-                                {e.name}
-                              </div>
-                              <div className="mt-2 grid grid-cols-2 xl:grid-cols-4">
-                                <div className="px-4 py-2 text-xs">
-                                  <div className="text-black font-medium ">NIK</div>
-                                  <div className="mt-2 text-black text-xs">
-                                    {e.idNumber}
-                                  </div>
+                          </>
+                        ))
+                      : ""}
+                    {/* infants */}
+                    {passengers.infants && passengers.infants.length > 0 ? (
+                      <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
+                        <p>INFANTS PASSENGERS</p>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                    {passengers.infants && passengers.infants.length > 0
+                      ? passengers.infants.map((e, i) => (
+                          <>
+                            <div className="p-2 mt-4 w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
+                              <div className="mt-2">
+                                <div className="px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
+                                  {e.name}
                                 </div>
-                                <div className="px-4 py-2 text-xs">
-                                  <div className="text-black font-medium ">
-                                    Tanggal Lahir
+                                <div className="mt-2 grid grid-cols-2 xl:grid-cols-4">
+                                  <div className="px-4 py-2 text-xs">
+                                    <div className="text-black font-medium ">
+                                      NIK
+                                    </div>
+                                    <div className="mt-2 text-black text-xs">
+                                      {e.idNumber}
+                                    </div>
                                   </div>
-                                  <div className="mt-2 text-black text-xs">
-                                    {e.birthdate}
+                                  <div className="px-4 py-2 text-xs">
+                                    <div className="text-black font-medium ">
+                                      Tanggal Lahir
+                                    </div>
+                                    <div className="mt-2 text-black text-xs">
+                                      {e.birthdate}
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="px-4 py-2 text-xs">
-                                  <div className="text-black font-medium ">Kursi</div>
-                                  <div className="mt-2 text-black text-xs">
-                                    {hasilBooking !== null
-                                      ? hasilBooking.seats[i][0] === "EKO"
-                                        ? "Ekonomi"
-                                        : hasilBooking.seats[i][0] === "BIS"
-                                        ? "Bisnis"
-                                        : "Eksekutif"
-                                      : ""}{" "}
+                                  <div className="px-4 py-2 text-xs">
+                                    <div className="text-black font-medium ">
+                                      Kursi
+                                    </div>
+                                    <div className="mt-2 text-black text-xs">
+                                      {hasilBooking !== null
+                                        ? hasilBooking.seats[i][0] === "EKO"
+                                          ? "Ekonomi"
+                                          : hasilBooking.seats[i][0] === "BIS"
+                                          ? "Bisnis"
+                                          : "Eksekutif"
+                                        : ""}{" "}
                                       {"/"}
                                       {" 0 "}
-                                    {/* {hasilBooking !== null
-                                      ? hasilBooking.seats[i][1]
-                                      : ""}{" "} */}
-                                    -{" "}
-                                    {/* {hasilBooking
-                                      ? hasilBooking.seats[i][2]
-                                      : ""} */}
-                                    {/* {hasilBooking !== null
-                                      ? hasilBooking.seats[i][3]
-                                      : ""} */}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </>
-                      ))
-                  : ""}
+                          </>
+                        ))
+                      : ""}
 
-                  <div className="text-sm xl:text-sm font-bold text-black mt-12">
-                    <p>PRICE DETAILT</p>
-                  </div>
-                  <div className="p-2 mt-4 w-full rounded-md border-b xl:border xl:border-gray-200">
-                    <div className="p-4">
-                      <div className="text-xs text-black font-medium  flex justify-between">
-                        <div>
-                          {dataBookingTrain && dataBookingTrain[0].trainName}{" "}
-                          {TotalAdult > 0 ? `(Adults) x${TotalAdult}` : ""}{" "}
-                          {/* {TotalChild > 0 ? `(Children) x${TotalChild}` : ""}{" "} */}
-                          {TotalInfant > 0 ? `(Infants) x${TotalInfant}` : ""}
+                    <div className="text-sm xl:text-sm font-bold text-black mt-12">
+                      <p>PRICE DETAILT</p>
+                    </div>
+                    <div className="p-2 mt-4 w-full rounded-md border-b xl:border xl:border-gray-200">
+                      <div className="p-4">
+                        <div className="text-xs text-black font-medium  flex justify-between">
+                          <div>
+                            {dataBookingTrain && dataBookingTrain[0].trainName}{" "}
+                            {TotalAdult > 0 ? `(Adults) x${TotalAdult}` : ""}{" "}
+                            {/* {TotalChild > 0 ? `(Children) x${TotalChild}` : ""}{" "} */}
+                            {TotalInfant > 0 ? `(Infants) x${TotalInfant}` : ""}
+                          </div>
+                          <div>
+                            Rp.{" "}
+                            {hasilBooking && toRupiah(hasilBooking.normalSales)}
+                          </div>
                         </div>
-                        <div>
-                          Rp.{" "}
-                          {hasilBooking && toRupiah(hasilBooking.normalSales)}
+                        <div className="mt-4 text-xs text-black font-medium  flex justify-between">
+                          <div>Biaya Admin (Fee)</div>
+                          <div>
+                            Rp.{" "}
+                            {hasilBooking &&
+                              toRupiah(hasilBooking.nominalAdmin)}
+                          </div>
                         </div>
-                      </div>
-                      <div className="mt-4 text-xs text-black font-medium  flex justify-between">
-                        <div>Biaya Admin (Fee)</div>
-                        <div>
-                          Rp.{" "}
-                          {hasilBooking && toRupiah(hasilBooking.nominalAdmin)}
+                        <div className="mt-4 text-xs text-black font-medium  flex justify-between">
+                          <div>Diskon (Rp.)</div>
+                          <div>Rp. {hasilBooking && hasilBooking.discount}</div>
                         </div>
-                      </div>
-                      <div className="mt-4 text-xs text-black font-medium  flex justify-between">
-                        <div>Diskon (Rp.)</div>
-                        <div>Rp. {hasilBooking && hasilBooking.discount}</div>
-                      </div>
-                      <div className="mt-8 pt-2 border-t border-gray-200 text-sm text-black font-medium  flex justify-between">
-                        <div>Total Harga</div>
-                        <div>
-                          Rp.{" "}
-                          {hasilBooking &&
-                            toRupiah(
-                              parseInt(hasilBooking.normalSales) -
-                                parseInt(hasilBooking.discount) +
-                                parseInt(hasilBooking.nominalAdmin)
-                            )}
+                        <div className="mt-8 pt-2 border-t border-gray-200 text-sm text-black font-medium  flex justify-between">
+                          <div>Total Harga</div>
+                          <div>
+                            Rp.{" "}
+                            {hasilBooking &&
+                              toRupiah(
+                                parseInt(hasilBooking.normalSales) -
+                                  parseInt(hasilBooking.discount) +
+                                  parseInt(hasilBooking.nominalAdmin)
+                              )}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  </div>
-                 {/* end desktop */}
+                  {/* end desktop */}
 
                   <div className="flex justify-end w-full xl:w-auto">
                     <ButtonAnt
@@ -1294,15 +1327,20 @@ export default function Konfirmasi() {
                   <div className="mt-2 xl:mt-8 py-2 rounded-md border border-gray-200 shadow-sm">
                     <div className="flex items-center justify-between py-2 px-4">
                       {/* <div className="text-black text-sm">Booking ID</div> */}
-                      <div className="-mt-4  text-black text-sm">Transaksi ID</div>
+                      <div className="-mt-4  text-black text-sm">
+                        Transaksi ID
+                      </div>
                       <div className="font-medium  text-blue-500 text-[18px]">
                         {/* {hasilBooking && hasilBooking.bookingCode} */}
-                        <Paragraph copyable>{hasilBooking && hasilBooking.transactionId}</Paragraph>
+                        <Paragraph copyable>
+                          {hasilBooking && hasilBooking.transactionId}
+                        </Paragraph>
                       </div>
                     </div>
                     <div className="px-4 text-grapy-500 text-xs">
-                    Gunakan kode bayar ini sebagai nomor tujuan pada menu pembayaran di aplikasi.
-                      </div>
+                      Gunakan kode bayar ini sebagai nomor tujuan pada menu
+                      pembayaran di aplikasi.
+                    </div>
                   </div>
                   <button onClick={handlerPilihKursi} className="block w-full">
                     <div className="mt-2 rounded-md border border-gray-200 shadow-sm  hover:bg-gray-100">
@@ -1331,7 +1369,10 @@ export default function Konfirmasi() {
                     </div>
                   </button>
                   <div className="hidden xl:block mt-2">
-                    <Alert message={`Expired Booking : ${remainingBookTime}`} banner />
+                    <Alert
+                      message={`Expired Booking : ${remainingBookTime}`}
+                      banner
+                    />
                   </div>
                   <div></div>
                 </div>

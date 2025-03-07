@@ -7,7 +7,7 @@ export default function HeaderTemplateMobileBooking({ children }) {
   return (
     <div className="flex flex-col min-h-screen">
       <div>
-      <div className="block md:hidden mb-2">
+      <div className="block xl:hidden mb-2">
         <div className="flex space-x-3.5 items-center w-full text-black px-2 py-[18px]">
               <div className="ml-2" onClick={() => window.history.back()}>
                   <IoArrowBack size={22} />

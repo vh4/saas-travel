@@ -19,7 +19,7 @@ export default function HeaderTemplateMobileSearch({ children }) {
   return (
     <div className="flex flex-col min-h-screen">
       <div>
-      <div className="block md:hidden">
+      <div className="block xl:hidden">
         <div className="flex  justify-center items-center w-full text-black p-2.5">
             <div className="ml-2" onClick={() => window.history.back()}>
                 <IoArrowBack size={22} />

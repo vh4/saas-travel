@@ -146,7 +146,7 @@ export default function ViewBooking({ path }) {
             <div className="mt-4 mb-12">
               {byrdata.penumpang.map((e) => (
                 <>
-                  <div className="border-b p-4 grid grid-cols-1 md:grid-cols-5 gap-4 mt-4">
+                  <div className="border-b p-4 grid grid-cols-1 xl:grid-cols-5 gap-4 mt-4">
                     <div className="text-xs">
                       <div className="">Nama</div>
                       <div>{e.nama || "-"}</div>
@@ -292,8 +292,7 @@ export default function ViewBooking({ path }) {
               </div> */}
             </div>
           ) : (
-            <>
-            </>
+            <></>
           )}
         </Modal>
         {err === true ? (
@@ -316,7 +315,7 @@ export default function ViewBooking({ path }) {
                     {data.map((e, i) => (
                       <div className="w-full mb-4">
                         <div className="w-full profile-header">
-                          <div className="p-2 md:p-8 mt-12 md:mt-0">
+                          <div className="p-2 xl:p-8 mt-12 xl:mt-0">
                             <div className="flex justify-between items-end">
                               {!e.status?.status_payment
                                 ?.toUpperCase()

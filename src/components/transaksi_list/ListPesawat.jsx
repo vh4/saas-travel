@@ -9,9 +9,13 @@ import { Modal } from "antd";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { CiBoxList, CiCircleMore, CiTimer } from "react-icons/ci";
 import { HiOutlinePrinter } from "react-icons/hi2";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { remainingTime } from "../../helpers/date";
 import dayjs from "dayjs";
+import { IoIosArrowRoundForward } from "react-icons/io";
+import { setBookDataLanjutBayar } from "../../features/createSlice";
+import { callbackFetchData } from "../../features/callBackSlice";
+import { useDispatch } from "react-redux";
 
 export default function ViewTransaksi({ path }) {
   const [data, setData] = useState([]);
@@ -26,6 +30,8 @@ export default function ViewTransaksi({ path }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const hardcode_inq = searchParams.get("hc_inq");
   const hardcode_pay = searchParams.get("hc_pay");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [err, setErr] = useState(false);
   const [errPage, setErrPage] = useState(false);
@@ -39,27 +45,6 @@ export default function ViewTransaksi({ path }) {
       setErr(true);
     }
   }, [token]);
-
-  // function success() {
-  //   messageApi.open({
-  //     type: "success",
-  //     content:
-  //       "Pembayaran anda berhasil, silahkan check tiket anda di menu transaksi.",
-  //     duration: 7,
-  //   });
-  // }
-
-  // function gagal(rd) {
-  //   messageApi.open({
-  //     type: "error",
-  //     content:
-  //       "Failed, " +
-  //       rd.toLowerCase().charAt(0).toUpperCase() +
-  //       rd.slice(1).toLowerCase() +
-  //       "",
-  //     duration: 7,
-  //   });
-  // }
 
   const [isLoading, setIsLoading] = useState(false);
   const [loadBayar, setloadBayar] = useState(true);
@@ -256,35 +241,21 @@ export default function ViewTransaksi({ path }) {
     };
   }, [data, remainingTimes]);
 
-  // const handleBayar = async () => {
-  //   // setLoading(true);
-
-  //   const response = await axios.post(
-  //     `${process.env.REACT_APP_HOST_API}/travel/flight/payment`,
-  //     {
-  //       airline: byrdata.id_produk,
-  //       transactionId: byrdata.id_transaksi,
-  //       bookingCode: byrdata.kode_booking,
-  //       simulateSuccess: process.env.REACT_APP_SIMUATION_PAYMENT,
-  //       paymentCode: "",
-  //       token: JSON.parse(
-  //         localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-  //       ),
-  //     }
-  //   );
-  //   setTimeout(() => {
-  //     // setLoading(false);
-  //     // setOpen(false);
-  //   }, 1000);
-
-  //   if (response.data.rc !== "00") {
-  //     gagal(response.data.rd);
-  //     handleClose();
-  //   } else {
-  //     success();
-  //     handleClose();
-  //   }
-  // };
+  const handleDetail = async (e) => {
+    setIsLoading(true);
+    try {
+      dispatch(
+        callbackFetchData({ type: "plane", id_transaksi: e.id_transaksi })
+      );
+      dispatch(setBookDataLanjutBayar(e));
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(true);
+    navigate({
+      pathname: `/flight/detail/payment`,
+    });
+  };
 
   return (
     <>
@@ -314,7 +285,7 @@ export default function ViewTransaksi({ path }) {
           <div className="mt-4 mb-12">
             {byrdata.penumpang.map((e) => (
               <>
-                <div className="border-b p-4 grid grid-cols-1 md:grid-cols-5 gap-4 mt-4">
+                <div className="border-b p-4 grid grid-cols-1 xl:grid-cols-5 gap-4 mt-4">
                   <div className="text-xs">
                     <div className="">Nama</div>
                     <div>
@@ -340,21 +311,23 @@ export default function ViewTransaksi({ path }) {
                         : "-"}
                     </div>
                   </div>
-                    <div className="text-xs">
-                      <div className="">No</div>
-                      {e.status === "DEWASA" ? (
-                        <>
-                          <div>
-                            {e.no_hp.toLowerCase().charAt(0).toUpperCase() +
-                              e.no_hp.slice(1).toLowerCase() !==
-                            "Undefined"
-                              ? e.no_hp.toLowerCase().charAt(0).toUpperCase() +
-                                e.no_hp.slice(1).toLowerCase()
-                              : "-"}
-                          </div>
-                        </>
-                      ) : "-"}
-                    </div>
+                  <div className="text-xs">
+                    <div className="">No</div>
+                    {e.status === "DEWASA" ? (
+                      <>
+                        <div>
+                          {e.no_hp.toLowerCase().charAt(0).toUpperCase() +
+                            e.no_hp.slice(1).toLowerCase() !==
+                          "Undefined"
+                            ? e.no_hp.toLowerCase().charAt(0).toUpperCase() +
+                              e.no_hp.slice(1).toLowerCase()
+                            : "-"}
+                        </div>
+                      </>
+                    ) : (
+                      "-"
+                    )}
+                  </div>
                   <div className="text-xs">
                     <div className="">Tanggal Lahir</div>
                     <div>
@@ -370,7 +343,7 @@ export default function ViewTransaksi({ path }) {
               <div className="text-xs">Deskripsi</div>
             </div>
             {/* desktop */}
-            <div className="mt-4 hidden md:block">
+            <div className="mt-4 hidden xl:block">
               <div className="border-y p-4 grid grid-cols-8 gap-2 items-center">
                 <div className="">
                   <div className="max-w-[80px]">
@@ -463,8 +436,7 @@ export default function ViewTransaksi({ path }) {
             </div>
           </div>
         ) : (
-          <>
-          </>
+          <></>
         )}
       </Modal>
       {err === true ? (
@@ -477,7 +449,7 @@ export default function ViewTransaksi({ path }) {
         </>
       ) : (
         <>
-          {/* <div className="w-full mt-0 md:mt-8">
+          {/* <div className="w-full mt-0 xl:mt-8">
             <div className="w-full rounded-md shadow-sm border profile-header">
               <div className="text-black p-4 flex space-x-2 items-center">
                 <AiOutlineHome size={20} /> <span>Home</span> <span>/</span>{" "}
@@ -494,7 +466,7 @@ export default function ViewTransaksi({ path }) {
                       <div className="mt-4 xl:mt-0">
                         <div className="w-full">
                           <div className="w-full profile-header">
-                            <div className="p-2 md:px-8 md:py-6 mt-4 mb-8 md:mb-0 md:mt-0">
+                            <div className="p-2 xl:px-8 xl:py-6 mt-4 mb-8 xl:mb-0 xl:mt-0">
                               <div className="flex justify-between items-end">
                                 {!e.status?.status_payment
                                   ?.toUpperCase()
@@ -602,6 +574,15 @@ export default function ViewTransaksi({ path }) {
                                       >
                                         Lihat Detail
                                       </a>
+                                    </div>
+                                    <div className="flex space-x-2 items-center">
+                                      <a
+                                        onClick={() => handleDetail(e, i)}
+                                        className="cursor-pointer text-black text-xs hover:text-black"
+                                      >
+                                        Lanjut Bayar
+                                      </a>
+                                      <IoIosArrowRoundForward size={16} />
                                     </div>
                                   </div>
                                 </div>

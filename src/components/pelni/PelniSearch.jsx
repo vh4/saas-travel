@@ -525,7 +525,7 @@ function Pelni() {
                     openTo="month"
                   />
               </div>
-              <div className={openYear ? `block mt-8 md:mt-8` : `hidden`}>
+              <div className={openYear ? `block mt-8 xl:mt-8` : `hidden`}>
                 <DateCalendar
                   value={tanggal}
                   onChange={(e) => {
@@ -554,7 +554,7 @@ function Pelni() {
                 <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 gap-2 xl:gap-0">
 
                   {/* desktop pencarian asal dan tujuan*/}
-                  <div className="mt-2 w-full col col-span-1 md:col-span-2 hidden xl:block">
+                  <div className="mt-2 w-full col col-span-1 xl:col-span-2 hidden xl:block">
                   <div className="w-full flex flex-col xl:flex-row items-center px-2 xl:px-0">
                       <div className="w-full m-2 xl:m-0 xl:pr-0">
                         <small className="block mb-2 text-black">
@@ -739,7 +739,7 @@ function Pelni() {
 
                   <FormControl sx={{ m: 1, minWidth: 130 }}>
                     <small className="mb-2 text-black">Total Penumpang</small>
-                    <div className="hidden md:block"></div>
+                    <div className="hidden xl:block"></div>
                     <div
                       className="cursor-pointer border py-[10px] rounded-md px-2 w-full text-black flex items-center space-x-2"
                       onClick={toggleDrawer(true, false, "buka")}
@@ -792,7 +792,7 @@ function Pelni() {
                     size="large"
                     key="submit"
                     type="primary"
-                    className="bg-blue-500 mx-2 md:mx-0 font-semibold"
+                    className="bg-blue-500 mx-2 xl:mx-0 font-semibold"
                     loading={isLoading}
                     onClick={handleSubmitPelni}
                   >

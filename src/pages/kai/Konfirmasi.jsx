@@ -10,7 +10,7 @@ export default function Konfirmasi(){
 
     return(
         <>
-            <div className="block md:hidden">
+            <div className="block xl:hidden">
                 <HeaderTemplateMobileKonfirmasi>
                     <div className="container">
                         <div className="w-full px-4"> 
@@ -20,7 +20,7 @@ export default function Konfirmasi(){
                     </div>
                 </HeaderTemplateMobileKonfirmasi>
             </div>
-            <div className="hidden md:block">
+            <div className="hidden xl:block">
                 <Layout>
                     <div className="container">
                         <div className="w-full px-4"> 

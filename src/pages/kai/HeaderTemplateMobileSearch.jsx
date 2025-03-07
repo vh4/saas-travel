@@ -19,7 +19,7 @@ export default function HeaderTemplateMobileSearch({ children }) {
   return (
     <div className="flex flex-col min-h-screen">
       <div className="w-full fixed z-50 bg-white border-b border-gray-200">
-        <div className="block md:hidden">
+        <div className="block xl:hidden">
           <div className="flex items-center w-full text-black px-4 py-2">
             <div className="mr-auto" onClick={() => window.history.back()}>
               <BsArrowLeft size={22} />

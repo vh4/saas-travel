@@ -12,7 +12,7 @@ export default function ProfilePage() {
     const path = _.startCase(location.pathname.toString()).split("  ").join("/");
 
     const theme = useTheme();
-    const isXL = useMediaQuery(theme.breakpoints.up("lg"));
+    const isXL = useMediaQuery(theme.breakpoints.up("xl"));
 
     useEffect(() => {
         document.title = "Travel - Profile";

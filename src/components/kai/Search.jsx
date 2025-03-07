@@ -32,7 +32,6 @@ import { setDataSearchKereta } from "../../features/createSlice";
 import FilterMobileKereta from "./components/FilterMobileKereta";
 
 export default function Search() {
-
   const [searchParams, setSearchParams] = useSearchParams();
   const [uuids, setuuid] = useState(null);
   const dispatch = useDispatch();
@@ -79,15 +78,15 @@ export default function Search() {
     return () => document.body.removeEventListener("click", closeFilter);
   }, []);
 
-  const [gradeFilter, setGradeFilter] = useState([false, false, false]); //index ke-0 ekonomi (K), index ke-1 eksekutif (E), dan index ke-2 bisnis (B) 
+  const [gradeFilter, setGradeFilter] = useState([false, false, false]); //index ke-0 ekonomi (K), index ke-1 eksekutif (E), dan index ke-2 bisnis (B)
   const [waktuFilter, setWaktuFilter] = useState([false, false, false, false]);
   const [HargaTerendahTinggi, setHargaTerendahTinggi] = useState(false);
   const [selectedTime, setSelectedTime] = useState([]);
   const [ubahPencarian, setUbahPencarian] = useState(false);
   const [err, setErr] = useState(false);
   const [errPage, setErrPage] = useState(false);
-  const [messageError, setmessageError] = useState('');
-  const [messageErrorTransit, setmessageErrorTransit] = useState('');
+  const [messageError, setmessageError] = useState("");
+  const [messageErrorTransit, setmessageErrorTransit] = useState("");
 
   const [valHargaRange, setHargaRange] = useState([0, 10000000]);
 
@@ -226,17 +225,17 @@ export default function Search() {
     try {
       setLoading(true);
       const listCategory = ["false", "true"];
-      
-      let rc_non = '';
-      let rc_transit = '';
-  
-      let data_non = '';
-      let data_transit = '';
-  
+
+      let rc_non = "";
+      let rc_transit = "";
+
+      let data_non = "";
+      let data_transit = "";
+
       // Mendapatkan data stasiun dan mengatur state terkait
       const stationData = await getKAIdata();
       setListStaton(stationData);
-  
+
       for (const category of listCategory) {
         const response = await axios.post(
           `${process.env.REACT_APP_HOST_API}/travel/train/search`,
@@ -249,8 +248,8 @@ export default function Search() {
             connection_train: category,
           }
         );
-  
-        if (category == 'true') {
+
+        if (category == "true") {
           rc_transit = response.data.rc;
           data_transit = response.data;
         } else {
@@ -258,30 +257,37 @@ export default function Search() {
           data_non = response.data;
         }
       }
-  
+
       // Handle non-transit response
-      if (rc_non == '10') {
-        setmessageError('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
-      } else if (rc_non != '00' && rc_transit != '10') {
-        setmessageError('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
+      if (rc_non == "10") {
+        setmessageError(
+          "Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang."
+        );
+      } else if (rc_non != "00" && rc_transit != "10") {
+        setmessageError(
+          "Maaf, sepertinya pada rute ini masih belum dibuka kembali."
+        );
       } else {
         setDataSearch(data_non.data);
         setuuid(data_non.uuid);
       }
-      
+
       // Handle transit response
-      if (rc_transit == '10') {
-        setmessageErrorTransit('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
-      } else if (rc_transit != '00' && rc_transit != '10') {
-        setmessageErrorTransit('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
+      if (rc_transit == "10") {
+        setmessageErrorTransit(
+          "Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang."
+        );
+      } else if (rc_transit != "00" && rc_transit != "10") {
+        setmessageErrorTransit(
+          "Maaf, sepertinya pada rute ini masih belum dibuka kembali."
+        );
       } else {
         setDataSearchTransit(data_transit.data);
         setuuid(data_transit.uuid);
       }
-  
     } catch (error) {
-      console.error('Error during search:', error);
-      setmessageError('Maaf, Terjadi kesalahan pada server.');
+      console.error("Error during search:", error);
+      setmessageError("Maaf, Terjadi kesalahan pada server.");
     } finally {
       setLoading(false);
       setLoadingTransit(false);
@@ -290,8 +296,6 @@ export default function Search() {
       setErrorTransit(false);
     }
   }
-  
-
 
   async function bookingHandlerDetail(trainNumber) {
     const detailBooking = dataSearch.filter(
@@ -320,14 +324,10 @@ export default function Search() {
     setTimeout(() => {
       navigate("/train/booking/");
     }, 1000);
-
   }
 
   const bookingHandlerDetailTransit = (dataDetailTrainTransit, category) => {
-
-    const filteredStations = listStaton.filter(
-      (e) => e.id_stasiun == category
-    );
+    const filteredStations = listStaton.filter((e) => e.id_stasiun == category);
 
     const detailKereta = [
       {
@@ -363,94 +363,126 @@ export default function Search() {
     handlerSearch();
   }, []);
 
-
   const [filteredDataTransit, setfilteredDataTransit] = useState({});
 
-  const filterDataTransit = (data, gradeFilter, valHargaRange, selectedTime, HargaTerendahTinggi) => {
-    const filteredData = {};  
-    const gradeMapping = ['K', 'E', 'B']; // Mapping untuk grade
+  const filterDataTransit = (
+    data,
+    gradeFilter,
+    valHargaRange,
+    selectedTime,
+    HargaTerendahTinggi
+  ) => {
+    const filteredData = {};
+    const gradeMapping = ["K", "E", "B"]; // Mapping untuk grade
     const activeGrades = gradeMapping.filter((_, index) => gradeFilter[index]);
-  
-    const isGradeFilterActive = gradeFilter.some(value => value);
-    const isPriceFilterActive = valHargaRange[0] > 0 || valHargaRange[1] < 10000000;
-  
-    if(data && Object.keys(data).length > 0){
+
+    const isGradeFilterActive = gradeFilter.some((value) => value);
+    const isPriceFilterActive =
+      valHargaRange[0] > 0 || valHargaRange[1] < 10000000;
+
+    if (data && Object.keys(data).length > 0) {
       Object.keys(data).forEach((key) => {
         const trains = data[key];
-    
+
         const filteredTrains = trains.filter((trainPair) => {
           let isGradeMatch = true; // Default true jika tidak ada filter grade
           let isPriceMatch = true; // Default true jika tidak ada filter harga
           let isWaktuMatch = true; // Default true jika tidak ada filter harga
 
           if (isGradeFilterActive) {
-            isGradeMatch = trainPair[0].seats.some(seat => activeGrades.includes(seat.grade));
+            isGradeMatch = trainPair[0].seats.some((seat) =>
+              activeGrades.includes(seat.grade)
+            );
           }
-    
+
           if (isPriceFilterActive) {
-  
             const totalPrice = trainPair.reduce((acc, train) => {
-              return acc + train.seats.reduce((acc, seat) => acc + parseInt(seat.priceAdult), 0);
+              return (
+                acc +
+                train.seats.reduce(
+                  (acc, seat) => acc + parseInt(seat.priceAdult),
+                  0
+                )
+              );
             }, 0);
-    
-            isPriceMatch = totalPrice >= valHargaRange[0] && totalPrice <= valHargaRange[1];
-          
+
+            isPriceMatch =
+              totalPrice >= valHargaRange[0] && totalPrice <= valHargaRange[1];
           }
-  
-          if(isWaktuMatch){
-  
+
+          if (isWaktuMatch) {
             if (selectedTime && selectedTime.length > 0) {
               const departureTime = moment(trainPair[0].departureTime, "HH:mm");
               isWaktuMatch = selectedTime.some((t) => {
                 const [start, end] = t.split("-");
-                return departureTime.isBetween(moment(start, "HH:mm"), moment(end, "HH:mm"), undefined, '[]'); // '[]' inklusif kedua batas
+                return departureTime.isBetween(
+                  moment(start, "HH:mm"),
+                  moment(end, "HH:mm"),
+                  undefined,
+                  "[]"
+                ); // '[]' inklusif kedua batas
               });
             }
             //
           }
-    
+
           // Return true jika kedua kondisi (atau salah satu, tergantung filter yang aktif) terpenuhi
           return isGradeMatch && isPriceMatch && isWaktuMatch;
         });
 
         if (HargaTerendahTinggi !== undefined && filteredTrains.length > 0) {
-            // Fungsi untuk menghitung total priceAdult dari sebuah sub-array
-            const calculateTotalPrice = (trainArray) => {
-              return trainArray.reduce((total, train) => {
-                return total + train.seats.reduce((seatTotal, seat) => seatTotal + parseInt(seat.priceAdult), 0);
-              }, 0);
-            };
+          // Fungsi untuk menghitung total priceAdult dari sebuah sub-array
+          const calculateTotalPrice = (trainArray) => {
+            return trainArray.reduce((total, train) => {
+              return (
+                total +
+                train.seats.reduce(
+                  (seatTotal, seat) => seatTotal + parseInt(seat.priceAdult),
+                  0
+                )
+              );
+            }, 0);
+          };
 
-            if(HargaTerendahTinggi === 2){
-              filteredTrains.sort((a, b) => {
-                const totalPriceA = calculateTotalPrice(a);
-                const totalPriceB = calculateTotalPrice(b);
-                return totalPriceB - totalPriceA; // Balikkan kondisi untuk mengurutkan dari tertinggi ke terendah
-              });
-            }else{
-              filteredTrains.sort((a, b) => {
-                const totalPriceA = calculateTotalPrice(a);
-                const totalPriceB = calculateTotalPrice(b);
-                return totalPriceA - totalPriceB; // Balikkan kondisi untuk mengurutkan dari tertinggi ke terendah
-              });
-            }
-
+          if (HargaTerendahTinggi === 2) {
+            filteredTrains.sort((a, b) => {
+              const totalPriceA = calculateTotalPrice(a);
+              const totalPriceB = calculateTotalPrice(b);
+              return totalPriceB - totalPriceA; // Balikkan kondisi untuk mengurutkan dari tertinggi ke terendah
+            });
+          } else {
+            filteredTrains.sort((a, b) => {
+              const totalPriceA = calculateTotalPrice(a);
+              const totalPriceB = calculateTotalPrice(b);
+              return totalPriceA - totalPriceB; // Balikkan kondisi untuk mengurutkan dari tertinggi ke terendah
+            });
+          }
         }
-    
+
         if (filteredTrains.length > 0) {
           filteredData[key] = filteredTrains;
         }
       });
     }
-    
-    setfilteredDataTransit(filteredData);
 
+    setfilteredDataTransit(filteredData);
   };
-    
-  
+
   useEffect(() => {
-    filterDataTransit(dataSearchTransit, gradeFilter, valHargaRange, selectedTime, HargaTerendahTinggi);
-  }, [dataSearchTransit, gradeFilter, valHargaRange, selectedTime, HargaTerendahTinggi])
+    filterDataTransit(
+      dataSearchTransit,
+      gradeFilter,
+      valHargaRange,
+      selectedTime,
+      HargaTerendahTinggi
+    );
+  }, [
+    dataSearchTransit,
+    gradeFilter,
+    valHargaRange,
+    selectedTime,
+    HargaTerendahTinggi,
+  ]);
 
   const filteredData = dataSearch
     .filter((train) => {
@@ -649,20 +681,17 @@ export default function Search() {
   );
 
   const handleIsTransit = async (e) => {
-    
     try {
-      
       setLoadingTransit(true);
       setLoading(true);
       setIsTransit(e.target.value);
 
-      if(Object.keys(dataSearchTransit).length !== 0){
+      if (Object.keys(dataSearchTransit).length !== 0) {
         setTimeout(() => {
           setLoadingTransit(false);
           setLoading(false);
         }, 1000);
-      }else{
-          
+      } else {
         const response = await axios.post(
           `${process.env.REACT_APP_HOST_API}/travel/train/search`,
           {
@@ -674,62 +703,68 @@ export default function Search() {
             connection_train: true,
           }
         );
-    
+
         if (response.data.rc.length < 1) {
           setLoadingTransit(false);
           setLoading(false);
 
-          if(response.data.rc == '10'){
-            setmessageErrorTransit('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
-          }else{
-            setmessageErrorTransit('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
+          if (response.data.rc == "10") {
+            setmessageErrorTransit(
+              "Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang."
+            );
+          } else {
+            setmessageErrorTransit(
+              "Maaf, sepertinya pada rute ini masih belum dibuka kembali."
+            );
           }
 
           setErrorTransit(true);
-  
-        
-        } else if (response.data.rc !== "00" || response.data.rc === undefined) {
+        } else if (
+          response.data.rc !== "00" ||
+          response.data.rc === undefined
+        ) {
           setLoadingTransit(false);
           setLoading(false);
-          
-          if(response.data.rc == '10'){
-            setmessageErrorTransit('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
-          }else{
-            setmessageErrorTransit('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
+
+          if (response.data.rc == "10") {
+            setmessageErrorTransit(
+              "Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang."
+            );
+          } else {
+            setmessageErrorTransit(
+              "Maaf, sepertinya pada rute ini masih belum dibuka kembali."
+            );
           }
           setErrorTransit(true);
-
         } else if (response.data === undefined) {
           setLoadingTransit(false);
           setLoading(false);
 
-          if(response.data.rc == '10'){
-            setmessageErrorTransit('Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang.');
-          }else{
-            setmessageErrorTransit('Maaf, sepertinya pada rute ini masih belum dibuka kembali.');
+          if (response.data.rc == "10") {
+            setmessageErrorTransit(
+              "Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang."
+            );
+          } else {
+            setmessageErrorTransit(
+              "Maaf, sepertinya pada rute ini masih belum dibuka kembali."
+            );
           }
 
           setErrorTransit(true);
-
         } else {
           setDataSearchTransit(response.data.data);
           setuuid(response.data.uuid);
           setLoadingTransit(false);
-          setLoading(false);  
+          setLoading(false);
           setErrorTransit(false);
         }
-  
       }
-      
     } catch (error) {
-      setmessageErrorTransit('Maaf, terjadi kesalahan pada server.');
-        setErrorTransit(false);
-        setLoading(false);  
-        setLoadingTransit(false);
-      }
-    
-
-
+      setmessageErrorTransit("Maaf, terjadi kesalahan pada server.");
+      setErrorTransit(false);
+      setLoading(false);
+      setLoadingTransit(false);
+    }
   };
 
   return (
@@ -746,12 +781,12 @@ export default function Search() {
         </>
       ) : (
         <>
-          <div className="hidden md:block judul-search  text-black">
+          <div className="hidden xl:block judul-search  text-black">
             PILIH JADWAL
           </div>
-          <div className="mt-4 md:mt-8">
+          <div className="mt-4 xl:mt-8">
             <div className="block lg:flex justify-between">
-              <div className="hidden md:flex items-center space-x-3 xl:space-x-4 text-center md:text-left">
+              <div className="hidden xl:flex items-center space-x-3 xl:space-x-4 text-center xl:text-left">
                 <small className="text-xs font-medium  text-black">
                   {stasiunBerangkat}, {kotaBerangkat}
                 </small>
@@ -764,40 +799,31 @@ export default function Search() {
                 <small className="text-xs font-medium  text-black">
                   {stasiunTujuan}, {kotaTujuan}
                 </small>
-                <div className="hidden md:block font-normal text-black">
-                  |
-                </div>
-                <small className="hidden md:block text-xs font-medium  text-black">
+                <div className="hidden xl:block font-normal text-black">|</div>
+                <small className="hidden xl:block text-xs font-medium  text-black">
                   {tanggal_keberangkatan_kereta}
                 </small>
-                <div className="hidden md:block font-normal text-black">
-                  |
-                </div>
-                <small className="hidden md:block text-xs font-medium  text-black">
+                <div className="hidden xl:block font-normal text-black">|</div>
+                <small className="hidden xl:block text-xs font-medium  text-black">
                   {parseInt(adult) + parseInt(infant)} Penumpang
                 </small>
               </div>
-              <div className="hidden mt-4 md:mt-0 md:flex space-x-4 md:mr-0 justify-center md:justify-end">
-                <Link
-                      to="/"
-                      className="hidden md:flex space-x-2 items-center"
-                    >
-                      <IoArrowBackOutline className="text-black" size={16} />
-                      <div className="text-black text-xs">
-                        Kembali
-                      </div>
-                    </Link>
+              <div className="hidden mt-4 xl:mt-0 xl:flex space-x-4 xl:mr-0 justify-center xl:justify-end">
+                <Link to="/" className="hidden xl:flex space-x-2 items-center">
+                  <IoArrowBackOutline className="text-black" size={16} />
+                  <div className="text-black text-xs">Kembali</div>
+                </Link>
                 <button
                   onClick={() => setUbahPencarian((prev) => !prev)}
-                  className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs "
+                  className="block border p-2 px-4 xl:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs "
                 >
                   Ubah Pencarian
                 </button>
               </div>
             </div>
-            
+
             {/* desktop filter */}
-            <div className="hidden xl:flex justify-between mt-0 md:mt-6">
+            <div className="hidden xl:flex justify-between mt-0 xl:mt-6">
               <div className="relative flex items-center space-x-2 text-black text-xs font-medium ">
                 <Whisper
                   placement="top"
@@ -806,7 +832,7 @@ export default function Search() {
                   speaker={hargaPopoOver}
                   placement="bottomStart"
                 >
-                  <button className="text-black block border rounded-full p-2 px-4 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium ">
+                  <button className="text-black block border rounded-full p-2 px-4 xl:px-4 focus:ring-1 focus:ring-gray-300 font-medium ">
                     HARGA
                   </button>
                 </Whisper>
@@ -817,7 +843,7 @@ export default function Search() {
                   speaker={waktuPopoOver}
                   placement="bottomStart"
                 >
-                  <button className="text-black rounded-full block border p-2 px-4 md:px-4 focus:ring-1 focus:ring-gray-300 font-medium ">
+                  <button className="text-black rounded-full block border p-2 px-4 xl:px-4 focus:ring-1 focus:ring-gray-300 font-medium ">
                     WAKTU
                   </button>
                 </Whisper>
@@ -828,12 +854,12 @@ export default function Search() {
                   speaker={KelasPopoOver}
                   placement="bottomStart"
                 >
-                  <button className="text-black rounded-full block border p-2 px-4 md:px-4 focus:ring-1 focus:ring-gray-300">
+                  <button className="text-black rounded-full block border p-2 px-4 xl:px-4 focus:ring-1 focus:ring-gray-300">
                     KELAS
                   </button>
                 </Whisper>
                 {/* <Radio.Group
-                  className="hidden md:block"
+                  className="hidden xl:block"
                   onChange={handleIsTransit}
                   value={isTransit}
                 >
@@ -843,7 +869,7 @@ export default function Search() {
               </div>
 
               <div className="flex space-x-2.5 items-center">
-                <div className="flex md:hidden space-x-4 md:mr-0 justify-center md:justify-end">
+                <div className="flex xl:hidden space-x-4 xl:mr-0 justify-center xl:justify-end">
                   <div
                     onClick={() => setUbahPencarian((prev) => !prev)}
                     className="cursor-pointer"
@@ -851,7 +877,7 @@ export default function Search() {
                     <IoSearchCircle size={28} className="text-blue-500" />
                   </div>
                   {/* <button
-                      className="block border p-2 px-4 md:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs "
+                      className="block border p-2 px-4 xl:px-4 mr-0 bg-blue-500 text-white rounded-md text-xs "
                     >
                       Ubah Pencarian
                     </button> */}
@@ -866,7 +892,7 @@ export default function Search() {
                   >
                     <div>
                       <MdSort
-                        className="text-blue-500 md:text-black"
+                        className="text-blue-500 xl:text-black"
                         size={28}
                       />
                     </div>
@@ -879,19 +905,19 @@ export default function Search() {
                 <KAISearch />
               </div>
             ) : null}
- 
           </div>
           {/* mobile filter */}
           <div className="w-full flex xl:hidden justify-center">
             <FilterMobileKereta
-              waktuFilter={waktuFilter} handleWaktuFilterChange={handleWaktuFilterChange}
-              valHargaRange={valHargaRange} 
+              waktuFilter={waktuFilter}
+              handleWaktuFilterChange={handleWaktuFilterChange}
+              valHargaRange={valHargaRange}
               hargraRangeChange={hargraRangeChange}
-              HargaTerendahTinggi={HargaTerendahTinggi} 
-              setHargaTerendahTinggi={setHargaTerendahTinggi} 
+              HargaTerendahTinggi={HargaTerendahTinggi}
+              setHargaTerendahTinggi={setHargaTerendahTinggi}
             />
           </div>
-          {/* <div className="mt-4 flex justify-center md:hidden">
+          {/* <div className="mt-4 flex justify-center xl:hidden">
             <Radio.Group
               className=""
               onChange={handleIsTransit}
@@ -925,21 +951,22 @@ export default function Search() {
                         e //&& checkedKelas[0] ? item.seats[0].grade == 'K' : true && checkedKelas[0] ? item.seats[1].grade == 'E' : true && checkedKelas[2] ? item.seats[2].grade == 'B' : true
                       ) => (
                         <div
-                          class={`mt-4 md:mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${
+                          class={`mt-4 xl:mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${
                             e.seats[0].availability > 0 &&
                             parseInt(adult) + parseInt(infant) <
                               e.seats[0].availability
-                              ? "bg-white" 
+                              ? "bg-white"
                               : "bg-white xl:bg-gray-50"
                           } border-b xl:border xl:border-gray-200 xl:rounded-lg xl:shadow-sm xl:hover:border-gray-300 xl:transition-transform xl:hover:scale-105`}
                         >
                           {/* desktop cari */}
 
                           <div className="hidden xl:block w-full text-black ">
-                            <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
+                            <div className="px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
                               <div className="col-span-1 xl:col-span-2">
                                 <h1 className="text-sm font-medium ">
-                                {e?.trainName?.charAt(0) + e?.trainName?.slice(1)?.toLowerCase()}
+                                  {e?.trainName?.charAt(0) +
+                                    e?.trainName?.slice(1)?.toLowerCase()}
                                 </h1>
                                 <small>
                                   {e.seats[0].grade === "E"
@@ -980,27 +1007,18 @@ export default function Search() {
                                   Rp.{toRupiah(e.seats[0].priceAdult)}
                                 </h1>
                                 {e.seats[0].availability > 0 &&
-                                  parseInt(adult) + parseInt(infant) <
-                                    e.seats[0].availability
-                                    ? 
-                                    (
-                                      <div>
-                                        {
-                                        e.seats[0].availability > 50 ?
-                                          (
-                                            <small>
-                                              Available
-                                            </small>
-                                          ) :
-                                          (
-                                            <small className="text-red-500">
-                                              {e.seats[0].availability} set(s) left
-                                            </small>
-                                          )
-                                        }
-                                      </div>
-                                    )
-                                    : null}
+                                parseInt(adult) + parseInt(infant) <
+                                  e.seats[0].availability ? (
+                                  <div>
+                                    {e.seats[0].availability > 50 ? (
+                                      <small>Available</small>
+                                    ) : (
+                                      <small className="text-red-500">
+                                        {e.seats[0].availability} set(s) left
+                                      </small>
+                                    )}
+                                  </div>
+                                ) : null}
                                 <small className="text-red-500">
                                   {e.seats[0].availability > 0 &&
                                   parseInt(adult) + parseInt(infant) <
@@ -1018,11 +1036,9 @@ export default function Search() {
                                     onClick={() =>
                                       bookingHandlerDetail(e.trainNumber)
                                     }
-                                    class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50  rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2"
+                                    class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50  rounded-lg text-sm px-10 xl:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2"
                                   >
-                                    <div className="text-white ">
-                                      PILIH
-                                    </div>
+                                    <div className="text-white ">PILIH</div>
                                   </button>
                                 ) : (
                                   ""
@@ -1041,89 +1057,110 @@ export default function Search() {
                                   : " "
                               }
                               className={`cursor-pointer block xl:hidden w-full
-                                ${e.seats[0].availability > 0 &&
-                                parseInt(adult) + parseInt(infant) <
-                                  e.seats[0].availability
-                                  ? "text-black" 
-                                  : "text-slate-400 "}
+                                ${
+                                  e.seats[0].availability > 0 &&
+                                  parseInt(adult) + parseInt(infant) <
+                                    e.seats[0].availability
+                                    ? "text-black"
+                                    : "text-slate-400 "
+                                }
                               `}
                             >
-                              <div className="bg-white max-w-md">
-                                  <div className="flex justify-between">
-                                    <div>
-                                      <h1 className={`${
+                              <div className="bg-white">
+                                <div className="flex justify-between">
+                                  <div className="">
+                                    <h1
+                                      className={`${
                                         e.seats[0].availability > 0 &&
                                         parseInt(adult) + parseInt(infant) <
-                                          e.seats[0].availability ? 'text-black' : 'text-gray-400 '
-                                      } font-bold text-sm`}>{e?.trainName?.charAt(0) + e?.trainName?.slice(1)?.toLowerCase()}</h1>
-                                      <p className="text-gray-500 text-xs">
-                                    <small>
-                                      {e.seats[0].grade === "E"
-                                        ? "Eksekutif"
-                                        : e.seats[0].grade === "B"
-                                        ? "Bisnis"
-                                        : "Ekonomi"}{" "}
-                                      Class ({e.seats[0].class})
-                                    </small></p>
-                                    </div>
-                                    <div className="text-right flex space-x-2 items-center">
-                                    {e.seats[0].availability > 0 &&
-                                  parseInt(adult) + parseInt(infant) <
-                                    e.seats[0].availability
-                                    ? 
-                                    (
-                                      <div>
-                                        {
-                                        e.seats[0].availability > 50 ?
-                                          (
-                                            <small className="text-gray-500">
-                                              Available
-                                            </small>
-                                          ) :
-                                          (
-                                            <small className="text-gray-500">
-                                              {e.seats[0].availability} set(s) left
-                                            </small>
-                                          )
-                                        }
-                                      </div>
-                                    )
-                                    : null}
-                                  <small className="text-red-500">
-                                  {e.seats[0].availability > 0 &&
-                                  parseInt(adult) + parseInt(infant) <
-                                    e.seats[0].availability
-                                    ? ""
-                                    : "Tiket Habis"}
+                                          e.seats[0].availability
+                                          ? "text-black"
+                                          : "text-gray-400 "
+                                      } font-bold text-sm`}
+                                    >
+                                      {e?.trainName?.charAt(0) +
+                                        e?.trainName?.slice(1)?.toLowerCase()}
+                                    </h1>
+                                    <p className="text-gray-500 text-xs">
+                                      <small>
+                                        {e.seats[0].grade === "E"
+                                          ? "Eksekutif"
+                                          : e.seats[0].grade === "B"
+                                          ? "Bisnis"
+                                          : "Ekonomi"}{" "}
+                                        Class ({e.seats[0].class})
                                       </small>
-                                      <MdArrowForwardIos size={20} className="text-black" />
-                                    </div>
+                                    </p>
                                   </div>
-
-                                  <div className="mt-4 flex items-center space-x-4">
-                                    <div className="flex flex-col items-center">
-                                      <div className="w-4 h-4 border-2 border-blue-500 rounded-full"></div>
-                                      <div className="border-l-2 border-dashed border-gray-300 h-8"></div>
-                                      <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-                                    </div>
-                                    <div className="flex-1">
+                                  <div className="text-right flex space-x-2 items-center">
+                                    {e.seats[0].availability > 0 &&
+                                    parseInt(adult) + parseInt(infant) <
+                                      e.seats[0].availability ? (
                                       <div>
-                                        <p className="text-sm font-medium">{e.departureTime}<span className="font-bold"></span></p>
-                                        <p className="text-xs text-gray-500">{e.duration}</p>
+                                        {e.seats[0].availability > 50 ? (
+                                          <small className="text-gray-500">
+                                            Available
+                                          </small>
+                                        ) : (
+                                          <small className="text-gray-500">
+                                            {e.seats[0].availability} set(s)
+                                            left
+                                          </small>
+                                        )}
                                       </div>
-                                      <div className="mt-1">
-                                        <p className="text-sm font-medium">{e.arrivalTime}<span className="font-bold"></span></p>
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <div className="mt-5 flex justify-between items-center">
-                                    <p className="text-sm font-semibold"> Rp. {toRupiah(e.seats[0].priceAdult)} <span className="text-sm text-gray-400">/org</span></p>
-                                    <span className="bg-blue-500 text-white text-xs font-medium px-3 py-1 rounded-full">
-                                      Langsung
-                                    </span>
+                                    ) : null}
+                                    <small className="text-red-500">
+                                      {e.seats[0].availability > 0 &&
+                                      parseInt(adult) + parseInt(infant) <
+                                        e.seats[0].availability
+                                        ? ""
+                                        : "Tiket Habis"}
+                                    </small>
+                                    <MdArrowForwardIos
+                                      size={20}
+                                      className="text-black"
+                                    />
                                   </div>
                                 </div>
+
+                                <div className="mt-4 flex items-center space-x-4">
+                                  <div className="flex flex-col items-center">
+                                    <div className="w-4 h-4 border-2 border-blue-500 rounded-full"></div>
+                                    <div className="border-l-2 border-dashed border-gray-300 h-8"></div>
+                                    <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
+                                  </div>
+                                  <div className="flex-1">
+                                    <div>
+                                      <p className="text-sm font-medium">
+                                        {e.departureTime}
+                                        <span className="font-bold"></span>
+                                      </p>
+                                      <p className="text-xs text-gray-500">
+                                        {e.duration}
+                                      </p>
+                                    </div>
+                                    <div className="mt-1">
+                                      <p className="text-sm font-medium">
+                                        {e.arrivalTime}
+                                        <span className="font-bold"></span>
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="mt-5 flex justify-between items-center">
+                                  <p className="text-sm font-semibold">
+                                    {" "}
+                                    Rp. {toRupiah(e.seats[0].priceAdult)}{" "}
+                                    <span className="text-sm text-gray-400">
+                                      /org
+                                    </span>
+                                  </p>
+                                  <span className="bg-blue-500 text-white text-xs font-medium px-3 py-1 rounded-full">
+                                    Langsung
+                                  </span>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -1135,14 +1172,14 @@ export default function Search() {
                     <div className="flex justify-center items-center">
                       <img
                         src={"/nodata.jpg"}
-                        className="w-[200px] md:w-[300px]"
+                        className="w-[200px] xl:w-[300px]"
                         alt="No data"
                       />
                     </div>
                     <div className="flex justify-center w-full text-black">
                       <div className="text-black text-center">
                         <div>
-                          <div className="text-sm md:text-md font-medium">
+                          <div className="text-sm xl:text-md font-medium">
                             {messageError}
                           </div>
                           {/* <small>
@@ -1173,290 +1210,296 @@ export default function Search() {
                     </Box>
                   </div>
                 ))
-              ) : notFoundTransit !== true && filteredDataTransit.length !== 0 && 
-                  Object.keys(filteredDataTransit).length !== 0
-              ? (
+              ) : notFoundTransit !== true &&
+                filteredDataTransit.length !== 0 &&
+                Object.keys(filteredDataTransit).length !== 0 ? (
                 <div className="row mb-24 w-full p-2">
                   {Object.keys(filteredDataTransit).map((category) => (
                     <div key={category}>
-                      {filteredDataTransit[category].map((trainArray, index) => (
-                        <div key={index}>
+                      {filteredDataTransit[category].map(
+                        (trainArray, index) => (
                           <div key={index}>
-                            <div>
-                              <div
-                                className={`mt-4 md:mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${
-                                  trainArray[0].seats[0].availability > 0 &&
-                                  parseInt(adult) + parseInt(infant) <
-                                    trainArray[0].seats[0].availability
-                                    ? "bg-white"
-                                    : "bg-gray-200"
-                                } border border-gray-200 rounded-lg shadow-sm hover:border transition-transform transform hover:scale-105`}
-                              >
-                                <div className="hidden xl:block w-full text-black ">
-                                  <div className="px-4 md:px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
-                                    <div className="col-span-1 xl:col-span-2">
-                                      <h1 className="text-sm font-medium ">
-                                        {trainArray.map((data, h) => (
-                                          <span key={h}>
-                                            {" "}
-                                            {/* Added key for better performance and to avoid warning */}
-                                            {data.trainName}{" "}
-                                            {h < trainArray.length - 1
-                                              ? " + "
-                                              : ""}
-                                          </span>
-                                        ))}
-                                      </h1>
-                                      <small>
-                                        {trainArray.map((data, h) => (
-                                          <span key={h}>
-                                            {" "}
-                                            {/* Added key for better performance and to avoid warning */}
-                                            {data.seats[0].grade === "E"
-                                              ? "Eksekutif"
-                                              : data.seats[0].grade === "B"
-                                              ? "Bisnis"
-                                              : "Ekonomi"}{" "}
-                                            Class ({data.seats[0].class})
-                                            {h < trainArray.length - 1
-                                              ? " + "
-                                              : ""}
-                                          </span>
-                                        ))}
-                                      </small>
-                                    </div>
-                                    <div className="flex">
-                                      <div className="">
-                                        <h1 className="mt-4 xl:mt-0 text-sm font-medium ">
-                                          {trainArray[0].departureTime}
+                            <div key={index}>
+                              <div>
+                                <div
+                                  className={`mt-4 xl:mt-6 w-full p-2 py-4 xl:px-6 2xl:px-10 xl:py-8 ${
+                                    trainArray[0].seats[0].availability > 0 &&
+                                    parseInt(adult) + parseInt(infant) <
+                                      trainArray[0].seats[0].availability
+                                      ? "bg-white"
+                                      : "bg-gray-200"
+                                  } border border-gray-200 rounded-lg shadow-sm hover:border transition-transform transform hover:scale-105`}
+                                >
+                                  <div className="hidden xl:block w-full text-black ">
+                                    <div className="px-4 xl:px-0 2xl:px-4 mt-4 grid grid-cols-1 xl:grid-cols-7">
+                                      <div className="col-span-1 xl:col-span-2">
+                                        <h1 className="text-sm font-medium ">
+                                          {trainArray.map((data, h) => (
+                                            <span key={h}>
+                                              {" "}
+                                              {/* Added key for better performance and to avoid warning */}
+                                              {data.trainName}{" "}
+                                              {h < trainArray.length - 1
+                                                ? " + "
+                                                : ""}
+                                            </span>
+                                          ))}
                                         </h1>
                                         <small>
-                                          {kotaBerangkat} ({origin})
+                                          {trainArray.map((data, h) => (
+                                            <span key={h}>
+                                              {" "}
+                                              {/* Added key for better performance and to avoid warning */}
+                                              {data.seats[0].grade === "E"
+                                                ? "Eksekutif"
+                                                : data.seats[0].grade === "B"
+                                                ? "Bisnis"
+                                                : "Ekonomi"}{" "}
+                                              Class ({data.seats[0].class})
+                                              {h < trainArray.length - 1
+                                                ? " + "
+                                                : ""}
+                                            </span>
+                                          ))}
                                         </small>
                                       </div>
-                                      <HiOutlineArrowNarrowRight size={24} />
-                                    </div>
-                                    <div>
-                                      <h1 className="text-sm font-medium ">
-                                        {
-                                          trainArray[trainArray.length - 1]
-                                            .arrivalTime
-                                        }
-                                      </h1>
-                                      <small>
-                                        {kotaTujuan} ({destination})
-                                      </small>
-                                      {/*  */}
-                                    </div>
-                                    <div>
-                                      <h1 className="mt-4 xl:mt-0 text-sm font-medium ">
-                                        {calculateTotalDurationTransit(
-                                          trainArray
-                                        )}
-                                      </h1>
-                                      <small>
-                                        Transit (
-                                        {(() => {
-                                          const filteredStations =
-                                            listStaton.filter(
-                                              (e) => e.id_stasiun === category
-                                            );
-                                          return filteredStations.length > 0
-                                            ? filteredStations[0].nama_stasiun
-                                            : "No station found";
-                                        })()}
-                                        )
-                                      </small>
-                                    </div>
-                                    <div className="">
-                                      <h1 className="mt-4 xl:mt-0 text-sm font-medium  text-blue-500">
-                                        {toRupiah(
-                                          trainArray.reduce(
-                                            (total, item) =>
-                                              total +
-                                              parseInt(
-                                                item.seats[0].priceAdult,
-                                                10
-                                              ),
-                                            0
+                                      <div className="flex">
+                                        <div className="">
+                                          <h1 className="mt-4 xl:mt-0 text-sm font-medium ">
+                                            {trainArray[0].departureTime}
+                                          </h1>
+                                          <small>
+                                            {kotaBerangkat} ({origin})
+                                          </small>
+                                        </div>
+                                        <HiOutlineArrowNarrowRight size={24} />
+                                      </div>
+                                      <div>
+                                        <h1 className="text-sm font-medium ">
+                                          {
+                                            trainArray[trainArray.length - 1]
+                                              .arrivalTime
+                                          }
+                                        </h1>
+                                        <small>
+                                          {kotaTujuan} ({destination})
+                                        </small>
+                                        {/*  */}
+                                      </div>
+                                      <div>
+                                        <h1 className="mt-4 xl:mt-0 text-sm font-medium ">
+                                          {calculateTotalDurationTransit(
+                                            trainArray
+                                          )}
+                                        </h1>
+                                        <small>
+                                          Transit (
+                                          {(() => {
+                                            const filteredStations =
+                                              listStaton.filter(
+                                                (e) => e.id_stasiun === category
+                                              );
+                                            return filteredStations.length > 0
+                                              ? filteredStations[0].nama_stasiun
+                                              : "No station found";
+                                          })()}
                                           )
-                                        )}
-                                      </h1>
-                                      <small className="text-red-500">
-                                        {trainArray[0].seats[0].availability}{" "}
-                                        set(s) left
-                                      </small>
-                                      <small className="text-red-500">
+                                        </small>
+                                      </div>
+                                      <div className="">
+                                        <h1 className="mt-4 xl:mt-0 text-sm font-medium  text-blue-500">
+                                          {toRupiah(
+                                            trainArray.reduce(
+                                              (total, item) =>
+                                                total +
+                                                parseInt(
+                                                  item.seats[0].priceAdult,
+                                                  10
+                                                ),
+                                              0
+                                            )
+                                          )}
+                                        </h1>
+                                        <small className="text-red-500">
+                                          {trainArray[0].seats[0].availability}{" "}
+                                          set(s) left
+                                        </small>
+                                        <small className="text-red-500">
+                                          {trainArray[0].seats[0].availability >
+                                            0 &&
+                                          parseInt(adult) + parseInt(infant) <
+                                            trainArray[0].seats[0].availability
+                                            ? ""
+                                            : ". (Tiket Habis)"}
+                                        </small>
+                                      </div>
+                                      <div>
                                         {trainArray[0].seats[0].availability >
                                           0 &&
                                         parseInt(adult) + parseInt(infant) <
-                                          trainArray[0].seats[0].availability
-                                          ? ""
-                                          : ". (Tiket Habis)"}
-                                      </small>
+                                          trainArray[0].seats[0]
+                                            .availability ? (
+                                          <button
+                                            type="button"
+                                            onClick={() =>
+                                              bookingHandlerDetailTransit(
+                                                trainArray,
+                                                category
+                                              )
+                                            }
+                                            class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50  rounded-lg text-sm px-10 xl:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2"
+                                          >
+                                            <div className="text-white ">
+                                              PILIH
+                                            </div>
+                                          </button>
+                                        ) : (
+                                          ""
+                                        )}
+                                      </div>
                                     </div>
-                                    <div>
-                                      {trainArray[0].seats[0].availability >
-                                        0 &&
-                                      parseInt(adult) + parseInt(infant) <
-                                        trainArray[0].seats[0].availability ? (
-                                        <button
-                                          type="button"
-                                          onClick={() =>
-                                            bookingHandlerDetailTransit(
+                                  </div>
+                                  <div>
+                                    {/* mobile cari */}
+                                    <div
+                                      onClick={() =>
+                                        trainArray[0].seats[0].availability >
+                                          0 &&
+                                        parseInt(adult) + parseInt(infant) <
+                                          trainArray[0].seats[0].availability
+                                          ? bookingHandlerDetailTransit(
                                               trainArray,
                                               category
                                             )
-                                          }
-                                          class="mt-4 xl:mt-0 text-white bg-blue-500 space-x-2 hover:bg-blue-500/80 focus:ring-4 focus:outline-none focus:ring-blue-500/50  rounded-lg text-sm px-10 md:px10 xl:px-10 2xl:px-14 py-2 text-center inline-flex items-center  mr-2 mb-2"
-                                        >
-                                          <div className="text-white ">
-                                            PILIH
-                                          </div>
-                                        </button>
-                                      ) : (
-                                        ""
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
-                                <div>
-                                {/* mobile cari */}
-                                <div
-                                    onClick={() =>
-                                      trainArray[0].seats[0].availability > 0 &&
-                                      parseInt(adult) + parseInt(infant) <
-                                        trainArray[0].seats[0].availability
-                                        ? bookingHandlerDetailTransit(
-                                          trainArray,
-                                          category
-                                          )
-                                        : " "
-                                    }
-                                    className="cursor-pointer block xl:hidden w-full text-black"
-                                  >
-                                    <div className="py-4 px-4 grid grid-cols-1 xl:grid-cols-7">
-                                      <div className="flex justify-between">
-                                        <div className="">
-                                          <h1 className="text-xs font-medium ">
-                                            {trainArray.map((data, h) => (
-                                              <span key={h}>
-                                                {" "}
-                                                {/* Added key for better performance and to avoid warning */}
-                                                {data.trainName}{" "}
-                                                {h < trainArray.length - 1
-                                                  ? " + "
-                                                  : ""}
-                                              </span>
-                                            ))}
-                                          </h1>
-                                          <small>
-                                            {trainArray.map((data, h) => (
-                                              <span key={h}>
-                                                {" "}
-                                                {/* Added key for better performance and to avoid warning */}
-                                                {data.seats[0].grade === "E"
-                                                  ? "Eks"
-                                                  : data.seats[0].grade === "B"
-                                                  ? "Bis"
-                                                  : "Eko"}{" "}
-                                                Class ({data.seats[0].class})
-                                                {h < trainArray.length - 1
-                                                  ? " + "
-                                                  : ""}
-                                              </span>
-                                            ))}
-                                          </small>
-                                        </div>
-                                        <div>
-                                          <h1 className="text-xs font-medium  text-black">
-                                            Rp.{" "}
-                                            {toRupiah(
-                                              trainArray.reduce(
-                                                (total, item) =>
-                                                  total +
-                                                  parseInt(
-                                                    item.seats[0].priceAdult,
-                                                    10
-                                                  ),
-                                                0
-                                              )
-                                            )}
-                                          </h1>
-                                          <small className="text-red-500">
-                                            {
-                                              trainArray[0].seats[0]
-                                                .availability
-                                            }{" "}
-                                            set(s)
-                                          </small>
-                                          <small className="text-red-500">
-                                            {trainArray[0].seats[0]
-                                              .availability > 0 &&
-                                            parseInt(adult) + parseInt(infant) <
-                                              trainArray[0].seats[0]
-                                                .availability
-                                              ? ""
-                                              : ". (Tiket Habis)"}
-                                          </small>
-                                        </div>
-                                        <div></div>
-                                      </div>
-                                      <div className="flex justify-start mt-4">
-                                        <div className="flex items-center space-x-8">
-                                          {/* Departure Time and Origin */}
-                                          <div>
-                                            <h1 className="text-sm xl:text-base font-medium ">
-                                              {trainArray[0].departureTime}
+                                          : " "
+                                      }
+                                      className="cursor-pointer block xl:hidden w-full text-black"
+                                    >
+                                      <div className="py-4 px-4 grid grid-cols-1 xl:grid-cols-7">
+                                        <div className="flex justify-between">
+                                          <div className="w-full">
+                                            <h1 className="text-xs font-medium ">
+                                              {trainArray.map((data, h) => (
+                                                <span key={h}>
+                                                  {" "}
+                                                  {/* Added key for better performance and to avoid warning */}
+                                                  {data.trainName}{" "}
+                                                  {h < trainArray.length - 1
+                                                    ? " + "
+                                                    : ""}
+                                                </span>
+                                              ))}
                                             </h1>
-                                            <small className="text-black">
-                                              {origin}
+                                            <small>
+                                              {trainArray.map((data, h) => (
+                                                <span key={h}>
+                                                  {" "}
+                                                  {/* Added key for better performance and to avoid warning */}
+                                                  {data.seats[0].grade === "E"
+                                                    ? "Eks"
+                                                    : data.seats[0].grade ===
+                                                      "B"
+                                                    ? "Bis"
+                                                    : "Eko"}{" "}
+                                                  Class ({data.seats[0].class})
+                                                  {h < trainArray.length - 1
+                                                    ? " + "
+                                                    : ""}
+                                                </span>
+                                              ))}
                                             </small>
                                           </div>
-
-                                          {/* Transit Duration */}
-                                          <div className="flex-1 mt-2 w-full">
-                                            <div className="border-t-2 border-gray-300 my-4 -mx-4"></div>
-                                            <div className="text-center">
-                                              <div className="text-xs text-black">
-                                                {calculateTotalDurationTransit(
-                                                  trainArray
-                                                )}
-                                              </div>
+                                          <div>
+                                            <h1 className="text-xs font-medium  text-black">
+                                              Rp.{" "}
+                                              {toRupiah(
+                                                trainArray.reduce(
+                                                  (total, item) =>
+                                                    total +
+                                                    parseInt(
+                                                      item.seats[0].priceAdult,
+                                                      10
+                                                    ),
+                                                  0
+                                                )
+                                              )}
+                                            </h1>
+                                            <small className="text-red-500">
+                                              {
+                                                trainArray[0].seats[0]
+                                                  .availability
+                                              }{" "}
+                                              set(s)
+                                            </small>
+                                            <small className="text-red-500">
+                                              {trainArray[0].seats[0]
+                                                .availability > 0 &&
+                                              parseInt(adult) +
+                                                parseInt(infant) <
+                                                trainArray[0].seats[0]
+                                                  .availability
+                                                ? ""
+                                                : ". (Tiket Habis)"}
+                                            </small>
+                                          </div>
+                                          <div></div>
+                                        </div>
+                                        <div className="flex justify-start mt-4">
+                                          <div className="flex items-center space-x-8">
+                                            {/* Departure Time and Origin */}
+                                            <div>
+                                              <h1 className="text-sm xl:text-base font-medium ">
+                                                {trainArray[0].departureTime}
+                                              </h1>
                                               <small className="text-black">
-                                                <small>
-                                                  Transit (
-                                                  {(() => {
-                                                    const filteredStations =
-                                                      listStaton.filter(
-                                                        (e) =>
-                                                          e.id_stasiun ===
-                                                          category
-                                                      );
-                                                    return filteredStations.length >
-                                                      0
-                                                      ? filteredStations[0]
-                                                          .nama_stasiun
-                                                      : "No station found";
-                                                  })()}
-                                                  )
-                                                </small>
+                                                {origin}
                                               </small>
                                             </div>
-                                          </div>
 
-                                          {/* Arrival Time and Destination */}
-                                          <div>
-                                            <h1 className="text-sm xl:text-base font-medium ">
-                                              {
-                                                trainArray[
-                                                  trainArray.length - 1
-                                                ].arrivalTime
-                                              }
-                                            </h1>
-                                            <small className="text-black">
-                                              {destination}
-                                            </small>
+                                            {/* Transit Duration */}
+                                            <div className="flex-1 mt-2 w-full">
+                                              <div className="border-t-2 border-gray-300 my-4 -mx-4"></div>
+                                              <div className="text-center">
+                                                <div className="text-xs text-black">
+                                                  {calculateTotalDurationTransit(
+                                                    trainArray
+                                                  )}
+                                                </div>
+                                                <small className="text-black">
+                                                  <small>
+                                                    Transit (
+                                                    {(() => {
+                                                      const filteredStations =
+                                                        listStaton.filter(
+                                                          (e) =>
+                                                            e.id_stasiun ===
+                                                            category
+                                                        );
+                                                      return filteredStations.length >
+                                                        0
+                                                        ? filteredStations[0]
+                                                            .nama_stasiun
+                                                        : "No station found";
+                                                    })()}
+                                                    )
+                                                  </small>
+                                                </small>
+                                              </div>
+                                            </div>
+
+                                            {/* Arrival Time and Destination */}
+                                            <div>
+                                              <h1 className="text-sm xl:text-base font-medium ">
+                                                {
+                                                  trainArray[
+                                                    trainArray.length - 1
+                                                  ].arrivalTime
+                                                }
+                                              </h1>
+                                              <small className="text-black">
+                                                {destination}
+                                              </small>
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
@@ -1466,8 +1509,8 @@ export default function Search() {
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        )
+                      )}
                     </div>
                   ))}
                 </div>
@@ -1476,15 +1519,17 @@ export default function Search() {
                   <div className="flex justify-center items-center">
                     <img
                       src={"/nodata.jpg"}
-                      className="w-[200px] md:w-[300px]"
+                      className="w-[200px] xl:w-[300px]"
                       alt="No data"
                     />
                   </div>
                   <div className="flex justify-center w-full text-black">
                     <div className="text-black text-center">
                       <div>
-                        <div className="text-sm md:text-md font-medium">
-                          {messageErrorTransit.length > 0  ? messageErrorTransit : 'Maaf, sepertinya pada rute ini masih belum dibuka kembali.'}
+                        <div className="text-sm xl:text-md font-medium">
+                          {messageErrorTransit.length > 0
+                            ? messageErrorTransit
+                            : "Maaf, sepertinya pada rute ini masih belum dibuka kembali."}
                         </div>
                         {/* <small>
                               Namun jangan khawatir, masih ada pilihan kendaraan lain

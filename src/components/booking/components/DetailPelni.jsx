@@ -5,7 +5,6 @@ import { styled } from "@mui/material/styles";
 import { grey } from "@mui/material/colors";
 import { Button, Typography } from "antd";
 import { toRupiah } from "../../../helpers/rupiah";
-import { FaShip } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { setBookDataLanjutBayar } from "../../../features/createSlice";
@@ -33,19 +32,20 @@ export default function DetailPelni({ data, openDetail, toggleDrawerDetail }) {
   const navigate = useNavigate();
 
   const handleDetail = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-       dispatch(callbackFetchData({ type: 'pelni', id_transaksi:data.id_transaksi  }));
-       dispatch(setBookDataLanjutBayar(data));
+      dispatch(
+        callbackFetchData({ type: "pelni", id_transaksi: data.id_transaksi })
+      );
+      dispatch(setBookDataLanjutBayar(data));
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-    setIsLoading(true)
+    setIsLoading(true);
     navigate({
       pathname: `/pelni/detail/payment`,
     });
-
-};
+  };
 
   return (
     <SwipeableDrawer
@@ -83,7 +83,10 @@ export default function DetailPelni({ data, openDetail, toggleDrawerDetail }) {
                   <div className="title font-bold">{penumpang.nama}</div>
                 </div>
               </div>
-              <Divider component="div" sx={{ width: "100%", display: "block" }} />
+              <Divider
+                component="div"
+                sx={{ width: "100%", display: "block" }}
+              />
             </React.Fragment>
           ))}
         </div>
@@ -106,25 +109,27 @@ export default function DetailPelni({ data, openDetail, toggleDrawerDetail }) {
                   <div>Total Harga</div>
                   <div>
                     Rp.{" "}
-                    {toRupiah(parseInt(data.nominal) + parseInt(data.nominal_admin))}
+                    {toRupiah(
+                      parseInt(data.nominal) + parseInt(data.nominal_admin)
+                    )}
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div className="mt-4">
-              <div className="flex justify-center w-full">
-                <Button
-                  onClick={handleDetail}                                             
-                  size="large"
-                  key="submit"
-                  type="primary"
-                  className="bg-blue-500 px-12 font-semibold w-full"
-                  loading={isLoading}
-                >
-                  Lanjut Bayar
-                </Button>
-              </div>
+            <div className="flex justify-center w-full">
+              <Button
+                onClick={handleDetail}
+                size="large"
+                key="submit"
+                type="primary"
+                className="bg-blue-500 px-12 font-semibold w-full"
+                loading={isLoading}
+              >
+                Lanjut Bayar
+              </Button>
+            </div>
           </div>
         </div>
       </StyledBox>

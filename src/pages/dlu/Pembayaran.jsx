@@ -11,7 +11,7 @@ export default function Pembayaran(){
     
     return(
         <>
-            <div className="block md:hidden">
+            <div className="block xl:hidden">
                 <HeaderTemplateMobilDetailBooking>
                     <div className="container">
                         <div className="w-full px-4"> 
@@ -21,7 +21,7 @@ export default function Pembayaran(){
                     </div>
                 </HeaderTemplateMobilDetailBooking>
             </div>
-            <div className="hidden md:block">
+            <div className="hidden xl:block">
                 <Layout>
                     <div className="container">
                         <div className="w-full px-4"> 

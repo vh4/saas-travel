@@ -58,7 +58,7 @@ export default function CarouselsMobile(props) {
   return (
     <div className="xl:grid xl:grid-cols-2 w-full px-0 xl:px-4 xl:py-8">
       <div
-        className={`block md:hidden px-4 mb-4`}
+        className={`block xl:hidden px-4 mb-4`}
         style={{
           color: customLayout?.color?.secondary?.font_color || "#ffff",
         }}

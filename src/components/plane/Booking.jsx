@@ -907,7 +907,7 @@ export default function BookingPesawat() {
                       expandable={{
                         expandedRowRender: (record) => (
                           <>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-8">
+                            <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 ml-8">
                               <div className="my-2">
                                 <p style={{ margin: 0 }} className="text-xs">
                                   <strong>NIK:</strong> {record.nik}
@@ -981,7 +981,7 @@ export default function BookingPesawat() {
               <>
                 {dataDetail &&
                   dataDetail.map((dataDetail) => (
-                    <div className="mt-0 mb-4 md:mb-0 md:mt-8 xl:mt-0 block xl:hidden border-b">
+                    <div className="mt-0 mb-4 xl:mb-0 xl:mt-8 xl:mt-0 block xl:hidden border-b">
                       <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                         <div className="text-black text-sm font-medium ">
                           Keberangkatan Pesawat
@@ -2603,7 +2603,7 @@ export default function BookingPesawat() {
                   </Form>
 
                   {/* sidebra desktop*/}
-                  <div className="w-full md:w-2/3 2xl:w-1/2 md:mt-8">
+                  <div className="w-full xl:w-2/3 2xl:w-1/2 xl:mt-8">
                     {dataDetail &&
                       dataDetail.map((dataDetail) => (
                         <>

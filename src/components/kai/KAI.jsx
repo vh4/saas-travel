@@ -24,15 +24,14 @@ import { HolidaysContext } from "../../App";
 import { CiCalendarDate } from "react-icons/ci";
 import { DateCalendar, DayCalendarSkeleton } from "@mui/x-date-pickers";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay/PickersDay";
-import { Calendar } from 'react-multi-date-picker';
-import 'dayjs/locale/id'; // mengimpor locale Bahasa Indonesia
+import { Calendar } from "react-multi-date-picker";
+import "dayjs/locale/id"; // mengimpor locale Bahasa Indonesia
 import KeretaMobile from "./components/KeretaMobile";
 import { LuUsers } from "react-icons/lu";
 
-dayjs.locale('id'); // mengatur locale global ke Bahasa Indonesia
+dayjs.locale("id"); // mengatur locale global ke Bahasa Indonesia
 
 function KAI() {
-
   const styleDesktop = {
     position: "absolute",
     top: "50%",
@@ -49,7 +48,7 @@ function KAI() {
     position: "absolute",
     left: "50%",
     top: "50%",
-    borderRadius:5,
+    borderRadius: 5,
     width: 350,
     bgcolor: "background.paper",
     transform: "translate(-50%, -50%)",
@@ -58,9 +57,7 @@ function KAI() {
     pb: 4,
   };
 
-
   const { holidays } = React.useContext(HolidaysContext);
-
 
   const useStyles = makeStyles((theme) => ({
     inputRoot: {
@@ -79,7 +76,7 @@ function KAI() {
       },
       "&&& $input": {
         padding: 1,
-        color:"black",
+        color: "black",
         width: "50%",
       },
     },
@@ -88,7 +85,7 @@ function KAI() {
         "& .MuiInputBase-input": {
           padding: 10,
           borderRadius: 10,
-          cursor:"pointer",
+          cursor: "pointer",
         },
         color: "black",
         "& .MuiOutlinedInput-notchedOutline": {
@@ -126,17 +123,18 @@ function KAI() {
   const [openTujuan, setOpenTujuan] = React.useState(false);
 
   const [openDrawer, setOpenDrawer] = useState(false);
-  const toggleDrawer = (newOpen, cancel = false, type="cancel") => () => {
-    setOpenDrawer(newOpen);
-    if(type ==='simpan'){
-        setadult(adultTemp)
-        setinfant(infantTemp)
-    }
-    else if(type ==='buka'){
-      setadultTemp(adult)
-      setinfantTemp(infant)
-  }
-  };
+  const toggleDrawer =
+    (newOpen, cancel = false, type = "cancel") =>
+    () => {
+      setOpenDrawer(newOpen);
+      if (type === "simpan") {
+        setadult(adultTemp);
+        setinfant(infantTemp);
+      } else if (type === "buka") {
+        setadultTemp(adult);
+        setinfantTemp(infant);
+      }
+    };
 
   const loadingBerangkat = openBerangka && kaiData.length === 0;
   const loadingTujuan = openTujuan && kaiData.length === 0;
@@ -151,29 +149,31 @@ function KAI() {
   };
   const [currentViewDate, setCurrentViewDate] = useState(dayjs());
 
-  const [currentViewDateDesktop, setCurrentViewDateDesktop] = useState(dayjs().format('YYYY-MM'));
+  const [currentViewDateDesktop, setCurrentViewDateDesktop] = useState(
+    dayjs().format("YYYY-MM")
+  );
 
   const findHolidayDescriptionsForMonthDesktop = (date) => {
     const startDate = dayjs(date);
     const monthStart = startDate.month();
     const year = startDate.year();
-  
+
     // Tambahkan 1 bulan ke startDate untuk mendapatkan bulan kedua dalam rentang
-    const endDate = startDate.add(1, 'month');
+    const endDate = startDate.add(1, "month");
     const monthEnd = endDate.month();
-  
-    const holidaysInMonth = holidays.filter(
-      (holiday) => {
-        const holidayMonth = dayjs(holiday.start).month();
-        const holidayYear = dayjs(holiday.start).year();
-  
-        // Cek jika liburan berada dalam rentang dua bulan dan tahun yang sama
-        return ((holidayMonth === monthStart || holidayMonth === monthEnd) && holidayYear === year);
-      }
-    );
-  
+
+    const holidaysInMonth = holidays.filter((holiday) => {
+      const holidayMonth = dayjs(holiday.start).month();
+      const holidayYear = dayjs(holiday.start).year();
+
+      // Cek jika liburan berada dalam rentang dua bulan dan tahun yang sama
+      return (
+        (holidayMonth === monthStart || holidayMonth === monthEnd) &&
+        holidayYear === year
+      );
+    });
+
     return holidaysInMonth;
-    
   };
 
   const findHolidayDescriptionsForMonth = (date) => {
@@ -210,43 +210,55 @@ function KAI() {
   }
   const errorBerangkat = () => {
     messageApi.open({
-      type: 'error',
-      content: 'Dari tidak boleh sama dengan Tujuan.',
+      type: "error",
+      content: "Dari tidak boleh sama dengan Tujuan.",
       duration: 10, // Durasi pesan 5 detik
-      top: '50%', // Posisi pesan di tengah layar
-      className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
+      top: "50%", // Posisi pesan di tengah layar
+      className: "custom-message", // Tambahkan kelas CSS kustom jika diperlukan
     });
   };
-  
 
   const errorTujuan = () => {
     messageApi.open({
-      type: 'error',
-      content: 'Tujuan tidak boleh sama dengan Dari.',
+      type: "error",
+      content: "Tujuan tidak boleh sama dengan Dari.",
       duration: 10, // Durasi pesan 5 detik
-      top: '50%', // Posisi pesan di tengah layar
-      className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
+      top: "50%", // Posisi pesan di tengah layar
+      className: "custom-message", // Tambahkan kelas CSS kustom jika diperlukan
     });
   };
 
   const messageCustomError = (message) => {
     messageApi.open({
-      type: 'error',
+      type: "error",
       content: message,
       duration: 10, // Durasi pesan 5 detik
-      top: '50%', // Posisi pesan di tengah layar
-      className: 'custom-message', // Tambahkan kelas CSS kustom jika diperlukan
+      top: "50%", // Posisi pesan di tengah layar
+      className: "custom-message", // Tambahkan kelas CSS kustom jika diperlukan
     });
   };
 
-
   let coockie = Cookies.get("v-train");
 
-  let depa = { id_stasiun: "PSE", nama_stasiun: "PASAR SENEN", nama_kota: "JAKARTA", is_active: 1 };
-  let arri = { id_stasiun: "SGU", nama_stasiun: "SURABAYA GUBENG", nama_kota: "SURABAYA", is_active: 1 };
+  let depa = {
+    id_stasiun: "PSE",
+    nama_stasiun: "PASAR SENEN",
+    nama_kota: "JAKARTA",
+    is_active: 1,
+  };
+  let arri = {
+    id_stasiun: "SGU",
+    nama_stasiun: "SURABAYA GUBENG",
+    nama_kota: "SURABAYA",
+    is_active: 1,
+  };
   let dateCookie = Cookies.get("v-date") ? Cookies.get("v-date") : dayjs();
-  let adultCookie = parseInt(Cookies.get("v-adult") ? Cookies.get("v-adult") : '');
-  let infantCookie = parseInt(Cookies.get("v-infant") ? Cookies.get("v-infant") : '');
+  let adultCookie = parseInt(
+    Cookies.get("v-adult") ? Cookies.get("v-adult") : ""
+  );
+  let infantCookie = parseInt(
+    Cookies.get("v-infant") ? Cookies.get("v-infant") : ""
+  );
 
   try {
     coockie = coockie ? JSON.parse(coockie) : null;
@@ -254,41 +266,72 @@ function KAI() {
     arri = coockie.tujuan;
   } catch (error) {
     coockie = null;
-    depa = { id_stasiun: "PSE", nama_stasiun: "PASAR SENEN", nama_kota: "JAKARTA", is_active: 1 };;
-    arri = { id_stasiun: "SGU", nama_stasiun: "SURABAYA GUBENG", nama_kota: "SURABAYA", is_active: 1 };
+    depa = {
+      id_stasiun: "PSE",
+      nama_stasiun: "PASAR SENEN",
+      nama_kota: "JAKARTA",
+      is_active: 1,
+    };
+    arri = {
+      id_stasiun: "SGU",
+      nama_stasiun: "SURABAYA GUBENG",
+      nama_kota: "SURABAYA",
+      is_active: 1,
+    };
   }
 
   try {
     dateCookie = dayjs(dateCookie).isValid() ? dateCookie : null;
-
   } catch (error) {
     dateCookie = null;
   }
 
   try {
     adultCookie = !isNaN(adultCookie) ? adultCookie : null;
-
   } catch (error) {
     adultCookie = null;
   }
 
   try {
     infantCookie = !isNaN(infantCookie) ? infantCookie : null;
-
   } catch (error) {
     infantCookie = null;
   }
 
   try {
-    depa = depa ? depa : { id_stasiun: "PSE", nama_stasiun: "PASAR SENEN", nama_kota: "JAKARTA", is_active: 1 };
+    depa = depa
+      ? depa
+      : {
+          id_stasiun: "PSE",
+          nama_stasiun: "PASAR SENEN",
+          nama_kota: "JAKARTA",
+          is_active: 1,
+        };
   } catch (error) {
-    depa = { id_stasiun: "PSE", nama_stasiun: "PASAR SENEN", nama_kota: "JAKARTA", is_active: 1 };
+    depa = {
+      id_stasiun: "PSE",
+      nama_stasiun: "PASAR SENEN",
+      nama_kota: "JAKARTA",
+      is_active: 1,
+    };
   }
 
   try {
-    arri = arri ? arri : { id_stasiun: "SGU", nama_stasiun: "SURABAYA GUBENG", nama_kota: "SURABAYA", is_active: 1 };
+    arri = arri
+      ? arri
+      : {
+          id_stasiun: "SGU",
+          nama_stasiun: "SURABAYA GUBENG",
+          nama_kota: "SURABAYA",
+          is_active: 1,
+        };
   } catch (error) {
-    arri = { id_stasiun: "SGU", nama_stasiun: "SURABAYA GUBENG", nama_kota: "SURABAYA", is_active: 1 };
+    arri = {
+      id_stasiun: "SGU",
+      nama_stasiun: "SURABAYA GUBENG",
+      nama_kota: "SURABAYA",
+      is_active: 1,
+    };
   }
 
   depa = depa?.id_stasiun && depa?.nama_kota ? depa : null;
@@ -298,11 +341,9 @@ function KAI() {
   infantCookie = infantCookie ? infantCookie : 0;
 
   const changeStatiun = () => {
-
     setKeberangkatan(tujuan);
     setTujuan(keberangkatan);
-
-  }
+  };
 
   //input
   const [keberangkatan, setKeberangkatan] = React.useState(depa);
@@ -331,18 +372,16 @@ function KAI() {
         }
       );
 
-
       const resSetKai = {
-        data: response.data.data.map(item => ({
+        data: response.data.data.map((item) => ({
           ...item,
           nama_kota: item.nama_kota === "unknown" ? "LAINYA" : item.nama_kota,
         })),
-        rc: '00',
-        rd: 'success',
+        rc: "00",
+        rd: "success",
       };
 
       setKAI(resSetKai);
-      
     } catch (error) {
       setKAI([]);
     }
@@ -412,7 +451,7 @@ function KAI() {
 
   function plusAdult(e) {
     e.preventDefault();
-    
+
     if (adultTemp >= 4) {
       setadultTemp(4);
     } else {
@@ -423,31 +462,29 @@ function KAI() {
   function minusAdult(e) {
     e.preventDefault();
 
-    if((adultTemp <= infantTemp)){
-      setadultTemp(parseInt(adultTemp))
-    }else{      
+    if (adultTemp <= infantTemp) {
+      setadultTemp(parseInt(adultTemp));
+    } else {
       if (adultTemp < 1 || adultTemp === 1) {
         setadultTemp(1);
       } else {
         setadultTemp(parseInt(adultTemp) - 1);
       }
     }
-
   }
 
   function plusInfant(e) {
     e.preventDefault();
 
-    if(adultTemp <= infantTemp){
+    if (adultTemp <= infantTemp) {
       setinfantTemp(parseInt(infantTemp));
-    }else{
+    } else {
       if (infantTemp >= 4) {
         setinfantTemp(4);
       } else {
         setinfantTemp(parseInt(infantTemp) + 1);
       }
     }
-
   }
 
   function minusInfant(e) {
@@ -492,17 +529,13 @@ function KAI() {
       e.preventDefault();
       setLoading(false);
 
-      if(keberangkatan === null && tujuan === null){
-        messageCustomError('Pilih Dari & Tujuan.')
-      }
-      else if(keberangkatan === null){
-        messageCustomError('Pilih Dari.')
-        
-      }else if(tujuan === null){
-        messageCustomError('Pilih Tujuan.')
-
-      }else{
-
+      if (keberangkatan === null && tujuan === null) {
+        messageCustomError("Pilih Dari & Tujuan.");
+      } else if (keberangkatan === null) {
+        messageCustomError("Pilih Dari.");
+      } else if (tujuan === null) {
+        messageCustomError("Pilih Tujuan.");
+      } else {
         const params = {
           origin: keberangkatan.id_stasiun,
           destination: tujuan.id_stasiun,
@@ -515,14 +548,14 @@ function KAI() {
           adult: adult,
           infant: infant,
         };
-  
+
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + 7);
-  
+
         const cookieOptions = {
           expires: expirationDate,
         };
-  
+
         Cookies.set(
           "v-train",
           JSON.stringify({
@@ -531,7 +564,7 @@ function KAI() {
           }),
           cookieOptions
         );
-  
+
         Cookies.set("v-date", tanggal.toString(), cookieOptions);
         Cookies.set("v-adult", adult, cookieOptions);
         Cookies.set("v-infant", infant, cookieOptions);
@@ -540,19 +573,17 @@ function KAI() {
           pathname: "/train/search",
           search: `?${createSearchParams(params)}`,
         });
-
       }
-
     }, 1000);
   }
 
   return (
     <>
-    {contextHolder}
-    <div className="flex justify-center row bg-white border-t border-gray-200 w-full pr-0">
-          {/* desktop */}
-          <ModalMui
-          className="hidden md:block"
+      {contextHolder}
+      <div className="flex justify-center row bg-white border-t border-gray-200 w-full pr-0">
+        {/* desktop */}
+        <ModalMui
+          className="hidden xl:block"
           open={openDate}
           onClose={handleCloseDate}
           aria-labelledby="modal-modal-title"
@@ -591,23 +622,37 @@ function KAI() {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <Calendar
                     value={tanggal}
-                    onChange={(e) => {setTanggal(dayjs(e)); handleCloseDate()}}
+                    onChange={(e) => {
+                      setTanggal(dayjs(e));
+                      handleCloseDate();
+                    }}
                     onMonthChange={(newViewDate) => {
-                      setCurrentViewDateDesktop(dayjs(newViewDate).format('YYYY-MM'));
+                      setCurrentViewDateDesktop(
+                        dayjs(newViewDate).format("YYYY-MM")
+                      );
                     }}
                     format={"YYYY/MM/DD"}
                     numberOfMonths={2}
                     mapDays={({ date }) => {
                       const dayjsDate = dayjs(date);
-              
+
                       const isSunday = dayjsDate.day() === 0;
-                      const isHoliday = holidays.some(holiday => dayjsDate.format("YYYY-MM-DD") === holiday.start);
-              
+                      const isHoliday = holidays.some(
+                        (holiday) =>
+                          dayjsDate.format("YYYY-MM-DD") === holiday.start
+                      );
+
                       if (isSunday || isHoliday) {
                         return {
                           className: "specialDay",
                           style: { color: "red", boxShadow: "none" }, // Sesuaikan dengan kebutuhan
-                          title: isHoliday ? holidays.find(holiday => dayjsDate.format("YYYY-MM-DD") === holiday.start).summary : "Sunday",
+                          title: isHoliday
+                            ? holidays.find(
+                                (holiday) =>
+                                  dayjsDate.format("YYYY-MM-DD") ===
+                                  holiday.start
+                              ).summary
+                            : "Sunday",
                         };
                       }
                     }}
@@ -621,30 +666,33 @@ function KAI() {
               style={{ overflowX: "scroll", display: "flex", gap: "8px" }}
               className="hidennscroll mt-2 z-50"
             >
-              {findHolidayDescriptionsForMonthDesktop(currentViewDateDesktop)?.map(
-                (e, index) => (
-                  <div
-                    key={index}
-                    className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50"
+              {findHolidayDescriptionsForMonthDesktop(
+                currentViewDateDesktop
+              )?.map((e, index) => (
+                <div
+                  key={index}
+                  className="border border-gray-200 rounded-md px-4 py-1 flex-shrink-0 z-50"
+                >
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    style={{ fontSize: "10px" }}
                   >
-                    <Typography
-                      variant="caption"
-                      display="block"
-                      style={{ fontSize: "10px" }}
-                    >
-                      <span className="text-red-500">{dayjs(e.start).format("DD MMM")}</span>. {e.summary}
-                    </Typography>
-                  </div>
-                )
-              )}
+                    <span className="text-red-500">
+                      {dayjs(e.start).format("DD MMM")}
+                    </span>
+                    . {e.summary}
+                  </Typography>
+                </div>
+              ))}
             </div>
           </Box>
           {/* mobile */}
-          </ModalMui>
+        </ModalMui>
 
-          {/* mobile */}
-          <ModalMui
-          className="block md:hidden"
+        {/* mobile */}
+        <ModalMui
+          className="block xl:hidden"
           open={openDate}
           onClose={handleCloseDate}
           aria-labelledby="modal-modal-title"
@@ -714,7 +762,10 @@ function KAI() {
                         display="block"
                         style={{ fontSize: "10px" }}
                       >
-                      <span className="text-red-500">{dayjs(e.start).format("DD MMM")}</span>. {e.summary}
+                        <span className="text-red-500">
+                          {dayjs(e.start).format("DD MMM")}
+                        </span>
+                        . {e.summary}
                       </Typography>
                     </div>
                   )
@@ -723,175 +774,182 @@ function KAI() {
             </div>
           </Box>
           {/* mobile */}
-          </ModalMui>
+        </ModalMui>
 
         <div class="w-full px-4 py-4 rounded-lg shadow-xs">
           <form className="w-full">
             <>
               <div className="block xl:flex justify-between mx-0 xl:mx-6">
                 <div className="grid grid-cols-1 xl:grid-cols-4 mx-0 gap-2 xl:gap-0">
-
                   {/* desktop pencarian asal dan tujuan*/}
-                  <div className="mt-2 w-full col col-span-1 md:col-span-2 hidden xl:block">
+                  <div className="mt-2 w-full col col-span-1 xl:col-span-2 hidden xl:block">
                     <div className="w-full flex flex-col xl:flex-row items-center px-2 xl:px-0">
-                        <div
-                            className="w-full m-2 xl:m-0 xl:pr-0"
-                        >
-                            <small className="block mb-2 text-black">Dari</small>
-                            <Autocomplete
-                            classes={classes}
-                            className="mt-1.5"
-                            id="asynchronous-demo"
-                            disableClearable
-                            PopperComponent={PopperMy}
-                            open={openBerangka}
-                            hiddenLabel={true}
-                            onOpen={() => {
-                                SetopenBerangka(true);
-                            }}
-                            onClose={() => {
-                                SetopenBerangka(false);
-                            }}
-                            renderTags={(value, getTagProps) => (
-                                <div style={{ width: "90%" }}>
-                                {value.map((option, index) => (
-                                    <Chip
-                                    variant="outlined"
-                                    label={option}
-                                    {...getTagProps({ index })}
-                                    />
-                                ))}
-                                </div>
-                            )}
-                            isOptionEqualToValue={(option, value) =>
-                                option.title === value.title
-                            }
-                            getOptionLabel={(option) =>
-                                option.nama_stasiun +
-                                " - " +
-                                option.nama_kota +
-                                " - " +
-                                option.id_stasiun
-                            }
-                            options={kaiData}
-                            value={keberangkatan}
-                            onChange={(event, newValue) => {
-                              if((newValue == tujuan) || (newValue?.id_stasiun == tujuan?.id_stasiun)){
-                                errorBerangkat();
-                                setKeberangkatan(keberangkatan)
-                              }else{
-                                setKeberangkatan(newValue);
-                              }
-                            }}
-                            loading={loadingBerangkat}
-                            renderInput={(params) => (
-                                <TextField
-                                {...params}
-                                InputProps={{
-                                    ...params.InputProps,
-                                    startAdornment: (
-                                    <FaTrain className="text-gray-400" />
-                                    ),
-                                    placeholder: "Dari",
-                                    endAdornment: (
-                                    <React.Fragment>
-                                        {loadingBerangkat ? (
-                                        <CircularProgress color="inherit" size={20} />
-                                        ) : null}
-                                        {params.InputProps.endAdornment}
-                                    </React.Fragment>
-                                    ),
-                                }}
+                      <div className="w-full m-2 xl:m-0 xl:pr-0">
+                        <small className="block mb-2 text-black">Dari</small>
+                        <Autocomplete
+                          classes={classes}
+                          className="mt-1.5"
+                          id="asynchronous-demo"
+                          disableClearable
+                          PopperComponent={PopperMy}
+                          open={openBerangka}
+                          hiddenLabel={true}
+                          onOpen={() => {
+                            SetopenBerangka(true);
+                          }}
+                          onClose={() => {
+                            SetopenBerangka(false);
+                          }}
+                          renderTags={(value, getTagProps) => (
+                            <div style={{ width: "90%" }}>
+                              {value.map((option, index) => (
+                                <Chip
+                                  variant="outlined"
+                                  label={option}
+                                  {...getTagProps({ index })}
                                 />
-                            )}
+                              ))}
+                            </div>
+                          )}
+                          isOptionEqualToValue={(option, value) =>
+                            option.title === value.title
+                          }
+                          getOptionLabel={(option) =>
+                            option.nama_stasiun +
+                            " - " +
+                            option.nama_kota +
+                            " - " +
+                            option.id_stasiun
+                          }
+                          options={kaiData}
+                          value={keberangkatan}
+                          onChange={(event, newValue) => {
+                            if (
+                              newValue == tujuan ||
+                              newValue?.id_stasiun == tujuan?.id_stasiun
+                            ) {
+                              errorBerangkat();
+                              setKeberangkatan(keberangkatan);
+                            } else {
+                              setKeberangkatan(newValue);
+                            }
+                          }}
+                          loading={loadingBerangkat}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              InputProps={{
+                                ...params.InputProps,
+                                startAdornment: (
+                                  <FaTrain className="text-gray-400" />
+                                ),
+                                placeholder: "Dari",
+                                endAdornment: (
+                                  <React.Fragment>
+                                    {loadingBerangkat ? (
+                                      <CircularProgress
+                                        color="inherit"
+                                        size={20}
+                                      />
+                                    ) : null}
+                                    {params.InputProps.endAdornment}
+                                  </React.Fragment>
+                                ),
+                              }}
                             />
-                        </div>
-                          <div
-                              onClick={changeStatiun}
-                              className="w-8 h-8 cursor-pointer flex justify-center mt-2 xl:mt-6 items-center bg-blue-500 rounded-full p-1 flex-shrink-0"
-                              >
-                              <AiOutlineSwap className="text-white w-10 h-10" />
-                          </div>
-                        <div
-                          className="w-full m-2 xl:m-0 xl:pr-0"
-                        >
-                            <small className="mb-2 text-black">Tujuan</small>
-                            <Autocomplete
-                            classes={classes}
-                            className="mt-1.5"
-                            id="asynchronous-demo"
-                            disableClearable
-                            PopperComponent={PopperMy}
-                            open={openTujuan}
-                            hiddenLabel={true}
-                            onOpen={() => {
-                                setOpenTujuan(true);
-                            }}
-                            onClose={() => {
-                                setOpenTujuan(false);
-                            }}
-                            renderTags={(value, getTagProps) => (
-                                <div style={{ width: "90%" }}>
-                                {value.map((option, index) => (
-                                    <Chip
-                                    variant="outlined"
-                                    label={option}
-                                    {...getTagProps({ index })}
-                                    />
-                                ))}
-                                </div>
-                            )}
-                            isOptionEqualToValue={(option, value) =>
-                                option.title === value.title
-                            }
-                            getOptionLabel={(option) =>
-                                option.nama_stasiun +
-                                " - " +
-                                option.nama_kota +
-                                " - " +
-                                option.id_stasiun
-                            }
-                            options={kaiData}
-                            value={tujuan}
-                            onChange={(event, newValue) => {
-                                if((newValue == keberangkatan) || (newValue?.id_stasiun == keberangkatan?.id_stasiun)){
-                                  errorTujuan();
-                                  setTujuan(tujuan);
-                                }else{
-                                  setTujuan(newValue);
-                                }
-                            }}
-                            loading={loadingTujuan}
-                            renderInput={(params) => (
-                                <TextField
-                                {...params}
-                                InputProps={{
-                                    ...params.InputProps,
-                                    startAdornment: (
-                                    <FaTrain className="text-gray-400" />
-                                    ),
-                                    placeholder: "Dari",
-                                    endAdornment: (
-                                    <React.Fragment>
-                                        {loadingTujuan ? (
-                                        <CircularProgress color="inherit" size={20} />
-                                        ) : null}
-                                        {params.InputProps.endAdornment}
-                                    </React.Fragment>
-                                    ),
-                                }}
+                          )}
+                        />
+                      </div>
+                      <div
+                        onClick={changeStatiun}
+                        className="w-8 h-8 cursor-pointer flex justify-center mt-2 xl:mt-6 items-center bg-blue-500 rounded-full p-1 flex-shrink-0"
+                      >
+                        <AiOutlineSwap className="text-white w-10 h-10" />
+                      </div>
+                      <div className="w-full m-2 xl:m-0 xl:pr-0">
+                        <small className="mb-2 text-black">Tujuan</small>
+                        <Autocomplete
+                          classes={classes}
+                          className="mt-1.5"
+                          id="asynchronous-demo"
+                          disableClearable
+                          PopperComponent={PopperMy}
+                          open={openTujuan}
+                          hiddenLabel={true}
+                          onOpen={() => {
+                            setOpenTujuan(true);
+                          }}
+                          onClose={() => {
+                            setOpenTujuan(false);
+                          }}
+                          renderTags={(value, getTagProps) => (
+                            <div style={{ width: "90%" }}>
+                              {value.map((option, index) => (
+                                <Chip
+                                  variant="outlined"
+                                  label={option}
+                                  {...getTagProps({ index })}
                                 />
-                            )}
+                              ))}
+                            </div>
+                          )}
+                          isOptionEqualToValue={(option, value) =>
+                            option.title === value.title
+                          }
+                          getOptionLabel={(option) =>
+                            option.nama_stasiun +
+                            " - " +
+                            option.nama_kota +
+                            " - " +
+                            option.id_stasiun
+                          }
+                          options={kaiData}
+                          value={tujuan}
+                          onChange={(event, newValue) => {
+                            if (
+                              newValue == keberangkatan ||
+                              newValue?.id_stasiun == keberangkatan?.id_stasiun
+                            ) {
+                              errorTujuan();
+                              setTujuan(tujuan);
+                            } else {
+                              setTujuan(newValue);
+                            }
+                          }}
+                          loading={loadingTujuan}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              InputProps={{
+                                ...params.InputProps,
+                                startAdornment: (
+                                  <FaTrain className="text-gray-400" />
+                                ),
+                                placeholder: "Dari",
+                                endAdornment: (
+                                  <React.Fragment>
+                                    {loadingTujuan ? (
+                                      <CircularProgress
+                                        color="inherit"
+                                        size={20}
+                                      />
+                                    ) : null}
+                                    {params.InputProps.endAdornment}
+                                  </React.Fragment>
+                                ),
+                              }}
                             />
-                        </div>
+                          )}
+                        />
+                      </div>
                     </div>
                   </div>
 
                   {/* mobile pencarian asal dan tujuan */}
                   <div className="block xl:hidden">
-                    <KeretaMobile 
+                    <KeretaMobile
                       kaiData={kai.data || []}
-                      keberangkatan={keberangkatan}     
+                      keberangkatan={keberangkatan}
                       setKeberangkatan={setKeberangkatan}
                       setTujuan={setTujuan}
                       tujuan={tujuan}
@@ -901,64 +959,131 @@ function KAI() {
 
                   {/* desktop  dan mobile tanggal */}
                   <FormControl sx={{ m: 1, minWidth: 160 }}>
-                    <small className="mb-2 text-black">
-                      Tanggal Berangkat
-                    </small>
-                    <button type="button" className="border py-[10px] customButtonStyle w-full block text-black" onClick={handleOpenDate}>
+                    <small className="mb-2 text-black">Tanggal Berangkat</small>
+                    <button
+                      type="button"
+                      className="border py-[10px] customButtonStyle w-full block text-black"
+                      onClick={handleOpenDate}
+                    >
                       <div className="flex justify-between mx-4 items-center">
-                        <div>
-                        {`${
-                            parseTanggalPelni(tanggal)
-                      } `}
-                        </div>
+                        <div>{`${parseTanggalPelni(tanggal)} `}</div>
                         <CiCalendarDate size={22} className="text-gray-400" />
                       </div>
                     </button>
                   </FormControl>
-                  
+
                   {/* desktop pencarian penumpang */}
                   <FormControl sx={{ m: 1, minWidth: 130 }}>
                     <small className="mb-2 text-black">Total Penumpang</small>
-                    <div className="hidden md:block"></div>
+                    <div className="hidden xl:block"></div>
                     <div
                       className="cursor-pointer border py-[10px] rounded-md px-2 w-full text-black flex items-center space-x-2"
                       onClick={toggleDrawer(true, false, "buka")}
                     >
-                        <LuUsers size={21} className="text-gray-400"  />
+                      <LuUsers size={21} className="text-gray-400" />
                       <div>
-                        {`${parseInt(adult) + parseInt(infant)} Penumpang`}                          
+                        {`${parseInt(adult) + parseInt(infant)} Penumpang`}
                       </div>
                     </div>
-                    <SwipeableDrawer anchor="bottom" PaperProps={{ sx: { borderTopLeftRadius: 30, borderTopRightRadius: 30 } }} open={openDrawer} onClose={toggleDrawer(false)} onOpen={toggleDrawer(true)}>
+                    <SwipeableDrawer
+                      anchor="bottom"
+                      PaperProps={{
+                        sx: {
+                          borderTopLeftRadius: 30,
+                          borderTopRightRadius: 30,
+                        },
+                      }}
+                      open={openDrawer}
+                      onClose={toggleDrawer(false)}
+                      onOpen={toggleDrawer(true)}
+                    >
                       <div className="p-4 mt-2 xl:container xl:px-64">
-                        
-                        <h2 className="text-lg font-semibold py-4">Pilih Jumlah Penumpang</h2>
-                        {[{ label: "ADULT", age: "(≥ 3 thn)", value: adultTemp, setValue: setadultTemp, min: 1, max:4, plus:plusAdult, minus:minusAdult },
-                          { label: "INFANT",age: "(<3 thn)", value: infantTemp, setValue: setinfantTemp, min: 0, max:4, plus:plusInfant, minus:minusInfant }]
-                          .map(({ label, age, value, setValue, min, max, plus, minus }) => (
+                        <h2 className="text-lg font-semibold py-4">
+                          Pilih Jumlah Penumpang
+                        </h2>
+                        {[
+                          {
+                            label: "ADULT",
+                            age: "(≥ 3 thn)",
+                            value: adultTemp,
+                            setValue: setadultTemp,
+                            min: 1,
+                            max: 4,
+                            plus: plusAdult,
+                            minus: minusAdult,
+                          },
+                          {
+                            label: "INFANT",
+                            age: "(<3 thn)",
+                            value: infantTemp,
+                            setValue: setinfantTemp,
+                            min: 0,
+                            max: 4,
+                            plus: plusInfant,
+                            minus: minusInfant,
+                          },
+                        ].map(
+                          ({
+                            label,
+                            age,
+                            value,
+                            setValue,
+                            min,
+                            max,
+                            plus,
+                            minus,
+                          }) => (
                             <div key={label} className="mt-4 px-4 py-1">
                               <div className="grid grid-cols-12">
                                 <div className="col-span-8">
                                   <div className="flex items-center space-x-2">
-                                    <div className="font-bold text-gray-800">{label}</div>
-                                    <div className="text-xs text-gray-400">{age}</div>
+                                    <div className="font-bold text-gray-800">
+                                      {label}
+                                    </div>
+                                    <div className="text-xs text-gray-400">
+                                      {age}
+                                    </div>
                                   </div>
                                 </div>
                                 <div className="col-span-4">
                                   <InputGroup>
-                                    <InputGroup.Button onClick={minus}>-</InputGroup.Button>
-                                    <input type="number" min={min} max={max} className="block text-center w-full focus:outline-0" value={value} readOnly />
-                                    <InputGroup.Button className="bg-gray-300 text-black hover:bg-blue-500 hover:text-white" onClick={plus}>+</InputGroup.Button>
+                                    <InputGroup.Button onClick={minus}>
+                                      -
+                                    </InputGroup.Button>
+                                    <input
+                                      type="number"
+                                      min={min}
+                                      max={max}
+                                      className="block text-center w-full focus:outline-0"
+                                      value={value}
+                                      readOnly
+                                    />
+                                    <InputGroup.Button
+                                      className="bg-gray-300 text-black hover:bg-blue-500 hover:text-white"
+                                      onClick={plus}
+                                    >
+                                      +
+                                    </InputGroup.Button>
                                   </InputGroup>
                                 </div>
                               </div>
                             </div>
-                          ))}
+                          )
+                        )}
                         <div className="flex justify-end space-x-2 my-8 px-4">
-                          <ButtonMui className="w-32" variant="outlined" color="secondary" onClick={toggleDrawer(false)}>
+                          <ButtonMui
+                            className="w-32"
+                            variant="outlined"
+                            color="secondary"
+                            onClick={toggleDrawer(false)}
+                          >
                             Cancel
                           </ButtonMui>
-                          <ButtonMui className="w-52" variant="contained"  onClick={toggleDrawer(false, true, "simpan")}>
+                          <ButtonMui
+                            className="w-52"
+                            variant="contained"
+                            onClick={toggleDrawer(false, true, "simpan")}
+                          >
                             Simpan
                           </ButtonMui>
                         </div>
@@ -972,7 +1097,7 @@ function KAI() {
                     size="large"
                     key="submit"
                     type="primary"
-                    className="bg-blue-500 mx-2 md:mx-0 font-semibold"
+                    className="bg-blue-500 mx-2 xl:mx-0 font-semibold"
                     loading={isLoading}
                     onClick={handlerCariKai}
                   >
@@ -988,4 +1113,4 @@ function KAI() {
   );
 }
 
-export default KAI
+export default KAI;

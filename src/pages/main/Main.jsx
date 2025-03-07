@@ -11,7 +11,6 @@ import KAI from "../../components/kai/KAI";
 import Pelni from "../../components/pelni/Pelni";
 import DLU from "../../components/dlu/DLU";
 import Carousels from "../../components/carousel/Carousel";
-import CarouselsTablet from "../../components/carousel/CarouselTablet";
 import {  notification, Skeleton as SkeletonAntMobile } from "antd";
 import { fetchDataType } from "../../features/dataTypeSlice";
 import Skeleton from 'react-loading-skeleton';
@@ -119,8 +118,8 @@ export default function MainPage() {
           className="pb-0 xl:pb-20 xl:mb-0 xl:rounded-b-[120px] -mt-4 xl:mt-0"
         >
           <div className="block xl:hidden"><img className="" src="/menu2.jpeg" /></div>
-          <div className="hidden xl:block  2xl:hidden py-0 xl:py-8 relative z-10 container mx-auto">
-            <CarouselsTablet />
+          <div className="hidden xl:block 2xl:hidden py-0 xl:py-8 relative z-10 container mx-auto">
+            {/* <CarouselsTablet /> */}
           </div>
           <div className="block xl:hidden py-0 xl:py-8 relative z-10 container mx-auto">
             {/* <CarouselsMobile />  hidden dulu*/} 

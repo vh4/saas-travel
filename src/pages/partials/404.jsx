@@ -11,11 +11,11 @@ const Page404 = () => {
   return (
     <>
       <div className="flex flex-col min-h-screen justify-center">
-        <div className="flex-grow flex items-center md:items-stretch"> {/* Gunakan md:items-stretch hanya pada tampilan mobile */}
-          <div className="container flex flex-col md:flex-row items-center justify-center px-5 text-black">
+        <div className="flex-grow flex items-center xl:items-stretch"> {/* Gunakan xl:items-stretch hanya pada tampilan mobile */}
+          <div className="container flex flex-col xl:flex-row items-center justify-center px-5 text-black">
             <div className="max-w-md text-center">
               <div className="text-2xl font-dark">404</div>
-              <p className="text-md md:text-xl font-light leading-normal mb-4">
+              <p className="text-md xl:text-xl font-light leading-normal mb-4">
                 Maaf, page tidak ditemukan.
               </p>
               <button

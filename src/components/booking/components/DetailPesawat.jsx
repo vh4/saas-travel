@@ -1,6 +1,6 @@
 import { SwipeableDrawer, Box, Divider } from "@mui/material";
 import * as React from "react";
-import {useState} from 'react';
+import { useState } from "react";
 import PropTypes from "prop-types";
 import { styled } from "@mui/material/styles";
 import { grey } from "@mui/material/colors";
@@ -11,7 +11,10 @@ import { CiCalendarDate } from "react-icons/ci";
 import { callbackFetchData } from "../../../features/callBackSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { setBookDataLanjutBayar, setDataSearchPesawat } from "../../../features/createSlice";
+import {
+  setBookDataLanjutBayar,
+  setDataSearchPesawat,
+} from "../../../features/createSlice";
 
 const StyledBox = styled("div")(({ theme }) => ({
   backgroundColor: "#fff",
@@ -27,25 +30,30 @@ const Puller = styled("div")(({ theme }) => ({
   left: "calc(50% - 15px)",
 }));
 
-export default function DetailPesawat({ data, openDetail, toggleDrawerDetail }) {
+export default function DetailPesawat({
+  data,
+  openDetail,
+  toggleDrawerDetail,
+}) {
   const { Paragraph } = Typography;
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleDetail = async () => {
-      setIsLoading(true)
-      try {
-         dispatch(callbackFetchData({ type: 'plane', id_transaksi:data.id_transaksi  }));
-         dispatch(setBookDataLanjutBayar(data));
-      } catch (error) {
-        console.log(error)
-      }
-      setIsLoading(true)
-      navigate({
-        pathname: `/flight/detail/payment`,
-      });
-
+    setIsLoading(true);
+    try {
+      dispatch(
+        callbackFetchData({ type: "plane", id_transaksi: data.id_transaksi })
+      );
+      dispatch(setBookDataLanjutBayar(data));
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(true);
+    navigate({
+      pathname: `/flight/detail/payment`,
+    });
   };
 
   return (
@@ -82,9 +90,11 @@ export default function DetailPesawat({ data, openDetail, toggleDrawerDetail }) 
                 <div className="font-bold">{index + 1}.</div>
                 <div>
                   <div className="flex space-x-2 items-center">
-				  	<div className="title font-bold">{penumpang.nama}</div>
-					<div className="bg-blue-100 py-1 px-2 text-xs">{penumpang.status}</div>
-				  </div>
+                    <div className="title font-bold">{penumpang.nama}</div>
+                    <div className="bg-blue-100 py-1 px-2 text-xs">
+                      {penumpang.status}
+                    </div>
+                  </div>
                   <div className="flex space-x-3 items-center mt-2">
                     <div className="mt-2">{penumpang.nik}</div>
                     <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
@@ -95,7 +105,10 @@ export default function DetailPesawat({ data, openDetail, toggleDrawerDetail }) 
                   </div>
                 </div>
               </div>
-              <Divider component="div" sx={{ width: "100%", display: "block" }} />
+              <Divider
+                component="div"
+                sx={{ width: "100%", display: "block" }}
+              />
             </React.Fragment>
           ))}
         </div>
@@ -118,25 +131,27 @@ export default function DetailPesawat({ data, openDetail, toggleDrawerDetail }) 
                   <div>Total Harga</div>
                   <div>
                     Rp.{" "}
-                    {toRupiah(parseInt(data.nominal) + parseInt(data.nominal_admin))}
+                    {toRupiah(
+                      parseInt(data.nominal) + parseInt(data.nominal_admin)
+                    )}
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div className="mt-4">
-              <div className="flex justify-center w-full">
-                <Button
-                  onClick={handleDetail}                                             
-                  size="large"
-                  key="submit"
-                  type="primary"
-                  className="bg-blue-500 px-12 font-semibold w-full"
-                  loading={isLoading}
-                >
-                  Lanjut Bayar
-                </Button>
-              </div>
+            <div className="flex justify-center w-full">
+              <Button
+                onClick={handleDetail}
+                size="large"
+                key="submit"
+                type="primary"
+                className="bg-blue-500 px-12 font-semibold w-full"
+                loading={isLoading}
+              >
+                Lanjut Bayar
+              </Button>
+            </div>
           </div>
         </div>
       </StyledBox>

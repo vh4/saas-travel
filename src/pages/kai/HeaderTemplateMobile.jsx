@@ -9,7 +9,7 @@ export default function HeaderTemplateMobile({ children, type }) {
   return (
     <div className="flex flex-col min-h-screen">
       <div>
-        <div className="block md:hidden mb-5">
+        <div className="block xl:hidden mb-5">
           <div className="flex space-x-16 items-center w-full text-black px-2 py-[18px] overflow-x-auto whitespace-nowrap">
             <div className="ml-2 flex-shrink-0" onClick={() => window.history.back()}>
               <div className="flex space-x-2 items-center">

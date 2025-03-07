@@ -13,7 +13,7 @@ export default function TransaksiAllPage() {
     const [open, setOpen] = useState(false);
 
     const theme = useTheme();
-    const isXL = useMediaQuery(theme.breakpoints.up("lg"));
+    const isXL = useMediaQuery(theme.breakpoints.up("xl"));
 
     useEffect(() => {
         document.title = "Travel - List Transaksi";
@@ -25,7 +25,7 @@ export default function TransaksiAllPage() {
 
     return (
         <Layout>
-            <div className="mt-0 mb-24 md:mb-0 md:mt-4 px-4 md:px-12">
+            <div className="mt-0 mb-24 xl:mb-0 xl:mt-4 px-4 xl:px-12">
                 <TransaksiAll path={path} />
             </div>
         </Layout>

@@ -80,13 +80,20 @@ export default function ListPesawat({ data, remainingPesawat }) {
                 cursor: "pointer",
               }}
             >
-              <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
                 <div className="flex items-center space-x-2 justify-center w-full px-4 font-semibold">
                   <div className="">Sisa Waktu Pembayaran</div>
                   <div className="">
-				  	{remainingPesawat[i] !== undefined && remainingPesawat[i] > 0
-						? remainingTimeAllBook(remainingPesawat[i])
-						: "Habis"}
+                    {remainingPesawat[i] !== undefined &&
+                    remainingPesawat[i] > 0
+                      ? remainingTimeAllBook(remainingPesawat[i])
+                      : "Habis"}
                   </div>
                 </div>
               </Box>

@@ -19,8 +19,8 @@ const WithoutMerchant = ({
   handleSearchSubmit,
 }) => {
   const handleSubmit = (event) => {
-    event.preventDefault(); // Mencegah reload halaman
-    handleSearchSubmit(); // Panggil fungsi pencarian
+    event.preventDefault();
+    handleSearchSubmit();
   };
 
   const options = [

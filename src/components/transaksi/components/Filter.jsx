@@ -1,10 +1,22 @@
-import { List, ListItem, ListItemButton, ListItemText, SwipeableDrawer, Divider } from "@mui/material";
+import {
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  SwipeableDrawer,
+  Divider,
+} from "@mui/material";
 import * as React from "react";
 import { MdRadioButtonUnchecked } from "react-icons/md";
 import { FaCircleCheck } from "react-icons/fa6";
 import PropTypes from "prop-types";
 
-export default function SwipeableEdgeDrawer({ open, toggleDrawer, selectedValue, setSelectedValue }) {
+export default function SwipeableEdgeDrawer({
+  open,
+  toggleDrawer,
+  selectedValue,
+  setSelectedValue,
+}) {
   const handleChange = (value) => {
     setSelectedValue(value);
   };
@@ -23,11 +35,16 @@ export default function SwipeableEdgeDrawer({ open, toggleDrawer, selectedValue,
               <React.Fragment key={item}>
                 <ListItem disablePadding>
                   <ListItemButton onClick={() => handleChange(item)}>
-                    <ListItemText primary={item.charAt(0).toUpperCase() + item.slice(1)} />
+                    <ListItemText
+                      primary={item.charAt(0).toUpperCase() + item.slice(1)}
+                    />
                     {selectedValue === item ? (
                       <FaCircleCheck className="text-blue-500 ml-2" size={20} />
                     ) : (
-                      <MdRadioButtonUnchecked className="text-gray-500 ml-2" size={20} />
+                      <MdRadioButtonUnchecked
+                        className="text-gray-500 ml-2"
+                        size={20}
+                      />
                     )}
                   </ListItemButton>
                 </ListItem>

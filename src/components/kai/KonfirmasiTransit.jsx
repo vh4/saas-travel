@@ -22,7 +22,6 @@ import KonfirmasiLoading from "../components/trainskeleton/konfirmasi";
 import { Typography } from "antd";
 import moment from "moment";
 import { SeatMapTransit } from "./SeatMapsTransit";
-import { IoArrowForwardOutline } from "react-icons/io5";
 import { MdOutlineTrain } from "react-icons/md";
 
 export default function KonfirmasiTransit() {
@@ -523,7 +522,7 @@ export default function KonfirmasiTransit() {
                       {/*body*/}
                       <div className="relative flex-auto">
                         <div className="">
-                          <div className="grid w-full grid-cols-1 md:grid-cols-3">
+                          <div className="grid w-full grid-cols-1 xl:grid-cols-3">
                             {/* sidebar seats Kai */}
                             <div className="text-start">
                               {changeState[0][isNumberTrainPassenger].map(
@@ -559,7 +558,7 @@ export default function KonfirmasiTransit() {
                                 )
                               )}
 
-                              <div className="mt-4 md:mt-4 ml-2">
+                              <div className="mt-4 xl:mt-4 ml-2">
                                 <div className="flex space-x-2 items-center mt-2 ">
                                   <label
                                     class={`select-none block py-1.5 items-center cursor-pointer`}
@@ -596,7 +595,7 @@ export default function KonfirmasiTransit() {
                             <div className="col-span-2 w-full h-[540px]">
                               <div className="flex justify-center mb-8 mt-4">
                                 <>
-                                  <div className="w-full mx-0 md:mx-8 text-center">
+                                  <div className="w-full mx-0 xl:mx-8 text-center">
                                     <label
                                       for="underline_select"
                                       class="sr-only"
@@ -740,7 +739,7 @@ export default function KonfirmasiTransit() {
           ) : (
             <>
               <div className="block xl:flex xl:justify-around mb-24 xl:space-x-4">
-                <div className="block md:hidden">
+                <div className="block xl:hidden">
                   <Alert
                     message={`Expired Booking : ${remainingBookTime}`}
                     banner
@@ -749,7 +748,7 @@ export default function KonfirmasiTransit() {
                 <div className="w-full mx-0 2xl:mx-4">
                   {dataDetailTrain.map((e, i) => (
                     <>
-                      <div className="mt-2 md:mt-8 w-full rounded-md border border-gray-200 shadow-sm">
+                      <div className="mt-2 xl:mt-8 w-full rounded-md border border-gray-200 shadow-sm">
                         <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                           <div className="text-black font-medium  ">
                             Keberangkatan kereta
@@ -835,8 +834,8 @@ export default function KonfirmasiTransit() {
                             ? passengers.adults.map((e, i) => (
                                 <>
                                   <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
-                                    <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
-                                      <div className="px-2 md:px-4 py-2 text-xs">
+                                    <div className="mt-2 grid grid-cols-2 xl:grid-cols-4">
+                                      <div className="px-2 xl:px-4 py-2 text-xs">
                                         <div className="text-black font-medium ">
                                           Nama
                                         </div>
@@ -844,7 +843,7 @@ export default function KonfirmasiTransit() {
                                           {e.name}
                                         </div>
                                       </div>
-                                      <div className="px-2 md:px-4 py-2 text-xs">
+                                      <div className="px-2 xl:px-4 py-2 text-xs">
                                         <div className="text-black font-medium ">
                                           NIK
                                         </div>
@@ -852,7 +851,7 @@ export default function KonfirmasiTransit() {
                                           {e.idNumber}
                                         </div>
                                       </div>
-                                      <div className="px-2 md:px-4 py-2 text-xs">
+                                      <div className="px-2 xl:px-4 py-2 text-xs">
                                         <div className="text-black  font-medium ">
                                           Nomor HP
                                         </div>
@@ -860,7 +859,7 @@ export default function KonfirmasiTransit() {
                                           {e.phone}
                                         </div>
                                       </div>
-                                      <div className="px-2 md:px-4 py-2 text-xs">
+                                      <div className="px-2 xl:px-4 py-2 text-xs">
                                         <div className="text-black  font-medium ">
                                           Kursi
                                         </div>
@@ -887,7 +886,7 @@ export default function KonfirmasiTransit() {
                                         </div>
                                       </div>
                                     </div>
-                                    </div>
+                                  </div>
                                 </>
                               ))
                             : ""}
@@ -909,17 +908,17 @@ export default function KonfirmasiTransit() {
                     passengers.infants.length > 0 &&
                     dataDetailTrain.map((k, l) => (
                       <>
-                         <div className="p-2">
+                        <div className="p-2">
                           <div className="flex space-x-2 items-center px-2 py-2 text-black border-b border-gray-200 text-sm font-medium ">
                             <MdOutlineTrain className="text-black" size={22} />
                             <p>{k.trainName}</p>
-                          </div>  
-                            {passengers.infants && passengers.infants.length > 0
-                              ? passengers.infants.map((e, i) => (
-                                  <>
+                          </div>
+                          {passengers.infants && passengers.infants.length > 0
+                            ? passengers.infants.map((e, i) => (
+                                <>
                                   <div className="p-2 mt-4 w-full rounded-md border border-gray-200 shadow-sm">
-                                    <div className="mt-2 grid grid-cols-2 md:grid-cols-4">
-                                      <div className="px-2 md:px-4 py-2 text-xs">
+                                    <div className="mt-2 grid grid-cols-2 xl:grid-cols-4">
+                                      <div className="px-2 xl:px-4 py-2 text-xs">
                                         <div className="text-black font-medium ">
                                           Nama
                                         </div>
@@ -927,7 +926,7 @@ export default function KonfirmasiTransit() {
                                           {e.name}
                                         </div>
                                       </div>
-                                      <div className="px-2 md:px-4 py-2 text-xs">
+                                      <div className="px-2 xl:px-4 py-2 text-xs">
                                         <div className="text-black font-medium ">
                                           NIK
                                         </div>
@@ -935,7 +934,7 @@ export default function KonfirmasiTransit() {
                                           {e.idNumber}
                                         </div>
                                       </div>
-                                      <div className="px-2 md:px-4 py-2 text-xs">
+                                      <div className="px-2 xl:px-4 py-2 text-xs">
                                         <div className="text-black  font-medium ">
                                           Tanggal Lahir
                                         </div>
@@ -972,10 +971,10 @@ export default function KonfirmasiTransit() {
                                         </div>
                                       </div>
                                     </div>
-                                    </div>
-                                  </>
-                                ))
-                              : ""}
+                                  </div>
+                                </>
+                              ))
+                            : ""}
                         </div>
                       </>
                     ))}
@@ -987,7 +986,7 @@ export default function KonfirmasiTransit() {
                     {hasilBooking.map((e, z) => (
                       <>
                         <div className="p-4">
-                        <div className="my-2 text-black pb-2 border-b border-gray-200 mb-2">
+                          <div className="my-2 text-black pb-2 border-b border-gray-200 mb-2">
                             {dataDetailTrain[z].trainName}
                           </div>
                           <div className="text-xs text-black font-medium  flex justify-between mt-4">
@@ -1036,7 +1035,7 @@ export default function KonfirmasiTransit() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="flex justify-end">
                     <ButtonAnt
                       onClick={handlerKonfirmasi}
@@ -1120,7 +1119,7 @@ export default function KonfirmasiTransit() {
                         <div></div>
                       </>
                     ))}
-                  <div className="hidden md:block mt-4">
+                  <div className="hidden xl:block mt-4">
                     <Alert
                       message={`Expired Booking : ${remainingBookTime}`}
                       banner

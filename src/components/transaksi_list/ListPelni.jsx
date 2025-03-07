@@ -10,7 +10,11 @@ import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { CiBoxList, CiCircleMore, CiTimer } from "react-icons/ci";
 import { HiOutlinePrinter } from "react-icons/hi2";
 import dayjs from "dayjs";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { callbackFetchData } from "../../features/callBackSlice";
+import { setBookDataLanjutBayar } from "../../features/createSlice";
+import { IoIosArrowRoundForward } from "react-icons/io";
 
 export default function ViewBooking({ path }) {
   const [data, setData] = useState([]);
@@ -19,6 +23,9 @@ export default function ViewBooking({ path }) {
   const [isLoading, setIsLoading] = useState(false);
   const [loadBayar, setLoadBayar] = useState(true);
   const [messageApi, contextHolder] = message.useMessage();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   // const [loading, setLoading] = useState(false);
   // const handleOpen = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
@@ -209,6 +216,22 @@ export default function ViewBooking({ path }) {
     };
   }, [data, remainingTimes]);
 
+  const handleDetail = async (e) => {
+    setIsLoading(true);
+    try {
+      dispatch(
+        callbackFetchData({ type: "pelni", id_transaksi: e.id_transaksi })
+      );
+      dispatch(setBookDataLanjutBayar(e));
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(true);
+    navigate({
+      pathname: `/pelni/detail/payment`,
+    });
+  };
+
   return (
     <>
       {contextHolder}
@@ -234,7 +257,7 @@ export default function ViewBooking({ path }) {
             <div className="mt-4 mb-12">
               {byrdata.penumpang.map((e) => (
                 <>
-                  <div className="border-b p-4 grid grid-cols-1 md:grid-cols-5 gap-4 mt-4">
+                  <div className="border-b p-4 grid grid-cols-1 xl:grid-cols-5 gap-4 mt-4">
                     <div className="text-xs">
                       <div className="">Nama</div>
                       <div>{e.nama}</div>
@@ -400,8 +423,7 @@ export default function ViewBooking({ path }) {
               </div>
             </div>
           ) : (
-            <>
-            </>
+            <></>
           )}
         </Modal>
         {err === true ? (
@@ -424,7 +446,7 @@ export default function ViewBooking({ path }) {
                     {data.map((e, i) => (
                       <div className="mt-4 xl:mt-0">
                         <div className="w-full profile-header">
-                          <div className="p-2 md:px-8 md:py-6 mt-4 mb-8 md:mb-0 md:mt-0">
+                          <div className="p-2 xl:px-8 xl:py-6 mt-4 mb-8 xl:mb-0 xl:mt-0">
                             <div className="flex justify-between items-end">
                               {!e.status?.status_payment
                                 ?.toUpperCase()
@@ -533,6 +555,15 @@ export default function ViewBooking({ path }) {
                                       Lihat Detail
                                     </a>
                                   </div>
+                                  <div className="flex space-x-2 items-center">
+                                      <a
+                                        onClick={() => handleDetail(e, i)}
+                                        className="cursor-pointer text-black text-xs hover:text-black"
+                                      >
+                                        Lanjut Bayar
+                                      </a>
+                                      <IoIosArrowRoundForward size={16} />
+                                    </div>
                                 </div>
                               </div>
                             </div>

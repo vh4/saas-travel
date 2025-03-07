@@ -64,19 +64,22 @@ export default function DetailKereta({ data, openDetail, toggleDrawerDetail }) {
                     <div className="flex items-center">
                       <PiChairDuotone className="mt-2" size={18} />
                       <div className="mt-2">
-						{data.classes === "EKS"
-						? "Eks"
-						: data.classes === "EKO"
-						? "Eko"
-							: "Bisnis"}{" "}
-						{data.kode_kereta.substring(4, 5)} / {" "}
-						{data.kode_kereta.split("/")[1]}
+                        {data.classes === "EKS"
+                          ? "Eks"
+                          : data.classes === "EKO"
+                          ? "Eko"
+                          : "Bisnis"}{" "}
+                        {data.kode_kereta.substring(4, 5)} /{" "}
+                        {data.kode_kereta.split("/")[1]}
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <Divider component="div" sx={{ width: "100%", display: "block" }} />
+              <Divider
+                component="div"
+                sx={{ width: "100%", display: "block" }}
+              />
             </React.Fragment>
           ))}
         </div>
@@ -99,7 +102,9 @@ export default function DetailKereta({ data, openDetail, toggleDrawerDetail }) {
                   <div>Total Harga</div>
                   <div>
                     Rp.{" "}
-                    {toRupiah(parseInt(data.nominal) + parseInt(data.nominal_admin))}
+                    {toRupiah(
+                      parseInt(data.nominal) + parseInt(data.nominal_admin)
+                    )}
                   </div>
                 </div>
               </div>

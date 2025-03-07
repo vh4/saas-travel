@@ -41,7 +41,7 @@ import {
   
     return (
       <aside className="w-full" aria-label="Sidebar">
-        <div className="mt-4 md:mt-0 -mb-4 md:mb-0 flex justify-center w-full overflow-y-auto py-4 px-1">
+        <div className="mt-4 xl:mt-0 -mb-4 xl:mb-0 flex justify-center w-full overflow-y-auto py-4 px-1">
           <ul className="p-4 w-full grid grid-cols-4 gap-2">
             {(isLoading || type === "auth" || type === "pesawat") && (
               <li>

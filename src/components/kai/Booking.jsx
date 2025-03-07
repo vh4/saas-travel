@@ -221,21 +221,21 @@ export default function BookingKai() {
     if (selectedPassenger) {
       if (indexPreviousPenumpang.type === "adult") {
         const adultCategory = adult[0];
-  
+
         const list_prefix = ["08"];
         const hp = list_prefix.some((prefix) =>
           selectedPassenger.hp.startsWith(prefix)
         )
           ? `628${selectedPassenger.hp.slice(2)}`
           : selectedPassenger.hp;
-  
+
         adultCategory[indexPreviousPenumpang.index]["name"] =
           selectedPassenger.nama;
         adultCategory[indexPreviousPenumpang.index]["phone"] = hp;
         adultCategory[indexPreviousPenumpang.index]["idNumber"] =
           selectedPassenger.nik;
         setAdult([adultCategory]);
-  
+
         form.setFields([
           {
             name: [`adultNameLengkap${indexPreviousPenumpang.index}`],
@@ -249,19 +249,19 @@ export default function BookingKai() {
         ]);
       } else if (indexPreviousPenumpang.type === "infant") {
         const infantCategory = infant[0];
-  
+
         const birthDate = dayjs(selectedPassenger.ttl, "YYYY/MM/DD");
         if (!disabledDate(birthDate)) {
           infantCategory[indexPreviousPenumpang.index]["birthdate"] =
             selectedPassenger.ttl;
         }
-  
+
         infantCategory[indexPreviousPenumpang.index]["name"] =
           selectedPassenger.nama;
         infantCategory[indexPreviousPenumpang.index]["idNumber"] =
           selectedPassenger.nik;
         setInfant([infantCategory]);
-  
+
         form.setFields([
           {
             name: [`infantNamaLengkap${indexPreviousPenumpang.index}`],
@@ -274,7 +274,7 @@ export default function BookingKai() {
         ]);
       }
     }
-  
+
     setIsModalListOpenPenumpang(false);
   };
 
@@ -282,7 +282,7 @@ export default function BookingKai() {
     if (selectedRows.length > 0) {
       const selectedPassenger = selectedRows[0];
       setSelectedPassenger(selectedPassenger);
-      handleOkListPenumpang(selectedPassenger); 
+      handleOkListPenumpang(selectedPassenger);
     }
   };
 
@@ -375,15 +375,14 @@ export default function BookingKai() {
         failedNotification(response.data.rd);
       }
     } else {
-      
       const hasilDataBooking = response.data.data;
       const resp = {
-          passengers: {
-            adults: adult[0],
-            infants: TotalInfant > 0 ? infant[0] : [],
-          },
-          hasil_book: hasilDataBooking,
-      }
+        passengers: {
+          adults: adult[0],
+          infants: TotalInfant > 0 ? infant[0] : [],
+        },
+        hasil_book: hasilDataBooking,
+      };
 
       dispatch(setDataBookKereta(resp));
 
@@ -392,12 +391,10 @@ export default function BookingKai() {
           pathname: `/train/konfirmasi`,
         });
       }, 1000);
-
     }
 
     setIsLoading(false);
     hideModal();
-    
   };
 
   const disabledDate = (current, e, i) => {
@@ -516,19 +513,19 @@ export default function BookingKai() {
                       placeholder="Searching...."
                       onChange={(e) => searchIdpelHistory(e.target.value)}
                       size="middle"
-                     />
+                    />
                   </div>
                   <Table
-                     onRow={(record) => ({
-                        onClick: () => {
-                          handleRowSelectionChange([record.key], [record]); // Trigger selection manually
-                        },
-                        style:{cursor: 'pointer'}
-                      })}
+                    onRow={(record) => ({
+                      onClick: () => {
+                        handleRowSelectionChange([record.key], [record]); // Trigger selection manually
+                      },
+                      style: { cursor: "pointer" },
+                    })}
                     expandable={{
                       expandedRowRender: (record) => (
                         <>
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-8">
+                          <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 ml-8">
                             <div className="my-2">
                               <p style={{ margin: 0 }} className="text-xs">
                                 <strong>NIK:</strong> {record.nik}
@@ -548,8 +545,8 @@ export default function BookingKai() {
                               <p style={{ margin: 0 }} className="text-xs">
                                 <strong>Tanggal Lahir:</strong>{" "}
                                 {record.ttl && record.ttl !== ""
-                                    ? dayjs(record.ttl).format("DD/MM/YYYY")
-                                    : "-"}
+                                  ? dayjs(record.ttl).format("DD/MM/YYYY")
+                                  : "-"}
                               </p>
                             </div>
                           </div>
@@ -569,27 +566,17 @@ export default function BookingKai() {
           <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
               <AiOutlineClockCircle size={20} className="" />
-              <div className="hidden xl:flex font-medium ">
-                Detail pesanan
-              </div>
+              <div className="hidden xl:flex font-medium ">Detail pesanan</div>
             </div>
             <div>
-              <MdHorizontalRule
-                size={20}
-                className="hidden xl:flex "
-              />
+              <MdHorizontalRule size={20} className="hidden xl:flex " />
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
               <RxCrossCircled size={20} className="" />
-              <div className="hidden xl:block ">
-                Konfirmasi pesanan
-              </div>
+              <div className="hidden xl:block ">Konfirmasi pesanan</div>
             </div>
             <div>
-              <MdHorizontalRule
-                size={20}
-                className=" hidden xl:flex"
-              />
+              <MdHorizontalRule size={20} className=" hidden xl:flex" />
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
               <RxCrossCircled size={20} className="" />
@@ -610,7 +597,7 @@ export default function BookingKai() {
                 ) : (
                   <>
                     {/* sidebar mobile kai*/}
-                    <div className="mt-0 md:mt-8 block xl:hidden w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
+                    <div className="mt-0 xl:mt-8 block xl:hidden w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
                       <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                         <div className="text-black font-medium ">
                           Keberangkatan kereta
@@ -711,13 +698,19 @@ export default function BookingKai() {
                     {/* for mobile */}
                     <div className="flex xl:hidden justify-between items-center mb-4 border-b px-2 py-4">
                       <div className="flex space-x-2 items-center text-gry-400 text-sm ">
-                        <IoPricetagOutline className="text-gray-500" size={18} />
+                        <IoPricetagOutline
+                          className="text-gray-500"
+                          size={18}
+                        />
                         <div className="text-gray-500">Harga Fare</div>
+                      </div>
+                      <small className="text-sm font-medium">
+                        Rp.{" "}
+                        {toRupiah(
+                          dataBookingTrain[0]?.seats[0]?.priceAdult || 0
+                        )}
+                      </small>
                     </div>
-                    <small className="text-sm font-medium">
-                      Rp. {toRupiah(dataBookingTrain[0]?.seats[0]?.priceAdult || 0)}
-                    </small>
-                  </div>
                   </>
                 )}
 
@@ -739,7 +732,7 @@ export default function BookingKai() {
                           adult[0].map((e, i) => (
                             <>
                               <div>
-                                <div className="Booking ml-2 md:ml-0 mt-8 mb-0 xl:mb-4 xl:mt-4">
+                                <div className="Booking ml-2 xl:ml-0 mt-8 mb-0 xl:mb-4 xl:mt-4">
                                   <h1 className="text-sm font-medium  text-black">
                                     ADULT PASSENGER
                                   </h1>
@@ -985,7 +978,7 @@ export default function BookingKai() {
                           infant[0].map((e, i) => (
                             <>
                               <div>
-                                <div className="Booking ml-2  md:ml-0 mt-8 mb-0 xl:mb-4 xl:mt-12">
+                                <div className="Booking ml-2  xl:ml-0 mt-8 mb-0 xl:mb-4 xl:mt-12">
                                   <h1 className="xl:text-sm font-medium  text-black text-sm">
                                     INFANT PASSENGER
                                   </h1>
@@ -1229,7 +1222,7 @@ export default function BookingKai() {
                   ) : (
                     <>
                       {/* sidebra desktop*/}
-                      <div className="w-full md:w-2/3 2xl:w-1/2 md:mt-8">
+                      <div className="w-full xl:w-2/3 2xl:w-1/2 xl:mt-8">
                         <div className="hidden xl:block rounded-md border border-gray-200 shadow-sm">
                           <div className="p-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-blue-500 border-b-gray-100">
                             <div className="text-black text-sm font-medium ">
@@ -1332,15 +1325,20 @@ export default function BookingKai() {
                         </div>
                         <div className="hidden xl:flex mt-4 justify-between items-center mb-4 px-4 py-4 border-t-0 border-b border-r-0 border-l-4 border-l-black-500 border-b-gray-100">
                           <div className="flex space-x-2 items-center text-gry-400 text-sm ">
-                            <IoPricetagOutline className="text-gray-500" size={18} />
+                            <IoPricetagOutline
+                              className="text-gray-500"
+                              size={18}
+                            />
                             <div className="text-gray-500">Harga Fare</div>
+                          </div>
+                          <small className="text-sm font-medium">
+                            Rp.{" "}
+                            {toRupiah(
+                              dataBookingTrain[0]?.seats[0]?.priceAdult || 0
+                            )}
+                          </small>
                         </div>
-                        <small className="text-sm font-medium">
-                          Rp. {toRupiah(dataBookingTrain[0]?.seats[0]?.priceAdult || 0)}
-                        </small>
                       </div>
-                      </div>
-
                     </>
                   )}
                 </div>

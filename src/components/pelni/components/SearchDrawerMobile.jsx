@@ -21,7 +21,12 @@ const Puller = styled("div")(({ theme }) => ({
   left: "calc(50% - 15px)",
 }));
 
-function SearchDrawerMobile({ data, openDetail, toggleDrawerDetail, pelniStatiun }) {
+function SearchDrawerMobile({
+  data,
+  openDetail,
+  toggleDrawerDetail,
+  pelniStatiun,
+}) {
   const { DEP_DATE, ARV_DATE, ROUTE } = data;
 
   return (
@@ -39,7 +44,10 @@ function SearchDrawerMobile({ data, openDetail, toggleDrawerDetail, pelniStatiun
         <div className="header">
           <div className="px-4 text-lg font-bold flex justify-between items-center">
             <h6>Detail Pelabuhan</h6>
-            <div onClick={() => toggleDrawerDetail(false)} className="cursor-pointer">
+            <div
+              onClick={() => toggleDrawerDetail(false)}
+              className="cursor-pointer"
+            >
               <IoCloseOutline size={22} className="text-gray-900" />
             </div>
           </div>
@@ -48,7 +56,9 @@ function SearchDrawerMobile({ data, openDetail, toggleDrawerDetail, pelniStatiun
           <div className="mb-2 text-sm font-bold">Tanggal Keberangkatan</div>
           <div className="block mb-10">
             <div className="text-xs">
-              {parseTanggal(dayjs(DEP_DATE, "YYYYMMDD").format("YYYY-MM-DD"))} s.d  {parseTanggal(dayjs(ARV_DATE, "YYYYMMDD").format("YYYY-MM-DD"))}
+              {parseTanggal(dayjs(DEP_DATE, "YYYYMMDD").format("YYYY-MM-DD"))}{" "}
+              s.d{" "}
+              {parseTanggal(dayjs(ARV_DATE, "YYYYMMDD").format("YYYY-MM-DD"))}
             </div>
           </div>
           <Timeline>
@@ -56,14 +66,23 @@ function SearchDrawerMobile({ data, openDetail, toggleDrawerDetail, pelniStatiun
               .filter((item) => item !== "")
               .map((h) => (
                 <Timeline.Item key={h}>
-                  {pelniStatiun.find((z) => parseInt(z.CODE) === parseInt(h))?.NAME}
+                  {
+                    pelniStatiun.find((z) => parseInt(z.CODE) === parseInt(h))
+                      ?.NAME
+                  }
                 </Timeline.Item>
               ))}
           </Timeline>
         </div>
-		<footer className="footer">
+        <footer className="footer">
           <div className="min-w-full p-4">
-             <Button onClick={() => toggleDrawerDetail(false)} className="w-full" variant="contained">Tutup</Button>
+            <Button
+              onClick={() => toggleDrawerDetail(false)}
+              className="w-full"
+              variant="contained"
+            >
+              Tutup
+            </Button>
           </div>
         </footer>
       </StyledBox>

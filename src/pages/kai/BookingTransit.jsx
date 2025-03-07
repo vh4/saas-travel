@@ -11,7 +11,7 @@ export default function BookingTransit(){
 
     return(
         <>
-            <div className="block md:hidden">
+            <div className="block xl:hidden">
                 <HeaderTemplateMobileBooking>
                     <div className="container">
                         <div className="w-full px-4"> 
@@ -21,7 +21,7 @@ export default function BookingTransit(){
                     </div>
                 </HeaderTemplateMobileBooking>
             </div>
-            <div className="hidden md:block">
+            <div className="hidden xl:block">
                 <Layout>
                     <div className="container">
                         <div className="w-full px-4"> 

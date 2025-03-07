@@ -8,26 +8,26 @@ import { useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
 export default function BookingAllPage() {
-    const location = useLocation();
-    const path = _.startCase(location.pathname.toString()).split("  ").join("/");
-    const [open, setOpen] = useState(false);
+  const location = useLocation();
+  const path = _.startCase(location.pathname.toString()).split("  ").join("/");
+  const [open, setOpen] = useState(false);
 
-    const theme = useTheme();
-    const isXL = useMediaQuery(theme.breakpoints.up("lg"));
+  const theme = useTheme();
+  const isXL = useMediaQuery(theme.breakpoints.up("xl"));
 
-    useEffect(() => {
-        document.title = "Travel - List Booking";
-    }, []);
+  useEffect(() => {
+    document.title = "Travel - List Booking";
+  }, []);
 
-    if (isXL) {
-        return <Page404 />;
-    }
+  if (isXL) {
+    return <Page404 />;
+  }
 
-    return (
-        <Layout>
-            <div className="mt-0 mb-24 md:mb-0 md:mt-4 px-4 md:px-12">
-                < BookingAll path={path} />
-            </div>
-        </Layout>
-    );
+  return (
+    <Layout>
+      <div className="mt-0 mb-24 xl:mb-0 xl:mt-4 px-4 xl:px-12">
+        <BookingAll path={path} />
+      </div>
+    </Layout>
+  );
 }

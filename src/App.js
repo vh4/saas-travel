@@ -1,13 +1,9 @@
-import React, {createContext, useEffect, useReducer, useState} from "react";
-import { BrowserRouter, Route, Routes, useLocation, useNavigate} from "react-router-dom";
+import React, {createContext, useEffect, useReducer} from "react";
+import { BrowserRouter, Route, Routes} from "react-router-dom";
 
 import TransaksiKai from "./pages/transaksi/TransaksiKai";
 import TransaksiPesawat from "./pages/transaksi/TransaksiPesawat";
 import TransaksiPelni from "./pages/transaksi/TransaksiPelni";
-
-// import BookingKaiList from "./pages/booking/KaiBooking";
-// import BookingPesawatList from "./pages/booking/PesawatBooking";
-// import BookingPelniList from "./pages/booking/BookingPelni";
 
 import SearchKai from "./pages/kai/Search";
 import SearchPlane from "./pages/plane/Search";
@@ -185,10 +181,6 @@ function App() {
                   <Route path="/profile" element={<ProfileMobile />}></Route>
 
                   {/* <Route path="/transaksi/dlu" element={<TransaksiDlu />}></Route> */}
-
-                  {/* <Route path="/booking/kai" element={<BookingKaiList />}></Route> */}
-                  {/* <Route path="/booking/pesawat" element={<BookingPesawatList />}></Route> */}
-                  {/* <Route path="/booking/pelni" element={<BookingPelniList />}></Route> */}
                   <Route path="/logout" element={<Logout />}></Route>
                   <Route path="/*" element={<Page404 />} />
                 </Routes>

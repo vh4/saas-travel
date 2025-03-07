@@ -10,7 +10,7 @@ export default function Search(){
 
     return(
         <>
-            <div className="block md:hidden">
+            <div className="block xl:hidden">
                 <HeaderTemplateMobileSearch>
                     <div className="container">
                         <div className="w-full px-4"> 
@@ -20,7 +20,7 @@ export default function Search(){
                     </div>
                 </HeaderTemplateMobileSearch>
             </div>
-            <div className="hidden md:block">
+            <div className="hidden xl:block">
                 <Layout>
                     <div className="container">
                         <div className="w-full px-4"> 
