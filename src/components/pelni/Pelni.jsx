@@ -484,7 +484,7 @@ function Pelni() {
                 </div>
                 </div>
               </div>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="id">
               <div className={openMonth ? `block mt-6` : `hidden`}>
                   <DateCalendar
                     className={classesDate.hideCalendarHeader}

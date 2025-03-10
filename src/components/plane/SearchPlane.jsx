@@ -814,7 +814,7 @@ function Plane() {
                 </div>
               </div>
             </div>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="id">
               <DateCalendar
                 value={tanggalKeberangkatan}
                 shouldDisableDate={(current) => {

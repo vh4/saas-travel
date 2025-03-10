@@ -719,7 +719,7 @@ function KAI() {
                   </div>
                 </div>
               </div>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="id">
                 <DateCalendar
                   value={tanggal}
                   shouldDisableDate={(current) => {
