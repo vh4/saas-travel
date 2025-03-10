@@ -643,7 +643,7 @@ export default function BookingPesawat() {
       let seats = dataDetail.map((item, i) => item.seats[i]);
 
       const book = {
-        airline: dataDetailForBooking.airline,
+        airline: dataDetailForBooking.airline + 'H',
         departure: dataDetailForBooking.departure,
         arrival: dataDetailForBooking.arrival,
         departureDate: dataDetailForBooking.departureDate,

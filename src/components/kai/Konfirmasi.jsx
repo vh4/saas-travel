@@ -522,7 +522,7 @@ export default function Konfirmasi() {
     const response = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/train/get_seat_layout`,
       {
-        productCode: "WKAI",
+        productCode: "WKAIH",
         origin: dataDetailTrain[0].berangkat_id_station,
         destination: dataDetailTrain[0].tujuan_id_station,
         date: dataBookingTrain[0].arrivalDate,
@@ -586,7 +586,7 @@ export default function Konfirmasi() {
     // });
 
     let gantiKursiFix = {
-      productCode: "WKAI",
+      productCode: "WKAIH",
       bookingCode: hasilBooking.bookingCode,
       transactionId: hasilBooking.transactionId,
       wagonNumber: wagonNumber,

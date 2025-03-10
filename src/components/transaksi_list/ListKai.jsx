@@ -192,7 +192,7 @@ export default function ViewBooking({ path }) {
   //   const response = await axios.post(
   //     `${process.env.REACT_APP_HOST_API}/travel/train/payment`,
   //     {
-  //       productCode: "WKAI",
+  //       productCode: "WKAIH",
   //       bookingCode: byrdata.kode_booking,
   //       transactionId: byrdata.id_transaksi,
   //       nominal: byrdata.nominal,

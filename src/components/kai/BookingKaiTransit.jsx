@@ -207,7 +207,7 @@ export default function BookingKaiTransit() {
 
     dataDetailTrain.forEach((e) => {
       listPassenger.push({
-        productCode: "WKAI",
+        productCode: "WKAIH",
         origin: e.berangkat_id_station,
         destination: e.tujuan_id_station,
         date: e.departureDate,

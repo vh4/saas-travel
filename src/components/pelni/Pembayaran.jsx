@@ -178,7 +178,7 @@ export default function Pembayaran() {
       const response = await axios.post(
         `${process.env.REACT_APP_HOST_API}/travel/is_whitelist`,
         {
-          produk: "SHPPELNI",
+          produk: "SHPPELNIH",
         }
       );
 

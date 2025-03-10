@@ -240,7 +240,7 @@ export default function Search() {
         const response = await axios.post(
           `${process.env.REACT_APP_HOST_API}/travel/train/search`,
           {
-            productCode: "WKAI",
+            productCode: "WKAIH",
             token: token,
             origin: origin,
             destination: destination,
@@ -695,7 +695,7 @@ export default function Search() {
         const response = await axios.post(
           `${process.env.REACT_APP_HOST_API}/travel/train/search`,
           {
-            productCode: "WKAI",
+            productCode: "WKAIH",
             token: token,
             origin: origin,
             destination: destination,

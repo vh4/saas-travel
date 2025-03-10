@@ -400,7 +400,7 @@ export default function BookingPelni() {
         `${process.env.REACT_APP_HOST_API}/travel/app/history_idpel`,
         {
           token,
-          type: "SHPPELNI",
+          type: "SHPPELNIH",
         }
       );
 

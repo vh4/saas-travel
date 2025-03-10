@@ -535,7 +535,7 @@ function KAI() {
         const params = {
           origin: keberangkatan.id_stasiun,
           destination: tujuan.id_stasiun,
-          productCode: "WKAI",
+          productCode: "WKAIH",
           date: tanggalParse,
           kotaBerangkat: keberangkatan.nama_kota,
           kotaTujuan: tujuan.nama_kota,

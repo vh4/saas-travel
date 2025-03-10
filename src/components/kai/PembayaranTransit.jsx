@@ -277,7 +277,7 @@ export default function Pembayaran() {
 
     hasilBooking.map((e) => {
       const params = {
-        productCode: "WKAI",
+        productCode: "WKAIH",
         bookingCode: e.bookingCode,
         transactionId: e.transactionId,
         nominal: e.normalSales,

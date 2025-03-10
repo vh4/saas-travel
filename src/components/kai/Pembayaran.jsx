@@ -226,7 +226,7 @@ export default function Pembayaran() {
       const response = await axios.post(
         `${process.env.REACT_APP_HOST_API}/travel/is_whitelist`,
         {
-          produk: "WKAI",
+          produk: "WKAIH",
         }
       );
 
@@ -251,7 +251,7 @@ export default function Pembayaran() {
     const response = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/train/payment`,
       {
-        productCode: "WKAI",
+        productCode: "WKAIH",
         bookingCode: hasilBooking.bookingCode,
         transactionId: hasilBooking.transactionId,
         nominal: hasilBooking.normalSales,

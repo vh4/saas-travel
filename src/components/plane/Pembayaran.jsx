@@ -215,7 +215,7 @@ export default function Pembayaran() {
     const response = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/flight/payment`,
       {
-        airline: dataDetailForBooking.airline,
+        airline: dataDetailForBooking.airline + 'H',
         transactionId: hasilBooking.transactionId,
         nominal: hasilBooking.nominal,
         nominal_admin: hasilBooking.nominalAdmin,

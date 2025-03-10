@@ -9,7 +9,7 @@ export default function ViewHistoryIdpel({ path }) {
   const [isLoading, setIsLoading] = useState(false);
   const [expandedRowKey, setExpandedRowKey] = useState(null);
   const [messageApi, contextHolder] = message.useMessage();
-  const [type, setType] = useState("WKAI");
+  const [type, setType] = useState("WKAIH");
 
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
@@ -156,15 +156,15 @@ export default function ViewHistoryIdpel({ path }) {
                   value={type}
                   options={[
                     {
-                      value: "WKAI",
+                      value: "WKAIH",
                       label: "Train",
                     },
                     {
-                      value: "TP",
+                      value: "TPH",
                       label: "Plane",
                     },
                     {
-                      value: "SHPPELNI",
+                      value: "SHPPELNIH",
                       label: "Pelni",
                     },
                   ]}
