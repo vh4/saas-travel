@@ -277,7 +277,6 @@ Router.post('/pelni/payment', AuthLogin, async (req, res) => {
 
     const send_format = JSON.parse(req.session['khusus_merchant'])?.data1;
 
-    data['username'] = req.session['v_uname'];
     const merchart = req.session['v_merchant'];
     const username = req.session['v_uname'];
 

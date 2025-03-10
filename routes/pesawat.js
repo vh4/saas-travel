@@ -302,11 +302,10 @@ Router.post('/flight/payment', AuthLogin, async (req, res) => {
 
     const send_format = JSON.parse(req.session['khusus_merchant'])?.data1;
 
-    data['username'] = req.session['v_uname'];
     const merchart = req.session['v_merchant'];
     const username = req.session['v_uname'];
 
-    logger.info(`Request /flight/book [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}, data: ${JSON.stringify(req.body)}`);
+    logger.info(`Request /flight/payment [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}, data: ${JSON.stringify(req.body)}`);
 
     await handlePayment(
         req, 
