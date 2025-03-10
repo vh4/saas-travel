@@ -289,7 +289,7 @@ Router.post('/pelni/payment', AuthLogin, async (req, res) => {
         'pelni', 
         'bayarkapal', 
         send_format?.toUpperCase() === 'TEXT' ? hardcodepelni.text : hardcodepelni.json, 
-        'SHPPELNIH',
+        'SHPPELNI',
         hardCodePayment
         );
 

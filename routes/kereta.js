@@ -409,7 +409,7 @@ Router.post('/train/payment', AuthLogin, async (req, res) => {
         'train', 
         'bayarkereta',
         send_format?.toUpperCase() === 'TEXT' ? hardcodeKereta.text : hardcodeKereta.json, 
-        'WKAIH',
+        'WKAI',
         hardCodePayment
         );
 });
