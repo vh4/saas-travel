@@ -43,6 +43,7 @@ const SeatMap = ({
 }) => {
   const groupColumnCounts = {};
   const rowCount = Math.max(...seats.map((seat) => seat.row));
+  let brow = 0;
 
   seats.forEach((seat) => {
     const groupKey = `${seat.groupColumn}-${seat.row}`;
@@ -185,19 +186,45 @@ const SeatMap = ({
 
   // }, [limit, selectedCount, selectedCheckboxes]);
 
+  let cek = [0, 0, 0, 0]; //A, B, C, D seats
+
+  seats.map((e, i) => {
+    if (e.column === "A" && cek[0] === 0) {
+      cek[0] = 1;
+    }
+
+    if (e.column === "B" && cek[1] === 0) {
+      cek[1] = 1;
+    }
+
+    if (e.column === "C" && cek[2] === 0) {
+      cek[2] = 1;
+    }
+
+    if (e.column === "D" && cek[3] === 0) {
+      cek[3] = 1;
+    }
+  });
+
+  const total = cek.reduce(function (x, y) {
+    return x + y;
+  }, 0);
+
   return (
-    <div className="flex space-x-0 xl:space-x-2 justify-center">
-      <div className="">
+    <div className="flex justify-center space-x-4">
+      {/* Kolom Nomor Baris */}
+      <div className="grid grid-rows-10 gap-y-2">
         {Array.from({ length: rowCount }, (_, index) => (
-          <div className="block py-2 pl-0 xl:pl-4">
-            <div class="select-none w-4 h-10 font-medium  rounded-lg">
-              <div key={index} class="py-2 text-center text-black">
-                {index + 1}.
-              </div>
-            </div>
+          <div
+            key={index}
+            className="h-10 w-6 flex items-center justify-end text-black font-medium select-none"
+          >
+            {index + 1}.
           </div>
         ))}
       </div>
+
+      {/* Grid Kursi */}
       <div className="grid grid-rows-10 grid-cols-4 xl:grid-cols-5">
         {seats.map((seat, i) => {
           const { row, column, class: seatClass, isFilled } = seat;
@@ -207,7 +234,7 @@ const SeatMap = ({
                 <div
                   key={`${row}-${column}`}
                   className={`
-                              seat ${column}80
+                              seat ${column}80${total === 3 ? "Luxury" : ""}
                               ${row > 2 ? "" : ""}
                             `}
                 >
@@ -999,9 +1026,7 @@ export default function Konfirmasi() {
 
                   {/* mobile sidebar */}
                   <div className="mt-4 block xl:hidden">
-                    <Box
-                      className="border-b px-4 py-4 "
-                    >
+                    <Box className="border-b px-4 py-4 ">
                       <div className="flex justify-between items-center -mt-2">
                         {/* <div className="text-black text-xs">Booking ID</div> */}
                         <div className="text-black text-sm -mt-1.5">

@@ -7,7 +7,8 @@
     font-weight: bold;
     color: #fff;
   }
-  
+
+
   .A80 {
     grid-column: 1;
   }
@@ -23,32 +24,27 @@
   .D80 {
     grid-column: 6;
   }
-  
-  .E80 {
-    grid-column: 7;
-  }
-  
-  .A80 {
+
+
+  .A80Luxury {
     grid-column: 1;
   }
   
-  .B80 {
-    grid-column: 2;
+  .B80Luxury {
+    grid-column: 4;
   }
   
-  .C80 {
+  .C80Luxury {
+    grid-column: 5;
+  }
+  
+  .D80Luxury {
+    grid-column: 6;
+  }
+
+  .E80 {
     grid-column: 7;
   }
-  
-  .D80 {
-    grid-column: 8;
-  }
-  
-  .E80 {
-    grid-column: 9;
-  }
-
-
 
 
   .A106 {
