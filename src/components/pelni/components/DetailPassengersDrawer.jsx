@@ -59,6 +59,10 @@ const DetailPassengersDrawer = ({
                         <div>Nama Lengkap</div>
                         <div>{e.name}</div>
                       </div>
+                      <div className="w-full py-2 grid grid-cols-2 text-gray-500 border-b border-gray-200 text-xs">
+                        <div>Nomor HP</div>
+                        <div>{bookInfo.CALLER}</div>
+                      </div>
                       <div className="w-full  py-2 grid grid-cols-2 text-gray-500 border-b border-gray-200 text-xs">
                         <div>NIK</div>
                         <div>{e.identityNumber}</div>
@@ -98,6 +102,10 @@ const DetailPassengersDrawer = ({
                       <div className="w-full py-2 grid grid-cols-2 text-gray-500 border-b border-gray-200 text-xs">
                         <div>Nama Lengkap</div>
                         <div>{e.name}</div>
+                      </div>
+                      <div className="w-full py-2 grid grid-cols-2 text-gray-500 border-b border-gray-200 text-xs">
+                        <div>Nomor HP</div>
+                        <div>{bookInfo.CALLER}</div>
                       </div>
                       <div className="w-full  py-2 grid grid-cols-2 text-gray-500 border-b border-gray-200 text-xs">
                         <div>NIK</div>

@@ -331,10 +331,10 @@ export default function Pembayaran() {
           >
             <p>Apakah Anda yakin ingin melakukan pembayaran ?</p>
           </Modal>
-          <div className="px-0 xl:px-12 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
+          <div className="px-4 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
-              <IoMdCheckmarkCircle className="text-green-500" size={20} />
-              <div className="hidden xl:flex text-green-500">
+              <IoMdCheckmarkCircle className="text-blue-500" size={20} />
+              <div className="hidden xl:flex text-blue-500">
                 Detail pesanan
               </div>
             </div>
@@ -577,10 +577,13 @@ export default function Pembayaran() {
                 {/* desktop */}
                 <div className="mt-4 w-full mx-0 2xl:mx-4 hidden xl:block">
                   {/* adult */}
+                  <div className="text-sm xl:text-sm font-bold text-black mt-6">
+                    <p>ADULTS PASSENGERS</p>
+                  </div>
                   {dataDetailPassenger && dataDetailPassenger.adults.length > 0
                     ? dataDetailPassenger.adults.map((e, i) => (
                         <>
-                          <div className="p-0 xl:px-8 xl:mt-6 mt-4 w-full">
+                          <div className="p-4 xl:px-8 xl:mt-6 mt-4 w-full border rounded-lg border-gray-200 shadow-sm">
                             <div className="">
                               <div className="px-2 py-4 xl:py-2 text-black border-b border-gray-200 text-xs font-semibold">
                                 {e.nama_depan} {e.nama_belakang}
@@ -626,16 +629,19 @@ export default function Pembayaran() {
                     : ""}
 
                   {/* Childs */}
+                  <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
+                    <p>CHILD PASSENGERS</p>
+                  </div>
                   {dataDetailPassenger &&
                   dataDetailPassenger.children.length > 0
                     ? dataDetailPassenger.children.map((e, i) => (
                         <>
-                          <div className="p-0 xl:px-8 xl:mt-6 mt-4 w-full">
+                          <div className="p-4 xl:px-8 xl:mt-6 mt-4 w-full border rounded-lg border-gray-200 shadow-sm">
                             <div className="">
                               <div className="px-2 py-4 xl:py-2 text-black border-b border-gray-200 text-xs font-semibold">
                                 {e.nama_depan} {e.nama_belakang}
                               </div>
-                              <div className="grid grid-cols-2 xl:grid-cols-4">
+                              <div className="grid grid-cols-2 xl:grid-cols-4 mt-2">
                                 <div className="px-2 py-2 text-xs">
                                   <div className="text-black font-medium ">
                                     NIK/ No.Ktp
@@ -660,15 +666,18 @@ export default function Pembayaran() {
                     : ""}
 
                   {/* infants */}
+                  <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
+                    <p>INFANTS PASSENGERS</p>
+                  </div>
                   {dataDetailPassenger && dataDetailPassenger.infants.length > 0
                     ? dataDetailPassenger.infants.map((e, i) => (
                         <>
-                          <div className="p-0 xl:px-8 xl:mt-6 mt-4 w-full">
+                          <div className="p-4 xl:px-8 xl:mt-6 mt-4 w-full border rounded-lg border-gray-200 shadow-sm">
                             <div className="">
                               <div className="px-2 py-4 xl:py-2 text-black border-b border-gray-200 text-xs font-semibold ">
                                 {e.nama_depan} {e.nama_belakang}
                               </div>
-                              <div className="grid grid-cols-2 xl:grid-cols-4">
+                              <div className="grid grid-cols-2 xl:grid-cols-4 mt-2">
                                 <div className="px-2 py-2 text-xs">
                                   <div className="text-black font-medium ">
                                     NIK/ No.Ktp
@@ -691,9 +700,12 @@ export default function Pembayaran() {
                         </>
                       ))
                     : ""}
-                  <div className="p-2 px-10 mt-4 w-full">
+                  <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
+                    <p>PRICE DETAILS</p>
+                  </div>  
+                  <div className="border rounded-lg border-gray-200 shadow-sm p-8 xl:mt-6 mt-4 w-full">
                     <div>
-                      <div className="text-xs text-black font-medium  flex justify-between border-t pt-4">
+                      <div className="text-xs text-black font-medium  flex justify-between">
                         <div>
                           {dataDetail && dataDetail.airlineName}{" "}
                           {TotalAdult > 0 ? `(Adults) x${TotalAdult}` : ""}{" "}
@@ -756,22 +768,25 @@ export default function Pembayaran() {
                           </>
                         ) : ''} */}
                     </div>
-                    <div className="px-4 py-2">
+                    <div className="px-8 py-4 border rounded-lg border-gray-200 shadow-sm mb-4">
                       {/* <div className="text-black text-xs">Booking ID</div> */}
-                      <div className="text-black text-xs">Transaksi ID</div>
-                      <div className="mt-1  font-medium  text-blue-500 text-[18px]">
-                        {/* {hasilBooking && hasilBooking.bookingCode} */}
-                        <Paragraph copyable>
-                          {hasilBooking && hasilBooking.transactionId}
-                        </Paragraph>
+                      <div className="flex justify-between items-center">
+                        <div className="text-black text-xs">Transaksi ID</div>
+
+                        <div className="font-medium  text-blue-500 text-[18px] pt-4">
+                          {/* {hasilBooking && hasilBooking.bookingCode} */}
+                          <Paragraph copyable>
+                            {hasilBooking && hasilBooking.transactionId}
+                          </Paragraph>
+                        </div>
                       </div>
                       <div className="text-grapy-500 text-xs">
                         Gunakan kode bayar ini sebagai nomor tujuan pada menu
                         pembayaran di aplikasi.
                       </div>
                     </div>
-                    <div className="p-4 border-t mt-2">
-                      <div className="text-xs text-black">
+                    <div className="px-8 py-4 border rounded-lg border-gray-200 shadow-sm mb-4">
+                      <div className="text-xs text-black font-semibold mb-4">
                         PESAWAT DESCRIPTION
                       </div>
                       {dataDetail &&
@@ -805,30 +820,6 @@ export default function Pembayaran() {
                               {dataDetail.arrivalTime}
                             </div>
                           </>
-                        ))}
-                    </div>
-                    <div className="p-4 border-t">
-                      <div className="text-xs text-black">LIST PASSENGERS</div>
-                      {dataDetailPassenger.adults &&
-                        dataDetailPassenger.adults.length > 0 &&
-                        dataDetailPassenger.adults.map((e, i) => (
-                          <div className="mt-3 text-xs text-black font-medium ">
-                            {e.nama_depan} {e.nama_belakang} (Adult)
-                          </div>
-                        ))}
-                      {dataDetailPassenger.children &&
-                        dataDetailPassenger.children.length > 0 &&
-                        dataDetailPassenger.children.map((e, i) => (
-                          <div className="mt-3 text-xs text-black font-medium ">
-                            {e.nama_depan} {e.nama_belakang} (Children)
-                          </div>
-                        ))}
-                      {dataDetailPassenger.infants &&
-                        dataDetailPassenger.infants.length > 0 &&
-                        dataDetailPassenger.infants.map((e, i) => (
-                          <div className="mt-3 text-xs text-black font-medium ">
-                            {e.nama_depan} {e.nama_belakang} (Infants)
-                          </div>
                         ))}
                     </div>
                     {/* <div className="p-4 border-t">

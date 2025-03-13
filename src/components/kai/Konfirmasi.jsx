@@ -915,8 +915,8 @@ export default function Konfirmasi() {
           {/* header kai flow */}
           <div className="flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
-              <IoMdCheckmarkCircle className="text-green-500" size={20} />
-              <div className="hidden xl:flex text-green-500">
+              <IoMdCheckmarkCircle className="text-blue-500" size={20} />
+              <div className="hidden xl:flex text-blue-500">
                 Detail pesanan
               </div>
             </div>

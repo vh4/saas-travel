@@ -101,7 +101,7 @@ export default function Pembayaran() {
       getDataTrain(),
       getHasilBooking(),
       cekIsMerchant(token),
-      cekWhiteListUsername(token, 'WKAI'),
+      cekWhiteListUsername(token, "WKAI"),
     ])
       .then(
         ([
@@ -340,10 +340,10 @@ export default function Pembayaran() {
           >
             <p>Apakah Anda yakin ingin melakukan pembayaran ?</p>
           </Modal>
-          <div className="px-0 xl:px-12 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
+          <div className="px-0 xl:px-4 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
-              <IoMdCheckmarkCircle className="text-green-500" size={20} />
-              <div className="hidden xl:flex text-green-500">
+              <IoMdCheckmarkCircle className="text-blue-500" size={20} />
+              <div className="hidden xl:flex text-blue-500">
                 Detail pesanan
               </div>
             </div>
@@ -351,8 +351,8 @@ export default function Pembayaran() {
               <MdHorizontalRule size={20} className="hidden xl:flex " />
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
-              <IoMdCheckmarkCircle className="text-green-500" size={20} />
-              <div className="hidden xl:flex text-green-500">
+              <IoMdCheckmarkCircle className="text-blue-500" size={20} />
+              <div className="hidden xl:flex text-blue-500">
                 Konfirmasi pesanan
               </div>
             </div>
@@ -376,9 +376,7 @@ export default function Pembayaran() {
                 {/* mobile sidebar */}
                 <div className="block xl:hidden sidebar w-full xl:w-2/3 2xl:w-1/2">
                   <div className="py-2 xl:py-4 mt-2 xl:mt-0">
-                    <Box
-                      className="border shadow px-6 py-6 rounded-xl"
-                    >
+                    <Box className="border shadow px-6 py-6 rounded-xl">
                       <div className="flex justify-between items-center -mt-2">
                         {/* <div className="text-black text-xs">Booking ID</div> */}
                         <div className="text-black text-sm -mt-1.5">
@@ -576,10 +574,13 @@ export default function Pembayaran() {
 
                 <div className="mt-4 w-full mx-0 2xl:mx-4 hidden xl:block">
                   {/* adult */}
+                  <div className="text-sm xl:text-sm font-bold text-black mt-6">
+                    <p>ADULTS PASSENGERS</p>
+                  </div>
                   {passengers.adults.length > 0
                     ? passengers.adults.map((e, i) => (
                         <>
-                          <div className="p-2 xl:px-8 xl:mt-6 mt-4 w-full">
+                          <div className="p-4 xl:px-8 xl:mt-6 mt-4 w-full border rounded-lg border-gray-200 shadow-sm">
                             <div className="">
                               <div className="px-2 py-4 xl:py-2 text-black border-b border-gray-200 text-xs font-semibold ">
                                 {e.name}
@@ -633,10 +634,13 @@ export default function Pembayaran() {
                     : ""}
 
                   {/* infants */}
+                  <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
+                    <p>INFANTS PASSENGERS</p>
+                  </div>
                   {passengers.infants.length > 0
                     ? passengers.infants.map((e, i) => (
                         <>
-                          <div className="p-2 xl:px-8 xl:mt-6 mt-4 w-full">
+                          <div className="p-4 xl:px-8 xl:mt-6 mt-4 w-full border rounded-lg border-gray-200 shadow-sm">
                             <div className="">
                               <div className="px-2 py-4 xl:py-2 text-black border-b border-gray-200 text-xs font-semibold ">
                                 {e.name}
@@ -690,7 +694,11 @@ export default function Pembayaran() {
                         </>
                       ))
                     : ""}
-                  <div className="p-2 xl:px-8 xl:mt-6 mt-4 w-full">
+
+                  <div className="text-sm xl:text-sm font-bold text-black mt-6">
+                    <p>PRICE DETAILT</p>
+                  </div>
+                  <div className="border rounded-lg border-gray-200 shadow-sm p-8 xl:mt-6 mt-4 w-full">
                     <div className="p-2">
                       <div className="text-xs text-black font-medium  flex justify-between">
                         <div>
@@ -750,63 +758,97 @@ export default function Pembayaran() {
                           </>
                         ) : ''} */}
                     </div>
-                    <div className="px-4 py-2">
+                    <div className="px-8 py-4 border rounded-lg border-gray-200 shadow-sm mb-4">
                       {/* <div className="text-black text-xs">Booking ID</div> */}
-                      <div className="text-black text-xs">Transaksi ID</div>
+                      <div className="flex justify-between items-center">
+                        <div className="text-black text-xs">Transaksi ID</div>
 
-                      <div className="mt-1 font-medium  text-blue-500 text-[18px]">
-                        {/* {hasilBooking && hasilBooking.bookingCode} */}
-                        <Paragraph copyable>
-                          {hasilBooking && hasilBooking.transactionId}
-                        </Paragraph>
+                        <div className="font-medium  text-blue-500 text-[18px] pt-4">
+                          {/* {hasilBooking && hasilBooking.bookingCode} */}
+                          <Paragraph copyable>
+                            {hasilBooking && hasilBooking.transactionId}
+                          </Paragraph>
+                        </div>
                       </div>
                       <div className="text-grapy-500 text-xs">
                         Gunakan kode bayar ini sebagai nomor tujuan pada menu
                         pembayaran di aplikasi.
                       </div>
                     </div>
-                    <div className="p-4 border-t xl:0 mt-2">
-                      <div className="text-xs text-black">
-                        TRAIN DESCRIPTION
-                      </div>
-                      <div className="mt-3 xl:mt-4 text-xs text-black">
-                        {dataBookingTrain[0].trainName}
-                      </div>
-                      <div className="mt-1 xl:mt-2 text-xs text-black font-medium ">
-                        {dataDetailTrain[0].berangkat_nama_kota} -{" "}
-                        {dataDetailTrain[0].tujuan_nama_kota}
-                      </div>
-                      <div className="mt-3 xl:mt-4 text-xs text-black">
-                        {parseTanggal(dataBookingTrain[0].departureDate)}
-                      </div>
-                      <div className="mt-1 xl:mt-2 text-xs text-black">
-                        {dataBookingTrain[0].departureTime} -{" "}
-                        {dataBookingTrain[0].arrivalTime}
-                      </div>
-                    </div>
-                    <div className="p-4 border-t">
-                      <div className="text-xs text-black">LIST PASSENGERS</div>
-                      {passengers.adults &&
-                        passengers.adults.length > 0 &&
-                        passengers.adults.map((e, i) => (
-                          <div className="mt-3 text-xs text-slate-700 font-medium ">
-                            {e.name} (Adult)
+                    <div className="mt-4">
+                      <div className="mt-2 w-full rounded-md border xl:border-gray-200 xl:shadow-sm">
+                        <div className="px-4 py-8 pl-8  text-black">
+                          <div className="text-xs font-semibold">
+                            {dataBookingTrain && dataBookingTrain[0].trainName}
                           </div>
-                        ))}
-                      {passengers.children &&
-                        passengers.children.length > 0 &&
-                        passengers.children.map((e, i) => (
-                          <div className="mt-3 text-xs text-slate-700 font-medium ">
-                            {e.name} (Children)
+                          <small>
+                            {dataBookingTrain &&
+                            dataBookingTrain[0].seats[0].grade === "E"
+                              ? "Eksekutif"
+                              : dataBookingTrain[0].seats[0].grade === "B"
+                              ? "Bisnis"
+                              : "Ekonomi"}{" "}
+                            Class{" "}
+                            {dataBookingTrain &&
+                              dataBookingTrain[0].seats[0].class}
+                          </small>
+                          <div className="mt-4">
+                            <small className="block font-semibold">
+                              Tanggal Keberangkatan
+                            </small>
+                            <small className="block mt-2">
+                              {parseTanggal(dataBookingTrain[0].departureDate)}
+                            </small>
                           </div>
-                        ))}
-                      {passengers.infants &&
-                        passengers.infants.length > 0 &&
-                        passengers.infants.map((e, i) => (
-                          <div className="mt-3 text-xs text-slate-700 font-medium ">
-                            {e.name} (Infants)
-                          </div>
-                        ))}
+                        </div>
+                        <div className="mt-2"></div>
+                        <div className="p-4 pl-10 mb-4">
+                          <ol class="relative border-l-2 border-dashed border-gray-800">
+                            <li class="mb-10 ml-4">
+                              <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800"></div>
+                              <div className="flex space-x-12">
+                                <time class="mb-1 text-sm font-normal leading-none text-black">
+                                  {dataBookingTrain &&
+                                    dataBookingTrain[0].departureTime}
+                                </time>
+                                <div className="-mt-2">
+                                  <div class="text-left text-xs text-black">
+                                    {dataBookingTrain &&
+                                      dataDetailTrain[0].berangkat_nama_kota}
+                                  </div>
+                                  <p class="text-left text-xs text-black ">
+                                    (
+                                    {dataBookingTrain &&
+                                      dataDetailTrain[0].berangkat_id_station}
+                                    )
+                                  </p>
+                                </div>
+                              </div>
+                            </li>
+                            <li class="ml-4">
+                              <div class="absolute w-4 h-4 bg-blue-500 rounded-full mt-0 -left-2 border border-white "></div>
+                              <div className="flex space-x-12">
+                                <time class="mb-1 text-sm leading-none text-black">
+                                  {dataBookingTrain &&
+                                    dataBookingTrain[0].arrivalTime}
+                                </time>
+                                <div className="-mt-2">
+                                  <div class="text-left text-xs  text-black">
+                                    {dataBookingTrain &&
+                                      dataDetailTrain[0].tujuan_nama_kota}
+                                  </div>
+                                  <p class="text-left text-xs text-black ">
+                                    (
+                                    {dataBookingTrain &&
+                                      dataDetailTrain[0].tujuan_id_station}
+                                    )
+                                  </p>
+                                </div>
+                              </div>
+                            </li>
+                          </ol>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div className="hidden xl:block mt-2">
@@ -816,39 +858,106 @@ export default function Pembayaran() {
                     />
                   </div>
                   {callbackBoolean == true ? (
-                  <div className="hidden xl:block mt-2 py-4 rounded-md border-t border-gray-200 shadow-sm">
-                    {/* {isOk == true && isCurrentBalance == true ? ( */}
+                    <div className="hidden xl:block mt-2 py-4 rounded-md border-t border-gray-200 shadow-sm">
+                      {/* {isOk == true && isCurrentBalance == true ? ( */}
+                      <>
+                        <div className="px-8 xl:px-4 py-4 text-sm text-black w-full xl:w-auto">
+                          Tekan tombol dibawah ini untuk melanjutkan proses
+                          transaksi.
+                        </div>
+                        <div className="flex justify-center">
+                          <ButtonAnt
+                            // onClick={isOk && isCurrentBalance && showModal}
+                            onClick={showModal}
+                            size="large"
+                            key="submit"
+                            type="primary"
+                            className="bg-blue-500 px-8 font-semibold"
+                            loading={isLoading}
+                          >
+                            Bayar Sekarang
+                          </ButtonAnt>
+                        </div>
+                        {isSimulated == 1 ? (
+                          <Alert
+                            className="mt-4"
+                            message="Don't worry, clicking the 'Bayar' button will not affect your balance."
+                            banner
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </>
+                      {/* ) : ''} */}
+                    </div>
+                  ) : (
                     <>
-                      <div className="px-8 xl:px-4 py-4 text-sm text-black w-full xl:w-auto">
-                        Tekan tombol dibawah ini untuk melanjutkan proses
-                        transaksi.
-                      </div>
-                      <div className="flex justify-center">
-                        <ButtonAnt
-                          // onClick={isOk && isCurrentBalance && showModal}
-                          onClick={showModal}
-                          size="large"
-                          key="submit"
-                          type="primary"
-                          className="bg-blue-500 px-8 font-semibold"
-                          loading={isLoading}
-                        >
-                          Bayar Sekarang
-                        </ButtonAnt>
-                      </div>
-                      {isSimulated == 1 ? (
-                        <Alert
-                          className="mt-4"
-                          message="Don't worry, clicking the 'Bayar' button will not affect your balance."
-                          banner
-                        />
-                      ) : (
-                        ""
-                      )}
+                      {/* <div className="px-8 py-4 text-sm text-black">
+                    Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
+                    </div>
+                    <div className="flex justify-center">
+                      <ButtonAnt
+                        onClick={handlerPembayaran}
+                        size="large"
+                        key="submit"
+                        type="primary"
+                        className="bg-blue-500 mx-2 font-semibold mt-4"
+                        loading={isLoading}
+                        disabled
+                      >
+                        Langsung Bayar
+                      </ButtonAnt>
+                    </div> */}
                     </>
+                  )}
+                </div>
+                {callbackBoolean == true ? (
+                  <div className="block xl:hidden mt-8 py-2 rounded-md">
+                    <>
+                      {/* {isOk == true && isCurrentBalance == true ? ( */}
+                      <>
+                        <div className="flex justify-center w-full xl:w-auto">
+                          <ButtonAnt
+                            onClick={showModal}
+                            size="large"
+                            key="submit"
+                            type="primary"
+                            className="bg-blue-500 mx-2 font-semibold w-full xl:w-auto"
+                            loading={isLoading}
+                          >
+                            Bayar Sekarang
+                          </ButtonAnt>
+                        </div>
+                        {isSimulated === 1 ? (
+                          <Alert
+                            className="mt-4"
+                            message="Clicking 'Bayar' will not affect your balance."
+                            banner
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </>
+                      {/* ) : ''} */}
+                    </>
+                    {/* {isOk == false || isCurrentBalance == false ? ( */}
+                    {/* <>
+                          <div className="mt-4">
+                          {status !== '68' && status !== '99' ? 
+                              (
+                                <Alert
+                                message={isCurrentBalance == false ? 'Saldo tidak cukup.': keterangan}
+                                type="error"
+                                banner
+                                closable
+                              />
+                              ) : null
+                              }
+                          </div>
+                        </> */}
                     {/* ) : ''} */}
                   </div>
-                   ) : ( 
+                ) : (
                   <>
                     {/* <div className="px-8 py-4 text-sm text-black">
                     Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
@@ -865,76 +974,9 @@ export default function Pembayaran() {
                       >
                         Langsung Bayar
                       </ButtonAnt>
-                    </div> */}
-                  </>
-                  )} 
-                </div>
-                {callbackBoolean == true ? (
-                <div className="block xl:hidden mt-8 py-2 rounded-md">
-                  <>
-                    {/* {isOk == true && isCurrentBalance == true ? ( */}
-                    <>
-                      <div className="flex justify-center w-full xl:w-auto">
-                        <ButtonAnt
-                          onClick={showModal}
-                          size="large"
-                          key="submit"
-                          type="primary"
-                          className="bg-blue-500 mx-2 font-semibold w-full xl:w-auto"
-                          loading={isLoading}
-                        >
-                          Bayar Sekarang
-                        </ButtonAnt>
-                      </div>
-                      {isSimulated === 1 ? (
-                        <Alert
-                          className="mt-4"
-                          message="Clicking 'Bayar' will not affect your balance."
-                          banner
-                        />
-                      ) : (
-                        ""
-                      )}
-                    </>
-                    {/* ) : ''} */}
-                  </>
-                  {/* {isOk == false || isCurrentBalance == false ? ( */}
-                  {/* <>
-                          <div className="mt-4">
-                          {status !== '68' && status !== '99' ? 
-                              (
-                                <Alert
-                                message={isCurrentBalance == false ? 'Saldo tidak cukup.': keterangan}
-                                type="error"
-                                banner
-                                closable
-                              />
-                              ) : null
-                              }
-                          </div>
-                        </> */}
-                  {/* ) : ''} */}
-                </div>
-                ) : (
-                <>
-                  {/* <div className="px-8 py-4 text-sm text-black">
-                    Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
-                    </div>
-                    <div className="flex justify-center">
-                      <ButtonAnt
-                        onClick={handlerPembayaran}
-                        size="large"
-                        key="submit"
-                        type="primary"
-                        className="bg-blue-500 mx-2 font-semibold mt-4"
-                        loading={isLoading}
-                        disabled
-                      >
-                        Langsung Bayar
-                      </ButtonAnt>
                     </div>                      */}
-                </>
-                )} 
+                  </>
+                )}
               </div>
             </>
           )}

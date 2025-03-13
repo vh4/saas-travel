@@ -315,10 +315,10 @@ export default function PembayaranKereta() {
           >
             <p>Apakah Anda yakin ingin melakukan pembayaran ?</p>
           </Modal>
-          <div className="px-0 xl:px-12 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
+          <div className="px-0 xl:px-4 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
-              <IoMdCheckmarkCircle className="text-green-500" size={20} />
-              <div className="hidden xl:flex text-green-500">
+              <IoMdCheckmarkCircle className="text-blue-500" size={20} />
+              <div className="hidden xl:flex text-blue-500">
                 Detail pesanan
               </div>
             </div>
@@ -326,8 +326,8 @@ export default function PembayaranKereta() {
               <MdHorizontalRule size={20} className="hidden xl:flex " />
             </div>
             <div className="hidden xl:flex space-x-2 items-center">
-              <IoMdCheckmarkCircle className="text-green-500" size={20} />
-              <div className="hidden xl:flex text-green-500">
+              <IoMdCheckmarkCircle className="text-blue-500" size={20} />
+              <div className="hidden xl:flex text-blue-500">
                 Konfirmasi pesanan
               </div>
             </div>
@@ -574,13 +574,16 @@ export default function PembayaranKereta() {
                   openDrawer={openDrawer}
                   toggleDrawer={toggleDrawer}
                 />
-
+ 
                 <div className="mt-4 w-full mx-0 2xl:mx-4 hidden xl:block">
+                <div className="text-sm xl:text-sm font-bold text-black mt-4">
+                  <p>LIST PASSENGERS</p>
+                </div>
                   {/* adult */}
                   {dataBookingTrain.penumpang.length > 0
                     ? dataBookingTrain.penumpang.map((e, i) => (
                         <>
-                          <div className="p-2 xl:px-8 xl:mt-6 mt-4 w-full">
+                          <div className="p-4 xl:px-8 xl:mt-6 mt-4 w-full border rounded-lg border-gray-200 shadow-sm">
                             <div className="">
                               <div className="px-2 py-4 xl:py-2 text-black border-b border-gray-200 text-xs font-semibold ">
                                 {e.nama}
@@ -633,7 +636,10 @@ export default function PembayaranKereta() {
                       ))
                     : ""}
 
-                  <div className="p-2 xl:px-8 xl:mt-6 mt-4 w-full">
+                  <div className="text-sm xl:text-sm font-bold text-black mt-12">
+                    <p>PRICE DETAILT</p>
+                  </div>
+                  <div className="border rounded-lg border-gray-200 shadow-sm p-8 xl:mt-6 mt-4 w-full">
                     <div className="p-2">
                       <div className="text-xs text-black font-medium  flex justify-between">
                         <div>
@@ -690,73 +696,82 @@ export default function PembayaranKereta() {
                           </>
                         ) : ''} */}
                     </div>
-                    <div className="px-4 py-2">
-                      {/* <div className="text-black text-xs">Booking ID</div> */}
-                      <div className="text-black text-xs">Transaksi ID</div>
-
-                      <div className="mt-1 font-medium  text-blue-500 text-[18px]">
-                        {/* {hasilBooking && hasilBooking.bookingCode} */}
-                        <Paragraph copyable>
-                          {dataBookingTrain && dataBookingTrain.id_transaksi}
-                        </Paragraph>
+                    <div className="px-8 py-4 border rounded-lg border-gray-200 shadow-sm mb-4">
+                      <div className="flex justify-between items-center">
+                        <div className="text-black text-xs">Transaksi ID</div>
+                        <div className="font-medium text-blue-500 text-[18px] pt-4">
+                          <Paragraph copyable>
+                            {dataBookingTrain && dataBookingTrain.id_transaksi}
+                          </Paragraph>
+                        </div>
                       </div>
-                      <div className="text-grapy-500 text-xs">
-                        Gunakan kode bayar ini sebagai nomor tujuan pada menu
-                        pembayaran di aplikasi.
+                      <div className="text-gray-500 text-xs">
+                        Gunakan kode bayar ini sebagai nomor tujuan pada menu pembayaran di aplikasi.
                       </div>
                     </div>
-                    <div className="p-4 border-t xl:0 mt-2">
-                      <div className="text-xs text-black">
-                        TRAIN DESCRIPTION
-                      </div>
-                      <div className="mt-3 xl:mt-4 text-xs text-black">
-                        {dataBookingTrain.nama_kereta}
-                      </div>
-                      <div className="mt-1 xl:mt-2 text-xs text-black font-medium ">
-                        {dataBookingTrain.origin} -{" "}
-                        {dataBookingTrain.destination}
-                      </div>
-                      <div className="mt-3 xl:mt-4 text-xs text-black">
-                        {new Date(
-                          dataBookingTrain.tanggal_keberangkatan.slice(0, 4),
-                          parseInt(
-                            dataBookingTrain.tanggal_keberangkatan.slice(4, 6)
-                          ) - 1,
-                          dataBookingTrain.tanggal_keberangkatan.slice(6, 8)
-                        ).toLocaleDateString("id-ID", {
-                          weekday: "long",
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}{" "}
-                        -{" "}
-                        {new Date(
-                          dataBookingTrain.tanggal_kedatangan.slice(0, 4),
-                          parseInt(
-                            dataBookingTrain.tanggal_kedatangan.slice(4, 6)
-                          ) - 1,
-                          dataBookingTrain.tanggal_kedatangan.slice(6, 8)
-                        ).toLocaleDateString("id-ID", {
-                          weekday: "long",
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}{" "}
-                      </div>
-                      <div className="mt-1 xl:mt-2 text-xs text-black">
-                        {dataBookingTrain.jam_keberangkatan.trim() == ""
-                          ? "-"
-                          : dataBookingTrain.jam_keberangkatan
-                              .toString()
-                              .padStart(4, "0")
-                              .replace(/(\d{2})(\d{2})/, "$1:$2")}{" "}
-                        -{" "}
-                        {dataBookingTrain.jam_kedatangan.trim() == ""
-                          ? "-"
-                          : dataBookingTrain.jam_kedatangan
-                              .toString()
-                              .padStart(4, "0")
-                              .replace(/(\d{2})(\d{2})/, "$1:$2")}
+                    <div className="mt-4">
+                      <div className="mt-2 w-full rounded-md border xl:border-gray-200 xl:shadow-sm">
+                        <div className="px-4 py-8 pl-8 text-black">
+                          <div className="text-xs font-semibold">
+                            {dataBookingTrain && dataBookingTrain.nama_kereta}
+                          </div>
+                          <small>
+                            {dataBookingTrain && dataBookingTrain.kelas === "E"
+                              ? "Eksekutif"
+                              : dataBookingTrain.kelas === "B"
+                              ? "Bisnis"
+                              : "Ekonomi"} Class
+                          </small>
+                          <div className="mt-4">
+                            <small className="block font-semibold">Tanggal Keberangkatan</small>
+                            <small className="block mt-2">
+                              {new Date(
+                                dataBookingTrain.tanggal_keberangkatan.slice(0, 4),
+                                parseInt(dataBookingTrain.tanggal_keberangkatan.slice(4, 6)) - 1,
+                                dataBookingTrain.tanggal_keberangkatan.slice(6, 8)
+                              ).toLocaleDateString("id-ID", {
+                                weekday: "long",
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              })}
+                            </small>
+                          </div>
+                        </div>
+                        <div className="p-4 pl-10 mb-4">
+                          <ol className="relative border-l-2 border-dashed border-gray-800">
+                            <li className="mb-10 ml-4">
+                              <div className="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800"></div>
+                              <div className="flex space-x-12">
+                                <time className="mb-1 text-sm font-normal leading-none text-black">
+                                  {dataBookingTrain && dataBookingTrain.jam_keberangkatan.trim() === ""
+                                    ? "-"
+                                    : dataBookingTrain.jam_keberangkatan.toString().padStart(4, "0").replace(/(\d{2})(\d{2})/, "$1:$2")}
+                                </time>
+                                <div className="-mt-2">
+                                  <div className="text-left text-xs text-black">
+                                    {dataBookingTrain && dataBookingTrain.origin}
+                                  </div>
+                                </div>
+                              </div>
+                            </li>
+                            <li className="ml-4">
+                              <div className="absolute w-4 h-4 bg-blue-500 rounded-full mt-0 -left-2 border border-white"></div>
+                              <div className="flex space-x-12">
+                                <time className="mb-1 text-sm leading-none text-black">
+                                  {dataBookingTrain && dataBookingTrain.jam_kedatangan.trim() === ""
+                                    ? "-"
+                                    : dataBookingTrain.jam_kedatangan.toString().padStart(4, "0").replace(/(\d{2})(\d{2})/, "$1:$2")}
+                                </time>
+                                <div className="-mt-2">
+                                  <div className="text-left text-xs text-black">
+                                    {dataBookingTrain && dataBookingTrain.destination}
+                                  </div>
+                                </div>
+                              </div>
+                            </li>
+                          </ol>
+                        </div>
                       </div>
                     </div>
                   </div>

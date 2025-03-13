@@ -276,10 +276,10 @@ export default function PembayaranPelni() {
           >
             <p>Apakah Anda yakin ingin melakukan pembayaran ?</p>
           </Modal>
-          <div className="px-0 xl:px-12 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
+          <div className="px-4 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
-              <IoMdCheckmarkCircle className="text-green-500" size={20} />
-              <div className="hidden xl:flex text-green-500">
+              <IoMdCheckmarkCircle className="text-blue-500" size={20} />
+              <div className="hidden xl:flex text-blue-500">
                 Detail pesanan
               </div>
             </div>
@@ -558,10 +558,13 @@ export default function PembayaranPelni() {
                 {/* desktop adult infant */}
                 <div className="mt-4 w-full mx-0 2xl:mx-4 hidden xl:block">
                   {/* adult and infant */}
+                  <div className="text-sm xl:text-sm font-bold text-black mt-6">
+                    <p>LIST PASSENGERS</p>
+                  </div>
                   {dataDetailForBooking.penumpang.length > 0
                     ? dataDetailForBooking.penumpang.map((e, i) => (
                         <>
-                          <div className="p-2 xl:px-8  mt-4 w-full rounded-md border-gray-200 shadow-sm">
+                          <div className="p-4 xl:px-8 xl:mt-6 mt-4 w-full border rounded-lg border-gray-200 shadow-sm">
                             <div className="">
                               <div className="mt-2  grid grid-cols-2 xl:grid-cols-4">
                                 {/* <div className="px-2 xl:px-4 py-2 text-sm">
@@ -582,8 +585,10 @@ export default function PembayaranPelni() {
                         </>
                       ))
                     : ""}
-
-                  <div className="p-2 xl:px-8 xl:mt-6 mt-4 w-full">
+                  <div className="text-sm xl:text-sm font-bold text-black mt-6">
+                    <p>PRICE DETAILT</p>
+                  </div>
+                  <div className="border rounded-lg border-gray-200 shadow-sm p-8 xl:mt-6 mt-4 w-full">
                     <div className="p-2">
                       <div className="text-xs text-black font-medium  flex justify-between">
                         <div>Harga </div>
@@ -642,46 +647,68 @@ export default function PembayaranPelni() {
                           </>
                         ) : ''} */}
                     </div>
-                    <div className="px-4 py-2">
-                      {/* <div className="text-black text-xs">Status Booking</div> */}
-                      <div className="text-black text-xs">Transaksi ID</div>
-                      <div className="mt-1 font-medium  text-blue-500 text-[18px]">
-                        <Paragraph copyable>
-                          {dataDetailForBooking &&
-                            dataDetailForBooking.id_transaksi}
-                        </Paragraph>
+                    <div className="px-8 py-4 border rounded-lg border-gray-200 shadow-sm mb-4">
+                      {/* <div className="text-black text-xs">Booking ID</div> */}
+                      <div className="flex justify-between items-center">
+                        <div className="text-black text-xs">Transaksi ID</div>
+
+                        <div className="font-medium  text-blue-500 text-[18px] pt-4">
+                          <Paragraph copyable>
+                            {dataDetailForBooking && dataDetailForBooking.id_transaksi}
+                          </Paragraph>
+                        </div>
                       </div>
                       <div className="text-grapy-500 text-xs">
                         Gunakan kode bayar ini sebagai nomor tujuan pada menu
                         pembayaran di aplikasi.
                       </div>
                     </div>
-                    <div className="p-4 border-t xl:0 mt-2">
-                      <div className="text-xs text-black">
-                        PELNI DESCRIPTION
-                      </div>
-                      <div className="mt-3 xl:mt-4 text-xs text-black">
-                        {dataDetailForBooking.nama_kapal}
-                      </div>
-                      <div className="flex space-x-4">
-                        <div className="mt-1 xl:mt-2 text-xs text-black font-medium ">
-                          {dataDetailForBooking.origin}
+                    <div className="mt-4">
+                      <div className="mt-2 w-full rounded-md border xl:border-gray-200 xl:shadow-sm">
+                        <div className="px-4 py-8 pl-8 text-black">
+                          <div className="text-xs font-semibold">
+                            {dataDetailForBooking && dataDetailForBooking.nama_kapal}
+                          </div>
+                          <div className="mt-4">
+                            <small className="block font-semibold">
+                              Tanggal Keberangkatan
+                            </small>
+                            <small className="block mt-2">
+                              {dataDetailForBooking.tanggal_keberangkatan}
+                            </small>
+                          </div>
                         </div>
-                        <IoArrowForwardOutline
-                          className="text-black mt-0 xl:mt-2"
-                          size={18}
-                        />
-                        <div className="mt-1 xl:mt-2 text-xs text-black font-medium ">
-                          {dataDetailForBooking.destination}
+                        <div className="mt-2"></div>
+                        <div className="p-4 pl-10 mb-4">
+                          <ol class="relative border-l-2 border-dashed border-gray-800">
+                            <li class="mb-10 ml-4">
+                              <div class="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800"></div>
+                              <div className="flex space-x-12">
+                                <time class="mb-1 text-sm font-normal leading-none text-black">
+                                  {dataDetailForBooking.jam_keberangkatan}
+                                </time>
+                                <div className="-mt-2">
+                                  <div class="text-left text-xs text-black">
+                                    {dataDetailForBooking.origin}
+                                  </div>
+                                </div>
+                              </div>
+                            </li>
+                            <li class="ml-4">
+                              <div class="absolute w-4 h-4 bg-blue-500 rounded-full mt-0 -left-2 border border-white"></div>
+                              <div className="flex space-x-12">
+                                <time class="mb-1 text-sm leading-none text-black">
+                                  {dataDetailForBooking.jam_kedatangan}
+                                </time>
+                                <div className="-mt-2">
+                                  <div class="text-left text-xs text-black">
+                                    {dataDetailForBooking.destination}
+                                  </div>
+                                </div>
+                              </div>
+                            </li>
+                          </ol>
                         </div>
-                      </div>
-                      <div className="mt-3 text-xs text-black">
-                        {dataDetailForBooking.tanggal_keberangkatan} -{" "}
-                        {dataDetailForBooking.tanggal_kedatangan}
-                      </div>
-                      <div className="mt-1 text-xs text-black">
-                        {dataDetailForBooking.jam_keberangkatan} -{" "}
-                        {dataDetailForBooking.jam_kedatangan}
                       </div>
                     </div>
                   </div>

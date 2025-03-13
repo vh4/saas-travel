@@ -288,10 +288,10 @@ export default function Pembayaran() {
           >
             <p>Apakah Anda yakin ingin melakukan pembayaran ?</p>
           </Modal>
-          <div className="px-0 xl:px-12 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
+          <div className="px-4 flex justify-start jalur-payment-booking text-xs xl:text-sm space-x-2 xl:space-x-8 items-center">
             <div className="hidden xl:flex space-x-2 items-center">
-              <IoMdCheckmarkCircle className="text-green-500" size={20} />
-              <div className="hidden xl:flex text-green-500">
+              <IoMdCheckmarkCircle className="text-blue-500" size={20} />
+              <div className="hidden xl:flex text-blue-500">
                 Detail pesanan
               </div>
             </div>
@@ -523,10 +523,13 @@ export default function Pembayaran() {
                 {/* desktop adult infant */}
                 <div className="mt-4 w-full mx-0 2xl:mx-4 hidden xl:block">
                   {/* adult and infant */}
+                  <div className="text-sm xl:text-sm font-bold text-black mt-6">
+                    <p>LIST PASSENGERS</p>
+                  </div>
                   {bookInfo.PAX_LIST.length > 0
                     ? bookInfo.PAX_LIST.map((e, i) => (
                         <>
-                          <div className="p-2 xl:px-8 xl:mt-6 mt-4 w-full rounded-md border-gray-200 shadow-sm">
+                          <div className="p-4 xl:px-8 xl:mt-6 mt-4 w-full border rounded-lg border-gray-200 shadow-sm">
                             <div className="">
                               <div className="px-2 py-4 xl:py-2 text-black border-b border-gray-200 text-xs font-semibold ">
                                 {bookInfo.PAX_LIST[i][0]} (
@@ -546,6 +549,14 @@ export default function Pembayaran() {
                                   </div>
                                   <div className="mt-2 text-xs text-black">
                                     {bookInfo.CALLER}
+                                  </div>
+                                </div>
+                                <div className="px-2 py-2">
+                                  <div className="text-black font-medium text-xs">
+                                    NIK
+                                  </div>
+                                  <div className="mt-2 text-xs text-black">
+                                    {e[1]}
                                   </div>
                                 </div>
                                 <div className="px-2 py-2">
@@ -579,12 +590,13 @@ export default function Pembayaran() {
                         </>
                       ))
                     : ""}
-
-                  <div className="p-2 xl:px-8 xl:mt-6 mt-4 w-full">
+                  <div className="text-sm xl:text-sm font-bold text-black mt-6">
+                    <p>PRICE DETAILT</p>
+                  </div>
+                  <div className="border rounded-lg border-gray-200 shadow-sm p-8 xl:mt-6 mt-4 w-full">
                     <div className="p-2">
                       <div className="text-xs text-black font-medium  flex justify-between">
                         <div>
-                          {bookInfo && bookInfo.SHIP_NAME}{" "}
                           {TotalAdult > 0 ? `(Adult) x${TotalAdult}` : ""}{" "}
                           {TotalInfant > 0 ? `(Infant) x${TotalInfant}` : ""}
                         </div>
@@ -593,10 +605,6 @@ export default function Pembayaran() {
                       <div className="mt-4 text-xs text-black font-medium  flex justify-between">
                         <div>Biaya Admin (Fee) x{TotalAdult + TotalInfant}</div>
                         <div>Rp. {book && toRupiah(book.nominal_admin)}</div>
-                      </div>
-                      <div className="mt-4 text-xs text-black font-medium  flex justify-between">
-                        <div>Diskon (Rp.)</div>
-                        <div>Rp. {book && book.discount}</div>
                       </div>
                       <div className="mt-8 pt-2 border-t border-gray-200 text-sm text-black font-semibold flex justify-between">
                         <div>Total Harga</div>
@@ -635,64 +643,63 @@ export default function Pembayaran() {
                           </>
                         ) : ''} */}
                     </div>
-                    <div className="px-4 py-2">
-                      {/* <div className="text-black text-xs">Status Booking</div> */}
-                      <div className="text-black text-xs">Transaksi ID</div>
-                      <div className="mt-1 font-medium  text-blue-500 text-[18px]">
-                        <Paragraph copyable>
-                          {book && book.transactionId}
-                        </Paragraph>
-                      </div>
-                      <div className="text-grapy-500 text-xs">
-                        Gunakan kode bayar ini sebagai nomor tujuan pada menu
-                        pembayaran di aplikasi.
-                      </div>
-                    </div>
-                    <div className="p-4 border-t xl:0 mt-2">
-                      <div className="text-xs text-black">
-                        PELNI DESCRIPTION
-                      </div>
-                      <div className="mt-3 xl:mt-4 text-xs text-black">
-                        {book.SHIP_NAME}
-                      </div>
-                      <div className="flex space-x-4">
-                        <div className="mt-1 xl:mt-2 text-xs text-black font-medium ">
-                          {passengers.pelabuhan_asal}
-                        </div>
-                        <IoArrowForwardOutline
-                          className="text-black mt-0 xl:mt-2"
-                          size={18}
-                        />
-                        <div className="mt-1 xl:mt-2 text-xs text-black font-medium ">
-                          {passengers.pelabuhan_tujuan}
+                    <div className="px-8 py-4 border rounded-lg border-gray-200 shadow-sm mb-4">
+                      <div className="flex justify-between items-center">
+                        <div className="text-black text-xs">Transaksi ID</div>
+                        <div className="font-medium text-blue-500 text-[18px] pt-4">
+                          <Paragraph copyable>
+                            {book && book.transactionId}
+                          </Paragraph>
                         </div>
                       </div>
-                      <div className="mt-3 text-xs text-black">
-                        {parseTanggal(passengers.departureDate)} -{" "}
-                        {parseTanggal(book.arrivalDate)}
-                      </div>
-                      <div className="mt-1 text-xs text-black">
-                        {book.departureTime} - {book.arrivalTime}
+                      <div className="text-gray-500 text-xs">
+                        Gunakan kode bayar ini sebagai nomor tujuan pada menu pembayaran di aplikasi.
                       </div>
                     </div>
-                    <div className="p-4 border-t">
-                      <div className="text-xs text-black">LIST PASSENGERS</div>
-                      {passengers.passengers.adults &&
-                      passengers.passengers.adults.length > 0
-                        ? passengers.passengers.adults.map((e, i) => (
-                            <div className="mt-3 text-xs text-black font-medium ">
-                              {e.name} (Adult)
-                            </div>
-                          ))
-                        : ""}
-                      {passengers.passengers.infants &&
-                      passengers.passengers.infants.length > 0
-                        ? passengers.passengers.infants.map((e, i) => (
-                            <div className="mt-3 text-xs text-black font-medium ">
-                              {e.name} (Infants)
-                            </div>
-                          ))
-                        : ""}
+                    <div className="mt-4">
+                      <div className="mt-2 w-full rounded-md border xl:border-gray-200 xl:shadow-sm">
+                        <div className="px-4 py-8 pl-8 text-black">
+                          <div className="text-xs font-semibold">
+                            {bookInfo.SHIP_NAME}
+                          </div>
+                          <div className="mt-4">
+                            <small className="block font-semibold">Tanggal Keberangkatan</small>
+                            <small className="block mt-2">
+                              {parseTanggal(passengers.departureDate)}
+                            </small>
+                          </div>
+                        </div>
+                        <div className="p-4 pl-10 mb-4">
+                          <ol className="relative border-l-2 border-dashed border-gray-800">
+                            <li className="mb-10 ml-4">
+                              <div className="absolute w-4 h-4 rounded-full mt-0 bg-white -left-2 border border-gray-800"></div>
+                              <div className="flex space-x-12">
+                                <time className="mb-1 text-sm font-normal leading-none text-black">
+                                  {book.departureTime}
+                                </time>
+                                <div className="-mt-2">
+                                  <div className="text-left text-xs text-black">
+                                    {passengers.pelabuhan_asal}
+                                  </div>
+                                </div>
+                              </div>
+                            </li>
+                            <li className="ml-4">
+                              <div className="absolute w-4 h-4 bg-blue-500 rounded-full mt-0 -left-2 border border-white"></div>
+                              <div className="flex space-x-12">
+                                <time className="mb-1 text-sm leading-none text-black">
+                                  {book.arrivalTime}
+                                </time>
+                                <div className="-mt-2">
+                                  <div className="text-left text-xs text-black">
+                                    {passengers.pelabuhan_tujuan}
+                                  </div>
+                                </div>
+                              </div>
+                            </li>
+                          </ol>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div className="hidden xl:block mt-2">
