@@ -21,11 +21,11 @@ export const {
   setDataBookPesawat,
   setisOkBalance,
   setDataSearchPesawat,
-  setBookDataLanjutBayar,
+  setBookDataLanjutBayarPesawat,
 } = bookPesawatSlice.actions;
-export const { setDataBookKereta, setisOkBalanceKereta, setDataSearchKereta } =
+export const { setDataBookKereta, setisOkBalanceKereta, setDataSearchKereta, setBookDataLanjutBayarKereta } =
   bookKeretaSlice.actions;
-export const { setDataBookPelni, setisOkBalancePelni, setDataSearchPelni } =
+export const { setDataBookPelni, setisOkBalancePelni, setDataSearchPelni, setBookDataLanjutBayarPelni } =
   bookPelniSlice.actions;
 
 export default store;

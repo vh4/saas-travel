@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { AiOutlineCheckCircle, AiOutlineClockCircle } from "react-icons/ai";
+import { AiOutlineClockCircle } from "react-icons/ai";
 import { RxCrossCircled } from "react-icons/rx";
 import {
   MdHorizontalRule,
@@ -8,26 +8,24 @@ import {
 } from "react-icons/md";
 import { IoIosArrowDropright, IoMdCheckmarkCircle } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import "./SeatMap.css";
+import "../../../components/kai/SeatMap.css";
 import { Modal, Placeholder, Button } from "rsuite";
 import { Alert, Select, notification } from "antd";
 import { Button as ButtonAnt } from "antd";
-import { toRupiah } from "../../helpers/rupiah";
-import { parseTanggal, remainingTime } from "../../helpers/date";
-import Page500 from "../components/500";
-import Page400 from "../components/400";
-import PageExpired from "../components/Expired";
-import KonfirmasiLoading from "../components/trainskeleton/konfirmasi";
+import { toRupiah } from "../../../helpers/rupiah";
+import { remainingTime } from "../../../helpers/date";
+import Page500 from "../../components/500";
+import Page400 from "../../components/400";
+import PageExpired from "../../components/Expired";
+import KonfirmasiLoading from "../../components/trainskeleton/konfirmasi";
 import { Typography } from "antd";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { callbackFetchData } from "../../features/callBackSlice";
 import {
   setDataBookKereta,
-  setisOkBalanceKereta,
-} from "../../features/createSlice";
+} from "../../../features/createSlice";
 import { Box } from "@mui/material";
-import DetailPassengersDrawer from "./components/DetailPassengersDrawer";
+import DetailPassengersDrawerKereta from "./DetailPassengerDrawerKereta";
 
 const SeatMap = ({
   seats,
@@ -313,13 +311,11 @@ const SeatMap = ({
   );
 };
 
-export default function Konfirmasi() {
+export default function KonfirmasiKereta() {
   const [api, contextHolder] = notification.useNotification();
   const { Paragraph } = Typography;
   const [selectedCount, setSelectedCount] = useState(0);
   const dispatch = useDispatch();
-  const bookKereta = useSelector((state) => state.bookkereta.bookDataKereta);
-  const dataSearch = useSelector((state) => state.bookkereta.searchDataKereta);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -348,19 +344,16 @@ export default function Konfirmasi() {
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
   );
 
+  let bookKeretaData = useSelector(
+    (state) => state.bookkereta.bookDataLanjutBayarKereta
+  );
+
   const [dataBookingTrain, setdataBookingTrain] = useState(null);
-  const [dataDetailTrain, setdataDetailTrain] = useState(null);
-
-  const [hasilBooking, setHasilBooking] = useState(null);
-  const [hasilBookingTriggerResetGagal, sethasilBookingTriggerResetGagal] =
-    useState(null);
-
+  const [expiredBookTime, setExpiredBookTime] = useState(null);
   const [passengers, setPassengers] = useState(null);
-  const [tanggal_keberangkatan_kereta, settanggal_keberangkatan_kereta] =
-    useState(null);
+
   const [classTrain, setClassTrain] = useState(null);
   const [TotalAdult, setTotalAdult] = useState(0);
-  //   const [TotalChild, setTotalChild] = useState(0);
   const [TotalInfant, setTotalInfant] = useState(0);
 
   const [err, setErr] = useState(false);
@@ -391,8 +384,6 @@ export default function Konfirmasi() {
     setgerbongsamawajib(0);
   };
 
-  const [expiredBookTime, setExpiredBookTime] = useState(null);
-
   const [openDrawer, setOpenDrawer] = useState(null);
   const toggleDrawer = (type) => {
     setOpenDrawer(type);
@@ -403,78 +394,80 @@ export default function Konfirmasi() {
       setErr(true);
     }
 
-    Promise.all([getDataTrain(), getHasilBooking()])
-      .then(([ResponsegetDataTrain, ResponsegetHasilBooking]) => {
-        if (ResponsegetDataTrain) {
-          setdataDetailTrain(ResponsegetDataTrain.train_detail);
-          setdataBookingTrain(ResponsegetDataTrain.train);
-
-          const dataBookingTrain = ResponsegetDataTrain.train;
+    Promise.all([
+      getInfoBooking(),
+    ])
+      .then(([getInfoBookingParse]) => {
+        const getInfoBooking = { ...getInfoBookingParse };
+        if (getInfoBooking) {
           const classTrain =
-            dataBookingTrain[0].seats[0].grade === "E"
+            getInfoBooking.classes === "EKO"
+              ? "Ekonomi"
+              : getInfoBooking.classes === "EKS"
               ? "Eksekutif"
-              : dataBookingTrain[0].seats[0].grade === "B"
-              ? "Bisnis"
-              : "Ekonomi";
-          const tanggal_keberangkatan_kereta = parseTanggal(
-            dataBookingTrain[0].departureDate
-          );
+              : "Bisnis";
 
-          settanggal_keberangkatan_kereta(tanggal_keberangkatan_kereta);
-          setClassTrain(classTrain); //ekonomi, eksekutid
+          setClassTrain(classTrain);
         } else {
           setErrPage(true);
         }
-
-        if (ResponsegetHasilBooking) {
-          setHasilBooking(ResponsegetHasilBooking.hasil_book);
+        //expired date convert
+        if (getInfoBooking?.expiredDate) {
+          getInfoBooking.expiredDate = moment(
+            getInfoBooking.expiredDate,
+            "YYYY-MM-DD HH:mm:ss"
+          ).format("YYYY-MM-DD HH:mm");
           setExpiredBookTime(
-            ResponsegetHasilBooking.hasil_book.timeLimit ||
-              moment().add(1, "hours")
+            getInfoBooking.expiredDate || moment().add(1, "hours")
           );
-
-          //mengatasi ketika mencopy variable hasilBooking, state nya ikut update.
-          sethasilBookingTriggerResetGagal(
-            JSON.stringify(ResponsegetHasilBooking.hasil_book)
-          );
-
-          setPassengers(ResponsegetHasilBooking.passengers);
-
-          const passengers = ResponsegetHasilBooking.passengers;
-          const hasilBooking = ResponsegetHasilBooking.hasil_book;
-          const initialChanges = Array();
-
-          hasilBooking.passengers.map((e, i) => {
-            initialChanges.push({
-              name: e,
-              type:
-                passengers.adults[i] !== null && passengers.adults[i]
-                  ? "adult"
-                  : "infant",
-              class: hasilBooking.seats[i][0],
-              wagonNumber: hasilBooking.seats[i][1],
-              row: hasilBooking.seats[i][2],
-              column: hasilBooking.seats[i][3],
-              checkbox: false,
-            });
-          });
-
-          setChangeSet([initialChanges]);
-          //mengatasi ketika mencopy variable setChangeSet, state nya ikut update.
-          setchangeStateKetikaGagalTidakUpdate(
-            JSON.stringify([initialChanges])
-          );
-          setTotalAdult(passengers.adults.length);
-          //   setTotalChild(passengers.children ? passengers.children.length : 0);
-          setTotalInfant(passengers.infants.length);
-        } else {
-          setErrPage(true);
         }
+
+        setdataBookingTrain(getInfoBooking);
+
+        //passenggers. nama saja. => bella, mama,
+        const passengers = getInfoBooking.penumpang.map((e) => e.nama);
+        setPassengers(passengers);
+
+        const initialChanges = Array();
+        let totaladult = 0;
+        let totalinfant = 0;
+
+        if (!Array.isArray(getInfoBooking["seats"])) {
+          getInfoBooking["seats"] = []; // Inisialisasi sebagai array jika belum ada
+        }
+
+        getInfoBooking.penumpang.map((e, i) => {
+          const seat = e.kursi.split(/[-/]/);
+          getInfoBooking["seats"].push(seat);
+
+          if (e.kursi?.trim().length > 1) {
+            totaladult += 1;
+          } else {
+            totalinfant += 1;
+          }
+
+          initialChanges.push({
+            name: e.nama,
+            type: e.kursi?.trim().length > 1 ? "adult" : "infant",
+            class: seat[0],
+            wagonNumber: seat[1] || "",
+            row: seat[2] || 0,
+            column: seat[3] || "-",
+            checkbox: false,
+          });
+        });
+
+        setChangeSet([initialChanges]);
+
+        //mengatasi ketika mencopy variable setChangeSet, state nya ikut update.
+        setchangeStateKetikaGagalTidakUpdate(JSON.stringify([initialChanges]));
+
+        setTotalAdult(totaladult);
+        setTotalInfant(totalinfant);
 
         if (
-          ResponsegetHasilBooking.hasil_book &&
-          new Date(ResponsegetHasilBooking.hasil_book.timeLimit).getTime() <
-            new Date().getTime()
+          getInfoBooking &&
+          new Date(getInfoBooking.expiredDate).getTime() < new Date().getTime()
         ) {
           setIsBookingExpired(true);
         } else {
@@ -489,16 +482,6 @@ export default function Konfirmasi() {
         setIsLoadingPage(false);
         setErrPage(true);
       });
-
-    // Set booking expiration flag
-    if (
-      hasilBooking &&
-      new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()
-    ) {
-      setIsBookingExpired(true);
-    } else {
-      setIsBookingExpired(false);
-    }
   }, [token]);
 
   const [remainingBookTime, setremainingBookTime] = useState(
@@ -510,8 +493,8 @@ export default function Konfirmasi() {
       setremainingBookTime(remainingTime(expiredBookTime));
 
       if (
-        hasilBooking &&
-        new Date(hasilBooking.timeLimit).getTime() < new Date().getTime()
+        dataBookingTrain &&
+        new Date(dataBookingTrain.expiredDate).getTime() < new Date().getTime()
       ) {
         setIsBookingExpired(true);
       } else {
@@ -522,18 +505,9 @@ export default function Konfirmasi() {
     return () => clearInterval(intervalId);
   }, [expiredBookTime]);
 
-  async function getDataTrain() {
+  async function getInfoBooking() {
     try {
-      const response = dataSearch;
-      return response;
-    } catch (error) {
-      return null;
-    }
-  }
-
-  async function getHasilBooking() {
-    try {
-      const response = bookKereta;
+      const response = bookKeretaData;
       return response;
     } catch (error) {
       return null;
@@ -550,10 +524,13 @@ export default function Konfirmasi() {
       `${process.env.REACT_APP_HOST_API}/travel/train/get_seat_layout`,
       {
         productCode: "WKAIH",
-        origin: dataDetailTrain[0].berangkat_id_station,
-        destination: dataDetailTrain[0].tujuan_id_station,
-        date: dataBookingTrain[0].arrivalDate,
-        trainNumber: dataBookingTrain[0].trainNumber,
+        origin: dataBookingTrain.id_origin,
+        destination: dataBookingTrain.id_destination,
+        date:
+          dataBookingTrain.tanggal_kedatangan.trim() === ""
+            ? dataBookingTrain.tanggal_keberangkatan
+            : dataBookingTrain.tanggal_kedatangan,
+        trainNumber: dataBookingTrain.trainNumber,
         token: token,
       }
     );
@@ -567,19 +544,8 @@ export default function Konfirmasi() {
 
   const handlerKonfirmasi = async (e) => {
     setIsLoading(true);
-
-    const idtrx = hasilBooking.transactionId;
-    const allowPayment = hasilBooking.is_allowed_pay;
-
-    //set booking data
-    dispatch(setisOkBalanceKereta(allowPayment));
-
-    //set data callback
-    dispatch(callbackFetchData({ type: "train", id_transaksi: idtrx }));
-
-    setIsLoading(false);
     navigate({
-      pathname: `/train/bayar`,
+      pathname: `/kereta/detail/payment`,
     });
   };
 
@@ -614,8 +580,8 @@ export default function Konfirmasi() {
 
     let gantiKursiFix = {
       productCode: "WKAIH",
-      bookingCode: hasilBooking.bookingCode,
-      transactionId: hasilBooking.transactionId,
+      bookingCode: dataBookingTrain.kode_booking,
+      transactionId: dataBookingTrain.id_transaksi,
       wagonNumber: wagonNumber,
       wagonCode: className,
       seats: changeStateFix[0],
@@ -630,7 +596,9 @@ export default function Konfirmasi() {
     //   delete item.type;
     // });
 
-    const hasilBookingDataCopyDeep = JSON.parse(JSON.stringify(hasilBooking));
+    const hasilBookingDataCopyDeep = JSON.parse(
+      JSON.stringify(dataBookingTrain)
+    );
     const hasilBookingData = { ...hasilBookingDataCopyDeep };
     setSelectedCount(0);
 
@@ -653,7 +621,7 @@ export default function Konfirmasi() {
     const idtrx = response.data.transactionId;
 
     if (response.data.rc == "00") {
-      hasilBookingData["transactionId"] = idtrx;
+      hasilBookingData["id_transaksi"] = idtrx;
 
       const data = {
         passengers: passengers,
@@ -664,17 +632,17 @@ export default function Konfirmasi() {
 
       setisLoadingPindahKursi(false);
       successNotification();
-      setHasilBooking(hasilBookingData);
+      setdataBookingTrain(hasilBookingData);
 
       setchangeStateKetikaGagalTidakUpdate(JSON.stringify(changeState));
     } else if (response.data.rc === "55") {
       setChangeSet(JSON.parse(changeStateKetikaGagalTidakUpdate));
-      setHasilBooking((prev) => prev);
+      setdataBookingTrain((prev) => prev);
       setisLoadingPindahKursi(false);
       failedNotification(response.data.rd);
     } else {
       setChangeSet(JSON.parse(changeStateKetikaGagalTidakUpdate));
-      setHasilBooking((prev) => prev);
+      setdataBookingTrain((prev) => prev);
       setisLoadingPindahKursi(false);
       failedNotification(response.data.rd);
     }
@@ -683,6 +651,7 @@ export default function Konfirmasi() {
   };
 
   const [backdrop, setBackdrop] = React.useState("static");
+
   function gantigerbong(value) {
     setSelectedCount(0);
     setgerbongsamawajib(0);
@@ -962,17 +931,28 @@ export default function Konfirmasi() {
                       <div className="text-black font-medium  ">
                         Keberangkatan kereta
                       </div>
-                      <small className="text-black">
-                        {tanggal_keberangkatan_kereta}
-                      </small>
+                      <div className="text-xs text-gray-400">
+                        {new Date(
+                          dataBookingTrain.tanggal_keberangkatan.slice(0, 4),
+                          parseInt(
+                            dataBookingTrain.tanggal_keberangkatan.slice(4, 6)
+                          ) - 1,
+                          dataBookingTrain.tanggal_keberangkatan.slice(6, 8)
+                        ).toLocaleDateString("id-ID", {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}{" "}
+                      </div>
                     </div>
                     <div className="p-4 pl-8  text-black">
                       <div className="text-xs font-medium ">
-                        {dataBookingTrain && dataBookingTrain[0].trainName}
+                        {dataBookingTrain && dataBookingTrain.nama_kereta}
                       </div>
                       <small>
                         {classTrain} Class{" "}
-                        {dataBookingTrain && dataBookingTrain[0].seats[0].class}
+                        {dataBookingTrain && dataBookingTrain.classes}
                       </small>
                     </div>
                     <div className="mt-2"></div>
@@ -983,19 +963,17 @@ export default function Konfirmasi() {
                           <div className="flex space-x-12">
                             <time class="mb-1 text-sm font-normal leading-none text-black">
                               {dataBookingTrain &&
-                                dataBookingTrain[0].departureTime}
+                                dataBookingTrain.jam_keberangkatan.toString()
+                                .padStart(4, "0")
+                                .replace(/(\d{2})(\d{2})/, "$1:$2")}
                             </time>
                             <div className="-mt-2">
                               <div class="text-left text-xs text-black">
-                                {dataBookingTrain &&
-                                  dataDetailTrain[0].berangkat_nama_kota}
+                                {dataBookingTrain && dataBookingTrain.origin}
                               </div>
-                              <p class="text-left text-xs text-black ">
-                                (
-                                {dataBookingTrain &&
-                                  dataDetailTrain[0].berangkat_id_station}
-                                )
-                              </p>
+                              <div>
+                                ({dataBookingTrain.id_origin})
+                              </div>
                             </div>
                           </div>
                         </li>
@@ -1004,19 +982,16 @@ export default function Konfirmasi() {
                           <div className="flex space-x-12">
                             <time class="mb-1 text-sm leading-none text-black">
                               {dataBookingTrain &&
-                                dataBookingTrain[0].arrivalTime}
+                                dataBookingTrain.jam_kedatangan.toString()
+                                .padStart(4, "0")
+                                .replace(/(\d{2})(\d{2})/, "$1:$2")}
                             </time>
                             <div className="-mt-2">
                               <div class="text-left text-xs  text-black">
                                 {dataBookingTrain &&
-                                  dataDetailTrain[0].tujuan_nama_kota}
+                                  dataBookingTrain.destination}{" "}
                               </div>
-                              <p class="text-left text-xs text-black ">
-                                (
-                                {dataBookingTrain &&
-                                  dataDetailTrain[0].tujuan_id_station}
-                                )
-                              </p>
+                              <div>({dataBookingTrain.id_destination})</div>
                             </div>
                           </div>
                         </li>
@@ -1035,7 +1010,7 @@ export default function Konfirmasi() {
                         <div className="mt-2 font-bold  text-blue-500 text-[18px]">
                           {/* {hasilBooking && hasilBooking.bookingCode} */}
                           <Paragraph copyable className="">
-                            {hasilBooking && hasilBooking.transactionId}
+                            {dataBookingTrain && dataBookingTrain.id_transaksi}
                           </Paragraph>
                         </div>
                       </div>
@@ -1109,7 +1084,8 @@ export default function Konfirmasi() {
                           <div className="text-xs">
                             Rp.{" "}
                             {toRupiah(
-                              (hasilBooking && hasilBooking?.normalSales) || "-"
+                              (dataBookingTrain && dataBookingTrain?.nominal) ||
+                                "-"
                             )}
                           </div>
                         </div>
@@ -1128,7 +1104,7 @@ export default function Konfirmasi() {
                           <div className="text-xs">
                             Rp.{" "}
                             {toRupiah(
-                              hasilBooking && hasilBooking.nominalAdmin
+                              dataBookingTrain && dataBookingTrain.nominal_admin
                             )}
                           </div>
                         </div>
@@ -1148,10 +1124,13 @@ export default function Konfirmasi() {
                             Rp.{" "}
                             {toRupiah(
                               parseInt(
-                                (hasilBooking && hasilBooking?.normalSales) || 0
+                                (dataBookingTrain &&
+                                  dataBookingTrain?.nominal) ||
+                                  0
                               ) +
                                 parseInt(
-                                  hasilBooking && hasilBooking.nominalAdmin
+                                  dataBookingTrain &&
+                                    dataBookingTrain.nominal_admin
                                 )
                             )}
                           </div>
@@ -1161,9 +1140,8 @@ export default function Konfirmasi() {
                   </div>
 
                   {/* mobile detail */}
-                  <DetailPassengersDrawer
-                    passengers={passengers}
-                    hasilBooking={hasilBooking}
+                  <DetailPassengersDrawerKereta
+                    dataDetailPassenger={dataBookingTrain}
                     openDrawer={openDrawer}
                     toggleDrawer={toggleDrawer}
                   />
@@ -1171,20 +1149,21 @@ export default function Konfirmasi() {
                   {/* for desktop adult, infant*/}
                   <div className="hidden xl:block">
                     {/* adult */}
-                    {passengers.adults && passengers.adults.length > 0 ? (
+                    {dataBookingTrain.penumpang  && dataBookingTrain.penumpang.length > 0 ? (
                       <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
-                        <p>ADULT PASSENGERS</p>
+                        <p>LIST PASSENGERS</p>
                       </div>
                     ) : (
                       ""
                     )}
-                    {passengers.adults && passengers.adults.length > 0
-                      ? passengers.adults.map((e, i) => (
+                    {dataBookingTrain.penumpang &&
+                    dataBookingTrain.penumpang.length > 0
+                      ? dataBookingTrain.penumpang.map((e, i) => (
                           <>
                             <div className="p-2 mt-4 w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
                               <div className="p-2">
                                 <div className="px-2 xl:px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
-                                  {e.name}
+                                  {e.nama}
                                 </div>
                                 <div className="mt-2 grid grid-cols-2 xl:grid-cols-4">
                                   <div className="px-2 xl:px-4 py-2 text-xs">
@@ -1192,93 +1171,38 @@ export default function Konfirmasi() {
                                       NIK
                                     </div>
                                     <div className="mt-2 text-black text-xs">
-                                      {e.idNumber}
+                                      {e.nomor_identitas}
                                     </div>
                                   </div>
                                   <div className="px-2 xl:px-4 py-2 text-xs">
                                     <div className="text-black ">Nomor HP</div>
                                     <div className="mt-2 text-black text-xs">
-                                      {e.phone}
+                                      {e.telepon !== '' ? e.telepon : '-'}
                                     </div>
                                   </div>
                                   <div className="px-2 xl:px-4 py-2 text-xs">
                                     <div className="text-black  font-medium ">
                                       Kursi
                                     </div>
-                                    <div className="mt-2 text-black text-xs">
-                                      {hasilBooking !== null
-                                        ? hasilBooking.seats[i][0] === "EKO"
-                                          ? "Ekonomi"
-                                          : hasilBooking.seats[i][0] === "BIS"
-                                          ? "Bisnis"
-                                          : "Eksekutif"
-                                        : ""}{" "}
-                                      {hasilBooking !== null
-                                        ? hasilBooking.seats[i][1]
-                                        : ""}{" "}
-                                      -{" "}
-                                      {hasilBooking
-                                        ? hasilBooking.seats[i][2]
-                                        : ""}
-                                      {hasilBooking !== null
-                                        ? hasilBooking.seats[i][3]
-                                        : ""}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </>
-                        ))
-                      : ""}
-                    {/* infants */}
-                    {passengers.infants && passengers.infants.length > 0 ? (
-                      <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
-                        <p>INFANTS PASSENGERS</p>
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                    {passengers.infants && passengers.infants.length > 0
-                      ? passengers.infants.map((e, i) => (
-                          <>
-                            <div className="p-2 mt-4 w-full rounded-md border-b xl:border xl:border-gray-200 xl:shadow-sm">
-                              <div className="mt-2">
-                                <div className="px-4 py-2 text-black border-b border-gray-200 text-sm font-medium ">
-                                  {e.name}
-                                </div>
-                                <div className="mt-2 grid grid-cols-2 xl:grid-cols-4">
-                                  <div className="px-4 py-2 text-xs">
-                                    <div className="text-black font-medium ">
-                                      NIK
-                                    </div>
-                                    <div className="mt-2 text-black text-xs">
-                                      {e.idNumber}
-                                    </div>
-                                  </div>
-                                  <div className="px-4 py-2 text-xs">
-                                    <div className="text-black font-medium ">
-                                      Tanggal Lahir
-                                    </div>
-                                    <div className="mt-2 text-black text-xs">
-                                      {e.birthdate}
-                                    </div>
-                                  </div>
-                                  <div className="px-4 py-2 text-xs">
-                                    <div className="text-black font-medium ">
-                                      Kursi
-                                    </div>
-                                    <div className="mt-2 text-black text-xs">
-                                      {hasilBooking !== null
-                                        ? hasilBooking.seats[i][0] === "EKO"
-                                          ? "Ekonomi"
-                                          : hasilBooking.seats[i][0] === "BIS"
-                                          ? "Bisnis"
-                                          : "Eksekutif"
-                                        : ""}{" "}
-                                      {"/"}
-                                      {" 0 "}
-                                    </div>
+                                      <div className="mt-2 text-black text-xs">
+                                        {dataBookingTrain !== null
+                                          ? dataBookingTrain.seats[i][0] === "EKO"
+                                            ? "Ekonomi"
+                                            : dataBookingTrain.seats[i][0] === "BIS"
+                                            ? "Bisnis"
+                                            : "Eksekutif"
+                                          : ""}{" "}
+                                        {dataBookingTrain.seats[i][1]
+                                          ? dataBookingTrain.seats[i][1]
+                                          : ""}{" "}
+                                        -{" "}
+                                        {dataBookingTrain.seats[i][2]
+                                          ? dataBookingTrain.seats[i][2]
+                                          : "/ 0"}
+                                        { dataBookingTrain.seats[i][3]
+                                          ? dataBookingTrain.seats[i][3]
+                                          : ""}
+                                      </div>
                                   </div>
                                 </div>
                               </div>
@@ -1294,37 +1218,33 @@ export default function Konfirmasi() {
                       <div className="p-4">
                         <div className="text-xs text-black font-medium  flex justify-between">
                           <div>
-                            {dataBookingTrain && dataBookingTrain[0].trainName}{" "}
+                            {dataBookingTrain && dataBookingTrain.nama_kereta}{" "}
                             {TotalAdult > 0 ? `(Adults) x${TotalAdult}` : ""}{" "}
                             {/* {TotalChild > 0 ? `(Children) x${TotalChild}` : ""}{" "} */}
                             {TotalInfant > 0 ? `(Infants) x${TotalInfant}` : ""}
                           </div>
                           <div>
                             Rp.{" "}
-                            {hasilBooking && toRupiah(hasilBooking.normalSales)}
+                            {dataBookingTrain &&
+                              toRupiah(dataBookingTrain.nominal)}
                           </div>
                         </div>
                         <div className="mt-4 text-xs text-black font-medium  flex justify-between">
                           <div>Biaya Admin (Fee)</div>
                           <div>
                             Rp.{" "}
-                            {hasilBooking &&
-                              toRupiah(hasilBooking.nominalAdmin)}
+                            {dataBookingTrain &&
+                              toRupiah(dataBookingTrain.nominal_admin)}
                           </div>
-                        </div>
-                        <div className="mt-4 text-xs text-black font-medium  flex justify-between">
-                          <div>Diskon (Rp.)</div>
-                          <div>Rp. {hasilBooking && hasilBooking.discount}</div>
                         </div>
                         <div className="mt-8 pt-2 border-t border-gray-200 text-sm text-black font-medium  flex justify-between">
                           <div>Total Harga</div>
                           <div>
                             Rp.{" "}
-                            {hasilBooking &&
+                            {dataBookingTrain &&
                               toRupiah(
-                                parseInt(hasilBooking.normalSales) -
-                                  parseInt(hasilBooking.discount) +
-                                  parseInt(hasilBooking.nominalAdmin)
+                                parseInt(dataBookingTrain.nominal) +
+                                  parseInt(dataBookingTrain.nominal_admin)
                               )}
                           </div>
                         </div>
@@ -1358,7 +1278,7 @@ export default function Konfirmasi() {
                       <div className="font-medium  text-blue-500 text-[18px]">
                         {/* {hasilBooking && hasilBooking.bookingCode} */}
                         <Paragraph copyable>
-                          {hasilBooking && hasilBooking.transactionId}
+                          {dataBookingTrain && dataBookingTrain.id_transaksi}
                         </Paragraph>
                       </div>
                     </div>

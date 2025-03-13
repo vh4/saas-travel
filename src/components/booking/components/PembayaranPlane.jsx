@@ -51,7 +51,7 @@ export default function PembayaranPlane() {
   const [isSimulated, setisSimulate] = useState(0);
   const callback = useSelector((state) => state.callback);
   let bookPesawatData = useSelector(
-    (state) => state.bookpesawat.bookDataLanjutBayar
+    (state) => state.bookpesawat.bookDataLanjutBayarPesawat
   );
   const token = JSON.parse(
     localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
@@ -92,7 +92,7 @@ export default function PembayaranPlane() {
     Promise.all([
       getInfoBooking(),
       cekIsMerchant(token),
-      cekWhiteListUsername(token),
+      cekWhiteListUsername(token, 'PESAWAT'),
     ])
       .then(([getInfoBookingParse, cekIsMerchant, cekWhiteListUsername]) => {
         const isSimulate = cekWhiteListUsername?.is_simulate || 0;
@@ -159,8 +159,8 @@ export default function PembayaranPlane() {
       setremainingBookTime(remainingTime(expiredBookTime));
 
       if (
-        getInfoBooking &&
-        new Date(getInfoBooking.expiredDate).getTime() < new Date().getTime()
+        dataDetailForBooking &&
+        new Date(dataDetailForBooking.expiredDate).getTime() < new Date().getTime()
       ) {
         setIsBookingExpired(true);
       } else {

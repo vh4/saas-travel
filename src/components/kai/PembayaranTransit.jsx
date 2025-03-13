@@ -3,7 +3,7 @@ import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { MdHorizontalRule, MdOutlineTrain } from "react-icons/md";
-import { useNavigate, createSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { TiketContext } from "../../App";
 import { Alert, Button as ButtonAnt, Modal } from "antd";
 import { notification } from "antd";
@@ -17,6 +17,7 @@ import { Typography } from "antd";
 import moment from "moment";
 import TiketTransit from "./TiketTransit";
 import { ExclamationCircleFilled } from "@ant-design/icons";
+import { cekIsMerchant, cekWhiteListUsername } from "../../helpers/api_global";
 
 export default function Pembayaran() {
   const navigate = useNavigate();
@@ -56,7 +57,6 @@ export default function Pembayaran() {
   const [expiredBookTime, setExpiredBookTime] = useState(null);
 
   const [api, contextHolder] = notification.useNotification();
-  const [isNavigationDone, setIsNavigationDone] = useState(false);
   const [whiteList, setWhiteList] = useState(0);
   const [ispay, setispay] = useState(false);
   const [hasilbayar, setHasilbayar] = useState([]);
@@ -88,8 +88,8 @@ export default function Pembayaran() {
     Promise.all([
       getDataTrain(),
       getHasilBooking(),
-      cekCallbakIsMitra(),
-      cekWhiteListUsername(),
+      cekIsMerchant(token),
+      cekWhiteListUsername(token, 'PESAWAT'),
     ])
       .then(
         ([
@@ -232,40 +232,12 @@ export default function Pembayaran() {
     }
   }
 
-  async function cekCallbakIsMitra() {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_HOST_API}/travel/is_merchant`,
-        {
-          token: JSON.parse(
-            localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-          ),
-        }
-      );
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  }
-
   async function getHasilBooking() {
     try {
       const response = localStorage.getItem(`data:k-book-transit/${uuid_book}`);
       return JSON.parse(response);
     } catch (error) {
       return null;
-    }
-  }
-
-  async function cekWhiteListUsername() {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_HOST_API}/travel/is_whitelist`
-      );
-
-      return response.data;
-    } catch (error) {
-      throw error;
     }
   }
 

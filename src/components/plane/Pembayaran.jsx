@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { AiOutlineCheckCircle, AiOutlineClockCircle } from "react-icons/ai";
-// import { RxCrossCircled } from "react-icons/rx";
 import { MdHorizontalRule } from "react-icons/md";
 import { BsArrowRightShort } from "react-icons/bs";
 import { Button, message, Alert, Modal } from "antd";
@@ -106,7 +105,7 @@ export default function Pembayaran() {
       getInfoBooking(),
       getSearchFlightInfo(),
       cekIsMerchant(token),
-      cekWhiteListUsername(token),
+      cekWhiteListUsername(token, 'PESAWAT'),
     ])
       .then(
         ([

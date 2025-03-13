@@ -19,6 +19,7 @@ import { IoMdCheckmarkCircle } from "react-icons/io";
 import { Box } from "@mui/material";
 import { TiketContext } from "../../App";
 import DetailPassengersDrawer from "./components/DetailPassengersDrawer";
+import { cekIsMerchant, cekWhiteListUsername } from "../../helpers/api_global";
 
 export default function Pembayaran() {
   // const isOk = useSelector((state) => state.callback.isOk);
@@ -99,8 +100,8 @@ export default function Pembayaran() {
     Promise.all([
       getDataTrain(),
       getHasilBooking(),
-      cekIsMerchant(),
-      cekWhiteListUsername(),
+      cekIsMerchant(token),
+      cekWhiteListUsername(token, 'WKAI'),
     ])
       .then(
         ([
@@ -204,35 +205,6 @@ export default function Pembayaran() {
       return response;
     } catch (error) {
       return null;
-    }
-  }
-
-  async function cekIsMerchant() {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_HOST_API}/travel/is_merchant`,
-        {
-          token: token,
-        }
-      );
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async function cekWhiteListUsername() {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_HOST_API}/travel/is_whitelist`,
-        {
-          produk: "WKAIH",
-        }
-      );
-
-      return response.data;
-    } catch (error) {
-      throw error;
     }
   }
 

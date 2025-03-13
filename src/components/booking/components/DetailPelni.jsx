@@ -7,7 +7,7 @@ import { Button, Typography } from "antd";
 import { toRupiah } from "../../../helpers/rupiah";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { setBookDataLanjutBayar } from "../../../features/createSlice";
+import { setBookDataLanjutBayarPelni } from "../../../features/createSlice";
 import { callbackFetchData } from "../../../features/callBackSlice";
 
 const StyledBox = styled("div")(({ theme }) => ({
@@ -37,7 +37,7 @@ export default function DetailPelni({ data, openDetail, toggleDrawerDetail }) {
       dispatch(
         callbackFetchData({ type: "pelni", id_transaksi: data.id_transaksi })
       );
-      dispatch(setBookDataLanjutBayar(data));
+      dispatch(setBookDataLanjutBayarPelni(data));
     } catch (error) {
       console.log(error);
     }

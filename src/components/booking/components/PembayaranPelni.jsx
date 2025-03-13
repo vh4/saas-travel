@@ -53,7 +53,7 @@ export default function PembayaranPelni() {
   const [openDrawer, setOpenDrawer] = useState(null);
   const { pay, dispatch } = React.useContext(TiketContext);
   let bookPesawatData = useSelector(
-    (state) => state.bookpesawat.bookDataLanjutBayar
+    (state) => state.bookpelni.bookDataLanjutBayarPelni
   );
 
   const toggleDrawer = (type) => {
@@ -76,7 +76,7 @@ export default function PembayaranPelni() {
     Promise.all([
       getInfoBooking(),
       cekIsMerchant(token),
-      cekWhiteListUsername(token),
+      cekWhiteListUsername(token, 'PELNI'),
     ])
       .then(([getInfoBookingParse, cekIsMerchant, cekWhiteListUsername]) => {
         const isSimulate = cekWhiteListUsername?.is_simulate || 0;
@@ -128,8 +128,8 @@ export default function PembayaranPelni() {
       setremainingBookTime(remainingTime(expiredBookTime));
 
       if (
-        getInfoBooking &&
-        new Date(getInfoBooking.expiredDate).getTime() < new Date().getTime()
+        dataDetailForBooking &&
+        new Date(dataDetailForBooking.expiredDate).getTime() < new Date().getTime()
       ) {
         setIsBookingExpired(true);
       } else {

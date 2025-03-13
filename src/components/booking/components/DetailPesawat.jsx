@@ -12,7 +12,7 @@ import { callbackFetchData } from "../../../features/callBackSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import {
-  setBookDataLanjutBayar,
+  setBookDataLanjutBayarPesawat,
   setDataSearchPesawat,
 } from "../../../features/createSlice";
 
@@ -46,11 +46,11 @@ export default function DetailPesawat({
       dispatch(
         callbackFetchData({ type: "plane", id_transaksi: data.id_transaksi })
       );
-      dispatch(setBookDataLanjutBayar(data));
+      dispatch(setBookDataLanjutBayarPesawat(data));
     } catch (error) {
       console.log(error);
     }
-    setIsLoading(true);
+    setIsLoading(false);
     navigate({
       pathname: `/flight/detail/payment`,
     });

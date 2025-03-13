@@ -5,7 +5,7 @@ const initialState = {
   isOkBalance:false, //calback
   bookData:null,
   searchData:null,
-  bookDataLanjutBayar:null,
+  bookDataLanjutBayarPesawat:null,
 };
   
 export const bookPesawatSlice = createSlice({
@@ -21,8 +21,8 @@ export const bookPesawatSlice = createSlice({
     setDataSearchPesawat: (state, action) => {
 	    state.searchData = action.payload;
 	  },
-    setBookDataLanjutBayar: (state, action) => {
-	    state.bookDataLanjutBayar = action.payload;
+    setBookDataLanjutBayarPesawat: (state, action) => {
+	    state.bookDataLanjutBayarPesawat = action.payload;
 	  }
   },
 });

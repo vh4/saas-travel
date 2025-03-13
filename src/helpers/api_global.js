@@ -14,12 +14,12 @@ export async function cekIsMerchant(token) {
   }
 }
 
-export async function cekWhiteListUsername(token) {
+export async function cekWhiteListUsername(token, product) {
   try {
     const response = await axios.post(
       `${process.env.REACT_APP_HOST_API}/travel/is_whitelist`,
       {
-        produk: "PESAWAT",
+        produk: product,
       }
     );
 

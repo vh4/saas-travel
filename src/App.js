@@ -12,6 +12,8 @@ import SearchPelni from "./pages/pelni/Search";
 import BookingPelni from "./pages/pelni/Booking";
 import PaymentPelni from "./pages/pelni/Pembayaran";
 import PembayaranLanjutPelni from './pages/pelni/LanjutPembayaran'
+import PembayaranLanjutKereta from './pages/kai/LanjutPembayaran'
+import KonfirmasiLanjutKereta from './pages/kai/LanjutKonfirmasi'
 
 import SearchDlu from "./pages/dlu/Search";
 import BookingDlu from "./pages/dlu/Booking"
@@ -163,6 +165,8 @@ function App() {
                   <Route path="/flight/payment/" element={< PembayaranPesawat/>}></Route>
                   <Route path="/flight/detail/payment" element={< PembayaranLanjutPesawat/>}></Route>
                   <Route path="/pelni/detail/payment" element={< PembayaranLanjutPelni/>}></Route>
+                  <Route path="/kereta/detail/konfirmasi" element={< KonfirmasiLanjutKereta/>}></Route>
+                  <Route path="/kereta/detail/payment" element={< PembayaranLanjutKereta/>}></Route>
 
                   {/* <Route path="/flight/tiket-pesawat" element={< TiketPesawat/>}></Route> */}
                   <Route path="/train/booking/" element={< BookingKai/>}></Route>

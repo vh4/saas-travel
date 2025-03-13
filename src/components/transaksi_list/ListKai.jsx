@@ -9,8 +9,12 @@ import { remainingTime } from "../../helpers/date";
 import Page500 from "../components/500";
 import { CiBoxList, CiCircleMore, CiTimer } from "react-icons/ci";
 import { HiOutlinePrinter } from "react-icons/hi2";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import dayjs from "dayjs";
+import { IoIosArrowRoundForward } from "react-icons/io";
+import { setBookDataLanjutBayarKereta } from "../../features/createSlice";
+import { callbackFetchData } from "../../features/callBackSlice";
+import { useDispatch } from "react-redux";
 // import {Button} from "antd";
 
 export default function ViewBooking({ path }) {
@@ -19,9 +23,9 @@ export default function ViewBooking({ path }) {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [loadBayar, setLoadBayar] = useState(true);
-  // const [open, setOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-  // const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const hardcode_inq = searchParams.get("hc_inq");
@@ -40,27 +44,7 @@ export default function ViewBooking({ path }) {
     }
   }, [token]);
 
-  const handleOpen = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
-
-  function success() {
-    messageApi.open({
-      type: "success",
-      content:
-        "Pembayaran anda berhasil, silahkan check tiket anda di menu transaksi.",
-      duration: 7,
-    });
-  }
-
-  function gagal(rd) {
-    messageApi.open({
-      type: "error",
-      content: `Failed, ${
-        rd.toLowerCase().charAt(0).toUpperCase() + rd.slice(1).toLowerCase()
-      }`,
-      duration: 7,
-    });
-  }
 
   useEffect(() => {
     getTransaksiList();
@@ -186,38 +170,6 @@ export default function ViewBooking({ path }) {
     }, 1000);
   }
 
-  // const handleBayar = async () => {
-  //   setLoading(true);
-
-  //   const response = await axios.post(
-  //     `${process.env.REACT_APP_HOST_API}/travel/train/payment`,
-  //     {
-  //       productCode: "WKAIH",
-  //       bookingCode: byrdata.kode_booking,
-  //       transactionId: byrdata.id_transaksi,
-  //       nominal: byrdata.nominal,
-  //       nominal_admin: byrdata.nominal_admin,
-  //       discount: 0,
-  //       pay_type: "TUNAI",
-  //       token: JSON.parse(
-  //         localStorage.getItem(process.env.REACT_APP_SECTRET_LOGIN_API)
-  //       ),
-  //     }
-  //   );
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //     setOpen(false);
-  //   }, 1000);
-
-  //   if (response.data.rc !== "00") {
-  //     gagal(response.data.rd);
-  //     handleClose();
-  //   } else {
-  //     success();
-  //     handleClose();
-  //   }
-  // };
-
   const intervalRef = React.useRef(null);
 
   const [remainingTimes, setRemainingTimes] = useState([]);
@@ -259,6 +211,22 @@ export default function ViewBooking({ path }) {
       }
     };
   }, [data, remainingTimes]);
+
+  const handleDetail = async (e) => {
+    setIsLoading(true);
+    try {
+      dispatch(
+        callbackFetchData({ type: "train", id_transaksi: e.id_transaksi })
+      );
+      dispatch(setBookDataLanjutBayarKereta(e));
+    } catch (error) {
+      console.log(error);
+    }
+    setIsLoading(false);
+    navigate({
+      pathname: `/kereta/detail/konfirmasi`,
+    });
+  };
 
   return (
     <>
@@ -582,6 +550,15 @@ export default function ViewBooking({ path }) {
                                       Lihat Detail
                                     </a>
                                   </div>
+                                  <div className="flex space-x-2 items-center">
+                                      <a
+                                        onClick={() => handleDetail(e)}
+                                        className="cursor-pointer text-black text-xs hover:text-black"
+                                      >
+                                        Lanjut Bayar
+                                      </a>
+                                      <IoIosArrowRoundForward size={16} />
+                                    </div>
                                 </div>
                               </div>
                             </div>

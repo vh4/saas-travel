@@ -13,7 +13,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { remainingTime } from "../../helpers/date";
 import dayjs from "dayjs";
 import { IoIosArrowRoundForward } from "react-icons/io";
-import { setBookDataLanjutBayar } from "../../features/createSlice";
+import { setBookDataLanjutBayarPesawat } from "../../features/createSlice";
 import { callbackFetchData } from "../../features/callBackSlice";
 import { useDispatch } from "react-redux";
 
@@ -247,7 +247,7 @@ export default function ViewTransaksi({ path }) {
       dispatch(
         callbackFetchData({ type: "plane", id_transaksi: e.id_transaksi })
       );
-      dispatch(setBookDataLanjutBayar(e));
+      dispatch(setBookDataLanjutBayarPesawat(e));
     } catch (error) {
       console.log(error);
     }

@@ -13,7 +13,7 @@ import dayjs from "dayjs";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { callbackFetchData } from "../../features/callBackSlice";
-import { setBookDataLanjutBayar } from "../../features/createSlice";
+import { setBookDataLanjutBayarPelni } from "../../features/createSlice";
 import { IoIosArrowRoundForward } from "react-icons/io";
 
 export default function ViewBooking({ path }) {
@@ -222,7 +222,7 @@ export default function ViewBooking({ path }) {
       dispatch(
         callbackFetchData({ type: "pelni", id_transaksi: e.id_transaksi })
       );
-      dispatch(setBookDataLanjutBayar(e));
+      dispatch(setBookDataLanjutBayarPelni(e));
     } catch (error) {
       console.log(error);
     }

@@ -5,6 +5,7 @@ const initialState = {
   isOkBalanceKereta:false, //calback
   bookDataKereta:null,
   searchDataKereta:null,
+  bookDataLanjutBayarKereta:null,
 };
   
 export const bookKeretaSlice = createSlice({
@@ -19,6 +20,9 @@ export const bookKeretaSlice = createSlice({
 	  },
     setDataSearchKereta: (state, action) => {
 	    state.searchDataKereta = action.payload;
+	  },
+    setBookDataLanjutBayarKereta: (state, action) => {
+	    state.bookDataLanjutBayarKereta = action.payload;
 	  }
   },
 });

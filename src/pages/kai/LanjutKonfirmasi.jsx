@@ -1,32 +1,32 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect} from "react";
 import Layout from "../BookingLayout";
-import HeaderTemplateMobile from "./HeaderTemplateMobile";
-import PembayaranPelni from "../../components/booking/components/PembayaranPelni";
+import KonfirmasiKereta from "../../components/booking/components/KonfirmasiKereta";
+import HeaderTemplateMobileKonfirmasi from './HeaderTemplateMobile'
 
 
 export default function LanjutPembayaran(){
     useEffect(() => {
-        document.title = 'Travel - pelni payment';
+        document.title = 'Travel - kereta konfirmasi';
     }, []);
 
     return(
         <>
             <div className="block xl:hidden">
-                <HeaderTemplateMobile>
+                <HeaderTemplateMobileKonfirmasi >
                     <div className="container">
                         <div className="w-full px-4"> 
                             {/* menu fitur  */}
-                            <PembayaranPelni />
+                            <KonfirmasiKereta />
                         </div>
                     </div>
-                </HeaderTemplateMobile>
+                </HeaderTemplateMobileKonfirmasi>
             </div>
             <div className="hidden xl:block">
                 <Layout>
                     <div className="container">
                         <div className="w-full px-4"> 
                             {/* menu fitur  */}
-                            <PembayaranPelni />
+                            <KonfirmasiKereta />
                         </div>
                     </div>
                 </Layout>
