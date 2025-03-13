@@ -845,7 +845,7 @@ export default function Pembayaran() {
                       banner
                     />
                   </div>
-                  {/* {callbackBoolean == true ? ( */}
+                  {callbackBoolean == true ? (
                   <div className="hidden xl:block mt-2 py-2 rounded-md border-t border-gray-200 shadow-sm">
                     <>
                       {/* {isOk == true && isCurrentBalance == true ? ( */}
@@ -880,11 +880,11 @@ export default function Pembayaran() {
                       {/* ) : ''} */}
                     </>
                   </div>
-                  {/* ) : ( */}
+                   ) : ( 
                   <></>
-                  {/* )} */}
+                  )}
                 </div>
-                {/* {callbackBoolean == true ? ( */}
+                {callbackBoolean == true ? (
                 <div className="block xl:hidden mt-2 py-4 rounded-md">
                   <>
                     {/* {isOk == true && isCurrentBalance == true ? ( */}
@@ -930,7 +930,7 @@ export default function Pembayaran() {
                       </>
                     ) : ''} */}
                 </div>
-                {/* ) : ( */}
+                 ) : (
                 <>
                   {/* <div className="px-8 py-4 text-sm text-black">
                     Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
@@ -949,7 +949,7 @@ export default function Pembayaran() {
                       </Button>
                     </div>                      */}
                 </>
-                {/* )} */}
+                )}
               </div>
             </>
           )}

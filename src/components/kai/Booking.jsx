@@ -179,7 +179,7 @@ export default function BookingKai() {
         `${process.env.REACT_APP_HOST_API}/travel/app/history_idpel`,
         {
           token,
-          type: "WKAIH",
+          type: "WKAI",
         }
       );
 

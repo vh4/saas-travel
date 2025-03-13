@@ -18,11 +18,13 @@ import { useSelector } from "react-redux";
 import { IoMdCheckmarkCircle } from "react-icons/io";
 import { Box } from "@mui/material";
 import { TiketContext } from "../../../App";
-import { cekIsMerchant, cekWhiteListUsername } from "../../../helpers/api_global";
+import {
+  cekIsMerchant,
+  cekWhiteListUsername,
+} from "../../../helpers/api_global";
 import DetailPassengersDrawerKereta from "./DetailPassengerDrawerKereta";
 
 export default function PembayaranKereta() {
-
   const callback = useSelector((state) => state.callback);
   let bookKeretaData = useSelector(
     (state) => state.bookkereta.bookDataLanjutBayarKereta
@@ -84,7 +86,6 @@ export default function PembayaranKereta() {
     });
   };
 
-
   useEffect(() => {
     if (token === null || token === undefined) {
       setErr(true);
@@ -92,20 +93,16 @@ export default function PembayaranKereta() {
 
     Promise.all([
       getInfoBooking(),
-	  cekIsMerchant(token),
-	  cekWhiteListUsername(token, "WKAI")
+      cekIsMerchant(token),
+      cekWhiteListUsername(token, "WKAI"),
     ])
-      .then(([
-		getInfoBookingParse,
-		cekIsMerchant,
-		cekWhiteListUsername,
-	]) => {
+      .then(([getInfoBookingParse, cekIsMerchant, cekWhiteListUsername]) => {
         const getInfoBooking = { ...getInfoBookingParse };
-		if (cekIsMerchant.data.rc == "00") {
-            setcallbackBoolean(true);
-          }
+        if (cekIsMerchant.data.rc == "00") {
+          setcallbackBoolean(true);
+        }
 
-		const isSimulate = cekWhiteListUsername?.is_simulate || 0;
+        const isSimulate = cekWhiteListUsername?.is_simulate || 0;
         setisSimulate(isSimulate);
 
         //expired date convert
@@ -142,7 +139,6 @@ export default function PembayaranKereta() {
           } else {
             totalinfant += 1;
           }
-
         });
 
         setTotalAdult(totaladult);
@@ -196,7 +192,6 @@ export default function PembayaranKereta() {
       return null;
     }
   }
-
 
   async function handlerPembayaran(e) {
     e.preventDefault();
@@ -356,9 +351,7 @@ export default function PembayaranKereta() {
                 {/* mobile sidebar */}
                 <div className="block xl:hidden sidebar w-full xl:w-2/3 2xl:w-1/2">
                   <div className="py-2 xl:py-4 mt-2 xl:mt-0">
-                    <Box
-                      className="border shadow px-6 py-6 rounded-xl"
-                    >
+                    <Box className="border shadow px-6 py-6 rounded-xl">
                       <div className="flex justify-between items-center -mt-2">
                         {/* <div className="text-black text-xs">Booking ID</div> */}
                         <div className="text-black text-sm -mt-1.5">
@@ -396,25 +389,34 @@ export default function PembayaranKereta() {
                                 Asal
                               </small>
                               <div className="font-semibold">
-							  	{dataBookingTrain && dataBookingTrain.origin} (
+                                {dataBookingTrain && dataBookingTrain.origin} (
                                 {dataBookingTrain.id_origin})
                               </div>
                             </div>
                           </div>
                           <div className="text-xs text-gray-400">
-						  {new Date(
-								dataBookingTrain.tanggal_keberangkatan.slice(0, 4),
-								parseInt(dataBookingTrain.tanggal_keberangkatan.slice(4, 6)) - 1,
-								dataBookingTrain.tanggal_keberangkatan.slice(6, 8)
-							).toLocaleDateString("id-ID", {
-								weekday: "long",
-								year: "numeric",
-								month: "long",
-								day: "numeric",
-							})}{" "}
-                            {dataBookingTrain.jam_keberangkatan.toString()
-							.padStart(4, "0")
-							.replace(/(\d{2})(\d{2})/, "$1:$2")}
+                            {new Date(
+                              dataBookingTrain.tanggal_keberangkatan.slice(
+                                0,
+                                4
+                              ),
+                              parseInt(
+                                dataBookingTrain.tanggal_keberangkatan.slice(
+                                  4,
+                                  6
+                                )
+                              ) - 1,
+                              dataBookingTrain.tanggal_keberangkatan.slice(6, 8)
+                            ).toLocaleDateString("id-ID", {
+                              weekday: "long",
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })}{" "}
+                            {dataBookingTrain.jam_keberangkatan
+                              .toString()
+                              .padStart(4, "0")
+                              .replace(/(\d{2})(\d{2})/, "$1:$2")}
                           </div>
                         </div>
                       </div>
@@ -426,25 +428,30 @@ export default function PembayaranKereta() {
                                 Tujuan
                               </small>
                               <div className="font-semibold">
-							  {dataBookingTrain && dataBookingTrain.origin} (
+                                {dataBookingTrain && dataBookingTrain.origin} (
                                 {dataBookingTrain.id_origin})
                               </div>
                             </div>
                           </div>
                           <div className="text-xs text-gray-400">
-							{new Date(
-								dataBookingTrain.tanggal_kedatangan.slice(0, 4),
-								parseInt(dataBookingTrain.tanggal_kedatangan.slice(4, 6)) - 1,
-								dataBookingTrain.tanggal_kedatangan.slice(6, 8)
-							).toLocaleDateString("id-ID", {
-								weekday: "long",
-								year: "numeric",
-								month: "long",
-								day: "numeric",
-							})}{" "}
-                            {dataBookingTrain.jam_kedatangan.trim() == "" ? '-' : dataBookingTrain.jam_kedatangan.toString()
-							.padStart(4, "0")
-							.replace(/(\d{2})(\d{2})/, "$1:$2")}
+                            {new Date(
+                              dataBookingTrain.tanggal_kedatangan.slice(0, 4),
+                              parseInt(
+                                dataBookingTrain.tanggal_kedatangan.slice(4, 6)
+                              ) - 1,
+                              dataBookingTrain.tanggal_kedatangan.slice(6, 8)
+                            ).toLocaleDateString("id-ID", {
+                              weekday: "long",
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })}{" "}
+                            {dataBookingTrain.jam_kedatangan.trim() == ""
+                              ? "-"
+                              : dataBookingTrain.jam_kedatangan
+                                  .toString()
+                                  .padStart(4, "0")
+                                  .replace(/(\d{2})(\d{2})/, "$1:$2")}
                           </div>
                         </div>
                       </div>
@@ -507,7 +514,8 @@ export default function PembayaranKereta() {
                         <div className="text-xs">
                           Rp.{" "}
                           {toRupiah(
-                            (dataBookingTrain && dataBookingTrain?.nominal) || "-"
+                            (dataBookingTrain && dataBookingTrain?.nominal) ||
+                              "-"
                           )}
                         </div>
                       </div>
@@ -525,7 +533,9 @@ export default function PembayaranKereta() {
                         </div>
                         <div className="text-xs">
                           Rp.{" "}
-                          {toRupiah(dataBookingTrain && dataBookingTrain.nominal_admin)}
+                          {toRupiah(
+                            dataBookingTrain && dataBookingTrain.nominal_admin
+                          )}
                         </div>
                       </div>
                     </div>
@@ -544,10 +554,12 @@ export default function PembayaranKereta() {
                           Rp.{" "}
                           {toRupiah(
                             parseInt(
-                              (dataBookingTrain && dataBookingTrain?.nominal) || 0
+                              (dataBookingTrain && dataBookingTrain?.nominal) ||
+                                0
                             ) +
                               parseInt(
-                                dataBookingTrain && dataBookingTrain.nominal_admin
+                                dataBookingTrain &&
+                                  dataBookingTrain.nominal_admin
                               )
                           )}
                         </div>
@@ -556,13 +568,12 @@ export default function PembayaranKereta() {
                   </div>
                 </div>
 
-                  {/* mobile detail */}
-                  <DetailPassengersDrawerKereta
-                    dataDetailPassenger={dataBookingTrain}
-                    openDrawer={openDrawer}
-                    toggleDrawer={toggleDrawer}
-                  />
-
+                {/* mobile detail */}
+                <DetailPassengersDrawerKereta
+                  dataDetailPassenger={dataBookingTrain}
+                  openDrawer={openDrawer}
+                  toggleDrawer={toggleDrawer}
+                />
 
                 <div className="mt-4 w-full mx-0 2xl:mx-4 hidden xl:block">
                   {/* adult */}
@@ -588,7 +599,7 @@ export default function PembayaranKereta() {
                                     Nomor HP
                                   </div>
                                   <div className="mt-2 text-black text-xs">
-								  {e.telepon !== '' ? e.telepon : '-'}
+                                    {e.telepon !== "" ? e.telepon : "-"}
                                   </div>
                                 </div>
                                 <div className="px-2 py-2 text-xs">
@@ -596,23 +607,23 @@ export default function PembayaranKereta() {
                                     Kursi
                                   </div>
                                   <div className="mt-2 text-black text-xs">
-									{dataBookingTrain !== null
-										? dataBookingTrain.seats[i][0] === "EKO"
-										? "Ekonomi"
-										: dataBookingTrain.seats[i][0] === "BIS"
-										? "Bisnis"
-										: "Eksekutif"
-										: ""}{" "}
-									{dataBookingTrain.seats[i][1]
-										? dataBookingTrain.seats[i][1]
-										: ""}{" "}
-									-{" "}
-									{dataBookingTrain.seats[i][2]
-										? dataBookingTrain.seats[i][2]
-										: "/ 0"}
-									{ dataBookingTrain.seats[i][3]
-										? dataBookingTrain.seats[i][3]
-										: ""}
+                                    {dataBookingTrain !== null
+                                      ? dataBookingTrain.seats[i][0] === "EKO"
+                                        ? "Ekonomi"
+                                        : dataBookingTrain.seats[i][0] === "BIS"
+                                        ? "Bisnis"
+                                        : "Eksekutif"
+                                      : ""}{" "}
+                                    {dataBookingTrain.seats[i][1]
+                                      ? dataBookingTrain.seats[i][1]
+                                      : ""}{" "}
+                                    -{" "}
+                                    {dataBookingTrain.seats[i][2]
+                                      ? dataBookingTrain.seats[i][2]
+                                      : "/ 0"}
+                                    {dataBookingTrain.seats[i][3]
+                                      ? dataBookingTrain.seats[i][3]
+                                      : ""}
                                   </div>
                                 </div>
                               </div>
@@ -632,14 +643,16 @@ export default function PembayaranKereta() {
                         </div>
                         <div>
                           Rp.{" "}
-                          {dataBookingTrain && toRupiah(dataBookingTrain.nominal)}
+                          {dataBookingTrain &&
+                            toRupiah(dataBookingTrain.nominal)}
                         </div>
                       </div>
                       <div className="mt-4 text-xs text-black font-medium  flex justify-between">
                         <div>Biaya Admin (Fee)</div>
                         <div>
                           Rp.{" "}
-                          {dataBookingTrain && toRupiah(dataBookingTrain.nominal_admin)}
+                          {dataBookingTrain &&
+                            toRupiah(dataBookingTrain.nominal_admin)}
                         </div>
                       </div>
                       <div className="mt-8 pt-2 border-t border-gray-200 text-sm text-black font-semibold  flex justify-between">
@@ -704,33 +717,46 @@ export default function PembayaranKereta() {
                         {dataBookingTrain.destination}
                       </div>
                       <div className="mt-3 xl:mt-4 text-xs text-black">
-					  {new Date(
-							dataBookingTrain.tanggal_keberangkatan.slice(0, 4),
-							parseInt(dataBookingTrain.tanggal_keberangkatan.slice(4, 6)) - 1,
-							dataBookingTrain.tanggal_keberangkatan.slice(6, 8)
-						).toLocaleDateString("id-ID", {
-							weekday: "long",
-							year: "numeric",
-							month: "long",
-							day: "numeric",
-						})}{" "} - {" "}{new Date(
-							dataBookingTrain.tanggal_kedatangan.slice(0, 4),
-							parseInt(dataBookingTrain.tanggal_kedatangan.slice(4, 6)) - 1,
-							dataBookingTrain.tanggal_kedatangan.slice(6, 8)
-						).toLocaleDateString("id-ID", {
-							weekday: "long",
-							year: "numeric",
-							month: "long",
-							day: "numeric",
-						})}{" "}
+                        {new Date(
+                          dataBookingTrain.tanggal_keberangkatan.slice(0, 4),
+                          parseInt(
+                            dataBookingTrain.tanggal_keberangkatan.slice(4, 6)
+                          ) - 1,
+                          dataBookingTrain.tanggal_keberangkatan.slice(6, 8)
+                        ).toLocaleDateString("id-ID", {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}{" "}
+                        -{" "}
+                        {new Date(
+                          dataBookingTrain.tanggal_kedatangan.slice(0, 4),
+                          parseInt(
+                            dataBookingTrain.tanggal_kedatangan.slice(4, 6)
+                          ) - 1,
+                          dataBookingTrain.tanggal_kedatangan.slice(6, 8)
+                        ).toLocaleDateString("id-ID", {
+                          weekday: "long",
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}{" "}
                       </div>
                       <div className="mt-1 xl:mt-2 text-xs text-black">
-					  {dataBookingTrain.jam_keberangkatan.trim() == "" ? '-' : dataBookingTrain.jam_keberangkatan.toString()
-							.padStart(4, "0")
-							.replace(/(\d{2})(\d{2})/, "$1:$2")} -{" "}
-                        {dataBookingTrain.jam_kedatangan.trim() == "" ? '-' : dataBookingTrain.jam_kedatangan.toString()
-							.padStart(4, "0")
-							.replace(/(\d{2})(\d{2})/, "$1:$2")}
+                        {dataBookingTrain.jam_keberangkatan.trim() == ""
+                          ? "-"
+                          : dataBookingTrain.jam_keberangkatan
+                              .toString()
+                              .padStart(4, "0")
+                              .replace(/(\d{2})(\d{2})/, "$1:$2")}{" "}
+                        -{" "}
+                        {dataBookingTrain.jam_kedatangan.trim() == ""
+                          ? "-"
+                          : dataBookingTrain.jam_kedatangan
+                              .toString()
+                              .padStart(4, "0")
+                              .replace(/(\d{2})(\d{2})/, "$1:$2")}
                       </div>
                     </div>
                   </div>
@@ -740,7 +766,7 @@ export default function PembayaranKereta() {
                       banner
                     />
                   </div>
-                  {/* {callbackBoolean == true ? ( */}
+                  {callbackBoolean == true ? (
                   <div className="hidden xl:block mt-2 py-4 rounded-md border-t border-gray-200 shadow-sm">
                     {/* {isOk == true && isCurrentBalance == true ? ( */}
                     <>
@@ -773,7 +799,7 @@ export default function PembayaranKereta() {
                     </>
                     {/* ) : ''} */}
                   </div>
-                  {/* ) : ( */}
+                  ) : ( 
                   <>
                     {/* <div className="px-8 py-4 text-sm text-black">
                     Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
@@ -792,9 +818,9 @@ export default function PembayaranKereta() {
                       </ButtonAnt>
                     </div> */}
                   </>
-                  {/* )} */}
+                  )}
                 </div>
-                {/* {callbackBoolean == true ? ( */}
+                {callbackBoolean == true ? (
                 <div className="block xl:hidden mt-8 py-2 rounded-md">
                   <>
                     {/* {isOk == true && isCurrentBalance == true ? ( */}
@@ -840,7 +866,7 @@ export default function PembayaranKereta() {
                         </> */}
                   {/* ) : ''} */}
                 </div>
-                {/* ) : ( */}
+                ) : (
                 <>
                   {/* <div className="px-8 py-4 text-sm text-black">
                     Untuk payment silahkan menggunakan api, atau silahkan hubungi tim bisnis untuk info lebih lanjut
@@ -859,7 +885,7 @@ export default function PembayaranKereta() {
                       </ButtonAnt>
                     </div>                      */}
                 </>
-                {/* )} */}
+                )}
               </div>
             </>
           )}
