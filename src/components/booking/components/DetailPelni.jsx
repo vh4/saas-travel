@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { setBookDataLanjutBayarPelni } from "../../../features/createSlice";
 import { callbackFetchData } from "../../../features/callBackSlice";
+import { CiCalendarDate } from "react-icons/ci";
 
 const StyledBox = styled("div")(({ theme }) => ({
   backgroundColor: "#fff",
@@ -80,7 +81,17 @@ export default function DetailPelni({ data, openDetail, toggleDrawerDetail }) {
               <div className="p-4 flex items-start space-x-2">
                 <div className="font-bold">{index + 1}.</div>
                 <div>
-                  <div className="title font-bold">{penumpang.nama}</div>
+                  <div className="flex space-x-2 items-center">
+                    <div className="title font-bold">{penumpang.nama}</div>
+                  </div>
+                  <div className="flex space-x-3 items-center mt-2">
+                    {penumpang.nik && (<><div className="mt-2">{penumpang.nik}</div><div className="w-2 h-2 bg-gray-300 rounded-full"></div></>)}
+                    
+                    <div className="flex items-center space-x-1">
+                      <CiCalendarDate className="mt-2" size={18} />
+                      <div className="mt-2">{penumpang.ttl ? penumpang.ttl : '-'}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <Divider

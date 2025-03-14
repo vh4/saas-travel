@@ -579,6 +579,22 @@ export default function PembayaranPelni() {
                                     {e.nama}
                                   </div>
                                 </div>
+                                <div className="px-2 py-2">
+                                  <div className="text-black font-medium text-xs">
+                                    NIK
+                                  </div>
+                                  <div className="mt-2 text-xs text-black">
+                                    {e.nik ? e.nik : '-'}
+                                  </div>
+                                </div>
+                                <div className="px-2 py-2">
+                                  <div className="text-black font-medium text-xs">
+                                    Tanggal Lahir
+                                  </div>
+                                  <div className="mt-2 text-xs text-black">
+                                    {e.ttl ? e.ttl : '-'}
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>

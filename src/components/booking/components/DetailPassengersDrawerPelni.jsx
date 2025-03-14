@@ -57,6 +57,14 @@ const DetailPassengersDrawerPelni = ({
                         <div>Nama Lengkap</div>
                         <div>{e.nama}</div>
                       </div>
+                      <div className="w-full py-2 grid grid-cols-2 text-gray-500 border-b border-gray-200 text-xs">
+                        <div>NIK</div>
+                        <div>{e.nik ? e.nik : '-'}</div>
+                      </div>
+                      <div className="w-full py-2 grid grid-cols-2 text-gray-500 border-b border-gray-200 text-xs">
+                        <div>Tanggal Lahir</div>
+                        <div>{e.ttl ? e.ttl : '-'}</div>
+                      </div>
                     </div>
                   </div>
                 </>
