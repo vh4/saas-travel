@@ -353,6 +353,8 @@ export default function BookingPelni() {
           departureTime: dataDetailPelni.departureTime,
           transactionId: data.transactionId,
           book: response,
+          originName:data.originName,
+          destinationName:data.destinationName,
           infobooking: infobooking,
         };
 
@@ -1039,9 +1041,9 @@ export default function BookingPelni() {
                                                   "Nama Lengkap minimal 5 karakter.",
                                               },
                                               {
-                                                max: 50,
+                                                max: 60,
                                                 message:
-                                                  "Nama Lengkap maksimal 50 karakter.",
+                                                  "Nama Lengkap maksimal 60 karakter.",
                                               },
                                               {
                                                 pattern: /^[A-Za-z\s]+$/,
@@ -1358,9 +1360,9 @@ export default function BookingPelni() {
                                                   "Nama Lengkap minimal 5 karakter.",
                                               },
                                               {
-                                                max: 50,
+                                                max: 60,
                                                 message:
-                                                  "Nama Lengkap maksimal 50 karakter.",
+                                                  "Nama Lengkap maksimal 60 karakter.",
                                               },
                                               {
                                                 pattern: /^[A-Za-z\s]+$/,

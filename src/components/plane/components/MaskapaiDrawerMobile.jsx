@@ -94,8 +94,8 @@ const MaskapaiDrawerMobile = ({
               />
             </div>
           </form>
-          <div className="py-4 font-bold">Bandara Populer</div>
-          {popularAirports.map((e, i) => (
+          {/* <div className="py-4 font-bold">Bandara Populer</div> */}
+          {/* {popularAirports.map((e, i) => (
             <div
               key={i}
               className="card mt-2 mb-6"
@@ -114,7 +114,7 @@ const MaskapaiDrawerMobile = ({
                 </div>
               </div>
             </div>
-          ))}
+          ))} */}
           <div className="py-4 font-bold">Semua bandara</div>
           {filteredData.map((e, i) => (
             <div

@@ -800,9 +800,9 @@ export default function BookingKai() {
                                                     "Nama Lengkap minimal 5 karakter.",
                                                 },
                                                 {
-                                                  max: 25,
+                                                  max: 60,
                                                   message:
-                                                    "Nama Lengkap maksimal 25 karakter.",
+                                                    "Nama Lengkap maksimal 60 karakter.",
                                                 },
                                                 {
                                                   pattern: /^[A-Za-z\s]+$/,
@@ -1046,9 +1046,9 @@ export default function BookingKai() {
                                                     "Nama Lengkap minimal 5 karakter.",
                                                 },
                                                 {
-                                                  max: 25,
+                                                  max: 60,
                                                   message:
-                                                    "Nama Lengkap maksimal 25 karakter.",
+                                                    "Nama Lengkap maksimal 60 karakter.",
                                                 },
                                                 {
                                                   pattern: /^[A-Za-z\s]+$/,

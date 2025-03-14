@@ -377,8 +377,8 @@ export default function Pembayaran() {
                                 Asal
                               </small>
                               <div className="font-semibold">
-                                {passengers?.pelabuhan_asal?.charAt(0) +
-                                  passengers?.pelabuhan_tujuan
+                                {book?.originName?.charAt(0) +
+                                  book?.originName
                                     ?.slice(1)
                                     ?.toLowerCase()}{" "}
                               </div>
@@ -400,8 +400,8 @@ export default function Pembayaran() {
                                 Tujuan
                               </small>
                               <div className="font-semibold">
-                                {passengers?.pelabuhan_tujuan.charAt(0) +
-                                  passengers?.pelabuhan_tujuan
+                                {book?.destinationName.charAt(0) +
+                                  book?.destinationName
                                     ?.slice(1)
                                     ?.toLowerCase()}
                               </div>

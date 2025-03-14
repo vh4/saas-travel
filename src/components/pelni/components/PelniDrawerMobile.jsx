@@ -93,8 +93,8 @@ const PelniDrawerMobile = ({
               />
             </div>
           </form>
-          <div className="py-4 font-bold">Pelabuhan Populer</div>
-          {popularAirports.map((e, i) => (
+          {/* <div className="py-4 font-bold">Pelabuhan Populer</div> */}
+          {/* {popularAirports.map((e, i) => (
             <div
               key={i}
               className="card mt-2 mb-6"
@@ -110,8 +110,8 @@ const PelniDrawerMobile = ({
                 </div>
               </div>
             </div>
-          ))}
-          <div className="py-4 font-bold">Semua Stasiun</div>
+          ))} */}
+          <div className="py-4 font-bold">Semua Pelabuhan</div>
           {filteredData.map((e, i) => (
             <div
               key={i}

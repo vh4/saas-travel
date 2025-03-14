@@ -560,7 +560,7 @@ export default function BookingPesawat() {
       };
 
       let data_adult = adult[0].map((item) => ({ ...item, ...email_hp }));
-      child[0].forEach((item) => {
+      child[0].forEach((item, i) => {
         let date = new Date(item.birthdate);
         let dateString =
           (date.getMonth() + 1).toString().padStart(2, "0") +
@@ -573,8 +573,13 @@ export default function BookingPesawat() {
 
         const full_name = item.nama_depan ? item.nama_depan.split(" ") : [];
         const namaDepanFinal = full_name.length > 0 ? full_name[0] : "";
-        const namaBelakangFinal =
+        let namaBelakangFinal =
           full_name.length > 1 ? full_name.slice(1).join(" ") : "";
+
+          if(namaBelakangFinal.length === 0){
+            namaBelakangFinal = namaDepanFinal
+            child[0][i]['nama_depan'] = namaDepanFinal + " " + namaBelakangFinal
+          }
 
         end_child.push(
           `CHD;${
@@ -587,7 +592,7 @@ export default function BookingPesawat() {
         );
       });
 
-      infant[0].forEach((item) => {
+      infant[0].forEach((item, i) => {
         let date = new Date(item.birthdate);
         let dateString =
           (date.getMonth() + 1).toString().padStart(2, "0") +
@@ -598,8 +603,14 @@ export default function BookingPesawat() {
 
         const full_name = item.nama_depan ? item.nama_depan.split(" ") : [];
         const namaDepanFinal = full_name.length > 0 ? full_name[0] : "";
-        const namaBelakangFinal =
+        
+        let namaBelakangFinal =
           full_name.length > 1 ? full_name.slice(1).join(" ") : "";
+
+          if(namaBelakangFinal.length === 0){
+            namaBelakangFinal = namaDepanFinal
+            infant[0][i]['nama_depan'] = namaDepanFinal + " " +  namaBelakangFinal
+        }
 
         end_infant.push(
           `INF;${
@@ -612,7 +623,7 @@ export default function BookingPesawat() {
         );
       }); //kok error jadinya
 
-      data_adult.forEach((item) => {
+      data_adult.forEach((item, i) => {
         let date = new Date(item.birthdate);
         let dateString =
           (date.getMonth() + 1).toString().padStart(2, "0") +
@@ -623,8 +634,13 @@ export default function BookingPesawat() {
 
         const full_name = item.nama_depan ? item.nama_depan.split(" ") : [];
         const namaDepanFinal = full_name.length > 0 ? full_name[0] : "";
-        const namaBelakangFinal =
+        let namaBelakangFinal =
           full_name.length > 1 ? full_name.slice(1).join(" ") : "";
+
+        if(namaBelakangFinal.length === 0){
+          namaBelakangFinal = namaDepanFinal
+          data_adult[i]['nama_depan'] = namaDepanFinal + " " +  namaBelakangFinal
+        }
 
         // end_adult.push(`ADT;${item.gender};${item.nama_depan.split(" ")[0].toLowerCase()};${item.nama_belakang.toLowerCase()};${dateString};${item.idNumber};::${item.nomor};::${item.nomor};;;;${item.email};KTP;ID;ID;;;;`);
         end_adult.push(
@@ -1291,7 +1307,7 @@ export default function BookingPesawat() {
                                                 "Nama Lengkap minimal 3 karakter.",
                                             },
                                             {
-                                              max: 25,
+                                              max: 60,
                                               message:
                                                 "Nama Lengkap maksimal 25 karakter.",
                                             },
@@ -1300,6 +1316,19 @@ export default function BookingPesawat() {
                                               message:
                                                 "Nama Lengkap hanya boleh terdiri dari huruf alfabet.",
                                             },
+                                            {
+                                              validator: (_, value) => {
+                                                if (value && value.trim().split(" ").length > 1) {
+                                                  const lastName = value.trim().split(" ")[1];
+                                                  if (lastName.length === 1) {
+                                                    return Promise.reject(
+                                                      "Nama Belakang tidak boleh disingkat, contoh: Chris Seya"
+                                                    );
+                                                  }
+                                                }
+                                                return Promise.resolve();
+                                              },
+                                            }
                                           ]}
                                         >
                                           <Input
@@ -1753,15 +1782,28 @@ export default function BookingPesawat() {
                                                 "Nama Lengkap minimal 3 karakter.",
                                             },
                                             {
-                                              max: 25,
+                                              max: 60,
                                               message:
-                                                "Nama Lengkap maksimal 25 karakter.",
+                                                "Nama Lengkap maksimal 60 karakter.",
                                             },
                                             {
                                               pattern: /^[A-Za-z\s]+$/,
                                               message:
                                                 "Nama Lengkap hanya boleh terdiri dari huruf alfabet.",
                                             },
+                                            {
+                                              validator: (_, value) => {
+                                                if (value && value.trim().split(" ").length > 1) {
+                                                  const lastName = value.trim().split(" ")[1];
+                                                  if (lastName.length === 1) {
+                                                    return Promise.reject(
+                                                      "Nama Belakang tidak boleh disingkat, contoh: Chris Seya"
+                                                    );
+                                                  }
+                                                }
+                                                return Promise.resolve();
+                                              },
+                                            }
                                           ]}
                                         >
                                           <Input
@@ -1787,15 +1829,28 @@ export default function BookingPesawat() {
                                                   "Nama Lengkap minimal 3 karakter.",
                                               },
                                               {
-                                                max: 25,
+                                                max: 60,
                                                 message:
-                                                  "Nama Lengkap maksimal 25 karakter.",
+                                                  "Nama Lengkap maksimal 60 karakter.",
                                               },
                                               {
                                                 pattern: /^[A-Za-z\s]+$/,
                                                 message:
                                                   "Nama Lengkap hanya boleh terdiri dari huruf alfabet.",
                                               },
+                                              {
+                                                validator: (_, value) => {
+                                                  if (value && value.trim().split(" ").length > 1) {
+                                                    const lastName = value.trim().split(" ")[1];
+                                                    if (lastName.length === 1) {
+                                                      return Promise.reject(
+                                                        "Nama Belakang tidak boleh disingkat, contoh: Chris Seya"
+                                                      );
+                                                    }
+                                                  }
+                                                  return Promise.resolve();
+                                                },
+                                              }
                                             ]}
                                           />
                                         </Form.Item>
@@ -2257,15 +2312,28 @@ export default function BookingPesawat() {
                                                 "Nama Lengkap minimal 3 karakter.",
                                             },
                                             {
-                                              max: 25,
+                                              max: 60,
                                               message:
-                                                "Nama Lengkap maksimal 25 karakter.",
+                                                "Nama Lengkap maksimal 60 karakter.",
                                             },
                                             {
                                               pattern: /^[A-Za-z\s]+$/,
                                               message:
                                                 "Nama Lengkap hanya boleh terdiri dari huruf alfabet.",
                                             },
+                                            {
+                                              validator: (_, value) => {
+                                                if (value && value.trim().split(" ").length > 1) {
+                                                  const lastName = value.trim().split(" ")[1];
+                                                  if (lastName.length === 1) {
+                                                    return Promise.reject(
+                                                      "Nama Belakang tidak boleh disingkat, contoh: Chris Seya"
+                                                    );
+                                                  }
+                                                }
+                                                return Promise.resolve();
+                                              },
+                                            }
                                           ]}
                                         >
                                           <Input
