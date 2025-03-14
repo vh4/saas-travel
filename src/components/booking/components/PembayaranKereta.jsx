@@ -428,8 +428,8 @@ export default function PembayaranKereta() {
                                 Tujuan
                               </small>
                               <div className="font-semibold">
-                                {dataBookingTrain && dataBookingTrain.origin} (
-                                {dataBookingTrain.id_origin})
+                                {dataBookingTrain && dataBookingTrain.destination} (
+                                {dataBookingTrain.id_destination})
                               </div>
                             </div>
                           </div>
