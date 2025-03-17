@@ -189,7 +189,7 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
             //regex for otomax 
 			const regex = /RC:(.*?),Status:(.*?),Username:(.*?),Merchant:(.*?),Total komisi:Rp(.*?),Komisi mitra:Rp(.*?),Komisi merchant:Rp(.*?),Saldo terpotong mitra:Rp(.*?),Saldo terpotong merchant:Rp(.*?)$/;
 
-			const match = getResponseGlobal.data.match(regex);
+			const match = responseCallback.match(regex);
 			
 			if (match) {
 				const data = {
