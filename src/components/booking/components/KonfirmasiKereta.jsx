@@ -22,6 +22,7 @@ import { Typography } from "antd";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  setBookDataLanjutBayarKereta,
   setDataBookKereta,
 } from "../../../features/createSlice";
 import { Box } from "@mui/material";
@@ -399,6 +400,11 @@ export default function KonfirmasiKereta() {
     ])
       .then(([getInfoBookingParse]) => {
         const getInfoBooking = { ...getInfoBookingParse };
+
+        if (getInfoBooking.seats) {
+          delete getInfoBooking.seats;
+        }   
+             
         if (getInfoBooking) {
           const classTrain =
             getInfoBooking.classes === "EKO"
@@ -622,17 +628,33 @@ export default function KonfirmasiKereta() {
 
     if (response.data.rc == "00") {
       hasilBookingData["id_transaksi"] = idtrx;
-
+      
       const data = {
         passengers: passengers,
         hasil_book: hasilBookingData,
       };
+
+ 
+      // Update data `penumpang` agar kursi sesuai dengan `seats`
+      hasilBookingData.penumpang = hasilBookingData.penumpang.map((penumpang, i) => {
+        if (
+            hasilBookingData.seats[i] !== undefined &&
+            hasilBookingData.seats[i] !== null
+        ) {
+            return {
+                ...penumpang,
+                kursi: `${hasilBookingData.seats[i][0]}-${hasilBookingData.seats[i][1]}/${hasilBookingData.seats[i][2]}${hasilBookingData.seats[i][3]}`
+            };
+        }
+        return penumpang;
+      });
 
       dispatch(setDataBookKereta(data));
 
       setisLoadingPindahKursi(false);
       successNotification();
       setdataBookingTrain(hasilBookingData);
+      dispatch(setBookDataLanjutBayarKereta(hasilBookingData));
 
       setchangeStateKetikaGagalTidakUpdate(JSON.stringify(changeState));
     } else if (response.data.rc === "55") {

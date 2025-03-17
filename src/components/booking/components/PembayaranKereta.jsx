@@ -97,6 +97,7 @@ export default function PembayaranKereta() {
       cekWhiteListUsername(token, "WKAI"),
     ])
       .then(([getInfoBookingParse, cekIsMerchant, cekWhiteListUsername]) => {
+        
         const getInfoBooking = { ...getInfoBookingParse };
         if (cekIsMerchant.data.rc == "00") {
           setcallbackBoolean(true);
@@ -128,18 +129,17 @@ export default function PembayaranKereta() {
 
         if (!Array.isArray(getInfoBooking["seats"])) {
           getInfoBooking["seats"] = []; // Inisialisasi sebagai array jika belum ada
+          getInfoBooking.penumpang.map((e, i) => {
+            const seat = e.kursi.split(/[-/]/);
+            getInfoBooking["seats"].push(seat);
+  
+            if (e.kursi?.trim().length > 1) {
+              totaladult += 1;
+            } else {
+              totalinfant += 1;
+            }
+          });
         }
-
-        getInfoBooking.penumpang.map((e, i) => {
-          const seat = e.kursi.split(/[-/]/);
-          getInfoBooking["seats"].push(seat);
-
-          if (e.kursi?.trim().length > 1) {
-            totaladult += 1;
-          } else {
-            totalinfant += 1;
-          }
-        });
 
         setTotalAdult(totaladult);
         setTotalInfant(totalinfant);
@@ -158,6 +158,7 @@ export default function PembayaranKereta() {
         }, 1000);
       })
       .catch((error) => {
+        console.log(error);
         setIsLoadingPage(false);
         setErrPage(true);
       });
