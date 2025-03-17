@@ -187,26 +187,28 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
         } else {
 
             //regex for otomax 
-            const regex = /RC:(.*?),Status:([^,]+),Username:(.*?),Merchant:(.*?),Total komisi:Rp(.*?),Komisi mitra:Rp(.*?),Komisi merchant:Rp(.*?),Saldo terpotong mitra:Rp(.*?),Saldo terpotong merchant:Rp(.*?)$/;
-
-			const match = responseCallback.match(regex);
+            const regex = /Trxid:\d+,Idpel:\d+,RC:(\d+),Status:([^,]+),Produk:[^,]+,Data penumpang:[^,]+,kursi:[^,]+,Kereta:[^,]+,Class:[^,]+,Tgl berangkat:[^,]+,Jam:[^,]+,Tujuan:[^,]+,Tagihan:Rp\d+,Adm:Rp\d+,Total bayar:Rp\d+,Waktu trx:[^,]+,Url etiket:([^,]*),Url struk:([^,]*),Kode booking:([^,]*),Username:([^,]+),Merchant:([^,]+),Total komisi:Rp(\d+),Komisi mitra:Rp(\d+),Komisi merchant:Rp(\d+),Saldo terpotong mitra:Rp(\d+),Saldo terpotong merchant:Rp(\d+)/;
+            const match = responseCallback.match(regex);
+            
+            if (match) {
+                const data = {
+                    rc: match[1],
+                    rd: match[2].trim(),
+                    url_etiket: match[3] || '',
+                    url_struk: match[4] || '',
+                    kode_booking: match[5] || '',
+                    data: {
+                        username: match[6],
+                        merchant: match[7],
+                        total_komisi: parseInt(match[8], 10),
+                        komisi_mitra: parseInt(match[9], 10),
+                        komisi_merchant: parseInt(match[10], 10),
+                        saldo_terpotong_mitra: parseInt(match[11], 10),
+                        saldo_terpotong_merchant: parseInt(match[12], 10)
+                    }
+                };
 			
-			if (match) {
-				const data = {
-					rc: match[1],
-					rd: match[2],
-					data: {
-						username: match[3],
-						merchant: match[4],
-						total_komisi: parseInt(match[5], 10),
-						komisi_mitra: parseInt(match[6], 10),
-						komisi_merchant: parseInt(match[7], 10),
-						saldo_terpotong_mitra: parseInt(match[8], 10),
-						saldo_terpotong_merchant: parseInt(match[9], 10)
-					}
-				};
-			
-				logger.info(`[REGEX DATA PAYMENTS (axiosSendCallback)] username => ${match[3]} merchant => ${match[4]}  =  ${JSON.stringify(data)}`);
+				logger.info(`[REGEX DATA PAYMENTS (axiosSendCallback)] username => ${match[1]} merchant => ${match[2]}  =  ${JSON.stringify(data)}`);
 				return data;
 			}
 			
