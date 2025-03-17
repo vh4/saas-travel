@@ -574,9 +574,11 @@ export default function Pembayaran() {
 
                 <div className="mt-4 w-full mx-0 2xl:mx-4 hidden xl:block">
                   {/* adult */}
-                  <div className="text-sm xl:text-sm font-bold text-black mt-6">
-                    <p>ADULTS PASSENGERS</p>
-                  </div>
+                  {TotalAdult > 0 ? (
+                    <div className="text-sm xl:text-sm font-bold text-black mt-6">
+                      <p>ADULTS PASSENGERS</p>
+                    </div>
+                  ) : null}
                   {passengers.adults.length > 0
                     ? passengers.adults.map((e, i) => (
                         <>
@@ -634,9 +636,11 @@ export default function Pembayaran() {
                     : ""}
 
                   {/* infants */}
-                  <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
-                    <p>INFANTS PASSENGERS</p>
-                  </div>
+                  {TotalInfant > 0 ? (
+                      <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
+                        <p>INFANTS PASSENGERS</p>
+                      </div>
+                  ) : null}
                   {passengers.infants.length > 0
                     ? passengers.infants.map((e, i) => (
                         <>

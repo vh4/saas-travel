@@ -577,9 +577,11 @@ export default function Pembayaran() {
                 {/* desktop */}
                 <div className="mt-4 w-full mx-0 2xl:mx-4 hidden xl:block">
                   {/* adult */}
-                  <div className="text-sm xl:text-sm font-bold text-black mt-6">
-                    <p>ADULTS PASSENGERS</p>
-                  </div>
+                   {TotalAdult > 0 ? (
+                      <div className="text-sm xl:text-sm font-bold text-black mt-6">
+                        <p>ADULTS PASSENGERS</p>
+                      </div>
+                   ) : null}
                   {dataDetailPassenger && dataDetailPassenger.adults.length > 0
                     ? dataDetailPassenger.adults.map((e, i) => (
                         <>
@@ -629,9 +631,13 @@ export default function Pembayaran() {
                     : ""}
 
                   {/* Childs */}
-                  <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
-                    <p>CHILD PASSENGERS</p>
-                  </div>
+                  {
+                    TotalChild > 0 ? (
+                        <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
+                          <p>CHILD PASSENGERS</p>
+                        </div>
+                    ) : null
+                  }
                   {dataDetailPassenger &&
                   dataDetailPassenger.children.length > 0
                     ? dataDetailPassenger.children.map((e, i) => (
@@ -666,9 +672,12 @@ export default function Pembayaran() {
                     : ""}
 
                   {/* infants */}
-                  <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
-                    <p>INFANTS PASSENGERS</p>
-                  </div>
+                  {TotalInfant > 0 ? (
+                      <div className="text-sm xl:text-sm font-bold text-black mt-6 xl:mt-12">
+                        <p>INFANTS PASSENGERS</p>
+                      </div>
+                  ) : null               
+                }
                   {dataDetailPassenger && dataDetailPassenger.infants.length > 0
                     ? dataDetailPassenger.infants.map((e, i) => (
                         <>
