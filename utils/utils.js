@@ -44,6 +44,9 @@ async function axiosSendCallbackPayment(req, method, id_transaksi, type = '') {
 		const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
 		const urlCallback = parseDataKhususMerchant?.url;
 		const send_format = parseDataKhususMerchant?.data1; //format json / text.
+		
+		const merchart = req.session['v_merchant'];
+		const username = req.session['v_uname'];
 
 		let getResponseGlobal = null;
 		if (send_format?.toUpperCase() == 'JSON') {
@@ -75,22 +78,15 @@ async function axiosSendCallbackPayment(req, method, id_transaksi, type = '') {
 
 		}
 
-		logger.info(`[REQUEST KIRIM KE-3 SENT CALLBACK TO MERCHANT (axiosSendCallbackPayment)] [${type}] URL ${urlCallback} : ${JSON.stringify(getResponseGlobal.data)}`);
-		await log_request(id_transaksi, req.ip, uid, id_transaksi, `REQUEST CALLBACK KE-3 => ${JSON.stringify(getResponseGlobal.data)}`);
+		logger.info(`[REQUEST KIRIM KE-3 SENT CALLBACK TO MERCHANT USERNAME => ${username}, MERCHANT => ${merchart} (axiosSendCallbackPayment)] [${type}] URL ${urlCallback} : ${JSON.stringify(getResponseGlobal.data)}`);
+		await log_request(id_transaksi, req.ip, uid, id_transaksi, `REQUEST CALLBACK KE-3 USERNAME => ${username}, MERCHANT => ${merchart} => ${JSON.stringify(getResponseGlobal.data)}`);
 
 		const sendCallbackTomerchant = await axios.post(
 			urlCallback,
 			getResponseGlobal.data || null
 		);
-		logger.info(`[RESPONSE KIRIM KE-3 SENT CALLBACK TO MERCHANT (axiosSendCallbackPayment)] [${type}] URL ${urlCallback}: ${JSON.stringify(sendCallbackTomerchant.data)}`);
-		await log_response(id_transaksi, req.ip, uid, id_transaksi, `RESPONSE CALLBACK KE-3 => ${JSON.stringify(sendCallbackTomerchant.data)}`);
-
-		if (getResponseGlobal.data.rc !== '00') {
-			return {
-				rc: getResponseGlobal.data.rc,
-				rd: getResponseGlobal.data.status
-			};
-		}
+		logger.info(`[RESPONSE KIRIM KE-3 SENT CALLBACK TO MERCHANT USERNAME => ${username}, MERCHANT => ${merchart} (axiosSendCallbackPayment)] [${type}] URL ${urlCallback}: ${JSON.stringify(sendCallbackTomerchant.data)}`);
+		await log_response(id_transaksi, req.ip, uid, id_transaksi, `RESPONSE CALLBACK KE-3 USERNAME => ${username}, MERCHANT => ${merchart} => ${JSON.stringify(sendCallbackTomerchant.data)}`);
 
 		//redturn response dari payment api rb bukan mitra.
 		return getResponseGlobal.data;
@@ -108,13 +104,13 @@ async function axiosSendCallbackPayment(req, method, id_transaksi, type = '') {
 
 }
 
-async function processCallbackSaldoTerpotong(urlCallback, requestData, uid, ip, trx_id = null) {
-	logger.info(`REQUEST KIRIM KE-2 SENT CALLBACK TO MERCHANT (processCallbackSaldoTerpotong): ${JSON.stringify(requestData)}`);
-	await log_request(trx_id, ip, uid, trx_id, `REQUEST CALLBACK KE-2 => ${JSON.stringify(requestData)}`);
+async function processCallbackSaldoTerpotong(urlCallback, requestData, uid, ip, trx_id = null, username, merchart) {
+	logger.info(`REQUEST KIRIM KE-2 SENT CALLBACK TO MERCHANT USERNAME => ${username}, MERCHANT => ${merchart} (processCallbackSaldoTerpotong): ${JSON.stringify(requestData)}`);
+	await log_request(trx_id, ip, uid, trx_id, `REQUEST CALLBACK KE-2 USERNAME => ${username}, MERCHANT => ${merchart} => ${JSON.stringify(requestData)}`);
 
 	const response = await axios.post(urlCallback, requestData);
-	logger.info(`RESPONSE KIRIM KE-2 SENT CALLBACK TO MERCHANT (processCallbackSaldoTerpotong): ${JSON.stringify(response.data)}`);
-	await log_response(trx_id, ip, uid, trx_id, `RESPONSE CALLBACK KE-2 => ${JSON.stringify(response.data)}`);
+	logger.info(`RESPONSE KIRIM KE-2 SENT CALLBACK TO MERCHANT USERNAME => ${username}, MERCHANT => ${merchart}  (processCallbackSaldoTerpotong): ${JSON.stringify(response.data)}`);
+	await log_response(trx_id, ip, uid, trx_id, `RESPONSE CALLBACK KE-2 USERNAME => ${username}, MERCHANT => ${merchart} => ${JSON.stringify(response.data)}`);
 
 	return response.data;
 }
@@ -127,6 +123,9 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
 	const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
 	const urlCallback = parseDataKhususMerchant?.url;
 	const send_format = parseDataKhususMerchant?.data1;
+	
+	const merchart = req.session['v_merchant'];
+	const username = req.session['v_uname'];
 
 	let requestCallbackSaldoTerpotong = {
 		trxid: data.transactionId,
@@ -142,7 +141,7 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
 	}
 
 
-	const responseMitra = await processCallbackSaldoTerpotong(urlCallback, requestCallbackSaldoTerpotong, uid, req.ip, data.transactionId);
+	const responseMitra = await processCallbackSaldoTerpotong(urlCallback, requestCallbackSaldoTerpotong, uid, req.ip, data.transactionId, username, merchart);
 	let parts = responseMitra.split(".") || [];
 
 	if (parts.length < 3) {
@@ -186,12 +185,12 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
 		// logger.info(`Response HIT API TRAVEL (Development): ${JSON.stringify(response.data)}`);
 
 		// Kirim callback payment dengan hardcode
-		logger.info(`REQUEST KIRIM KE-3 SENT CALLBACK TO MERCHANT  DEVEL (axiosSendCallbackPayment): ${JSON.stringify(hardcodeCallback)}`);
+		logger.info(`REQUEST KIRIM KE-3 SENT CALLBACK TO MERCHANT  DEVEL USERNAME => ${username}, MERCHANT => ${merchart} (axiosSendCallbackPayment): ${JSON.stringify(hardcodeCallback)}`);
 		await log_request(data.transactionId, req.ip, uid, data.transactionId, `REQUEST CALLBACK KE-3 DEVEL => ${JSON.stringify(hardcodeCallback)}`);
 
 		// hardcodeCallback.trxid = data.transactionId;
 		const responseCallbackDevel = await axios.post(urlCallback, hardcodeCallback);
-		logger.info(`RESPONSE KIRIM KE-3 SENT CALLBACK TO MERCHANT DEVEL (axiosSendCallbackPayment): ${JSON.stringify(responseCallbackDevel.data)}`);
+		logger.info(`RESPONSE KIRIM KE-3 SENT CALLBACK TO MERCHANT DEVEL USERNAME => ${username}, MERCHANT => ${merchart} (axiosSendCallbackPayment): ${JSON.stringify(responseCallbackDevel.data)}`);
 		await log_response(data.transactionId, req.ip, uid, data.transactionId, `RESPONSE CALLBACK KE-3 DEVEL => ${JSON.stringify(responseCallbackDevel.data)}`);
 
 		//response ke frontend
@@ -271,6 +270,9 @@ module.exports = {
 			const uid = uidpin[0] || null;
 			const pin = uidpin[1] || null;
 
+			const merchart = req.session['v_merchant'];
+			const username = req.session['v_uname'];
+
 			//data merchant
 			const parseDataKhususMerchant = JSON.parse(req.session['khusus_merchant']);
 			const urlCallback = parseDataKhususMerchant?.url;
@@ -308,15 +310,15 @@ module.exports = {
 
 			}
 
-			logger.info(`[REQUEST KIRIM KE-1 SENT CALLBACK TO MERCHANT (axiosSendCallback)] [${type}] URL ${urlCallback} : ${JSON.stringify(getResponseGlobal.data)}`);
-			await log_request(id_transaksi, req.ip, uid, id_transaksi, `REQUEST CALLBACK KE-1 => ${JSON.stringify(getResponseGlobal.data)}`);
+			logger.info(`[REQUEST KIRIM KE-1 SENT CALLBACK TO MERCHANT USERNAME => ${username}, MERCHANT => ${merchart}  (axiosSendCallback)] [${type}] URL ${urlCallback} : ${JSON.stringify(getResponseGlobal.data)}`);
+			await log_request(id_transaksi, req.ip, uid, id_transaksi, `REQUEST CALLBACK KE-1 USERNAME => ${username}, MERCHANT => ${merchart} => ${JSON.stringify(getResponseGlobal.data)}`);
 
 			const sendCallbackTomerchant = await axios.post(
 				urlCallback,
 				getResponseGlobal.data || null
 			);
-			logger.info(`[RESPONSE KIRIM KE-1 SENT CALLBACK TO MERCHANT (axiosSendCallback)] [${type}] URL ${urlCallback}: ${JSON.stringify(sendCallbackTomerchant.data)}`);
-			await log_response(id_transaksi, req.ip, uid, id_transaksi, `RESPONSE CALLBACK KE-1 => ${JSON.stringify(sendCallbackTomerchant.data)}`);
+			logger.info(`[RESPONSE KIRIM KE-1 SENT CALLBACK TO MERCHANT USERNAME => ${username}, MERCHANT => ${merchart} (axiosSendCallback)] [${type}] URL ${urlCallback}: ${JSON.stringify(sendCallbackTomerchant.data)}`);
+			await log_response(id_transaksi, req.ip, uid, id_transaksi, `RESPONSE CALLBACK KE-1 USERNAME => ${username}, MERCHANT => ${merchart} => ${JSON.stringify(sendCallbackTomerchant.data)}`);
 
 			// const response_mitra = sendCallbackTomerchant.data;
 			// let parts = response_mitra.split(".") || [];
