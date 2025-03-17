@@ -206,7 +206,7 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
 					}
 				};
 			
-				logger.info(`[REGEX DATA PAYMENTS (axiosSendCallback)] id_transaksi => ${id_transaksi} =  ${JSON.stringify(data)}`);
+				logger.info(`[REGEX DATA PAYMENTS (axiosSendCallback)] username => ${match[3]} merchant => ${match[4]}  =  ${JSON.stringify(data)}`);
 				return data;
 			}
 			
