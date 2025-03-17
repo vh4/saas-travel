@@ -21,10 +21,14 @@ check:
   tags:
     - sonarrunner
 
-build staging cluster:
+build staging:
   stage: build staging
   environment: staging
+  variables:
+    DOCKER_CONFIG: "/tmp/docker-config-${CI_JOB_ID}"  # Unique config directory per job
   before_script:
+    - export DOCKER_CONFIG=${DOCKER_CONFIG}  # Set the unique config directory
+    - mkdir -p ${DOCKER_CONFIG}  # Create the directory if it doesn’t exist
     - docker login -u _json_key -p "$(echo $SA_REGISTRY)" https://asia.gcr.io
   script:
     - cp $ENV_FE .env
@@ -32,6 +36,7 @@ build staging cluster:
     - docker push asia.gcr.io/partnerlink-h2h/saas-travel-frontend:staging-latest
   after_script:
     - docker logout asia.gcr.io
+    - rm -rf ${DOCKER_CONFIG}  # Clean up the unique config directory
   needs: [check]
   when: on_success
   allow_failure: false
@@ -46,7 +51,7 @@ cluster staging:
   environment: staging
   script:
     - kubectl apply -f k8s/staging/code.yml
-  needs: [check, build staging cluster]
+  needs: [check, build staging]
   when: on_success
   allow_failure: false
   tags:
@@ -55,10 +60,10 @@ cluster staging:
     refs:
       - production
 
-deploy staging cluster:
+deploy staging:
   stage: deploy staging
   environment: staging
-  needs: [check, build staging cluster, cluster staging]
+  needs: [check, build staging, cluster staging]
   when: on_success
   allow_failure: false
   script:
@@ -71,10 +76,14 @@ deploy staging cluster:
   tags:
     - gitlabrunner01
 
-build prod cluster:
+build prod:
   stage: build prod
   environment: prod
+  variables:
+    DOCKER_CONFIG: "/tmp/docker-config-${CI_JOB_ID}"  # Unique config directory per job
   before_script:
+    - export DOCKER_CONFIG=${DOCKER_CONFIG}  # Set the unique config directory
+    - mkdir -p ${DOCKER_CONFIG}  # Create the directory if it doesn’t exist
     - docker login -u _json_key -p "$(echo $SA_REGISTRY)" https://asia.gcr.io
   script:
     - cp $ENV_FE .env
@@ -82,6 +91,7 @@ build prod cluster:
     - docker push asia.gcr.io/partnerlink-h2h/saas-travel-frontend:latest
   after_script:
     - docker logout asia.gcr.io
+    - rm -rf ${DOCKER_CONFIG}  # Clean up the unique config directory
   needs: [check]
   when: manual
   allow_failure: false
@@ -96,7 +106,7 @@ cluster prod:
   environment: prod
   script:
     - kubectl apply -f k8s/prod/code.yml
-  needs: [check, build prod cluster]
+  needs: [check, build prod]
   when: on_success
   allow_failure: false
   tags:
@@ -105,10 +115,10 @@ cluster prod:
     refs:
       - production
 
-deploy prod cluster:
+deploy prod:
   stage: deploy prod
   environment: prod
-  needs: [check, build prod cluster, cluster prod]
+  needs: [check, build prod, cluster prod]
   when: on_success
   allow_failure: false
   script:
