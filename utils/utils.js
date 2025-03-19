@@ -153,7 +153,7 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
     }
 
 
-    const responseMitra = await processCallbackSaldoTerpotong(urlCallback, requestCallbackSaldoTerpotong, uid, req.ip, data.transactionId, username, merchart);
+    const responseMitra = await processCallbackSaldoTerpotong(urlCallback, requestCallbackSaldoTerpotong, uid, req.ip, data.transactionId);
     let parts = responseMitra.split(".") || [];
 
     if (parts.length < 3) {
