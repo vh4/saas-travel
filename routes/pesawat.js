@@ -183,7 +183,7 @@ Router.post('/flight/book', AuthLogin, async function(req, res) {
         const merchart = req.session['v_merchant'];
         const username = req.session['v_uname'];
 
-        logger.info(`Request /flight/book [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}`);
+        logger.info(`Request /flight/book [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}, data: ${JSON.stringify(data)}`);
 
         if (merchart !== undefined && merchart !== null) {
 
@@ -301,6 +301,12 @@ Router.post('/plane/callback', AuthLogin, async function(req, res) { // Menambah
 Router.post('/flight/payment', AuthLogin, async (req, res) => {
 
     const send_format = JSON.parse(req.session['khusus_merchant'])?.data1;
+
+    const merchart = req.session['v_merchant'];
+    const username = req.session['v_uname'];
+
+    logger.info(`Request /flight/payment [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}, data: ${JSON.stringify(req.body)}`);
+
     await handlePayment(
         req, 
         res, 

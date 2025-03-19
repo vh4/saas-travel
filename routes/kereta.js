@@ -397,6 +397,12 @@ Router.post('/train/fare', AuthLogin, async function(req, res) { // Menambahkan 
 Router.post('/train/payment', AuthLogin, async (req, res) => {
 
     const send_format = JSON.parse(req.session['khusus_merchant'])?.data1;
+
+    const merchart = req.session['v_merchant'];
+    const username = req.session['v_uname'];
+
+    logger.info(`Request /train/payment [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}, data: ${JSON.stringify(req.body)}`);
+
     await handlePayment(
         req, 
         res, 
