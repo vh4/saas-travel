@@ -109,14 +109,25 @@ async function axiosSendCallbackPayment(req, method, id_transaksi, type = '') {
 }
 
 async function processCallbackSaldoTerpotong(urlCallback, requestData, uid, ip, trx_id = null) {
-	logger.info(`REQUEST KIRIM KE-2 SENT CALLBACK TO MERCHANT (processCallbackSaldoTerpotong): ${JSON.stringify(requestData)}`);
-	await log_request(trx_id, ip, uid, trx_id, `REQUEST CALLBACK KE-2 => ${JSON.stringify(requestData)}`);
 
-	const response = await axios.post(urlCallback, requestData);
-	logger.info(`RESPONSE KIRIM KE-2 SENT CALLBACK TO MERCHANT (processCallbackSaldoTerpotong): ${JSON.stringify(response.data)}`);
-	await log_response(trx_id, ip, uid, trx_id, `RESPONSE CALLBACK KE-2 => ${JSON.stringify(response.data)}`);
+	try {
+		
+		logger.info(`REQUEST KIRIM KE-2 SENT CALLBACK TO MERCHANT (processCallbackSaldoTerpotong): ${JSON.stringify(requestData)}`);
+		await log_request(trx_id, ip, uid, trx_id, `REQUEST CALLBACK KE-2 => ${JSON.stringify(requestData)}`);
+		
+		const response = await axios.post(urlCallback, requestData);
+		
+		logger.info(`RESPONSE KIRIM KE-2 SENT CALLBACK TO MERCHANT (processCallbackSaldoTerpotong): ${JSON.stringify(response.data)}`);
+		await log_response(trx_id, ip, uid, trx_id, `RESPONSE CALLBACK KE-2 => ${JSON.stringify(response.data)}`);
+	
+		return response.data;
 
-	return response.data;
+	} catch (error) {
+
+		logger.error(`Error RESPONSE CALLBACK KE-2 [processCallbackSaldoTerpotong], ${urlCallback} ${uid} => REQUEST DATA => ${requestData}  : ${error.message}`)
+		return null;
+		
+	}
 }
 
 
@@ -181,21 +192,29 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
 			} : null
 		};
 	} else {
-		// logger.info(`Requests HIT API TRAVEL (Development): ${JSON.stringify(data)}`);
-		// const response = await axios.post(`${process.env.URL_HIT}/${type}/payment`, data);
-		// logger.info(`Response HIT API TRAVEL (Development): ${JSON.stringify(response.data)}`);
 
-		// Kirim callback payment dengan hardcode
-		logger.info(`REQUEST KIRIM KE-3 SENT CALLBACK TO MERCHANT  DEVEL (axiosSendCallbackPayment): ${JSON.stringify(hardcodeCallback)}`);
-		await log_request(data.transactionId, req.ip, uid, data.transactionId, `REQUEST CALLBACK KE-3 DEVEL => ${JSON.stringify(hardcodeCallback)}`);
+		// Kirim callback payment dengan hardcode		
+		try {
+			
+			logger.info(`REQUEST KIRIM KE-3 SENT CALLBACK TO MERCHANT  DEVEL (axiosSendCallbackPayment): ${JSON.stringify(hardcodeCallback)}`);
+			await log_request(data.transactionId, req.ip, uid, data.transactionId, `REQUEST CALLBACK KE-3 DEVEL => ${JSON.stringify(hardcodeCallback)}`);
+	
+			// hardcodeCallback.trxid = data.transactionId;
+			const responseCallbackDevel = await axios.post(urlCallback, hardcodeCallback);
+	
+			logger.info(`RESPONSE KIRIM KE-3 SENT CALLBACK TO MERCHANT DEVEL (axiosSendCallbackPayment): ${JSON.stringify(responseCallbackDevel.data)}`);
+			await log_response(data.transactionId, req.ip, uid, data.transactionId, `RESPONSE CALLBACK KE-3 DEVEL => ${JSON.stringify(responseCallbackDevel.data)}`);
+			
+		} catch (error) {
 
-		// hardcodeCallback.trxid = data.transactionId;
-		const responseCallbackDevel = await axios.post(urlCallback, hardcodeCallback);
-		logger.info(`RESPONSE KIRIM KE-3 SENT CALLBACK TO MERCHANT DEVEL (axiosSendCallbackPayment): ${JSON.stringify(responseCallbackDevel.data)}`);
-		await log_response(data.transactionId, req.ip, uid, data.transactionId, `RESPONSE CALLBACK KE-3 DEVEL => ${JSON.stringify(responseCallbackDevel.data)}`);
-
+			logger.error(`Error RESPONSE KIRIM KE-3 SENT [processPayment] DEVEL , ${urlCallback} ${uid} => REQUEST DATA => ${data}  : ${error.message}`)
+			return null;
+			
+		}
+		
 		//response ke frontend
 		return hardCodePayment;
+
 	}
 }
 
@@ -486,7 +505,9 @@ module.exports = {
 
 			return res.send(response);
 		} catch (error) {
+			logger.error(`Error /${type}/payment : ${JSON.stringify(error)}`)
 			logger.error(`Error /${type}/payment: ${error.message}`);
+			console.log(error)
 			return res.status(200).send({
 				rc: '68',
 				rd: 'Internal Server Error.'
