@@ -41,7 +41,7 @@ import {
   
     return (
       <aside className="w-full" aria-label="Sidebar">
-        <div className="mt-4 xl:mt-0 -mb-4 xl:mb-0 flex justify-center w-full overflow-y-auto py-4 px-1">
+        <div className="mt-0 -mb-4 flex justify-center w-full overflow-y-auto pb-4 px-1">
           <ul className="p-4 w-full grid grid-cols-4 gap-2">
             {(isLoading || type === "auth" || type === "pesawat") && (
               <li>
@@ -50,14 +50,14 @@ import {
                 ) : (
                   <div
                     onClick={() => setNameMenu("pesawat")}
-                    className={`mt-4 block center cursor-pointer items-center text-sm font-bold text-gray-900 ${
+                    className={`mt-2 block center cursor-pointer items-center text-sm font-bold text-gray-900 ${
                       nameMenu === "pesawat" ? "border-b-2 border-blue-500" : ""
                     }`}
                   >
                     <div className="bg-gray-100 mx-4 py-3 flex justify-center rounded-xl">
                       <IoAirplaneOutline className="text-red-500" size={24} />
                     </div>
-                    <span className="block text-xs text-center font-normal mt-4 flex-1 whitespace-nowrap text-[15px] text-black ">
+                    <span className="block text-xs text-center font-normal mt-2 flex-1 whitespace-nowrap text-[15px] text-black ">
                       Pesawat
                     </span>
                   </div>
@@ -72,14 +72,14 @@ import {
                 ) : (
                   <div
                     onClick={() => setNameMenu("kereta")}
-                    className={`mt-4 block center cursor-pointer items-center text-sm font-bold text-gray-900 ${
+                    className={`mt-2 block center cursor-pointer items-center text-sm font-bold text-gray-900 ${
                       nameMenu === "kereta" ? "border-b-2 border-blue-500" : ""
                     }`}
                   >
                     <div className="bg-gray-100 mx-4 py-3 flex justify-center rounded-xl">
                       <IoTrainOutline className="text-orange-500" size={24} />
                     </div>
-                    <span className="block text-xs text-center font-normal mt-4 flex-1 whitespace-nowrap text-[15px] text-black">
+                    <span className="block text-xs text-center font-normal mt-2 flex-1 whitespace-nowrap text-[15px] text-black">
                       Kereta Api
                     </span>
                   </div>
@@ -93,14 +93,14 @@ import {
                 ) : (
                   <div
                     onClick={() => setNameMenu("pelni")}
-                    className={`mt-4 block center cursor-pointer items-center text-sm font-bold text-gray-900 ${
+                    className={`mt-2 block center cursor-pointer items-center text-sm font-bold text-gray-900 ${
                       nameMenu === "pelni" ? "border-b-2 border-blue-500" : ""
                     }`}
                   >
                     <div className="bg-gray-100 mx-4 py-3 flex justify-center rounded-xl">
                       <IoBoatOutline className="text-fuchsia-500" size={24} />
                     </div>
-                    <span className="block text-xs text-center font-normal mt-4 flex-1 whitespace-nowrap text-[15px] text-black">
+                    <span className="block text-xs text-center font-normal mt-2 flex-1 whitespace-nowrap text-[15px] text-black">
                       Pelni
                     </span>
                   </div>
@@ -111,14 +111,14 @@ import {
               <li>
                 <div
                   onClick={() => setNameMenu("dlu")}
-                  className={`mt-4 block center cursor-pointer items-center text-sm font-bold text-gray-900 ${
+                  className={`mt-2 block center cursor-pointer items-center text-sm font-bold text-gray-900 ${
                     nameMenu === "dlu" ? "border-b-2 border-blue-500" : ""
                   }`}
                 >
                   <div className="bg-gray-100 mx-4 py-3 flex justify-center rounded-xl">
                     <IoBoatSharp className="text-green-500" size={24} />
                   </div>
-                  <span className="block text-xs text-center font-normal mt-4 flex-1 whitespace-nowrap text-[15px] text-black">
+                  <span className="block text-xs text-center font-normal mt-2 flex-1 whitespace-nowrap text-[15px] text-black">
                     Dlu
                   </span>
                 </div>

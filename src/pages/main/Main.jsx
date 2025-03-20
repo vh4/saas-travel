@@ -115,9 +115,8 @@ export default function MainPage() {
           style={{
             backgroundColor: customLayout?.color?.secondary?.background || "#0f172a",
           }}
-          className="pb-0 xl:pb-20 xl:mb-0 xl:rounded-b-[120px] -mt-4 xl:mt-0"
+          className="pb-0 xl:pb-20 xl:mb-0 xl:rounded-b-[120px] -mt-4 xl:mt-0 w-full xl:w-none h-[170px] xl:h-auto rounded-2xl xl:rounded-none"
         >
-          <div className="block xl:hidden"><img className="" src="/menu2.jpeg" /></div>
           <div className="hidden xl:block 2xl:hidden py-0 xl:py-8 relative z-10 container mx-auto">
             {/* <CarouselsTablet /> */}
           </div>
@@ -128,10 +127,11 @@ export default function MainPage() {
             <Carousels />
           </div>
         </div>
-        <div className="-mt-[130px] xl:-mt-24">
+        <div className="-mt-[100px] xl:-mt-24">
           <div className="relative container mx-auto mb-0 xl:mb-6">
             <div className="-mt-4 xl:mt-0 z-10 xl:bg-white mx-0 lg:mx-12 xl:mx-32 2xl:mx-36 xl:border xl:rounded-md xl:shadow-lg">
-              <div className="block xl:flex 2xl:flex justify-start">
+              
+              <div className="block xl:flex 2xl:flex justify-start  bg-white border xl:border-none rounded-xl xl:rounded-none xl:bg-none z-50 xl:z-auto mx-2 xl:mx-0">
                 <div className="hidden xl:flex justify-start px-10">
                   <Sidebar nameMenu={nameMenu} setNameMenu={setNameMenu} />
                 </div>
@@ -139,6 +139,7 @@ export default function MainPage() {
                   <SideBarMobile nameMenu={nameMenu} setNameMenu={setNameMenu} />
                 </div>
               </div>
+
               <div className="block mt-2 pb-12 px-4">
                 <div className="w-full">
                   {isLoading ? (
