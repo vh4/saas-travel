@@ -124,7 +124,7 @@ async function processCallbackSaldoTerpotong(urlCallback, requestData, uid, ip, 
 
 	} catch (error) {
 
-		logger.error(`Error RESPONSE CALLBACK KE-2 [processCallbackSaldoTerpotong], ${urlCallback} ${uid} => REQUEST DATA => ${requestData}  : ${error.message}`)
+		logger.error(`Error RESPONSE CALLBACK KE-2 [processCallbackSaldoTerpotong], ${urlCallback} ${uid} => REQUEST DATA => ${JSON.stringify(requestData)}  : ${error.message}`)
 		return null;
 		
 	}
@@ -155,7 +155,14 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
 
 
     const responseMitra = await processCallbackSaldoTerpotong(urlCallback, requestCallbackSaldoTerpotong, uid, req.ip, data.transactionId);
-    let parts = responseMitra.split(".") || [];
+    let parts = responseMitra?.split(".") || [];
+
+    if(!responseMitra){
+        return {
+            rc: "13",
+            rd: "Error Kirim Callback ke mitra.!",
+        };
+    }
 
     if (parts.length < 3) {
         return {
