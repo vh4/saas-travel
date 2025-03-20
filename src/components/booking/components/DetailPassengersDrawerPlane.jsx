@@ -59,7 +59,7 @@ const DetailPassengersDrawerPlane = ({
                       </div>
                       <div className="w-full  py-2 grid grid-cols-2 text-gray-500 border-b border-gray-200 text-xs">
                         <div>NIK</div>
-                        <div>{e.nik}</div>
+                        <div>{e.nik ? e.nik : '-'}</div>
                       </div>
                       <div className="w-full  py-2 grid grid-cols-2 text-gray-500 border-b border-gray-200 text-xs">
                         <div>Nomor HP</div>
@@ -69,7 +69,7 @@ const DetailPassengersDrawerPlane = ({
                       </div>
                       <div className="w-full  py-2 grid grid-cols-2 text-gray-500 border-b border-gray-200 text-xs">
                         <div>Tanggal Lahir</div>
-                        <div>{e.tgl_lahir}</div>
+                        <div>{e.tgl_lahir ? e.tgl_lahir : '-'}</div>
                       </div>
                     </div>
                   </div>

@@ -564,7 +564,7 @@ export default function PembayaranPlane() {
                                   <div className="text-black font-medium">
                                     NIK
                                   </div>
-                                  <div className="mt-2 text-black">{e.nik}</div>
+                                  <div className="mt-2 text-black">{e.nik ? e.nik : '-'}</div>
                                 </div>
                                 <div className="px-2 py-2 text-xs">
                                   <div className="text-black font-medium">
@@ -581,7 +581,7 @@ export default function PembayaranPlane() {
                                     Tanggal Lahir
                                   </div>
                                   <div className="mt-2 text-black">
-                                    {e.tgl_lahir}
+                                    {e.tgl_lahir ? e.tgl_lahir : '-'}
                                   </div>
                                 </div>
                               </div>

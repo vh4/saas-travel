@@ -24,6 +24,7 @@ import { Box } from "@mui/material";
 import DetailPassengersDrawer from "./components/DetailPassengersDrawer";
 import { TiketContext } from "../../App";
 import { cekIsMerchant, cekWhiteListUsername } from "../../helpers/api_global";
+import { templateBookFlight } from "../../helpers/templateBookFlight";
 
 export default function Pembayaran() {
   const { Paragraph } = Typography;
@@ -39,6 +40,7 @@ export default function Pembayaran() {
   const [dataDetailPassenger, setdataDetailPassenger] = useState(null);
   const [hasilBooking, sethasilBooking] = useState(null);
   const [dataDetailForBooking, setdataDetailForBooking] = useState(null);
+  const [isInternational, setIsInternational] = React.useState(0);
 
   const [TotalAdult, setTotalAdult] = useState(0);
   const [TotalChild, setTotalChild] = useState(0);
@@ -54,6 +56,7 @@ export default function Pembayaran() {
   const [ispay, setispay] = useState(false);
   const [hasilbayar, setHasilbayar] = useState(null);
   const [isSimulated, setisSimulate] = useState(0);
+  const [TemplateBooking, setTemplateBooking] = useState(null);
 
   const [open, setOpen] = useState(false);
   const showModal = () => {
@@ -119,6 +122,11 @@ export default function Pembayaran() {
           const hasilBooking = getInfoBooking._Bookingflight;
           const dataDetailForBooking = getSearchFlightInfo._flight_forBooking;
           const isSimulate = cekWhiteListUsername?.is_simulate || 0;
+
+
+          setIsInternational(dataDetailForBooking.isInternational);
+          const airline = getSearchFlightInfo._flight_forBooking.airline ? getSearchFlightInfo._flight_forBooking.airline + 'H' : 'TPQZH'
+          setTemplateBooking(templateBookFlight['domestic'][airline]);
 
           setisSimulate(isSimulate);
 
@@ -596,7 +604,7 @@ export default function Pembayaran() {
                                     NIK
                                   </div>
                                   <div className="mt-2 text-black">
-                                    {e.idNumber}
+                                    {e.idNumber ? e.idNumber : '-'}
                                   </div>
                                 </div>
                                 <div className="px-2 py-2 text-xs">
@@ -620,7 +628,7 @@ export default function Pembayaran() {
                                     Tanggal Lahir
                                   </div>
                                   <div className="mt-2 text-black">
-                                    {e.birthdate}
+                                    {e.birthdate ? e.birthdate : '-'}
                                   </div>
                                 </div>
                               </div>
@@ -653,7 +661,7 @@ export default function Pembayaran() {
                                     NIK/ No.Ktp
                                   </div>
                                   <div className="mt-2 text-black">
-                                    {e.idNumber}
+                                    {e.idNumber ? e.idNumber : '-' }
                                   </div>
                                 </div>
                                 <div className="px-2 py-2 text-xs">
@@ -661,7 +669,7 @@ export default function Pembayaran() {
                                     Tanggal Lahir
                                   </div>
                                   <div className="mt-2 text-black">
-                                    {e.birthdate}
+                                    {e.birthdate ? e.birthdate : '-'}
                                   </div>
                                 </div>
                               </div>
@@ -692,7 +700,7 @@ export default function Pembayaran() {
                                     NIK/ No.Ktp
                                   </div>
                                   <div className="mt-2 text-black">
-                                    {e.idNumber}
+                                    {e.idNumber ? e.idNumber : '-'}
                                   </div>
                                 </div>
                                 <div className="px-2 py-2 text-xs">
@@ -700,7 +708,7 @@ export default function Pembayaran() {
                                     Tanggal Lahir
                                   </div>
                                   <div className="mt-2 text-black">
-                                    {e.birthdate}
+                                    {e.birthdate ? e.birthdate : '-'}
                                   </div>
                                 </div>
                               </div>
