@@ -31,6 +31,10 @@ function parseOtomax(data) {
     return resp.join(",");
 }
 
+function parseRupiah(value) {
+    return parseInt(value.replace(/[^0-9]/g, ""), 10);
+  }
+
 async function axiosSendCallbackPayment(req, method, id_transaksi, type = '') {
 
     try {
@@ -89,7 +93,7 @@ async function axiosSendCallbackPayment(req, method, id_transaksi, type = '') {
         await log_response(id_transaksi, req.ip, uid, id_transaksi, `RESPONSE CALLBACK KE-3 USERNAME => ${username}, MERCHANT => ${merchart} => ${JSON.stringify(sendCallbackTomerchant.data)}`);
 
         //redturn response dari payment api rb bukan mitra.
-        return getResponseGlobal.data;
+        return getResponseGlobal;
 
 
     } catch (error) {
@@ -136,9 +140,6 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
     const urlCallback = parseDataKhususMerchant?.url;
     const send_format = parseDataKhususMerchant?.data1;
 
-    const merchart = req.session['v_merchant'];
-    const username = req.session['v_uname'];
-
     let requestCallbackSaldoTerpotong = {
         trxid: data.transactionId,
         saldo_terpotong_mitra: data.saldo_terpotong_mitra,
@@ -177,8 +178,8 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
     }
 
     if (isProd) {
-        const responseCallback = await axiosSendCallbackPayment(req, method, data.transactionId, type);
-
+        const response = await axiosSendCallbackPayment(req, method, data.transactionId, type);
+        const responseCallback = response.data;
 
         if (send_format?.toUpperCase() === 'JSON') {
 
@@ -198,31 +199,38 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
 
         } else {
 
-            //regex for otomax 
-            const regex = /Trxid:\d+,Idpel:\d+,RC:(\d+),Status:([^,]+),Produk:[^,]+,Data penumpang:[^,]+,kursi:[^,]+,Kereta:[^,]+,Class:[^,]+,Tgl berangkat:[^,]+,Jam:[^,]+,Tujuan:[^,]+,Tagihan:Rp\d+,Adm:Rp\d+,Total bayar:Rp\d+,Waktu trx:[^,]+,Url etiket:([^,]*),Url struk:([^,]*),Kode booking:([^,]*),Username:([^,]+),Merchant:([^,]+),Total komisi:Rp(\d+),Komisi mitra:Rp(\d+),Komisi merchant:Rp(\d+),Saldo terpotong mitra:Rp(\d+),Saldo terpotong merchant:Rp(\d+)/;
-            const match = responseCallback.match(regex);
-            
-            if (match) {
-                const data = {
-                    rc: match[1],
-                    rd: match[2].trim(),
-                    url_etiket: match[3] || '',
-                    url_struk: match[4] || '',
-                    kode_booking: match[5] || '',
-                    data: {
-                        username: match[6],
-                        merchant: match[7],
-                        total_komisi: parseInt(match[8], 10),
-                        komisi_mitra: parseInt(match[9], 10),
-                        komisi_merchant: parseInt(match[10], 10),
-                        saldo_terpotong_mitra: parseInt(match[11], 10),
-                        saldo_terpotong_merchant: parseInt(match[12], 10)
+                try {
+
+                    const responseDecrypt = await axios.post(`${process.env.URL_AUTH_REDIRECT}/index.php?dekrip=null`, {
+                        dekrip: response.headers['x-validate'],
+                    });
+
+                    logger.info(`[REGEX DATA PAYMENTS (axiosSendCallback)] username => ${data.username} merchant => ${data?.merchant || null}  =  ${JSON.stringify(responseDecrypt.data)}`);
+                    return {
+                        rc: responseDecrypt.data.rc,
+                        rd: responseDecrypt.data.status,
+                        data: responseDecrypt.data.rc == '00' ? {
+                            transaction_id: responseDecrypt.data.trxid,
+                            url_etiket: responseDecrypt.data.url_etiket,
+                            url_struk: responseDecrypt.data.url_struk,
+                            nominal: parseRupiah(responseDecrypt.data.tagihan),
+                            komisi_mitra: parseRupiah(responseDecrypt.data.komisi_mitra),
+                            komisi_merchant: parseRupiah(responseDecrypt.data.komisi_merchant),
+                            total_komisi: parseRupiah(responseDecrypt.data.total_komisi)
+                        } : null
                     }
-                };
-			
-				logger.info(`[REGEX DATA PAYMENTS (axiosSendCallback)] username => ${match[1]} merchant => ${match[2]}  =  ${JSON.stringify(data)}`);
-				return data;
-			}
+
+
+                } catch (error) {
+                    
+                    logger.info(`[Error DECRYPT REGEX DATA PAYMENTS (axiosSendCallback)] username => ${data.username} merchant => ${data?.merchant || null}  =  ${error.message}`);
+                    return {
+                        rc: '68',
+                        rd: error.message,
+                        data: null,
+                    };
+
+                }
 			
         }
 
