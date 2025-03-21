@@ -14,7 +14,6 @@ import { Select as SelectAnt } from "antd";
 import dayjs from "dayjs";
 import { notification } from "antd";
 import {
-  getCurrentDate,
   parseTanggal as tanggalParse,
 } from "../../helpers/date";
 import BookingLoading from "../components/planeskeleton/booking";
@@ -199,9 +198,9 @@ export default function BookingPesawat() {
 
           const AdultArr = Array.from({ length: TotalAdult }, () => ({
             gender: "MR",
-            nama_depan: "broowww",
+            nama_depan: "",
             // nama_belakang: "",
-            birthdate: getCurrentDate(),
+            birthdate: "",
             idNumber: "",
           }));
 
@@ -209,14 +208,14 @@ export default function BookingPesawat() {
             gender: "MR",
             nama_depan: "",
             // nama_belakang: "",
-            birthdate: getCurrentDate(),
+            birthdate: "",
           }));
 
           const ChildArr = Array.from({ length: TotalChild }, () => ({
             gender: "MR",
             nama_depan: "",
             // nama_belakang: "",
-            birthdate: getCurrentDate(),
+            birthdate: "",
             idNumber: "",
           }));
 
@@ -1400,145 +1399,150 @@ export default function BookingPesawat() {
                                 </div>
                               </div>
 
-                              <div className="mb-8 mt-0 xl:mt-4">
-                                <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6 ">
-                                  {/* mobile & desktop NIK*/}
-                                  {isInternational === 1 || TemplateBooking.adult.ttl ? (
-                                    <>
-                                      <div className="w-full px-4 xl:px-0">
-                                        <div className="xl:px-0 w-full text-black text-sm mb-2">
-                                          Tanggal Lahir
-                                        </div>
-                                        <Form.Item
-                                          required={true}
-                                          hasFeedback
-                                          name={`tanggalAdult${i}`}
-                                          rules={[
-                                            {
-                                              required: true,
-                                              message: "Harap input Tanggal Lahir.",
-                                            },
-                                          ]}
-                                        >
-                                          <DatePicker
-                                            size="large"
-                                            className="w-full"
-                                            value={dayjs(e.birthdate, "YYYY/MM/DD")}
-                                            format={"YYYY/MM/DD"}
-                                            onChange={handleAdultsubCatagoryChange(
-                                              i,
-                                              "birthdate"
-                                            )}
-                                            disabledDate={disabledDateAdult}
-                                            open={isDatePickerOpenAdult[i]} // Pass the state to the open prop
-                                            // inputReadOnly={true}
-                                            onOpenChange={(status) => {
-                                              const newOpenState = [
-                                                ...isDatePickerOpenAdult,
-                                              ]; // Create a copy of the array
-                                              newOpenState[i] = status; // Update the state for the specific index
-                                              setIsDatePickerOpenAdult(
-                                                newOpenState
-                                              ); // Set the updated array as the new state
-                                            }}
-                                          />
-                                        </Form.Item>
-                                        <small className="block -mt-4 text-gray-400">
-                                          Contoh: yyyy/mm/dd
-                                        </small>
-                                      </div>
-                                    
-                                    </>
-                                  ) : null}
-                                  {
-                                    isInternational === 1 || TemplateBooking.adult.nik ? 
-                                    (
-
-                                      <div className="w-full">
-                                        <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
-                                          <div className="text-black text-sm mb-2">
-                                            {isInternational == 1
-                                              ? "No. Passport"
-                                              : "No. Ktp"}
-                                          </div>
-                                          <Form.Item
-                                            required={true}
-                                            hasFeedback
-                                            name={`nikAdult${i}`}
-                                            rules={[
-                                              {
-                                                required: true,
-                                                message:
-                                                  isInternational == 1
-                                                    ? "NIK tidak boleh kosong."
-                                                    : "Passport tidak boleh kosong.",
-                                              },
-                                              ({ getFieldValue }) => ({
-                                                validator(_, value) {
-                                                  if (
-                                                    !isNaN(value) &&
-                                                    value !== null &&
-                                                    value.toString().length === 16
-                                                  ) {
-                                                    return Promise.resolve();
-                                                  }
-                                                  return Promise.reject(
-                                                    isInternational == 1
-                                                      ? "Panjang Passport harus 16 digit."
-                                                      : "Panjang NIK harus 16 digit."
-                                                  );
+                              {isInternational === 1 || TemplateBooking.adult.ttl || TemplateBooking.adult.nik ? 
+                               (
+                                <>
+                                  <div className="mb-8 mt-0 xl:mt-4">
+                                    <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6 ">
+                                      {/* mobile & desktop NIK*/}
+                                      {isInternational === 1 || TemplateBooking.adult.ttl ? (
+                                        <>
+                                          <div className="w-full px-4 xl:px-0">
+                                            <div className="xl:px-0 w-full text-black text-sm mb-2">
+                                              Tanggal Lahir
+                                            </div>
+                                            <Form.Item
+                                              required={true}
+                                              hasFeedback
+                                              name={`tanggalAdult${i}`}
+                                              rules={[
+                                                {
+                                                  required: true,
+                                                  message: "Harap input Tanggal Lahir.",
                                                 },
-                                              }),
-                                            ]}
-                                          >
-                                            <input
-                                              type="text"
-                                              pattern="[0-9]*"
-                                              onInput={(e) => {
-                                                e.target.value =
-                                                  e.target.value.replace(
-                                                    /[^\d]/g,
-                                                    ""
-                                                  ); // Replace any non-digit characters
-                                                if (e.target.value.includes(".")) {
-                                                  e.target.value =
-                                                    e.target.value.replace(".", ""); // Remove any dots
-                                                }
-                                              }}
-                                              onKeyPress={(e) => {
-                                                return (
-                                                  (e.charCode >= 48 &&
-                                                    e.charCode <= 57) ||
-                                                  e.key !== "."
-                                                ); // Disallow the dot
-                                              }}
-                                              className={
-                                                "border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0"
-                                              }
-                                              value={e.idNumber}
-                                              placeholder={
-                                                isInternational == 1
+                                              ]}
+                                            >
+                                              <DatePicker
+                                                size="large"
+                                                className="w-full"
+                                                value={dayjs(e.birthdate, "YYYY/MM/DD")}
+                                                format={"YYYY/MM/DD"}
+                                                onChange={handleAdultsubCatagoryChange(
+                                                  i,
+                                                  "birthdate"
+                                                )}
+                                                disabledDate={disabledDateAdult}
+                                                open={isDatePickerOpenAdult[i]} // Pass the state to the open prop
+                                                // inputReadOnly={true}
+                                                onOpenChange={(status) => {
+                                                  const newOpenState = [
+                                                    ...isDatePickerOpenAdult,
+                                                  ]; // Create a copy of the array
+                                                  newOpenState[i] = status; // Update the state for the specific index
+                                                  setIsDatePickerOpenAdult(
+                                                    newOpenState
+                                                  ); // Set the updated array as the new state
+                                                }}
+                                              />
+                                            </Form.Item>
+                                            <small className="block -mt-4 text-gray-400">
+                                              Contoh: yyyy/mm/dd
+                                            </small>
+                                          </div>
+                                        
+                                        </>
+                                      ) : null}
+                                      {
+                                        isInternational === 1 || TemplateBooking.adult.nik ? 
+                                        (
+
+                                          <div className="w-full">
+                                            <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
+                                              <div className="text-black text-sm mb-2">
+                                                {isInternational == 1
                                                   ? "No. Passport"
-                                                  : "No. Ktp / NIK"
-                                              }
-                                              onChange={handleAdultsubCatagoryChange(
-                                                i,
-                                                "idNumber"
-                                              )}
-                                              min={0}
-                                              id="default-input"
-                                            />
-                                          </Form.Item>
-                                          <small className="block -mt-4 text-gray-400">
-                                            Contoh: 16 digit nomor
-                                          </small>
-                                          <div></div>
-                                        </div>
-                                      </div>
-                                    ) : null
-                                  }
-                                </div>
-                              </div>
+                                                  : "No. Ktp"}
+                                              </div>
+                                              <Form.Item
+                                                required={true}
+                                                hasFeedback
+                                                name={`nikAdult${i}`}
+                                                rules={[
+                                                  {
+                                                    required: true,
+                                                    message:
+                                                      isInternational == 1
+                                                        ? "NIK tidak boleh kosong."
+                                                        : "Passport tidak boleh kosong.",
+                                                  },
+                                                  ({ getFieldValue }) => ({
+                                                    validator(_, value) {
+                                                      if (
+                                                        !isNaN(value) &&
+                                                        value !== null &&
+                                                        value.toString().length === 16
+                                                      ) {
+                                                        return Promise.resolve();
+                                                      }
+                                                      return Promise.reject(
+                                                        isInternational == 1
+                                                          ? "Panjang Passport harus 16 digit."
+                                                          : "Panjang NIK harus 16 digit."
+                                                      );
+                                                    },
+                                                  }),
+                                                ]}
+                                              >
+                                                <input
+                                                  type="text"
+                                                  pattern="[0-9]*"
+                                                  onInput={(e) => {
+                                                    e.target.value =
+                                                      e.target.value.replace(
+                                                        /[^\d]/g,
+                                                        ""
+                                                      ); // Replace any non-digit characters
+                                                    if (e.target.value.includes(".")) {
+                                                      e.target.value =
+                                                        e.target.value.replace(".", ""); // Remove any dots
+                                                    }
+                                                  }}
+                                                  onKeyPress={(e) => {
+                                                    return (
+                                                      (e.charCode >= 48 &&
+                                                        e.charCode <= 57) ||
+                                                      e.key !== "."
+                                                    ); // Disallow the dot
+                                                  }}
+                                                  className={
+                                                    "border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0"
+                                                  }
+                                                  value={e.idNumber}
+                                                  placeholder={
+                                                    isInternational == 1
+                                                      ? "No. Passport"
+                                                      : "No. Ktp / NIK"
+                                                  }
+                                                  onChange={handleAdultsubCatagoryChange(
+                                                    i,
+                                                    "idNumber"
+                                                  )}
+                                                  min={0}
+                                                  id="default-input"
+                                                />
+                                              </Form.Item>
+                                              <small className="block -mt-4 text-gray-400">
+                                                Contoh: 16 digit nomor
+                                              </small>
+                                              <div></div>
+                                            </div>
+                                          </div>
+                                        ) : null
+                                      }
+                                    </div>
+                                  </div>
+                                </>
+                               ) : null }
 
                               {/* passport */}
                               {isInternational === 1 && (
@@ -1942,138 +1946,140 @@ export default function BookingPesawat() {
                                   </div>
                                 </div>
                               </div>
-
-                                  <div className="mb-8 mt-0 xl:mt-4">
-                                    <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
-                                      {/* mobile & desktop NIK*/}
-                                      {isInternational === 1 || TemplateBooking.child.ttl ? (
-                                        <div className="w-full px-4 xl:px-0">
-                                        <div className="xl:px-0 w-full text-black text-sm mb-2">
-                                          Tanggal Lahir
-                                        </div>
-                                        <Form.Item
-                                          required={true}
-                                          hasFeedback
-                                          name={`tanggallahirChild${i}`}
-                                          rules={[
-                                            {
-                                              required: true,
-                                              message: "Harap input Tanggal Lahir.",
-                                            },
-                                          ]}
-                                        >
-                                          <DatePicker
-                                            size="large"
-                                            className="w-full"
-                                            value={dayjs(e.birthdate, "YYYY/MM/DD")}
-                                            format={"YYYY/MM/DD"}
-                                            onChange={handleChildsubCatagoryChange(
-                                              i,
-                                              "birthdate"
-                                            )}
-                                            disabledDate={disabledDateChild}
-                                            open={isDatePickerOpenChild[i]} // Pass the state to the open prop
-                                            // inputReadOnly={true}
-                                            onOpenChange={(status) => {
-                                              const newOpenState = [
-                                                ...isDatePickerOpenChild,
-                                              ]; // Create a copy of the array
-                                              newOpenState[i] = status; // Update the state for the specific index
-                                              setIsDatePickerOpenChild(
-                                                newOpenState
-                                              ); // Set the updated array as the new state
-                                            }}
-                                          />
-                                        </Form.Item>
-                                        <small className="block -mt-4 text-gray-400">
-                                          Contoh: yyyy/mm/dd
-                                        </small>
-                                        </div>) : null }
-                                        {isInternational === 1 || TemplateBooking.child.nik ? (
-                                          <div className="w-full">
-                                            <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
-                                              <div className="text-black text-sm mb-2">
-                                                {isInternational == 1
-                                                  ? "No. Passport"
-                                                  : "No. Ktp"}
-                                              </div>
-                                              <Form.Item
-                                                required={true}
-                                                hasFeedback
-                                                name={`noktpChild${i}`}
-                                                rules={[
-                                                  {
-                                                    required: true,
-                                                    message:
-                                                      isInternational == 1
-                                                        ? "Passport tidak boleh kosong."
-                                                        : "NIK tidak boleh kosong.",
-                                                  },
-                                                  ({ getFieldValue }) => ({
-                                                    validator(_, value) {
-                                                      if (
-                                                        !isNaN(value) &&
-                                                        value !== null &&
-                                                        value.toString().length === 16
-                                                      ) {
-                                                        return Promise.resolve();
-                                                      }
-                                                      return Promise.reject(
-                                                        isInternational == 1
-                                                          ? "Panjang Passport harus 16 digit."
-                                                          : "Panjang NIK harus 16 digit."
-                                                      );
-                                                    },
-                                                  }),
-                                                ]}
-                                              >
-                                                <input
-                                                  type="text"
-                                                  pattern="[0-9]*"
-                                                  onInput={(e) => {
-                                                    e.target.value =
-                                                      e.target.value.replace(
-                                                        /[^\d]/g,
-                                                        ""
-                                                      ); // Replace any non-digit characters
-                                                    if (e.target.value.includes(".")) {
-                                                      e.target.value =
-                                                        e.target.value.replace(".", ""); // Remove any dots
-                                                    }
-                                                  }}
-                                                  onKeyPress={(e) => {
-                                                    return (
-                                                      (e.charCode >= 48 &&
-                                                        e.charCode <= 57) ||
-                                                      e.key !== "."
-                                                    ); // Disallow the dot
-                                                  }}
-                                                  className={
-                                                    "border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0"
-                                                  }
-                                                  value={e.idNumber}
-                                                  placeholder={
-                                                    isInternational == 1
-                                                      ? "No. Passport"
-                                                      : "No. Ktp / NIK"
-                                                  }
-                                                  onChange={handleChildsubCatagoryChange(
-                                                    i,
-                                                    "idNumber"
-                                                  )}
-                                                  min={0}
-                                                  id="default-input"
-                                                />
-                                              </Form.Item>
-                                              <small className="block -mt-4 text-gray-400">
-                                                Contoh: 16 digit nomor
-                                              </small>
-                                              <div></div>
-                                            </div>
+                              {isInternational === 1 || TemplateBooking.child.ttl || TemplateBooking.child.nik ? 
+                                (<>
+                                    <div className="mb-8 mt-0 xl:mt-4">
+                                      <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
+                                        {/* mobile & desktop NIK*/}
+                                        {isInternational === 1 || TemplateBooking.child.ttl ? (
+                                          <div className="w-full px-4 xl:px-0">
+                                          <div className="xl:px-0 w-full text-black text-sm mb-2">
+                                            Tanggal Lahir
                                           </div>
-                                        ) : null }
+                                          <Form.Item
+                                            required={true}
+                                            hasFeedback
+                                            name={`tanggallahirChild${i}`}
+                                            rules={[
+                                              {
+                                                required: true,
+                                                message: "Harap input Tanggal Lahir.",
+                                              },
+                                            ]}
+                                          >
+                                            <DatePicker
+                                              size="large"
+                                              className="w-full"
+                                              value={dayjs(e.birthdate, "YYYY/MM/DD")}
+                                              format={"YYYY/MM/DD"}
+                                              onChange={handleChildsubCatagoryChange(
+                                                i,
+                                                "birthdate"
+                                              )}
+                                              disabledDate={disabledDateChild}
+                                              open={isDatePickerOpenChild[i]} // Pass the state to the open prop
+                                              // inputReadOnly={true}
+                                              onOpenChange={(status) => {
+                                                const newOpenState = [
+                                                  ...isDatePickerOpenChild,
+                                                ]; // Create a copy of the array
+                                                newOpenState[i] = status; // Update the state for the specific index
+                                                setIsDatePickerOpenChild(
+                                                  newOpenState
+                                                ); // Set the updated array as the new state
+                                              }}
+                                            />
+                                          </Form.Item>
+                                          <small className="block -mt-4 text-gray-400">
+                                            Contoh: yyyy/mm/dd
+                                          </small>
+                                          </div>) : null }
+                                          {isInternational === 1 || TemplateBooking.child.nik ? (
+                                            <div className="w-full">
+                                              <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
+                                                <div className="text-black text-sm mb-2">
+                                                  {isInternational == 1
+                                                    ? "No. Passport"
+                                                    : "No. Ktp"}
+                                                </div>
+                                                <Form.Item
+                                                  required={true}
+                                                  hasFeedback
+                                                  name={`noktpChild${i}`}
+                                                  rules={[
+                                                    {
+                                                      required: true,
+                                                      message:
+                                                        isInternational == 1
+                                                          ? "Passport tidak boleh kosong."
+                                                          : "NIK tidak boleh kosong.",
+                                                    },
+                                                    ({ getFieldValue }) => ({
+                                                      validator(_, value) {
+                                                        if (
+                                                          !isNaN(value) &&
+                                                          value !== null &&
+                                                          value.toString().length === 16
+                                                        ) {
+                                                          return Promise.resolve();
+                                                        }
+                                                        return Promise.reject(
+                                                          isInternational == 1
+                                                            ? "Panjang Passport harus 16 digit."
+                                                            : "Panjang NIK harus 16 digit."
+                                                        );
+                                                      },
+                                                    }),
+                                                  ]}
+                                                >
+                                                  <input
+                                                    type="text"
+                                                    pattern="[0-9]*"
+                                                    onInput={(e) => {
+                                                      e.target.value =
+                                                        e.target.value.replace(
+                                                          /[^\d]/g,
+                                                          ""
+                                                        ); // Replace any non-digit characters
+                                                      if (e.target.value.includes(".")) {
+                                                        e.target.value =
+                                                          e.target.value.replace(".", ""); // Remove any dots
+                                                      }
+                                                    }}
+                                                    onKeyPress={(e) => {
+                                                      return (
+                                                        (e.charCode >= 48 &&
+                                                          e.charCode <= 57) ||
+                                                        e.key !== "."
+                                                      ); // Disallow the dot
+                                                    }}
+                                                    className={
+                                                      "border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0"
+                                                    }
+                                                    value={e.idNumber}
+                                                    placeholder={
+                                                      isInternational == 1
+                                                        ? "No. Passport"
+                                                        : "No. Ktp / NIK"
+                                                    }
+                                                    onChange={handleChildsubCatagoryChange(
+                                                      i,
+                                                      "idNumber"
+                                                    )}
+                                                    min={0}
+                                                    id="default-input"
+                                                  />
+                                                </Form.Item>
+                                                <small className="block -mt-4 text-gray-400">
+                                                  Contoh: 16 digit nomor
+                                                </small>
+                                                <div></div>
+                                              </div>
+                                            </div>
+                                          ) : null }
+                                      </div>
                                     </div>
-                                  </div>
+                                </>) : null }
 
                               {/* passport */}
                               {isInternational === 1 && (
@@ -2420,141 +2426,147 @@ export default function BookingPesawat() {
                                   </div>
                                 </div>
                               </div>
-                              <div className="mb-8 mt-0 xl:mt-4">
-                                <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
-                                  {/* mobile & desktop NIK*/}
 
-                                  {isInternational === 1 || TemplateBooking.infant.ttl ? (
-                                    <div className="w-full px-4 xl:px-0">
-                                      <div className="xl:px-0 w-full text-black text-sm mb-2">
-                                        Tanggal Lahir
-                                      </div>
-                                      <Form.Item
-                                        required={true}
-                                        hasFeedback
-                                        name={`infanttanggallhr${i}`}
-                                        rules={[
-                                          {
-                                            required: true,
-                                            message: "Harap input Tanggal Lahir.",
-                                          },
-                                        ]}
-                                      >
-                                        <DatePicker
-                                          size="large"
-                                          className="w-full"
-                                          value={dayjs(e.birthdate, "YYYY/MM/DD")}
-                                          format={"YYYY/MM/DD"}
-                                          onChange={handleInfantsubCatagoryChange(
-                                            i,
-                                            "birthdate"
-                                          )}
-                                          disabledDate={disabledDate}
-                                          open={
-                                            isDatePickerOpenInfantExpiredDate[i]
-                                          } // Pass the state to the open prop
-                                          // inputReadOnly={true}
-                                          onOpenChange={(status) => {
-                                            const newOpenState = [
-                                              ...isDatePickerOpenInfantExpiredDate,
-                                            ]; // Create a copy of the array
-                                            newOpenState[i] = status; // Update the state for the specific index
-                                            setIsDatePickerOpenInfantExpiredDate(
-                                              newOpenState
-                                            ); // Set the updated array as the new state
-                                          }}
-                                        />
-                                      </Form.Item>
-                                      <small className="block -mt-4 text-gray-400">
-                                        Contoh: yyyy/mm/dd
-                                      </small>
-                                    </div>) : null}
+                              {isInternational === 1 || TemplateBooking.infant.ttl || TemplateBooking.infant.nik ? 
+                              (
+                                <>
+                                  <div className="mb-8 mt-0 xl:mt-4">
+                                    <div className="block py-0 px-0 xl:px-8 xl:grid xl:grid-cols-2 gap-2 mt-0 xl:-mt-6">
+                                      {/* mobile & desktop NIK*/}
 
-                                    {isInternational === 1 || TemplateBooking.infant.nik ? (
-                                        <div className="w-full">
-                                          <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
-                                            <div className="text-black text-sm mb-2">
-                                              {isInternational == 1
-                                                ? "No. Passport"
-                                                : "No. Ktp"}
-                                            </div>
-                                            <Form.Item
-                                              required={true}
-                                              hasFeedback
-                                              name={`infantktp${i}`}
-                                              rules={[
-                                                {
-                                                  required: true,
-                                                  message:
-                                                    isInternational == 1
-                                                      ? "Passport tidak boleh kosong."
-                                                      : "NIK tidak boleh kosong.",
-                                                },
-                                                ({ getFieldValue }) => ({
-                                                  validator(_, value) {
-                                                    if (
-                                                      !isNaN(value) &&
-                                                      value !== null &&
-                                                      value.toString().length === 16
-                                                    ) {
-                                                      return Promise.resolve();
-                                                    }
-                                                    return Promise.reject(
-                                                      isInternational == 1
-                                                        ? "Panjang Passport harus 16 digit."
-                                                        : "Panjang NIK harus 16 digit."
-                                                    );
-                                                  },
-                                                }),
-                                              ]}
-                                            >
-                                              <input
-                                                type="text"
-                                                pattern="[0-9]*"
-                                                onInput={(e) => {
-                                                  e.target.value =
-                                                    e.target.value.replace(
-                                                      /[^\d]/g,
-                                                      ""
-                                                    ); // Replace any non-digit characters
-                                                  if (e.target.value.includes(".")) {
-                                                    e.target.value =
-                                                      e.target.value.replace(".", ""); // Remove any dots
-                                                  }
-                                                }}
-                                                onKeyPress={(e) => {
-                                                  return (
-                                                    (e.charCode >= 48 &&
-                                                      e.charCode <= 57) ||
-                                                    e.key !== "."
-                                                  ); // Disallow the dot
-                                                }}
-                                                className={
-                                                  "border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0"
-                                                }
-                                                value={e.idNumber}
-                                                placeholder={
-                                                  isInternational == 1
-                                                    ? "No. Passport"
-                                                    : "No. Ktp / NIK"
-                                                }
-                                                onChange={handleInfantsubCatagoryChange(
-                                                  i,
-                                                  "idNumber"
-                                                )}
-                                                min={0}
-                                                id="default-input"
-                                              />
-                                            </Form.Item>
-                                            <small className="block -mt-4 text-gray-400">
-                                              Contoh: 16 digit nomor
-                                            </small>
-                                            <div></div>
+                                      {isInternational === 1 || TemplateBooking.infant.ttl ? (
+                                        <div className="w-full px-4 xl:px-0">
+                                          <div className="xl:px-0 w-full text-black text-sm mb-2">
+                                            Tanggal Lahir
                                           </div>
-                                        </div>
-                                    ) : null}
-                                </div>
-                              </div>
+                                          <Form.Item
+                                            required={true}
+                                            hasFeedback
+                                            name={`infanttanggallhr${i}`}
+                                            rules={[
+                                              {
+                                                required: true,
+                                                message: "Harap input Tanggal Lahir.",
+                                              },
+                                            ]}
+                                          >
+                                            <DatePicker
+                                              size="large"
+                                              className="w-full"
+                                              value={dayjs(e.birthdate, "YYYY/MM/DD")}
+                                              format={"YYYY/MM/DD"}
+                                              onChange={handleInfantsubCatagoryChange(
+                                                i,
+                                                "birthdate"
+                                              )}
+                                              disabledDate={disabledDate}
+                                              open={
+                                                isDatePickerOpenInfantExpiredDate[i]
+                                              } // Pass the state to the open prop
+                                              // inputReadOnly={true}
+                                              onOpenChange={(status) => {
+                                                const newOpenState = [
+                                                  ...isDatePickerOpenInfantExpiredDate,
+                                                ]; // Create a copy of the array
+                                                newOpenState[i] = status; // Update the state for the specific index
+                                                setIsDatePickerOpenInfantExpiredDate(
+                                                  newOpenState
+                                                ); // Set the updated array as the new state
+                                              }}
+                                            />
+                                          </Form.Item>
+                                          <small className="block -mt-4 text-gray-400">
+                                            Contoh: yyyy/mm/dd
+                                          </small>
+                                        </div>) : null}
+
+                                        {isInternational === 1 || TemplateBooking.infant.nik ? (
+                                            <div className="w-full">
+                                              <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
+                                                <div className="text-black text-sm mb-2">
+                                                  {isInternational == 1
+                                                    ? "No. Passport"
+                                                    : "No. Ktp"}
+                                                </div>
+                                                <Form.Item
+                                                  required={true}
+                                                  hasFeedback
+                                                  name={`infantktp${i}`}
+                                                  rules={[
+                                                    {
+                                                      required: true,
+                                                      message:
+                                                        isInternational == 1
+                                                          ? "Passport tidak boleh kosong."
+                                                          : "NIK tidak boleh kosong.",
+                                                    },
+                                                    ({ getFieldValue }) => ({
+                                                      validator(_, value) {
+                                                        if (
+                                                          !isNaN(value) &&
+                                                          value !== null &&
+                                                          value.toString().length === 16
+                                                        ) {
+                                                          return Promise.resolve();
+                                                        }
+                                                        return Promise.reject(
+                                                          isInternational == 1
+                                                            ? "Panjang Passport harus 16 digit."
+                                                            : "Panjang NIK harus 16 digit."
+                                                        );
+                                                      },
+                                                    }),
+                                                  ]}
+                                                >
+                                                  <input
+                                                    type="text"
+                                                    pattern="[0-9]*"
+                                                    onInput={(e) => {
+                                                      e.target.value =
+                                                        e.target.value.replace(
+                                                          /[^\d]/g,
+                                                          ""
+                                                        ); // Replace any non-digit characters
+                                                      if (e.target.value.includes(".")) {
+                                                        e.target.value =
+                                                          e.target.value.replace(".", ""); // Remove any dots
+                                                      }
+                                                    }}
+                                                    onKeyPress={(e) => {
+                                                      return (
+                                                        (e.charCode >= 48 &&
+                                                          e.charCode <= 57) ||
+                                                        e.key !== "."
+                                                      ); // Disallow the dot
+                                                    }}
+                                                    className={
+                                                      "border border-[#d9d9d9] block rounded-md pl-2 text-[16px] py-1.5 w-full hover:border-blue-400 focus:border-blue-400 focus:outline-blue-200 focus:outline-0"
+                                                    }
+                                                    value={e.idNumber}
+                                                    placeholder={
+                                                      isInternational == 1
+                                                        ? "No. Passport"
+                                                        : "No. Ktp / NIK"
+                                                    }
+                                                    onChange={handleInfantsubCatagoryChange(
+                                                      i,
+                                                      "idNumber"
+                                                    )}
+                                                    min={0}
+                                                    id="default-input"
+                                                  />
+                                                </Form.Item>
+                                                <small className="block -mt-4 text-gray-400">
+                                                  Contoh: 16 digit nomor
+                                                </small>
+                                                <div></div>
+                                              </div>
+                                            </div>
+                                        ) : null}
+                                    </div>
+                                  </div>
+                                </>
+                              ) : null }
 
                               {/* passport */}
                               {isInternational === 1 && (
