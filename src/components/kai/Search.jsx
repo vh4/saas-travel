@@ -261,7 +261,7 @@ export default function Search() {
       // Handle non-transit response
       if (rc_non == "10") {
         setmessageError(
-          "Pencarian melebihi batas limit dan user dimohon menunggu 5 menit untuk melakukan pencarian ulang."
+          "Pencarian melebihi batas limit dan user dimohon menunggu 2 menit untuk melakukan pencarian ulang."
         );
       } else if (rc_non != "00" && rc_transit != "10") {
         setmessageError(

@@ -137,7 +137,7 @@ function KAI() {
   const loadingTujuan = openTujuan && kaiData.length === 0;
   const [messageApi, contextHolder] = message.useMessage();
   const currentDate = dayjs();
-  const aheadDate = dayjs().add(3, "months");
+  const aheadDate = dayjs().add(45, "days");
 
   const [openDate, setOpenDate] = React.useState(false);
   const handleOpenDate = () => setOpenDate(true);
@@ -725,7 +725,7 @@ function KAI() {
                   value={tanggal}
                   shouldDisableDate={(current) => {
                     const currentDate = dayjs();
-                    const aheadDate = dayjs().add(6, "months");
+                    const aheadDate = dayjs().add(45, "days");
                     return (
                       current &&
                       (current < currentDate.startOf("day") ||
