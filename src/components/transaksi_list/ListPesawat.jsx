@@ -289,26 +289,18 @@ export default function ViewTransaksi({ path }) {
                   <div className="text-xs">
                     <div className="">Nama</div>
                     <div>
-                      {e.title.toLowerCase().charAt(0).toUpperCase() +
-                        e.title.slice(1).toLowerCase()}
+                      {e.title}
                       .{" "}
-                      {e.nama.toLowerCase().charAt(0).toUpperCase() +
-                        e.nama.slice(1).toLowerCase()}{" "}
+                      {e.nama}{" "}
                       (
-                      {e.status.toLowerCase().charAt(0).toUpperCase() +
-                        e.status.slice(1).toLowerCase()}
+                      {e.status}
                       )
                     </div>
                   </div>
                   <div className="text-xs">
                     <div className="">Nik</div>
                     <div>
-                      {e.nik.toLowerCase().charAt(0).toUpperCase() +
-                        e.nik.slice(1).toLowerCase() !==
-                      "Undefined"
-                        ? e.nik.toLowerCase().charAt(0).toUpperCase() +
-                          e.nik.slice(1).toLowerCase()
-                        : "-"}
+                      {e.nik ? e.nik : '-' }
                     </div>
                   </div>
                   <div className="text-xs">
@@ -316,12 +308,7 @@ export default function ViewTransaksi({ path }) {
                     {e.status === "DEWASA" ? (
                       <>
                         <div>
-                          {e.no_hp.toLowerCase().charAt(0).toUpperCase() +
-                            e.no_hp.slice(1).toLowerCase() !==
-                          "Undefined"
-                            ? e.no_hp.toLowerCase().charAt(0).toUpperCase() +
-                              e.no_hp.slice(1).toLowerCase()
-                            : "-"}
+                          {e.no_hp ? e.no_hp : '-'}
                         </div>
                       </>
                     ) : (
@@ -331,8 +318,7 @@ export default function ViewTransaksi({ path }) {
                   <div className="text-xs">
                     <div className="">Tanggal Lahir</div>
                     <div>
-                      {e.tgl_lahir.toLowerCase().charAt(0).toUpperCase() +
-                        e.tgl_lahir.slice(1).toLowerCase()}
+                      {e.tgl_lahir ? e.tgl_lahir : '-'}
                     </div>
                   </div>
                 </div>

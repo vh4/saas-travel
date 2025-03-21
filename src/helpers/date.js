@@ -1,11 +1,13 @@
 import moment from "moment";
 
-export const parseTanggal = (d) => {
+export const parseTanggal = (d, time=false) => {
   var date = new Date(d);
   var tahun = date.getFullYear();
   var bulan = date.getMonth();
   var hari = date.getDay();
   var tanggal = date.getDate();
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
 
   switch (hari) {
     case 0:
@@ -70,8 +72,12 @@ export const parseTanggal = (d) => {
       break;
   }
 
-  const tanggal_keberangkatan = `${hari}, ${tanggal} ${bulan} ${tahun}`;
-  return tanggal_keberangkatan;
+  if(time){ 
+      return `${hari}, ${tanggal} ${bulan} ${tahun} - ${hours}:${minutes}`
+  }else{
+      return `${hari}, ${tanggal} ${bulan} ${tahun}`;
+  }
+
 };
 
 export const parseTanggalPelniMonth = (d) => {
@@ -354,12 +360,12 @@ export const remainingTimeAllBook = (targetDate) => {
 
   if (hours === 0) {
     if (minutes === 0) {
-      return ` 00:00:${formattedSeconds}`;
+      return ` ${formattedSeconds} detik`;
     } else {
-      return ` 00:${formattedMinutes}:${formattedSeconds}`;
+      return ` ${formattedMinutes} menit ${formattedSeconds} detik`;
     }
   } else {
-    return ` ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+    return ` ${formattedHours} jam ${formattedMinutes} menit ${formattedSeconds} detik`;
   }
 };
 

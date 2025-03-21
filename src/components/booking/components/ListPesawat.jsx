@@ -1,7 +1,7 @@
 import { Box, SwipeableDrawer } from "@mui/material";
 import * as React from "react";
 import { FaPlaneDeparture } from "react-icons/fa";
-import { formatDate, remainingTimeAllBook } from "../../../helpers/date";
+import { formatDate, parseTanggal, remainingTimeAllBook } from "../../../helpers/date";
 import DetailPesawat from "./DetailPesawat";
 
 export default function ListPesawat({ data, remainingPesawat }) {
@@ -35,7 +35,6 @@ export default function ListPesawat({ data, remainingPesawat }) {
                 </small>
               </div>
             </div>
-
             {/* Body */}
             <div className="grid grid-cols-12 gap-1 mb-4 ml-2">
               <div className="col my-4">
@@ -68,7 +67,12 @@ export default function ListPesawat({ data, remainingPesawat }) {
                 </div>
               </div>
             </div>
-
+              <div className="px-6 my-4">
+                <div className="text-xs font-semibold">Batas Pembayaran</div>
+                <div className="text-xs text-gray-500">
+                  {parseTanggal(e.expiredDate, true)}
+                </div>
+              </div>
             {/* Footer */}
             <Box
               className="bg-indigo-100 text-indigo-500"
@@ -88,7 +92,7 @@ export default function ListPesawat({ data, remainingPesawat }) {
                 }}
               >
                 <div className="flex items-center space-x-2 justify-center w-full px-4 font-semibold">
-                  <div className="">Sisa Waktu Pembayaran</div>
+                  <div className="">Sisa Waktu</div>
                   <div className="">
                     {remainingPesawat[i] !== undefined &&
                     remainingPesawat[i] > 0

@@ -260,16 +260,16 @@ export default function ViewBooking({ path }) {
                   <div className="text-xs">
                     <div className="">Nik</div>
                     <div>
-                      {e.nomor_identitas !== "" ? e.nomor_identitas : "-"}
+                      {e.nomor_identitas ? e.nomor_identitas : "-"}
                     </div>
                   </div>
                   <div className="text-xs">
                     <div className="">No. HP</div>
-                    <div>{e.telepon !== "" ? e.telepon : "-"}</div>
+                    <div>{e.telepon ? e.telepon : "-"}</div>
                   </div>
                   <div className="text-xs">
                     <div className="">No. Kursi</div>
-                    <div>{e.kursi !== "" ? e.kursi : "-"}</div>
+                    <div>{e.kursi ? e.kursi : "-"}</div>
                   </div>
                 </div>
               </>
