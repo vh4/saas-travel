@@ -249,6 +249,12 @@ async function processPayment(req, data, uid, isProd, method, type, hardcodeCall
 			logger.info(`REQUEST KIRIM KE-3 SENT CALLBACK TO MERCHANT  DEVEL (axiosSendCallbackPayment): ${JSON.stringify(hardcodeCallback)}`);
 			await log_request(data.transactionId, req.ip, uid, data.transactionId, `REQUEST CALLBACK KE-3 DEVEL => ${JSON.stringify(hardcodeCallback)}`);
 	
+            hardcodeCallback = {
+                transactionId:data.transactionId,
+                ...hardcodeCallback,
+
+            }
+
 			// hardcodeCallback.trxid = data.transactionId;
 			const responseCallbackDevel = await axios.post(urlCallback, hardcodeCallback);
 	
