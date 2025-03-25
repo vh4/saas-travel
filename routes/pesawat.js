@@ -12,7 +12,7 @@ const {
     handlePayment
 } = require('../utils/utils.js');
 require('dotenv').config()
-const hardcodePesawat = {
+let hardcodePesawat = {
     "json":{
         "trxid": "199512506",
         "rc": "00",
@@ -306,6 +306,19 @@ Router.post('/flight/payment', AuthLogin, async (req, res) => {
     const username = req.session['v_uname'];
 
     logger.info(`Request /flight/payment [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}, data: ${JSON.stringify(req.body)}`);
+
+    //replase idtrx callback devel with idtrx inquiry.
+    if (send_format?.toUpperCase() === 'TEXT') {
+        hardcodePesawat.text = hardcodePesawat.text.replace(/Trxid:\d+/, `Trxid:${req.body?.transactionId}`);
+    } else {
+        hardcodePesawat = {
+            ...hardcodePesawat,
+            json: {
+                ...hardcodePesawat.json,
+                trxid: req.body?.transactionId
+            }
+        };
+    }
 
     await handlePayment(
         req, 

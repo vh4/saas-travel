@@ -15,7 +15,7 @@ const {
 const Router = express.Router();
 require('dotenv').config()
 
-const hardcodeKereta = {
+let hardcodeKereta = {
     "json":{
         "trxid": "3095045099",
         "rc": "00",
@@ -400,6 +400,20 @@ Router.post('/train/payment', AuthLogin, async (req, res) => {
 
     const merchart = req.session['v_merchant'];
     const username = req.session['v_uname'];
+
+    //replase idtrx callback devel with idtrx inquiry.
+    if (send_format?.toUpperCase() === 'TEXT') {
+        hardcodeKereta.text = hardcodeKereta.text.replace(/Trxid:\d+/, `Trxid:${req.body?.transactionId}`);
+    } else {
+        hardcodeKereta = {
+            ...hardcodeKereta,
+            json: {
+                ...hardcodeKereta.json,
+                trxid: req.body?.transactionId
+            }
+        };
+    }
+    
 
     logger.info(`Request /train/payment [USERNAME] : ${username} [MERCHANT IF EXISTS]: ${merchart}, data: ${JSON.stringify(req.body)}`);
 
