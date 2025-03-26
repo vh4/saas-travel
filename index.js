@@ -56,6 +56,13 @@ app.use(cors({
     credentials: true
 }));
 
+
+app.use((req, res, next) => {
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('Content-Security-Policy', "frame-ancestors 'none'");
+    next();
+});
+
 app.use(express.json());
 app.use('/travel', MainRoutes);
 app.use('/travel', PelniRouter);
