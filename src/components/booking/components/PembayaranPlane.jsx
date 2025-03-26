@@ -4,7 +4,7 @@ import { AiOutlineClockCircle } from "react-icons/ai";
 import { MdHorizontalRule } from "react-icons/md";
 import { BsArrowRightShort } from "react-icons/bs";
 import { Button, message, Alert, Modal } from "antd";
-import { remainingTime } from "../../../helpers/date";
+import { parseTanggal, remainingTime } from "../../../helpers/date";
 import { toRupiah } from "../../../helpers/rupiah";
 import Page500 from "../../components/500";
 import Page400 from "../../components/400";
@@ -438,7 +438,7 @@ export default function PembayaranPlane() {
                             <div className="block xl:hidden">
                               <Alert
                                 className="text-xs text-gray-500"
-                                message={`${remainingBookTime}`}
+                                message={`${parseTanggal(dataDetailForBooking.expiredDate, true)}`}
                                 banner
                               />
                             </div>
@@ -709,7 +709,7 @@ export default function PembayaranPlane() {
                   {/* desktop payment button */}
                   <div className="hidden xl:block mt-2">
                     <Alert
-                      message={`Expired Booking : ${remainingBookTime}`}
+                      message={`Expired Booking : ${parseTanggal(dataDetailForBooking.expiredDate, true)}`}
                       banner
                     />
                   </div>
