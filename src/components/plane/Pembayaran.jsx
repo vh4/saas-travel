@@ -475,7 +475,7 @@ export default function Pembayaran() {
                                 <div className="block xl:hidden">
                                   <Alert
                                     className="text-xs text-gray-500"
-                                    message={`${remainingBookTime}`}
+                                    message={`${parseTanggal( hasilBooking.timeLimitYMD, true)}`}
                                     banner
                                   />
                                 </div>
@@ -849,7 +849,7 @@ export default function Pembayaran() {
                   {/* desktop payment button */}
                   <div className="hidden xl:block mt-2">
                     <Alert
-                      message={`Expired Booking : ${remainingBookTime}`}
+                      message={`Expired Booking : ${parseTanggal(hasilBooking.timeLimitYMD, true)}`}
                       banner
                     />
                   </div>
