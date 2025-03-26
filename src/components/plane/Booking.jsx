@@ -1467,7 +1467,7 @@ export default function BookingPesawat() {
                                         <div className="w-full">
                                           <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
                                             <div className="text-black text-sm mb-2">
-                                              {isInternational == 1
+                                              {isInternational === 1
                                                 ? "No. Passport"
                                                 : "No. Ktp"}
                                             </div>
@@ -1479,9 +1479,9 @@ export default function BookingPesawat() {
                                                 {
                                                   required: true,
                                                   message:
-                                                    isInternational == 1
-                                                      ? "NIK tidak boleh kosong."
-                                                      : "Passport tidak boleh kosong.",
+                                                    isInternational === 1
+                                                      ? "Passport tidak boleh kosong."
+                                                      : "NIK tidak boleh kosong.",
                                                 },
                                                 ({ getFieldValue }) => ({
                                                   validator(_, value) {
@@ -1546,7 +1546,7 @@ export default function BookingPesawat() {
                                               />
                                             </Form.Item>
                                             <small className="block -mt-4 text-gray-400">
-                                              Contoh: 16 digit nomor
+                                              Contoh: {isInternational === 1 ? 15 : 16 } digit nomor
                                             </small>
                                             <div></div>
                                           </div>
@@ -2045,7 +2045,7 @@ export default function BookingPesawat() {
                                         <div className="w-full">
                                           <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
                                             <div className="text-black text-sm mb-2">
-                                              {isInternational == 1
+                                              {isInternational === 1
                                                 ? "No. Passport"
                                                 : "No. Ktp"}
                                             </div>
@@ -2057,7 +2057,7 @@ export default function BookingPesawat() {
                                                 {
                                                   required: true,
                                                   message:
-                                                    isInternational == 1
+                                                    isInternational === 1
                                                       ? "Passport tidak boleh kosong."
                                                       : "NIK tidak boleh kosong.",
                                                 },
@@ -2111,7 +2111,7 @@ export default function BookingPesawat() {
                                                 }
                                                 value={e.idNumber}
                                                 placeholder={
-                                                  isInternational == 1
+                                                  isInternational === 1
                                                     ? "No. Passport"
                                                     : "No. Ktp / NIK"
                                                 }
@@ -2124,7 +2124,7 @@ export default function BookingPesawat() {
                                               />
                                             </Form.Item>
                                             <small className="block -mt-4 text-gray-400">
-                                              Contoh: 16 digit nomor
+                                              Contoh: {isInternational === 1 ? 15 : 16} digit nomor
                                             </small>
                                             <div></div>
                                           </div>
@@ -2565,7 +2565,7 @@ export default function BookingPesawat() {
                                         <div className="w-full">
                                           <div className="px-4 xl:px-0 w-full block mt-4 xl:mt-0">
                                             <div className="text-black text-sm mb-2">
-                                              {isInternational == 1
+                                              {isInternational === 1
                                                 ? "No. Passport"
                                                 : "No. Ktp"}
                                             </div>
@@ -2577,7 +2577,7 @@ export default function BookingPesawat() {
                                                 {
                                                   required: true,
                                                   message:
-                                                    isInternational == 1
+                                                    isInternational === 1
                                                       ? "Passport tidak boleh kosong."
                                                       : "NIK tidak boleh kosong.",
                                                 },
@@ -2594,7 +2594,7 @@ export default function BookingPesawat() {
                                                     return Promise.reject(
                                                       isInternational === 1
                                                         ? "Panjang Passport harus 15 digit."
-                                                        : "Panjang NIK harus 16 digit."
+                                                        : `Panjang NIK harus 16 digit.`
                                                     );
                                                   },
                                                 }),
@@ -2631,7 +2631,7 @@ export default function BookingPesawat() {
                                                 }
                                                 value={e.idNumber}
                                                 placeholder={
-                                                  isInternational == 1
+                                                  isInternational === 1
                                                     ? "No. Passport"
                                                     : "No. Ktp / NIK"
                                                 }
@@ -2644,7 +2644,7 @@ export default function BookingPesawat() {
                                               />
                                             </Form.Item>
                                             <small className="block -mt-4 text-gray-400">
-                                              Contoh: 16 digit nomor
+                                              Contoh: {isInternational === 1 ? 15 : 16} digit nomor
                                             </small>
                                             <div></div>
                                           </div>
